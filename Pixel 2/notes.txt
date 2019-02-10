@@ -1,0 +1,340 @@
+A FrameNodeFunc is an object that performs an operation on some given inputs
+  FrameNode stores a FrameNodeFunc
+  FrameNodeFunc can also render the widget that is used to modify a NodeParamPack
+
+A FrameNode performs an operation on an image to produce an output input
+  stores a FrameNodeFunc
+  input FrameNode -> FrameNodeFunc -> output ImageHandle
+  input may be another FrameNode or nothing
+  input FrameNode must be on a lower layer or frame to prevent cyclic dependencies
+  stores cached output of FrameNodeFunc
+
+  can tranfer parameters via a NodeParamPack
+    this severes coupling between TweenSpan and FrameNodeFunc implementations
+  maybe be marked as invisible
+    this will mean that the output image is not an input to the CompositeNode
+    for this layer but can still be used as input to other FrameNodes
+    invisible frames are allowed to be a different size to the project
+    a TransformFrameNode can take a small invisible FrameNode and transform it to the Animation size
+
+  DupFrameNode duplicates a FrameNode
+    if the input frame is a DupFrameNode
+      use the input frame of the DupFrameNode as input
+    this prevents long dependency chains
+  TransformFrameNode applies a transformation matrix
+  SourceFrameNode has no input. Just returns a stored ImageHandle
+    images of a different size to the project are invisible by default
+    smaller images that are made visible will be placed in the top-left corner of a transparent black image
+    larger images that are made visible will be cropped
+    mask images that are made visible will be rendered as transparent black and opaque white
+  ColorFilterFrameNode applies a color filter
+    lighten, darken, grayscale, contrast, multiply...
+  GradientFrameNode creates a gradient
+    does not have an input, just produces an image with a gradient
+    linear gradients, radial gradients
+    user can define stop positions, stop colors, radiuses
+    gradient could later be masked or transformed onto a drawing
+  MaskOpFrameNode combines and transforms masks
+    can accept one or two inputs
+    invisible by default
+    performs a logical operation on masks
+    logical operations
+      ~S
+      S | D
+      S & D
+      S ^ D = ~S ^ ~D
+      ~S & ~D
+      ~S | ~D
+      ~S ^ D = S ^ ~D
+      ~S & D
+      S & ~D
+      ~S | D
+      S | ~D
+  MaskApplyFrameNode applies a mask to a colored image
+    takes a mask image and color image
+    applies the mask to the color image
+    both images must be the same size
+  AlphaMaskFrameNode reads the alpha channel of an image to produce a mask
+    user can specify a threshold
+    if alpha <= threshold
+      transparent
+    if alpha > threshold
+      opaque
+    default threshold is 0
+  DelegateFrameNode refers to another FrameNodeFunc and forwards messages to it
+    holds a pointer to a FrameNodeFunc
+    when the output is requested, the stored FrameNodeFunc is queried
+    DelegateFrameNode will have different inputs so we'll need to specify those inputs
+      to the FrameNodeFunc
+  TweenFrameNode produces an animation
+    refers to TweenSpan which does all of the work
+    stores a linear progress
+    output frame is calculated by passing linear progress to TweenSpan
+  TweenKeyFrameNode
+    refers to TweenSpan
+    stores a NodeParamPack for this point in the TweenSpan
+
+A NodeParamPack is a sequence of numbers
+  stores the id of the FrameNodeFunc that these parameters are for
+  uses something like entt::family to generate an index from a type
+
+What if the animation stored spans instead of frame nodes?
+
+A TweenSpan
+  AnimCurve is a function for transforming linear progress to some other progress
+    linear, sine, quadratic
+  interpolates the NodeParamPacks in TweenKeyFrameNodes using a FrameNodeFunc
+  the first and last frame in the span must be keyframes
+
+An ImageHandle refers to an image
+  the image may be colored, paletted or a mask
+  paletted images refer to a PaletteHandle that multiple images may share
+  paletted images may share a BitmapHandle but apply a different PaletteHandle
+  there is a list of named palettes available in the animation
+  user can select the palette to use for an image
+
+A Frame is a sequence of FrameNodes
+  this is the input to a CompositeNode
+  there is a FrameNode for each layer
+  if there is no FrameNode for a layer, nullptr is stored
+
+A CompositeNode produces the frame image from the FrameNodes
+  input Frame -> CompositeNode -> output ImageHandle
+  there is one CompositeNode for the whole project
+  stores the size of the final image
+    all input images must be the same size as the CompositeNode
+
+  These are the pairs of images that the operation is performed on
+    B ─┐
+       ├─┐    0 op
+    0 ─┘ │
+         ├─┑  1 op
+    1 ───┘ │
+           ├─ final
+    2 ─────┙
+
+  B base image is transparent black
+  Each image in the layer stack has a composite operation that is applied
+    to it and the previous layers
+  composite operations may all be the same or defined separatly
+
+  CompositeOperation describes the operation performed on each pair of images
+    Default is source-over
+    User can define a table that describes which colors produce which output
+      table entries may be unordered to signify that the order of top and bottom colors does not matter
+    operation can be set for each individual pair or all pairs
+    Operation may apply a mask image
+
+Dependency graph
+  When
+    the PaletteHandle of an ImageHandle is changed
+    the BitmapHandle of an ImageHandle is changed
+    the input of a FrameNode is changed
+    the parameters of a FrameNode are changed
+    the inputs of a CompositeNode are changed
+    the parameters of a CompositeNode are changed
+  dependent nodes will become stale
+  the next time the dependent nodes are requested, they will have to be recalculated
+  nodes store a timestamp of when they were last calculated
+  images store a timestamp of when they were last modified
+  when the timestamp is earlier than the timestamp of an input, the node must recalcuate its output
+  might be able to use cacheKey instead of a timestamp
+
+A Layer is a sequence of FrameNodes that make up a layer
+
+An Animation is a collection of Layers
+  also stores a CompositeNode
+  maybe PaletteHandles and BitmapHandles
+  an Animation can be serialized or converted to a sequence of PNGs
+  an Animation can also be converted to a spritesheet
+    reuse some of the pack code
+
+Timeline is used for manipulating an Animation
+  stores a handle to Animation
+  current layer and frame
+  provides UI for
+    manipulating frames, layers, composites
+    modifying the parameters of FrameNodes and CompositeNodes
+    creating and modifying TweenSpans
+    toggling compositing
+  manipulating tween spans
+    user can select a span whose first frame will be animated
+      this will set a sequence of TweenFrameNodes terminated by a TweenKeyFrameNode
+    user can move the keys and also create new keys in the span
+    user TweenFrameNodes are automatically filled and removed
+      user only needs to worry about TweenKeyFrames
+  insert delegate nodes
+    user will select a node
+    user will select a span
+    DelegateFrameNodes refering to node will be placed in the span
+    user may also decide whether inputs are relative or absolute
+    relative is the default
+    if the source node is on layer 4 and the input is on layer 2,
+      a delegate node is placed on layer 3
+      relative input at layer 1
+      absolute input at layer 2
+  insert duplicate nodes
+    similar workflow to inserting delegate nodes except that the user doesn't need
+    to specify relative or absolute
+  animation playback
+    user can select a span and a framerate
+    the animation will be played on the composite window
+  manipulating FrameNodes
+    right-clicking on a FrameNode will show a context menu
+      button to "Change Inputs"
+        menu for changing the inputs of a FrameNode
+      button to "Edit Node"
+        menu for editing the NodeParamPack for the underlying FrameNodeFunc
+      button to "Change Palette" if this is a SourceFrameNode with a palette
+        menu for changing the palette that this node points to
+  hot key for appending a new SourceFrameNode with a copy of the current SourceFrameNodes ImageHandle
+
+ToolColors<ColorProfile>
+  stores the primary, secondary and erase colors in the ColorProfile of the current BitmapHandle
+  passed to Tool along with a BitmapHandle
+
+Attempting to use a tool on a black frame will automatically create a SourceFrameNode
+
+A Tool<ColorProfile> responds to mouse inputs and manipulates BitmapHandles
+  accepts primary/secondary/erase down/move/up events
+    event includes an ImageHandle that can be modified
+  an overlay image may be requested from the current tool
+    an overlay image is a grayscale, partially transparent image
+    an overlay image is rendered on the EditorWindow
+    rendering overlay on the CompositeWindow might be tricky but definitely useful
+  BrushTool
+    Sets a square of pixels
+    Size of square can be set
+    Overlay represents the size of the brush
+  LineTool
+    Draws a straight line
+    Keeps a copy of the ImageHandle so that the line can continuously be drawn as the users drags the mouse
+  FilledCircleTool
+    Draws a filled circle
+    Circle can either be centered on one pixel, two pixels or four pixels
+    Does caching like LineTool
+  FilledRectangleTool
+    Draws a filled rectangled
+    Does caching like LineTool
+  OutlinedCircleTool
+    Draws the outer border of a circle
+    Circle can either be centered on one pixel, two pixels or four pixels
+    Does caching like LineTool
+  OutlinedRectangleTool
+    Draws the outer border of a rectangle
+    Does caching like LineTool
+  FloodFillTool
+    Performs a floodfill of surrounding pixels with the same color as the clicked pixel
+  RectangleSelectTool
+    Makes a copy of a rectangle of pixels
+    Renders an overlay of the selected region in grayscale (perceived lumosity) and partially transparent
+  PolySelectTool
+    Creates a mask by allowing the user to draw a polygon
+    The mask is used to make a copy of an area of the image
+    Does same overlay thing as RectangleSelectTool
+  SymmetryTool
+    Provides a similar functionality to the BrushTool
+    User can select horizontal, vertical or both
+    Painting in an area of the image will automatically paint in the symmetrical area
+    Overlay shows where tool will change pixels
+  RulerTool
+    User can select two points and the inclusive distance will be shown in a window
+    User can plot a pixel at the two end points for use later
+
+Tools
+  a collection of every tool for each color profile
+  a reference to the current tool
+  the mouse is rendered as a circular dot
+  the overlay shows that pixel that the mouse is hovering over
+    this makes drawing easier because the user knows when they are near the
+    edge of a pixel
+
+CompositeWindow
+  renders the current frame using the CompositeNode
+
+EditorWindow
+  renders the current ImageHandle
+
+Editor is the state of the application
+  stores Tools, ToolColors, Animation, CompositeWindow, EditorWindow
+  accepts raw keyboard and mouse events and passes them to the current tool
+
+ColorHandle<ColorProfile>
+  a handle to a color
+  can refer to tool colors or palette colors
+
+ColorPicker<ColorProfile>
+  has a target ColorHandle
+  appears in a window whenever the user attempts to edit a color
+
+Package the composite renderer and animation loader so that games can load animations and render them live
+Much more space efficient than baking the animation into PNGs
+Could we generate some sort of bytecode that is interpreted to render the animation?
+Only really useful for long, high res animations that compress easily
+  like the intro to The Machine
+
+Qt has a utility called undo stack
+might be able to use it for implementing undo/redo
+
+
+
+
+
+
+
+Am I overcomplicating this?
+
+
+
+
+
+
+
+
+--------------------------------------------------------------------------------
+
+PIXMAN CONTENTS
+
+118     fixed point
+114     color, point_fixed, line_fixed, vector, transform
+185     image
+187     fixed point transformation matrix manip
+229     f_vector, f_transform
+242     float point transformation matrix manip
+280     repeat_t
+288     filter_t
+297     separable convolution comment
+319     op_t
+388     region16_data, box16, rectangle16, region16, region_overlap
+426     deprecated
+431     region16 creation/destruction
+448     region manip
+497     region32_data, box32, rectangle32, region32
+526     region32 creation/destruction
+543     region32 manip
+592     blt
+604     fill
+613     version
+622     read_memory_func, write_memory_func
+625     image_destroy_func
+627     gradient_stop
+638     indexed
+650     FORMAT
+682     TYPE
+695     FORMAT_COLOR
+702     format_code
+779     format_supported
+783     image_create solid_fill, linear_gradient, radial_gradient, conical_gradient
+810     image_ref, image_unref, destroy_function, destroy_data
+819     image properties
+854     kernel
+869     create_separable_convolution
+880     image_fill_rectangles, image_fill_boxes
+892     compute_composite_region, image_composite, image_composite32
+947     deprecated
+953     glyph
+959     glyph manip
+1022    edge, trapezoid, triangle
+1054    span_fix, trap
+1064    edge, trap manip
+1102    composite_trapezoids composite_trianges

@@ -1,0 +1,319 @@
+An Image is a pixmap with a transform
+  has a translation
+  has a scale
+  has a rotation
+  has a image handle
+
+A Cell is an item on the timeline
+  has a position which is the layer and the frame
+  When a cell is added or removed from a layer
+    All of the cells in that layer are informed
+      This allows Duplicate and Transform cells to update their reference to
+      the SourceCell
+  SourceCell
+    Stores an image that can be manipulated
+    Image is either a color RGBA image or a paletted image
+  DuplicateCell
+    Duplicate the previous cell
+    When the previous cell is a null cell
+      produces a null image
+  TransformCell
+    Transform the previous cell
+    The stored transformation is absolute
+      The image from the SourceCell is taken and its transform is replaced with
+      the stored transform
+    When the previous cell is a null cell
+      produces a null image
+
+A Layer is a horizontal array of Cells
+A Frame is a vertical stack of Cells
+An Animation is a sequence of Layers
+  has a size
+  all cells have the same size as the animation
+  all cells are either paletted or colored
+  there is one palette for the whole animation
+
+Timeline
+  When creating a new frame, user can append either
+    a blank SourceCell
+    a DuplicateCell
+    a TransformCell
+      stored transform is initialized with the transform of the SourceCell
+  When the user tries to use a tool on a null cell,
+    a SourceCell is created
+  When the user tries to use a tool on a DuplicateCell,
+    it will be converted to a SourceCell
+  When the user tries to use a tool on a TransformCell,
+    a message will tell the user that this is not allowed
+  Layers can be hidden
+    This prevents them from being seen in the render window
+    Toggled by pressing H
+  Layers can be isolated
+    This hiding all layers apart from this one
+    Toggled by pressing I
+  Onion skin mode
+    Renders the previous cell behind the current cell with a reduced opacity
+    Toggled by pression O
+  WASD to change the current cell
+  Animation can be played
+    user can set a frame delay
+    animation is looped
+    can pause and play by pressing space
+
+Transformations
+  User can apply relative transformations to a SourceCell or a TransformCell
+  Translations and scales are integers
+  Rotation is always a multiple of 90 degrees
+  Origin of rotation is always the center of the image
+  Order
+    Rotation
+    Scale
+    Translation
+  User can select the transformation they want to apply and use the arrow keys
+    For translation or scale
+      UP     -y
+      RIGHT  +x
+      DOWN   +y
+      LEFT   -x
+    For rotation
+      UP     CW
+      RIGHT  CW
+      DOWN   CCW
+      LEFT   CCW
+    Scaling up and down adds and subtracts from the absolute scale of the image
+      this may be slightly unintuitive but provides more flexibility
+
+Palette Mode
+  There are 256 colors in the palette
+  Clicking on a color will attach that color to the color picker
+  Clicking on the tool color will set it to the index of the color in the
+    color picker
+  Pressing z, x, c on a palette color will set tool color
+
+RGBA Mode
+  Clicking on a color in the default palette will set the color picker to that color
+    this does not attach the color
+    this sets the color of the attached ColorHandle to the color in the palette
+  Clicking on the tool color will attach that color to the color picker
+
+ColorHandle
+  a handle to a color
+  used for attaching colors to the color picker
+  keeps track of where the color came from so that a string name can be generated
+  always refers to an RGBA color
+
+ColorPicker
+  indicates the source of the color that is currently attached
+    "Palette 14" or "Secondary"
+  HSV color picker with alpha slider and text boxes for RGBA and HSV
+
+Export
+  The current frame can be exported as a PNG
+  The animation can be exported as a sequence of PNGs
+    User can select a directory to fill with the PNGs
+    User can provide a name for the PNGs
+    Each PNG will have the frame number
+    Conflicting files will be overwritten
+  The current palette can be exported as a px2pal
+
+Import
+  PNGs can be imported
+    this replaces the current cell with SourceCell (if it isn't one already)
+    then sets the contents of the SourceCell to the image
+    If the PNG is too big
+      it will be cropped
+    if the PNG is too small
+      the remaining space will be filled with transparent black
+  A palette can be imported from a px2pal to replace the current palette
+
+Status Bar
+  Appears as a line of text in the bottom left corner
+  When mouse is in editor
+    mouse position
+    color and palette index if this is a palette animation
+  When using rectangular selection tool
+    Not selected
+      same as mouse in editor
+    Selecting or Selected
+      start and end position
+      size of selection
+  When hovering over palette tile
+    palette mode
+      palette index
+      color
+    rgba mode
+      color name
+      color
+  Temporary messages may appear for a few seconds
+    When the CMD+S is pressed, "Saved!" will appear for a few seconds
+    temporary messages overwrite messages coming from things like the editor
+    temporary messages are removed after 5 seconds
+    if a temporary message arrives while a temporary message is being shown
+      the old message is replaced with a new one
+    this might work better than having a static status bar
+      if the user presses CMD+S but then moves the mouse in the editor,
+        they might missed the "Saved!" message and think that the animation
+        has not been saved
+
+Tool options
+  Appears as a line in the bottom right corner
+  Shows options for configuring the selected tool
+  Setting the size of the brush or axes of symmetry or the thinkness of a line
+
+RGBAToolColors
+  Stores RGBA colors for tool colors
+
+PaletteToolColors
+  Stores palette indicies for tool colors
+  Stores a handle to the palette of the animation
+
+ToolColors
+  either an RGBAToolColors object or PaletteToolColors object
+  has virtual functions for setting the pen and brush colors
+
+A Tool responds to mouse inputs and manipulates Images
+  accepts primary/secondary/erase down/move/up events
+    event includes a Cell that can be modified
+    and ToolColors
+  an overlay image may be requested from the current tool
+    an overlay image is a grayscale, partially transparent image
+    an overlay image is rendered on the editor
+  the paint tools use the primary/secondary/erase colors to paint the image
+  paint tools use the Source composite operation so they can erase
+  BrushTool
+    sets a circle of pixels
+    user can set the size
+    overlay shows brush shape
+    mouse down paints the brush
+    mouse move paints a line between the previous point and the current point
+    mouse up points a line between the previous point and the current point
+    there is no buffering like the other paint tools
+    changes are made live
+  LineTool
+    user can set thickness
+    mouse down sets the start point
+    mouse up sets the end point
+  FilledCircleTool
+    user can decide between a 1x1, 1x2, 2x1, 2x2 center
+    mouse down sets the center
+    mouse up sets the radius
+  FilledRectangleTool
+    mouse down sets a corner
+    mouse up sets an opposite corner
+  StrokedCircleTool
+    user can set thickness
+    user can decide between a 1x1, 1x2, 2x1, 2x2 center
+    mouse down sets the center
+    mouse up sets the radius
+  StrokedRectangleTool
+    user can set thickness
+    mouse down sets a corner
+    mouse up sets an opposite corner
+  FloodFillTool
+    mouse down will flood fill all surrounding pixels of the same color
+  RectangleSelectTool
+    primary down sets a corner
+    primary up sets an opposite corner and copies the selection
+    if the tool is holding a copied selection and the mouse is not down,
+      sets the overlay to the lumosity of the selection
+    if primary is down
+      sets the overlay to a rectangle showing the selection
+    secondary down pastes the copied selection
+      does nothing if no selection has been copied
+    erase down
+      erases the rectangle of the selection at the mouse position
+      not at the original selection position
+  MaskSelectTool
+    primary down sets the start position
+    primary move appends a point to a polygon if that point is not at the end
+    primary up appends the current point and the start point
+      a mask is created by filling the polygon
+      the mask is used to copy part of the image
+    shows overlay like rectangle select
+    secondary down pastes the copied selection
+      does nothing if no selection has been copied
+      uses the Source composite operation for pixels within the mask
+      does not change pixels outside of the mask
+    erase down
+      erases the shape of the selection at the mouse position
+  SymmetryTool
+    similar to BrushTool
+    user can set the size of the brush
+    user can set the symmetry mode
+      vertical
+      horizontal
+      vertial and horizontal
+    overlay shows brush shape on all sides of symmetry
+    mouse events are the same as BrushTool except that multiple points are painted
+  transformation tools can be applied to both SourceCells and TransformCells
+  MoveTool
+    arrow keys may be used to move
+    translation is shown in the status bar
+    dragging can also be used to move
+  ScaleTool
+    arrow keys may be used to scale
+    scale is shown in the status bar
+    dragging can not be used to scale
+  RotateTool
+    arrow keys may be used to rotate
+    rotation angle is shown in the status bar
+    dragging can not be used to rotate
+
+Tools
+  Stores all of the tools and pointer to the active tool
+  responsible for switching tools and routing messages to the current tool
+  passes the current cell to the current tool
+
+Project management
+  If the application is launched by opening an animation file,
+    that animation file will be opened
+  If the application is launched without a animation file
+    the user will be presented with the New Animation window
+  The user will be asked "Do You Want To Save?" before the current animation
+  is changed
+  Clicking the "New Animation" button will show the New Animation window
+    User can set the size of the animation and whether they want to use a palette
+  Clicking the "Open Animation" button will show the FileDialog for opening animations
+  Clicking the "Save Animation" button
+    if the current animation was opened from a file
+      that file will be updated
+    if the current animation was previously saved to a file
+      that file will be updated
+    if the current animation has not been saved before
+      a FileDialog for saving animations will be shown
+
+Undo
+  a stack of images of the current SourceCell are stored
+  or a stack of transforms of the current TransformCell
+  a pointer to the top image is stored
+    there is always at least one image in the stack
+    probably want to implement this as an index if the stack is dynamically
+    changing size
+  when the current SourceCell is changed
+    the stack is cleared
+    the state of the new SourceCell is pushed onto the stack
+    the pointer is set the pushed item
+  when a tool updates the current SourceCell
+    if there are images after the pointer
+      they will be removed
+      the new image will be pushed after the pointer
+    the modified image is pushed to the stack
+    the pointer is incremented to pointer to the image that was pushed
+    if the stack size is greater than 64
+      the oldest items are removed
+  when the undo button is pressed
+    if the stack is empty (this is not a SourceCell)
+      a temporary message will show "Cannot undo actions on this cell"
+    if the current pointer is pointing to the base of the stack
+      a temporary message will show "Cannot undo any further"
+    otherwise
+      the pointer is decremented
+      the current source cell will be updated with the pointed image
+  when the redo button is pressed
+    if the stack is empty (this is not a SourceCell)
+      a temporary message will show "Cannot redo actions on this cell"
+    if the current pointer is pointing to the top of the stack
+      a temporary message will show "Cannot redo any further"
+    otherwise
+      the pointer is incremented
+      the current source cell will be updated with the pointed image
