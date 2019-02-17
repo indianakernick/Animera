@@ -25,6 +25,8 @@
 		455F28852206930800C73F39 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455F28842206930800C73F39 /* CoreVideo.framework */; };
 		455F28872206930E00C73F39 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455F28862206930D00C73F39 /* OpenGL.framework */; };
 		455F288C2206B57300C73F39 /* QtQuick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455F288B2206B57300C73F39 /* QtQuick.framework */; };
+		45B284932218E38800D6D055 /* image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45B284912218E38800D6D055 /* image.cpp */; };
+		45B284962218E39300D6D055 /* cell.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45B284942218E39300D6D055 /* cell.cpp */; };
 		45C2A27C220AB2FF00E989C2 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 45C2A27B220AB2FE00E989C2 /* icon.png */; };
 /* End PBXBuildFile section */
 
@@ -51,6 +53,10 @@
 		455F28862206930D00C73F39 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		455F28882206942200C73F39 /* libqcocoa.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libqcocoa.dylib; path = ../../../../../../usr/local/Cellar/qt/5.12.0/plugins/platforms/libqcocoa.dylib; sourceTree = "<group>"; };
 		455F288B2206B57300C73F39 /* QtQuick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtQuick.framework; path = ../../../../../../usr/local/Cellar/qt/5.12.0/lib/QtQuick.framework; sourceTree = "<group>"; };
+		45B284912218E38800D6D055 /* image.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = image.cpp; sourceTree = "<group>"; };
+		45B284922218E38800D6D055 /* image.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = image.hpp; sourceTree = "<group>"; };
+		45B284942218E39300D6D055 /* cell.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = cell.cpp; sourceTree = "<group>"; };
+		45B284952218E39300D6D055 /* cell.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = cell.hpp; sourceTree = "<group>"; };
 		45C2A2562207BC4000E989C2 /* notes.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = notes.txt; sourceTree = "<group>"; };
 		45C2A27B220AB2FE00E989C2 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = "Pixel 2/icon.png"; sourceTree = "<group>"; };
 		45C2A27D220BFD1800E989C2 /* libpixman-1.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libpixman-1.a"; path = "../../../../../../usr/local/Cellar/pixman/0.36.0/lib/libpixman-1.a"; sourceTree = "<group>"; };
@@ -144,6 +150,10 @@
 		45C2A2552207BC1500E989C2 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				45B284912218E38800D6D055 /* image.cpp */,
+				45B284922218E38800D6D055 /* image.hpp */,
+				45B284942218E39300D6D055 /* cell.cpp */,
+				45B284952218E39300D6D055 /* cell.hpp */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -246,6 +256,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				455F2868220690A600C73F39 /* main.cpp in Sources */,
+				45B284932218E38800D6D055 /* image.cpp in Sources */,
+				45B284962218E39300D6D055 /* cell.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

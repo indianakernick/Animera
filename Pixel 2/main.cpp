@@ -458,6 +458,8 @@ public:
   }
 };
 
+#include "src/image.hpp"
+
 class RenderWidget : public QScrollArea {
 public:
   RenderWidget(QWidget *parent)
@@ -486,7 +488,7 @@ public:
     setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     setAlignment(Qt::AlignCenter);
     view = new QLabel{this};
-    img.load("/Users/indikernick/Library/Developer/Xcode/DerivedData/Pixel_2-gqoblrlhvynmicgniivandqktune/Build/Products/Debug/Pixel 2.app/Contents/Resources/icon.png");
+    img.load("/Users/indikernick/Library/Developer/Xcode/DerivedData/Pixel_2-gqoblrlhvynmicgniivandqktune/Build/Products/Release/Pixel 2.app/Contents/Resources/icon.png");
     view->setPixmap(img.scaled(1024, 1024));
     view->resize(1024, 1024);
     setWidget(view);
@@ -624,7 +626,33 @@ private:
   }
 };
 
+template <typename Type>
+void dummy() {}
+
+using ID = void(*)();
+
+template <typename Type>
+constexpr ID getID() {
+  return &dummy<Type>;
+}
+
+// leave your entries in the subreddit bros and I'll watch submissions in the next episode of LWIAY
+// skrattar du, förlorar du
+
 int main(int argc, char **argv) {
+  Image img;
+  img.data.load("/Users/indikernick/Library/Developer/Xcode/DerivedData/Pixel_2-gqoblrlhvynmicgniivandqktune/Build/Products/Release/Pixel 2.app/Contents/Resources/icon.png");
+  img.xform.rot = 1;
+  img.xform.pos = {30, 50};
+  img.xform.scale = {4, -3};
+  QImage xformed = img.transformed();
+  xformed.save("/Users/indikernick/Desktop/test.png");
+  return 0;
+  
+  static_assert(getID<int>() == getID<int>());
+  static_assert(getID<int>() != getID<char>());
+  static_assert(getID<struct A>() == getID<struct A>());
+  static_assert(getID<struct A>() != getID<struct B>());
   Application app{argc, argv};
   return app.exec();
 }

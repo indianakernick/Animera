@@ -14,7 +14,7 @@ A Cell is an item on the timeline
     Stores an image that can be manipulated
     Image is either a color RGBA image or a paletted image
   DuplicateCell
-    Duplicate the previous cell
+    Duplicate the previous cell (including both bitmap and transform)
     When the previous cell is a null cell
       produces a null image
   TransformCell
@@ -34,16 +34,16 @@ An Animation is a sequence of Layers
   there is one palette for the whole animation
 
 Timeline
-  When creating a new frame, user can append either
+  When creating a new cell, user can append either
     a blank SourceCell
     a DuplicateCell
     a TransformCell
       stored transform is initialized with the transform of the SourceCell
   When the user tries to use a tool on a null cell,
     a SourceCell is created
-  When the user tries to use a tool on a DuplicateCell,
+  When the user tries to modify on a DuplicateCell,
     it will be converted to a SourceCell
-  When the user tries to use a tool on a TransformCell,
+  When the user tries to use a paint modification tool on a TransformCell,
     a message will tell the user that this is not allowed
   Layers can be hidden
     This prevents them from being seen in the render window
@@ -59,6 +59,29 @@ Timeline
     user can set a frame delay
     animation is looped
     can pause and play by pressing space
+  The type of a cell is reflected in the UI
+    there is a symbol for each type of cell
+    maybe just S, T and D until I can think of something better
+  Cells can be selected by dragging a box
+    Copy
+      copies the cells onto the timeline clipboard
+    Remove
+      removes the cells
+      cells after the deleted cells are shifted
+      layer is notified of change
+    Clear
+      replaces the cells with null cells
+    Paste
+      removes the selected cells
+      pastes the timeline clipboard at the start of the selection
+  Shortcuts
+    shift left clicking on a cell will copy it to the timeline clipboard
+    shift right clicking on a cell will remove the cell and paste the timeline clipboard
+    pressing delete will remove the selected cells
+    command C will copy selected cells
+    command V will paste selected cells
+    command X will copy and remove selected cells
+    
 
 Transformations
   User can apply relative transformations to a SourceCell or a TransformCell
@@ -317,3 +340,5 @@ Undo
     otherwise
       the pointer is incremented
       the current source cell will be updated with the pointed image
+
+Does having three colors overcomplicate things? Could we get away with just a foreground and background color?
