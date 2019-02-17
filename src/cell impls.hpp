@@ -11,6 +11,12 @@
 
 #include "cell.hpp"
 
+enum class CellType : uint8_t {
+  source,
+  duplicate,
+  transform
+};
+
 class SourceCell : public Cell {
 public:
   SourceCell() = default;
@@ -19,6 +25,7 @@ public:
   Image outputImage() const override;
   void updateInput(const Cell *) override;
   CellPtr clone() const override;
+  void serialize(QIODevice *) const override;
   
   Image image;
 };
@@ -31,6 +38,7 @@ public:
   Image outputImage() const override;
   void updateInput(const Cell *) override;
   CellPtr clone() const override;
+  void serialize(QIODevice *) const override;
 
   const Cell *source = nullptr;
 };
@@ -43,6 +51,7 @@ public:
   Image outputImage() const override;
   void updateInput(const Cell *) override;
   CellPtr clone() const override;
+  void serialize(QIODevice *) const override;
   
   const Cell *source = nullptr;
   Transform xform;
