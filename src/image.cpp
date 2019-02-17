@@ -11,19 +11,19 @@
 #include <QtGui/qpainter.h>
 
 QImage Image::transformed() const {
-  const QSize newSize{
-    data.width() * qAbs(xform.scale.x()),
-    data.height() * qAbs(xform.scale.y())
-  };
-  QImage newImage(newSize, data.format());
+  QImage newImage(data.size(), data.format());
   newImage.fill(0);
   QPainter painter(&newImage);
-  painter.translate(xform.pos);
-  painter.translate(newSize.width() / 2, newSize.height() / 2);
-  painter.scale(xform.scale.x(), xform.scale.y());
-  painter.rotate(90.0 * xform.rot);
+  painter.translate(xform.posX, xform.posY);
+  painter.translate(data.width() / 2, data.height() / 2);
+  painter.scale(flipToScale(xform.flipX), flipToScale(xform.flipY));
+  painter.rotate(angleToDegrees(xform.angle));
   painter.translate(data.width() / -2, data.height() / -2);
   painter.drawImage(0, 0, data);
   painter.end();
   return newImage;
+}
+
+bool Image::isNull() const {
+  return data.isNull();
 }

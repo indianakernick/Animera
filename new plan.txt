@@ -81,7 +81,6 @@ Timeline
     command C will copy selected cells
     command V will paste selected cells
     command X will copy and remove selected cells
-    
 
 Transformations
   User can apply relative transformations to a SourceCell or a TransformCell
@@ -105,6 +104,7 @@ Transformations
       LEFT   CCW
     Scaling up and down adds and subtracts from the absolute scale of the image
       this may be slightly unintuitive but provides more flexibility
+  Transformations on SourceCells can be baked
 
 Palette Mode
   There are 256 colors in the palette
@@ -273,10 +273,10 @@ A Tool responds to mouse inputs and manipulates Images
     arrow keys may be used to move
     translation is shown in the status bar
     dragging can also be used to move
-  ScaleTool
-    arrow keys may be used to scale
-    scale is shown in the status bar
-    dragging can not be used to scale
+  FlipTool
+    arrow keys may be used to flip
+    flip status is shown in the status bar
+    dragging can not be used to flip
   RotateTool
     arrow keys may be used to rotate
     rotation angle is shown in the status bar

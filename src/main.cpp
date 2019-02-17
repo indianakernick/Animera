@@ -624,32 +624,19 @@ private:
   }
 };
 
-template <typename Type>
-void dummy() {}
-
-using ID = void(*)();
-
-template <typename Type>
-constexpr ID getID() {
-  return &dummy<Type>;
-}
-
 #include "image.hpp"
 
 int main(int argc, char **argv) {
   Image img;
   img.data.load("/Users/indikernick/Library/Developer/Xcode/DerivedData/Pixel_2-gqoblrlhvynmicgniivandqktune/Build/Products/Debug/Pixel 2.app/Contents/Resources/icon.png");
-  img.xform.rot = 1;
-  img.xform.pos = {30, 50};
-  img.xform.scale = {4, -3};
+  img.xform.angle = 1;
+  img.xform.posX = 3;
+  img.xform.posY = 5;
+  img.xform.flipX = true;
   QImage xformed = img.transformed();
   xformed.save("/Users/indikernick/Desktop/test.png");
   //return 0;
   
-  static_assert(getID<int>() == getID<int>());
-  static_assert(getID<int>() != getID<char>());
-  static_assert(getID<struct A>() == getID<struct A>());
-  static_assert(getID<struct A>() != getID<struct B>());
   Application app{argc, argv};
   return app.exec();
 }
