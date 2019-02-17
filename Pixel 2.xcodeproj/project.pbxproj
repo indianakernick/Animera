@@ -27,7 +27,7 @@
 		455F288C2206B57300C73F39 /* QtQuick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455F288B2206B57300C73F39 /* QtQuick.framework */; };
 		45B284932218E38800D6D055 /* image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45B284912218E38800D6D055 /* image.cpp */; };
 		45B284962218E39300D6D055 /* cell.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45B284942218E39300D6D055 /* cell.cpp */; };
-		45C2A27C220AB2FF00E989C2 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 45C2A27B220AB2FE00E989C2 /* icon.png */; };
+		45B284982219003C00D6D055 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 45B284972219003B00D6D055 /* icon.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -57,8 +57,8 @@
 		45B284922218E38800D6D055 /* image.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = image.hpp; sourceTree = "<group>"; };
 		45B284942218E39300D6D055 /* cell.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = cell.cpp; sourceTree = "<group>"; };
 		45B284952218E39300D6D055 /* cell.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = cell.hpp; sourceTree = "<group>"; };
+		45B284972219003B00D6D055 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		45C2A2562207BC4000E989C2 /* notes.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = notes.txt; sourceTree = "<group>"; };
-		45C2A27B220AB2FE00E989C2 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = "Pixel 2/icon.png"; sourceTree = "<group>"; };
 		45C2A27D220BFD1800E989C2 /* libpixman-1.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libpixman-1.a"; path = "../../../../../../usr/local/Cellar/pixman/0.36.0/lib/libpixman-1.a"; sourceTree = "<group>"; };
 		45C2A280220E821200E989C2 /* new plan.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "new plan.txt"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -93,8 +93,13 @@
 		455F2848220688FC00C73F39 = {
 			isa = PBXGroup;
 			children = (
-				45C2A27B220AB2FE00E989C2 /* icon.png */,
-				455F2853220688FD00C73F39 /* Pixel 2 */,
+				45B284972219003B00D6D055 /* icon.png */,
+				455F285B2206890300C73F39 /* Assets.xcassets */,
+				455F28602206890300C73F39 /* Info.plist */,
+				455F28612206890300C73F39 /* Pixel_2.entitlements */,
+				45C2A2562207BC4000E989C2 /* notes.txt */,
+				45C2A280220E821200E989C2 /* new plan.txt */,
+				455F2853220688FD00C73F39 /* src */,
 				455F2852220688FD00C73F39 /* Products */,
 				455F2869220691DC00C73F39 /* Frameworks */,
 			);
@@ -108,18 +113,16 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		455F2853220688FD00C73F39 /* Pixel 2 */ = {
+		455F2853220688FD00C73F39 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				45C2A2552207BC1500E989C2 /* src */,
-				455F285B2206890300C73F39 /* Assets.xcassets */,
-				455F28602206890300C73F39 /* Info.plist */,
-				455F28612206890300C73F39 /* Pixel_2.entitlements */,
+				45B284912218E38800D6D055 /* image.cpp */,
+				45B284922218E38800D6D055 /* image.hpp */,
+				45B284942218E39300D6D055 /* cell.cpp */,
+				45B284952218E39300D6D055 /* cell.hpp */,
 				455F2867220690A600C73F39 /* main.cpp */,
-				45C2A2562207BC4000E989C2 /* notes.txt */,
-				45C2A280220E821200E989C2 /* new plan.txt */,
 			);
-			path = "Pixel 2";
+			path = src;
 			sourceTree = "<group>";
 		};
 		455F2869220691DC00C73F39 /* Frameworks */ = {
@@ -145,17 +148,6 @@
 				455F2872220691DD00C73F39 /* QtWidgets.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		45C2A2552207BC1500E989C2 /* src */ = {
-			isa = PBXGroup;
-			children = (
-				45B284912218E38800D6D055 /* image.cpp */,
-				45B284922218E38800D6D055 /* image.hpp */,
-				45B284942218E39300D6D055 /* cell.cpp */,
-				45B284952218E39300D6D055 /* cell.hpp */,
-			);
-			path = src;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -223,7 +215,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				45C2A27C220AB2FF00E989C2 /* icon.png in Resources */,
+				45B284982219003C00D6D055 /* icon.png in Resources */,
 				455F285C2206890300C73F39 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -393,7 +385,7 @@
 					/usr/local/Cellar/qt/5.12.0/lib,
 				);
 				HEADER_SEARCH_PATHS = "";
-				INFOPLIST_FILE = "Pixel 2/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -425,7 +417,7 @@
 				);
 				GCC_OPTIMIZATION_LEVEL = 3;
 				HEADER_SEARCH_PATHS = "";
-				INFOPLIST_FILE = "Pixel 2/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
