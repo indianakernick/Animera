@@ -17,6 +17,30 @@ const Cell *findNonDup(const Cell *cell) {
   return cell;
 }
 
+const Cell *findSrc(const Cell *cell) {
+  while (cell) {
+    if (auto *dup = dynamic_cast<const DuplicateCell *>(cell)) {
+      cell = dup->source;
+    } else if (auto *trans = dynamic_cast<const TransformCell *>(cell)) {
+      cell = trans->source;
+    } else {
+      break;
+    }
+  }
+  return cell;
+}
+
+Transform findTransform(const Cell *cell) {
+  cell = findNonDup(cell);
+  if (auto *src = dynamic_cast<const SourceCell *>(cell)) {
+    return src->image.xform;
+  } else if (auto *trans = dynamic_cast<const TransformCell *>(cell)) {
+    return trans->xform;
+  } else {
+    return {};
+  }
+}
+
 }
 
 SourceCell::SourceCell(const QSize size, const Format format)
@@ -52,11 +76,7 @@ CellPtr DuplicateCell::clone() const {
 
 TransformCell::TransformCell(const Cell *input) {
   updateInput(input);
-  if (auto *srcCell = dynamic_cast<const SourceCell *>(source)) {
-    xform = srcCell->image.xform;
-  } else if (auto *transCell = dynamic_cast<const TransformCell *>(source)) {
-    xform = transCell->xform;
-  }
+  xform = findTransform(input);
 }
 
 Image TransformCell::outputImage() const {
@@ -64,7 +84,7 @@ Image TransformCell::outputImage() const {
 }
 
 void TransformCell::updateInput(const Cell *input) {
-  source = findNonDup(input);
+  source = findSrc(input);
 }
 
 CellPtr TransformCell::clone() const {
