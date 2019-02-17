@@ -6,15 +6,23 @@
 //  Copyright © 2019 Indi Kernick. All rights reserved.
 //
 
-#ifndef pixel_2_cell_hpp
-#define pixel_2_cell_hpp
+#ifndef cell_hpp
+#define cell_hpp
 
+#include <memory>
 #include "image.hpp"
+
+class Cell;
+
+using CellPtr = std::unique_ptr<Cell>;
 
 class Cell {
 public:
   virtual ~Cell();
-  virtual Image image() const = 0;
+  
+  virtual Image outputImage() const = 0;
+  virtual void updateInput(const Cell *) = 0;
+  virtual CellPtr clone() const = 0;
 };
 
 #endif

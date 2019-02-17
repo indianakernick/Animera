@@ -72,8 +72,9 @@ Timeline
     Clear
       replaces the cells with null cells
     Paste
-      removes the selected cells
       pastes the timeline clipboard at the start of the selection
+    Insert
+      A new cell is placed at the beginning of the selection
   Shortcuts
     shift left clicking on a cell will copy it to the timeline clipboard
     shift right clicking on a cell will remove the cell and paste the timeline clipboard

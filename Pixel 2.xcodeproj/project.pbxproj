@@ -28,6 +28,8 @@
 		45B284932218E38800D6D055 /* image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45B284912218E38800D6D055 /* image.cpp */; };
 		45B284962218E39300D6D055 /* cell.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45B284942218E39300D6D055 /* cell.cpp */; };
 		45B284982219003C00D6D055 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 45B284972219003B00D6D055 /* icon.png */; };
+		45B284A42219071200D6D055 /* cell impls.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45B284A22219071200D6D055 /* cell impls.cpp */; };
+		45B284A72219079B00D6D055 /* animation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45B284A52219079B00D6D055 /* animation.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,6 +60,10 @@
 		45B284942218E39300D6D055 /* cell.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = cell.cpp; sourceTree = "<group>"; };
 		45B284952218E39300D6D055 /* cell.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = cell.hpp; sourceTree = "<group>"; };
 		45B284972219003B00D6D055 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
+		45B284A22219071200D6D055 /* cell impls.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "cell impls.cpp"; sourceTree = "<group>"; };
+		45B284A32219071200D6D055 /* cell impls.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "cell impls.hpp"; sourceTree = "<group>"; };
+		45B284A52219079B00D6D055 /* animation.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = animation.cpp; sourceTree = "<group>"; };
+		45B284A62219079B00D6D055 /* animation.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = animation.hpp; sourceTree = "<group>"; };
 		45C2A2562207BC4000E989C2 /* notes.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = notes.txt; sourceTree = "<group>"; };
 		45C2A27D220BFD1800E989C2 /* libpixman-1.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libpixman-1.a"; path = "../../../../../../usr/local/Cellar/pixman/0.36.0/lib/libpixman-1.a"; sourceTree = "<group>"; };
 		45C2A280220E821200E989C2 /* new plan.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "new plan.txt"; sourceTree = "<group>"; };
@@ -116,11 +122,15 @@
 		455F2853220688FD00C73F39 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				455F2867220690A600C73F39 /* main.cpp */,
 				45B284912218E38800D6D055 /* image.cpp */,
 				45B284922218E38800D6D055 /* image.hpp */,
 				45B284942218E39300D6D055 /* cell.cpp */,
 				45B284952218E39300D6D055 /* cell.hpp */,
-				455F2867220690A600C73F39 /* main.cpp */,
+				45B284A22219071200D6D055 /* cell impls.cpp */,
+				45B284A32219071200D6D055 /* cell impls.hpp */,
+				45B284A52219079B00D6D055 /* animation.cpp */,
+				45B284A62219079B00D6D055 /* animation.hpp */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -248,8 +258,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				455F2868220690A600C73F39 /* main.cpp in Sources */,
+				45B284A72219079B00D6D055 /* animation.cpp in Sources */,
 				45B284932218E38800D6D055 /* image.cpp in Sources */,
 				45B284962218E39300D6D055 /* cell.cpp in Sources */,
+				45B284A42219071200D6D055 /* cell impls.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -394,6 +406,21 @@
 					"$(inherited)",
 					/usr/local/Cellar/qt/5.12.0/plugins/platforms,
 				);
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-Wall",
+					"-Wextra",
+					"-Weffc++",
+					"-Wpedantic",
+					"-Wshadow",
+					"-Wno-documentation",
+					"-Wnull-dereference",
+					"-Woverloaded-virtual",
+					"-Wreturn-type",
+					"-Wnonportable-include-path",
+					"-Wstrict-aliasing",
+					"-Wno-comma",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "Indi-Kernick.Pixel-2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REEXPORTED_LIBRARY_PATHS = "";
@@ -416,6 +443,7 @@
 					/usr/local/Cellar/qt/5.12.0/lib,
 				);
 				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = NDEBUG;
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -425,6 +453,21 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/usr/local/Cellar/qt/5.12.0/plugins/platforms,
+				);
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-Wall",
+					"-Wextra",
+					"-Weffc++",
+					"-Wpedantic",
+					"-Wshadow",
+					"-Wno-documentation",
+					"-Wnull-dereference",
+					"-Woverloaded-virtual",
+					"-Wreturn-type",
+					"-Wnonportable-include-path",
+					"-Wstrict-aliasing",
+					"-Wno-comma",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "Indi-Kernick.Pixel-2";
 				PRODUCT_NAME = "$(TARGET_NAME)";

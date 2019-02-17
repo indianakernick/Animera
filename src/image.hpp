@@ -19,6 +19,19 @@ struct Transform {
   bool flipY = false;
 };
 
+enum class Format {
+  color,
+  palette
+};
+
+inline QImage::Format getImageFormat(const Format format) {
+  if (format == Format::color) {
+    return QImage::Format_ARGB32;
+  } else {
+    return QImage::Format_Indexed8;
+  }
+}
+
 inline quint8 increaseAngle(const quint8 angle) {
   return (angle + 1) & 3;
 }
