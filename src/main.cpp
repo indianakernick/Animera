@@ -457,6 +457,47 @@ private:
   Clock::time_point startTime;
 };
 
+#include <QtCore/qtimer.h>
+
+class StatusBar : public QWidget {
+public:
+  explicit StatusBar(QWidget *parent)
+    : QWidget{parent}, label{this} {
+    timer.setInterval(5000);
+    timer.setSingleShot(true);
+    connect(&timer, &QTimer::timeout, this, &StatusBar::hideTemp);
+    label.setMinimumWidth(400);
+  }
+  
+  void showTemp(const QString &text) {
+    tempText = text;
+    timer.start();
+    setText();
+  }
+  void showPerm(const QString &text) {
+    permText = text;
+    setText();
+  }
+  
+private:
+  QLabel label;
+  QString permText;
+  QString tempText;
+  QTimer timer;
+  
+  void setText() {
+    if (tempText.isEmpty()) {
+      label.setText(permText);
+    } else {
+      label.setText(permText + " | " + tempText);
+    }
+  }
+  void hideTemp() {
+    tempText = "";
+    setText();
+  }
+};
+
 class ToolsWidget : public QWidget {
 public:
   ToolsWidget(QWidget *parent)
@@ -472,11 +513,16 @@ private:
 
 class TimelineWidget : public QWidget {
 public:
-  TimelineWidget(QWidget *parent)
-    : QWidget{parent} {
+  explicit TimelineWidget(QWidget *parent)
+    : QWidget{parent}, status{this} {
     setMinimumHeight(128);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
+    status.showPerm("Permanent message");
+    status.showTemp("Temporary message");
   }
+
+private:
+  StatusBar status;
 };
 
 class RenderWidget : public QScrollArea {
