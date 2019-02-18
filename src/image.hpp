@@ -10,6 +10,9 @@
 #define image_hpp
 
 #include <QtGui/qimage.h>
+#include <QtCore/qvector.h>
+
+using Palette = QVector<QRgb>;
 
 struct Transform {
   qint16 posX = 0;
@@ -19,17 +22,16 @@ struct Transform {
   bool flipY = false;
 };
 
-enum class Format {
+enum class Format : uint8_t {
   color,
   palette
 };
 
+constexpr QImage::Format color_format = QImage::Format_ARGB32;
+constexpr QImage::Format palette_format = QImage::Format_Grayscale8;
+
 inline QImage::Format getImageFormat(const Format format) {
-  if (format == Format::color) {
-    return QImage::Format_ARGB32;
-  } else {
-    return QImage::Format_Indexed8;
-  }
+  return format == Format::color ? color_format : palette_format;
 }
 
 inline quint8 increaseAngle(const quint8 angle) {
@@ -55,5 +57,14 @@ struct Image {
   QImage transformed() const;
   bool isNull() const;
 };
+
+void serialize(QIODevice *, const Transform &);
+void deserialize(QIODevice *, Transform &);
+
+void serialize(QIODevice *, const Image &);
+void deserialize(QIODevice *, Image &);
+
+void serialize(QIODevice *, const Palette &);
+void deserialize(QIODevice *, Palette &);
 
 #endif

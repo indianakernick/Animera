@@ -20,10 +20,10 @@ class Cell {
 public:
   virtual ~Cell();
   
+  virtual void serialize(QIODevice *) const = 0;
   virtual Image outputImage() const = 0;
   virtual void updateInput(const Cell *) = 0;
   virtual CellPtr clone() const = 0;
-  virtual void serialize(QIODevice *) const = 0;
 };
 
 #endif

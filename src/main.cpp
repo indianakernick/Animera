@@ -179,7 +179,7 @@ In case I decide that we need KC filters
 
 */
 
-#include <cmath>
+/*#include <cmath>
 
 struct Color {
   uint8_t r, g, b, a;
@@ -427,7 +427,7 @@ void xorMask(QImage &dst, const QImage &src) {
 
 uint32_t composeRGBA(const uint8_t r, const uint8_t g, const uint8_t b, const uint8_t a = 255) {
   return (uint32_t{a} << 24) | (uint32_t{r} << 16) | (uint32_t{g} << 8) | uint32_t{b};
-}
+}*/
 
 #define START_TIMER(NAME) \
   const auto NAME##_timer_start = std::chrono::high_resolution_clock::now()
@@ -624,7 +624,17 @@ private:
   }
 };
 
-#include "image.hpp"
+#include "animation.hpp"
+#include "cell impls.hpp"
+
+template <typename CellClass>
+auto getCell(const Animation &anim, const LayerIdx l, const FrameIdx f) {
+  Cell *cell = anim.getCell(l, f);
+  assert(cell);
+  auto *derived = dynamic_cast<CellClass *>(cell);
+  assert(derived);
+  return derived;
+};
 
 int main(int argc, char **argv) {
   Image img;
@@ -635,6 +645,98 @@ int main(int argc, char **argv) {
   img.xform.flipX = true;
   QImage xformed = img.transformed();
   xformed.save("/Users/indikernick/Desktop/test.png");
+  
+  QImage idxImg{2, 2, QImage::Format_Indexed8};
+  idxImg.detach();
+  idxImg.bits()[0] = 0;
+  idxImg.bits()[1] = 20;
+  idxImg.bits()[4] = 40;
+  idxImg.bits()[5] = 60;
+  idxImg.reinterpretAsFormat(QImage::Format_Grayscale8);
+  idxImg.save("/Users/indikernick/Desktop/idx_test.png");
+  
+  QImage loaded("/Users/indikernick/Desktop/idx_test.png");
+  std::cout << (loaded.format() == QImage::Format_Grayscale8) << '\n';
+  std::cout << (loaded.format() == QImage::Format_Indexed8) << '\n';
+  std::cout << (loaded.format() == QImage::Format_Alpha8) << '\n';
+  std::cout << loaded.format() << '\n';
+  std::cout << '\n';
+  
+  QImage colImg(1, 1, QImage::Format_ARGB32);
+  colImg.detach();
+  colImg.bits()[0] = 63;
+  colImg.bits()[1] = 127;
+  colImg.bits()[2] = 0;
+  colImg.bits()[3] = 0;
+  colImg.save("/Users/indikernick/Desktop/col_test.png");
+  
+  const int multiplied = ((127 * 63) / 255);
+  std::cout << multiplied << '\n';
+  std::cout << ((multiplied * 255) / 63) << '\n';
+  std::cout << '\n';
+  
+  QImage loadedCol("/Users/indikernick/Desktop/col_test.png");
+  std::cout << (loadedCol.format() == QImage::Format_ARGB32) << '\n';
+  std::cout << (loadedCol.format() == QImage::Format_ARGB32_Premultiplied) << '\n';
+  std::cout << loadedCol.format() << '\n';
+  std::cout << int(loadedCol.constBits()[0]) << ' '
+            << int(loadedCol.constBits()[1]) << ' '
+            << int(loadedCol.constBits()[2]) << ' '
+            << int(loadedCol.constBits()[3]) << '\n';
+  
+  /*QFile file{"/Users/indikernick/Desktop/project.px2"};
+  
+  file.open(QIODevice::WriteOnly | QIODevice::Truncate);
+  Animation anim({1, 1}, Format::color);
+  anim.appendTransform(0);
+  anim.appendLayer();
+  anim.appendDuplicate(1);
+  anim.appendDuplicate(1);
+  anim.appendLayer();
+  anim.appendSource(2);
+  auto *src = getCell<SourceCell>(anim, 2, 0);
+  src->image.xform.posX = 123;
+  src->image.xform.posY = 456;
+  src->image.xform.angle = 1;
+  src->image.xform.flipY = true;
+  src->image.data.bits()[0] = 191;
+  src->image.data.bits()[1] = 160;
+  src->image.data.bits()[2] = 63;
+  src->image.data.bits()[3] = 2;
+  
+  anim.serialize(&file);
+  file.close();
+  
+  file.open(QIODevice::ReadOnly);
+  Animation newAnim{&file};
+  file.close();
+  
+  assert(newAnim.size.width() == anim.size.width());
+  assert(newAnim.size.height() == anim.size.height());
+  assert(newAnim.format == anim.format);
+  assert(newAnim.layers.size() == anim.layers.size());
+  for (LayerIdx l = 0; l != newAnim.layers.size(); ++l) {
+    assert(newAnim.layers[l].size() == anim.layers[l].size());
+  }
+  if (newAnim.format == Format::palette) {
+    assert(newAnim.palette.size() == anim.palette.size());
+    assert(newAnim.palette == anim.palette);
+  }
+  
+  auto *trans_0_0 = getCell<TransformCell>(newAnim, 0, 0);
+  auto *dup_1_0 = getCell<DuplicateCell>(newAnim, 1, 0);
+  auto *dup_1_1 = getCell<DuplicateCell>(newAnim, 1, 1);
+  auto *src_2_0 = getCell<SourceCell>(newAnim, 2, 0);
+  assert(src_2_0->image.xform.posX == src->image.xform.posX);
+  assert(src_2_0->image.xform.posY == src->image.xform.posY);
+  assert(src_2_0->image.xform.angle == src->image.xform.angle);
+  assert(src_2_0->image.xform.flipX == src->image.xform.flipX);
+  assert(src_2_0->image.xform.flipY == src->image.xform.flipY);
+  assert(src_2_0->image.data.bits()[0] == src->image.data.bits()[0]);
+  assert(src_2_0->image.data.bits()[1] == src->image.data.bits()[1]);
+  assert(src_2_0->image.data.bits()[2] == src->image.data.bits()[2]);
+  assert(src_2_0->image.data.bits()[3] == src->image.data.bits()[3]);
+  */
   //return 0;
   
   Application app{argc, argv};

@@ -8,6 +8,8 @@
 
 #include "cell impls.hpp"
 
+#include "serial.hpp"
+
 namespace {
 
 const Cell *findNonDup(const Cell *cell) {
@@ -41,25 +43,48 @@ Transform findTransform(const Cell *cell) {
   }
 }
 
-template <typename T>
-void serialize(QIODevice *dev, const T &data) {
-  assert(dev->isWritable());
-  dev->write(reinterpret_cast<const char *>(&data), sizeof(T));
 }
 
-void serialize(QIODevice *dev, const Transform &xform) {
+void serializeCell(QIODevice *dev, const Cell *cell) {
   assert(dev);
-  serialize(dev, xform.posX);
-  serialize(dev, xform.posY);
-  serialize(dev, xform.angle);
-  serialize(dev, xform.flipX);
-  serialize(dev, xform.flipY);
+  if (cell) {
+    cell->serialize(dev);
+  } else {
+    serialize(dev, CellType::null);
+  }
 }
 
+CellPtr deserializeCell(QIODevice *dev) {
+  assert(dev);
+  CellType type;
+  deserialize(dev, type);
+  switch (type) {
+    case CellType::null:
+      return nullptr;
+    case CellType::source:
+      return std::make_unique<SourceCell>(dev);
+    case CellType::duplicate:
+      return std::make_unique<DuplicateCell>(dev);
+    case CellType::transform:
+      return std::make_unique<TransformCell>(dev);
+    default:
+      assert(false);
+  }
 }
 
 SourceCell::SourceCell(const QSize size, const Format format)
   : image{{size, getImageFormat(format)}, {}} {}
+
+SourceCell::SourceCell(QIODevice *dev) {
+  assert(dev);
+  ::deserialize(dev, image);
+}
+
+void SourceCell::serialize(QIODevice *dev) const {
+  assert(dev);
+  ::serialize(dev, CellType::source);
+  ::serialize(dev, image);
+}
 
 Image SourceCell::outputImage() const {
   return image;
@@ -73,17 +98,18 @@ CellPtr SourceCell::clone() const {
   return copy;
 }
 
-void SourceCell::serialize(QIODevice *dev) const {
-  assert(dev);
-  ::serialize(dev, CellType::source);
-  ::serialize(dev, image.xform);
-  assert(!image.data.isNull());
-  assert(dev->isWritable());
-  image.data.save(dev, "png");
-}
-
 DuplicateCell::DuplicateCell(const Cell *input) {
   updateInput(input);
+}
+
+DuplicateCell::DuplicateCell(QIODevice *dev) {
+  assert(dev);
+  // nothing to do
+}
+
+void DuplicateCell::serialize(QIODevice *dev) const {
+  assert(dev);
+  ::serialize(dev, CellType::duplicate);
 }
 
 Image DuplicateCell::outputImage() const {
@@ -98,14 +124,20 @@ CellPtr DuplicateCell::clone() const {
   return std::make_unique<DuplicateCell>();
 }
 
-void DuplicateCell::serialize(QIODevice *dev) const {
-  assert(dev);
-  ::serialize(dev, CellType::duplicate);
-}
-
 TransformCell::TransformCell(const Cell *input) {
   updateInput(input);
   xform = findTransform(input);
+}
+
+TransformCell::TransformCell(QIODevice *dev) {
+  assert(dev);
+  ::deserialize(dev, xform);
+}
+
+void TransformCell::serialize(QIODevice *dev) const {
+  assert(dev);
+  ::serialize(dev, CellType::transform);
+  ::serialize(dev, xform);
 }
 
 Image TransformCell::outputImage() const {
@@ -120,10 +152,4 @@ CellPtr TransformCell::clone() const {
   auto copy = std::make_unique<TransformCell>();
   copy->xform = xform;
   return copy;
-}
-
-void TransformCell::serialize(QIODevice *dev) const {
-  assert(dev);
-  ::serialize(dev, CellType::transform);
-  ::serialize(dev, xform);
 }

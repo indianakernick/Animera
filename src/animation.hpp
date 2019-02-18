@@ -11,7 +11,6 @@
 
 #include <vector>
 #include "cell.hpp"
-#include <QtCore/qvector.h>
 
 using LayerIdx = uint32_t;
 using FrameIdx = uint32_t;
@@ -31,11 +30,13 @@ struct CellRect {
 using Frames = std::vector<CellPtr>;
 using Layers = std::vector<Frames>;
 using Frame = std::vector<Cell *>;
-using Palette = QVector<QRgb>;
 
 class Animation {
 public:
   Animation(QSize, Format);
+  explicit Animation(QIODevice *);
+  
+  void serialize(QIODevice *) const;
 
   bool hasLayer(LayerIdx) const;
   bool hasFrame(CellPos) const;

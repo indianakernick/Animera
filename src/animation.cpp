@@ -8,6 +8,7 @@
 
 #include "animation.hpp"
 
+#include "serial.hpp"
 #include "cell impls.hpp"
 
 namespace {
@@ -21,23 +22,80 @@ void insertNull(Frames &frames, const Frames::iterator begin, const size_t count
   std::rotate(begin, frames.end() - count, frames.end());
 }
 
+constexpr char const magic_number[] = {'P', 'I', 'X', '2'};
+
 }
 
 Animation::Animation(const QSize size, const Format format)
   : size{size}, format{format} {
   layers.reserve(32);
-  layers.push_back(Frames{});
+  layers.emplace_back();
   if (format == Format::palette) {
     palette.reserve(256);
   }
 }
 
+Animation::Animation(QIODevice *dev) {
+  assert(dev);
+  char header[sizeof(magic_number)];
+  dev->read(header, sizeof(magic_number));
+  assert(std::memcmp(header, magic_number, sizeof(magic_number)) == 0);
+  deserialize(dev, format);
+  if (format == Format::palette) {
+    deserialize(dev, palette);
+  }
+  
+  uint16_t width;
+  uint16_t height;
+  deserialize(dev, width);
+  deserialize(dev, height);
+  size = {width, height};
+  
+  uint16_t layersSize;
+  deserialize(dev, layersSize);
+  layers.reserve(layersSize);
+  
+  while (layersSize--) {
+    uint16_t framesSize;
+    deserialize(dev, framesSize);
+    Frames &frames = layers.emplace_back();
+    frames.reserve(framesSize);
+    while (framesSize--) {
+      frames.push_back(deserializeCell(dev));
+    }
+  }
+  
+  for (LayerIdx l = 0; l != layers.size(); ++l) {
+    updateLayer(l);
+  }
+}
+
+void Animation::serialize(QIODevice *dev) const {
+  assert(dev);
+  dev->write(magic_number, sizeof(magic_number));
+  ::serialize(dev, format);
+  if (format == Format::palette) {
+    ::serialize(dev, palette);
+  }
+  
+  ::serialize(dev, static_cast<uint16_t>(size.width()));
+  ::serialize(dev, static_cast<uint16_t>(size.height()));
+  ::serialize(dev, static_cast<uint16_t>(layers.size()));
+  
+  for (const Frames &frames : layers) {
+    ::serialize(dev, static_cast<uint16_t>(frames.size()));
+    for (const CellPtr &cell : frames) {
+      serializeCell(dev, cell.get());
+    }
+  }
+}
+
 bool Animation::hasLayer(const LayerIdx l) const {
-  return 0 <= l && l < layers.size();
+  return l < layers.size();
 }
 
 bool Animation::hasFrame(const CellPos pos) const {
-  return hasLayer(pos.l) && 0 <= pos.f && pos.f < layers[pos.l].size();
+  return hasLayer(pos.l) && pos.f < layers[pos.l].size();
 }
 
 bool Animation::hasFrame(const LayerIdx l, const FrameIdx f) const {
@@ -53,9 +111,9 @@ FrameIdx Animation::frameCount(const LayerIdx l) const {
 }
 
 Cell *Animation::getCell(const CellPos pos) const {
-  if (0 <= pos.l && pos.l < layers.size()) {
+  if (pos.l < layers.size()) {
     const Frames &frames = layers[pos.l];
-    if (0 <= pos.f && pos.f < frames.size()) {
+    if (pos.f < frames.size()) {
       return frames[pos.f].get();
     }
   }
@@ -132,7 +190,7 @@ void Animation::pasteRect(const CellRect rect, const Layers &src) {
 }
 
 void Animation::appendLayer() {
-  layers.push_back(Frames{});
+  layers.emplace_back();
 }
 
 void Animation::appendSource(const LayerIdx l) {
@@ -187,7 +245,5 @@ bool Animation::validRect(const CellRect rect) const {
     rect.minL < rect.maxL &&
     rect.minF < rect.maxF &&
     hasLayer(rect.minL) &&
-    hasLayer(rect.maxL) &&
-    rect.minF > 0 &&
-    rect.maxF > 0;
+    hasLayer(rect.maxL);
 }
