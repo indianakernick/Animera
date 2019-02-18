@@ -31,6 +31,7 @@
 		45B284A42219071200D6D055 /* cell impls.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45B284A22219071200D6D055 /* cell impls.cpp */; };
 		45B284A72219079B00D6D055 /* animation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45B284A52219079B00D6D055 /* animation.cpp */; };
 		45B284AA221A331500D6D055 /* serial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45B284A8221A331500D6D055 /* serial.cpp */; };
+		45B284AD221A59EB00D6D055 /* undo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45B284AB221A59EB00D6D055 /* undo.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -67,6 +68,8 @@
 		45B284A62219079B00D6D055 /* animation.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = animation.hpp; sourceTree = "<group>"; };
 		45B284A8221A331500D6D055 /* serial.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = serial.cpp; sourceTree = "<group>"; };
 		45B284A9221A331500D6D055 /* serial.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = serial.hpp; sourceTree = "<group>"; };
+		45B284AB221A59EB00D6D055 /* undo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = undo.cpp; sourceTree = "<group>"; };
+		45B284AC221A59EB00D6D055 /* undo.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = undo.hpp; sourceTree = "<group>"; };
 		45C2A2562207BC4000E989C2 /* notes.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = notes.txt; sourceTree = "<group>"; };
 		45C2A27D220BFD1800E989C2 /* libpixman-1.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libpixman-1.a"; path = "../../../../../../usr/local/Cellar/pixman/0.36.0/lib/libpixman-1.a"; sourceTree = "<group>"; };
 		45C2A280220E821200E989C2 /* new plan.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "new plan.txt"; sourceTree = "<group>"; };
@@ -136,6 +139,8 @@
 				45B284A62219079B00D6D055 /* animation.hpp */,
 				45B284A8221A331500D6D055 /* serial.cpp */,
 				45B284A9221A331500D6D055 /* serial.hpp */,
+				45B284AB221A59EB00D6D055 /* undo.cpp */,
+				45B284AC221A59EB00D6D055 /* undo.hpp */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -262,6 +267,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				45B284AD221A59EB00D6D055 /* undo.cpp in Sources */,
 				455F2868220690A600C73F39 /* main.cpp in Sources */,
 				45B284A72219079B00D6D055 /* animation.cpp in Sources */,
 				45B284932218E38800D6D055 /* image.cpp in Sources */,

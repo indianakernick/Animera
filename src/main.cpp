@@ -429,12 +429,33 @@ uint32_t composeRGBA(const uint8_t r, const uint8_t g, const uint8_t b, const ui
   return (uint32_t{a} << 24) | (uint32_t{r} << 16) | (uint32_t{g} << 8) | uint32_t{b};
 }*/
 
-#define START_TIMER(NAME) \
-  const auto NAME##_timer_start = std::chrono::high_resolution_clock::now()
-#define STOP_TIMER(NAME) \
-  const auto NAME##_timer_end = std::chrono::high_resolution_clock::now(); \
-  const auto NAME##_timer_diff = std::chrono::duration_cast<std::chrono::microseconds>(NAME##_timer_end - NAME##_timer_start); \
-  std::cout << #NAME << " \t" << NAME##_timer_diff.count() / 1000.0 << "ms\n"
+class Timer {
+public:
+  using Clock = std::chrono::high_resolution_clock;
+  using OutputDuration = std::chrono::duration<double, std::milli>;
+  
+  void start(const char *timerName) {
+    assert(timerName);
+    name = timerName;
+    startTime = Clock::now();
+  }
+  void stop() {
+    assert(name);
+    const auto endTime = Clock::now();
+    const auto diff = std::chrono::duration_cast<OutputDuration>(
+      endTime - startTime
+    );
+    std::cout.width(16);
+    std::cout << std::left << name << ' ';
+    std::cout.precision(3);
+    std::cout << diff.count() << "ms\n";
+    name = nullptr;
+  }
+
+private:
+  const char *name = nullptr;
+  Clock::time_point startTime;
+};
 
 class ToolsWidget : public QWidget {
 public:
@@ -636,6 +657,12 @@ auto getCell(const Animation &anim, const LayerIdx l, const FrameIdx f) {
   return derived;
 };
 
+QImage dupImage(const QImage &img) {
+  QImage duplicate{img.size(), img.format()};
+  std::memcpy(duplicate.bits(), img.constBits(), img.sizeInBytes());
+  return duplicate;
+}
+
 int main(int argc, char **argv) {
   Image img;
   img.data.load("/Users/indikernick/Library/Developer/Xcode/DerivedData/Pixel_2-gqoblrlhvynmicgniivandqktune/Build/Products/Debug/Pixel 2.app/Contents/Resources/icon.png");
@@ -683,6 +710,38 @@ int main(int argc, char **argv) {
             << int(loadedCol.constBits()[1]) << ' '
             << int(loadedCol.constBits()[2]) << ' '
             << int(loadedCol.constBits()[3]) << '\n';
+  
+  std::cout << "\n\n";
+  
+  Timer timer;
+  
+  timer.start("Alloc");
+  QImage image{256, 256, QImage::Format_ARGB32};
+  timer.stop();
+  
+  timer.start("Clear");
+  image.fill(0);
+  timer.stop();
+  
+  timer.start("Memset");
+  std::memset(image.bits(), 0, image.sizeInBytes());
+  timer.stop();
+  
+  timer.start("Refer");
+  QImage copy = image;
+  timer.stop();
+  
+  timer.start("Copy");
+  copy.detach();
+  timer.stop();
+  
+  timer.start("Memcpy");
+  std::memcpy(copy.bits(), image.constBits(), image.sizeInBytes());
+  timer.stop();
+  
+  timer.start("Duplicate");
+  QImage dup = dupImage(image);
+  timer.stop();
   
   /*QFile file{"/Users/indikernick/Desktop/project.px2"};
   
