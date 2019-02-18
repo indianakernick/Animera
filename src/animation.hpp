@@ -9,27 +9,7 @@
 #ifndef animation_hpp
 #define animation_hpp
 
-#include <vector>
 #include "cell.hpp"
-
-using LayerIdx = uint32_t;
-using FrameIdx = uint32_t;
-
-struct CellPos {
-  LayerIdx l;
-  FrameIdx f;
-};
-
-struct CellRect {
-  LayerIdx minL;
-  LayerIdx maxL;
-  FrameIdx minF;
-  FrameIdx maxF;
-};
-
-using Frames = std::vector<CellPtr>;
-using Layers = std::vector<Frames>;
-using Frame = std::vector<Cell *>;
 
 class Animation {
 public:

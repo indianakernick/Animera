@@ -10,6 +10,7 @@
 #define cell_hpp
 
 #include <memory>
+#include <vector>
 #include "image.hpp"
 
 class Cell;
@@ -25,5 +26,24 @@ public:
   virtual void updateInput(const Cell *) = 0;
   virtual CellPtr clone() const = 0;
 };
+
+using LayerIdx = uint32_t;
+using FrameIdx = uint32_t;
+
+struct CellPos {
+  LayerIdx l;
+  FrameIdx f;
+};
+
+struct CellRect {
+  LayerIdx minL;
+  LayerIdx maxL;
+  FrameIdx minF;
+  FrameIdx maxF;
+};
+
+using Frames = std::vector<CellPtr>;
+using Layers = std::vector<Frames>;
+using Frame = std::vector<Cell *>;
 
 #endif

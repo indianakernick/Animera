@@ -179,7 +179,7 @@ In case I decide that we need KC filters
 
 */
 
-/*#include <cmath>
+#include <cmath>
 
 struct Color {
   uint8_t r, g, b, a;
@@ -295,10 +295,12 @@ bool operator!=(const Color a, const Color b) {
   return !(a == b);
 }
 
+constexpr int difference_threshold = 0;
+
 bool different(const uint8_t a, const uint8_t b) {
   const int aI = a;
   const int bI = b;
-  return aI + 2 < bI || bI + 2 < aI;
+  return aI + difference_threshold < bI || bI + difference_threshold < aI;
 }
 
 bool different(const Color a, const Color b) {
@@ -322,9 +324,12 @@ void testComposite() {
           const uint8_t bF = 255 - a.a;
           const Color cF = compositeF(a, b, aF, bF);
           const Color cI = compositeI(a, b, aF, bF);
-          const Color cM = divAlpha(compositeM(mulAlpha(a), mulAlpha(b), aF, bF));
-          if (different(cF, cI) || different(cI, cM) || different(cF, cM)) {
-            std::cout << a << " \t" << b << " \t" << cF << " \t" << cI << " \t" << cM << '\n';
+          //const Color cM = divAlpha(compositeM(mulAlpha(a), mulAlpha(b), aF, bF));
+          //if (different(cF, cI) || different(cI, cM) || different(cF, cM)) {
+          //  std::cout << a << " \t" << b << " \t" << cF << " \t" << cI << " \t" << cM << '\n';
+          //}
+          if (different(cF, cI)) {
+            std::cout << a << " \t" << b << " \t" << cF << " \t" << cI << '\n';
           }
         }
       }
@@ -427,7 +432,7 @@ void xorMask(QImage &dst, const QImage &src) {
 
 uint32_t composeRGBA(const uint8_t r, const uint8_t g, const uint8_t b, const uint8_t a = 255) {
   return (uint32_t{a} << 24) | (uint32_t{r} << 16) | (uint32_t{g} << 8) | uint32_t{b};
-}*/
+}
 
 class Timer {
 public:
@@ -710,14 +715,14 @@ QImage dupImage(const QImage &img) {
 }
 
 int main(int argc, char **argv) {
-  Image img;
+  /*Image img;
   img.data.load("/Users/indikernick/Library/Developer/Xcode/DerivedData/Pixel_2-gqoblrlhvynmicgniivandqktune/Build/Products/Debug/Pixel 2.app/Contents/Resources/icon.png");
   img.xform.angle = 1;
   img.xform.posX = 3;
   img.xform.posY = 5;
   img.xform.flipX = true;
   QImage xformed = img.transformed();
-  xformed.save("/Users/indikernick/Desktop/test.png");
+  xformed.save("/Users/indikernick/Desktop/test.png");*/
   
   QImage idxImg{2, 2, QImage::Format_Indexed8};
   idxImg.detach();
@@ -788,6 +793,8 @@ int main(int argc, char **argv) {
   timer.start("Duplicate");
   QImage dup = dupImage(image);
   timer.stop();
+  
+  testComposite();
   
   /*QFile file{"/Users/indikernick/Desktop/project.px2"};
   

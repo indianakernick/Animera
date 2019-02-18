@@ -27,6 +27,11 @@ enum class Format : uint8_t {
   palette
 };
 
+struct Image {
+  QImage data;
+  Transform xform;
+};
+
 constexpr QImage::Format color_format = QImage::Format_ARGB32;
 constexpr QImage::Format palette_format = QImage::Format_Grayscale8;
 
@@ -49,14 +54,6 @@ inline qreal angleToDegrees(const quint8 angle) {
 inline qreal flipToScale(const bool flip) {
   return static_cast<qreal>(flip) * -2.0 + 1.0;
 }
-
-struct Image {
-  QImage data;
-  Transform xform;
-  
-  QImage transformed() const;
-  bool isNull() const;
-};
 
 void serialize(QIODevice *, const Transform &);
 void deserialize(QIODevice *, Transform &);
