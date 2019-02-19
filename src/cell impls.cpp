@@ -67,13 +67,14 @@ CellPtr deserializeCell(QIODevice *dev) {
       return std::make_unique<DuplicateCell>(dev);
     case CellType::transform:
       return std::make_unique<TransformCell>(dev);
-    default:
-      assert(false);
+    default: Q_UNREACHABLE();
   }
 }
 
 SourceCell::SourceCell(const QSize size, const Format format)
-  : image{{size, getImageFormat(format)}, {}} {}
+  : image{{size, getImageFormat(format)}, {}} {
+  image.data.fill(0);
+}
 
 SourceCell::SourceCell(QIODevice *dev) {
   assert(dev);
@@ -102,8 +103,7 @@ DuplicateCell::DuplicateCell(const Cell *input) {
   updateInput(input);
 }
 
-DuplicateCell::DuplicateCell(QIODevice *dev) {
-  assert(dev);
+DuplicateCell::DuplicateCell(QIODevice *) {
   // nothing to do
 }
 

@@ -72,11 +72,7 @@ namespace {
 
 void paintImage(QPainter &painter, const Image &img) {
   painter.resetTransform();
-  painter.translate(img.xform.posX, img.xform.posY);
-  painter.translate(img.data.width() / 2, img.data.height() / 2);
-  painter.scale(flipToScale(img.xform.flipX), flipToScale(img.xform.flipY));
-  painter.rotate(angleToDegrees(img.xform.angle));
-  painter.translate(img.data.width() / -2, img.data.height() / -2);
+  applyTransform(painter, img);
   painter.drawImage(0, 0, img.data);
 }
 

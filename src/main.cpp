@@ -441,6 +441,7 @@ public:
   
   void start(const char *timerName) {
     assert(timerName);
+    assert(!name);
     name = timerName;
     startTime = Clock::now();
   }
@@ -455,6 +456,10 @@ public:
     std::cout.precision(3);
     std::cout << diff.count() << "ms\n";
     name = nullptr;
+  }
+  void stopAndStart(const char *timerName) {
+    stop();
+    start(timerName);
   }
 
 private:
@@ -714,6 +719,9 @@ QImage dupImage(const QImage &img) {
   return duplicate;
 }
 
+#include "paint tool impls.hpp"
+#include "composite.hpp"
+
 int main(int argc, char **argv) {
   /*Image img;
   img.data.load("/Users/indikernick/Library/Developer/Xcode/DerivedData/Pixel_2-gqoblrlhvynmicgniivandqktune/Build/Products/Debug/Pixel 2.app/Contents/Resources/icon.png");
@@ -794,7 +802,47 @@ int main(int argc, char **argv) {
   QImage dup = dupImage(image);
   timer.stop();
   
-  testComposite();
+  //testComposite();
+  
+  SourceCell source({256, 256}, Format::color);
+  source.image.xform.angle = 1;
+  BrushTool brush;
+  brush.setDiameter(8);
+  [[maybe_unused]] const bool ok = brush.attachCell(&source);
+  assert(ok);
+  QImage overlay({256, 256}, getImageFormat(Format::color));
+  overlay.fill(0);
+  
+  ToolEvent event;
+  event.type = ButtonType::primary;
+  event.pos = QPoint{128, 4};
+  event.colors.primary = qRgba(191, 63, 127, 191);
+  event.overlay = &overlay;
+  
+  timer.start("MouseDown");
+  brush.mouseDown(event);
+  timer.stop();
+  QImage drawing = source.image.data;
+  compositeOverlay(drawing, overlay);
+  drawing.save("/Users/indikernick/Desktop/overlay_0.png");
+  
+  event.pos = QPoint{128, 64};
+  timer.start("MouseMove");
+  brush.mouseMove(event);
+  timer.stop();
+  drawing = source.image.data;
+  compositeOverlay(drawing, overlay);
+  drawing.save("/Users/indikernick/Desktop/overlay_1.png");
+  
+  event.pos = QPoint{64, 191};
+  timer.start("MouseUp");
+  brush.mouseUp(event);
+  timer.stop();
+  drawing = source.image.data;
+  compositeOverlay(drawing, overlay);
+  drawing.save("/Users/indikernick/Desktop/overlay_2.png");
+  
+  source.image.data.save("/Users/indikernick/Desktop/brush.png");
   
   /*QFile file{"/Users/indikernick/Desktop/project.px2"};
   
@@ -849,7 +897,7 @@ int main(int argc, char **argv) {
   assert(src_2_0->image.data.bits()[2] == src->image.data.bits()[2]);
   assert(src_2_0->image.data.bits()[3] == src->image.data.bits()[3]);
   */
-  //return 0;
+  return 0;
   
   Application app{argc, argv};
   return app.exec();

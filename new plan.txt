@@ -83,6 +83,8 @@ Timeline
     command V will paste selected cells
     command X will copy and remove selected cells
 
+Needs to be some way to view a source cell without its transformation applied
+
 Transformations
   User can apply relative transformations to a SourceCell or a TransformCell
   Translations and scales are integers

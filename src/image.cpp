@@ -9,6 +9,20 @@
 #include "image.hpp"
 
 #include "serial.hpp"
+#include <QtGui/qpainter.h>
+
+void applyTransform(QPainter &painter, const Image &img) {
+  painter.translate(img.xform.posX, img.xform.posY);
+  painter.translate(img.data.width() / 2, img.data.height() / 2);
+  painter.scale(flipToScale(img.xform.flipX), flipToScale(img.xform.flipY));
+  painter.rotate(angleToDegrees(img.xform.angle));
+  painter.translate(img.data.width() / -2, img.data.height() / -2);
+}
+
+void applyInvTransform(QPainter &painter, const Image &img) {
+  applyTransform(painter, img);
+  painter.setTransform(painter.transform().inverted());
+}
 
 void serialize(QIODevice *dev, const Transform &xform) {
   assert(dev);
