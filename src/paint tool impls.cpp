@@ -8,6 +8,7 @@
 
 #include "paint tool impls.hpp"
 
+#include <cmath>
 #include "cell impls.hpp"
 #include <QtGui/qpainter.h>
 
@@ -186,9 +187,119 @@ ToolChanges LineTool::mouseUp(const ToolEvent &event) {
 }
 
 void LineTool::setThickness(const int thickness) {
+  assert(min_thickness <= thickness && thickness <= max_thickness);
   pen.setWidth(thickness);
 }
 
 int LineTool::getThickness() const {
   return pen.width();
+}
+
+namespace {
+
+int addEllipseWidth(const CircleCenter center) {
+  if (center == CircleCenter::c2x1 || center == CircleCenter::c2x2) {
+    return 1;
+  } else {
+    return 0;
+  }
+}
+
+int addEllipseHeight(const CircleCenter center) {
+  if (center == CircleCenter::c1x2 || center == CircleCenter::c2x2) {
+    return 1;
+  } else {
+    return 0;
+  }
+}
+
+double distance(const QPoint a, const QPoint b) {
+  const int dx = a.x() - b.x();
+  const int dy = a.y() - b.y();
+  return std::sqrt(dx*dx + dy*dy);
+}
+
+QRectF calcEllipseRect(const CircleCenter center, const QPoint start, const QPoint end) {
+  // @TODO revisit this
+  const int radius = distance(start, end);
+  const QPoint radiusPoint{radius, radius};
+  QRect rect{start - radiusPoint, QSize{radius * 2, radius * 2}};
+  rect.setRight(rect.right() + addEllipseWidth(center));
+  rect.setBottom(rect.bottom() + addEllipseHeight(center));
+  return rect;
+}
+
+}
+
+StrokedCircleTool::StrokedCircleTool()
+  : pen{default_pen} {}
+
+bool StrokedCircleTool::attachCell(Cell *cell) {
+  source = dynamic_cast<SourceCell *>(cell);
+  if (source) {
+    if (!compatible(cleanImage, source->image.data)) {
+      cleanImage = makeCompatible(source->image.data);
+    }
+    return true;
+  } else {
+    return false;
+  }
+}
+
+ToolChanges StrokedCircleTool::mouseDown(const ToolEvent &event) {
+  assert(source);
+  if (button != ButtonType::none) return ToolChanges::none;
+  drawOverlay(event.overlay, event.pos, pen);
+  button = event.type;
+  startPos = lastPos = event.pos;
+  copyImage(cleanImage, source->image.data);
+  pen.setColor(toColor(selectColor(event.colors, event.type)));
+  QPainter painter;
+  initPainter(painter, source, pen);
+  painter.drawPoint(startPos);
+  return ToolChanges::cell_overlay;
+}
+
+ToolChanges StrokedCircleTool::mouseMove(const ToolEvent &event) {
+  assert(source);
+  if (event.pos == lastPos) return ToolChanges::none;
+  drawOverlay(event.overlay, event.pos, pen);
+  if (event.type == ButtonType::none) return ToolChanges::overlay;
+  lastPos = event.pos;
+  copyImage(source->image.data, cleanImage);
+  QPainter painter;
+  initPainter(painter, source, pen);
+  painter.drawEllipse(calcEllipseRect(center, startPos, lastPos));
+  return ToolChanges::cell_overlay;
+}
+
+ToolChanges StrokedCircleTool::mouseUp(const ToolEvent &event) {
+  assert(source);
+  if (event.pos == lastPos) return ToolChanges::none;
+  if (event.type != button) return ToolChanges::none;
+  clearOverlay(event.overlay);
+  button = ButtonType::none;
+  lastPos = event.pos;
+  copyImage(source->image.data, cleanImage);
+  QPainter painter;
+  initPainter(painter, source, pen);
+  painter.drawEllipse(calcEllipseRect(center, startPos, lastPos));
+  return ToolChanges::cell_overlay;
+}
+
+void StrokedCircleTool::setThickness(const int thickness) {
+  assert(min_thickness <= thickness && thickness <= max_thickness);
+  pen.setWidth(thickness);
+}
+
+int StrokedCircleTool::getThickness() const {
+  return pen.width();
+}
+
+void StrokedCircleTool::setCenter(const CircleCenter cent) {
+  center = cent;
+}
+
+CircleCenter StrokedCircleTool::getCenter() const {
+  return center;
 }
