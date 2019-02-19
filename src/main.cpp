@@ -805,10 +805,10 @@ int main(int argc, char **argv) {
   //testComposite();
   
   SourceCell source({256, 256}, Format::color);
-  source.image.xform.angle = 1;
-  BrushTool brush;
-  brush.setDiameter(8);
-  [[maybe_unused]] const bool ok = brush.attachCell(&source);
+  source.image.xform.angle = 0;
+  LineTool tool;
+  tool.setThickness(8);
+  [[maybe_unused]] const bool ok = tool.attachCell(&source);
   assert(ok);
   QImage overlay({256, 256}, getImageFormat(Format::color));
   overlay.fill(0);
@@ -820,7 +820,7 @@ int main(int argc, char **argv) {
   event.overlay = &overlay;
   
   timer.start("MouseDown");
-  brush.mouseDown(event);
+  tool.mouseDown(event);
   timer.stop();
   QImage drawing = source.image.data;
   compositeOverlay(drawing, overlay);
@@ -828,7 +828,7 @@ int main(int argc, char **argv) {
   
   event.pos = QPoint{128, 64};
   timer.start("MouseMove");
-  brush.mouseMove(event);
+  tool.mouseMove(event);
   timer.stop();
   drawing = source.image.data;
   compositeOverlay(drawing, overlay);
@@ -836,7 +836,7 @@ int main(int argc, char **argv) {
   
   event.pos = QPoint{64, 191};
   timer.start("MouseUp");
-  brush.mouseUp(event);
+  tool.mouseUp(event);
   timer.stop();
   drawing = source.image.data;
   compositeOverlay(drawing, overlay);

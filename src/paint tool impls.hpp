@@ -34,10 +34,30 @@ private:
   SourceCell *source = nullptr;
   ButtonType button = ButtonType::none;
   QPen pen;
+};
+
+class LineTool : public Tool {
+public:
+  LineTool();
   
-  QPen overlayPen() const;
-  void clearOverlay(QImage *);
-  void drawOverlay(QImage *, QPoint);
+  bool attachCell(Cell *) override;
+  ToolChanges mouseDown(const ToolEvent &) override;
+  ToolChanges mouseMove(const ToolEvent &) override;
+  ToolChanges mouseUp(const ToolEvent &) override;
+  
+  void setThickness(int);
+  int getThickness() const;
+  
+  static constexpr int min_thickness = 1;
+  static constexpr int max_thickness = 64;
+  
+private:
+  QPoint lastPos = {-1, -1};
+  QPoint startPos = {-1, -1};
+  SourceCell *source = nullptr;
+  ButtonType button = ButtonType::none;
+  QPen pen;
+  QImage cleanImage;
 };
 
 #endif

@@ -41,11 +41,43 @@ QColor toColor(const QRgb rgba) {
 const QColor overlay_color{
   overlay_gray, overlay_gray, overlay_gray, overlay_alpha
 };
+const QPen default_pen{
+  Qt::NoBrush, 1.0, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin
+};
+
+void clearOverlay(QImage *overlay) {
+  assert(overlay);
+  overlay->fill(0);
+}
+
+void drawOverlay(QImage *overlay, const QPoint pos, QPen colorPen) {
+  clearOverlay(overlay);
+  QPainter painter{overlay};
+  painter.setCompositionMode(QPainter::CompositionMode_Source);
+  painter.setRenderHint(QPainter::Antialiasing, false);
+  colorPen.setColor(overlay_color);
+  painter.setPen(colorPen);
+  painter.drawPoint(pos);
+}
+
+bool compatible(const QImage &a, const QImage &b) {
+  return a.size() == b.size() && a.format() == b.format();
+}
+
+QImage makeCompatible(const QImage &img) {
+  return QImage{img.size(), img.format()};
+}
+
+void copyImage(QImage &dst, const QImage &src) {
+  assert(compatible(dst, src));
+  dst.detach();
+  std::memcpy(dst.bits(), src.constBits(), dst.sizeInBytes());
+}
 
 }
 
 BrushTool::BrushTool()
-  : pen{Qt::NoBrush, 1.0, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin} {}
+  : pen{default_pen} {}
 
 bool BrushTool::attachCell(Cell *cell) {
   return source = dynamic_cast<SourceCell *>(cell);
@@ -54,7 +86,7 @@ bool BrushTool::attachCell(Cell *cell) {
 ToolChanges BrushTool::mouseDown(const ToolEvent &event) {
   assert(source);
   if (button != ButtonType::none) return ToolChanges::none;
-  drawOverlay(event.overlay, event.pos);
+  drawOverlay(event.overlay, event.pos, pen);
   button = event.type;
   lastPos = event.pos;
   pen.setColor(toColor(selectColor(event.colors, event.type)));
@@ -67,7 +99,7 @@ ToolChanges BrushTool::mouseDown(const ToolEvent &event) {
 ToolChanges BrushTool::mouseMove(const ToolEvent &event) {
   assert(source);
   if (event.pos == lastPos) return ToolChanges::none;
-  drawOverlay(event.overlay, event.pos);
+  drawOverlay(event.overlay, event.pos, pen);
   if (event.type == ButtonType::none) return ToolChanges::overlay;
   QPainter painter;
   initPainter(painter, source, pen);
@@ -79,16 +111,13 @@ ToolChanges BrushTool::mouseMove(const ToolEvent &event) {
 ToolChanges BrushTool::mouseUp(const ToolEvent &event) {
   assert(source);
   if (event.pos == lastPos) return ToolChanges::none;
-  if (event.type == button) {
-    clearOverlay(event.overlay);
-    button = ButtonType::none;
-    QPainter painter;
-    initPainter(painter, source, pen);
-    painter.drawLine(lastPos, event.pos);
-    return ToolChanges::cell_overlay;
-  } else {
-    return ToolChanges::none;
-  }
+  if (event.type != button) return ToolChanges::none;
+  clearOverlay(event.overlay);
+  button = ButtonType::none;
+  QPainter painter;
+  initPainter(painter, source, pen);
+  painter.drawLine(lastPos, event.pos);
+  return ToolChanges::cell_overlay;
 }
 
 void BrushTool::setDiameter(const int diameter) {
@@ -100,22 +129,66 @@ int BrushTool::getDiameter() const {
   return pen.width();
 }
 
-QPen BrushTool::overlayPen() const {
-  QPen newPen = pen;
-  newPen.setColor(overlay_color);
-  return newPen;
+LineTool::LineTool()
+  : pen{default_pen} {}
+
+bool LineTool::attachCell(Cell *cell) {
+  source = dynamic_cast<SourceCell *>(cell);
+  if (source) {
+    if (!compatible(cleanImage, source->image.data)) {
+      cleanImage = makeCompatible(source->image.data);
+    }
+    return true;
+  } else {
+    return false;
+  }
 }
 
-void BrushTool::clearOverlay(QImage *overlay) {
-  assert(overlay);
-  overlay->fill(0);
+ToolChanges LineTool::mouseDown(const ToolEvent &event) {
+  assert(source);
+  if (button != ButtonType::none) return ToolChanges::none;
+  drawOverlay(event.overlay, event.pos, pen);
+  button = event.type;
+  startPos = lastPos = event.pos;
+  copyImage(cleanImage, source->image.data);
+  pen.setColor(toColor(selectColor(event.colors, event.type)));
+  QPainter painter;
+  initPainter(painter, source, pen);
+  painter.drawPoint(startPos);
+  return ToolChanges::cell_overlay;
 }
 
-void BrushTool::drawOverlay(QImage *overlay, const QPoint pos) {
-  clearOverlay(overlay);
-  QPainter painter{overlay};
-  painter.setCompositionMode(QPainter::CompositionMode_Source);
-  painter.setRenderHint(QPainter::Antialiasing, false);
-  painter.setPen(overlayPen());
-  painter.drawPoint(pos);
+ToolChanges LineTool::mouseMove(const ToolEvent &event) {
+  assert(source);
+  if (event.pos == lastPos) return ToolChanges::none;
+  drawOverlay(event.overlay, event.pos, pen);
+  if (event.type == ButtonType::none) return ToolChanges::overlay;
+  lastPos = event.pos;
+  copyImage(source->image.data, cleanImage);
+  QPainter painter;
+  initPainter(painter, source, pen);
+  painter.drawLine(startPos, lastPos);
+  return ToolChanges::cell_overlay;
+}
+
+ToolChanges LineTool::mouseUp(const ToolEvent &event) {
+  assert(source);
+  if (event.pos == lastPos) return ToolChanges::none;
+  if (event.type != button) return ToolChanges::none;
+  clearOverlay(event.overlay);
+  button = ButtonType::none;
+  lastPos = event.pos;
+  copyImage(source->image.data, cleanImage);
+  QPainter painter;
+  initPainter(painter, source, pen);
+  painter.drawLine(startPos, lastPos);
+  return ToolChanges::cell_overlay;
+}
+
+void LineTool::setThickness(const int thickness) {
+  pen.setWidth(thickness);
+}
+
+int LineTool::getThickness() const {
+  return pen.width();
 }
