@@ -36,28 +36,48 @@ private:
   QPen pen;
 };
 
-class LineTool : public Tool {
+// @TODO make this a CRTP base
+class DragPaintTool : public Tool {
+public:
+  DragPaintTool() = default;
+  
+  bool attachCell(Cell *) override final;
+  ToolChanges mouseDown(const ToolEvent &) override final;
+  ToolChanges mouseMove(const ToolEvent &) override final;
+  ToolChanges mouseUp(const ToolEvent &) override final;
+  
+private:
+  QPoint startPos = {-1, -1};
+  QPoint lastPos = {-1, -1};
+  ButtonType button = ButtonType::none;
+  SourceCell *source = nullptr;
+  QImage cleanImage;
+  
+  virtual void setColor(QColor) = 0;
+  virtual void setupPainter(QPainter &) = 0;
+  virtual void drawPoint(QPainter &, QPoint) = 0;
+  virtual void drawDrag(QPainter &, QPoint, QPoint) = 0;
+  virtual void drawOverlay(QImage *, QPoint) = 0;
+};
+
+class LineTool final : public DragPaintTool {
 public:
   LineTool();
-  
-  bool attachCell(Cell *) override;
-  ToolChanges mouseDown(const ToolEvent &) override;
-  ToolChanges mouseMove(const ToolEvent &) override;
-  ToolChanges mouseUp(const ToolEvent &) override;
-  
+
   void setThickness(int);
   int getThickness() const;
   
   static constexpr int min_thickness = 1;
   static constexpr int max_thickness = 64;
-  
+
 private:
-  QPoint lastPos = {-1, -1};
-  QPoint startPos = {-1, -1};
-  SourceCell *source = nullptr;
-  ButtonType button = ButtonType::none;
   QPen pen;
-  QImage cleanImage;
+  
+  void setColor(QColor) override;
+  void setupPainter(QPainter &) override;
+  void drawPoint(QPainter &, QPoint) override;
+  void drawDrag(QPainter &, QPoint, QPoint) override;
+  void drawOverlay(QImage *, QPoint) override;
 };
 
 enum class CircleCenter {
@@ -67,15 +87,10 @@ enum class CircleCenter {
   c2x2
 };
 
-class StrokedCircleTool : public Tool {
+class StrokedCircleTool final : public DragPaintTool {
 public:
   StrokedCircleTool();
-  
-  bool attachCell(Cell *) override;
-  ToolChanges mouseDown(const ToolEvent &) override;
-  ToolChanges mouseMove(const ToolEvent &) override;
-  ToolChanges mouseUp(const ToolEvent &) override;
-  
+
   void setThickness(int);
   int getThickness() const;
   void setCenter(CircleCenter);
@@ -85,13 +100,14 @@ public:
   static constexpr int max_thickness = 64;
   
 private:
-  QPoint lastPos = {-1, -1};
-  QPoint startPos = {-1, -1};
-  SourceCell *source = nullptr;
-  ButtonType button = ButtonType::none;
   QPen pen;
-  QImage cleanImage;
   CircleCenter center = CircleCenter::c1x1;
+
+  void setColor(QColor) override;
+  void setupPainter(QPainter &) override;
+  void drawPoint(QPainter &, QPoint) override;
+  void drawDrag(QPainter &, QPoint, QPoint) override;
+  void drawOverlay(QImage *, QPoint) override;
 };
 
 #endif

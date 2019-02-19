@@ -14,14 +14,13 @@
 
 namespace {
 
-void initPainter(QPainter &painter, SourceCell *source, const QPen &pen) {
+void initPainter(QPainter &painter, SourceCell *source) {
   assert(source);
   painter.begin(&source->image.data);
   painter.setCompositionMode(QPainter::CompositionMode_Source);
   painter.setRenderHint(QPainter::Antialiasing, false);
   painter.resetTransform();
   applyInvTransform(painter, source->image);
-  painter.setPen(pen);
 }
 
 QRgb selectColor(const ToolColors &colors, const ButtonType button) {
@@ -52,7 +51,7 @@ void clearOverlay(QImage *overlay) {
 }
 
 void drawOverlay(QImage *overlay, const QPoint pos, QPen colorPen) {
-  clearOverlay(overlay);
+  assert(overlay);
   QPainter painter{overlay};
   painter.setCompositionMode(QPainter::CompositionMode_Source);
   painter.setRenderHint(QPainter::Antialiasing, false);
@@ -87,12 +86,14 @@ bool BrushTool::attachCell(Cell *cell) {
 ToolChanges BrushTool::mouseDown(const ToolEvent &event) {
   assert(source);
   if (button != ButtonType::none) return ToolChanges::none;
+  clearOverlay(event.overlay);
   drawOverlay(event.overlay, event.pos, pen);
   button = event.type;
   lastPos = event.pos;
   pen.setColor(toColor(selectColor(event.colors, event.type)));
   QPainter painter;
-  initPainter(painter, source, pen);
+  initPainter(painter, source);
+  painter.setPen(pen);
   painter.drawPoint(lastPos);
   return ToolChanges::cell_overlay;
 }
@@ -100,10 +101,12 @@ ToolChanges BrushTool::mouseDown(const ToolEvent &event) {
 ToolChanges BrushTool::mouseMove(const ToolEvent &event) {
   assert(source);
   if (event.pos == lastPos) return ToolChanges::none;
+  clearOverlay(event.overlay);
   drawOverlay(event.overlay, event.pos, pen);
   if (event.type == ButtonType::none) return ToolChanges::overlay;
   QPainter painter;
-  initPainter(painter, source, pen);
+  initPainter(painter, source);
+  painter.setPen(pen);
   painter.drawLine(lastPos, event.pos);
   lastPos = event.pos;
   return ToolChanges::cell_overlay;
@@ -116,7 +119,8 @@ ToolChanges BrushTool::mouseUp(const ToolEvent &event) {
   clearOverlay(event.overlay);
   button = ButtonType::none;
   QPainter painter;
-  initPainter(painter, source, pen);
+  initPainter(painter, source);
+  painter.setPen(pen);
   painter.drawLine(lastPos, event.pos);
   return ToolChanges::cell_overlay;
 }
@@ -130,10 +134,7 @@ int BrushTool::getDiameter() const {
   return pen.width();
 }
 
-LineTool::LineTool()
-  : pen{default_pen} {}
-
-bool LineTool::attachCell(Cell *cell) {
+bool DragPaintTool::attachCell(Cell *cell) {
   source = dynamic_cast<SourceCell *>(cell);
   if (source) {
     if (!compatible(cleanImage, source->image.data)) {
@@ -145,34 +146,38 @@ bool LineTool::attachCell(Cell *cell) {
   }
 }
 
-ToolChanges LineTool::mouseDown(const ToolEvent &event) {
+ToolChanges DragPaintTool::mouseDown(const ToolEvent &event) {
   assert(source);
   if (button != ButtonType::none) return ToolChanges::none;
-  drawOverlay(event.overlay, event.pos, pen);
+  clearOverlay(event.overlay);
+  drawOverlay(event.overlay, event.pos);
   button = event.type;
   startPos = lastPos = event.pos;
   copyImage(cleanImage, source->image.data);
-  pen.setColor(toColor(selectColor(event.colors, event.type)));
+  setColor(toColor(selectColor(event.colors, event.type)));
   QPainter painter;
-  initPainter(painter, source, pen);
-  painter.drawPoint(startPos);
+  initPainter(painter, source);
+  setupPainter(painter);
+  drawPoint(painter, startPos);
   return ToolChanges::cell_overlay;
 }
 
-ToolChanges LineTool::mouseMove(const ToolEvent &event) {
+ToolChanges DragPaintTool::mouseMove(const ToolEvent &event) {
   assert(source);
   if (event.pos == lastPos) return ToolChanges::none;
-  drawOverlay(event.overlay, event.pos, pen);
+  clearOverlay(event.overlay);
+  drawOverlay(event.overlay, event.pos);
   if (event.type == ButtonType::none) return ToolChanges::overlay;
   lastPos = event.pos;
   copyImage(source->image.data, cleanImage);
   QPainter painter;
-  initPainter(painter, source, pen);
-  painter.drawLine(startPos, lastPos);
+  initPainter(painter, source);
+  setupPainter(painter);
+  drawDrag(painter, startPos, lastPos);
   return ToolChanges::cell_overlay;
 }
 
-ToolChanges LineTool::mouseUp(const ToolEvent &event) {
+ToolChanges DragPaintTool::mouseUp(const ToolEvent &event) {
   assert(source);
   if (event.pos == lastPos) return ToolChanges::none;
   if (event.type != button) return ToolChanges::none;
@@ -181,10 +186,14 @@ ToolChanges LineTool::mouseUp(const ToolEvent &event) {
   lastPos = event.pos;
   copyImage(source->image.data, cleanImage);
   QPainter painter;
-  initPainter(painter, source, pen);
-  painter.drawLine(startPos, lastPos);
+  initPainter(painter, source);
+  setupPainter(painter);
+  drawDrag(painter, startPos, lastPos);
   return ToolChanges::cell_overlay;
 }
+
+LineTool::LineTool()
+  : pen{default_pen} {}
 
 void LineTool::setThickness(const int thickness) {
   assert(min_thickness <= thickness && thickness <= max_thickness);
@@ -195,97 +204,28 @@ int LineTool::getThickness() const {
   return pen.width();
 }
 
-namespace {
-
-int addEllipseWidth(const CircleCenter center) {
-  if (center == CircleCenter::c2x1 || center == CircleCenter::c2x2) {
-    return 1;
-  } else {
-    return 0;
-  }
+void LineTool::setColor(const QColor color) {
+  pen.setColor(color);
 }
 
-int addEllipseHeight(const CircleCenter center) {
-  if (center == CircleCenter::c1x2 || center == CircleCenter::c2x2) {
-    return 1;
-  } else {
-    return 0;
-  }
+void LineTool::setupPainter(QPainter &painter) {
+  painter.setPen(pen);
 }
 
-double distance(const QPoint a, const QPoint b) {
-  const int dx = a.x() - b.x();
-  const int dy = a.y() - b.y();
-  return std::sqrt(dx*dx + dy*dy);
+void LineTool::drawPoint(QPainter &painter, const QPoint pos) {
+  painter.drawPoint(pos);
 }
 
-QRectF calcEllipseRect(const CircleCenter center, const QPoint start, const QPoint end) {
-  // @TODO revisit this
-  const int radius = distance(start, end);
-  const QPoint radiusPoint{radius, radius};
-  QRect rect{start - radiusPoint, QSize{radius * 2, radius * 2}};
-  rect.setRight(rect.right() + addEllipseWidth(center));
-  rect.setBottom(rect.bottom() + addEllipseHeight(center));
-  return rect;
+void LineTool::drawDrag(QPainter &painter, const QPoint start, const QPoint end) {
+  painter.drawLine(start, end);
 }
 
+void LineTool::drawOverlay(QImage *overlay, const QPoint pos) {
+  ::drawOverlay(overlay, pos, pen);
 }
 
 StrokedCircleTool::StrokedCircleTool()
   : pen{default_pen} {}
-
-bool StrokedCircleTool::attachCell(Cell *cell) {
-  source = dynamic_cast<SourceCell *>(cell);
-  if (source) {
-    if (!compatible(cleanImage, source->image.data)) {
-      cleanImage = makeCompatible(source->image.data);
-    }
-    return true;
-  } else {
-    return false;
-  }
-}
-
-ToolChanges StrokedCircleTool::mouseDown(const ToolEvent &event) {
-  assert(source);
-  if (button != ButtonType::none) return ToolChanges::none;
-  drawOverlay(event.overlay, event.pos, pen);
-  button = event.type;
-  startPos = lastPos = event.pos;
-  copyImage(cleanImage, source->image.data);
-  pen.setColor(toColor(selectColor(event.colors, event.type)));
-  QPainter painter;
-  initPainter(painter, source, pen);
-  painter.drawPoint(startPos);
-  return ToolChanges::cell_overlay;
-}
-
-ToolChanges StrokedCircleTool::mouseMove(const ToolEvent &event) {
-  assert(source);
-  if (event.pos == lastPos) return ToolChanges::none;
-  drawOverlay(event.overlay, event.pos, pen);
-  if (event.type == ButtonType::none) return ToolChanges::overlay;
-  lastPos = event.pos;
-  copyImage(source->image.data, cleanImage);
-  QPainter painter;
-  initPainter(painter, source, pen);
-  painter.drawEllipse(calcEllipseRect(center, startPos, lastPos));
-  return ToolChanges::cell_overlay;
-}
-
-ToolChanges StrokedCircleTool::mouseUp(const ToolEvent &event) {
-  assert(source);
-  if (event.pos == lastPos) return ToolChanges::none;
-  if (event.type != button) return ToolChanges::none;
-  clearOverlay(event.overlay);
-  button = ButtonType::none;
-  lastPos = event.pos;
-  copyImage(source->image.data, cleanImage);
-  QPainter painter;
-  initPainter(painter, source, pen);
-  painter.drawEllipse(calcEllipseRect(center, startPos, lastPos));
-  return ToolChanges::cell_overlay;
-}
 
 void StrokedCircleTool::setThickness(const int thickness) {
   assert(min_thickness <= thickness && thickness <= max_thickness);
@@ -302,4 +242,48 @@ void StrokedCircleTool::setCenter(const CircleCenter cent) {
 
 CircleCenter StrokedCircleTool::getCenter() const {
   return center;
+}
+
+void StrokedCircleTool::setColor(const QColor color) {
+  pen.setColor(color);
+}
+
+void StrokedCircleTool::setupPainter(QPainter &painter) {
+  painter.setPen(pen);
+}
+
+void StrokedCircleTool::drawPoint(QPainter &painter, const QPoint pos) {
+  painter.drawPoint(pos);
+}
+
+namespace {
+
+int addEllipseWidth(const CircleCenter center) {
+  return (center == CircleCenter::c2x1 || center == CircleCenter::c2x2);
+}
+
+int addEllipseHeight(const CircleCenter center) {
+  return (center == CircleCenter::c1x2 || center == CircleCenter::c2x2);
+}
+
+double distance(const QPoint a, const QPoint b) {
+  const int dx = a.x() - b.x();
+  const int dy = a.y() - b.y();
+  return std::sqrt(dx*dx + dy*dy);
+}
+
+}
+
+void StrokedCircleTool::drawDrag(QPainter &painter, const QPoint start, const QPoint end) {
+  // @TODO revisit this
+  const int radius = distance(start, end);
+  const QPoint radiusPoint{radius, radius};
+  QRect rect{start - radiusPoint, QSize{radius * 2, radius * 2}};
+  rect.setRight(rect.right() + addEllipseWidth(center));
+  rect.setBottom(rect.bottom() + addEllipseHeight(center));
+  painter.drawEllipse(rect);
+}
+
+void StrokedCircleTool::drawOverlay(QImage *overlay, const QPoint pos) {
+  ::drawOverlay(overlay, pos, pen);
 }
