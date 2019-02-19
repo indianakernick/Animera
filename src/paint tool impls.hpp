@@ -36,10 +36,10 @@ private:
   QPen pen;
 };
 
-// @TODO make this a CRTP base
+template <typename Derived>
 class DragPaintTool : public Tool {
 public:
-  DragPaintTool() = default;
+  ~DragPaintTool();
   
   bool attachCell(Cell *) override final;
   ToolChanges mouseDown(const ToolEvent &) override final;
@@ -53,16 +53,15 @@ private:
   SourceCell *source = nullptr;
   QImage cleanImage;
   
-  virtual void setColor(QColor) = 0;
-  virtual void setupPainter(QPainter &) = 0;
-  virtual void drawPoint(QPainter &, QPoint) = 0;
-  virtual void drawDrag(QPainter &, QPoint, QPoint) = 0;
-  virtual void drawOverlay(QImage *, QPoint) = 0;
+  Derived *that();
 };
 
-class LineTool final : public DragPaintTool {
+class LineTool final : public DragPaintTool<LineTool> {
 public:
+  friend class DragPaintTool;
+
   LineTool();
+  ~LineTool();
 
   void setThickness(int);
   int getThickness() const;
@@ -73,11 +72,11 @@ public:
 private:
   QPen pen;
   
-  void setColor(QColor) override;
-  void setupPainter(QPainter &) override;
-  void drawPoint(QPainter &, QPoint) override;
-  void drawDrag(QPainter &, QPoint, QPoint) override;
-  void drawOverlay(QImage *, QPoint) override;
+  void setColor(QColor);
+  void setupPainter(QPainter &);
+  void drawPoint(QPainter &, QPoint);
+  void drawDrag(QPainter &, QPoint, QPoint);
+  void drawOverlay(QImage *, QPoint);
 };
 
 enum class CircleCenter {
@@ -87,9 +86,12 @@ enum class CircleCenter {
   c2x2
 };
 
-class StrokedCircleTool final : public DragPaintTool {
+class StrokedCircleTool final : public DragPaintTool<StrokedCircleTool> {
 public:
+  friend class DragPaintTool;
+
   StrokedCircleTool();
+  ~StrokedCircleTool();
 
   void setThickness(int);
   int getThickness() const;
@@ -103,11 +105,11 @@ private:
   QPen pen;
   CircleCenter center = CircleCenter::c1x1;
 
-  void setColor(QColor) override;
-  void setupPainter(QPainter &) override;
-  void drawPoint(QPainter &, QPoint) override;
-  void drawDrag(QPainter &, QPoint, QPoint) override;
-  void drawOverlay(QImage *, QPoint) override;
+  void setColor(QColor);
+  void setupPainter(QPainter &);
+  void drawPoint(QPainter &, QPoint);
+  void drawDrag(QPainter &, QPoint, QPoint);
+  void drawOverlay(QImage *, QPoint);
 };
 
 #endif

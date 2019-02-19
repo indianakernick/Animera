@@ -134,7 +134,13 @@ int BrushTool::getDiameter() const {
   return pen.width();
 }
 
-bool DragPaintTool::attachCell(Cell *cell) {
+template <typename Derived>
+DragPaintTool<Derived>::~DragPaintTool() {
+  static_assert(std::is_base_of_v<DragPaintTool, Derived>);
+}
+
+template <typename Derived>
+bool DragPaintTool<Derived>::attachCell(Cell *cell) {
   source = dynamic_cast<SourceCell *>(cell);
   if (source) {
     if (!compatible(cleanImage, source->image.data)) {
@@ -146,38 +152,41 @@ bool DragPaintTool::attachCell(Cell *cell) {
   }
 }
 
-ToolChanges DragPaintTool::mouseDown(const ToolEvent &event) {
+template <typename Derived>
+ToolChanges DragPaintTool<Derived>::mouseDown(const ToolEvent &event) {
   assert(source);
   if (button != ButtonType::none) return ToolChanges::none;
   clearOverlay(event.overlay);
-  drawOverlay(event.overlay, event.pos);
+  that()->drawOverlay(event.overlay, event.pos);
   button = event.type;
   startPos = lastPos = event.pos;
   copyImage(cleanImage, source->image.data);
-  setColor(toColor(selectColor(event.colors, event.type)));
+  that()->setColor(toColor(selectColor(event.colors, event.type)));
   QPainter painter;
   initPainter(painter, source);
-  setupPainter(painter);
-  drawPoint(painter, startPos);
+  that()->setupPainter(painter);
+  that()->drawPoint(painter, startPos);
   return ToolChanges::cell_overlay;
 }
 
-ToolChanges DragPaintTool::mouseMove(const ToolEvent &event) {
+template <typename Derived>
+ToolChanges DragPaintTool<Derived>::mouseMove(const ToolEvent &event) {
   assert(source);
   if (event.pos == lastPos) return ToolChanges::none;
   clearOverlay(event.overlay);
-  drawOverlay(event.overlay, event.pos);
+  that()->drawOverlay(event.overlay, event.pos);
   if (event.type == ButtonType::none) return ToolChanges::overlay;
   lastPos = event.pos;
   copyImage(source->image.data, cleanImage);
   QPainter painter;
   initPainter(painter, source);
-  setupPainter(painter);
-  drawDrag(painter, startPos, lastPos);
+  that()->setupPainter(painter);
+  that()->drawDrag(painter, startPos, lastPos);
   return ToolChanges::cell_overlay;
 }
 
-ToolChanges DragPaintTool::mouseUp(const ToolEvent &event) {
+template <typename Derived>
+ToolChanges DragPaintTool<Derived>::mouseUp(const ToolEvent &event) {
   assert(source);
   if (event.pos == lastPos) return ToolChanges::none;
   if (event.type != button) return ToolChanges::none;
@@ -187,13 +196,20 @@ ToolChanges DragPaintTool::mouseUp(const ToolEvent &event) {
   copyImage(source->image.data, cleanImage);
   QPainter painter;
   initPainter(painter, source);
-  setupPainter(painter);
-  drawDrag(painter, startPos, lastPos);
+  that()->setupPainter(painter);
+  that()->drawDrag(painter, startPos, lastPos);
   return ToolChanges::cell_overlay;
+}
+
+template <typename Derived>
+Derived *DragPaintTool<Derived>::that() {
+  return static_cast<Derived *>(this);
 }
 
 LineTool::LineTool()
   : pen{default_pen} {}
+
+LineTool::~LineTool() = default;
 
 void LineTool::setThickness(const int thickness) {
   assert(min_thickness <= thickness && thickness <= max_thickness);
@@ -226,6 +242,8 @@ void LineTool::drawOverlay(QImage *overlay, const QPoint pos) {
 
 StrokedCircleTool::StrokedCircleTool()
   : pen{default_pen} {}
+
+StrokedCircleTool::~StrokedCircleTool() = default;
 
 void StrokedCircleTool::setThickness(const int thickness) {
   assert(min_thickness <= thickness && thickness <= max_thickness);
