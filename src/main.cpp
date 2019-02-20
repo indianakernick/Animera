@@ -806,8 +806,8 @@ int main(int argc, char **argv) {
   
   SourceCell source({32, 32}, Format::color);
   source.image.xform.angle = 0;
-  FilledCircleTool tool;
-  //tool.setThickness(1);
+  StrokedRectangleTool tool;
+  tool.setThickness(3);
   [[maybe_unused]] const bool ok = tool.attachCell(&source);
   assert(ok);
   QImage overlay({32, 32}, getImageFormat(Format::color));
@@ -826,7 +826,7 @@ int main(int argc, char **argv) {
   compositeOverlay(drawing, overlay);
   drawing.save("/Users/indikernick/Desktop/overlay_0.png");
   
-  event.pos = QPoint{16, 20};
+  event.pos = QPoint{24, 20};
   timer.start("MouseMove");
   tool.mouseMove(event);
   timer.stop();
@@ -834,7 +834,7 @@ int main(int argc, char **argv) {
   compositeOverlay(drawing, overlay);
   drawing.save("/Users/indikernick/Desktop/overlay_1.png");
   
-  event.pos = QPoint{16, 24};
+  event.pos = QPoint{12, 24};
   timer.start("MouseMove");
   tool.mouseMove(event);
   timer.stop();

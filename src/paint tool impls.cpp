@@ -41,8 +41,11 @@ QColor toColor(const QRgb rgba) {
 const QColor overlay_color{
   overlay_gray, overlay_gray, overlay_gray, overlay_alpha
 };
-const QPen default_pen{
+const QPen round_pen{
   Qt::NoBrush, 1.0, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin
+};
+const QPen square_pen{
+  Qt::NoBrush, 1.0, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin
 };
 
 void clearOverlay(QImage *overlay) {
@@ -77,7 +80,7 @@ void copyImage(QImage &dst, const QImage &src) {
 }
 
 BrushTool::BrushTool()
-  : pen{default_pen} {}
+  : pen{round_pen} {}
 
 bool BrushTool::attachCell(Cell *cell) {
   return source = dynamic_cast<SourceCell *>(cell);
@@ -126,7 +129,7 @@ ToolChanges BrushTool::mouseUp(const ToolEvent &event) {
 }
 
 void BrushTool::setDiameter(const int diameter) {
-  assert(min_diameter <= diameter && diameter <= max_diameter);
+  assert(min_thickness <= diameter && diameter <= max_thickness);
   pen.setWidth(diameter);
 }
 
@@ -207,7 +210,7 @@ Derived *DragPaintTool<Derived>::that() {
 }
 
 LineTool::LineTool()
-  : pen{default_pen} {}
+  : pen{round_pen} {}
 
 LineTool::~LineTool() = default;
 
@@ -241,7 +244,7 @@ void LineTool::drawOverlay(QImage *overlay, const QPoint pos) {
 }
 
 StrokedCircleTool::StrokedCircleTool()
-  : pen{default_pen} {}
+  : pen{round_pen} {}
 
 StrokedCircleTool::~StrokedCircleTool() = default;
 
@@ -335,7 +338,7 @@ void StrokedCircleTool::drawOverlay(QImage *overlay, const QPoint pos) {
 }
 
 FilledCircleTool::FilledCircleTool()
-  : brush{Qt::SolidPattern} {}
+  : pen{round_pen} {}
 
 FilledCircleTool::~FilledCircleTool() = default;
 
@@ -348,12 +351,12 @@ CircleCenter FilledCircleTool::getCenter() const {
 }
 
 void FilledCircleTool::setColor(const QColor color) {
-  brush.setColor(color);
+  pen.setColor(color);
 }
 
 void FilledCircleTool::setupPainter(QPainter &painter) {
-  painter.setBrush(brush);
-  painter.setPen(brush.color());
+  painter.setPen(pen);
+  painter.setBrush(pen.color());
 }
 
 void FilledCircleTool::drawPoint(QPainter &, QPoint) {}
@@ -368,4 +371,50 @@ void FilledCircleTool::drawOverlay(QImage *overlay, const QPoint pos) {
   painter.setRenderHint(QPainter::Antialiasing, false);
   painter.setPen(overlay_color);
   painter.drawPoint(pos);
+}
+
+StrokedRectangleTool::StrokedRectangleTool()
+  : pen{square_pen} {}
+
+StrokedRectangleTool::~StrokedRectangleTool() = default;
+
+void StrokedRectangleTool::setThickness(const int thickness) {
+  pen.setWidth(thickness);
+}
+
+int StrokedRectangleTool::getThickness() const {
+  return pen.width();
+}
+
+void StrokedRectangleTool::setColor(const QColor color) {
+  pen.setColor(color);
+}
+
+void StrokedRectangleTool::setupPainter(QPainter &painter) {
+  painter.setPen(pen);
+}
+
+void StrokedRectangleTool::drawPoint(QPainter &painter, const QPoint pos) {
+  painter.drawPoint(pos);
+}
+
+namespace {
+
+QRect calcRect(const QPoint start, const QPoint end) {
+  return QRect{
+    std::min(start.x(), end.x()),
+    std::min(start.y(), end.y()),
+    std::abs(start.x() - end.x()),
+    std::abs(start.y() - end.y())
+  };
+}
+
+}
+
+void StrokedRectangleTool::drawDrag(QPainter &painter, const QPoint start, const QPoint end) {
+  painter.drawRect(calcRect(start, end));
+}
+
+void StrokedRectangleTool::drawOverlay(QImage *overlay, const QPoint pos) {
+  drawPointOverlay(overlay, pos, pen);
 }

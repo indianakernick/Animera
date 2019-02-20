@@ -14,6 +14,9 @@
 
 class SourceCell;
 
+constexpr int min_thickness = 1;
+constexpr int max_thickness = 64;
+
 class BrushTool : public Tool {
 public:
   BrushTool();
@@ -25,9 +28,6 @@ public:
 
   void setDiameter(int);
   int getDiameter() const;
-  
-  static constexpr int min_diameter = 1;
-  static constexpr int max_diameter = 64;
 
 private:
   QPoint lastPos = {-1, -1};
@@ -65,9 +65,6 @@ public:
 
   void setThickness(int);
   int getThickness() const;
-  
-  static constexpr int min_thickness = 1;
-  static constexpr int max_thickness = 64;
 
 private:
   QPen pen;
@@ -98,9 +95,6 @@ public:
   void setCenter(CircleCenter);
   CircleCenter getCenter() const;
   
-  static constexpr int min_thickness = 1;
-  static constexpr int max_thickness = 64;
-  
 private:
   QPen pen;
   CircleCenter center = CircleCenter::c1x1;
@@ -124,7 +118,27 @@ public:
 
 private:
   CircleCenter center = CircleCenter::c1x1;
-  QBrush brush;
+  QPen pen;
+  
+  void setColor(QColor);
+  void setupPainter(QPainter &);
+  void drawPoint(QPainter &, QPoint);
+  void drawDrag(QPainter &, QPoint, QPoint);
+  void drawOverlay(QImage *, QPoint);
+};
+
+class StrokedRectangleTool final : public DragPaintTool<StrokedRectangleTool> {
+public:
+  friend class DragPaintTool;
+  
+  StrokedRectangleTool();
+  ~StrokedRectangleTool();
+  
+  void setThickness(int);
+  int getThickness() const;
+
+private:
+  QPen pen;
   
   void setColor(QColor);
   void setupPainter(QPainter &);
