@@ -16,6 +16,9 @@ class SourceCell;
 
 constexpr int min_thickness = 1;
 constexpr int max_thickness = 64;
+constexpr int no_radius = -1;
+inline const QPoint no_point{-1, -1};
+inline const QSize no_size{-1, -1};
 
 class BrushTool : public Tool {
 public:
@@ -30,7 +33,7 @@ public:
   int getDiameter() const;
 
 private:
-  QPoint lastPos = {-1, -1};
+  QPoint lastPos = no_point;
   SourceCell *source = nullptr;
   ButtonType button = ButtonType::none;
   QPen pen;
@@ -44,7 +47,7 @@ public:
   ToolChanges mouseUp(const ToolEvent &) override;
 
 private:
-  QPoint lastPos = {-1, -1};
+  QPoint lastPos = no_point;
   SourceCell *source = nullptr;
 };
 
@@ -57,10 +60,13 @@ public:
   ToolChanges mouseDown(const ToolEvent &) override final;
   ToolChanges mouseMove(const ToolEvent &) override final;
   ToolChanges mouseUp(const ToolEvent &) override final;
-  
+
+protected:
+  bool isDragging() const;
+
 private:
-  QPoint startPos = {-1, -1};
-  QPoint lastPos = {-1, -1};
+  QPoint startPos = no_point;
+  QPoint lastPos = no_point;
   ButtonType button = ButtonType::none;
   SourceCell *source = nullptr;
   QImage cleanImage;
@@ -106,10 +112,12 @@ public:
   int getThickness() const;
   void setCenter(CircleCenter);
   CircleCenter getCenter() const;
+  int getRadius() const;
   
 private:
   QPen pen;
   CircleCenter center = CircleCenter::c1x1;
+  int radius = no_radius;
 
   void setColor(QColor);
   void setupPainter(QPainter &);
@@ -127,10 +135,12 @@ public:
   
   void setCenter(CircleCenter);
   CircleCenter getCenter() const;
+  int getRadius() const;
 
 private:
   CircleCenter center = CircleCenter::c1x1;
   QPen pen;
+  int radius = no_radius;
   
   void setColor(QColor);
   void setupPainter(QPainter &);
@@ -148,9 +158,11 @@ public:
   
   void setThickness(int);
   int getThickness() const;
+  QSize getSize() const;
 
 private:
   QPen pen;
+  QSize size = no_size;
   
   void setColor(QColor);
   void setupPainter(QPainter &);
@@ -166,8 +178,11 @@ public:
   FilledRectangleTool();
   ~FilledRectangleTool();
 
+  QSize getSize() const;
+
 private:
   QPen pen;
+  QSize size = no_size;
   
   void setColor(QColor);
   void setupPainter(QPainter &);

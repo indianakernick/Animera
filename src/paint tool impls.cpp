@@ -360,7 +360,13 @@ ToolChanges DragPaintTool<Derived>::mouseUp(const ToolEvent &event) {
   initPainter(painter, source);
   that()->setupPainter(painter);
   that()->drawDrag(painter, startPos, lastPos);
+  startPos = no_point;
   return ToolChanges::cell_overlay;
+}
+
+template <typename Derived>
+bool DragPaintTool<Derived>::isDragging() const {
+  return startPos != no_point;
 }
 
 template <typename Derived>
@@ -424,6 +430,10 @@ CircleCenter StrokedCircleTool::getCenter() const {
   return center;
 }
 
+int StrokedCircleTool::getRadius() const {
+  return isDragging() ? radius : no_radius;
+}
+
 void StrokedCircleTool::setColor(const QColor color) {
   pen.setColor(color);
 }
@@ -432,7 +442,9 @@ void StrokedCircleTool::setupPainter(QPainter &painter) {
   painter.setPen(pen);
 }
 
-void StrokedCircleTool::drawPoint(QPainter &, QPoint) {}
+void StrokedCircleTool::drawPoint(QPainter &, QPoint) {
+  radius = 0;
+}
 
 namespace {
 
@@ -450,14 +462,17 @@ double distance(const QPoint a, const QPoint b) {
   return std::sqrt(dx*dx + dy*dy);
 }
 
+int calcRadius(const QPoint start, const QPoint end) {
+  return std::round(distance(start, end));
+}
+
 QRect calcEllipseRect(
   const CircleCenter center,
   const QPoint start,
-  const QPoint end,
+  const int radius,
   const int thickness
 ) {
   // @TODO revisit this
-  const int radius = std::round(distance(start, end));
   return QRect{
     start.x() - radius,
     start.y() - radius,
@@ -489,7 +504,8 @@ QRect calcEllipseRect(
 }
 
 void StrokedCircleTool::drawDrag(QPainter &painter, const QPoint start, const QPoint end) {
-  painter.drawEllipse(calcEllipseRect(center, start, end, pen.width()));
+  radius = calcRadius(start, end);
+  painter.drawEllipse(calcEllipseRect(center, start, radius, pen.width()));
 }
 
 void StrokedCircleTool::drawOverlay(QImage *overlay, const QPoint pos) {
@@ -509,6 +525,10 @@ CircleCenter FilledCircleTool::getCenter() const {
   return center;
 }
 
+int FilledCircleTool::getRadius() const {
+  return isDragging() ? radius : no_radius;
+}
+
 void FilledCircleTool::setColor(const QColor color) {
   pen.setColor(color);
 }
@@ -518,10 +538,13 @@ void FilledCircleTool::setupPainter(QPainter &painter) {
   painter.setBrush(pen.color());
 }
 
-void FilledCircleTool::drawPoint(QPainter &, QPoint) {}
+void FilledCircleTool::drawPoint(QPainter &, QPoint) {
+  radius = 0;
+}
 
 void FilledCircleTool::drawDrag(QPainter &painter, const QPoint start, const QPoint end) {
-  painter.drawEllipse(calcEllipseRect(center, start, end, 1));
+  radius = calcRadius(start, end);
+  painter.drawEllipse(calcEllipseRect(center, start, radius, 1));
 }
 
 void FilledCircleTool::drawOverlay(QImage *overlay, const QPoint pos) {
@@ -541,6 +564,10 @@ int StrokedRectangleTool::getThickness() const {
   return pen.width();
 }
 
+QSize StrokedRectangleTool::getSize() const {
+  return isDragging() ? size : no_size;
+}
+
 void StrokedRectangleTool::setColor(const QColor color) {
   pen.setColor(color);
 }
@@ -550,6 +577,7 @@ void StrokedRectangleTool::setupPainter(QPainter &painter) {
 }
 
 void StrokedRectangleTool::drawPoint(QPainter &painter, const QPoint pos) {
+  size = QSize{1, 1};
   painter.drawPoint(pos);
 }
 
@@ -567,7 +595,9 @@ QRect calcRect(const QPoint start, const QPoint end) {
 }
 
 void StrokedRectangleTool::drawDrag(QPainter &painter, const QPoint start, const QPoint end) {
-  painter.drawRect(calcRect(start, end));
+  const QRect rect = calcRect(start, end);
+  size = rect.size() + QSize{1, 1};
+  painter.drawRect(rect);
 }
 
 void StrokedRectangleTool::drawOverlay(QImage *overlay, const QPoint pos) {
@@ -579,6 +609,10 @@ FilledRectangleTool::FilledRectangleTool()
 
 FilledRectangleTool::~FilledRectangleTool() = default;
 
+QSize FilledRectangleTool::getSize() const {
+  return isDragging() ? size : no_size;
+}
+
 void FilledRectangleTool::setColor(const QColor color) {
   pen.setColor(color);
 }
@@ -589,11 +623,14 @@ void FilledRectangleTool::setupPainter(QPainter &painter) {
 }
 
 void FilledRectangleTool::drawPoint(QPainter &painter, const QPoint pos) {
+  size = QSize{1, 1};
   painter.drawPoint(pos);
 }
 
 void FilledRectangleTool::drawDrag(QPainter &painter, const QPoint start, const QPoint end) {
-  painter.drawRect(calcRect(start, end));
+  const QRect rect = calcRect(start, end);
+  size = rect.size() + QSize{1, 1};
+  painter.drawRect(rect);
 }
 
 void FilledRectangleTool::drawOverlay(QImage *overlay, const QPoint pos) {
