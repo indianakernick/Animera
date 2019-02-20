@@ -775,7 +775,7 @@ int main(int argc, char **argv) {
   Timer timer;
   
   timer.start("Alloc");
-  QImage image{256, 256, QImage::Format_ARGB32};
+  QImage image{1024, 1024, QImage::Format_ARGB32};
   timer.stop();
   
   timer.start("Clear");
@@ -783,6 +783,7 @@ int main(int argc, char **argv) {
   timer.stop();
   
   timer.start("Memset");
+  image.detach();
   std::memset(image.bits(), 0, image.sizeInBytes());
   timer.stop();
   
@@ -806,7 +807,7 @@ int main(int argc, char **argv) {
   
   SourceCell source({32, 32}, Format::color);
   source.image.xform.angle = 0;
-  FilledRectangleTool tool;
+  FloodFillTool tool;
   //tool.setThickness(3);
   [[maybe_unused]] const bool ok = tool.attachCell(&source);
   assert(ok);
@@ -816,8 +817,19 @@ int main(int argc, char **argv) {
   ToolEvent event;
   event.type = ButtonType::primary;
   event.pos = QPoint{16, 16};
-  event.colors.primary = qRgba(191, 63, 127, 191);
+  event.colors.primary = qRgba(0, 255, 0, 255);
   event.overlay = &overlay;
+  
+  StrokedCircleTool sct;
+  sct.attachCell(&source);
+  event.pos.rx() += 3;
+  sct.mouseDown(event);
+  event.pos.rx() -= 6;
+  sct.mouseUp(event);
+  event.pos.rx() += 2;
+  event.pos.ry() -= 2;
+  
+  event.colors.primary = qRgba(191, 63, 127, 191);
   
   timer.start("MouseDown");
   tool.mouseDown(event);

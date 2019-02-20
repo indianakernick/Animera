@@ -11,6 +11,7 @@
 
 #include <QtGui/qimage.h>
 #include <QtCore/qvector.h>
+#include <QtGui/qtransform.h>
 
 using Palette = QVector<QRgb>;
 
@@ -55,8 +56,8 @@ inline qreal flipToScale(const bool flip) {
   return static_cast<qreal>(flip) * -2.0 + 1.0;
 }
 
-void applyTransform(QPainter &, const Image &);
-void applyInvTransform(QPainter &, const Image &);
+QTransform getTransform(const Image &);
+QTransform getInvTransform(const Image &);
 
 void serialize(QIODevice *, const Transform &);
 void deserialize(QIODevice *, Transform &);

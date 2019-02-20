@@ -71,8 +71,7 @@ Color compositeI(const Color a, const Color b, const uint8_t aF, const uint8_t b
 namespace {
 
 void paintImage(QPainter &painter, const Image &img) {
-  painter.resetTransform();
-  applyTransform(painter, img);
+  painter.setTransform(getTransform(img));
   painter.drawImage(0, 0, img.data);
 }
 

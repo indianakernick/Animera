@@ -36,6 +36,18 @@ private:
   QPen pen;
 };
 
+class FloodFillTool : public Tool {
+public:
+  bool attachCell(Cell *) override;
+  ToolChanges mouseDown(const ToolEvent &) override;
+  ToolChanges mouseMove(const ToolEvent &) override;
+  ToolChanges mouseUp(const ToolEvent &) override;
+
+private:
+  QPoint lastPos = {-1, -1};
+  SourceCell *source = nullptr;
+};
+
 template <typename Derived>
 class DragPaintTool : public Tool {
 public:

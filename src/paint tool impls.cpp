@@ -19,8 +19,7 @@ void initPainter(QPainter &painter, SourceCell *source) {
   painter.begin(&source->image.data);
   painter.setCompositionMode(QPainter::CompositionMode_Source);
   painter.setRenderHint(QPainter::Antialiasing, false);
-  painter.resetTransform();
-  applyInvTransform(painter, source->image);
+  painter.setTransform(getInvTransform(source->image));
 }
 
 QRgb selectColor(const ToolColors &colors, const ButtonType button) {
@@ -34,7 +33,7 @@ QRgb selectColor(const ToolColors &colors, const ButtonType button) {
 }
 
 QColor toColor(const QRgb rgba) {
-  // the QRgb constructor just sets alpha to 255 for some reason
+  // the QRgb constructor sets alpha to 255 for some reason
   return QColor{qRed(rgba), qGreen(rgba), qBlue(rgba), qAlpha(rgba)};
 }
 
@@ -48,21 +47,6 @@ const QPen square_pen{
   Qt::NoBrush, 1.0, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin
 };
 
-void clearOverlay(QImage *overlay) {
-  assert(overlay);
-  overlay->fill(0);
-}
-
-void drawPointOverlay(QImage *overlay, const QPoint pos, QPen colorPen) {
-  assert(overlay);
-  QPainter painter{overlay};
-  painter.setCompositionMode(QPainter::CompositionMode_Source);
-  painter.setRenderHint(QPainter::Antialiasing, false);
-  colorPen.setColor(overlay_color);
-  painter.setPen(colorPen);
-  painter.drawPoint(pos);
-}
-
 bool compatible(const QImage &a, const QImage &b) {
   return a.size() == b.size() && a.format() == b.format();
 }
@@ -75,6 +59,26 @@ void copyImage(QImage &dst, const QImage &src) {
   assert(compatible(dst, src));
   dst.detach();
   std::memcpy(dst.bits(), src.constBits(), dst.sizeInBytes());
+}
+
+void clearImage(QImage &dst) {
+  dst.detach();
+  std::memset(dst.bits(), 0, dst.sizeInBytes());
+}
+
+void clearOverlay(QImage *overlay) {
+  assert(overlay);
+  clearImage(*overlay);
+}
+
+void drawPointOverlay(QImage *overlay, const QPoint pos, QPen colorPen) {
+  assert(overlay);
+  QPainter painter{overlay};
+  painter.setCompositionMode(QPainter::CompositionMode_Source);
+  painter.setRenderHint(QPainter::Antialiasing, false);
+  colorPen.setColor(overlay_color);
+  painter.setPen(colorPen);
+  painter.drawPoint(pos);
 }
 
 }
@@ -135,6 +139,161 @@ void BrushTool::setDiameter(const int diameter) {
 
 int BrushTool::getDiameter() const {
   return pen.width();
+}
+
+bool FloodFillTool::attachCell(Cell *cell) {
+  return source = dynamic_cast<SourceCell *>(cell);
+}
+
+namespace {
+
+template <typename Pixel>
+Pixel *pixelAddr(uchar *bits, const int bbl, const QPoint pos) noexcept {
+  return reinterpret_cast<Pixel *>(bits + bbl * pos.y()) + pos.x();
+}
+
+template <typename Pixel>
+class PixelGetter {
+public:
+  PixelGetter(QImage &img, const Pixel startColor, const Pixel toolColor)
+    : bits{img.bits()},
+      bbl{img.bytesPerLine()},
+      startColor{startColor},
+      toolColor{toolColor} {}
+  
+  bool filled(const QPoint pos) const noexcept {
+    return *pixelAddr<Pixel>(bits, bbl, pos) != startColor;
+  }
+  void fill(const QPoint pos) noexcept {
+    *pixelAddr<Pixel>(bits, bbl, pos) = toolColor;
+  }
+
+private:
+  uchar *const bits;
+  const int bbl;
+  Pixel startColor;
+  Pixel toolColor;
+};
+
+QPoint up(const QPoint p) {
+  return {p.x(), p.y() - 1};
+}
+
+QPoint right(const QPoint p) {
+  return {p.x() + 1, p.y()};
+}
+
+QPoint down(const QPoint p) {
+  return {p.x(), p.y() + 1};
+}
+
+QPoint left(const QPoint p) {
+  return {p.x() - 1, p.y()};
+}
+
+// Flood Fill algorithm by Adam Milazzo
+// http://www.adammil.net/blog/v126_A_More_Efficient_Flood_Fill.html
+
+template <typename Pixel>
+void startFloodFill(PixelGetter<Pixel>, QPoint, QSize);
+
+template <typename Pixel>
+void floodFillImpl(PixelGetter<Pixel> px, QPoint pos, const QSize size) {
+  int lastRowLength = 0;
+  do {
+    int rowLength = 0;
+    QPoint start = pos;
+    if (lastRowLength != 0 && px.filled(pos)) {
+      do {
+        if (--lastRowLength == 0) return;
+        pos = right(pos);
+      } while (px.filled(pos));
+    } else {
+      while (pos.x() != 0 && !px.filled(left(pos))) {
+        pos = left(pos);
+        px.fill(pos);
+        if (pos.y() != 0 && !px.filled(up(pos))) startFloodFill(px, up(pos), size);
+        ++rowLength;
+        ++lastRowLength;
+      }
+    }
+    while (start.x() < size.width() && !px.filled(start)) {
+      px.fill(start);
+      start = right(start);
+      ++rowLength;
+    }
+    if (rowLength < lastRowLength) {
+      const int endX = pos.x() + lastRowLength;
+      while (++start.rx() < endX) {
+        if (!px.filled(start)) floodFillImpl(px, start, size);
+      }
+    } else if (rowLength > lastRowLength && pos.y() != 0) {
+      QPoint above = up({pos.x() + lastRowLength, pos.y()});
+      while (++above.rx() < start.x()) {
+        if (!px.filled(above)) startFloodFill(px, above, size);
+      }
+    }
+    lastRowLength = rowLength;
+    pos = down(pos);
+  } while (lastRowLength != 0 && pos.y() < size.height());
+}
+
+template <typename Pixel>
+void startFloodFill(PixelGetter<Pixel> px, QPoint pos, const QSize size) {
+  while (true) {
+    const QPoint startPos = pos;
+    while (pos.y() != 0 && !px.filled(up(pos))) pos = up(pos);
+    while (pos.x() != 0 && !px.filled(left(pos))) pos = left(pos);
+    if (pos == startPos) break;
+  }
+  floodFillImpl(px, pos, size);
+}
+
+template <typename Pixel>
+ToolChanges floodFill(QImage &img, const QPoint startPos, const QRgb color) {
+  const Pixel toolColor = static_cast<Pixel>(color);
+  const Pixel startColor = *pixelAddr<Pixel>(img.bits(), img.bytesPerLine(), startPos);
+  if (startColor == toolColor) return ToolChanges::overlay;
+  PixelGetter<Pixel> px{img, startColor, toolColor};
+  startFloodFill(px, startPos, img.size());
+  return ToolChanges::cell_overlay;
+}
+
+ToolChanges floodFill(QImage &img, const QPoint pos, const QRgb color) {
+  if (img.depth() == 8) {
+    return floodFill<uint8_t>(img, pos, color);
+  } else if (img.depth() == 32) {
+    return floodFill<uint32_t>(img, pos, color);
+  } else {
+    Q_UNREACHABLE();
+  }
+}
+
+}
+
+ToolChanges FloodFillTool::mouseDown(const ToolEvent &event) {
+  assert(source);
+  lastPos = event.pos;
+  clearOverlay(event.overlay);
+  drawPointOverlay(event.overlay, event.pos, square_pen);
+  const QRgb toolColor = selectColor(event.colors, event.type);
+  const QTransform xform = getInvTransform(source->image);
+  const ToolChanges changes = floodFill(source->image.data, xform.map(event.pos), toolColor);
+  return changes;
+}
+
+ToolChanges FloodFillTool::mouseMove(const ToolEvent &event) {
+  assert(source);
+  if (event.pos == lastPos) return ToolChanges::none;
+  lastPos = event.pos;
+  clearOverlay(event.overlay);
+  drawPointOverlay(event.overlay, event.pos, square_pen);
+  return ToolChanges::overlay;
+}
+
+ToolChanges FloodFillTool::mouseUp(const ToolEvent &) {
+  assert(source);
+  return ToolChanges::none;
 }
 
 template <typename Derived>
