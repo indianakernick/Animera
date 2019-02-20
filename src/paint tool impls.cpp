@@ -50,7 +50,7 @@ void clearOverlay(QImage *overlay) {
   overlay->fill(0);
 }
 
-void drawOverlay(QImage *overlay, const QPoint pos, QPen colorPen) {
+void drawPointOverlay(QImage *overlay, const QPoint pos, QPen colorPen) {
   assert(overlay);
   QPainter painter{overlay};
   painter.setCompositionMode(QPainter::CompositionMode_Source);
@@ -87,7 +87,7 @@ ToolChanges BrushTool::mouseDown(const ToolEvent &event) {
   assert(source);
   if (button != ButtonType::none) return ToolChanges::none;
   clearOverlay(event.overlay);
-  drawOverlay(event.overlay, event.pos, pen);
+  drawPointOverlay(event.overlay, event.pos, pen);
   button = event.type;
   lastPos = event.pos;
   pen.setColor(toColor(selectColor(event.colors, event.type)));
@@ -102,7 +102,7 @@ ToolChanges BrushTool::mouseMove(const ToolEvent &event) {
   assert(source);
   if (event.pos == lastPos) return ToolChanges::none;
   clearOverlay(event.overlay);
-  drawOverlay(event.overlay, event.pos, pen);
+  drawPointOverlay(event.overlay, event.pos, pen);
   if (event.type == ButtonType::none) return ToolChanges::overlay;
   QPainter painter;
   initPainter(painter, source);
@@ -237,7 +237,7 @@ void LineTool::drawDrag(QPainter &painter, const QPoint start, const QPoint end)
 }
 
 void LineTool::drawOverlay(QImage *overlay, const QPoint pos) {
-  ::drawOverlay(overlay, pos, pen);
+  drawPointOverlay(overlay, pos, pen);
 }
 
 StrokedCircleTool::StrokedCircleTool()
@@ -270,9 +270,7 @@ void StrokedCircleTool::setupPainter(QPainter &painter) {
   painter.setPen(pen);
 }
 
-void StrokedCircleTool::drawPoint(QPainter &painter, const QPoint pos) {
-  painter.drawPoint(pos);
-}
+void StrokedCircleTool::drawPoint(QPainter &, QPoint) {}
 
 namespace {
 
@@ -290,18 +288,84 @@ double distance(const QPoint a, const QPoint b) {
   return std::sqrt(dx*dx + dy*dy);
 }
 
+QRect calcEllipseRect(
+  const CircleCenter center,
+  const QPoint start,
+  const QPoint end,
+  const int thickness
+) {
+  // @TODO revisit this
+  const int radius = std::round(distance(start, end));
+  return QRect{
+    start.x() - radius,
+    start.y() - radius,
+    radius * 2 + 1 + addEllipseWidth(center),
+    radius * 2 + 1 + addEllipseHeight(center)
+  };
+  
+  /*const double halfThick = thickness / 2.0;
+  QRectF rect{
+    start.x() - radius,
+    start.y() - radius,
+    radius * 2.0,
+    radius * 2.0
+  };
+  QRectF rect{
+    start.x() - radius + halfThick,
+    start.y() - radius + halfThick,
+    radius * 2.0 - thickness,
+    radius * 2.0 - thickness
+  };
+  QRectF rect{7.0, 7.0, 24.0 - 7.0, 25.0 - 7.0};
+  QRectF rect{7.0 + 1.0, 7.0 + 1.0, 17.0 - 2.0, 18.0 - 2.0};
+  QRectF rect{7.0 + 0.5, 7.0 + 0.5, 17.0 - 1.0, 18.0 - 1.0};
+  rect.setRight(rect.right() + addEllipseWidth(center));
+  rect.setBottom(rect.bottom() + addEllipseHeight(center));
+  return rect;*/
+}
+
 }
 
 void StrokedCircleTool::drawDrag(QPainter &painter, const QPoint start, const QPoint end) {
-  // @TODO revisit this
-  const int radius = distance(start, end);
-  const QPoint radiusPoint{radius, radius};
-  QRect rect{start - radiusPoint, QSize{radius * 2, radius * 2}};
-  rect.setRight(rect.right() + addEllipseWidth(center));
-  rect.setBottom(rect.bottom() + addEllipseHeight(center));
-  painter.drawEllipse(rect);
+  painter.drawEllipse(calcEllipseRect(center, start, end, pen.width()));
 }
 
 void StrokedCircleTool::drawOverlay(QImage *overlay, const QPoint pos) {
-  ::drawOverlay(overlay, pos, pen);
+  drawPointOverlay(overlay, pos, pen);
+}
+
+FilledCircleTool::FilledCircleTool()
+  : brush{Qt::SolidPattern} {}
+
+FilledCircleTool::~FilledCircleTool() = default;
+
+void FilledCircleTool::setCenter(const CircleCenter cent) {
+  center = cent;
+}
+
+CircleCenter FilledCircleTool::getCenter() const {
+  return center;
+}
+
+void FilledCircleTool::setColor(const QColor color) {
+  brush.setColor(color);
+}
+
+void FilledCircleTool::setupPainter(QPainter &painter) {
+  painter.setBrush(brush);
+  painter.setPen(brush.color());
+}
+
+void FilledCircleTool::drawPoint(QPainter &, QPoint) {}
+
+void FilledCircleTool::drawDrag(QPainter &painter, const QPoint start, const QPoint end) {
+  painter.drawEllipse(calcEllipseRect(center, start, end, 1));
+}
+
+void FilledCircleTool::drawOverlay(QImage *overlay, const QPoint pos) {
+  QPainter painter{overlay};
+  painter.setCompositionMode(QPainter::CompositionMode_Source);
+  painter.setRenderHint(QPainter::Antialiasing, false);
+  painter.setPen(overlay_color);
+  painter.drawPoint(pos);
 }

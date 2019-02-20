@@ -112,4 +112,25 @@ private:
   void drawOverlay(QImage *, QPoint);
 };
 
+class FilledCircleTool final : public DragPaintTool<FilledCircleTool> {
+public:
+  friend class DragPaintTool;
+  
+  FilledCircleTool();
+  ~FilledCircleTool();
+  
+  void setCenter(CircleCenter);
+  CircleCenter getCenter() const;
+
+private:
+  CircleCenter center = CircleCenter::c1x1;
+  QBrush brush;
+  
+  void setColor(QColor);
+  void setupPainter(QPainter &);
+  void drawPoint(QPainter &, QPoint);
+  void drawDrag(QPainter &, QPoint, QPoint);
+  void drawOverlay(QImage *, QPoint);
+};
+
 #endif

@@ -804,18 +804,18 @@ int main(int argc, char **argv) {
   
   //testComposite();
   
-  SourceCell source({64, 64}, Format::color);
+  SourceCell source({32, 32}, Format::color);
   source.image.xform.angle = 0;
-  StrokedCircleTool tool;
-  tool.setThickness(4);
+  FilledCircleTool tool;
+  //tool.setThickness(1);
   [[maybe_unused]] const bool ok = tool.attachCell(&source);
   assert(ok);
-  QImage overlay({64, 64}, getImageFormat(Format::color));
+  QImage overlay({32, 32}, getImageFormat(Format::color));
   overlay.fill(0);
   
   ToolEvent event;
   event.type = ButtonType::primary;
-  event.pos = QPoint{32, 32};
+  event.pos = QPoint{16, 16};
   event.colors.primary = qRgba(191, 63, 127, 191);
   event.overlay = &overlay;
   
@@ -826,7 +826,7 @@ int main(int argc, char **argv) {
   compositeOverlay(drawing, overlay);
   drawing.save("/Users/indikernick/Desktop/overlay_0.png");
   
-  event.pos = QPoint{32, 36};
+  event.pos = QPoint{16, 20};
   timer.start("MouseMove");
   tool.mouseMove(event);
   timer.stop();
@@ -834,7 +834,7 @@ int main(int argc, char **argv) {
   compositeOverlay(drawing, overlay);
   drawing.save("/Users/indikernick/Desktop/overlay_1.png");
   
-  event.pos = QPoint{32, 40};
+  event.pos = QPoint{16, 24};
   timer.start("MouseMove");
   tool.mouseMove(event);
   timer.stop();
@@ -842,7 +842,7 @@ int main(int argc, char **argv) {
   compositeOverlay(drawing, overlay);
   drawing.save("/Users/indikernick/Desktop/overlay_2.png");
   
-  event.pos = QPoint{32, 44};
+  event.pos = QPoint{16, 16};
   timer.start("MouseUp");
   tool.mouseUp(event);
   timer.stop();
