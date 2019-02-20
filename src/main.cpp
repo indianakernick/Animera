@@ -806,8 +806,8 @@ int main(int argc, char **argv) {
   
   SourceCell source({32, 32}, Format::color);
   source.image.xform.angle = 0;
-  StrokedRectangleTool tool;
-  tool.setThickness(3);
+  FilledRectangleTool tool;
+  //tool.setThickness(3);
   [[maybe_unused]] const bool ok = tool.attachCell(&source);
   assert(ok);
   QImage overlay({32, 32}, getImageFormat(Format::color));

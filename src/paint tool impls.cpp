@@ -366,11 +366,7 @@ void FilledCircleTool::drawDrag(QPainter &painter, const QPoint start, const QPo
 }
 
 void FilledCircleTool::drawOverlay(QImage *overlay, const QPoint pos) {
-  QPainter painter{overlay};
-  painter.setCompositionMode(QPainter::CompositionMode_Source);
-  painter.setRenderHint(QPainter::Antialiasing, false);
-  painter.setPen(overlay_color);
-  painter.drawPoint(pos);
+  drawPointOverlay(overlay, pos, pen);
 }
 
 StrokedRectangleTool::StrokedRectangleTool()
@@ -416,5 +412,31 @@ void StrokedRectangleTool::drawDrag(QPainter &painter, const QPoint start, const
 }
 
 void StrokedRectangleTool::drawOverlay(QImage *overlay, const QPoint pos) {
+  drawPointOverlay(overlay, pos, pen);
+}
+
+FilledRectangleTool::FilledRectangleTool()
+  : pen{square_pen} {}
+
+FilledRectangleTool::~FilledRectangleTool() = default;
+
+void FilledRectangleTool::setColor(const QColor color) {
+  pen.setColor(color);
+}
+
+void FilledRectangleTool::setupPainter(QPainter &painter) {
+  painter.setPen(pen);
+  painter.setBrush(pen.color());
+}
+
+void FilledRectangleTool::drawPoint(QPainter &painter, const QPoint pos) {
+  painter.drawPoint(pos);
+}
+
+void FilledRectangleTool::drawDrag(QPainter &painter, const QPoint start, const QPoint end) {
+  painter.drawRect(calcRect(start, end));
+}
+
+void FilledRectangleTool::drawOverlay(QImage *overlay, const QPoint pos) {
   drawPointOverlay(overlay, pos, pen);
 }

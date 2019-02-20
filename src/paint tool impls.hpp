@@ -147,4 +147,21 @@ private:
   void drawOverlay(QImage *, QPoint);
 };
 
+class FilledRectangleTool final : public DragPaintTool<FilledRectangleTool> {
+public:
+  friend class DragPaintTool;
+  
+  FilledRectangleTool();
+  ~FilledRectangleTool();
+
+private:
+  QPen pen;
+  
+  void setColor(QColor);
+  void setupPainter(QPainter &);
+  void drawPoint(QPainter &, QPoint);
+  void drawDrag(QPainter &, QPoint, QPoint);
+  void drawOverlay(QImage *, QPoint);
+};
+
 #endif
