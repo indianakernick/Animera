@@ -11,14 +11,9 @@
 
 #include "tool.hpp"
 #include <QtGui/qpen.h>
+#include "paint params.hpp"
 
 class SourceCell;
-
-constexpr int min_thickness = 1;
-constexpr int max_thickness = 64;
-constexpr int no_radius = -1;
-inline const QPoint no_point{-1, -1};
-inline const QSize no_size{-1, -1};
 
 class BrushTool : public Tool {
 public:
@@ -81,9 +76,6 @@ public:
   LineTool();
   ~LineTool();
 
-  void setThickness(int);
-  int getThickness() const;
-
 private:
   QPen pen;
   
@@ -94,13 +86,6 @@ private:
   void drawOverlay(QImage *, QPoint);
 };
 
-enum class CircleCenter {
-  c1x1,
-  c1x2,
-  c2x1,
-  c2x2
-};
-
 class StrokedCircleTool final : public DragPaintTool<StrokedCircleTool> {
 public:
   friend class DragPaintTool;
@@ -108,15 +93,13 @@ public:
   StrokedCircleTool();
   ~StrokedCircleTool();
 
-  void setThickness(int);
-  int getThickness() const;
-  void setCenter(CircleCenter);
-  CircleCenter getCenter() const;
+  void setShape(CircleShape);
+  CircleShape getShape() const;
   int getRadius() const;
   
 private:
   QPen pen;
-  CircleCenter center = CircleCenter::c1x1;
+  CircleShape shape = CircleShape::c1x1;
   int radius = no_radius;
 
   void setColor(QColor);
@@ -133,12 +116,12 @@ public:
   FilledCircleTool();
   ~FilledCircleTool();
   
-  void setCenter(CircleCenter);
-  CircleCenter getCenter() const;
+  void setShape(CircleShape);
+  CircleShape getShape() const;
   int getRadius() const;
 
 private:
-  CircleCenter center = CircleCenter::c1x1;
+  CircleShape shape = CircleShape::c1x1;
   QPen pen;
   int radius = no_radius;
   
@@ -156,8 +139,6 @@ public:
   StrokedRectangleTool();
   ~StrokedRectangleTool();
   
-  void setThickness(int);
-  int getThickness() const;
   QSize getSize() const;
 
 private:

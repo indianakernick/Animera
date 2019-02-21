@@ -68,4 +68,9 @@ void deserialize(QIODevice *, Image &);
 void serialize(QIODevice *, const Palette &);
 void deserialize(QIODevice *, Palette &);
 
+bool compatible(const QImage &, const QImage &);
+QImage makeCompatible(const QImage &);
+void copyImage(QImage &, const QImage &);
+void clearImage(QImage &);
+
 #endif

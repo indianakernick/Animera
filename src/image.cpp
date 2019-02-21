@@ -74,3 +74,22 @@ void deserialize(QIODevice *dev, Palette &palette) {
     palette.size() * sizeof(Palette::value_type)
   );
 }
+
+bool compatible(const QImage &a, const QImage &b) {
+  return a.size() == b.size() && a.format() == b.format();
+}
+
+QImage makeCompatible(const QImage &img) {
+  return QImage{img.size(), img.format()};
+}
+
+void copyImage(QImage &dst, const QImage &src) {
+  assert(compatible(dst, src));
+  dst.detach();
+  std::memcpy(dst.bits(), src.constBits(), dst.sizeInBytes());
+}
+
+void clearImage(QImage &dst) {
+  dst.detach();
+  std::memset(dst.bits(), 0, dst.sizeInBytes());
+}

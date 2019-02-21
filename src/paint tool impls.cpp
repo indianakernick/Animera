@@ -9,6 +9,7 @@
 #include "paint tool impls.hpp"
 
 #include <cmath>
+#include "painting.hpp"
 #include "cell impls.hpp"
 #include <QtGui/qpainter.h>
 
@@ -46,25 +47,6 @@ const QPen round_pen{
 const QPen square_pen{
   Qt::NoBrush, 1.0, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin
 };
-
-bool compatible(const QImage &a, const QImage &b) {
-  return a.size() == b.size() && a.format() == b.format();
-}
-
-QImage makeCompatible(const QImage &img) {
-  return QImage{img.size(), img.format()};
-}
-
-void copyImage(QImage &dst, const QImage &src) {
-  assert(compatible(dst, src));
-  dst.detach();
-  std::memcpy(dst.bits(), src.constBits(), dst.sizeInBytes());
-}
-
-void clearImage(QImage &dst) {
-  dst.detach();
-  std::memset(dst.bits(), 0, dst.sizeInBytes());
-}
 
 void clearOverlay(QImage *overlay) {
   assert(overlay);
@@ -145,132 +127,6 @@ bool FloodFillTool::attachCell(Cell *cell) {
   return source = dynamic_cast<SourceCell *>(cell);
 }
 
-namespace {
-
-template <typename Pixel>
-Pixel *pixelAddr(uchar *bits, const int bbl, const QPoint pos) noexcept {
-  return reinterpret_cast<Pixel *>(bits + bbl * pos.y()) + pos.x();
-}
-
-template <typename Pixel>
-class PixelGetter {
-public:
-  PixelGetter(QImage &img, const Pixel startColor, const Pixel toolColor)
-    : bits{img.bits()},
-      bbl{img.bytesPerLine()},
-      startColor{startColor},
-      toolColor{toolColor} {}
-  
-  bool filled(const QPoint pos) const noexcept {
-    return *pixelAddr<Pixel>(bits, bbl, pos) != startColor;
-  }
-  void fill(const QPoint pos) noexcept {
-    *pixelAddr<Pixel>(bits, bbl, pos) = toolColor;
-  }
-
-private:
-  uchar *const bits;
-  const int bbl;
-  Pixel startColor;
-  Pixel toolColor;
-};
-
-QPoint up(const QPoint p) {
-  return {p.x(), p.y() - 1};
-}
-
-QPoint right(const QPoint p) {
-  return {p.x() + 1, p.y()};
-}
-
-QPoint down(const QPoint p) {
-  return {p.x(), p.y() + 1};
-}
-
-QPoint left(const QPoint p) {
-  return {p.x() - 1, p.y()};
-}
-
-// Flood Fill algorithm by Adam Milazzo
-// http://www.adammil.net/blog/v126_A_More_Efficient_Flood_Fill.html
-
-template <typename Pixel>
-void startFloodFill(PixelGetter<Pixel>, QPoint, QSize);
-
-template <typename Pixel>
-void floodFillImpl(PixelGetter<Pixel> px, QPoint pos, const QSize size) {
-  int lastRowLength = 0;
-  do {
-    int rowLength = 0;
-    QPoint start = pos;
-    if (lastRowLength != 0 && px.filled(pos)) {
-      do {
-        if (--lastRowLength == 0) return;
-        pos = right(pos);
-      } while (px.filled(pos));
-    } else {
-      while (pos.x() != 0 && !px.filled(left(pos))) {
-        pos = left(pos);
-        px.fill(pos);
-        if (pos.y() != 0 && !px.filled(up(pos))) startFloodFill(px, up(pos), size);
-        ++rowLength;
-        ++lastRowLength;
-      }
-    }
-    while (start.x() < size.width() && !px.filled(start)) {
-      px.fill(start);
-      start = right(start);
-      ++rowLength;
-    }
-    if (rowLength < lastRowLength) {
-      const int endX = pos.x() + lastRowLength;
-      while (++start.rx() < endX) {
-        if (!px.filled(start)) floodFillImpl(px, start, size);
-      }
-    } else if (rowLength > lastRowLength && pos.y() != 0) {
-      QPoint above = up({pos.x() + lastRowLength, pos.y()});
-      while (++above.rx() < start.x()) {
-        if (!px.filled(above)) startFloodFill(px, above, size);
-      }
-    }
-    lastRowLength = rowLength;
-    pos = down(pos);
-  } while (lastRowLength != 0 && pos.y() < size.height());
-}
-
-template <typename Pixel>
-void startFloodFill(PixelGetter<Pixel> px, QPoint pos, const QSize size) {
-  while (true) {
-    const QPoint startPos = pos;
-    while (pos.y() != 0 && !px.filled(up(pos))) pos = up(pos);
-    while (pos.x() != 0 && !px.filled(left(pos))) pos = left(pos);
-    if (pos == startPos) break;
-  }
-  floodFillImpl(px, pos, size);
-}
-
-template <typename Pixel>
-ToolChanges floodFill(QImage &img, const QPoint startPos, const QRgb color) {
-  const Pixel toolColor = static_cast<Pixel>(color);
-  const Pixel startColor = *pixelAddr<Pixel>(img.bits(), img.bytesPerLine(), startPos);
-  if (startColor == toolColor) return ToolChanges::overlay;
-  PixelGetter<Pixel> px{img, startColor, toolColor};
-  startFloodFill(px, startPos, img.size());
-  return ToolChanges::cell_overlay;
-}
-
-ToolChanges floodFill(QImage &img, const QPoint pos, const QRgb color) {
-  if (img.depth() == 8) {
-    return floodFill<uint8_t>(img, pos, color);
-  } else if (img.depth() == 32) {
-    return floodFill<uint32_t>(img, pos, color);
-  } else {
-    Q_UNREACHABLE();
-  }
-}
-
-}
-
 ToolChanges FloodFillTool::mouseDown(const ToolEvent &event) {
   assert(source);
   lastPos = event.pos;
@@ -278,8 +134,8 @@ ToolChanges FloodFillTool::mouseDown(const ToolEvent &event) {
   drawPointOverlay(event.overlay, event.pos, square_pen);
   const QRgb toolColor = selectColor(event.colors, event.type);
   const QTransform xform = getInvTransform(source->image);
-  const ToolChanges changes = floodFill(source->image.data, xform.map(event.pos), toolColor);
-  return changes;
+  const bool drawn = drawFloodFill(source->image.data, toolColor, xform.map(event.pos));
+  return drawn ? ToolChanges::cell_overlay : ToolChanges::overlay;
 }
 
 ToolChanges FloodFillTool::mouseMove(const ToolEvent &event) {
@@ -379,15 +235,6 @@ LineTool::LineTool()
 
 LineTool::~LineTool() = default;
 
-void LineTool::setThickness(const int thickness) {
-  assert(min_thickness <= thickness && thickness <= max_thickness);
-  pen.setWidth(thickness);
-}
-
-int LineTool::getThickness() const {
-  return pen.width();
-}
-
 void LineTool::setColor(const QColor color) {
   pen.setColor(color);
 }
@@ -413,21 +260,12 @@ StrokedCircleTool::StrokedCircleTool()
 
 StrokedCircleTool::~StrokedCircleTool() = default;
 
-void StrokedCircleTool::setThickness(const int thickness) {
-  assert(min_thickness <= thickness && thickness <= max_thickness);
-  pen.setWidth(thickness);
+void StrokedCircleTool::setShape(const CircleShape newShape) {
+  shape = newShape;
 }
 
-int StrokedCircleTool::getThickness() const {
-  return pen.width();
-}
-
-void StrokedCircleTool::setCenter(const CircleCenter cent) {
-  center = cent;
-}
-
-CircleCenter StrokedCircleTool::getCenter() const {
-  return center;
+CircleShape StrokedCircleTool::getShape() const {
+  return shape;
 }
 
 int StrokedCircleTool::getRadius() const {
@@ -448,14 +286,6 @@ void StrokedCircleTool::drawPoint(QPainter &, QPoint) {
 
 namespace {
 
-int addEllipseWidth(const CircleCenter center) {
-  return (center == CircleCenter::c2x1 || center == CircleCenter::c2x2);
-}
-
-int addEllipseHeight(const CircleCenter center) {
-  return (center == CircleCenter::c1x2 || center == CircleCenter::c2x2);
-}
-
 double distance(const QPoint a, const QPoint b) {
   const int dx = a.x() - b.x();
   const int dy = a.y() - b.y();
@@ -466,46 +296,11 @@ int calcRadius(const QPoint start, const QPoint end) {
   return std::round(distance(start, end));
 }
 
-QRect calcEllipseRect(
-  const CircleCenter center,
-  const QPoint start,
-  const int radius,
-  const int thickness
-) {
-  // @TODO revisit this
-  return QRect{
-    start.x() - radius,
-    start.y() - radius,
-    radius * 2 + 1 + addEllipseWidth(center),
-    radius * 2 + 1 + addEllipseHeight(center)
-  };
-  
-  /*const double halfThick = thickness / 2.0;
-  QRectF rect{
-    start.x() - radius,
-    start.y() - radius,
-    radius * 2.0,
-    radius * 2.0
-  };
-  QRectF rect{
-    start.x() - radius + halfThick,
-    start.y() - radius + halfThick,
-    radius * 2.0 - thickness,
-    radius * 2.0 - thickness
-  };
-  QRectF rect{7.0, 7.0, 24.0 - 7.0, 25.0 - 7.0};
-  QRectF rect{7.0 + 1.0, 7.0 + 1.0, 17.0 - 2.0, 18.0 - 2.0};
-  QRectF rect{7.0 + 0.5, 7.0 + 0.5, 17.0 - 1.0, 18.0 - 1.0};
-  rect.setRight(rect.right() + addEllipseWidth(center));
-  rect.setBottom(rect.bottom() + addEllipseHeight(center));
-  return rect;*/
-}
-
 }
 
 void StrokedCircleTool::drawDrag(QPainter &painter, const QPoint start, const QPoint end) {
   radius = calcRadius(start, end);
-  painter.drawEllipse(calcEllipseRect(center, start, radius, pen.width()));
+  painter.drawEllipse(adjustStrokedEllipse(circleToRect(start, radius, shape), 1));
 }
 
 void StrokedCircleTool::drawOverlay(QImage *overlay, const QPoint pos) {
@@ -517,12 +312,12 @@ FilledCircleTool::FilledCircleTool()
 
 FilledCircleTool::~FilledCircleTool() = default;
 
-void FilledCircleTool::setCenter(const CircleCenter cent) {
-  center = cent;
+void FilledCircleTool::setShape(const CircleShape newShape) {
+  shape = newShape;
 }
 
-CircleCenter FilledCircleTool::getCenter() const {
-  return center;
+CircleShape FilledCircleTool::getShape() const {
+  return shape;
 }
 
 int FilledCircleTool::getRadius() const {
@@ -544,7 +339,7 @@ void FilledCircleTool::drawPoint(QPainter &, QPoint) {
 
 void FilledCircleTool::drawDrag(QPainter &painter, const QPoint start, const QPoint end) {
   radius = calcRadius(start, end);
-  painter.drawEllipse(calcEllipseRect(center, start, radius, 1));
+  painter.drawEllipse(adjustStrokedEllipse(circleToRect(start, radius, shape), 1));
 }
 
 void FilledCircleTool::drawOverlay(QImage *overlay, const QPoint pos) {
@@ -555,14 +350,6 @@ StrokedRectangleTool::StrokedRectangleTool()
   : pen{square_pen} {}
 
 StrokedRectangleTool::~StrokedRectangleTool() = default;
-
-void StrokedRectangleTool::setThickness(const int thickness) {
-  pen.setWidth(thickness);
-}
-
-int StrokedRectangleTool::getThickness() const {
-  return pen.width();
-}
 
 QSize StrokedRectangleTool::getSize() const {
   return isDragging() ? size : no_size;
@@ -584,20 +371,19 @@ void StrokedRectangleTool::drawPoint(QPainter &painter, const QPoint pos) {
 namespace {
 
 QRect calcRect(const QPoint start, const QPoint end) {
-  return QRect{
-    std::min(start.x(), end.x()),
-    std::min(start.y(), end.y()),
-    std::abs(start.x() - end.x()),
-    std::abs(start.y() - end.y())
-  };
+  return QRect{start, end}.normalized();
 }
 
 }
 
 void StrokedRectangleTool::drawDrag(QPainter &painter, const QPoint start, const QPoint end) {
-  const QRect rect = calcRect(start, end);
-  size = rect.size() + QSize{1, 1};
-  painter.drawRect(rect);
+  if (start == end) {
+    drawPoint(painter, start);
+  } else {
+    const QRect rect = calcRect(start, end);
+    size = rect.size();
+    painter.drawRect(adjustStrokedRect(rect, pen.width()));
+  }
 }
 
 void StrokedRectangleTool::drawOverlay(QImage *overlay, const QPoint pos) {
@@ -618,7 +404,7 @@ void FilledRectangleTool::setColor(const QColor color) {
 }
 
 void FilledRectangleTool::setupPainter(QPainter &painter) {
-  painter.setPen(pen);
+  painter.setPen(Qt::NoPen);
   painter.setBrush(pen.color());
 }
 
@@ -629,7 +415,7 @@ void FilledRectangleTool::drawPoint(QPainter &painter, const QPoint pos) {
 
 void FilledRectangleTool::drawDrag(QPainter &painter, const QPoint start, const QPoint end) {
   const QRect rect = calcRect(start, end);
-  size = rect.size() + QSize{1, 1};
+  size = rect.size();
   painter.drawRect(rect);
 }
 

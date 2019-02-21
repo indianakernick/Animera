@@ -807,8 +807,8 @@ int main(int argc, char **argv) {
   
   SourceCell source({32, 32}, Format::color);
   source.image.xform.angle = 0;
-  FloodFillTool tool;
-  //tool.setThickness(3);
+  FilledCircleTool tool;
+  tool.setShape(CircleShape::c1x1);
   [[maybe_unused]] const bool ok = tool.attachCell(&source);
   assert(ok);
   QImage overlay({32, 32}, getImageFormat(Format::color));
@@ -820,14 +820,14 @@ int main(int argc, char **argv) {
   event.colors.primary = qRgba(0, 255, 0, 255);
   event.overlay = &overlay;
   
-  StrokedCircleTool sct;
+  /*StrokedCircleTool sct;
   sct.attachCell(&source);
   event.pos.rx() += 3;
   sct.mouseDown(event);
   event.pos.rx() -= 6;
   sct.mouseUp(event);
   event.pos.rx() += 2;
-  event.pos.ry() -= 2;
+  event.pos.ry() -= 2;*/
   
   event.colors.primary = qRgba(191, 63, 127, 191);
   
