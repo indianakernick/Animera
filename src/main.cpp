@@ -723,6 +723,148 @@ QImage dupImage(const QImage &img) {
 #include "composite.hpp"
 #include "painting.hpp"
 
+void freshFilledCircle(
+  QImage &image,
+  const QRgb color,
+  const QPoint pos,
+  const int radius,
+  const CircleShape shape
+) {
+  const QRect rect = circleToRect(pos, radius, shape);
+  const int radius2 = radius * radius;
+  for (int y = rect.top(); y <= rect.bottom(); ++y) {
+    for (int x = rect.left(); x <= rect.right(); ++x) {
+      const int dx = std::abs(x - pos.x());
+      const int dy = std::abs(y - pos.y());
+      if (dx*dx + dy*dy < radius2 + radius) {
+        image.setPixel(x, y, color);
+      }
+    }
+  }
+}
+
+void drawSectors(
+  QImage &image,
+  const QPoint c,
+  const QPoint p,
+  const QRgb color
+) {
+  image.setPixel(c.x()+p.x(), c.y()+p.y(), color);
+  image.setPixel(c.x()-p.x(), c.y()+p.y(), color);
+  image.setPixel(c.x()+p.x(), c.y()-p.y(), color);
+  image.setPixel(c.x()-p.x(), c.y()-p.y(), color);
+  image.setPixel(c.x()+p.y(), c.y()+p.x(), color);
+  image.setPixel(c.x()-p.y(), c.y()+p.x(), color);
+  image.setPixel(c.x()+p.y(), c.y()-p.x(), color);
+  image.setPixel(c.x()-p.y(), c.y()-p.x(), color);
+}
+
+void bresenhamStroked(
+  QImage &img,
+  const QRgb col,
+  const QPoint ctr,
+  const int rad,
+  CircleShape
+) {
+  QPoint pos = {0, rad};
+  int err = 3 - 2 * rad;
+  drawSectors(img, ctr, pos, col);
+  while (pos.y() >= pos.x()) {
+    ++pos.rx();
+    if (err > 0) {
+      --pos.ry();
+      err = err + 4 * (pos.x() - pos.y()) + 10;
+    } else {
+      err = err + 4 * pos.x() + 6;
+    }
+    drawSectors(img, ctr, pos, col);
+  }
+}
+
+void moreGreen(QRgb &color) {
+  color = qRgba(qRed(color), qGreen(color) + 12, qBlue(color) - 12, qAlpha(color));
+}
+
+void midpointStroked(
+  QImage &img,
+  QRgb col,
+  const QPoint ctr,
+  const int rad,
+  CircleShape
+) {
+  QPoint pos = {rad, 0};
+  img.setPixel(ctr.x() + pos.x(), ctr.y() + pos.y(), col);
+  if (rad > 0) {
+    img.setPixel(ctr.x() - pos.x(), ctr.y() + pos.y(), col);
+    img.setPixel(ctr.x() + pos.y(), ctr.y() + pos.x(), col);
+    img.setPixel(ctr.x() + pos.y(), ctr.y() - pos.x(), col);
+  }
+  int mid = 1 - rad;
+  while (pos.x() > pos.y()) {
+    ++pos.ry();
+    if (mid < 0) {
+      mid = mid + 2 * pos.y() + 1;
+    } else {
+      --pos.rx();
+      mid = mid + 2 * pos.y() - 2 * pos.x() + 1;
+    }
+    if (pos.x() < pos.y()) break;
+    img.setPixel(ctr.x() + pos.x(), ctr.y() + pos.y(), col);
+    img.setPixel(ctr.x() - pos.x(), ctr.y() + pos.y(), col);
+    img.setPixel(ctr.x() + pos.x(), ctr.y() - pos.y(), col);
+    img.setPixel(ctr.x() - pos.x(), ctr.y() - pos.y(), col);
+    moreGreen(col);
+    if (pos.x() != pos.y()) {
+      img.setPixel(ctr.x() + pos.y(), ctr.y() + pos.x(), col);
+      img.setPixel(ctr.x() - pos.y(), ctr.y() + pos.x(), col);
+      img.setPixel(ctr.x() + pos.y(), ctr.y() - pos.x(), col);
+      img.setPixel(ctr.x() - pos.y(), ctr.y() - pos.x(), col);
+    }
+  }
+}
+// midpoint filled  37.2ms
+void fillScanLine(QImage &img, const QRgb col, const QPoint first, const int last) {
+  uchar *rowBytes = img.bits() + first.y() * img.bytesPerLine() + first.x() * sizeof(QRgb);
+  QRgb *row = reinterpret_cast<QRgb *>(rowBytes);
+  QRgb *const rowEnd = row + (last - first.x() + 1);
+  while (row != rowEnd) {
+    *row++ = col;
+  }
+}
+
+void midpointFilled(
+  QImage &img,
+  QRgb col,
+  const QPoint ctr,
+  const int rad,
+  CircleShape
+) {
+  QPoint pos = {rad, 0};
+  img.setPixel(ctr.x() + pos.x(), ctr.y() + pos.y(), col);
+  if (rad > 0) {
+    fillScanLine(img, col, {ctr.x() - pos.x(), ctr.y() + pos.y()}, ctr.x() + pos.x());
+    img.setPixel(ctr.x() + pos.y(), ctr.y() + pos.x(), col);
+    img.setPixel(ctr.x() + pos.y(), ctr.y() - pos.x(), col);
+  }
+  int mid = 1 - rad;
+  while (pos.x() > pos.y()) {
+    ++pos.ry();
+    if (mid < 0) {
+      mid = mid + 2 * pos.y() + 1;
+    } else {
+      --pos.rx();
+      mid = mid + 2 * pos.y() - 2 * pos.x() + 1;
+    }
+    if (pos.x() < pos.y()) break;
+    fillScanLine(img, col, {ctr.x() - pos.x(), ctr.y() + pos.y()}, ctr.x() + pos.x());
+    fillScanLine(img, col, {ctr.x() - pos.x(), ctr.y() - pos.y()}, ctr.x() + pos.x());
+    if (pos.x() != pos.y()) {
+      fillScanLine(img, col, {ctr.x() - pos.y(), ctr.y() + pos.x()}, ctr.x() + pos.y());
+      fillScanLine(img, col, {ctr.x() - pos.y(), ctr.y() - pos.x()}, ctr.x() + pos.y());
+    }
+  }
+}
+
 int main(int argc, char **argv) {
   /*Image img;
   img.data.load("/Users/indikernick/Library/Developer/Xcode/DerivedData/Pixel_2-gqoblrlhvynmicgniivandqktune/Build/Products/Debug/Pixel 2.app/Contents/Resources/icon.png");
@@ -774,9 +916,17 @@ int main(int argc, char **argv) {
   std::cout << "\n\n";*/
   
   Timer timer;
-  
+  // 128
+  // painter filled   0.0975ms
+  // midpoint filled  0.0121ms
+  // 2048
+  // painter filled   4.31ms
+  // midpoint filled  1.77ms
+  // 4096
+  // painter filled   17.7ms
+  // midpoint filled  7.59ms
   timer.start("Alloc");
-  QImage image{1024, 1024, QImage::Format_ARGB32};
+  QImage image{2048, 2048, QImage::Format_ARGB32};
   timer.stop();
   
   timer.start("Clear");
@@ -808,7 +958,7 @@ int main(int argc, char **argv) {
   QImage dup = dupImage(image);
   timer.stop();
   
-  const QRgb fillColor = qRgba(191, 63, 127, 191);
+  const QRgb fillColor = qRgba(0, 0, 255, 255);
   const QRect fillRect{
     image.width() / 8,
     image.height() / 7,
@@ -830,6 +980,78 @@ int main(int argc, char **argv) {
     painter.fillRect(fillRect, QColor{qRed(fillColor), qGreen(fillColor), qBlue(fillColor), qAlpha(fillColor)});
   }
   timer.stop();
+  
+  clearImage(image);
+  
+  for (int r = 0; r <= 24; ++r) {
+    const int x = 64 * (r + 1);
+    drawStrokedEllipse(image, fillColor, circleToRect({x, 64}, r, CircleShape::c1x1));
+    bresenhamStroked(image, fillColor, {x, 128}, r, CircleShape::c1x1);
+    midpointStroked(image, fillColor, {x, 192}, r, CircleShape::c1x1);
+    midpointFilled(image, fillColor, {x, 256}, r, CircleShape::c1x1);
+    drawFilledEllipse(image, fillColor, circleToRect({x, 320}, r, CircleShape::c1x1));
+  }
+  
+  const QPoint circPos = {dup.width() / 2, dup.height() / 2};
+  const int circRad = std::min(dup.width(), dup.height()) / 2 - 1;
+  
+  timer.start("painter stroked");
+  drawStrokedEllipse(dup, fillColor, circleToRect(circPos, circRad, CircleShape::c1x1));
+  timer.stop();
+  
+  timer.start("bres stroked");
+  bresenhamStroked(dup, fillColor, circPos, circRad, CircleShape::c1x1);
+  timer.stop();
+  
+  timer.start("midpoint stroked");
+  midpointStroked(dup, fillColor, circPos, circRad, CircleShape::c1x1);
+  timer.stop();
+  
+  timer.start("painter filled");
+  drawFilledEllipse(dup, fillColor, circleToRect(circPos, circRad, CircleShape::c1x1));
+  timer.stop();
+  
+  dup.fill(0);
+  
+  timer.start("midpoint filled");
+  midpointFilled(dup, fillColor, circPos, circRad, CircleShape::c1x1);
+  timer.stop();
+  
+  dup.save("/Users/indikernick/Desktop/circle.png");
+  image.save("/Users/indikernick/Desktop/circles.png");
+  
+  image.fill(0);
+  
+  timer.start("painter brush");
+  {
+    QPen pen{Qt::NoBrush, 64.0, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin};
+    pen.setColor(QColor{fillColor});
+    QPainter painter{&image};
+    painter.setPen(pen);
+    painter.drawLine(64, 64, image.width() - 65, image.height() - 65);
+  }
+  timer.stop();
+  
+  image.save("/Users/indikernick/Desktop/smear_0.png");
+  image.fill(0);
+  
+  timer.start("midpoint smear");
+  for (int x = 64; x < image.width() - 64; ++x) {
+    midpointFilled(image, fillColor, {x, x}, 32, CircleShape::c1x1);
+  }
+  timer.stop();
+  
+  image.save("/Users/indikernick/Desktop/smear_1.png");
+  image.fill(0);
+  
+  timer.start("painter smear");
+  for (int x = 64; x < image.width() - 64; ++x) {
+    drawFilledEllipse(image, fillColor, circleToRect({x, x}, 32, CircleShape::c1x1));
+  }
+  timer.stop();
+  
+  image.save("/Users/indikernick/Desktop/smear_2.png");
+  image.fill(0);
   
   //testComposite();
   
