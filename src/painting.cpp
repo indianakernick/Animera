@@ -35,6 +35,8 @@ QRect centerToRect(const QPoint center, const CircleShape shape) {
   return circleToRect(center, 0, shape);
 }
 
+namespace {
+
 QRect adjustStrokedRect(const QRect rect, const int thickness) {
   return QRect{
     rect.left() + thickness / 2,
@@ -47,8 +49,6 @@ QRect adjustStrokedRect(const QRect rect, const int thickness) {
 QRect adjustStrokedEllipse(const QRect rect, const int thickness) {
   return adjustStrokedRect(rect, thickness);
 }
-
-namespace {
 
 QColor toColor(const QRgb rgba) {
   // the QRgb constructor sets alpha to 255 for some reason
@@ -74,14 +74,32 @@ void preparePainter(QPainter &painter) {
   painter.setRenderHint(QPainter::Antialiasing, false);
 }
 
+template <typename Pixel>
+Pixel *pixelAddr(
+  uchar *const bits,
+  const int bbl,
+  const QPoint pos
+) noexcept {
+  return reinterpret_cast<Pixel *>(bits + pos.y() * bbl + pos.x() * sizeof(Pixel));
+}
+
+template <typename Pixel>
+bool drawSquarePoint(QImage &img, const QRgb color, const QPoint pos) {
+  *pixelAddr<Pixel>(img.bits(), img.bytesPerLine(), pos) = static_cast<Pixel>(color);
+  return true;
+}
+
 }
 
 bool drawSquarePoint(QImage &img, const QRgb color, const QPoint pos) {
-  QPainter painter{&img};
-  preparePainter(painter);
-  painter.setPen(makePen(square_pen, color, 1));
-  painter.drawPoint(pos);
-  return true;
+  if (!img.rect().contains(pos)) return false;
+  if (img.depth() == 8) {
+    return drawSquarePoint<uint8_t>(img, color, pos);
+  } else if (img.depth() == 32) {
+    return drawSquarePoint<uint32_t>(img, color, pos);
+  } else {
+    Q_UNREACHABLE();
+  }
 }
 
 bool drawRoundPoint(QImage &img, const QRgb color, const QPoint pos, const int thickness) {
@@ -93,11 +111,6 @@ bool drawRoundPoint(QImage &img, const QRgb color, const QPoint pos, const int t
 }
 
 namespace {
-
-template <typename Pixel>
-Pixel *pixelAddr(uchar *bits, const int bbl, const QPoint pos) noexcept {
-  return reinterpret_cast<Pixel *>(bits + bbl * pos.y()) + pos.x();
-}
 
 template <typename Pixel>
 class PixelGetter {
@@ -225,7 +238,7 @@ bool drawFilledEllipse(
   const QRgb color,
   const QRect ellipse
 ) {
-  assert(!ellipse.size().isEmpty());
+  assert(ellipse.isValid());
   if (!img.rect().intersects(ellipse)) return false;
   QPainter painter{&img};
   preparePainter(painter);
@@ -240,7 +253,7 @@ bool drawStrokedEllipse(
   const QRgb color,
   const QRect ellipse
 ) {
-  assert(!ellipse.size().isEmpty());
+  assert(ellipse.isValid());
   if (!img.rect().intersects(ellipse)) return false;
   QPainter painter{&img};
   preparePainter(painter);
@@ -252,15 +265,17 @@ bool drawStrokedEllipse(
 namespace {
 
 template <typename Pixel>
-void fillScanLine(Pixel *row, const int size, const Pixel color) {
-  Pixel *const rowEnd = row + size;
-  for (; row != rowEnd; ++row) {
-    *row = color;
+void fillScanLine(Pixel *row, const uintptr_t size, const Pixel color) noexcept {
+  Pixel *const rowEnd = reinterpret_cast<Pixel *>(
+    reinterpret_cast<uchar *>(row) + size
+  );
+  while (row != rowEnd) {
+    *row++ = color;
   }
 }
 
 template <>
-void fillScanLine(uint8_t *row, const int size, const uint8_t color) {
+void fillScanLine(uint8_t *const row, const uintptr_t size, const uint8_t color) noexcept {
   std::memset(row, color, size);
 }
 
@@ -268,21 +283,21 @@ template <typename Pixel>
 void fillRect(QImage &img, const QRgb color, const QPoint topLeft, const QSize size) {
   img.detach();
   const Pixel toolColor = static_cast<Pixel>(color);
-  uchar *const bits = img.bits();
-  const int bbl = img.bytesPerLine();
-  int y = topLeft.y();
-  const int endY = y + size.height();
-  for (; y != endY; ++y) {
-    Pixel *row = pixelAddr<Pixel>(bits, bbl, {topLeft.x(), y});
-    fillScanLine(row, size.width(), toolColor);
+  const uintptr_t bbl = img.bytesPerLine();
+  uchar *row = img.bits() + topLeft.y() * bbl + topLeft.x() * sizeof(Pixel);
+  uchar *const endRow = row + size.height() * bbl;
+  const uintptr_t width = size.width() * sizeof(Pixel);
+  
+  while (row != endRow) {
+    fillScanLine(reinterpret_cast<Pixel *>(row), width, toolColor);
+    row += bbl;
   }
 }
 
 }
 
 bool drawFilledRect(QImage &img, const QRgb color, const QRect rect) {
-  assert(rect.width() >= 0);
-  assert(rect.height() >= 0);
+  assert(rect.isValid());
   const QRect clipped = img.rect().intersected(rect);
   if (clipped.isEmpty()) return false;
   
@@ -302,14 +317,17 @@ bool drawStrokedRect(
   const QRgb color,
   const QRect rect
 ) {
-  assert(rect.width() >= 0);
-  assert(rect.height() >= 0);
+  assert(rect.isValid());
   if (!img.rect().intersects(rect)) return false;
   
   QPainter painter{&img};
   preparePainter(painter);
   painter.setPen(makePen(square_pen, color, 1));
-  painter.drawRect(adjustStrokedRect(rect, 1));
+  if (rect.size() == QSize{1, 1}) {
+    painter.drawPoint(rect.topLeft());
+  } else {
+    painter.drawRect(adjustStrokedRect(rect, 1));
+  }
   
   return true;
 }

@@ -14,8 +14,6 @@
 
 QRect circleToRect(QPoint, int, CircleShape);
 QRect centerToRect(QPoint, CircleShape);
-QRect adjustStrokedRect(QRect, int);
-QRect adjustStrokedEllipse(QRect, int);
 
 bool drawSquarePoint   (QImage &, QRgb, QPoint);
 bool drawRoundPoint    (QImage &, QRgb, QPoint, int);

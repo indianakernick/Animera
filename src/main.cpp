@@ -714,13 +714,14 @@ auto getCell(const Animation &anim, const LayerIdx l, const FrameIdx f) {
 };
 
 QImage dupImage(const QImage &img) {
-  QImage duplicate{img.size(), img.format()};
-  std::memcpy(duplicate.bits(), img.constBits(), img.sizeInBytes());
-  return duplicate;
+  QImage dup = makeCompatible(img);
+  std::memcpy(dup.bits(), img.constBits(), img.sizeInBytes());
+  return dup;
 }
 
 #include "paint tool impls.hpp"
 #include "composite.hpp"
+#include "painting.hpp"
 
 int main(int argc, char **argv) {
   /*Image img;
@@ -732,7 +733,7 @@ int main(int argc, char **argv) {
   QImage xformed = img.transformed();
   xformed.save("/Users/indikernick/Desktop/test.png");*/
   
-  QImage idxImg{2, 2, QImage::Format_Indexed8};
+  /*QImage idxImg{2, 2, QImage::Format_Indexed8};
   idxImg.detach();
   idxImg.bits()[0] = 0;
   idxImg.bits()[1] = 20;
@@ -770,7 +771,7 @@ int main(int argc, char **argv) {
             << int(loadedCol.constBits()[2]) << ' '
             << int(loadedCol.constBits()[3]) << '\n';
   
-  std::cout << "\n\n";
+  std::cout << "\n\n";*/
   
   Timer timer;
   
@@ -785,6 +786,10 @@ int main(int argc, char **argv) {
   timer.start("Memset");
   image.detach();
   std::memset(image.bits(), 0, image.sizeInBytes());
+  timer.stop();
+  
+  timer.start("Floodfill");
+  drawFloodFill(image, QRgb{0xFFFFFFFF}, {image.width() / 2, image.height() / 2});
   timer.stop();
   
   timer.start("Refer");
@@ -803,12 +808,36 @@ int main(int argc, char **argv) {
   QImage dup = dupImage(image);
   timer.stop();
   
+  const QRgb fillColor = qRgba(191, 63, 127, 191);
+  const QRect fillRect{
+    image.width() / 8,
+    image.height() / 7,
+    (image.width() * 2) / 3,
+    (image.height() * 3) / 4
+  };
+  
+  image.detach();
+  dup.detach();
+  
+  timer.start("drawFilledRect");
+  drawFilledRect(image, fillColor, fillRect);
+  timer.stop();
+  
+  timer.start("painter.fillRect");
+  {
+    QPainter painter{&dup};
+    painter.setCompositionMode(QPainter::CompositionMode_Source);
+    painter.fillRect(fillRect, QColor{qRed(fillColor), qGreen(fillColor), qBlue(fillColor), qAlpha(fillColor)});
+  }
+  timer.stop();
+  
   //testComposite();
   
   SourceCell source({32, 32}, Format::color);
   source.image.xform.angle = 0;
-  FilledCircleTool tool;
-  tool.setShape(CircleShape::c1x1);
+  FloodFillTool tool;
+  //tool.setWidth(3);
+  //tool.setShape(CircleShape::c1x1);
   [[maybe_unused]] const bool ok = tool.attachCell(&source);
   assert(ok);
   QImage overlay({32, 32}, getImageFormat(Format::color));
@@ -820,14 +849,14 @@ int main(int argc, char **argv) {
   event.colors.primary = qRgba(0, 255, 0, 255);
   event.overlay = &overlay;
   
-  /*StrokedCircleTool sct;
+  StrokedCircleTool sct;
   sct.attachCell(&source);
   event.pos.rx() += 3;
   sct.mouseDown(event);
   event.pos.rx() -= 6;
   sct.mouseUp(event);
   event.pos.rx() += 2;
-  event.pos.ry() -= 2;*/
+  event.pos.ry() -= 2;
   
   event.colors.primary = qRgba(191, 63, 127, 191);
   

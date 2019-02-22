@@ -10,28 +10,25 @@
 #define paint_tool_impls_hpp
 
 #include "tool.hpp"
-#include <QtGui/qpen.h>
 #include "paint params.hpp"
 
 class SourceCell;
 
 class BrushTool : public Tool {
 public:
-  BrushTool();
-
   bool attachCell(Cell *) override;
   ToolChanges mouseDown(const ToolEvent &) override;
   ToolChanges mouseMove(const ToolEvent &) override;
   ToolChanges mouseUp(const ToolEvent &) override;
 
-  void setDiameter(int);
-  int getDiameter() const;
+  void setWidth(int);
 
 private:
   QPoint lastPos = no_point;
   SourceCell *source = nullptr;
   ButtonType button = ButtonType::none;
-  QPen pen;
+  int width = 1;
+  QRgb color = 0;
 };
 
 class FloodFillTool : public Tool {
@@ -58,6 +55,7 @@ public:
 
 protected:
   bool isDragging() const;
+  QRgb getColor() const;
 
 private:
   QPoint startPos = no_point;
@@ -65,6 +63,7 @@ private:
   ButtonType button = ButtonType::none;
   SourceCell *source = nullptr;
   QImage cleanImage;
+  QRgb color = 0;
   
   Derived *that();
 };
@@ -73,103 +72,80 @@ class LineTool final : public DragPaintTool<LineTool> {
 public:
   friend class DragPaintTool;
 
-  LineTool();
   ~LineTool();
 
 private:
-  QPen pen;
-  
-  void setColor(QColor);
-  void setupPainter(QPainter &);
-  void drawPoint(QPainter &, QPoint);
-  void drawDrag(QPainter &, QPoint, QPoint);
-  void drawOverlay(QImage *, QPoint);
+  bool drawPoint(Image &, QPoint);
+  bool drawDrag(Image &, QPoint, QPoint);
+  void drawOverlay(QImage &, QPoint);
 };
 
 class StrokedCircleTool final : public DragPaintTool<StrokedCircleTool> {
 public:
   friend class DragPaintTool;
 
-  StrokedCircleTool();
   ~StrokedCircleTool();
 
   void setShape(CircleShape);
-  CircleShape getShape() const;
   int getRadius() const;
   
 private:
-  QPen pen;
   CircleShape shape = CircleShape::c1x1;
   int radius = no_radius;
 
-  void setColor(QColor);
-  void setupPainter(QPainter &);
-  void drawPoint(QPainter &, QPoint);
-  void drawDrag(QPainter &, QPoint, QPoint);
-  void drawOverlay(QImage *, QPoint);
+  bool drawPoint(Image &, QPoint);
+  bool drawDrag(Image &, QPoint, QPoint);
+  void drawOverlay(QImage &, QPoint);
 };
 
 class FilledCircleTool final : public DragPaintTool<FilledCircleTool> {
 public:
   friend class DragPaintTool;
   
-  FilledCircleTool();
   ~FilledCircleTool();
   
   void setShape(CircleShape);
-  CircleShape getShape() const;
   int getRadius() const;
 
 private:
   CircleShape shape = CircleShape::c1x1;
-  QPen pen;
   int radius = no_radius;
   
-  void setColor(QColor);
-  void setupPainter(QPainter &);
-  void drawPoint(QPainter &, QPoint);
-  void drawDrag(QPainter &, QPoint, QPoint);
-  void drawOverlay(QImage *, QPoint);
+  bool drawPoint(Image &, QPoint);
+  bool drawDrag(Image &, QPoint, QPoint);
+  void drawOverlay(QImage &, QPoint);
 };
 
 class StrokedRectangleTool final : public DragPaintTool<StrokedRectangleTool> {
 public:
   friend class DragPaintTool;
   
-  StrokedRectangleTool();
   ~StrokedRectangleTool();
   
   QSize getSize() const;
 
 private:
-  QPen pen;
   QSize size = no_size;
   
-  void setColor(QColor);
-  void setupPainter(QPainter &);
-  void drawPoint(QPainter &, QPoint);
-  void drawDrag(QPainter &, QPoint, QPoint);
-  void drawOverlay(QImage *, QPoint);
+  bool drawPoint(Image &, QPoint);
+  bool drawDrag(Image &, QPoint, QPoint);
+  void drawOverlay(QImage &, QPoint);
 };
 
 class FilledRectangleTool final : public DragPaintTool<FilledRectangleTool> {
 public:
   friend class DragPaintTool;
   
-  FilledRectangleTool();
   ~FilledRectangleTool();
 
   QSize getSize() const;
 
 private:
-  QPen pen;
   QSize size = no_size;
   
-  void setColor(QColor);
-  void setupPainter(QPainter &);
-  void drawPoint(QPainter &, QPoint);
-  void drawDrag(QPainter &, QPoint, QPoint);
-  void drawOverlay(QImage *, QPoint);
+  bool drawPoint(Image &, QPoint);
+  bool drawDrag(Image &, QPoint, QPoint);
+  void drawOverlay(QImage &, QPoint);
 };
 
 #endif

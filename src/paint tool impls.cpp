@@ -11,62 +11,33 @@
 #include <cmath>
 #include "painting.hpp"
 #include "cell impls.hpp"
-#include <QtGui/qpainter.h>
 
 namespace {
 
-void initPainter(QPainter &painter, SourceCell *source) {
-  assert(source);
-  painter.begin(&source->image.data);
-  painter.setCompositionMode(QPainter::CompositionMode_Source);
-  painter.setRenderHint(QPainter::Antialiasing, false);
-  painter.setTransform(getInvTransform(source->image));
-}
-
 QRgb selectColor(const ToolColors &colors, const ButtonType button) {
   switch (button) {
-    case ButtonType::primary: return colors.primary;
+    case ButtonType::primary:   return colors.primary;
     case ButtonType::secondary: return colors.secondary;
-    case ButtonType::erase: return colors.erase;
+    case ButtonType::erase:     return colors.erase;
     default: Q_UNREACHABLE();
   }
-  return 0;
 }
 
-QColor toColor(const QRgb rgba) {
-  // the QRgb constructor sets alpha to 255 for some reason
-  return QColor{qRed(rgba), qGreen(rgba), qBlue(rgba), qAlpha(rgba)};
+template <typename Geometry>
+Geometry map(const Image &image, const Geometry &geom) {
+  return getInvTransform(image).map(geom);
 }
 
-const QColor overlay_color{
-  overlay_gray, overlay_gray, overlay_gray, overlay_alpha
-};
-const QPen round_pen{
-  Qt::NoBrush, 1.0, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin
-};
-const QPen square_pen{
-  Qt::NoBrush, 1.0, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin
-};
-
-void clearOverlay(QImage *overlay) {
-  assert(overlay);
-  clearImage(*overlay);
+template <>
+QRect map(const Image &image, const QRect &rect) {
+  return getInvTransform(image).mapRect(rect);
 }
 
-void drawPointOverlay(QImage *overlay, const QPoint pos, QPen colorPen) {
-  assert(overlay);
-  QPainter painter{overlay};
-  painter.setCompositionMode(QPainter::CompositionMode_Source);
-  painter.setRenderHint(QPainter::Antialiasing, false);
-  colorPen.setColor(overlay_color);
-  painter.setPen(colorPen);
-  painter.drawPoint(pos);
+ToolChanges drawnChanges(const bool drawn) {
+  return drawn ? ToolChanges::cell_overlay : ToolChanges::overlay;
 }
 
 }
-
-BrushTool::BrushTool()
-  : pen{round_pen} {}
 
 bool BrushTool::attachCell(Cell *cell) {
   return source = dynamic_cast<SourceCell *>(cell);
@@ -74,53 +45,49 @@ bool BrushTool::attachCell(Cell *cell) {
 
 ToolChanges BrushTool::mouseDown(const ToolEvent &event) {
   assert(source);
+  assert(event.overlay);
   if (button != ButtonType::none) return ToolChanges::none;
-  clearOverlay(event.overlay);
-  drawPointOverlay(event.overlay, event.pos, pen);
+  clearImage(*event.overlay);
+  drawRoundPoint(*event.overlay, overlay_color, event.pos, width);
   button = event.type;
   lastPos = event.pos;
-  pen.setColor(toColor(selectColor(event.colors, event.type)));
-  QPainter painter;
-  initPainter(painter, source);
-  painter.setPen(pen);
-  painter.drawPoint(lastPos);
-  return ToolChanges::cell_overlay;
+  color = selectColor(event.colors, event.type);
+  Image &img = source->image;
+  // @TODO won't be transformed properly when width > 1
+  return drawnChanges(drawRoundPoint(img.data, color, map(img, lastPos), width));
 }
 
 ToolChanges BrushTool::mouseMove(const ToolEvent &event) {
   assert(source);
+  assert(event.overlay);
   if (event.pos == lastPos) return ToolChanges::none;
-  clearOverlay(event.overlay);
-  drawPointOverlay(event.overlay, event.pos, pen);
+  clearImage(*event.overlay);
+  drawRoundPoint(*event.overlay, overlay_color, event.pos, width);
   if (event.type == ButtonType::none) return ToolChanges::overlay;
-  QPainter painter;
-  initPainter(painter, source);
-  painter.setPen(pen);
-  painter.drawLine(lastPos, event.pos);
+  Image &img = source->image;
+  const QLine mappedLine = map(img, QLine{lastPos, event.pos});
+  // @TODO won't be transformed properly when width > 1
+  const bool drawn = drawRoundLine(img.data, color, mappedLine, width);
   lastPos = event.pos;
-  return ToolChanges::cell_overlay;
+  return drawnChanges(drawn);
 }
 
 ToolChanges BrushTool::mouseUp(const ToolEvent &event) {
   assert(source);
+  assert(event.overlay);
   if (event.pos == lastPos) return ToolChanges::none;
   if (event.type != button) return ToolChanges::none;
-  clearOverlay(event.overlay);
+  clearImage(*event.overlay);
   button = ButtonType::none;
-  QPainter painter;
-  initPainter(painter, source);
-  painter.setPen(pen);
-  painter.drawLine(lastPos, event.pos);
-  return ToolChanges::cell_overlay;
+  Image &img = source->image;
+  const QLine mappedLine = map(img, QLine{lastPos, event.pos});
+  // @TODO won't be transformed properly when width > 1
+  return drawnChanges(drawRoundLine(img.data, color, mappedLine, width));
 }
 
-void BrushTool::setDiameter(const int diameter) {
-  assert(min_thickness <= diameter && diameter <= max_thickness);
-  pen.setWidth(diameter);
-}
-
-int BrushTool::getDiameter() const {
-  return pen.width();
+void BrushTool::setWidth(const int newWidth) {
+  assert(min_thickness <= newWidth && newWidth <= max_thickness);
+  width = newWidth;
 }
 
 bool FloodFillTool::attachCell(Cell *cell) {
@@ -129,21 +96,22 @@ bool FloodFillTool::attachCell(Cell *cell) {
 
 ToolChanges FloodFillTool::mouseDown(const ToolEvent &event) {
   assert(source);
+  assert(event.overlay);
   lastPos = event.pos;
-  clearOverlay(event.overlay);
-  drawPointOverlay(event.overlay, event.pos, square_pen);
-  const QRgb toolColor = selectColor(event.colors, event.type);
-  const QTransform xform = getInvTransform(source->image);
-  const bool drawn = drawFloodFill(source->image.data, toolColor, xform.map(event.pos));
-  return drawn ? ToolChanges::cell_overlay : ToolChanges::overlay;
+  clearImage(*event.overlay);
+  drawSquarePoint(*event.overlay, overlay_color, event.pos);
+  const QRgb color = selectColor(event.colors, event.type);
+  Image &img = source->image;
+  return drawnChanges(drawFloodFill(img.data, color, map(img, event.pos)));
 }
 
 ToolChanges FloodFillTool::mouseMove(const ToolEvent &event) {
   assert(source);
+  assert(event.overlay);
   if (event.pos == lastPos) return ToolChanges::none;
   lastPos = event.pos;
-  clearOverlay(event.overlay);
-  drawPointOverlay(event.overlay, event.pos, square_pen);
+  clearImage(*event.overlay);
+  drawSquarePoint(*event.overlay, overlay_color, event.pos);
   return ToolChanges::overlay;
 }
 
@@ -173,51 +141,43 @@ bool DragPaintTool<Derived>::attachCell(Cell *cell) {
 template <typename Derived>
 ToolChanges DragPaintTool<Derived>::mouseDown(const ToolEvent &event) {
   assert(source);
+  assert(event.overlay);
   if (button != ButtonType::none) return ToolChanges::none;
-  clearOverlay(event.overlay);
-  that()->drawOverlay(event.overlay, event.pos);
+  clearImage(*event.overlay);
+  that()->drawOverlay(*event.overlay, event.pos);
   button = event.type;
   startPos = lastPos = event.pos;
   copyImage(cleanImage, source->image.data);
-  that()->setColor(toColor(selectColor(event.colors, event.type)));
-  QPainter painter;
-  initPainter(painter, source);
-  that()->setupPainter(painter);
-  that()->drawPoint(painter, startPos);
-  return ToolChanges::cell_overlay;
+  color = selectColor(event.colors, event.type);
+  return drawnChanges(that()->drawPoint(source->image, startPos));
 }
 
 template <typename Derived>
 ToolChanges DragPaintTool<Derived>::mouseMove(const ToolEvent &event) {
   assert(source);
+  assert(event.overlay);
   if (event.pos == lastPos) return ToolChanges::none;
-  clearOverlay(event.overlay);
-  that()->drawOverlay(event.overlay, event.pos);
+  clearImage(*event.overlay);
+  that()->drawOverlay(*event.overlay, event.pos);
   if (event.type == ButtonType::none) return ToolChanges::overlay;
   lastPos = event.pos;
   copyImage(source->image.data, cleanImage);
-  QPainter painter;
-  initPainter(painter, source);
-  that()->setupPainter(painter);
-  that()->drawDrag(painter, startPos, lastPos);
-  return ToolChanges::cell_overlay;
+  return drawnChanges(that()->drawDrag(source->image, startPos, lastPos));
 }
 
 template <typename Derived>
 ToolChanges DragPaintTool<Derived>::mouseUp(const ToolEvent &event) {
   assert(source);
+  assert(event.overlay);
   if (event.pos == lastPos) return ToolChanges::none;
   if (event.type != button) return ToolChanges::none;
-  clearOverlay(event.overlay);
+  clearImage(*event.overlay);
   button = ButtonType::none;
   lastPos = event.pos;
   copyImage(source->image.data, cleanImage);
-  QPainter painter;
-  initPainter(painter, source);
-  that()->setupPainter(painter);
-  that()->drawDrag(painter, startPos, lastPos);
+  const bool drawn = that()->drawDrag(source->image, startPos, lastPos);
   startPos = no_point;
-  return ToolChanges::cell_overlay;
+  return drawnChanges(drawn);
 }
 
 template <typename Derived>
@@ -226,37 +186,28 @@ bool DragPaintTool<Derived>::isDragging() const {
 }
 
 template <typename Derived>
+QRgb DragPaintTool<Derived>::getColor() const {
+  return color;
+}
+
+template <typename Derived>
 Derived *DragPaintTool<Derived>::that() {
   return static_cast<Derived *>(this);
 }
 
-LineTool::LineTool()
-  : pen{round_pen} {}
-
 LineTool::~LineTool() = default;
 
-void LineTool::setColor(const QColor color) {
-  pen.setColor(color);
+bool LineTool::drawPoint(Image &image, const QPoint pos) {
+  return drawSquarePoint(image.data, getColor(), map(image, pos));
 }
 
-void LineTool::setupPainter(QPainter &painter) {
-  painter.setPen(pen);
+bool LineTool::drawDrag(Image &image, const QPoint start, const QPoint end) {
+  return drawLine(image.data, getColor(), map(image, QLine{start, end}));
 }
 
-void LineTool::drawPoint(QPainter &painter, const QPoint pos) {
-  painter.drawPoint(pos);
+void LineTool::drawOverlay(QImage &overlay, const QPoint pos) {
+  drawSquarePoint(overlay, overlay_color, pos);
 }
-
-void LineTool::drawDrag(QPainter &painter, const QPoint start, const QPoint end) {
-  painter.drawLine(start, end);
-}
-
-void LineTool::drawOverlay(QImage *overlay, const QPoint pos) {
-  drawPointOverlay(overlay, pos, pen);
-}
-
-StrokedCircleTool::StrokedCircleTool()
-  : pen{round_pen} {}
 
 StrokedCircleTool::~StrokedCircleTool() = default;
 
@@ -264,24 +215,13 @@ void StrokedCircleTool::setShape(const CircleShape newShape) {
   shape = newShape;
 }
 
-CircleShape StrokedCircleTool::getShape() const {
-  return shape;
-}
-
 int StrokedCircleTool::getRadius() const {
   return isDragging() ? radius : no_radius;
 }
 
-void StrokedCircleTool::setColor(const QColor color) {
-  pen.setColor(color);
-}
-
-void StrokedCircleTool::setupPainter(QPainter &painter) {
-  painter.setPen(pen);
-}
-
-void StrokedCircleTool::drawPoint(QPainter &, QPoint) {
+bool StrokedCircleTool::drawPoint(Image &, QPoint) {
   radius = 0;
+  return false;
 }
 
 namespace {
@@ -298,17 +238,15 @@ int calcRadius(const QPoint start, const QPoint end) {
 
 }
 
-void StrokedCircleTool::drawDrag(QPainter &painter, const QPoint start, const QPoint end) {
+bool StrokedCircleTool::drawDrag(Image &image, const QPoint start, const QPoint end) {
   radius = calcRadius(start, end);
-  painter.drawEllipse(adjustStrokedEllipse(circleToRect(start, radius, shape), 1));
+  const QRect rect = map(image, circleToRect(start, radius, shape));
+  return drawStrokedEllipse(image.data, getColor(), rect);
 }
 
-void StrokedCircleTool::drawOverlay(QImage *overlay, const QPoint pos) {
-  drawPointOverlay(overlay, pos, pen);
+void StrokedCircleTool::drawOverlay(QImage &overlay, const QPoint pos) {
+  drawFilledRect(overlay, overlay_color, centerToRect(pos, shape));
 }
-
-FilledCircleTool::FilledCircleTool()
-  : pen{round_pen} {}
 
 FilledCircleTool::~FilledCircleTool() = default;
 
@@ -316,38 +254,24 @@ void FilledCircleTool::setShape(const CircleShape newShape) {
   shape = newShape;
 }
 
-CircleShape FilledCircleTool::getShape() const {
-  return shape;
-}
-
 int FilledCircleTool::getRadius() const {
   return isDragging() ? radius : no_radius;
 }
 
-void FilledCircleTool::setColor(const QColor color) {
-  pen.setColor(color);
-}
-
-void FilledCircleTool::setupPainter(QPainter &painter) {
-  painter.setPen(pen);
-  painter.setBrush(pen.color());
-}
-
-void FilledCircleTool::drawPoint(QPainter &, QPoint) {
+bool FilledCircleTool::drawPoint(Image &, QPoint) {
   radius = 0;
+  return false;
 }
 
-void FilledCircleTool::drawDrag(QPainter &painter, const QPoint start, const QPoint end) {
+bool FilledCircleTool::drawDrag(Image &image, const QPoint start, const QPoint end) {
   radius = calcRadius(start, end);
-  painter.drawEllipse(adjustStrokedEllipse(circleToRect(start, radius, shape), 1));
+  const QRect rect = map(image, circleToRect(start, radius, shape));
+  return drawFilledEllipse(image.data, getColor(), rect);
 }
 
-void FilledCircleTool::drawOverlay(QImage *overlay, const QPoint pos) {
-  drawPointOverlay(overlay, pos, pen);
+void FilledCircleTool::drawOverlay(QImage &overlay, const QPoint pos) {
+  drawFilledRect(overlay, overlay_color, centerToRect(pos, shape));
 }
-
-StrokedRectangleTool::StrokedRectangleTool()
-  : pen{square_pen} {}
 
 StrokedRectangleTool::~StrokedRectangleTool() = default;
 
@@ -355,43 +279,20 @@ QSize StrokedRectangleTool::getSize() const {
   return isDragging() ? size : no_size;
 }
 
-void StrokedRectangleTool::setColor(const QColor color) {
-  pen.setColor(color);
-}
-
-void StrokedRectangleTool::setupPainter(QPainter &painter) {
-  painter.setPen(pen);
-}
-
-void StrokedRectangleTool::drawPoint(QPainter &painter, const QPoint pos) {
+bool StrokedRectangleTool::drawPoint(Image &image, const QPoint pos) {
   size = QSize{1, 1};
-  painter.drawPoint(pos);
+  return drawSquarePoint(image.data, getColor(), map(image, pos));
 }
 
-namespace {
-
-QRect calcRect(const QPoint start, const QPoint end) {
-  return QRect{start, end}.normalized();
+bool StrokedRectangleTool::drawDrag(Image &image, const QPoint start, const QPoint end) {
+  const QRect rect = QRect{start, end}.normalized();
+  size = rect.size();
+  return drawStrokedRect(image.data, getColor(), map(image, rect));
 }
 
+void StrokedRectangleTool::drawOverlay(QImage &overlay, const QPoint pos) {
+  drawSquarePoint(overlay, overlay_color, pos);
 }
-
-void StrokedRectangleTool::drawDrag(QPainter &painter, const QPoint start, const QPoint end) {
-  if (start == end) {
-    drawPoint(painter, start);
-  } else {
-    const QRect rect = calcRect(start, end);
-    size = rect.size();
-    painter.drawRect(adjustStrokedRect(rect, pen.width()));
-  }
-}
-
-void StrokedRectangleTool::drawOverlay(QImage *overlay, const QPoint pos) {
-  drawPointOverlay(overlay, pos, pen);
-}
-
-FilledRectangleTool::FilledRectangleTool()
-  : pen{square_pen} {}
 
 FilledRectangleTool::~FilledRectangleTool() = default;
 
@@ -399,26 +300,17 @@ QSize FilledRectangleTool::getSize() const {
   return isDragging() ? size : no_size;
 }
 
-void FilledRectangleTool::setColor(const QColor color) {
-  pen.setColor(color);
-}
-
-void FilledRectangleTool::setupPainter(QPainter &painter) {
-  painter.setPen(Qt::NoPen);
-  painter.setBrush(pen.color());
-}
-
-void FilledRectangleTool::drawPoint(QPainter &painter, const QPoint pos) {
+bool FilledRectangleTool::drawPoint(Image &image, const QPoint pos) {
   size = QSize{1, 1};
-  painter.drawPoint(pos);
+  return drawSquarePoint(image.data, getColor(), map(image, pos));
 }
 
-void FilledRectangleTool::drawDrag(QPainter &painter, const QPoint start, const QPoint end) {
-  const QRect rect = calcRect(start, end);
+bool FilledRectangleTool::drawDrag(Image &image, const QPoint start, const QPoint end) {
+  const QRect rect = QRect{start, end}.normalized();
   size = rect.size();
-  painter.drawRect(rect);
+  return drawFilledRect(image.data, getColor(), map(image, rect));
 }
 
-void FilledRectangleTool::drawOverlay(QImage *overlay, const QPoint pos) {
-  drawPointOverlay(overlay, pos, pen);
+void FilledRectangleTool::drawOverlay(QImage &overlay, const QPoint pos) {
+  drawSquarePoint(overlay, overlay_color, pos);
 }
