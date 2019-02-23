@@ -878,9 +878,9 @@ void midpointFilled(
 void midpointLilPos(QImage &img, const QRgb col, const QPoint p1, const QPoint p2) {
   const int dx = p2.x() - p1.x();
   const int dy = p2.y() - p1.y();
-  const int incE = 2*dy;
-  const int incSE = 2*(dy-dx);
-  int err = 2*dy - dx;
+  const int incE = 2 * dy;
+  const int incSE = 2 * (dy - dx);
+  int err = 2 * dy - dx;
   QPoint pos = p1;
   
   img.setPixel(pos, col);
@@ -899,9 +899,9 @@ void midpointLilPos(QImage &img, const QRgb col, const QPoint p1, const QPoint p
 void midpointBigPos(QImage &img, const QRgb col, const QPoint p1, const QPoint p2) {
   const int dx = p2.x() - p1.x();
   const int dy = p2.y() - p1.y();
-  const int incS = 2*dx;
-  const int incSE = 2*(dx-dy);
-  int err = 2*dx - dy;
+  const int incS = 2 * dx;
+  const int incSE = 2 * (dx - dy);
+  int err = 2 * dx - dy;
   QPoint pos = p1;
   
   img.setPixel(pos, col);
@@ -920,9 +920,9 @@ void midpointBigPos(QImage &img, const QRgb col, const QPoint p1, const QPoint p
 void midpointLilNeg(QImage &img, const QRgb col, const QPoint p1, const QPoint p2) {
   const int dx = p2.x() - p1.x();
   const int dy = p1.y() - p2.y();
-  const int incE = 2*dy;
-  const int incNE = 2*(dy-dx);
-  int err = 2*dy - dx;
+  const int incE = 2 * dy;
+  const int incNE = 2 * (dy - dx);
+  int err = 2 * dy - dx;
   
   QPoint pos = p1;
   img.setPixel(pos, col);
@@ -973,12 +973,12 @@ void midpointLine(
   const int dy = p2.y() - p1.y();
   
   if (dy == 0) {
-    return fillScanLine(img, col, p1, p2.x());
+    //return fillScanLine(img, col, p1, p2.x());
   } else if (dx == 0) {
     if (dy > 0) {
-      return fillVertLine(img, col, p1, p2.y());
+      //return fillVertLine(img, col, p1, p2.y());
     } else {
-      return fillVertLine(img, col, {p1.x(), p2.y()}, p1.y());
+      //return fillVertLine(img, col, {p1.x(), p2.y()}, p1.y());
     }
   }
   
@@ -1202,7 +1202,7 @@ int main(int argc, char **argv) {
   
   SourceCell source({32, 32}, Format::color);
   source.image.xform.angle = 0;
-  FloodFillTool tool;
+  LineTool tool;
   //tool.setWidth(3);
   //tool.setShape(CircleShape::c1x1);
   [[maybe_unused]] const bool ok = tool.attachCell(&source);
@@ -1216,14 +1216,14 @@ int main(int argc, char **argv) {
   event.colors.primary = qRgba(0, 255, 0, 255);
   event.overlay = &overlay;
   
-  StrokedCircleTool sct;
+  /*StrokedCircleTool sct;
   sct.attachCell(&source);
   event.pos.rx() += 3;
   sct.mouseDown(event);
   event.pos.rx() -= 6;
   sct.mouseUp(event);
   event.pos.rx() += 2;
-  event.pos.ry() -= 2;
+  event.pos.ry() -= 2;*/
   
   event.colors.primary = qRgba(191, 63, 127, 191);
   

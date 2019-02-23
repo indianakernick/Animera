@@ -37,17 +37,13 @@ QRect centerToRect(const QPoint center, const CircleShape shape) {
 
 namespace {
 
-QRect adjustStrokedRect(const QRect rect, const int thickness) {
+QRect adjustStrokedEllipse(const QRect rect, const int thickness) {
   return QRect{
     rect.left() + thickness / 2,
     rect.top() + thickness / 2,
     rect.width() - thickness,
     rect.height() - thickness
   };
-}
-
-QRect adjustStrokedEllipse(const QRect rect, const int thickness) {
-  return adjustStrokedRect(rect, thickness);
 }
 
 QColor toColor(const QRgb rgba) {
@@ -233,11 +229,7 @@ bool drawFloodFill(QImage &img, const QRgb color, const QPoint pos) {
   }
 }
 
-bool drawFilledEllipse(
-  QImage &img,
-  const QRgb color,
-  const QRect ellipse
-) {
+bool drawFilledEllipse(QImage &img, const QRgb color, const QRect ellipse) {
   assert(ellipse.isValid());
   if (!img.rect().intersects(ellipse)) return false;
   QPainter painter{&img};
@@ -248,11 +240,7 @@ bool drawFilledEllipse(
   return true;
 }
 
-bool drawStrokedEllipse(
-  QImage &img,
-  const QRgb color,
-  const QRect ellipse
-) {
+bool drawStrokedEllipse(QImage &img, const QRgb color, const QRect ellipse) {
   assert(ellipse.isValid());
   if (!img.rect().intersects(ellipse)) return false;
   QPainter painter{&img};
@@ -310,44 +298,154 @@ bool drawFilledRect(QImage &img, const QRgb color, const QRect rect) {
   return true;
 }
 
-bool drawStrokedRect(
-  QImage &img,
-  const QRgb color,
-  const QRect rect
-) {
+bool drawStrokedRect(QImage &img, const QRgb color, const QRect rect) {
   assert(rect.isValid());
   if (!img.rect().intersects(rect)) return false;
+  bool drawn = false;
+  drawn = drawn || drawLine(img, color, {rect.topLeft(), rect.topRight()});
+  drawn = drawn || drawLine(img, color, {rect.topRight(), rect.bottomRight()});
+  drawn = drawn || drawLine(img, color, {rect.bottomLeft(), rect.bottomRight()});
+  drawn = drawn || drawLine(img, color, {rect.topLeft(), rect.bottomLeft()});
+  return drawn;
+}
+
+namespace {
+
+template <typename Pixel>
+void setPixel(QImage &img, const QPoint pos, const Pixel color) {
+  // @TODO clip the line
+  // we can increment and decrement the pointer instead of using this function
+  if (img.rect().contains(pos)) {
+    const uintptr_t pbl = img.bytesPerLine() / sizeof(Pixel);
+    Pixel *const px = reinterpret_cast<Pixel *>(img.bits()) + pos.y() * pbl + pos.x();
+    *px = color;
+  }
+}
+
+template <typename Pixel>
+void lineLilPos(QImage &img, const Pixel col, const QPoint p1, const QPoint p2) {
+  const int dx = p2.x() - p1.x();
+  const int dy = p2.y() - p1.y();
+  const int incE = 2 * dy;
+  const int incSE = 2 * (dy - dx);
+  int err = 2 * dy - dx;
+  QPoint pos = p1;
   
-  QPainter painter{&img};
-  preparePainter(painter);
-  painter.setPen(makePen(square_pen, color, 1));
-  if (rect.size() == QSize{1, 1}) {
-    painter.drawPoint(rect.topLeft());
-  } else {
-    painter.drawRect(adjustStrokedRect(rect, 1));
+  setPixel(img, pos, col);
+  while (pos.x() < p2.x()) {
+    if (err < 0) {
+      err += incE;
+    } else {
+      err += incSE;
+      ++pos.ry();
+    }
+    ++pos.rx();
+    setPixel(img, pos, col);
+  }
+}
+
+template <typename Pixel>
+void lineBigPos(QImage &img, const Pixel col, const QPoint p1, const QPoint p2) {
+  const int dx = p2.x() - p1.x();
+  const int dy = p2.y() - p1.y();
+  const int incS = 2 * dx;
+  const int incSE = 2 * (dx - dy);
+  int err = 2 * dx - dy;
+  QPoint pos = p1;
+  
+  setPixel(img, pos, col);
+  while (pos.y() < p2.y()) {
+    if (err < 0) {
+      err += incS;
+    } else {
+      err += incSE;
+      ++pos.rx();
+    }
+    ++pos.ry();
+    setPixel(img, pos, col);
+  }
+}
+
+template <typename Pixel>
+void lineLilNeg(QImage &img, const Pixel col, const QPoint p1, const QPoint p2) {
+  const int dx = p2.x() - p1.x();
+  const int dy = p1.y() - p2.y();
+  const int incE = 2 * dy;
+  const int incNE = 2 * (dy - dx);
+  int err = 2 * dy - dx;
+  QPoint pos = p1;
+  
+  setPixel(img, pos, col);
+  while (pos.x() < p2.x()) {
+    if (err < 0) {
+      err += incE;
+    } else {
+      err += incNE;
+      --pos.ry();
+    }
+    ++pos.rx();
+    setPixel(img, pos, col);
+  }
+}
+
+template <typename Pixel>
+void lineBigNeg(QImage &img, const Pixel col, const QPoint p1, const QPoint p2) {
+  const int dx = p2.x() - p1.x();
+  const int dy = p1.y() - p2.y();
+  const int incN = 2 * dx;
+  const int incNE = 2 * (dx - dy);
+  int err = 2 * dx - dy;
+  QPoint pos = p1;
+  
+  setPixel(img, pos, col);
+  while (pos.y() > p2.y()) {
+    if (err < 0) {
+      err += incN;
+    } else {
+      err += incNE;
+      ++pos.rx();
+    }
+    --pos.ry();
+    setPixel(img, pos, col);
+  }
+}
+
+template <typename Pixel>
+void midpointLine(QImage &img, const Pixel col, QPoint p1, QPoint p2) {
+  img.detach();
+  
+  if (p2.x() < p1.x()) {
+    std::swap(p1, p2);
   }
   
+  const int dx = p2.x() - p1.x();
+  const int dy = p2.y() - p1.y();
+  
+  if (0 < dy && dy <= dx) {
+    return lineLilPos(img, col, p1, p2);
+  } else if (dx < dy) {
+    return lineBigPos(img, col, p1, p2);
+  } else if (-dy <= dx) {
+    return lineLilNeg(img, col, p1, p2);
+  } else {
+    return lineBigNeg(img, col, p1, p2);
+  }
+}
+
+}
+
+bool drawLine(QImage &img, const QRgb color, const QLine line) {
+  if (img.depth() == 8) {
+    midpointLine<uint8_t>(img, color, line.p1(), line.p2());
+  } else if (img.depth() == 32) {
+    midpointLine<uint32_t>(img, color, line.p1(), line.p2());
+  } else {
+    Q_UNREACHABLE();
+  }
   return true;
 }
 
-bool drawLine(
-  QImage &img,
-  const QRgb color,
-  const QLine line
-) {
-  QPainter painter{&img};
-  preparePainter(painter);
-  painter.setPen(makePen(square_pen, color, 1));
-  painter.drawLine(line);
-  return true;
-}
-
-bool drawRoundLine(
-  QImage &img,
-  const QRgb color,
-  const QLine line,
-  const int thickness
-) {
+bool drawRoundLine(QImage &img, const QRgb color, const QLine line, const int thickness) {
   QPainter painter{&img};
   preparePainter(painter);
   painter.setPen(makePen(round_pen, color, thickness));
