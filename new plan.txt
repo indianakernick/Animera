@@ -57,6 +57,7 @@ Timeline
   WASD to change the current cell
   Animation can be played
     user can set a frame delay
+    user can select a range of frames to loop
     animation is looped
     can pause and play by pressing space
   The type of a cell is reflected in the UI
@@ -82,8 +83,6 @@ Timeline
     command C will copy selected cells
     command V will paste selected cells
     command X will copy and remove selected cells
-
-Needs to be some way to view a source cell without its transformation applied
 
 Transformations
   User can apply relative transformations to a SourceCell or a TransformCell
@@ -138,6 +137,7 @@ Export
   The animation can be exported as a sequence of PNGs
     User can select a directory to fill with the PNGs
     User can provide a name for the PNGs
+    User can select a range of frames to export
     Each PNG will have the frame number
     Conflicting files will be overwritten
   The current palette can be exported as a px2pal
@@ -272,6 +272,31 @@ A Tool responds to mouse inputs and manipulates Images
     overlay shows brush shape on all sides of symmetry
     mouse events are the same as BrushTool except that multiple points are painted
   transformation tools can be applied to both SourceCells and TransformCells
+  when a SourceCell is detached from a transform tool
+    the transformation is baked
+    this resets the stored transformation to identity
+    this makes things a bajillion times easier for me
+    the only case where I think this might be a problem is when is when the user
+    wants to animate someting that moves from outside the viewport to inside the
+    viewport. a work around is to do the animation with TransformCells and
+    discard the initial SourceCell
+    user can easily switch to the SourceCell to edit the sprite that is moving
+
+    another approach is to allow the user to switch between drawing onto the
+    image and viewing the image with the transformation applied
+    drawing onto an image with transformation applied causes all sorts of
+    problems (mainly due to circles not matching up with overlays and also being
+    off by a pixel or two). The user might find it strange that they can't draw
+    in parts of the image after translation.
+    this approach is clumsy
+
+    what if we had a generic transform tool that did all of the transforms and
+    only have that tool has been detached will the transformation be baked?
+    then we'd need to select the transformation we want to apply in the status
+    bar. Translating the image will require switching to the transform tool then
+    selecting translation. This is inconvienient. Usually, the user will simply
+    want to translate, flip or rotate without doing all three.
+
   MoveTool
     arrow keys may be used to move
     translation is shown in the status bar
