@@ -822,13 +822,23 @@ void midpointStroked(
     }
   }
 }
-// midpoint filled  37.2ms
+
 void fillScanLine(QImage &img, const QRgb col, const QPoint first, const int last) {
   uchar *rowBytes = img.bits() + first.y() * img.bytesPerLine() + first.x() * sizeof(QRgb);
   QRgb *row = reinterpret_cast<QRgb *>(rowBytes);
   QRgb *const rowEnd = row + (last - first.x() + 1);
   while (row != rowEnd) {
     *row++ = col;
+  }
+}
+
+void fillVertLine(QImage &img, const QRgb col, const QPoint first, const int last) {
+  uchar *row = img.bits() + first.y() * img.bytesPerLine() + first.x() * sizeof(QRgb);
+  const uintptr_t bbl = img.bytesPerLine();
+  uchar *const rowEnd = row + (last - first.y() + 1) * bbl;
+  while (row != rowEnd) {
+    *reinterpret_cast<QRgb *>(row) = col;
+    row += bbl;
   }
 }
 
@@ -862,6 +872,124 @@ void midpointFilled(
       fillScanLine(img, col, {ctr.x() - pos.y(), ctr.y() + pos.x()}, ctr.x() + pos.y());
       fillScanLine(img, col, {ctr.x() - pos.y(), ctr.y() - pos.x()}, ctr.x() + pos.y());
     }
+  }
+}
+
+void midpointLilPos(QImage &img, const QRgb col, const QPoint p1, const QPoint p2) {
+  const int dx = p2.x() - p1.x();
+  const int dy = p2.y() - p1.y();
+  const int incE = 2*dy;
+  const int incSE = 2*(dy-dx);
+  int err = 2*dy - dx;
+  QPoint pos = p1;
+  
+  img.setPixel(pos, col);
+  while (pos.x() < p2.x()) {
+    if (err < 0) {
+      err += incE;
+    } else {
+      err += incSE;
+      ++pos.ry();
+    }
+    ++pos.rx();
+    img.setPixel(pos, col);
+  }
+}
+
+void midpointBigPos(QImage &img, const QRgb col, const QPoint p1, const QPoint p2) {
+  const int dx = p2.x() - p1.x();
+  const int dy = p2.y() - p1.y();
+  const int incS = 2*dx;
+  const int incSE = 2*(dx-dy);
+  int err = 2*dx - dy;
+  QPoint pos = p1;
+  
+  img.setPixel(pos, col);
+  while (pos.y() < p2.y()) {
+    if (err < 0) {
+      err += incS;
+    } else {
+      err += incSE;
+      ++pos.rx();
+    }
+    ++pos.ry();
+    img.setPixel(pos, col);
+  }
+}
+
+void midpointLilNeg(QImage &img, const QRgb col, const QPoint p1, const QPoint p2) {
+  const int dx = p2.x() - p1.x();
+  const int dy = p1.y() - p2.y();
+  const int incE = 2*dy;
+  const int incNE = 2*(dy-dx);
+  int err = 2*dy - dx;
+  
+  QPoint pos = p1;
+  img.setPixel(pos, col);
+  while (pos.x() < p2.x()) {
+    if (err < 0) {
+      err += incE;
+    } else {
+      err += incNE;
+      --pos.ry();
+    }
+    ++pos.rx();
+    img.setPixel(pos, col);
+  }
+}
+
+void midpointBigNeg(QImage &img, const QRgb col, const QPoint p1, const QPoint p2) {
+  const int dx = p2.x() - p1.x();
+  const int dy = p1.y() - p2.y();
+  const int incN = 2*dx;
+  const int incNE = 2*(dx-dy);
+  int err = 2*dx - dy;
+  QPoint pos = p1;
+  
+  img.setPixel(pos, col);
+  while (pos.y() > p2.y()) {
+    if (err < 0) {
+      err += incN;
+    } else {
+      err += incNE;
+      ++pos.rx();
+    }
+    --pos.ry();
+    img.setPixel(pos, col);
+  }
+}
+
+void midpointLine(
+  QImage &img,
+  const QRgb col,
+  QPoint p1,
+  QPoint p2
+) {
+  if (p2.x() < p1.x()) {
+    std::swap(p1, p2);
+  }
+  
+  const int dx = p2.x() - p1.x();
+  const int dy = p2.y() - p1.y();
+  
+  if (dy == 0) {
+    return fillScanLine(img, col, p1, p2.x());
+  } else if (dx == 0) {
+    if (dy > 0) {
+      return fillVertLine(img, col, p1, p2.y());
+    } else {
+      return fillVertLine(img, col, {p1.x(), p2.y()}, p1.y());
+    }
+  }
+  
+  if (0 < dy && dy <= dx) {
+    return midpointLilPos(img, col, p1, p2);
+  } else if (dx < dy) {
+    return midpointBigPos(img, col, p1, p2);
+  } else if (-dy <= dx) {
+    return midpointLilNeg(img, col, p1, p2);
+  } else {
+    return midpointBigNeg(img, col, p1, p2);
   }
 }
 
@@ -973,9 +1101,11 @@ int main(int argc, char **argv) {
   drawFilledRect(image, fillColor, fillRect);
   timer.stop();
   
+  image.fill(0);
+  
   timer.start("painter.fillRect");
   {
-    QPainter painter{&dup};
+    QPainter painter{&image};
     painter.setCompositionMode(QPainter::CompositionMode_Source);
     painter.fillRect(fillRect, QColor{qRed(fillColor), qGreen(fillColor), qBlue(fillColor), qAlpha(fillColor)});
   }
@@ -1020,6 +1150,7 @@ int main(int argc, char **argv) {
   dup.save("/Users/indikernick/Desktop/circle.png");
   image.save("/Users/indikernick/Desktop/circles.png");
   
+  dup.fill(0);
   image.fill(0);
   
   timer.start("painter brush");
@@ -1051,6 +1182,20 @@ int main(int argc, char **argv) {
   timer.stop();
   
   image.save("/Users/indikernick/Desktop/smear_2.png");
+  image.fill(0);
+  
+  midpointLine(image, fillColor, {10, 10}, {20, 10});
+  midpointLine(image, fillColor, {20, 20}, {10, 20});
+  midpointLine(image, fillColor, {10, 30}, {10, 40});
+  midpointLine(image, fillColor, {10, 60}, {10, 50});
+  midpointLine(image, fillColor, {10, 70}, {20, 75});
+  midpointLine(image, fillColor, {10, 90}, {20, 85});
+  midpointLine(image, fillColor, {10, 100}, {15, 110});
+  midpointLine(image, fillColor, {10, 130}, {15, 120});
+  midpointLine(image, fillColor, {10, 140}, {20, 150});
+  midpointLine(image, fillColor, {10, 170}, {20, 160});
+  
+  image.save("/Users/indikernick/Desktop/lines.png");
   image.fill(0);
   
   //testComposite();
