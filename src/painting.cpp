@@ -266,9 +266,7 @@ namespace {
 
 template <typename Pixel>
 void fillScanLine(Pixel *row, const uintptr_t size, const Pixel color) noexcept {
-  Pixel *const rowEnd = reinterpret_cast<Pixel *>(
-    reinterpret_cast<uchar *>(row) + size
-  );
+  Pixel *const rowEnd = row + size;
   while (row != rowEnd) {
     *row++ = color;
   }
@@ -283,14 +281,14 @@ template <typename Pixel>
 void fillRect(QImage &img, const QRgb color, const QPoint topLeft, const QSize size) {
   img.detach();
   const Pixel toolColor = static_cast<Pixel>(color);
-  const uintptr_t bbl = img.bytesPerLine();
-  uchar *row = img.bits() + topLeft.y() * bbl + topLeft.x() * sizeof(Pixel);
-  uchar *const endRow = row + size.height() * bbl;
-  const uintptr_t width = size.width() * sizeof(Pixel);
+  const uintptr_t pbl = img.bytesPerLine() / sizeof(Pixel);
+  Pixel *row = reinterpret_cast<Pixel *>(img.bits()) + topLeft.y() * pbl + topLeft.x();
+  Pixel *const endRow = row + size.height() * pbl;
+  const uintptr_t width = size.width();
   
   while (row != endRow) {
-    fillScanLine(reinterpret_cast<Pixel *>(row), width, toolColor);
-    row += bbl;
+    fillScanLine(row, width, toolColor);
+    row += pbl;
   }
 }
 
