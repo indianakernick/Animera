@@ -14,7 +14,7 @@
 
 class SourceCell;
 
-class BrushTool : public Tool {
+class BrushTool final : public Tool {
 public:
   bool attachCell(Cell *) override;
   void detachCell() override;
@@ -32,7 +32,7 @@ private:
   QRgb color = 0;
 };
 
-class FloodFillTool : public Tool {
+class FloodFillTool final : public Tool {
 public:
   bool attachCell(Cell *) override;
   void detachCell() override;

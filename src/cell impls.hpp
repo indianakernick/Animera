@@ -21,7 +21,7 @@ enum class CellType : uint8_t {
 void serializeCell(QIODevice *, const Cell *);
 CellPtr deserializeCell(QIODevice *);
 
-class SourceCell : public Cell {
+class SourceCell final : public Cell {
 public:
   SourceCell() = default;
   SourceCell(QSize, Format);
@@ -35,7 +35,7 @@ public:
   Image image;
 };
 
-class DuplicateCell : public Cell {
+class DuplicateCell final : public Cell {
 public:
   DuplicateCell() = default;
   explicit DuplicateCell(const Cell *);
@@ -49,7 +49,7 @@ public:
   const Cell *source = nullptr;
 };
 
-class TransformCell : public Cell {
+class TransformCell final : public Cell {
 public:
   TransformCell() = default;
   explicit TransformCell(const Cell *);
