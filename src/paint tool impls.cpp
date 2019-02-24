@@ -23,16 +23,6 @@ QRgb selectColor(const ToolColors &colors, const ButtonType button) {
   }
 }
 
-template <typename Geometry>
-Geometry map(const Image &image, const Geometry &geom) {
-  return getInvTransform(image).map(geom);
-}
-
-template <>
-QRect map(const Image &image, const QRect &rect) {
-  return getInvTransform(image).mapRect(rect);
-}
-
 ToolChanges drawnChanges(const bool drawn) {
   return drawn ? ToolChanges::cell_overlay : ToolChanges::overlay;
 }
@@ -58,8 +48,7 @@ ToolChanges BrushTool::mouseDown(const ToolEvent &event) {
   lastPos = event.pos;
   color = selectColor(event.colors, event.type);
   Image &img = source->image;
-  // @TODO won't be transformed properly when width > 1
-  return drawnChanges(drawRoundPoint(img.data, color, map(img, lastPos), width));
+  return drawnChanges(drawRoundPoint(img.data, color, lastPos, width));
 }
 
 ToolChanges BrushTool::mouseMove(const ToolEvent &event) {
@@ -70,9 +59,7 @@ ToolChanges BrushTool::mouseMove(const ToolEvent &event) {
   drawRoundPoint(*event.overlay, overlay_color, event.pos, width);
   if (event.type == ButtonType::none) return ToolChanges::overlay;
   Image &img = source->image;
-  const QLine mappedLine = map(img, QLine{lastPos, event.pos});
-  // @TODO won't be transformed properly when width > 1
-  const bool drawn = drawRoundLine(img.data, color, mappedLine, width);
+  const bool drawn = drawRoundLine(img.data, color, {lastPos, event.pos}, width);
   lastPos = event.pos;
   return drawnChanges(drawn);
 }
@@ -85,9 +72,7 @@ ToolChanges BrushTool::mouseUp(const ToolEvent &event) {
   clearImage(*event.overlay);
   button = ButtonType::none;
   Image &img = source->image;
-  const QLine mappedLine = map(img, QLine{lastPos, event.pos});
-  // @TODO won't be transformed properly when width > 1
-  return drawnChanges(drawRoundLine(img.data, color, mappedLine, width));
+  return drawnChanges(drawRoundLine(img.data, color, {lastPos, event.pos}, width));
 }
 
 void BrushTool::setWidth(const int newWidth) {
@@ -112,7 +97,7 @@ ToolChanges FloodFillTool::mouseDown(const ToolEvent &event) {
   drawSquarePoint(*event.overlay, overlay_color, event.pos);
   const QRgb color = selectColor(event.colors, event.type);
   Image &img = source->image;
-  return drawnChanges(drawFloodFill(img.data, color, map(img, event.pos)));
+  return drawnChanges(drawFloodFill(img.data, color, event.pos));
 }
 
 ToolChanges FloodFillTool::mouseMove(const ToolEvent &event) {
@@ -214,11 +199,11 @@ Derived *DragPaintTool<Derived>::that() {
 LineTool::~LineTool() = default;
 
 bool LineTool::drawPoint(Image &image, const QPoint pos) {
-  return drawSquarePoint(image.data, getColor(), map(image, pos));
+  return drawSquarePoint(image.data, getColor(), pos);
 }
 
 bool LineTool::drawDrag(Image &image, const QPoint start, const QPoint end) {
-  return drawLine(image.data, getColor(), map(image, QLine{start, end}));
+  return drawLine(image.data, getColor(), {start, end});
 }
 
 void LineTool::drawOverlay(QImage &overlay, const QPoint pos) {
@@ -256,8 +241,7 @@ int calcRadius(const QPoint start, const QPoint end) {
 
 bool StrokedCircleTool::drawDrag(Image &image, const QPoint start, const QPoint end) {
   radius = calcRadius(start, end);
-  const QRect rect = map(image, circleToRect(start, radius, shape));
-  return drawStrokedEllipse(image.data, getColor(), rect);
+  return drawStrokedEllipse(image.data, getColor(), circleToRect(start, radius, shape));
 }
 
 void StrokedCircleTool::drawOverlay(QImage &overlay, const QPoint pos) {
@@ -281,8 +265,7 @@ bool FilledCircleTool::drawPoint(Image &, QPoint) {
 
 bool FilledCircleTool::drawDrag(Image &image, const QPoint start, const QPoint end) {
   radius = calcRadius(start, end);
-  const QRect rect = map(image, circleToRect(start, radius, shape));
-  return drawFilledEllipse(image.data, getColor(), rect);
+  return drawFilledEllipse(image.data, getColor(), circleToRect(start, radius, shape));
 }
 
 void FilledCircleTool::drawOverlay(QImage &overlay, const QPoint pos) {
@@ -297,13 +280,13 @@ QSize StrokedRectangleTool::getSize() const {
 
 bool StrokedRectangleTool::drawPoint(Image &image, const QPoint pos) {
   size = QSize{1, 1};
-  return drawSquarePoint(image.data, getColor(), map(image, pos));
+  return drawSquarePoint(image.data, getColor(), pos);
 }
 
 bool StrokedRectangleTool::drawDrag(Image &image, const QPoint start, const QPoint end) {
   const QRect rect = QRect{start, end}.normalized();
   size = rect.size();
-  return drawStrokedRect(image.data, getColor(), map(image, rect));
+  return drawStrokedRect(image.data, getColor(), rect);
 }
 
 void StrokedRectangleTool::drawOverlay(QImage &overlay, const QPoint pos) {
@@ -318,13 +301,13 @@ QSize FilledRectangleTool::getSize() const {
 
 bool FilledRectangleTool::drawPoint(Image &image, const QPoint pos) {
   size = QSize{1, 1};
-  return drawSquarePoint(image.data, getColor(), map(image, pos));
+  return drawSquarePoint(image.data, getColor(), pos);
 }
 
 bool FilledRectangleTool::drawDrag(Image &image, const QPoint start, const QPoint end) {
   const QRect rect = QRect{start, end}.normalized();
   size = rect.size();
-  return drawFilledRect(image.data, getColor(), map(image, rect));
+  return drawFilledRect(image.data, getColor(), rect);
 }
 
 void FilledRectangleTool::drawOverlay(QImage &overlay, const QPoint pos) {
