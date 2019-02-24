@@ -43,6 +43,11 @@ bool BrushTool::attachCell(Cell *cell) {
   return source = dynamic_cast<SourceCell *>(cell);
 }
 
+void BrushTool::detachCell() {
+  assert(source);
+  source = nullptr;
+}
+
 ToolChanges BrushTool::mouseDown(const ToolEvent &event) {
   assert(source);
   assert(event.overlay);
@@ -94,6 +99,11 @@ bool FloodFillTool::attachCell(Cell *cell) {
   return source = dynamic_cast<SourceCell *>(cell);
 }
 
+void FloodFillTool::detachCell() {
+  assert(source);
+  source = nullptr;
+}
+
 ToolChanges FloodFillTool::mouseDown(const ToolEvent &event) {
   assert(source);
   assert(event.overlay);
@@ -136,6 +146,12 @@ bool DragPaintTool<Derived>::attachCell(Cell *cell) {
   } else {
     return false;
   }
+}
+
+template <typename Derived>
+void DragPaintTool<Derived>::detachCell() {
+  assert(source);
+  source = nullptr;
 }
 
 template <typename Derived>

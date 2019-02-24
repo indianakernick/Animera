@@ -1318,3 +1318,23 @@ int main(int argc, char **argv) {
   Application app{argc, argv};
   return app.exec();
 }
+
+/*template <typename T>
+struct loop {
+  loop<T*> operator->();
+};
+
+loop<int> i, j = i->hooray;*/
+
+/*template <size_t N>
+struct loop {
+  static constexpr size_t value = loop<N + 1>::value;
+};
+int arr[loop<0>::value];*/
+
+/*template <typename... List>
+struct explode {
+  using type = typename explode<List..., List..., List..., List...>::type;
+};
+
+typename explode<int>::type t;*/

@@ -17,6 +17,7 @@ class SourceCell;
 class BrushTool : public Tool {
 public:
   bool attachCell(Cell *) override;
+  void detachCell() override;
   ToolChanges mouseDown(const ToolEvent &) override;
   ToolChanges mouseMove(const ToolEvent &) override;
   ToolChanges mouseUp(const ToolEvent &) override;
@@ -34,6 +35,7 @@ private:
 class FloodFillTool : public Tool {
 public:
   bool attachCell(Cell *) override;
+  void detachCell() override;
   ToolChanges mouseDown(const ToolEvent &) override;
   ToolChanges mouseMove(const ToolEvent &) override;
   ToolChanges mouseUp(const ToolEvent &) override;
@@ -49,6 +51,7 @@ public:
   ~DragPaintTool();
   
   bool attachCell(Cell *) override final;
+  void detachCell() override final;
   ToolChanges mouseDown(const ToolEvent &) override final;
   ToolChanges mouseMove(const ToolEvent &) override final;
   ToolChanges mouseUp(const ToolEvent &) override final;

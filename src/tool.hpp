@@ -51,6 +51,7 @@ public:
   virtual ~Tool();
   
   virtual bool attachCell(Cell *) = 0;
+  virtual void detachCell() = 0;
   virtual ToolChanges mouseDown(const ToolEvent &) = 0;
   virtual ToolChanges mouseMove(const ToolEvent &) = 0;
   virtual ToolChanges mouseUp(const ToolEvent &) = 0;
