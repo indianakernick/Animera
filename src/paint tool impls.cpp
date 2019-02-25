@@ -43,57 +43,6 @@ ToolChanges BrushTool::mouseDown(const ToolEvent &event) {
   assert(event.overlay);
   if (button != ButtonType::none) return ToolChanges::none;
   clearImage(*event.overlay);
-  drawRoundPoint(*event.overlay, overlay_color, event.pos, width);
-  button = event.type;
-  lastPos = event.pos;
-  color = selectColor(event.colors, event.type);
-  Image &img = source->image;
-  return drawnChanges(drawRoundPoint(img.data, color, lastPos, width));
-}
-
-ToolChanges BrushTool::mouseMove(const ToolEvent &event) {
-  assert(source);
-  assert(event.overlay);
-  if (event.pos == lastPos) return ToolChanges::none;
-  clearImage(*event.overlay);
-  drawRoundPoint(*event.overlay, overlay_color, event.pos, width);
-  if (event.type == ButtonType::none) return ToolChanges::overlay;
-  Image &img = source->image;
-  const bool drawn = drawRoundLine(img.data, color, {lastPos, event.pos}, width);
-  lastPos = event.pos;
-  return drawnChanges(drawn);
-}
-
-ToolChanges BrushTool::mouseUp(const ToolEvent &event) {
-  assert(source);
-  assert(event.overlay);
-  if (event.pos == lastPos) return ToolChanges::none;
-  if (event.type != button) return ToolChanges::none;
-  clearImage(*event.overlay);
-  button = ButtonType::none;
-  Image &img = source->image;
-  return drawnChanges(drawRoundLine(img.data, color, {lastPos, event.pos}, width));
-}
-
-void BrushTool::setWidth(const int newWidth) {
-  assert(min_thickness <= newWidth && newWidth <= max_thickness);
-  width = newWidth;
-}
-
-bool SymmetryTool::attachCell(Cell *cell) {
-  return source = dynamic_cast<SourceCell *>(cell);
-}
-
-void SymmetryTool::detachCell() {
-  assert(source);
-  source = nullptr;
-}
-
-ToolChanges SymmetryTool::mouseDown(const ToolEvent &event) {
-  assert(source);
-  assert(event.overlay);
-  if (button != ButtonType::none) return ToolChanges::none;
-  clearImage(*event.overlay);
   symPoint(*event.overlay, overlay_color, event.pos);
   button = event.type;
   lastPos = event.pos;
@@ -101,7 +50,7 @@ ToolChanges SymmetryTool::mouseDown(const ToolEvent &event) {
   return drawnChanges(symPoint(source->image.data, color, lastPos));
 }
 
-ToolChanges SymmetryTool::mouseMove(const ToolEvent &event) {
+ToolChanges BrushTool::mouseMove(const ToolEvent &event) {
   assert(source);
   assert(event.overlay);
   if (event.pos == lastPos) return ToolChanges::none;
@@ -114,7 +63,7 @@ ToolChanges SymmetryTool::mouseMove(const ToolEvent &event) {
   return drawnChanges(drawn);
 }
 
-ToolChanges SymmetryTool::mouseUp(const ToolEvent &event) {
+ToolChanges BrushTool::mouseUp(const ToolEvent &event) {
   assert(source);
   assert(event.overlay);
   if (event.pos == lastPos) return ToolChanges::none;
@@ -125,16 +74,16 @@ ToolChanges SymmetryTool::mouseUp(const ToolEvent &event) {
   return drawnChanges(symLine(img.data, color, {lastPos, event.pos}));
 }
 
-void SymmetryTool::setWidth(const int newWidth) {
+void BrushTool::setWidth(const int newWidth) {
   assert(min_thickness <= newWidth && newWidth <= max_thickness);
   width = newWidth;
 }
 
-void SymmetryTool::setMode(const SymmetryMode newMode) {
+void BrushTool::setMode(const SymmetryMode newMode) {
   mode = newMode;
 }
 
-bool SymmetryTool::symPoint(QImage &img, const QRgb col, const QPoint point) {
+bool BrushTool::symPoint(QImage &img, const QRgb col, const QPoint point) {
   const QPoint refl = {img.width() - point.x() - 1, img.height() - point.y() - 1};
   bool drawn = drawRoundPoint(img, col, point, width);
   if (mode & SymmetryMode::hori) {
@@ -165,7 +114,7 @@ QPoint reflectXY(const QSize size, const QPoint point) {
 
 }
 
-bool SymmetryTool::symLine(QImage &img, const QRgb col, const QLine line) {
+bool BrushTool::symLine(QImage &img, const QRgb col, const QLine line) {
   const QSize size = img.size();
   bool drawn = drawRoundLine(img, col, line, width);
   if (mode & SymmetryMode::hori) {

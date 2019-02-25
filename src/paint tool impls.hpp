@@ -23,24 +23,6 @@ public:
   ToolChanges mouseUp(const ToolEvent &) override;
 
   void setWidth(int);
-
-private:
-  QPoint lastPos = no_point;
-  SourceCell *source = nullptr;
-  ButtonType button = ButtonType::none;
-  int width = 1;
-  QRgb color = 0;
-};
-
-class SymmetryTool final : public Tool {
-public:
-  bool attachCell(Cell *) override;
-  void detachCell() override;
-  ToolChanges mouseDown(const ToolEvent &) override;
-  ToolChanges mouseMove(const ToolEvent &) override;
-  ToolChanges mouseUp(const ToolEvent &) override;
-
-  void setWidth(int);
   void setMode(SymmetryMode);
 
 private:

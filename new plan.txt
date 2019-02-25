@@ -209,7 +209,12 @@ A Tool responds to mouse inputs and manipulates Images
   BrushTool
     sets a circle of pixels
     user can set the size
-    overlay shows brush shape
+    user can set the symmetry mode
+      none
+      vertical
+      horizontal
+      vertical and horizontal
+    overlay shows brush shape on all sides of symmetry
     mouse down paints the brush
     mouse move paints a line between the previous point and the current point
     mouse up points a line between the previous point and the current point
@@ -262,15 +267,6 @@ A Tool responds to mouse inputs and manipulates Images
       does not change pixels outside of the mask
     erase down
       erases the shape of the selection at the mouse position
-  SymmetryTool
-    similar to BrushTool
-    user can set the size of the brush
-    user can set the symmetry mode
-      vertical
-      horizontal
-      vertial and horizontal
-    overlay shows brush shape on all sides of symmetry
-    mouse events are the same as BrushTool except that multiple points are painted
   transformation tools can be applied to both SourceCells and TransformCells
   when a SourceCell is detached from a transform tool
     the transformation is baked
