@@ -28,7 +28,6 @@ public:
 private:
   QPoint lastPos = no_point;
   SourceCell *source = nullptr;
-  ButtonType button = ButtonType::none;
   int width = 1;
   SymmetryMode mode = SymmetryMode::none;
   QRgb color = 0;
@@ -46,7 +45,6 @@ public:
   ToolChanges mouseUp(const ToolEvent &) override;
 
 private:
-  QPoint lastPos = no_point;
   SourceCell *source = nullptr;
 };
 
@@ -62,8 +60,6 @@ public:
   
 private:
   QPoint startPos = no_point;
-  QPoint lastPos = no_point;
-  ButtonType button = ButtonType::none;
   SourceCell *source = nullptr;
   QImage selection;
   QImage overlay;
@@ -88,8 +84,6 @@ protected:
 
 private:
   QPoint startPos = no_point;
-  QPoint lastPos = no_point;
-  ButtonType button = ButtonType::none;
   SourceCell *source = nullptr;
   QImage cleanImage;
   QRgb color = 0;

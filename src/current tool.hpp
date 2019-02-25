@@ -22,6 +22,8 @@ public:
 private:
   Tool *tool = nullptr;
   Cell *cell = nullptr;
+  QPoint lastPos = {-1, -1};
+  ButtonType button = ButtonType::none;
   bool enabled = false;
   
   void attach();
