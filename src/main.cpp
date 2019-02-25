@@ -719,7 +719,7 @@ QImage dupImage(const QImage &img) {
   return dup;
 }
 
-#include "paint tool impls.hpp"
+#include "tool impls.hpp"
 #include "composite.hpp"
 #include "painting.hpp"
 

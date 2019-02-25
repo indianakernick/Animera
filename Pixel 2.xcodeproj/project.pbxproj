@@ -34,7 +34,7 @@
 		45B284AD221A59EB00D6D055 /* undo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45B284AB221A59EB00D6D055 /* undo.cpp */; };
 		45B284B0221A83C300D6D055 /* composite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45B284AE221A83C300D6D055 /* composite.cpp */; };
 		45B284B3221A919000D6D055 /* tool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45B284B1221A919000D6D055 /* tool.cpp */; };
-		45B284B6221B726200D6D055 /* paint tool impls.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45B284B4221B726200D6D055 /* paint tool impls.cpp */; };
+		45B284B6221B726200D6D055 /* tool impls.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45B284B4221B726200D6D055 /* tool impls.cpp */; };
 		45B284B9221E110F00D6D055 /* painting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45B284B7221E110F00D6D055 /* painting.cpp */; };
 		45F065F22222998300BCE863 /* current tool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45F065F02222998300BCE863 /* current tool.cpp */; };
 /* End PBXBuildFile section */
@@ -79,8 +79,8 @@
 		45B284AF221A83C300D6D055 /* composite.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = composite.hpp; sourceTree = "<group>"; };
 		45B284B1221A919000D6D055 /* tool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = tool.cpp; sourceTree = "<group>"; };
 		45B284B2221A919000D6D055 /* tool.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = tool.hpp; sourceTree = "<group>"; };
-		45B284B4221B726200D6D055 /* paint tool impls.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "paint tool impls.cpp"; sourceTree = "<group>"; };
-		45B284B5221B726200D6D055 /* paint tool impls.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "paint tool impls.hpp"; sourceTree = "<group>"; };
+		45B284B4221B726200D6D055 /* tool impls.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "tool impls.cpp"; sourceTree = "<group>"; };
+		45B284B5221B726200D6D055 /* tool impls.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "tool impls.hpp"; sourceTree = "<group>"; };
 		45B284B7221E110F00D6D055 /* painting.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = painting.cpp; sourceTree = "<group>"; };
 		45B284B8221E110F00D6D055 /* painting.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = painting.hpp; sourceTree = "<group>"; };
 		45B284BB221E252300D6D055 /* paint params.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "paint params.hpp"; sourceTree = "<group>"; };
@@ -161,8 +161,8 @@
 				45B284AF221A83C300D6D055 /* composite.hpp */,
 				45B284B1221A919000D6D055 /* tool.cpp */,
 				45B284B2221A919000D6D055 /* tool.hpp */,
-				45B284B4221B726200D6D055 /* paint tool impls.cpp */,
-				45B284B5221B726200D6D055 /* paint tool impls.hpp */,
+				45B284B4221B726200D6D055 /* tool impls.cpp */,
+				45B284B5221B726200D6D055 /* tool impls.hpp */,
 				45B284B7221E110F00D6D055 /* painting.cpp */,
 				45B284B8221E110F00D6D055 /* painting.hpp */,
 				45B284BB221E252300D6D055 /* paint params.hpp */,
@@ -299,7 +299,7 @@
 				45B284B9221E110F00D6D055 /* painting.cpp in Sources */,
 				45B284B3221A919000D6D055 /* tool.cpp in Sources */,
 				455F2868220690A600C73F39 /* main.cpp in Sources */,
-				45B284B6221B726200D6D055 /* paint tool impls.cpp in Sources */,
+				45B284B6221B726200D6D055 /* tool impls.cpp in Sources */,
 				45F065F22222998300BCE863 /* current tool.cpp in Sources */,
 				45B284A72219079B00D6D055 /* animation.cpp in Sources */,
 				45B284932218E38800D6D055 /* image.cpp in Sources */,

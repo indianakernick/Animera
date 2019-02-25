@@ -1,12 +1,12 @@
 //
-//  paint tool impls.cpp
+//  tool impls.cpp
 //  Pixel 2
 //
 //  Created by Indi Kernick on 19/2/19.
 //  Copyright © 2019 Indi Kernick. All rights reserved.
 //
 
-#include "paint tool impls.hpp"
+#include "tool impls.hpp"
 
 #include <cmath>
 #include "painting.hpp"
