@@ -31,6 +31,7 @@ enum class Format : uint8_t {
 struct Image {
   QImage data;
   Transform xform;
+  // @TODO maybe store a pointer to the palette?
 };
 
 constexpr QImage::Format color_format = QImage::Format_ARGB32;

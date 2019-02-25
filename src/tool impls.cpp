@@ -10,6 +10,7 @@
 
 #include <cmath>
 #include "painting.hpp"
+#include "composite.hpp"
 #include "cell impls.hpp"
 
 namespace {
@@ -44,9 +45,9 @@ ToolChanges BrushTool::mouseDown(const ToolEvent &event) {
   if (button != ButtonType::none) return ToolChanges::none;
   clearImage(*event.overlay);
   symPoint(*event.overlay, overlay_color, event.pos);
-  button = event.type;
+  button = event.button;
   lastPos = event.pos;
-  color = selectColor(event.colors, event.type);
+  color = selectColor(event.colors, event.button);
   return drawnChanges(symPoint(source->image.data, color, lastPos));
 }
 
@@ -56,7 +57,7 @@ ToolChanges BrushTool::mouseMove(const ToolEvent &event) {
   if (event.pos == lastPos) return ToolChanges::none;
   clearImage(*event.overlay);
   symPoint(*event.overlay, overlay_color, event.pos);
-  if (event.type == ButtonType::none) return ToolChanges::overlay;
+  if (event.button == ButtonType::none) return ToolChanges::overlay;
   Image &img = source->image;
   const bool drawn = symLine(img.data, color, {lastPos, event.pos});
   lastPos = event.pos;
@@ -67,7 +68,7 @@ ToolChanges BrushTool::mouseUp(const ToolEvent &event) {
   assert(source);
   assert(event.overlay);
   if (event.pos == lastPos) return ToolChanges::none;
-  if (event.type != button) return ToolChanges::none;
+  if (event.button != button) return ToolChanges::none;
   clearImage(*event.overlay);
   button = ButtonType::none;
   Image &img = source->image;
@@ -147,7 +148,7 @@ ToolChanges FloodFillTool::mouseDown(const ToolEvent &event) {
   lastPos = event.pos;
   clearImage(*event.overlay);
   drawSquarePoint(*event.overlay, overlay_color, event.pos);
-  const QRgb color = selectColor(event.colors, event.type);
+  const QRgb color = selectColor(event.colors, event.button);
   Image &img = source->image;
   return drawnChanges(drawFloodFill(img.data, color, event.pos));
 }
@@ -165,6 +166,79 @@ ToolChanges FloodFillTool::mouseMove(const ToolEvent &event) {
 ToolChanges FloodFillTool::mouseUp(const ToolEvent &) {
   assert(source);
   return ToolChanges::none;
+}
+
+bool RectangleSelectTool::attachCell(Cell *cell) {
+  return source = dynamic_cast<SourceCell *>(cell);
+}
+
+void RectangleSelectTool::detachCell() {
+  assert(source);
+  source = nullptr;
+}
+
+// @TODO maybe dragging a rectangle with secondary button will cut instead of copy?
+
+ToolChanges RectangleSelectTool::mouseDown(const ToolEvent &event) {
+  assert(source);
+  assert(event.overlay);
+  if (button != ButtonType::none) return ToolChanges::none;
+  clearImage(*event.overlay);
+  if (mode == SelectMode::copy) {
+    drawSquarePoint(*event.overlay, overlay_color, event.pos);
+  } else { // SelectMode::paste
+    blitImage(*event.overlay, overlay, event.pos + offset);
+  }
+  if (event.button != ButtonType::primary) return ToolChanges::overlay;
+  button = event.button;
+  lastPos = event.pos;
+  if (mode == SelectMode::copy) {
+    startPos = event.pos;
+    return ToolChanges::overlay;
+  } else { // SelectMode::paste
+    blitImage(source->image.data, selection, event.pos + offset);
+    return ToolChanges::cell_overlay;
+  }
+}
+
+ToolChanges RectangleSelectTool::mouseMove(const ToolEvent &event) {
+  assert(source);
+  assert(event.overlay);
+  if (event.pos == lastPos) return ToolChanges::none;
+  lastPos = event.pos;
+  clearImage(*event.overlay);
+  if (mode == SelectMode::copy) {
+    const QRect rect = QRect{startPos, event.pos}.normalized();
+    drawStrokedRect(*event.overlay, overlay_color, rect);
+  } else { // SelectMode::paste
+    blitImage(*event.overlay, overlay, event.pos + offset);
+  }
+  return ToolChanges::overlay;
+}
+
+ToolChanges RectangleSelectTool::mouseUp(const ToolEvent &event) {
+  assert(source);
+  assert(event.overlay);
+  if (event.button != button) return ToolChanges::none;
+  lastPos = event.pos;
+  clearImage(*event.overlay);
+  if (mode == SelectMode::copy) {
+    drawSquarePoint(*event.overlay, overlay_color, event.pos);
+    const QRect rect = QRect{startPos, event.pos}.normalized();
+    selection = blitImage(source->image.data, rect);
+    overlay = selection;
+    colorToOverlay(overlay);
+    offset = startPos - event.pos;
+    return ToolChanges::overlay;
+  } else { // SelectMode::paste
+    blitImage(*event.overlay, overlay, startPos);
+    return ToolChanges::overlay;
+  }
+}
+
+void RectangleSelectTool::setMode(const SelectMode newMode) {
+  assert(button == ButtonType::none);
+  mode = newMode;
 }
 
 template <typename Derived>
@@ -198,10 +272,10 @@ ToolChanges DragPaintTool<Derived>::mouseDown(const ToolEvent &event) {
   if (button != ButtonType::none) return ToolChanges::none;
   clearImage(*event.overlay);
   that()->drawOverlay(*event.overlay, event.pos);
-  button = event.type;
+  button = event.button;
   startPos = lastPos = event.pos;
   copyImage(cleanImage, source->image.data);
-  color = selectColor(event.colors, event.type);
+  color = selectColor(event.colors, event.button);
   return drawnChanges(that()->drawPoint(source->image, startPos));
 }
 
@@ -212,7 +286,7 @@ ToolChanges DragPaintTool<Derived>::mouseMove(const ToolEvent &event) {
   if (event.pos == lastPos) return ToolChanges::none;
   clearImage(*event.overlay);
   that()->drawOverlay(*event.overlay, event.pos);
-  if (event.type == ButtonType::none) return ToolChanges::overlay;
+  if (event.button == ButtonType::none) return ToolChanges::overlay;
   lastPos = event.pos;
   copyImage(source->image.data, cleanImage);
   return drawnChanges(that()->drawDrag(source->image, startPos, lastPos));
@@ -222,8 +296,7 @@ template <typename Derived>
 ToolChanges DragPaintTool<Derived>::mouseUp(const ToolEvent &event) {
   assert(source);
   assert(event.overlay);
-  if (event.pos == lastPos) return ToolChanges::none;
-  if (event.type != button) return ToolChanges::none;
+  if (event.button != button) return ToolChanges::none;
   clearImage(*event.overlay);
   button = ButtonType::none;
   lastPos = event.pos;

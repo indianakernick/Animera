@@ -13,5 +13,8 @@
 
 QImage compositeFrame(const Palette &, const Frame &);
 void compositeOverlay(QImage &, const QImage &);
+void blitImage(QImage &, const QImage &, QPoint);
+QImage blitImage(const QImage &, QRect);
+void colorToOverlay(QImage &);
 
 #endif

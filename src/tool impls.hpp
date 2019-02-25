@@ -50,6 +50,27 @@ private:
   SourceCell *source = nullptr;
 };
 
+class RectangleSelectTool final : public Tool {
+public:
+  bool attachCell(Cell *) override;
+  void detachCell() override;
+  ToolChanges mouseDown(const ToolEvent &) override;
+  ToolChanges mouseMove(const ToolEvent &) override;
+  ToolChanges mouseUp(const ToolEvent &) override;
+
+  void setMode(SelectMode);
+  
+private:
+  QPoint startPos = no_point;
+  QPoint lastPos = no_point;
+  ButtonType button = ButtonType::none;
+  SourceCell *source = nullptr;
+  QImage selection;
+  QImage overlay;
+  QPoint offset;
+  SelectMode mode = SelectMode::copy;
+};
+
 template <typename Derived>
 class DragPaintTool : public Tool {
 public:

@@ -91,10 +91,10 @@ QImage compositeFrame(const Palette &palette, const Frame &frame) {
     }
   }
   QImage output{images.front().data.size(), QImage::Format_ARGB32};
-  output.fill(0);
+  clearImage(output);
   
+  // @TODO avoid using QPainter
   QPainter painter{&output};
-  painter.setRenderHint(QPainter::Antialiasing, false);
   painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
   for (const Image &image : images) {
     paintImage(painter, image);
@@ -104,9 +104,54 @@ QImage compositeFrame(const Palette &palette, const Frame &frame) {
 }
 
 void compositeOverlay(QImage &drawing, const QImage &overlay) {
+  // @TODO avoid using QPainter
   assert(drawing.size() == overlay.size());
   QPainter painter{&drawing};
-  painter.setRenderHint(QPainter::Antialiasing, false);
   painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
   painter.drawImage(0, 0, overlay);
+}
+
+void blitImage(QImage &dst, const QImage &src, const QPoint pos) {
+  // @TODO avoid using QPainter
+  QPainter painter{&dst};
+  painter.setCompositionMode(QPainter::CompositionMode_Source);
+  painter.drawImage(pos, src);
+}
+
+QImage blitImage(const QImage &src, const QRect rect) {
+  // @TODO avoid using QPainter
+  QImage dst{rect.size(), src.format()};
+  QPainter painter{&dst};
+  painter.setCompositionMode(QPainter::CompositionMode_Source);
+  painter.drawImage({0, 0}, src, rect);
+  return dst;
+}
+
+namespace {
+
+void colorToOverlay(QRgb *const pixel) {
+  const QRgb pxval = *pixel;
+  const int gray = qGray(qRed(pxval), qGreen(pxval), qBlue(pxval));
+  *pixel = qRgba(gray, gray, gray, qAlpha(pxval) * 3 / 4);
+}
+
+}
+
+void colorToOverlay(QImage &img) {
+  assert(img.format() == getImageFormat(Format::color));
+  assert(img.depth() == 32);
+  img.detach();
+  const uintptr_t ppl = img.bytesPerLine() / sizeof(QRgb);
+  QRgb *row = reinterpret_cast<QRgb *>(img.bits());
+  QRgb *const lastRow = row + img.height() * ppl;
+  const uintptr_t width = img.width();
+  
+  while (row != lastRow) {
+    QRgb *pixel = row;
+    QRgb *const lastPixel = row + width;
+    while (pixel != lastPixel) {
+      colorToOverlay(pixel++);
+    }
+    row += ppl;
+  }
 }

@@ -1202,10 +1202,9 @@ int main(int argc, char **argv) {
   
   SourceCell source({32, 32}, Format::color);
   source.image.xform.angle = 0;
-  BrushTool tool;
-  tool.setMode(SymmetryMode::both);
-  tool.setWidth(2);
-  //tool.setWidth(3);
+  RectangleSelectTool tool;
+  //tool.setMode(SymmetryMode::both);
+  //tool.setWidth(2);
   //tool.setShape(CircleShape::c1x1);
   [[maybe_unused]] const bool ok = tool.attachCell(&source);
   assert(ok);
@@ -1213,19 +1212,19 @@ int main(int argc, char **argv) {
   overlay.fill(0);
   
   ToolEvent event;
-  event.type = ButtonType::primary;
+  event.button = ButtonType::primary;
   event.pos = QPoint{16, 16};
   event.colors.primary = qRgba(0, 255, 0, 255);
   event.overlay = &overlay;
   
-  /*StrokedCircleTool sct;
+  FilledCircleTool sct;
   sct.attachCell(&source);
   event.pos.rx() += 3;
   sct.mouseDown(event);
-  event.pos.rx() -= 6;
+  event.pos.rx() -= 3;
   sct.mouseUp(event);
-  event.pos.rx() += 2;
-  event.pos.ry() -= 2;*/
+  //event.pos.rx() += 2;
+  //event.pos.ry() -= 2;
   
   event.colors.primary = qRgba(191, 63, 127, 191);
   
@@ -1244,21 +1243,32 @@ int main(int argc, char **argv) {
   compositeOverlay(drawing, overlay);
   drawing.save("/Users/indikernick/Desktop/overlay_1.png");
   
-  event.pos = QPoint{12, 24};
+  event.pos = QPoint{24, 20};
   timer.start("MouseMove");
-  tool.mouseMove(event);
+  tool.mouseUp(event);
   timer.stop();
   drawing = source.image.data;
   compositeOverlay(drawing, overlay);
   drawing.save("/Users/indikernick/Desktop/overlay_2.png");
   
-  event.pos = QPoint{16, 16};
-  timer.start("MouseUp");
-  tool.mouseUp(event);
-  timer.stop();
+  tool.setMode(SelectMode::paste);
+  
+  ++event.pos.rx();
+  tool.mouseMove(event);
+  --event.pos.rx();
+  
+  tool.mouseMove(event);
   drawing = source.image.data;
   compositeOverlay(drawing, overlay);
   drawing.save("/Users/indikernick/Desktop/overlay_3.png");
+  
+  event.pos = QPoint{16, 16};
+  timer.start("MouseUp");
+  tool.mouseMove(event);
+  timer.stop();
+  drawing = source.image.data;
+  compositeOverlay(drawing, overlay);
+  drawing.save("/Users/indikernick/Desktop/overlay_4.png");
   
   source.image.data.save("/Users/indikernick/Desktop/brush.png");
   

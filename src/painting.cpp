@@ -67,7 +67,6 @@ QPen makePen(const QPen &base, const QRgb color, const int width) {
 
 void preparePainter(QPainter &painter) {
   painter.setCompositionMode(QPainter::CompositionMode_Source);
-  painter.setRenderHint(QPainter::Antialiasing, false);
 }
 
 template <typename Pixel>
@@ -269,14 +268,14 @@ template <typename Pixel>
 void fillRect(QImage &img, const QRgb color, const QPoint topLeft, const QSize size) {
   img.detach();
   const Pixel toolColor = static_cast<Pixel>(color);
-  const uintptr_t pbl = img.bytesPerLine() / sizeof(Pixel);
-  Pixel *row = reinterpret_cast<Pixel *>(img.bits()) + topLeft.y() * pbl + topLeft.x();
-  Pixel *const endRow = row + size.height() * pbl;
+  const uintptr_t ppl = img.bytesPerLine() / sizeof(Pixel);
+  Pixel *row = reinterpret_cast<Pixel *>(img.bits()) + topLeft.y() * ppl + topLeft.x();
+  Pixel *const endRow = row + size.height() * ppl;
   const uintptr_t width = size.width();
   
   while (row != endRow) {
     fillScanLine(row, width, toolColor);
-    row += pbl;
+    row += ppl;
   }
 }
 
@@ -316,8 +315,8 @@ void setPixel(QImage &img, const QPoint pos, const Pixel color) {
   // @TODO clip the line
   // we can increment and decrement the pointer instead of using this function
   if (img.rect().contains(pos)) {
-    const uintptr_t pbl = img.bytesPerLine() / sizeof(Pixel);
-    Pixel *const px = reinterpret_cast<Pixel *>(img.bits()) + pos.y() * pbl + pos.x();
+    const uintptr_t ppl = img.bytesPerLine() / sizeof(Pixel);
+    Pixel *const px = reinterpret_cast<Pixel *>(img.bits()) + pos.y() * ppl + pos.x();
     *px = color;
   }
 }

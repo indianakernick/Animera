@@ -37,4 +37,9 @@ constexpr bool operator&(const SymmetryMode set, const SymmetryMode bit) {
   return (static_cast<Type>(set) & static_cast<Type>(bit)) == static_cast<Type>(bit);
 }
 
+enum class SelectMode {
+  copy,
+  paste
+};
+
 #endif

@@ -34,10 +34,10 @@ struct ToolColors {
 };
 
 struct ToolEvent {
-  ButtonType type;
+  ButtonType button;
   QPoint pos;
   ToolColors colors;
-  QImage *overlay = nullptr;
+  QImage *overlay = nullptr; // @TODO does this really need to be a pointer?
 };
 
 constexpr int overlay_alpha = 127;
