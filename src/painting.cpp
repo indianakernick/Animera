@@ -302,10 +302,10 @@ bool drawStrokedRect(QImage &img, const QRgb color, const QRect rect) {
   assert(rect.isValid());
   if (!img.rect().intersects(rect)) return false;
   bool drawn = false;
-  drawn = drawn || drawLine(img, color, {rect.topLeft(), rect.topRight()});
-  drawn = drawn || drawLine(img, color, {rect.topRight(), rect.bottomRight()});
-  drawn = drawn || drawLine(img, color, {rect.bottomLeft(), rect.bottomRight()});
-  drawn = drawn || drawLine(img, color, {rect.topLeft(), rect.bottomLeft()});
+  drawn |= drawLine(img, color, {rect.topLeft(), rect.topRight()});
+  drawn |= drawLine(img, color, {rect.topRight(), rect.bottomRight()});
+  drawn |= drawLine(img, color, {rect.bottomLeft(), rect.bottomRight()});
+  drawn |= drawLine(img, color, {rect.topLeft(), rect.bottomLeft()});
   return drawn;
 }
 

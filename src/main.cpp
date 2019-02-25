@@ -1202,7 +1202,8 @@ int main(int argc, char **argv) {
   
   SourceCell source({32, 32}, Format::color);
   source.image.xform.angle = 0;
-  LineTool tool;
+  SymmetryTool tool;
+  tool.setMode(SymmetryMode::both);
   //tool.setWidth(3);
   //tool.setShape(CircleShape::c1x1);
   [[maybe_unused]] const bool ok = tool.attachCell(&source);

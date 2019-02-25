@@ -25,4 +25,16 @@ enum class CircleShape {
   c2x2
 };
 
+enum class SymmetryMode {
+  none,
+  hori,
+  vert,
+  both
+};
+
+constexpr bool operator&(const SymmetryMode set, const SymmetryMode bit) {
+  using Type = std::underlying_type_t<SymmetryMode>;
+  return (static_cast<Type>(set) & static_cast<Type>(bit)) == static_cast<Type>(bit);
+}
+
 #endif

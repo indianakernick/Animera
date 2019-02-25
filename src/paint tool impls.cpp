@@ -80,6 +80,109 @@ void BrushTool::setWidth(const int newWidth) {
   width = newWidth;
 }
 
+bool SymmetryTool::attachCell(Cell *cell) {
+  return source = dynamic_cast<SourceCell *>(cell);
+}
+
+void SymmetryTool::detachCell() {
+  assert(source);
+  source = nullptr;
+}
+
+ToolChanges SymmetryTool::mouseDown(const ToolEvent &event) {
+  assert(source);
+  assert(event.overlay);
+  if (button != ButtonType::none) return ToolChanges::none;
+  clearImage(*event.overlay);
+  symPoint(*event.overlay, overlay_color, event.pos);
+  button = event.type;
+  lastPos = event.pos;
+  color = selectColor(event.colors, event.type);
+  return drawnChanges(symPoint(source->image.data, color, lastPos));
+}
+
+ToolChanges SymmetryTool::mouseMove(const ToolEvent &event) {
+  assert(source);
+  assert(event.overlay);
+  if (event.pos == lastPos) return ToolChanges::none;
+  clearImage(*event.overlay);
+  symPoint(*event.overlay, overlay_color, event.pos);
+  if (event.type == ButtonType::none) return ToolChanges::overlay;
+  Image &img = source->image;
+  const bool drawn = symLine(img.data, color, {lastPos, event.pos});
+  lastPos = event.pos;
+  return drawnChanges(drawn);
+}
+
+ToolChanges SymmetryTool::mouseUp(const ToolEvent &event) {
+  assert(source);
+  assert(event.overlay);
+  if (event.pos == lastPos) return ToolChanges::none;
+  if (event.type != button) return ToolChanges::none;
+  clearImage(*event.overlay);
+  button = ButtonType::none;
+  Image &img = source->image;
+  return drawnChanges(symLine(img.data, color, {lastPos, event.pos}));
+}
+
+void SymmetryTool::setWidth(const int newWidth) {
+  assert(min_thickness <= newWidth && newWidth <= max_thickness);
+  width = newWidth;
+}
+
+void SymmetryTool::setMode(const SymmetryMode newMode) {
+  mode = newMode;
+}
+
+bool SymmetryTool::symPoint(QImage &img, const QRgb col, const QPoint point) {
+  const QPoint refl = {img.width() - point.x() - 1, img.height() - point.y() - 1};
+  bool drawn = drawRoundPoint(img, col, point, width);
+  if (mode & SymmetryMode::hori) {
+    drawn |= drawRoundPoint(img, col, {refl.x(), point.y()}, width);
+  }
+  if (mode & SymmetryMode::vert) {
+    drawn |= drawRoundPoint(img, col, {point.x(), refl.y()}, width);
+  }
+  if (mode & SymmetryMode::both) {
+    drawn |= drawRoundPoint(img, col, refl, width);
+  }
+  return drawn;
+}
+
+namespace {
+
+QPoint reflectX(const QSize size, const QPoint point) {
+  return {size.width() - point.x() - 1, point.y()};
+}
+
+QPoint reflectY(const QSize size, const QPoint point) {
+  return {point.x(), size.height() - point.y() - 1};
+}
+
+QPoint reflectXY(const QSize size, const QPoint point) {
+  return reflectX(size, reflectY(size, point));
+}
+
+}
+
+bool SymmetryTool::symLine(QImage &img, const QRgb col, const QLine line) {
+  const QSize size = img.size();
+  bool drawn = drawRoundLine(img, col, line, width);
+  if (mode & SymmetryMode::hori) {
+    const QLine refl = {reflectX(size, line.p1()), reflectX(size, line.p2())};
+    drawn |= drawRoundLine(img, col, refl, width);
+  }
+  if (mode & SymmetryMode::vert) {
+    const QLine refl = {reflectY(size, line.p1()), reflectY(size, line.p2())};
+    drawn |= drawRoundLine(img, col, refl, width);
+  }
+  if (mode & SymmetryMode::both) {
+    const QLine refl = {reflectXY(size, line.p1()), reflectXY(size, line.p2())};
+    drawn |= drawRoundLine(img, col, refl, width);
+  }
+  return drawn;
+}
+
 bool FloodFillTool::attachCell(Cell *cell) {
   return source = dynamic_cast<SourceCell *>(cell);
 }
