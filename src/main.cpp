@@ -1066,6 +1066,10 @@ int main(int argc, char **argv) {
   std::memset(image.bits(), 0, image.sizeInBytes());
   timer.stop();
   
+  timer.start("Loop clear");
+  clearImage(image, 0x11223344);
+  timer.stop();
+  
   timer.start("Floodfill");
   drawFloodFill(image, QRgb{0xFFFFFFFF}, {image.width() / 2, image.height() / 2});
   timer.stop();
@@ -1202,12 +1206,6 @@ int main(int argc, char **argv) {
   
   SourceCell source({32, 32}, Format::color);
   source.image.xform.angle = 0;
-  MaskSelectTool tool;
-  //tool.setMode(SymmetryMode::both);
-  //tool.setWidth(2);
-  //tool.setShape(CircleShape::c1x1);
-  [[maybe_unused]] const bool ok = tool.attachCell(&source);
-  assert(ok);
   QImage overlay({32, 32}, getImageFormat(Format::color));
   overlay.fill(0);
   
@@ -1215,6 +1213,7 @@ int main(int argc, char **argv) {
   event.button = ButtonType::primary;
   event.pos = QPoint{16, 16};
   event.colors.primary = qRgba(0, 255, 0, 255);
+  event.colors.erase = qRgba(0, 0, 0, 0);
   event.overlay = &overlay;
   
   FilledCircleTool sct;
@@ -1223,8 +1222,14 @@ int main(int argc, char **argv) {
   sct.mouseDown(event);
   event.pos.rx() -= 3;
   sct.mouseUp(event);
-  //event.pos.rx() += 2;
-  //event.pos.ry() -= 2;
+  sct.detachCell();
+  
+  TranslationTool tool;
+  //tool.setMode(SymmetryMode::both);
+  //tool.setWidth(2);
+  //tool.setShape(CircleShape::c1x1);
+  [[maybe_unused]] const bool ok = tool.attachCell(&source);
+  assert(ok);
   
   event.colors.primary = qRgba(191, 63, 127, 191);
   
@@ -1257,7 +1262,7 @@ int main(int argc, char **argv) {
   compositeOverlay(drawing, overlay);
   drawing.save("/Users/indikernick/Desktop/Test/overlay_3.png");
   
-  tool.setMode(SelectMode::paste);
+  //tool.setMode(SelectMode::paste);
   tool.mouseMove(event);
   
   tool.mouseMove(event);

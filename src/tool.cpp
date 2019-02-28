@@ -9,3 +9,7 @@
 #include "tool.hpp"
 
 Tool::~Tool() = default;
+
+ToolChanges Tool::keyPress(const ToolKeyEvent &event) {
+  return ToolChanges::none;
+}

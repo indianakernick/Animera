@@ -40,6 +40,12 @@ struct ToolMouseEvent {
   QImage *overlay = nullptr; // @TODO does this really need to be a pointer?
 };
 
+struct ToolKeyEvent {
+  Qt::Key key;
+  ToolColors colors;
+  QImage *overlay = nullptr;
+};
+
 constexpr int overlay_alpha = 127;
 constexpr int overlay_gray = 127;
 constexpr QRgb overlay_color = qRgba(
@@ -55,6 +61,7 @@ public:
   virtual ToolChanges mouseDown(const ToolMouseEvent &) = 0;
   virtual ToolChanges mouseMove(const ToolMouseEvent &) = 0;
   virtual ToolChanges mouseUp(const ToolMouseEvent &) = 0;
+  virtual ToolChanges keyPress(const ToolKeyEvent &);
 };
 
 #endif

@@ -13,6 +13,7 @@
 #include "paint params.hpp"
 
 class SourceCell;
+class TransformCell;
 
 class BrushTool final : public Tool {
 public:
@@ -189,6 +190,29 @@ private:
   bool drawPoint(Image &, QPoint);
   bool drawDrag(Image &, QPoint, QPoint);
   void drawOverlay(QImage &, QPoint);
+};
+
+class TranslationTool final : public Tool {
+public:
+  bool attachCell(Cell *) override;
+  void detachCell() override;
+  ToolChanges mouseDown(const ToolMouseEvent &) override;
+  ToolChanges mouseMove(const ToolMouseEvent &) override;
+  ToolChanges mouseUp(const ToolMouseEvent &) override;
+  ToolChanges keyPress(const ToolKeyEvent &) override;
+
+  QPoint translation() const;
+
+private:
+  SourceCell *source = nullptr;
+  TransformCell *transform = nullptr;
+  QImage cleanImage;
+  QPoint lastPos = no_point;
+  QPoint pos = no_point;
+  bool drag = false;
+  
+  void translate(QPoint, QRgb);
+  void updateSourceImage(QRgb);
 };
 
 #endif

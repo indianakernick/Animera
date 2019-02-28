@@ -57,6 +57,12 @@ ToolChanges CurrentTool::mouseUp(const ToolMouseEvent &event) {
   }
 }
 
+ToolChanges CurrentTool::keyPress(const ToolKeyEvent &event) {
+  assert(tool);
+  assert(event.overlay);
+  return enabled ? tool->keyPress(event) : ToolChanges::none;
+}
+
 void CurrentTool::attach() {
   enabled = cell ? tool->attachCell(cell) : false;
 }

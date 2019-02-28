@@ -495,3 +495,117 @@ bool FilledRectangleTool::drawDrag(Image &image, const QPoint start, const QPoin
 void FilledRectangleTool::drawOverlay(QImage &overlay, const QPoint pos) {
   drawSquarePoint(overlay, overlay_color, pos);
 }
+
+bool TranslationTool::attachCell(Cell *cell) {
+  if ((source = dynamic_cast<SourceCell *>(cell))) {
+    if (!compatible(cleanImage, source->image.data)) {
+      cleanImage = makeCompatible(source->image.data);
+    }
+    copyImage(cleanImage, source->image.data);
+    pos = {0, 0};
+    return true;
+  } else if ((transform = dynamic_cast<TransformCell *>(cell))) {
+    return true;
+  }
+  return false;
+}
+
+namespace {
+
+template <typename A, typename B>
+bool oneNotNull(A *a, B *b) {
+  return !!a + !!b == 1;
+}
+
+}
+
+void TranslationTool::detachCell() {
+  source = nullptr;
+  transform = nullptr;
+}
+
+ToolChanges TranslationTool::mouseDown(const ToolMouseEvent &event) {
+  assert(oneNotNull(source, transform));
+  if (event.button != ButtonType::primary) return ToolChanges::none;
+  lastPos = event.pos;
+  drag = true;
+  return ToolChanges::none;
+}
+
+ToolChanges TranslationTool::mouseMove(const ToolMouseEvent &event) {
+  assert(oneNotNull(source, transform));
+  if (event.button != ButtonType::primary || !drag) return ToolChanges::none;
+  translate(event.pos - lastPos, event.colors.erase);
+  lastPos = event.pos;
+  return ToolChanges::cell;
+}
+
+ToolChanges TranslationTool::mouseUp(const ToolMouseEvent &event) {
+  assert(oneNotNull(source, transform));
+  if (event.button != ButtonType::primary || !drag) return ToolChanges::none;
+  translate(event.pos - lastPos, event.colors.erase);
+  lastPos = event.pos;
+  drag = false;
+  return ToolChanges::cell;
+}
+
+namespace {
+
+QPoint arrowToDir(const Qt::Key key) {
+  switch (key) {
+    case Qt::Key_Up: return {0, -1};
+    case Qt::Key_Right: return {1, 0};
+    case Qt::Key_Down: return {0, 1};
+    case Qt::Key_Left: return {-1, 0};
+    default: return {0, 0};
+  }
+}
+
+}
+
+ToolChanges TranslationTool::keyPress(const ToolKeyEvent &event) {
+  assert(oneNotNull(source, transform));
+  QPoint move = arrowToDir(event.key);
+  if (move == QPoint{0, 0}) return ToolChanges::none;
+  translate(move, event.colors.erase);
+  return ToolChanges::cell;
+}
+
+QPoint TranslationTool::translation() const {
+  assert(oneNotNull(source, transform));
+  if (source) {
+    return pos;
+  } else if (transform) {
+    return {transform->xform.posX, transform->xform.posX};
+  } else Q_UNREACHABLE();
+}
+
+namespace {
+
+Transform xformFromPos(const QPoint pos) {
+  Transform xform;
+  xform.posX = pos.x();
+  xform.posY = pos.y();
+  return xform;
+}
+
+}
+
+void TranslationTool::translate(const QPoint move, const QRgb eraseColor) {
+  assert(oneNotNull(source, transform));
+  if (source) {
+    pos += move;
+    updateSourceImage(eraseColor);
+  } else if (transform) {
+    transform->xform.posX += move.x();
+    transform->xform.posY += move.y();
+  } else Q_UNREACHABLE();
+}
+
+void TranslationTool::updateSourceImage(const QRgb eraseColor) {
+  assert(source);
+  assert(!transform);
+  clearImage(source->image.data, eraseColor);
+  Image src{cleanImage, xformFromPos(pos)};
+  blitTransformedImage(source->image.data, src);
+}

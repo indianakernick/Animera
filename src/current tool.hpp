@@ -18,6 +18,7 @@ public:
   ToolChanges mouseDown(const ToolMouseEvent &);
   ToolChanges mouseMove(const ToolMouseEvent &);
   ToolChanges mouseUp(const ToolMouseEvent &);
+  ToolChanges keyPress(const ToolKeyEvent &);
 
 private:
   Tool *tool = nullptr;

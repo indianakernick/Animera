@@ -73,5 +73,6 @@ bool compatible(const QImage &, const QImage &);
 QImage makeCompatible(const QImage &);
 void copyImage(QImage &, const QImage &);
 void clearImage(QImage &);
+void clearImage(QImage &, QRgb);
 
 #endif

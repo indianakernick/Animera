@@ -68,15 +68,6 @@ Color compositeI(const Color a, const Color b, const uint8_t aF, const uint8_t b
   }
 }*/
 
-namespace {
-
-void paintImage(QPainter &painter, const Image &img) {
-  painter.setTransform(getTransform(img));
-  painter.drawImage(0, 0, img.data);
-}
-
-}
-
 QImage compositeFrame(const Palette &palette, const Frame &frame) {
   assert(!frame.empty());
   std::vector<Image> images;
@@ -97,7 +88,8 @@ QImage compositeFrame(const Palette &palette, const Frame &frame) {
   QPainter painter{&output};
   painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
   for (const Image &image : images) {
-    paintImage(painter, image);
+    painter.setTransform(getTransform(image));
+    painter.drawImage(0, 0, image.data);
   }
   
   return output;
@@ -125,6 +117,13 @@ QImage blitImage(const QImage &src, const QRect rect) {
   painter.setCompositionMode(QPainter::CompositionMode_Source);
   painter.drawImage({0, 0}, src, rect);
   return dst;
+}
+
+void blitTransformedImage(QImage &dst, const Image &src) {
+  QPainter painter{&dst};
+  painter.setCompositionMode(QPainter::CompositionMode_Source);
+  painter.setTransform(getTransform(src));
+  painter.drawImage(0, 0, src.data);
 }
 
 void blitMaskImage(QImage &dst, const QImage &mask, const QImage &src, const QPoint pos) {
