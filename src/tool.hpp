@@ -33,7 +33,7 @@ struct ToolColors {
   QRgb erase;
 };
 
-struct ToolEvent {
+struct ToolMouseEvent {
   ButtonType button;
   QPoint pos;
   ToolColors colors;
@@ -52,9 +52,9 @@ public:
   
   virtual bool attachCell(Cell *) = 0;
   virtual void detachCell() = 0;
-  virtual ToolChanges mouseDown(const ToolEvent &) = 0;
-  virtual ToolChanges mouseMove(const ToolEvent &) = 0;
-  virtual ToolChanges mouseUp(const ToolEvent &) = 0;
+  virtual ToolChanges mouseDown(const ToolMouseEvent &) = 0;
+  virtual ToolChanges mouseMove(const ToolMouseEvent &) = 0;
+  virtual ToolChanges mouseUp(const ToolMouseEvent &) = 0;
 };
 
 #endif

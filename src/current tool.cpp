@@ -21,7 +21,7 @@ void CurrentTool::changeCell(Cell *newCell) {
   attach();
 }
 
-ToolChanges CurrentTool::mouseDown(const ToolEvent &event) {
+ToolChanges CurrentTool::mouseDown(const ToolMouseEvent &event) {
   assert(tool);
   assert(event.overlay);
   if (button == ButtonType::none) {
@@ -33,19 +33,19 @@ ToolChanges CurrentTool::mouseDown(const ToolEvent &event) {
   }
 }
 
-ToolChanges CurrentTool::mouseMove(const ToolEvent &event) {
+ToolChanges CurrentTool::mouseMove(const ToolMouseEvent &event) {
   assert(tool);
   assert(event.overlay);
   if (event.pos == lastPos) {
     return ToolChanges::none;
   } else {
     lastPos = event.pos;
-    const ToolEvent newEvent{button, event.pos, event.colors, event.overlay};
+    const ToolMouseEvent newEvent{button, event.pos, event.colors, event.overlay};
     return enabled ? tool->mouseMove(newEvent) : ToolChanges::none;
   }
 }
 
-ToolChanges CurrentTool::mouseUp(const ToolEvent &event) {
+ToolChanges CurrentTool::mouseUp(const ToolMouseEvent &event) {
   assert(tool);
   assert(event.overlay);
   if (event.button == button) {

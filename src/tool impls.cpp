@@ -39,7 +39,7 @@ void BrushTool::detachCell() {
   source = nullptr;
 }
 
-ToolChanges BrushTool::mouseDown(const ToolEvent &event) {
+ToolChanges BrushTool::mouseDown(const ToolMouseEvent &event) {
   assert(source);
   clearImage(*event.overlay);
   symPoint(*event.overlay, overlay_color, event.pos);
@@ -48,7 +48,7 @@ ToolChanges BrushTool::mouseDown(const ToolEvent &event) {
   return drawnChanges(symPoint(source->image.data, color, lastPos));
 }
 
-ToolChanges BrushTool::mouseMove(const ToolEvent &event) {
+ToolChanges BrushTool::mouseMove(const ToolMouseEvent &event) {
   assert(source);
   clearImage(*event.overlay);
   symPoint(*event.overlay, overlay_color, event.pos);
@@ -59,7 +59,7 @@ ToolChanges BrushTool::mouseMove(const ToolEvent &event) {
   return drawnChanges(drawn);
 }
 
-ToolChanges BrushTool::mouseUp(const ToolEvent &event) {
+ToolChanges BrushTool::mouseUp(const ToolMouseEvent &event) {
   assert(source);
   clearImage(*event.overlay);
   Image &img = source->image;
@@ -133,7 +133,7 @@ void FloodFillTool::detachCell() {
   source = nullptr;
 }
 
-ToolChanges FloodFillTool::mouseDown(const ToolEvent &event) {
+ToolChanges FloodFillTool::mouseDown(const ToolMouseEvent &event) {
   assert(source);
   clearImage(*event.overlay);
   drawSquarePoint(*event.overlay, overlay_color, event.pos);
@@ -141,14 +141,14 @@ ToolChanges FloodFillTool::mouseDown(const ToolEvent &event) {
   return drawnChanges(drawFloodFill(source->image.data, color, event.pos));
 }
 
-ToolChanges FloodFillTool::mouseMove(const ToolEvent &event) {
+ToolChanges FloodFillTool::mouseMove(const ToolMouseEvent &event) {
   assert(source);
   clearImage(*event.overlay);
   drawSquarePoint(*event.overlay, overlay_color, event.pos);
   return ToolChanges::overlay;
 }
 
-ToolChanges FloodFillTool::mouseUp(const ToolEvent &) {
+ToolChanges FloodFillTool::mouseUp(const ToolMouseEvent &) {
   assert(source);
   return ToolChanges::none;
 }
@@ -164,7 +164,7 @@ void RectangleSelectTool::detachCell() {
 
 // @TODO maybe dragging a rectangle with secondary will cut instead of copy?
 
-ToolChanges RectangleSelectTool::mouseDown(const ToolEvent &event) {
+ToolChanges RectangleSelectTool::mouseDown(const ToolMouseEvent &event) {
   assert(source);
   clearImage(*event.overlay);
   if (mode == SelectMode::copy) {
@@ -182,7 +182,7 @@ ToolChanges RectangleSelectTool::mouseDown(const ToolEvent &event) {
   }
 }
 
-ToolChanges RectangleSelectTool::mouseMove(const ToolEvent &event) {
+ToolChanges RectangleSelectTool::mouseMove(const ToolMouseEvent &event) {
   assert(source);
   clearImage(*event.overlay);
   if (mode == SelectMode::copy) {
@@ -198,7 +198,7 @@ ToolChanges RectangleSelectTool::mouseMove(const ToolEvent &event) {
   return ToolChanges::overlay;
 }
 
-ToolChanges RectangleSelectTool::mouseUp(const ToolEvent &event) {
+ToolChanges RectangleSelectTool::mouseUp(const ToolMouseEvent &event) {
   assert(source);
   clearImage(*event.overlay);
   if (mode == SelectMode::copy) {
@@ -228,7 +228,7 @@ void MaskSelectTool::detachCell() {
   source = nullptr;
 }
 
-ToolChanges MaskSelectTool::mouseDown(const ToolEvent &event) {
+ToolChanges MaskSelectTool::mouseDown(const ToolMouseEvent &event) {
   assert(source);
   clearImage(*event.overlay);
   if (mode == SelectMode::copy) {
@@ -247,7 +247,7 @@ ToolChanges MaskSelectTool::mouseDown(const ToolEvent &event) {
   }
 }
 
-ToolChanges MaskSelectTool::mouseMove(const ToolEvent &event) {
+ToolChanges MaskSelectTool::mouseMove(const ToolMouseEvent &event) {
   assert(source);
   clearImage(*event.overlay);
   if (mode == SelectMode::copy) {
@@ -281,7 +281,7 @@ QRect polyBounds(const std::vector<QPoint> &polygon) {
 
 }
 
-ToolChanges MaskSelectTool::mouseUp(const ToolEvent &event) {
+ToolChanges MaskSelectTool::mouseUp(const ToolMouseEvent &event) {
   assert(source);
   clearImage(*event.overlay);
   if (mode == SelectMode::copy) {
@@ -333,7 +333,7 @@ void DragPaintTool<Derived>::detachCell() {
 }
 
 template <typename Derived>
-ToolChanges DragPaintTool<Derived>::mouseDown(const ToolEvent &event) {
+ToolChanges DragPaintTool<Derived>::mouseDown(const ToolMouseEvent &event) {
   assert(source);
   clearImage(*event.overlay);
   that()->drawOverlay(*event.overlay, event.pos);
@@ -344,7 +344,7 @@ ToolChanges DragPaintTool<Derived>::mouseDown(const ToolEvent &event) {
 }
 
 template <typename Derived>
-ToolChanges DragPaintTool<Derived>::mouseMove(const ToolEvent &event) {
+ToolChanges DragPaintTool<Derived>::mouseMove(const ToolMouseEvent &event) {
   assert(source);
   clearImage(*event.overlay);
   that()->drawOverlay(*event.overlay, event.pos);
@@ -354,7 +354,7 @@ ToolChanges DragPaintTool<Derived>::mouseMove(const ToolEvent &event) {
 }
 
 template <typename Derived>
-ToolChanges DragPaintTool<Derived>::mouseUp(const ToolEvent &event) {
+ToolChanges DragPaintTool<Derived>::mouseUp(const ToolMouseEvent &event) {
   assert(source);
   clearImage(*event.overlay);
   copyImage(source->image.data, cleanImage);

@@ -1211,7 +1211,7 @@ int main(int argc, char **argv) {
   QImage overlay({32, 32}, getImageFormat(Format::color));
   overlay.fill(0);
   
-  ToolEvent event;
+  ToolMouseEvent event;
   event.button = ButtonType::primary;
   event.pos = QPoint{16, 16};
   event.colors.primary = qRgba(0, 255, 0, 255);

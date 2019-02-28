@@ -18,9 +18,9 @@ class BrushTool final : public Tool {
 public:
   bool attachCell(Cell *) override;
   void detachCell() override;
-  ToolChanges mouseDown(const ToolEvent &) override;
-  ToolChanges mouseMove(const ToolEvent &) override;
-  ToolChanges mouseUp(const ToolEvent &) override;
+  ToolChanges mouseDown(const ToolMouseEvent &) override;
+  ToolChanges mouseMove(const ToolMouseEvent &) override;
+  ToolChanges mouseUp(const ToolMouseEvent &) override;
 
   void setWidth(int);
   void setMode(SymmetryMode);
@@ -40,9 +40,9 @@ class FloodFillTool final : public Tool {
 public:
   bool attachCell(Cell *) override;
   void detachCell() override;
-  ToolChanges mouseDown(const ToolEvent &) override;
-  ToolChanges mouseMove(const ToolEvent &) override;
-  ToolChanges mouseUp(const ToolEvent &) override;
+  ToolChanges mouseDown(const ToolMouseEvent &) override;
+  ToolChanges mouseMove(const ToolMouseEvent &) override;
+  ToolChanges mouseUp(const ToolMouseEvent &) override;
 
 private:
   SourceCell *source = nullptr;
@@ -52,9 +52,9 @@ class RectangleSelectTool final : public Tool {
 public:
   bool attachCell(Cell *) override;
   void detachCell() override;
-  ToolChanges mouseDown(const ToolEvent &) override;
-  ToolChanges mouseMove(const ToolEvent &) override;
-  ToolChanges mouseUp(const ToolEvent &) override;
+  ToolChanges mouseDown(const ToolMouseEvent &) override;
+  ToolChanges mouseMove(const ToolMouseEvent &) override;
+  ToolChanges mouseUp(const ToolMouseEvent &) override;
 
   void setMode(SelectMode);
   
@@ -71,9 +71,9 @@ class MaskSelectTool final : public Tool {
 public:
   bool attachCell(Cell *) override;
   void detachCell() override;
-  ToolChanges mouseDown(const ToolEvent &) override;
-  ToolChanges mouseMove(const ToolEvent &) override;
-  ToolChanges mouseUp(const ToolEvent &) override;
+  ToolChanges mouseDown(const ToolMouseEvent &) override;
+  ToolChanges mouseMove(const ToolMouseEvent &) override;
+  ToolChanges mouseUp(const ToolMouseEvent &) override;
   
   void setMode(SelectMode);
 
@@ -94,9 +94,9 @@ public:
   
   bool attachCell(Cell *) override final;
   void detachCell() override final;
-  ToolChanges mouseDown(const ToolEvent &) override final;
-  ToolChanges mouseMove(const ToolEvent &) override final;
-  ToolChanges mouseUp(const ToolEvent &) override final;
+  ToolChanges mouseDown(const ToolMouseEvent &) override final;
+  ToolChanges mouseMove(const ToolMouseEvent &) override final;
+  ToolChanges mouseUp(const ToolMouseEvent &) override final;
 
 protected:
   bool isDragging() const;

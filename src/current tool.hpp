@@ -15,9 +15,9 @@ class CurrentTool {
 public:
   void changeTool(Tool *);
   void changeCell(Cell *);
-  ToolChanges mouseDown(const ToolEvent &);
-  ToolChanges mouseMove(const ToolEvent &);
-  ToolChanges mouseUp(const ToolEvent &);
+  ToolChanges mouseDown(const ToolMouseEvent &);
+  ToolChanges mouseMove(const ToolMouseEvent &);
+  ToolChanges mouseUp(const ToolMouseEvent &);
 
 private:
   Tool *tool = nullptr;
