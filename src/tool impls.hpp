@@ -67,6 +67,26 @@ private:
   SelectMode mode = SelectMode::copy;
 };
 
+class MaskSelectTool final : public Tool {
+public:
+  bool attachCell(Cell *) override;
+  void detachCell() override;
+  ToolChanges mouseDown(const ToolEvent &) override;
+  ToolChanges mouseMove(const ToolEvent &) override;
+  ToolChanges mouseUp(const ToolEvent &) override;
+  
+  void setMode(SelectMode);
+
+private:
+  std::vector<QPoint> polygon;
+  SourceCell *source = nullptr;
+  QImage selection;
+  QImage mask;
+  QImage overlay;
+  QPoint offset;
+  SelectMode mode = SelectMode::copy;
+};
+
 template <typename Derived>
 class DragPaintTool : public Tool {
 public:

@@ -451,3 +451,22 @@ bool drawRoundLine(QImage &img, const QRgb color, const QLine line, const int th
   painter.drawLine(line);
   return true;
 }
+
+bool drawFilledPolygon(
+  QImage &img,
+  const QRgb color,
+  const std::vector<QPoint> &poly,
+  const QPoint offset
+) {
+  std::vector<QPoint> shiftedPoly;
+  shiftedPoly.reserve(poly.size());
+  for (const QPoint vertex : poly) {
+    shiftedPoly.push_back(vertex + offset);
+  }
+  QPainter painter{&img};
+  preparePainter(painter);
+  painter.setBrush(toColor(color));
+  painter.setPen(makePen(round_pen, color, 1));
+  painter.drawPolygon(shiftedPoly.data(), static_cast<int>(shiftedPoly.size()));
+  return true;
+}

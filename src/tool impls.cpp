@@ -186,8 +186,12 @@ ToolChanges RectangleSelectTool::mouseMove(const ToolEvent &event) {
   assert(source);
   clearImage(*event.overlay);
   if (mode == SelectMode::copy) {
-    const QRect rect = QRect{startPos, event.pos}.normalized();
-    drawStrokedRect(*event.overlay, overlay_color, rect);
+    if (event.button == ButtonType::primary) {
+      const QRect rect = QRect{startPos, event.pos}.normalized();
+      drawStrokedRect(*event.overlay, overlay_color, rect);
+    } else {
+      drawSquarePoint(*event.overlay, overlay_color, event.pos);
+    }
   } else { // SelectMode::paste
     blitImage(*event.overlay, overlay, event.pos + offset);
   }
@@ -203,7 +207,7 @@ ToolChanges RectangleSelectTool::mouseUp(const ToolEvent &event) {
     selection = blitImage(source->image.data, rect);
     overlay = selection;
     colorToOverlay(overlay);
-    offset = startPos - event.pos;
+    offset = rect.topLeft() - event.pos;
     return ToolChanges::overlay;
   } else { // SelectMode::paste
     blitImage(*event.overlay, overlay, startPos);
@@ -212,7 +216,95 @@ ToolChanges RectangleSelectTool::mouseUp(const ToolEvent &event) {
 }
 
 void RectangleSelectTool::setMode(const SelectMode newMode) {
-  assert(button == ButtonType::none);
+  mode = newMode;
+}
+
+bool MaskSelectTool::attachCell(Cell *cell) {
+  return source = dynamic_cast<SourceCell *>(cell);
+}
+
+void MaskSelectTool::detachCell() {
+  assert(source);
+  source = nullptr;
+}
+
+ToolChanges MaskSelectTool::mouseDown(const ToolEvent &event) {
+  assert(source);
+  clearImage(*event.overlay);
+  if (mode == SelectMode::copy) {
+    drawSquarePoint(*event.overlay, overlay_color, event.pos);
+  } else { // SelectMode::paste
+    blitImage(*event.overlay, overlay, event.pos + offset);
+  }
+  if (event.button != ButtonType::primary) return ToolChanges::overlay;
+  if (mode == SelectMode::copy) {
+    polygon.clear();
+    polygon.push_back(event.pos);
+    return ToolChanges::overlay;
+  } else { // SelectMode::paste
+    blitMaskImage(source->image.data, mask, selection, event.pos + offset);
+    return ToolChanges::cell_overlay;
+  }
+}
+
+ToolChanges MaskSelectTool::mouseMove(const ToolEvent &event) {
+  assert(source);
+  clearImage(*event.overlay);
+  if (mode == SelectMode::copy) {
+    if (event.button == ButtonType::primary) {
+      polygon.push_back(event.pos);
+      drawFilledPolygon(*event.overlay, overlay_color, polygon, QPoint{0, 0});
+    } else {
+      drawSquarePoint(*event.overlay, overlay_color, event.pos);
+    }
+  } else { // SelectMode::paste
+    blitImage(*event.overlay, overlay, event.pos + offset);
+  }
+  return ToolChanges::overlay;
+}
+
+namespace {
+
+QRect polyBounds(const std::vector<QPoint> &polygon) {
+  QRect rect;
+  if (!polygon.empty()) {
+    rect = {polygon.front(), QSize{1, 1}};
+  }
+  for (const QPoint p : polygon) {
+    if (p.x() < rect.left()) rect.setLeft(p.x());
+    if (p.y() < rect.top()) rect.setTop(p.y());
+    if (p.x() > rect.right()) rect.setRight(p.x());
+    if (p.y() > rect.bottom()) rect.setBottom(p.y());
+  }
+  return rect;
+}
+
+}
+
+ToolChanges MaskSelectTool::mouseUp(const ToolEvent &event) {
+  assert(source);
+  clearImage(*event.overlay);
+  if (mode == SelectMode::copy) {
+    if (polygon.back() != event.pos) {
+      polygon.push_back(event.pos);
+    }
+    const QRect bounds = polyBounds(polygon);
+    mask = QImage{bounds.size(), mask_format};
+    clearImage(mask);
+    drawFilledPolygon(mask, mask_color_on, polygon, -bounds.topLeft());
+    selection = blitMaskImage(source->image.data, mask, bounds.topLeft());
+    overlay = selection;
+    colorToOverlay(overlay, mask);
+    offset = bounds.topLeft() - event.pos;
+    blitImage(*event.overlay, overlay, bounds.topLeft());
+    return ToolChanges::overlay;
+  } else { // SelectMode::paste
+    blitImage(*event.overlay, overlay, event.pos + offset);
+    return ToolChanges::overlay;
+  }
+}
+
+void MaskSelectTool::setMode(const SelectMode newMode) {
   mode = newMode;
 }
 

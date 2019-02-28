@@ -29,4 +29,6 @@ bool drawStrokedRect   (QImage &, QRgb, QRect);
 bool drawLine          (QImage &, QRgb, QLine);
 bool drawRoundLine     (QImage &, QRgb, QLine, int);
 
+bool drawFilledPolygon(QImage &, QRgb, const std::vector<QPoint> &, QPoint);
+
 #endif

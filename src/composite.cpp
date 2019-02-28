@@ -127,12 +127,45 @@ QImage blitImage(const QImage &src, const QRect rect) {
   return dst;
 }
 
+void blitMaskImage(QImage &dst, const QImage &mask, const QImage &src, const QPoint pos) {
+  assert(mask.size() == src.size());
+  assert(mask.format() == mask_format);
+  assert(dst.rect().contains(mask.rect().translated(pos)));
+  // @TODO correct but slow
+  for (int y = 0; y != mask.height(); ++y) {
+    for (int x = 0; x != mask.width(); ++x) {
+      if (mask.pixel(x, y) == mask_color_on) {
+        dst.setPixel(x + pos.x(), y + pos.y(), src.pixel(x, y));
+      }
+    }
+  }
+}
+
+QImage blitMaskImage(const QImage &src, const QImage &mask, const QPoint pos) {
+  assert(mask.format() == mask_format);
+  assert(src.rect().contains(mask.rect().translated(pos)));
+  QImage dst{mask.size(), src.format()};
+  // @TODO correct but slow
+  for (int y = 0; y != mask.height(); ++y) {
+    for (int x = 0; x != mask.width(); ++x) {
+      if (mask.pixel(x, y) == mask_color_on) {
+        dst.setPixel(x, y, src.pixel(x + pos.x(), y + pos.y()));
+      }
+    }
+  }
+  return dst;
+}
+
 namespace {
 
 void colorToOverlay(QRgb *const pixel) {
   const QRgb pxval = *pixel;
   const int gray = qGray(qRed(pxval), qGreen(pxval), qBlue(pxval));
   *pixel = qRgba(gray, gray, gray, qAlpha(pxval) * 3 / 4);
+}
+
+void applyMaskPixel(QRgb *const pixel, const uchar mask) {
+  *pixel &= qRgba(mask, mask, mask, mask);
 }
 
 }
@@ -153,5 +186,32 @@ void colorToOverlay(QImage &img) {
       colorToOverlay(pixel++);
     }
     row += ppl;
+  }
+}
+
+void colorToOverlay(QImage &img, const QImage &mask) {
+  assert(img.format() == getImageFormat(Format::color));
+  assert(img.depth() == 32);
+  assert(img.size() == mask.size());
+  img.detach();
+  const uintptr_t ppl = img.bytesPerLine() / sizeof(QRgb);
+  const uintptr_t maskPpl = mask.bytesPerLine() / sizeof(uchar);
+  QRgb *row = reinterpret_cast<QRgb *>(img.bits());
+  const uchar *maskRow = mask.bits();
+  QRgb *const lastRow = row + img.height() * ppl;
+  const uintptr_t width = img.width();
+  
+  while (row != lastRow) {
+    QRgb *pixel = row;
+    const uchar *maskPixel = maskRow;
+    QRgb *const lastPixel = row + width;
+    while (pixel != lastPixel) {
+      colorToOverlay(pixel);
+      applyMaskPixel(pixel, *maskPixel);
+      ++pixel;
+      ++maskPixel;
+    }
+    row += ppl;
+    maskRow += maskPpl;
   }
 }

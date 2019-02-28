@@ -1001,7 +1001,7 @@ int main(int argc, char **argv) {
   img.xform.posY = 5;
   img.xform.flipX = true;
   QImage xformed = img.transformed();
-  xformed.save("/Users/indikernick/Desktop/test.png");*/
+  xformed.save("/Users/indikernick/Desktop/Test/test.png");*/
   
   /*QImage idxImg{2, 2, QImage::Format_Indexed8};
   idxImg.detach();
@@ -1010,7 +1010,7 @@ int main(int argc, char **argv) {
   idxImg.bits()[4] = 40;
   idxImg.bits()[5] = 60;
   idxImg.reinterpretAsFormat(QImage::Format_Grayscale8);
-  idxImg.save("/Users/indikernick/Desktop/idx_test.png");
+  idxImg.save("/Users/indikernick/Desktop/Test/idx_test.png");
   
   QImage loaded("/Users/indikernick/Desktop/idx_test.png");
   std::cout << (loaded.format() == QImage::Format_Grayscale8) << '\n';
@@ -1025,14 +1025,14 @@ int main(int argc, char **argv) {
   colImg.bits()[1] = 127;
   colImg.bits()[2] = 0;
   colImg.bits()[3] = 0;
-  colImg.save("/Users/indikernick/Desktop/col_test.png");
+  colImg.save("/Users/indikernick/Desktop/Test/col_test.png");
   
   const int multiplied = ((127 * 63) / 255);
   std::cout << multiplied << '\n';
   std::cout << ((multiplied * 255) / 63) << '\n';
   std::cout << '\n';
   
-  QImage loadedCol("/Users/indikernick/Desktop/col_test.png");
+  QImage loadedCol("/Users/indikernick/Desktop/Test/col_test.png");
   std::cout << (loadedCol.format() == QImage::Format_ARGB32) << '\n';
   std::cout << (loadedCol.format() == QImage::Format_ARGB32_Premultiplied) << '\n';
   std::cout << loadedCol.format() << '\n';
@@ -1147,8 +1147,8 @@ int main(int argc, char **argv) {
   midpointFilled(dup, fillColor, circPos, circRad, CircleShape::c1x1);
   timer.stop();
   
-  dup.save("/Users/indikernick/Desktop/circle.png");
-  image.save("/Users/indikernick/Desktop/circles.png");
+  dup.save("/Users/indikernick/Desktop/Test/circle.png");
+  image.save("/Users/indikernick/Desktop/Test/circles.png");
   
   dup.fill(0);
   image.fill(0);
@@ -1163,7 +1163,7 @@ int main(int argc, char **argv) {
   }
   timer.stop();
   
-  image.save("/Users/indikernick/Desktop/smear_0.png");
+  image.save("/Users/indikernick/Desktop/Test/smear_0.png");
   image.fill(0);
   
   timer.start("midpoint smear");
@@ -1172,7 +1172,7 @@ int main(int argc, char **argv) {
   }
   timer.stop();
   
-  image.save("/Users/indikernick/Desktop/smear_1.png");
+  image.save("/Users/indikernick/Desktop/Test/smear_1.png");
   image.fill(0);
   
   timer.start("painter smear");
@@ -1181,7 +1181,7 @@ int main(int argc, char **argv) {
   }
   timer.stop();
   
-  image.save("/Users/indikernick/Desktop/smear_2.png");
+  image.save("/Users/indikernick/Desktop/Test/smear_2.png");
   image.fill(0);
   
   midpointLine(image, fillColor, {10, 10}, {20, 10});
@@ -1195,14 +1195,14 @@ int main(int argc, char **argv) {
   midpointLine(image, fillColor, {10, 140}, {20, 150});
   midpointLine(image, fillColor, {10, 170}, {20, 160});
   
-  image.save("/Users/indikernick/Desktop/lines.png");
+  image.save("/Users/indikernick/Desktop/Test/lines.png");
   image.fill(0);
   
   //testComposite();
   
   SourceCell source({32, 32}, Format::color);
   source.image.xform.angle = 0;
-  RectangleSelectTool tool;
+  MaskSelectTool tool;
   //tool.setMode(SymmetryMode::both);
   //tool.setWidth(2);
   //tool.setShape(CircleShape::c1x1);
@@ -1233,7 +1233,7 @@ int main(int argc, char **argv) {
   timer.stop();
   QImage drawing = source.image.data;
   compositeOverlay(drawing, overlay);
-  drawing.save("/Users/indikernick/Desktop/overlay_0.png");
+  drawing.save("/Users/indikernick/Desktop/Test/overlay_0.png");
   
   event.pos = QPoint{24, 20};
   timer.start("MouseMove");
@@ -1241,26 +1241,29 @@ int main(int argc, char **argv) {
   timer.stop();
   drawing = source.image.data;
   compositeOverlay(drawing, overlay);
-  drawing.save("/Users/indikernick/Desktop/overlay_1.png");
+  drawing.save("/Users/indikernick/Desktop/Test/overlay_1.png");
   
-  event.pos = QPoint{24, 20};
+  event.pos = QPoint{20, 20};
+  tool.mouseMove(event);
+  drawing = source.image.data;
+  compositeOverlay(drawing, overlay);
+  drawing.save("/Users/indikernick/Desktop/Test/overlay_2.png");
+  
+  event.pos = QPoint{20, 20};
   timer.start("MouseMove");
   tool.mouseUp(event);
   timer.stop();
   drawing = source.image.data;
   compositeOverlay(drawing, overlay);
-  drawing.save("/Users/indikernick/Desktop/overlay_2.png");
+  drawing.save("/Users/indikernick/Desktop/Test/overlay_3.png");
   
   tool.setMode(SelectMode::paste);
-  
-  ++event.pos.rx();
   tool.mouseMove(event);
-  --event.pos.rx();
   
   tool.mouseMove(event);
   drawing = source.image.data;
   compositeOverlay(drawing, overlay);
-  drawing.save("/Users/indikernick/Desktop/overlay_3.png");
+  drawing.save("/Users/indikernick/Desktop/Test/overlay_4.png");
   
   event.pos = QPoint{16, 16};
   timer.start("MouseUp");
@@ -1268,9 +1271,20 @@ int main(int argc, char **argv) {
   timer.stop();
   drawing = source.image.data;
   compositeOverlay(drawing, overlay);
-  drawing.save("/Users/indikernick/Desktop/overlay_4.png");
+  drawing.save("/Users/indikernick/Desktop/Test/overlay_5.png");
   
-  source.image.data.save("/Users/indikernick/Desktop/brush.png");
+  tool.mouseDown(event);
+  drawing = source.image.data;
+  compositeOverlay(drawing, overlay);
+  drawing.save("/Users/indikernick/Desktop/Test/overlay_6.png");
+  
+  tool.mouseUp(event);
+  
+  drawing = source.image.data;
+  compositeOverlay(drawing, overlay);
+  drawing.save("/Users/indikernick/Desktop/Test/overlay_7.png");
+  
+  source.image.data.save("/Users/indikernick/Desktop/Test/brush.png");
   
   /*QFile file{"/Users/indikernick/Desktop/project.px2"};
   
