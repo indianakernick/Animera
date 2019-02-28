@@ -215,4 +215,24 @@ private:
   void updateSourceImage(QRgb);
 };
 
+class FlipTool final : public Tool {
+public:
+  bool attachCell(Cell *) override;
+  void detachCell() override;
+  ToolChanges mouseDown(const ToolMouseEvent &) override;
+  ToolChanges mouseMove(const ToolMouseEvent &) override;
+  ToolChanges mouseUp(const ToolMouseEvent &) override;
+  ToolChanges keyPress(const ToolKeyEvent &) override;
+  
+  bool flippingX() const;
+  bool flippingY() const;
+
+private:
+  SourceCell *source = nullptr;
+  TransformCell *transform = nullptr;
+  
+  void updateSourceImage();
+  Transform &getTransform() const;
+};
+
 #endif

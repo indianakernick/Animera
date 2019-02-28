@@ -1216,15 +1216,21 @@ int main(int argc, char **argv) {
   event.colors.erase = qRgba(0, 0, 0, 0);
   event.overlay = &overlay;
   
+  ToolKeyEvent keyEvent;
+  keyEvent.colors = event.colors;
+  keyEvent.overlay = event.overlay;
+  
   FilledCircleTool sct;
   sct.attachCell(&source);
   event.pos.rx() += 3;
+  event.pos.ry() += 2;
   sct.mouseDown(event);
   event.pos.rx() -= 3;
+  event.pos.ry() -= 2;
   sct.mouseUp(event);
   sct.detachCell();
   
-  TranslationTool tool;
+  FlipTool tool;
   //tool.setMode(SymmetryMode::both);
   //tool.setWidth(2);
   //tool.setShape(CircleShape::c1x1);
@@ -1236,29 +1242,37 @@ int main(int argc, char **argv) {
   timer.start("MouseDown");
   tool.mouseDown(event);
   timer.stop();
-  QImage drawing = source.image.data;
+  QImage drawing = compositeFrame(Palette{}, Frame{&source});
   compositeOverlay(drawing, overlay);
   drawing.save("/Users/indikernick/Desktop/Test/overlay_0.png");
+  
+  keyEvent.key = Qt::Key_Down;
+  tool.keyPress(keyEvent);
   
   event.pos = QPoint{24, 20};
   timer.start("MouseMove");
   tool.mouseMove(event);
   timer.stop();
-  drawing = source.image.data;
+  drawing = compositeFrame(Palette{}, Frame{&source});
   compositeOverlay(drawing, overlay);
   drawing.save("/Users/indikernick/Desktop/Test/overlay_1.png");
   
+  keyEvent.key = Qt::Key_Right;
+  tool.keyPress(keyEvent);
+  
   event.pos = QPoint{20, 20};
   tool.mouseMove(event);
-  drawing = source.image.data;
+  drawing = compositeFrame(Palette{}, Frame{&source});
   compositeOverlay(drawing, overlay);
   drawing.save("/Users/indikernick/Desktop/Test/overlay_2.png");
+  
+  tool.detachCell();
   
   event.pos = QPoint{20, 20};
   timer.start("MouseMove");
   tool.mouseUp(event);
   timer.stop();
-  drawing = source.image.data;
+  drawing = compositeFrame(Palette{}, Frame{&source});
   compositeOverlay(drawing, overlay);
   drawing.save("/Users/indikernick/Desktop/Test/overlay_3.png");
   
@@ -1266,7 +1280,7 @@ int main(int argc, char **argv) {
   tool.mouseMove(event);
   
   tool.mouseMove(event);
-  drawing = source.image.data;
+  drawing = compositeFrame(Palette{}, Frame{&source});
   compositeOverlay(drawing, overlay);
   drawing.save("/Users/indikernick/Desktop/Test/overlay_4.png");
   
@@ -1274,18 +1288,18 @@ int main(int argc, char **argv) {
   timer.start("MouseUp");
   tool.mouseMove(event);
   timer.stop();
-  drawing = source.image.data;
+  drawing = compositeFrame(Palette{}, Frame{&source});
   compositeOverlay(drawing, overlay);
   drawing.save("/Users/indikernick/Desktop/Test/overlay_5.png");
   
   tool.mouseDown(event);
-  drawing = source.image.data;
+  drawing = compositeFrame(Palette{}, Frame{&source});
   compositeOverlay(drawing, overlay);
   drawing.save("/Users/indikernick/Desktop/Test/overlay_6.png");
   
   tool.mouseUp(event);
   
-  drawing = source.image.data;
+  drawing = compositeFrame(Palette{}, Frame{&source});
   compositeOverlay(drawing, overlay);
   drawing.save("/Users/indikernick/Desktop/Test/overlay_7.png");
   
