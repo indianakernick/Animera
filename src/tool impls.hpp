@@ -43,7 +43,6 @@ public:
   void detachCell() override;
   ToolChanges mouseDown(const ToolMouseEvent &) override;
   ToolChanges mouseMove(const ToolMouseEvent &) override;
-  ToolChanges mouseUp(const ToolMouseEvent &) override;
 
 private:
   SourceCell *source = nullptr;
@@ -219,9 +218,6 @@ class FlipTool final : public Tool {
 public:
   bool attachCell(Cell *) override;
   void detachCell() override;
-  ToolChanges mouseDown(const ToolMouseEvent &) override;
-  ToolChanges mouseMove(const ToolMouseEvent &) override;
-  ToolChanges mouseUp(const ToolMouseEvent &) override;
   ToolChanges keyPress(const ToolKeyEvent &) override;
   
   bool flippingX() const;
@@ -238,9 +234,6 @@ class RotateTool final : public Tool {
 public:
   bool attachCell(Cell *) override;
   void detachCell() override;
-  ToolChanges mouseDown(const ToolMouseEvent &) override;
-  ToolChanges mouseMove(const ToolMouseEvent &) override;
-  ToolChanges mouseUp(const ToolMouseEvent &) override;
   ToolChanges keyPress(const ToolKeyEvent &) override;
   
   quint8 angle() const;

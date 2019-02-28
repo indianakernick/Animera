@@ -54,13 +54,13 @@ constexpr QRgb overlay_color = qRgba(
 
 class Tool {
 public:
-  virtual ~Tool();
+  virtual ~Tool() = default;
   
   virtual bool attachCell(Cell *) = 0;
   virtual void detachCell() = 0;
-  virtual ToolChanges mouseDown(const ToolMouseEvent &) = 0;
-  virtual ToolChanges mouseMove(const ToolMouseEvent &) = 0;
-  virtual ToolChanges mouseUp(const ToolMouseEvent &) = 0;
+  virtual ToolChanges mouseDown(const ToolMouseEvent &);
+  virtual ToolChanges mouseMove(const ToolMouseEvent &);
+  virtual ToolChanges mouseUp(const ToolMouseEvent &);
   virtual ToolChanges keyPress(const ToolKeyEvent &);
 };
 

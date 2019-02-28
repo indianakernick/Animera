@@ -148,11 +148,6 @@ ToolChanges FloodFillTool::mouseMove(const ToolMouseEvent &event) {
   return ToolChanges::overlay;
 }
 
-ToolChanges FloodFillTool::mouseUp(const ToolMouseEvent &) {
-  assert(source);
-  return ToolChanges::none;
-}
-
 bool RectangleSelectTool::attachCell(Cell *cell) {
   return source = dynamic_cast<SourceCell *>(cell);
 }
@@ -625,18 +620,6 @@ void FlipTool::detachCell() {
   }
 }
 
-ToolChanges FlipTool::mouseDown(const ToolMouseEvent &) {
-  return ToolChanges::none;
-}
-
-ToolChanges FlipTool::mouseMove(const ToolMouseEvent &) {
-  return ToolChanges::none;
-}
-
-ToolChanges FlipTool::mouseUp(const ToolMouseEvent &) {
-  return ToolChanges::none;
-}
-
 namespace {
 
 bool arrowToFlip(const Qt::Key key, Transform &xform) {
@@ -708,18 +691,6 @@ void RotateTool::detachCell() {
   if (source) {
     updateSourceImage();
   }
-}
-
-ToolChanges RotateTool::mouseDown(const ToolMouseEvent &) {
-  return ToolChanges::none;
-}
-
-ToolChanges RotateTool::mouseMove(const ToolMouseEvent &) {
-  return ToolChanges::none;
-}
-
-ToolChanges RotateTool::mouseUp(const ToolMouseEvent &) {
-  return ToolChanges::none;
 }
 
 namespace {

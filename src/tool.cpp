@@ -8,8 +8,18 @@
 
 #include "tool.hpp"
 
-Tool::~Tool() = default;
+ToolChanges Tool::mouseDown(const ToolMouseEvent &) {
+  return ToolChanges::none;
+}
 
-ToolChanges Tool::keyPress(const ToolKeyEvent &event) {
+ToolChanges Tool::mouseMove(const ToolMouseEvent &) {
+  return ToolChanges::none;
+}
+
+ToolChanges Tool::mouseUp(const ToolMouseEvent &) {
+  return ToolChanges::none;
+}
+
+ToolChanges Tool::keyPress(const ToolKeyEvent &) {
   return ToolChanges::none;
 }
