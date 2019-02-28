@@ -650,39 +650,110 @@ bool arrowToFlip(const Qt::Key key, Transform &xform) {
   }
 }
 
-}
-
-ToolChanges FlipTool::keyPress(const ToolKeyEvent &event) {
-  assert(oneNotNull(source, transform));
-  if (arrowToFlip(event.key, getTransform())) {
-    return ToolChanges::cell;
-  }
-  return ToolChanges::none;
-}
-
-bool FlipTool::flippingX() const {
-  return getTransform().flipX;
-}
-
-bool FlipTool::flippingY() const {
-  return getTransform().flipY;
-}
-
-void FlipTool::updateSourceImage() {
-  assert(source);
-  assert(!transform);
-  QImage temp = makeCompatible(source->image.data);
-  blitTransformedImage(temp, source->image);
-  source->image.xform.flipX = false;
-  source->image.xform.flipY = false;
-  copyImage(source->image.data, temp);
-}
-
-Transform &FlipTool::getTransform() const {
+Transform &getTransform(SourceCell *source, TransformCell *transform) {
   assert(oneNotNull(source, transform));
   if (source) {
     return source->image.xform;
   } else if (transform) {
     return transform->xform;
   } else Q_UNREACHABLE();
+}
+
+}
+
+ToolChanges FlipTool::keyPress(const ToolKeyEvent &event) {
+  assert(oneNotNull(source, transform));
+  if (arrowToFlip(event.key, getTransform(source, transform))) {
+    return ToolChanges::cell;
+  }
+  return ToolChanges::none;
+}
+
+bool FlipTool::flippingX() const {
+  return getTransform(source, transform).flipX;
+}
+
+bool FlipTool::flippingY() const {
+  return getTransform(source, transform).flipY;
+}
+
+namespace {
+
+void applyTransform(Image &image) {
+  QImage temp = makeCompatible(image.data);
+  blitTransformedImage(temp, image);
+  copyImage(image.data, temp);
+}
+
+}
+
+void FlipTool::updateSourceImage() {
+  assert(source);
+  assert(!transform);
+  applyTransform(source->image);
+  source->image.xform.flipX = false;
+  source->image.xform.flipY = false;
+}
+
+bool RotateTool::attachCell(Cell *cell) {
+  if ((source = dynamic_cast<SourceCell *>(cell))) {
+    return true;
+  } else if ((transform = dynamic_cast<TransformCell *>(cell))) {
+    return true;
+  }
+  return false;
+}
+
+void RotateTool::detachCell() {
+  if (source) {
+    updateSourceImage();
+  }
+}
+
+ToolChanges RotateTool::mouseDown(const ToolMouseEvent &) {
+  return ToolChanges::none;
+}
+
+ToolChanges RotateTool::mouseMove(const ToolMouseEvent &) {
+  return ToolChanges::none;
+}
+
+ToolChanges RotateTool::mouseUp(const ToolMouseEvent &) {
+  return ToolChanges::none;
+}
+
+namespace {
+
+quint8 arrowToRot(const Qt::Key key) {
+  switch (key) {
+    case Qt::Key_Up: return 3;
+    case Qt::Key_Right: return 1;
+    case Qt::Key_Down: return 1;
+    case Qt::Key_Left: return 3;
+    default: return 0;
+  }
+}
+
+}
+
+ToolChanges RotateTool::keyPress(const ToolKeyEvent &event) {
+  assert(oneNotNull(source, transform));
+  const quint8 rot = arrowToRot(event.key);
+  if (rot) {
+    quint8 &angle = getTransform(source, transform).angle;
+    angle = (angle + rot) & 3;
+    return ToolChanges::cell;
+  }
+  return ToolChanges::none;
+}
+
+quint8 RotateTool::angle() const {
+  return getTransform(source, transform).angle;
+}
+
+void RotateTool::updateSourceImage() {
+  assert(source);
+  assert(!transform);
+  applyTransform(source->image);
+  source->image.xform.angle = 0;
 }

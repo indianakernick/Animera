@@ -1230,7 +1230,7 @@ int main(int argc, char **argv) {
   sct.mouseUp(event);
   sct.detachCell();
   
-  FlipTool tool;
+  RotateTool tool;
   //tool.setMode(SymmetryMode::both);
   //tool.setWidth(2);
   //tool.setShape(CircleShape::c1x1);
@@ -1257,7 +1257,7 @@ int main(int argc, char **argv) {
   compositeOverlay(drawing, overlay);
   drawing.save("/Users/indikernick/Desktop/Test/overlay_1.png");
   
-  keyEvent.key = Qt::Key_Right;
+  keyEvent.key = Qt::Key_Left;
   tool.keyPress(keyEvent);
   
   event.pos = QPoint{20, 20};

@@ -232,7 +232,24 @@ private:
   TransformCell *transform = nullptr;
   
   void updateSourceImage();
-  Transform &getTransform() const;
+};
+
+class RotateTool final : public Tool {
+public:
+  bool attachCell(Cell *) override;
+  void detachCell() override;
+  ToolChanges mouseDown(const ToolMouseEvent &) override;
+  ToolChanges mouseMove(const ToolMouseEvent &) override;
+  ToolChanges mouseUp(const ToolMouseEvent &) override;
+  ToolChanges keyPress(const ToolKeyEvent &) override;
+  
+  quint8 angle() const;
+
+private:
+  SourceCell *source = nullptr;
+  TransformCell *transform = nullptr;
+  
+  void updateSourceImage();
 };
 
 #endif
