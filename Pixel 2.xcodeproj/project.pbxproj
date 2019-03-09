@@ -438,7 +438,7 @@
 				DEVELOPMENT_TEAM = QY44MADGVC;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/usr/local/Cellar/qt/5.12.0/lib,
+					/usr/local/opt/Qt/lib,
 				);
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
@@ -448,7 +448,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					/usr/local/Cellar/qt/5.12.0/plugins/platforms,
+					/usr/local/opt/Qt/plugins/platforms,
 				);
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
@@ -485,7 +485,7 @@
 				DEVELOPMENT_TEAM = QY44MADGVC;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/usr/local/Cellar/qt/5.12.0/lib,
+					/usr/local/opt/Qt/lib,
 				);
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PREPROCESSOR_DEFINITIONS = NDEBUG;
@@ -497,7 +497,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					/usr/local/Cellar/qt/5.12.0/plugins/platforms,
+					/usr/local/opt/Qt/plugins/platforms,
 				);
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
