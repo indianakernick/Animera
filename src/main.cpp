@@ -6,6 +6,7 @@
 //  Copyright © 2019 Indi Kernick. All rights reserved.
 //
 
+#include "application.hpp"
 #include <iostream>
 #include <QtGui/qevent.h>
 #include <QtWidgets/qlabel.h>
@@ -466,7 +467,7 @@ private:
   const char *name = nullptr;
   Clock::time_point startTime;
 };
-
+/*
 #include <QtCore/qtimer.h>
 
 class StatusBar : public QWidget {
@@ -699,7 +700,7 @@ private:
       return QApplication::event(event);
     }
   }
-};
+};*/
 
 #include "animation.hpp"
 #include "cell impls.hpp"
@@ -1043,7 +1044,7 @@ int main(int argc, char **argv) {
   
   std::cout << "\n\n";*/
   
-  Timer timer;
+  /*Timer timer;
   // 128
   // painter filled   0.0975ms
   // midpoint filled  0.0121ms
@@ -1303,7 +1304,7 @@ int main(int argc, char **argv) {
   compositeOverlay(drawing, overlay);
   drawing.save("/Users/indikernick/Desktop/Test/overlay_7.png");
   
-  source.image.data.save("/Users/indikernick/Desktop/Test/brush.png");
+  source.image.data.save("/Users/indikernick/Desktop/Test/brush.png");*/
   
   /*QFile file{"/Users/indikernick/Desktop/project.px2"};
   
@@ -1358,7 +1359,6 @@ int main(int argc, char **argv) {
   assert(src_2_0->image.data.bits()[2] == src->image.data.bits()[2]);
   assert(src_2_0->image.data.bits()[3] == src->image.data.bits()[3]);
   */
-  return 0;
   
   Application app{argc, argv};
   return app.exec();

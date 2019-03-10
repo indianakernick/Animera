@@ -34,6 +34,8 @@ private:
   void changeTool(Tool *);
   template <typename ToolClass>
   void makeToolWidget(const QString &);
+  
+  void paintEvent(QPaintEvent *) override;
 };
 
 #endif

@@ -9,6 +9,9 @@
 #include "timeline widget.hpp"
 
 TimelineWidget::TimelineWidget(QWidget *parent, Animation &anim)
-  : QScrollArea{parent}, anim{anim} {}
+  : QScrollArea{parent}, anim{anim} {
+  setMinimumHeight(128);
+  setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
+}
 
 #include "timeline widget.moc"
