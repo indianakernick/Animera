@@ -19,6 +19,7 @@ public:
     : QRadioButton{tools}, tools{tools}, tool{std::move(tool)} {
     connect(this, &QAbstractButton::pressed, this, &ToolWidget::toolPressed);
     setIcon(icon);
+    setContentsMargins(4, 4, 4, 4);
   }
   
 public Q_SLOTS:
@@ -33,7 +34,7 @@ private:
 
 ToolsWidget::ToolsWidget(QWidget *parent)
   : QGroupBox{parent} {
-  QVBoxLayout *layout = new QVBoxLayout{this};
+  setLayout(new QVBoxLayout{this});
   makeToolWidget<BrushTool>("brush");
   makeToolWidget<FloodFillTool>("flood fill");
   makeToolWidget<RectangleSelectTool>("rectangle select");
@@ -46,7 +47,6 @@ ToolsWidget::ToolsWidget(QWidget *parent)
   makeToolWidget<TranslateTool>("translate");
   makeToolWidget<FlipTool>("flip");
   makeToolWidget<RotateTool>("rotate");
-  setLayout(layout);
 }
 
 void ToolsWidget::changeCell(Cell *cell) {

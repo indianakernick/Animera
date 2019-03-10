@@ -24,6 +24,7 @@
 		453C783A2234CB5500818B19 /* brush tool.png in Resources */ = {isa = PBXBuildFile; fileRef = 453C782E2234CB5500818B19 /* brush tool.png */; };
 		453C78402234DF3200818B19 /* application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C783E2234DF3200818B19 /* application.cpp */; };
 		453C78432234E13E00818B19 /* window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C78412234E13E00818B19 /* window.cpp */; };
+		453C78462234F3C600818B19 /* statusbar widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C78442234F3C600818B19 /* statusbar widget.cpp */; };
 		455F285C2206890300C73F39 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 455F285B2206890300C73F39 /* Assets.xcassets */; };
 		455F2868220690A600C73F39 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 455F2867220690A600C73F39 /* main.cpp */; };
 		455F2875220691DE00C73F39 /* QtPositioningQuick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455F286A220691DC00C73F39 /* QtPositioningQuick.framework */; };
@@ -79,6 +80,8 @@
 		453C783F2234DF3200818B19 /* application.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = application.hpp; sourceTree = "<group>"; };
 		453C78412234E13E00818B19 /* window.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = window.cpp; sourceTree = "<group>"; };
 		453C78422234E13E00818B19 /* window.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = window.hpp; sourceTree = "<group>"; };
+		453C78442234F3C600818B19 /* statusbar widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "statusbar widget.cpp"; sourceTree = "<group>"; };
+		453C78452234F3C600818B19 /* statusbar widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "statusbar widget.hpp"; sourceTree = "<group>"; };
 		455F2851220688FD00C73F39 /* Pixel 2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pixel 2.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		455F285B2206890300C73F39 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		455F28602206890300C73F39 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -212,16 +215,18 @@
 		453C783D2234DEF100818B19 /* Widgets */ = {
 			isa = PBXGroup;
 			children = (
+				453C783E2234DF3200818B19 /* application.cpp */,
+				453C783F2234DF3200818B19 /* application.hpp */,
+				453C78412234E13E00818B19 /* window.cpp */,
+				453C78422234E13E00818B19 /* window.hpp */,
 				453C78172234935000818B19 /* timeline widget.cpp */,
 				453C78182234935000818B19 /* timeline widget.hpp */,
 				453C781A22349BBD00818B19 /* editor widget.cpp */,
 				453C781B22349BBD00818B19 /* editor widget.hpp */,
 				453C781D22349F0100818B19 /* tools widget.cpp */,
 				453C781E22349F0100818B19 /* tools widget.hpp */,
-				453C783E2234DF3200818B19 /* application.cpp */,
-				453C783F2234DF3200818B19 /* application.hpp */,
-				453C78412234E13E00818B19 /* window.cpp */,
-				453C78422234E13E00818B19 /* window.hpp */,
+				453C78442234F3C600818B19 /* statusbar widget.cpp */,
+				453C78452234F3C600818B19 /* statusbar widget.hpp */,
 			);
 			name = Widgets;
 			sourceTree = "<group>";
@@ -392,7 +397,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "function moc {\n  local OUTPUT=\"$PROJECT_DIR/src/$1.moc\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.hpp\" > \"$OUTPUT\"\n  echo \"\" >> \"$OUTPUT\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.cpp\" >> \"$OUTPUT\"\n}\n\nmoc \"timeline widget\"\nmoc \"editor widget\"\nmoc \"tools widget\"\nmoc \"application\"\nmoc \"window\"\n";
+			shellScript = "function moc {\n  local OUTPUT=\"$PROJECT_DIR/src/$1.moc\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.hpp\" > \"$OUTPUT\"\n  echo \"\" >> \"$OUTPUT\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.cpp\" >> \"$OUTPUT\"\n}\n\nmoc \"statusbar widget\"\nmoc \"timeline widget\"\nmoc \"editor widget\"\nmoc \"tools widget\"\nmoc \"application\"\nmoc \"window\"\n";
 		};
 		455F288A2206A17600C73F39 /* Mac Deploy */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -435,6 +440,7 @@
 				45B284932218E38800D6D055 /* image.cpp in Sources */,
 				45B284962218E39300D6D055 /* cell.cpp in Sources */,
 				45B284A42219071200D6D055 /* cell impls.cpp in Sources */,
+				453C78462234F3C600818B19 /* statusbar widget.cpp in Sources */,
 				45B284AA221A331500D6D055 /* serial.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
