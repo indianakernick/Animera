@@ -191,7 +191,7 @@ private:
   void drawOverlay(QImage &, QPoint);
 };
 
-class TranslationTool final : public Tool {
+class TranslateTool final : public Tool {
 public:
   bool attachCell(Cell *) override;
   void detachCell() override;

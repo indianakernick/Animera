@@ -491,7 +491,7 @@ void FilledRectangleTool::drawOverlay(QImage &overlay, const QPoint pos) {
   drawSquarePoint(overlay, overlay_color, pos);
 }
 
-bool TranslationTool::attachCell(Cell *cell) {
+bool TranslateTool::attachCell(Cell *cell) {
   if ((source = dynamic_cast<SourceCell *>(cell))) {
     if (!compatible(cleanImage, source->image.data)) {
       cleanImage = makeCompatible(source->image.data);
@@ -514,12 +514,12 @@ bool oneNotNull(A *a, B *b) {
 
 }
 
-void TranslationTool::detachCell() {
+void TranslateTool::detachCell() {
   source = nullptr;
   transform = nullptr;
 }
 
-ToolChanges TranslationTool::mouseDown(const ToolMouseEvent &event) {
+ToolChanges TranslateTool::mouseDown(const ToolMouseEvent &event) {
   assert(oneNotNull(source, transform));
   if (event.button != ButtonType::primary) return ToolChanges::none;
   lastPos = event.pos;
@@ -527,7 +527,7 @@ ToolChanges TranslationTool::mouseDown(const ToolMouseEvent &event) {
   return ToolChanges::none;
 }
 
-ToolChanges TranslationTool::mouseMove(const ToolMouseEvent &event) {
+ToolChanges TranslateTool::mouseMove(const ToolMouseEvent &event) {
   assert(oneNotNull(source, transform));
   if (event.button != ButtonType::primary || !drag) return ToolChanges::none;
   translate(event.pos - lastPos, event.colors.erase);
@@ -535,7 +535,7 @@ ToolChanges TranslationTool::mouseMove(const ToolMouseEvent &event) {
   return ToolChanges::cell;
 }
 
-ToolChanges TranslationTool::mouseUp(const ToolMouseEvent &event) {
+ToolChanges TranslateTool::mouseUp(const ToolMouseEvent &event) {
   assert(oneNotNull(source, transform));
   if (event.button != ButtonType::primary || !drag) return ToolChanges::none;
   translate(event.pos - lastPos, event.colors.erase);
@@ -558,7 +558,7 @@ QPoint arrowToDir(const Qt::Key key) {
 
 }
 
-ToolChanges TranslationTool::keyPress(const ToolKeyEvent &event) {
+ToolChanges TranslateTool::keyPress(const ToolKeyEvent &event) {
   assert(oneNotNull(source, transform));
   QPoint move = arrowToDir(event.key);
   if (move == QPoint{0, 0}) return ToolChanges::none;
@@ -566,7 +566,7 @@ ToolChanges TranslationTool::keyPress(const ToolKeyEvent &event) {
   return ToolChanges::cell;
 }
 
-QPoint TranslationTool::translation() const {
+QPoint TranslateTool::translation() const {
   assert(oneNotNull(source, transform));
   if (source) {
     return pos;
@@ -586,7 +586,7 @@ Transform xformFromPos(const QPoint pos) {
 
 }
 
-void TranslationTool::translate(const QPoint move, const QRgb eraseColor) {
+void TranslateTool::translate(const QPoint move, const QRgb eraseColor) {
   assert(oneNotNull(source, transform));
   if (source) {
     pos += move;
@@ -597,7 +597,7 @@ void TranslationTool::translate(const QPoint move, const QRgb eraseColor) {
   } else Q_UNREACHABLE();
 }
 
-void TranslationTool::updateSourceImage(const QRgb eraseColor) {
+void TranslateTool::updateSourceImage(const QRgb eraseColor) {
   assert(source);
   assert(!transform);
   clearImage(source->image.data, eraseColor);

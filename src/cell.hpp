@@ -45,5 +45,6 @@ struct CellRect {
 using Frames = std::vector<CellPtr>;
 using Layers = std::vector<Frames>;
 using Frame = std::vector<Cell *>;
+using LayerVisible = std::vector<bool>;
 
 #endif

@@ -7,6 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		453C78192234935000818B19 /* timeline widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C78172234935000818B19 /* timeline widget.cpp */; };
+		453C781C22349BBD00818B19 /* editor widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C781A22349BBD00818B19 /* editor widget.cpp */; };
+		453C781F22349F0100818B19 /* tools widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C781D22349F0100818B19 /* tools widget.cpp */; };
+		453C782F2234CB5500818B19 /* rotate tool.png in Resources */ = {isa = PBXBuildFile; fileRef = 453C78232234CB5500818B19 /* rotate tool.png */; };
+		453C78302234CB5500818B19 /* filled rectangle tool.png in Resources */ = {isa = PBXBuildFile; fileRef = 453C78242234CB5500818B19 /* filled rectangle tool.png */; };
+		453C78312234CB5500818B19 /* filled circle tool.png in Resources */ = {isa = PBXBuildFile; fileRef = 453C78252234CB5500818B19 /* filled circle tool.png */; };
+		453C78322234CB5500818B19 /* rectangle select tool.png in Resources */ = {isa = PBXBuildFile; fileRef = 453C78262234CB5500818B19 /* rectangle select tool.png */; };
+		453C78332234CB5500818B19 /* mask select tool.png in Resources */ = {isa = PBXBuildFile; fileRef = 453C78272234CB5500818B19 /* mask select tool.png */; };
+		453C78342234CB5500818B19 /* line tool.png in Resources */ = {isa = PBXBuildFile; fileRef = 453C78282234CB5500818B19 /* line tool.png */; };
+		453C78352234CB5500818B19 /* translate tool.png in Resources */ = {isa = PBXBuildFile; fileRef = 453C78292234CB5500818B19 /* translate tool.png */; };
+		453C78362234CB5500818B19 /* flip tool.png in Resources */ = {isa = PBXBuildFile; fileRef = 453C782A2234CB5500818B19 /* flip tool.png */; };
+		453C78372234CB5500818B19 /* stroked rectangle tool.png in Resources */ = {isa = PBXBuildFile; fileRef = 453C782B2234CB5500818B19 /* stroked rectangle tool.png */; };
+		453C78382234CB5500818B19 /* fill tool.png in Resources */ = {isa = PBXBuildFile; fileRef = 453C782C2234CB5500818B19 /* fill tool.png */; };
+		453C78392234CB5500818B19 /* stroked circle tool.png in Resources */ = {isa = PBXBuildFile; fileRef = 453C782D2234CB5500818B19 /* stroked circle tool.png */; };
+		453C783A2234CB5500818B19 /* brush tool.png in Resources */ = {isa = PBXBuildFile; fileRef = 453C782E2234CB5500818B19 /* brush tool.png */; };
 		455F285C2206890300C73F39 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 455F285B2206890300C73F39 /* Assets.xcassets */; };
 		455F2868220690A600C73F39 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 455F2867220690A600C73F39 /* main.cpp */; };
 		455F2875220691DE00C73F39 /* QtPositioningQuick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455F286A220691DC00C73F39 /* QtPositioningQuick.framework */; };
@@ -40,6 +55,24 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		453C78172234935000818B19 /* timeline widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "timeline widget.cpp"; sourceTree = "<group>"; };
+		453C78182234935000818B19 /* timeline widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "timeline widget.hpp"; sourceTree = "<group>"; };
+		453C781A22349BBD00818B19 /* editor widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "editor widget.cpp"; sourceTree = "<group>"; };
+		453C781B22349BBD00818B19 /* editor widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "editor widget.hpp"; sourceTree = "<group>"; };
+		453C781D22349F0100818B19 /* tools widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "tools widget.cpp"; sourceTree = "<group>"; };
+		453C781E22349F0100818B19 /* tools widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "tools widget.hpp"; sourceTree = "<group>"; };
+		453C78232234CB5500818B19 /* rotate tool.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rotate tool.png"; sourceTree = "<group>"; };
+		453C78242234CB5500818B19 /* filled rectangle tool.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "filled rectangle tool.png"; sourceTree = "<group>"; };
+		453C78252234CB5500818B19 /* filled circle tool.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "filled circle tool.png"; sourceTree = "<group>"; };
+		453C78262234CB5500818B19 /* rectangle select tool.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rectangle select tool.png"; sourceTree = "<group>"; };
+		453C78272234CB5500818B19 /* mask select tool.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mask select tool.png"; sourceTree = "<group>"; };
+		453C78282234CB5500818B19 /* line tool.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "line tool.png"; sourceTree = "<group>"; };
+		453C78292234CB5500818B19 /* translate tool.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "translate tool.png"; sourceTree = "<group>"; };
+		453C782A2234CB5500818B19 /* flip tool.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flip tool.png"; sourceTree = "<group>"; };
+		453C782B2234CB5500818B19 /* stroked rectangle tool.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "stroked rectangle tool.png"; sourceTree = "<group>"; };
+		453C782C2234CB5500818B19 /* fill tool.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "fill tool.png"; sourceTree = "<group>"; };
+		453C782D2234CB5500818B19 /* stroked circle tool.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "stroked circle tool.png"; sourceTree = "<group>"; };
+		453C782E2234CB5500818B19 /* brush tool.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "brush tool.png"; sourceTree = "<group>"; };
 		455F2851220688FD00C73F39 /* Pixel 2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pixel 2.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		455F285B2206890300C73F39 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		455F28602206890300C73F39 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -118,6 +151,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		453C78222234CB5500818B19 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				453C78232234CB5500818B19 /* rotate tool.png */,
+				453C78242234CB5500818B19 /* filled rectangle tool.png */,
+				453C78252234CB5500818B19 /* filled circle tool.png */,
+				453C78262234CB5500818B19 /* rectangle select tool.png */,
+				453C78272234CB5500818B19 /* mask select tool.png */,
+				453C78282234CB5500818B19 /* line tool.png */,
+				453C78292234CB5500818B19 /* translate tool.png */,
+				453C782A2234CB5500818B19 /* flip tool.png */,
+				453C782B2234CB5500818B19 /* stroked rectangle tool.png */,
+				453C782C2234CB5500818B19 /* fill tool.png */,
+				453C782D2234CB5500818B19 /* stroked circle tool.png */,
+				453C782E2234CB5500818B19 /* brush tool.png */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		455F2848220688FC00C73F39 = {
 			isa = PBXGroup;
 			children = (
@@ -127,6 +179,7 @@
 				455F28612206890300C73F39 /* Pixel_2.entitlements */,
 				45C2A2562207BC4000E989C2 /* notes.txt */,
 				45C2A280220E821200E989C2 /* new plan.txt */,
+				453C78222234CB5500818B19 /* Resources */,
 				455F2853220688FD00C73F39 /* src */,
 				455F2852220688FD00C73F39 /* Products */,
 				455F2869220691DC00C73F39 /* Frameworks */,
@@ -168,6 +221,12 @@
 				45B284BB221E252300D6D055 /* paint params.hpp */,
 				45F065F02222998300BCE863 /* current tool.cpp */,
 				45F065F12222998300BCE863 /* current tool.hpp */,
+				453C78172234935000818B19 /* timeline widget.cpp */,
+				453C78182234935000818B19 /* timeline widget.hpp */,
+				453C781A22349BBD00818B19 /* editor widget.cpp */,
+				453C781B22349BBD00818B19 /* editor widget.hpp */,
+				453C781D22349F0100818B19 /* tools widget.cpp */,
+				453C781E22349F0100818B19 /* tools widget.hpp */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -204,10 +263,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 455F28642206890300C73F39 /* Build configuration list for PBXNativeTarget "Pixel 2" */;
 			buildPhases = (
+				453C7816223490B500818B19 /* Moc */,
 				455F284D220688FD00C73F39 /* Sources */,
 				455F284E220688FD00C73F39 /* Frameworks */,
 				455F284F220688FD00C73F39 /* Resources */,
-				455F288A2206A17600C73F39 /* ShellScript */,
+				455F288A2206A17600C73F39 /* Mac Deploy */,
 			);
 			buildRules = (
 			);
@@ -262,15 +322,27 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				45B284982219003C00D6D055 /* icon.png in Resources */,
 				455F285C2206890300C73F39 /* Assets.xcassets in Resources */,
+				453C78352234CB5500818B19 /* translate tool.png in Resources */,
+				453C78392234CB5500818B19 /* stroked circle tool.png in Resources */,
+				453C78382234CB5500818B19 /* fill tool.png in Resources */,
+				453C78332234CB5500818B19 /* mask select tool.png in Resources */,
+				453C782F2234CB5500818B19 /* rotate tool.png in Resources */,
+				453C78322234CB5500818B19 /* rectangle select tool.png in Resources */,
+				45B284982219003C00D6D055 /* icon.png in Resources */,
+				453C78372234CB5500818B19 /* stroked rectangle tool.png in Resources */,
+				453C78362234CB5500818B19 /* flip tool.png in Resources */,
+				453C78302234CB5500818B19 /* filled rectangle tool.png in Resources */,
+				453C783A2234CB5500818B19 /* brush tool.png in Resources */,
+				453C78342234CB5500818B19 /* line tool.png in Resources */,
+				453C78312234CB5500818B19 /* filled circle tool.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		455F288A2206A17600C73F39 /* ShellScript */ = {
+		453C7816223490B500818B19 /* Moc */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -279,6 +351,25 @@
 			);
 			inputPaths = (
 			);
+			name = Moc;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "function moc {\n  local OUTPUT=\"$PROJECT_DIR/src/$1.moc\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.hpp\" > \"$OUTPUT\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.cpp\" >> \"$OUTPUT\"\n}\n\nmoc \"timeline widget\"\nmoc \"editor widget\"\nmoc \"tools widget\"\n";
+		};
+		455F288A2206A17600C73F39 /* Mac Deploy */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Mac Deploy";
 			outputFileListPaths = (
 			);
 			outputPaths = (
@@ -299,7 +390,10 @@
 				45B284B9221E110F00D6D055 /* painting.cpp in Sources */,
 				45B284B3221A919000D6D055 /* tool.cpp in Sources */,
 				455F2868220690A600C73F39 /* main.cpp in Sources */,
+				453C781C22349BBD00818B19 /* editor widget.cpp in Sources */,
 				45B284B6221B726200D6D055 /* tool impls.cpp in Sources */,
+				453C781F22349F0100818B19 /* tools widget.cpp in Sources */,
+				453C78192234935000818B19 /* timeline widget.cpp in Sources */,
 				45F065F22222998300BCE863 /* current tool.cpp in Sources */,
 				45B284A72219079B00D6D055 /* animation.cpp in Sources */,
 				45B284932218E38800D6D055 /* image.cpp in Sources */,
