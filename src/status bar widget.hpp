@@ -1,13 +1,13 @@
 //
-//  statusbar widget.hpp
+//  status bar widget.hpp
 //  Pixel 2
 //
 //  Created by Indi Kernick on 10/3/19.
 //  Copyright © 2019 Indi Kernick. All rights reserved.
 //
 
-#ifndef statusbar_widget_hpp
-#define statusbar_widget_hpp
+#ifndef status_bar_widget_hpp
+#define status_bar_widget_hpp
 
 #include <QtCore/qtimer.h>
 #include <QtWidgets/qlabel.h>
