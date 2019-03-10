@@ -194,7 +194,7 @@ void ToolWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
 }
 
 QT_INIT_METAOBJECT const QMetaObject ToolWidget::staticMetaObject = { {
-    &QRadioButton::staticMetaObject,
+    &QAbstractButton::staticMetaObject,
     qt_meta_stringdata_ToolWidget.data,
     qt_meta_data_ToolWidget,
     qt_static_metacall,
@@ -213,12 +213,12 @@ void *ToolWidget::qt_metacast(const char *_clname)
     if (!_clname) return nullptr;
     if (!strcmp(_clname, qt_meta_stringdata_ToolWidget.stringdata0))
         return static_cast<void*>(this);
-    return QRadioButton::qt_metacast(_clname);
+    return QAbstractButton::qt_metacast(_clname);
 }
 
 int ToolWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
-    _id = QRadioButton::qt_metacall(_c, _id, _a);
+    _id = QAbstractButton::qt_metacall(_c, _id, _a);
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {

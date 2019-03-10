@@ -13,20 +13,25 @@
 #include <QtGui/qpainter.h>
 #include <QtWidgets/qradiobutton.h>
 
-#include <iostream>
-
 class ToolWidget final : public QAbstractButton {
   Q_OBJECT
 
+  static constexpr QSize icon_size {48, 48};
+  static constexpr QSize button_size {52, 52};
+  // @TODO use Qt resource system
+  static inline const QString resource_path = "/Users/indikernick/Library/Developer/Xcode/DerivedData/Pixel_2-gqoblrlhvynmicgniivandqktune/Build/Products/Debug/Pixel 2.app/Contents/Resources/";
+
 public:
-  // layout is wrong if using a QRadioButton
-  ToolWidget(ToolsWidget *tools, std::unique_ptr<Tool> tool, const QString &iconPath)
-    : QAbstractButton{tools}, tools{tools}, tool{std::move(tool)}, icon{iconPath} {
-    icon = icon.scaled(48, 48);
-    connect(this, &QAbstractButton::pressed, this, &ToolWidget::toolPressed);
-    setFixedSize(52, 52);
-    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+  ToolWidget(ToolsWidget *tools, std::unique_ptr<Tool> tool, const QString &name)
+    : QAbstractButton{tools}, tools{tools}, tool{std::move(tool)} {
+    loadIcons(name);
+    setToolTip(name);
+    setCheckable(true);
+    setAutoExclusive(true);
+    setFixedSize(button_size);
     setContentsMargins(0, 0, 0, 0);
+    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    connect(this, &QAbstractButton::pressed, this, &ToolWidget::toolPressed);
   }
   
 public Q_SLOTS:
@@ -37,9 +42,27 @@ public Q_SLOTS:
 private:
   ToolsWidget *tools;
   std::unique_ptr<Tool> tool;
-  QPixmap icon;
+  QPixmap enabledIcon;
+  QPixmap disabledIcon;
+  
+  void loadIcons(const QString &name) {
+    bool loaded = enabledIcon.load(resource_path + name + " tool enabled.png");
+    assert(loaded && name.data());
+    enabledIcon = enabledIcon.scaled(icon_size);
+    loaded = disabledIcon.load(resource_path + name + " tool disabled.png");
+    assert(loaded);
+    disabledIcon = disabledIcon.scaled(icon_size);
+  }
   
   void paintEvent(QPaintEvent *) override {
+    if (isChecked()) {
+      drawIcon(enabledIcon);
+    } else {
+      drawIcon(disabledIcon);
+    }
+  }
+  
+  void drawIcon(const QPixmap &icon) {
     QPainter painter{this};
     painter.drawPixmap(QRect{
       (width() - icon.width()) / 2,
@@ -56,13 +79,14 @@ ToolsWidget::ToolsWidget(QWidget *parent)
   
   QVBoxLayout *layout = new QVBoxLayout{this};
   layout->setSpacing(0);
-  layout->setAlignment(Qt::AlignTop);
+  layout->setAlignment(Qt::AlignVCenter);
   layout->setContentsMargins(0, 0, 0, 0);
   setLayout(layout);
   setContentsMargins(0, 0, 0, 0);
   
-  makeToolWidget<BrushTool>("brush");
-  makeToolWidget<FloodFillTool>("fill");
+  layout->addStretch();
+  makeToolWidget<BrushTool>("brush")->toolPressed();
+  makeToolWidget<FloodFillTool>("flood fill");
   makeToolWidget<RectangleSelectTool>("rectangle select");
   makeToolWidget<MaskSelectTool>("mask select");
   makeToolWidget<LineTool>("line");
@@ -73,7 +97,6 @@ ToolsWidget::ToolsWidget(QWidget *parent)
   makeToolWidget<TranslateTool>("translate");
   makeToolWidget<FlipTool>("flip");
   makeToolWidget<RotateTool>("rotate");
-  
   layout->addStretch();
 }
 
@@ -86,12 +109,12 @@ void ToolsWidget::changeTool(Tool *tool) {
 }
 
 template <typename ToolClass>
-void ToolsWidget::makeToolWidget(const QString &iconName) {
+ToolWidget *ToolsWidget::makeToolWidget(const QString &name) {
   std::unique_ptr<Tool> tool = std::make_unique<ToolClass>();
-  const QString iconPath = "/Users/indikernick/Library/Developer/Xcode/DerivedData/Pixel_2-gqoblrlhvynmicgniivandqktune/Build/Products/Debug/Pixel 2.app/Contents/Resources/" + iconName + " tool.png";
-  ToolWidget *widget = new ToolWidget{this, std::move(tool), iconPath};
+  ToolWidget *widget = new ToolWidget{this, std::move(tool), name};
   tools.push_back(widget);
   layout()->addWidget(widget);
+  return widget;
 }
 
 void ToolsWidget::paintEvent(QPaintEvent *) {

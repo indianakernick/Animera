@@ -33,7 +33,7 @@ private:
   
   void changeTool(Tool *);
   template <typename ToolClass>
-  void makeToolWidget(const QString &);
+  ToolWidget *makeToolWidget(const QString &);
   
   void paintEvent(QPaintEvent *) override;
 };
