@@ -13,10 +13,11 @@
 
 class Animation {
 public:
-  Animation(QSize, Format);
-  explicit Animation(QIODevice *);
+  Animation();
   
   void serialize(QIODevice *) const;
+  void deserialize(QIODevice *);
+  void initialize(QSize, Format);
 
   bool hasLayer(LayerIdx) const;
   bool hasFrame(CellPos) const;

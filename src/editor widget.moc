@@ -209,6 +209,7 @@ void EditorWidget::keyPress(Qt::Key _t1, QImage * _t2)
 }
 QT_WARNING_POP
 QT_END_MOC_NAMESPACE
+
 /****************************************************************************
 ** Meta object code from reading C++ file 'editor widget.cpp'
 **

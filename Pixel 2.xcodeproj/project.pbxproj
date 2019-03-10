@@ -22,6 +22,8 @@
 		453C78382234CB5500818B19 /* fill tool.png in Resources */ = {isa = PBXBuildFile; fileRef = 453C782C2234CB5500818B19 /* fill tool.png */; };
 		453C78392234CB5500818B19 /* stroked circle tool.png in Resources */ = {isa = PBXBuildFile; fileRef = 453C782D2234CB5500818B19 /* stroked circle tool.png */; };
 		453C783A2234CB5500818B19 /* brush tool.png in Resources */ = {isa = PBXBuildFile; fileRef = 453C782E2234CB5500818B19 /* brush tool.png */; };
+		453C78402234DF3200818B19 /* application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C783E2234DF3200818B19 /* application.cpp */; };
+		453C78432234E13E00818B19 /* window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C78412234E13E00818B19 /* window.cpp */; };
 		455F285C2206890300C73F39 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 455F285B2206890300C73F39 /* Assets.xcassets */; };
 		455F2868220690A600C73F39 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 455F2867220690A600C73F39 /* main.cpp */; };
 		455F2875220691DE00C73F39 /* QtPositioningQuick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455F286A220691DC00C73F39 /* QtPositioningQuick.framework */; };
@@ -73,6 +75,10 @@
 		453C782C2234CB5500818B19 /* fill tool.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "fill tool.png"; sourceTree = "<group>"; };
 		453C782D2234CB5500818B19 /* stroked circle tool.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "stroked circle tool.png"; sourceTree = "<group>"; };
 		453C782E2234CB5500818B19 /* brush tool.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "brush tool.png"; sourceTree = "<group>"; };
+		453C783E2234DF3200818B19 /* application.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = application.cpp; sourceTree = "<group>"; };
+		453C783F2234DF3200818B19 /* application.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = application.hpp; sourceTree = "<group>"; };
+		453C78412234E13E00818B19 /* window.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = window.cpp; sourceTree = "<group>"; };
+		453C78422234E13E00818B19 /* window.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = window.hpp; sourceTree = "<group>"; };
 		455F2851220688FD00C73F39 /* Pixel 2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pixel 2.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		455F285B2206890300C73F39 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		455F28602206890300C73F39 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -170,6 +176,56 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		453C783B2234DEBA00818B19 /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+				45B284B1221A919000D6D055 /* tool.cpp */,
+				45B284B2221A919000D6D055 /* tool.hpp */,
+				45B284B4221B726200D6D055 /* tool impls.cpp */,
+				45B284B5221B726200D6D055 /* tool impls.hpp */,
+				45B284B7221E110F00D6D055 /* painting.cpp */,
+				45B284B8221E110F00D6D055 /* painting.hpp */,
+				45B284BB221E252300D6D055 /* paint params.hpp */,
+				45F065F02222998300BCE863 /* current tool.cpp */,
+				45F065F12222998300BCE863 /* current tool.hpp */,
+			);
+			name = Tools;
+			sourceTree = "<group>";
+		};
+		453C783C2234DECE00818B19 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				45B284912218E38800D6D055 /* image.cpp */,
+				45B284922218E38800D6D055 /* image.hpp */,
+				45B284942218E39300D6D055 /* cell.cpp */,
+				45B284952218E39300D6D055 /* cell.hpp */,
+				45B284A22219071200D6D055 /* cell impls.cpp */,
+				45B284A32219071200D6D055 /* cell impls.hpp */,
+				45B284A52219079B00D6D055 /* animation.cpp */,
+				45B284A62219079B00D6D055 /* animation.hpp */,
+				45B284A8221A331500D6D055 /* serial.cpp */,
+				45B284A9221A331500D6D055 /* serial.hpp */,
+			);
+			name = Cells;
+			sourceTree = "<group>";
+		};
+		453C783D2234DEF100818B19 /* Widgets */ = {
+			isa = PBXGroup;
+			children = (
+				453C78172234935000818B19 /* timeline widget.cpp */,
+				453C78182234935000818B19 /* timeline widget.hpp */,
+				453C781A22349BBD00818B19 /* editor widget.cpp */,
+				453C781B22349BBD00818B19 /* editor widget.hpp */,
+				453C781D22349F0100818B19 /* tools widget.cpp */,
+				453C781E22349F0100818B19 /* tools widget.hpp */,
+				453C783E2234DF3200818B19 /* application.cpp */,
+				453C783F2234DF3200818B19 /* application.hpp */,
+				453C78412234E13E00818B19 /* window.cpp */,
+				453C78422234E13E00818B19 /* window.hpp */,
+			);
+			name = Widgets;
+			sourceTree = "<group>";
+		};
 		455F2848220688FC00C73F39 = {
 			isa = PBXGroup;
 			children = (
@@ -197,36 +253,14 @@
 		455F2853220688FD00C73F39 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				453C783C2234DECE00818B19 /* Cells */,
+				453C783B2234DEBA00818B19 /* Tools */,
+				453C783D2234DEF100818B19 /* Widgets */,
 				455F2867220690A600C73F39 /* main.cpp */,
-				45B284912218E38800D6D055 /* image.cpp */,
-				45B284922218E38800D6D055 /* image.hpp */,
-				45B284942218E39300D6D055 /* cell.cpp */,
-				45B284952218E39300D6D055 /* cell.hpp */,
-				45B284A22219071200D6D055 /* cell impls.cpp */,
-				45B284A32219071200D6D055 /* cell impls.hpp */,
-				45B284A52219079B00D6D055 /* animation.cpp */,
-				45B284A62219079B00D6D055 /* animation.hpp */,
-				45B284A8221A331500D6D055 /* serial.cpp */,
-				45B284A9221A331500D6D055 /* serial.hpp */,
 				45B284AB221A59EB00D6D055 /* undo.cpp */,
 				45B284AC221A59EB00D6D055 /* undo.hpp */,
 				45B284AE221A83C300D6D055 /* composite.cpp */,
 				45B284AF221A83C300D6D055 /* composite.hpp */,
-				45B284B1221A919000D6D055 /* tool.cpp */,
-				45B284B2221A919000D6D055 /* tool.hpp */,
-				45B284B4221B726200D6D055 /* tool impls.cpp */,
-				45B284B5221B726200D6D055 /* tool impls.hpp */,
-				45B284B7221E110F00D6D055 /* painting.cpp */,
-				45B284B8221E110F00D6D055 /* painting.hpp */,
-				45B284BB221E252300D6D055 /* paint params.hpp */,
-				45F065F02222998300BCE863 /* current tool.cpp */,
-				45F065F12222998300BCE863 /* current tool.hpp */,
-				453C78172234935000818B19 /* timeline widget.cpp */,
-				453C78182234935000818B19 /* timeline widget.hpp */,
-				453C781A22349BBD00818B19 /* editor widget.cpp */,
-				453C781B22349BBD00818B19 /* editor widget.hpp */,
-				453C781D22349F0100818B19 /* tools widget.cpp */,
-				453C781E22349F0100818B19 /* tools widget.hpp */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -358,7 +392,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "function moc {\n  local OUTPUT=\"$PROJECT_DIR/src/$1.moc\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.hpp\" > \"$OUTPUT\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.cpp\" >> \"$OUTPUT\"\n}\n\nmoc \"timeline widget\"\nmoc \"editor widget\"\nmoc \"tools widget\"\n";
+			shellScript = "function moc {\n  local OUTPUT=\"$PROJECT_DIR/src/$1.moc\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.hpp\" > \"$OUTPUT\"\n  echo \"\" >> \"$OUTPUT\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.cpp\" >> \"$OUTPUT\"\n}\n\nmoc \"timeline widget\"\nmoc \"editor widget\"\nmoc \"tools widget\"\nmoc \"application\"\nmoc \"window\"\n";
 		};
 		455F288A2206A17600C73F39 /* Mac Deploy */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -389,12 +423,14 @@
 				45B284B0221A83C300D6D055 /* composite.cpp in Sources */,
 				45B284B9221E110F00D6D055 /* painting.cpp in Sources */,
 				45B284B3221A919000D6D055 /* tool.cpp in Sources */,
+				453C78402234DF3200818B19 /* application.cpp in Sources */,
 				455F2868220690A600C73F39 /* main.cpp in Sources */,
 				453C781C22349BBD00818B19 /* editor widget.cpp in Sources */,
 				45B284B6221B726200D6D055 /* tool impls.cpp in Sources */,
 				453C781F22349F0100818B19 /* tools widget.cpp in Sources */,
 				453C78192234935000818B19 /* timeline widget.cpp in Sources */,
 				45F065F22222998300BCE863 /* current tool.cpp in Sources */,
+				453C78432234E13E00818B19 /* window.cpp in Sources */,
 				45B284A72219079B00D6D055 /* animation.cpp in Sources */,
 				45B284932218E38800D6D055 /* image.cpp in Sources */,
 				45B284962218E39300D6D055 /* cell.cpp in Sources */,

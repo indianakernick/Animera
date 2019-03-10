@@ -155,3 +155,4 @@ void TimelineWidget::layerVisibility(const LayerVisible & _t1)
 }
 QT_WARNING_POP
 QT_END_MOC_NAMESPACE
+

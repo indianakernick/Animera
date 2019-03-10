@@ -26,48 +26,8 @@ constexpr char const magic_number[] = {'P', 'I', 'X', '2'};
 
 }
 
-Animation::Animation(const QSize size, const Format format)
-  : size{size}, format{format} {
-  layers.reserve(32);
-  layers.emplace_back();
-  if (format == Format::palette) {
-    palette.reserve(256);
-  }
-}
-
-Animation::Animation(QIODevice *dev) {
-  assert(dev);
-  char header[sizeof(magic_number)];
-  dev->read(header, sizeof(magic_number));
-  assert(std::memcmp(header, magic_number, sizeof(magic_number)) == 0);
-  deserialize(dev, format);
-  if (format == Format::palette) {
-    deserialize(dev, palette);
-  }
-  
-  uint16_t width;
-  uint16_t height;
-  deserialize(dev, width);
-  deserialize(dev, height);
-  size = {width, height};
-  
-  uint16_t layersSize;
-  deserialize(dev, layersSize);
-  layers.reserve(layersSize);
-  
-  while (layersSize--) {
-    uint16_t framesSize;
-    deserialize(dev, framesSize);
-    Frames &frames = layers.emplace_back();
-    frames.reserve(framesSize);
-    while (framesSize--) {
-      frames.push_back(deserializeCell(dev));
-    }
-  }
-  
-  for (LayerIdx l = 0; l != layers.size(); ++l) {
-    updateLayer(l);
-  }
+Animation::Animation() {
+  initialize({0, 0}, Format::color);
 }
 
 void Animation::serialize(QIODevice *dev) const {
@@ -87,6 +47,54 @@ void Animation::serialize(QIODevice *dev) const {
     for (const CellPtr &cell : frames) {
       serializeCell(dev, cell.get());
     }
+  }
+}
+
+void Animation::deserialize(QIODevice *dev) {
+  assert(dev);
+  char header[sizeof(magic_number)];
+  dev->read(header, sizeof(magic_number));
+  assert(std::memcmp(header, magic_number, sizeof(magic_number)) == 0);
+  ::deserialize(dev, format);
+  if (format == Format::palette) {
+    ::deserialize(dev, palette);
+  }
+  
+  uint16_t width;
+  uint16_t height;
+  ::deserialize(dev, width);
+  ::deserialize(dev, height);
+  size = {width, height};
+  
+  uint16_t layersSize;
+  ::deserialize(dev, layersSize);
+  layers.clear();
+  layers.reserve(layersSize);
+  
+  while (layersSize--) {
+    uint16_t framesSize;
+    ::deserialize(dev, framesSize);
+    Frames &frames = layers.emplace_back();
+    frames.reserve(framesSize);
+    while (framesSize--) {
+      frames.push_back(deserializeCell(dev));
+    }
+  }
+  
+  for (LayerIdx l = 0; l != layers.size(); ++l) {
+    updateLayer(l);
+  }
+}
+
+void Animation::initialize(const QSize newSize, const Format newFormat) {
+  size = newSize;
+  format = newFormat;
+  layers.clear();
+  layers.reserve(32);
+  layers.emplace_back();
+  palette.clear();
+  if (format == Format::palette) {
+    palette.reserve(256);
   }
 }
 
