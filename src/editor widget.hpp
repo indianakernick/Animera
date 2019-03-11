@@ -10,6 +10,7 @@
 #define editor_widget_hpp
 
 #include <iostream>
+#include "tool.hpp"
 #include "animation.hpp"
 #include <QtWidgets/qscrollarea.h>
 
@@ -22,9 +23,9 @@ public:
   EditorWidget(QWidget *, Animation &);
 
 Q_SIGNALS:
-  void mouseDown(QPoint, Qt::MouseButton, QImage *);
+  void mouseDown(QPoint, ButtonType, QImage *);
   void mouseMove(QPoint, QImage *);
-  void mouseUp(QPoint, Qt::MouseButton, QImage *);
+  void mouseUp(QPoint, ButtonType, QImage *);
   void keyPress(Qt::Key, QImage *);
 
 public Q_SLOTS:
@@ -32,16 +33,16 @@ public Q_SLOTS:
   // (from a paint tool or a timeline operation)
   void composite();
   // invoked when the image needs to be composited
-  void composite(Cell *, LayerIdx, FrameIdx);
+  void compositePos(Cell *, LayerIdx, FrameIdx);
   // invoked when the image needs to be composited
-  void composite(const LayerVisible &);
+  void compositeVis(const LayerVisible &);
 
 private:
   Animation &anim;
   EditorImage *view;
   LayerVisible visibility;
-  LayerIdx layer;
-  FrameIdx frame;
+  LayerIdx layer = 0;
+  FrameIdx frame = 0;
 
   void keyPressEvent(QKeyEvent *) override;
   void keyReleaseEvent(QKeyEvent *) override;

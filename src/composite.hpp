@@ -17,7 +17,7 @@ constexpr QRgb mask_color_off = 0;
 
 /// Take all of the images that make up a frame and composite them together into
 /// a single image
-QImage compositeFrame(const Palette &, const Frame &);
+QImage compositeFrame(const Palette &, const Frame &, const LayerVisible &);
 /// Composite the overlay on top of the frame
 void compositeOverlay(QImage &, const QImage &);
 

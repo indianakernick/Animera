@@ -25,7 +25,13 @@ Window::Window(const QRect desktop)
   ));
   setupUI();
   setupMenubar();
+  connectSignals();
   show();
+  
+  // @TODO remove
+  anim.initialize(QSize{128, 128}, Format::color);
+  anim.appendSource(0);
+  timeline.projectLoaded();
 }
 
 void Window::setupUI() {
@@ -52,6 +58,17 @@ void Window::makeDockWidget(Qt::DockWidgetArea area, QWidget *widget) {
   dock->setWidget(widget);
   dock->setTitleBarWidget(new QWidget{});
   addDockWidget(area, dock);
+}
+
+void Window::connectSignals() {
+  connect(&timeline, &TimelineWidget::posChange,       &editor, &EditorWidget::compositePos);
+  connect(&timeline, &TimelineWidget::posChange,       &tools,  &ToolsWidget::changeCell);
+  connect(&timeline, &TimelineWidget::layerVisibility, &editor, &EditorWidget::compositeVis);
+  connect(&tools,    &ToolsWidget::cellModified,       &editor, &EditorWidget::composite);
+  connect(&editor,   &EditorWidget::mouseDown,         &tools,  &ToolsWidget::mouseDown);
+  connect(&editor,   &EditorWidget::mouseMove,         &tools,  &ToolsWidget::mouseMove);
+  connect(&editor,   &EditorWidget::mouseUp,           &tools,  &ToolsWidget::mouseUp);
+  connect(&editor,   &EditorWidget::keyPress,          &tools,  &ToolsWidget::keyPress);
 }
 
 #include "window.moc"

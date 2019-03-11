@@ -28,6 +28,7 @@ public:
   Cell *getCell(CellPos) const;
   Cell *getCell(LayerIdx, FrameIdx) const;
   Frame getFrame(FrameIdx) const;
+  const Palette &getPallete() const;
 
   Layers copyRect(CellRect) const;
   void removeRect(CellRect);

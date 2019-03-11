@@ -30,6 +30,7 @@ private:
   void setupUI();
   void setupMenubar();
   void makeDockWidget(Qt::DockWidgetArea, QWidget *);
+  void connectSignals();
 };
 
 #endif

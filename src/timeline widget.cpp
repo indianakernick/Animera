@@ -14,4 +14,11 @@ TimelineWidget::TimelineWidget(QWidget *parent, Animation &anim)
   setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
 }
 
+void TimelineWidget::projectLoaded() {
+  visible.resize(anim.layerCount());
+  std::fill(visible.begin(), visible.end(), true);
+  Q_EMIT layerVisibility(visible);
+  Q_EMIT posChange(anim.getCell(0, 0), 0, 0);
+}
+
 #include "timeline widget.moc"

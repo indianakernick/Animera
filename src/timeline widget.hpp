@@ -18,6 +18,9 @@ class TimelineWidget final : public QScrollArea {
 public:
   TimelineWidget(QWidget *, Animation &);
   
+public Q_SLOTS:
+  void projectLoaded();
+
 Q_SIGNALS:
   // emitted when the current layer/frame has changed
   // or the current cell has changed
@@ -27,6 +30,7 @@ Q_SIGNALS:
 
 private:
   Animation &anim;
+  LayerVisible visible;
 };
 
 #endif

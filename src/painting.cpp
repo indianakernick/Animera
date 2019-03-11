@@ -298,7 +298,6 @@ bool drawFilledRect(QImage &img, const QRgb color, const QRect rect) {
 }
 
 bool drawStrokedRect(QImage &img, const QRgb color, const QRect rect) {
-  assert(rect.isValid());
   if (!img.rect().intersects(rect)) return false;
   bool drawn = false;
   drawn |= drawLine(img, color, {rect.topLeft(), rect.topRight()});

@@ -68,12 +68,17 @@ Color compositeI(const Color a, const Color b, const uint8_t aF, const uint8_t b
   }
 }*/
 
-QImage compositeFrame(const Palette &palette, const Frame &frame) {
+QImage compositeFrame(const Palette &palette, const Frame &frame, const LayerVisible &visible) {
   assert(!frame.empty());
+  assert(frame.size() == visible.size());
   std::vector<Image> images;
   images.reserve(frame.size());
-  for (const Cell *cell : frame) {
-    images.push_back(cell->outputImage());
+  for (size_t i = 0; i != frame.size(); ++i) {
+    if (frame[i]) {
+      images.push_back(frame[i]->outputImage());
+    } else {
+      images.push_back({});
+    }
   }
   if (images.front().data.format() == QImage::Format_Grayscale8) {
     for (Image &image : images) {
@@ -87,9 +92,11 @@ QImage compositeFrame(const Palette &palette, const Frame &frame) {
   // @TODO avoid using QPainter
   QPainter painter{&output};
   painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
-  for (const Image &image : images) {
-    painter.setTransform(getTransform(image));
-    painter.drawImage(0, 0, image.data);
+  for (size_t i = 0; i != frame.size(); ++i) {
+    if (visible[i] && !images[i].data.isNull()) {
+      painter.setTransform(getTransform(images[i]));
+      painter.drawImage(0, 0, images[i].data);
+    }
   }
   
   return output;

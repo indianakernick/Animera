@@ -141,6 +141,10 @@ Frame Animation::getFrame(const FrameIdx f) const {
   return frame;
 }
 
+const Palette &Animation::getPallete() const {
+  return palette;
+}
+
 Layers Animation::copyRect(const CellRect rect) const {
   assert(validRect(rect));
   Layers copy;

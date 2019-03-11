@@ -22,18 +22,27 @@ class ToolsWidget final : public QGroupBox {
 
 public:
   explicit ToolsWidget(QWidget *);
-  
+
+Q_SIGNALS:
+  void cellModified();
+
 public Q_SLOTS:
-  // changes the cell that this
+  void mouseDown(QPoint, ButtonType, QImage *);
+  void mouseMove(QPoint, QImage *);
+  void mouseUp(QPoint, ButtonType, QImage *);
+  void keyPress(Qt::Key, QImage *);
   void changeCell(Cell *);
   
 private:
   CurrentTool currTool;
+  ToolColors colors;
   std::vector<ToolWidget *> tools;
   
   void changeTool(Tool *);
   template <typename ToolClass>
   ToolWidget *makeToolWidget(const QString &);
+  
+  void emitModified(ToolChanges);
   
   void paintEvent(QPaintEvent *) override;
 };

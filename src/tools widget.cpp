@@ -96,6 +96,27 @@ ToolsWidget::ToolsWidget(QWidget *parent)
   makeToolWidget<FlipTool>("flip");
   makeToolWidget<RotateTool>("rotate");
   layout->addStretch();
+  
+  // @TODO remove
+  colors.primary = qRgba(255, 0, 0, 255);
+  colors.secondary = qRgba(0, 255, 0, 255);
+  colors.erase = qRgba(0, 0, 0, 0);
+}
+
+void ToolsWidget::mouseDown(const QPoint pos, const ButtonType button, QImage *overlay) {
+  emitModified(currTool.mouseDown({button, pos, colors, overlay}));
+}
+
+void ToolsWidget::mouseMove(const QPoint pos, QImage *overlay) {
+  emitModified(currTool.mouseMove({{}, pos, colors, overlay}));
+}
+
+void ToolsWidget::mouseUp(const QPoint pos, const ButtonType button, QImage *overlay) {
+  emitModified(currTool.mouseUp({button, pos, colors, overlay}));
+}
+
+void ToolsWidget::keyPress(const Qt::Key key, QImage *overlay) {
+  emitModified(currTool.keyPress({key, colors, overlay}));
 }
 
 void ToolsWidget::changeCell(Cell *cell) {
@@ -113,6 +134,12 @@ ToolWidget *ToolsWidget::makeToolWidget(const QString &name) {
   tools.push_back(widget);
   layout()->addWidget(widget);
   return widget;
+}
+
+void ToolsWidget::emitModified(const ToolChanges changes) {
+  if (changes == ToolChanges::cell || changes == ToolChanges::cell_overlay) {
+    Q_EMIT cellModified();
+  }
 }
 
 void ToolsWidget::paintEvent(QPaintEvent *) {
