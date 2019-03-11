@@ -282,14 +282,13 @@ void fillRect(QImage &img, const QRgb color, const QPoint topLeft, const QSize s
 }
 
 bool drawFilledRect(QImage &img, const QRgb color, const QRect rect) {
-  assert(rect.isValid());
   const QRect clipped = img.rect().intersected(rect);
   if (clipped.isEmpty()) return false;
   
   if (img.depth() == 8) {
-    fillRect<uint8_t>(img, color, rect.topLeft(), rect.size());
+    fillRect<uint8_t>(img, color, clipped.topLeft(), clipped.size());
   } else if (img.depth() == 32) {
-    fillRect<uint32_t>(img, color, rect.topLeft(), rect.size());
+    fillRect<uint32_t>(img, color, clipped.topLeft(), clipped.size());
   } else {
     Q_UNREACHABLE();
   }

@@ -99,7 +99,7 @@ ToolsWidget::ToolsWidget(QWidget *parent)
   
   // @TODO remove
   colors.primary = qRgba(255, 0, 0, 255);
-  colors.secondary = qRgba(0, 255, 0, 255);
+  colors.secondary = qRgba(0, 0, 255, 255);
   colors.erase = qRgba(0, 0, 0, 0);
 }
 
@@ -139,6 +139,8 @@ ToolWidget *ToolsWidget::makeToolWidget(const QString &name) {
 void ToolsWidget::emitModified(const ToolChanges changes) {
   if (changes == ToolChanges::cell || changes == ToolChanges::cell_overlay) {
     Q_EMIT cellModified();
+  } else if (changes == ToolChanges::overlay) {
+    Q_EMIT overlayModified();
   }
 }
 

@@ -29,7 +29,7 @@ Window::Window(const QRect desktop)
   show();
   
   // @TODO remove
-  anim.initialize(QSize{128, 128}, Format::color);
+  anim.initialize(QSize{256, 256}, Format::color);
   anim.appendSource(0);
   timeline.projectLoaded();
 }
@@ -65,6 +65,7 @@ void Window::connectSignals() {
   connect(&timeline, &TimelineWidget::posChange,       &tools,  &ToolsWidget::changeCell);
   connect(&timeline, &TimelineWidget::layerVisibility, &editor, &EditorWidget::compositeVis);
   connect(&tools,    &ToolsWidget::cellModified,       &editor, &EditorWidget::composite);
+  connect(&tools,    &ToolsWidget::overlayModified,    &editor, &EditorWidget::compositeOverlay);
   connect(&editor,   &EditorWidget::mouseDown,         &tools,  &ToolsWidget::mouseDown);
   connect(&editor,   &EditorWidget::mouseMove,         &tools,  &ToolsWidget::mouseMove);
   connect(&editor,   &EditorWidget::mouseUp,           &tools,  &ToolsWidget::mouseUp);

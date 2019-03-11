@@ -30,7 +30,7 @@ private:
   QPoint lastPos = no_point;
   SourceCell *source = nullptr;
   int width = 1;
-  SymmetryMode mode = SymmetryMode::none;
+  SymmetryMode mode = SymmetryMode::both;
   QRgb color = 0;
   
   bool symPoint(QImage &, QRgb, QPoint);

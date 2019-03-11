@@ -13,6 +13,8 @@
 #include "composite.hpp"
 #include "cell impls.hpp"
 
+#include <iostream>
+
 namespace {
 
 QRgb selectColor(const ToolColors &colors, const ButtonType button) {
@@ -61,7 +63,6 @@ ToolChanges BrushTool::mouseMove(const ToolMouseEvent &event) {
 
 ToolChanges BrushTool::mouseUp(const ToolMouseEvent &event) {
   assert(source);
-  clearImage(*event.overlay);
   Image &img = source->image;
   return drawnChanges(symLine(img.data, color, {lastPos, event.pos}));
 }
@@ -283,7 +284,7 @@ ToolChanges MaskSelectTool::mouseUp(const ToolMouseEvent &event) {
     if (polygon.back() != event.pos) {
       polygon.push_back(event.pos);
     }
-    const QRect bounds = polyBounds(polygon);
+    const QRect bounds = polyBounds(polygon).intersected(source->image.data.rect());
     mask = QImage{bounds.size(), mask_format};
     clearImage(mask);
     drawFilledPolygon(mask, mask_color_on, polygon, -bounds.topLeft());
@@ -291,7 +292,6 @@ ToolChanges MaskSelectTool::mouseUp(const ToolMouseEvent &event) {
     overlay = selection;
     colorToOverlay(overlay, mask);
     offset = bounds.topLeft() - event.pos;
-    blitImage(*event.overlay, overlay, bounds.topLeft());
     return ToolChanges::overlay;
   } else { // SelectMode::paste
     blitImage(*event.overlay, overlay, event.pos + offset);

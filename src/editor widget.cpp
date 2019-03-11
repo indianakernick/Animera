@@ -25,6 +25,8 @@ public:
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     // @TODO custom cursor
     setCursor(Qt::CrossCursor);
+    setFocusPolicy(Qt::StrongFocus);
+    setMouseTracking(true);
   }
   
   void setImage(const QImage &img) {
@@ -56,6 +58,7 @@ private:
   QPixmap editor;
   QPoint pos;
   int scale = 2;
+  int keysDown = 0;
 
   void resize(const QSize newSize) {
     updateCheckers(newSize);
@@ -117,15 +120,31 @@ private:
     pos = getPos(event);
     Q_EMIT mouseMove(pos, &overlay);
   }
+  void enterEvent(QEvent *) override {
+    setFocus();
+  }
+
+public:
   void keyPressEvent(QKeyEvent *event) override {
-    const ButtonType button = getButton(event);
-    if (button == ButtonType::none) {
-      Q_EMIT keyPress(static_cast<Qt::Key>(event->key()), &overlay);
+    if (!event->isAutoRepeat()) {
+      ++keysDown;
+      if (keysDown == 1) grabMouse();
+    }
+    if (event->key() == Qt::Key_Q) {
+      zoomOut();
+    } else if (event->key() == Qt::Key_E) {
+      zoomIn();
+    } else if (ButtonType button = getButton(event); button != ButtonType::none) {
+      if (!event->isAutoRepeat()) {
+        Q_EMIT mouseDown(pos, button, &overlay);
+      }
     } else {
-      Q_EMIT mouseDown(pos, button, &overlay);
+      Q_EMIT keyPress(static_cast<Qt::Key>(event->key()), &overlay);
     }
   }
   void keyReleaseEvent(QKeyEvent *event) override {
+    --keysDown;
+    if (keysDown == 0) releaseMouse();
     const ButtonType button = getButton(event);
     if (button != ButtonType::none) {
       Q_EMIT mouseUp(pos, button, &overlay);
@@ -141,10 +160,15 @@ EditorWidget::EditorWidget(QWidget *parent, Animation &anim)
   connect(view, &EditorImage::mouseUp, this, &EditorWidget::mouseUp);
   connect(view, &EditorImage::keyPress, this, &EditorWidget::keyPress);
   setAlignment(Qt::AlignCenter);
+  setFocusPolicy(Qt::WheelFocus);
 }
 
 void EditorWidget::composite() {
   view->setImage(compositeFrame(anim.getPallete(), anim.getFrame(frame), visibility));
+}
+
+void EditorWidget::compositeOverlay() {
+  view->repaint();
 }
 
 void EditorWidget::compositePos(Cell *, LayerIdx newLayer, FrameIdx newFrame) {
@@ -157,18 +181,5 @@ void EditorWidget::compositeVis(const LayerVisible &newVisibility) {
   visibility = newVisibility;
   composite();
 }
-
-void EditorWidget::keyPressEvent(QKeyEvent *event) {
-  switch (event->key()) {
-    case Qt::Key_Q:
-      view->zoomOut();
-      break;
-    case Qt::Key_E:
-      view->zoomIn();
-      break;
-  }
-}
-
-void EditorWidget::keyReleaseEvent(QKeyEvent *) {}
 
 #include "editor widget.moc"

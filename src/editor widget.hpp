@@ -32,6 +32,7 @@ public Q_SLOTS:
   // invoked when the current frame has changed
   // (from a paint tool or a timeline operation)
   void composite();
+  void compositeOverlay();
   // invoked when the image needs to be composited
   void compositePos(Cell *, LayerIdx, FrameIdx);
   // invoked when the image needs to be composited
@@ -43,9 +44,6 @@ private:
   LayerVisible visibility;
   LayerIdx layer = 0;
   FrameIdx frame = 0;
-
-  void keyPressEvent(QKeyEvent *) override;
-  void keyReleaseEvent(QKeyEvent *) override;
 };
 
 #endif

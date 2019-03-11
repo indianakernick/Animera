@@ -25,6 +25,7 @@ public:
 
 Q_SIGNALS:
   void cellModified();
+  void overlayModified();
 
 public Q_SLOTS:
   void mouseDown(QPoint, ButtonType, QImage *);
