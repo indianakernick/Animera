@@ -10,6 +10,7 @@
 
 #include "composite.hpp"
 #include <QtGui/qevent.h>
+#include <QtGui/qbitmap.h>
 #include <QtGui/qpainter.h>
 #include <QtWidgets/qlabel.h>
 
@@ -23,10 +24,10 @@ public:
   explicit EditorImage(QWidget *parent)
     : QWidget{parent} {
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    // @TODO custom cursor
-    setCursor(Qt::CrossCursor);
     setFocusPolicy(Qt::StrongFocus);
     setMouseTracking(true);
+    initCursor();
+    setCursor(cursor);
   }
   
   void setImage(const QImage &img) {
@@ -53,12 +54,22 @@ Q_SIGNALS:
   void keyPress(Qt::Key, QImage *);
   
 private:
+  QCursor cursor;
   QPixmap checkers;
   QImage overlay;
   QPixmap editor;
   QPoint pos;
   int scale = 2;
   int keysDown = 0;
+
+  void initCursor() {
+    cursor = QCursor{
+      QBitmap{":/Cursors/circle b.pbm"}.scaled(8 * 2, 8 * 2),
+      QBitmap{":/Cursors/circle m.pbm"}.scaled(8 * 2, 8 * 2),
+      4 * 2,
+      4 * 2
+    };
+  }
 
   void resize(const QSize newSize) {
     updateCheckers(newSize);
@@ -128,7 +139,7 @@ public:
   void keyPressEvent(QKeyEvent *event) override {
     if (!event->isAutoRepeat()) {
       ++keysDown;
-      if (keysDown == 1) grabMouse();
+      if (keysDown == 1) grabMouse(cursor);
     }
     if (event->key() == Qt::Key_Q) {
       zoomOut();

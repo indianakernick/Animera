@@ -25,5 +25,7 @@
   <file>./Tools/stroked rectangle e.png</file>
   <file>./Tools/translate d.png</file>
   <file>./Tools/translate e.png</file>
+  <file>./Cursors/circle b.pbm</file>
+  <file>./Cursors/circle m.pbm</file>
 </qresource>
 </RCC>
