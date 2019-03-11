@@ -18,8 +18,6 @@ class ToolWidget final : public QAbstractButton {
 
   static constexpr QSize icon_size {48, 48};
   static constexpr QSize button_size {52, 52};
-  // @TODO use Qt resource system
-  static inline const QString resource_path = "/Users/indikernick/Library/Developer/Xcode/DerivedData/Pixel_2-gqoblrlhvynmicgniivandqktune/Build/Products/Debug/Pixel 2.app/Contents/Resources/";
 
 public:
   ToolWidget(ToolsWidget *tools, std::unique_ptr<Tool> tool, const QString &name)
@@ -46,10 +44,10 @@ private:
   QPixmap disabledIcon;
   
   void loadIcons(const QString &name) {
-    bool loaded = enabledIcon.load(resource_path + name + " tool enabled.png");
+    bool loaded = enabledIcon.load(":/Tools/" + name + " e.png");
     assert(loaded && name.data());
     enabledIcon = enabledIcon.scaled(icon_size);
-    loaded = disabledIcon.load(resource_path + name + " tool disabled.png");
+    loaded = disabledIcon.load(":/Tools/" + name + " d.png");
     assert(loaded);
     disabledIcon = disabledIcon.scaled(icon_size);
   }
@@ -85,7 +83,7 @@ ToolsWidget::ToolsWidget(QWidget *parent)
   setContentsMargins(0, 0, 0, 0);
   
   layout->addStretch();
-  makeToolWidget<BrushTool>("brush")->toolPressed();
+  makeToolWidget<BrushTool>("brush")->click();
   makeToolWidget<FloodFillTool>("flood fill");
   makeToolWidget<RectangleSelectTool>("rectangle select");
   makeToolWidget<MaskSelectTool>("mask select");

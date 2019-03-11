@@ -9,6 +9,7 @@
 #ifndef application_hpp
 #define application_hpp
 
+#include <optional>
 #include "window.hpp"
 #include <QtWidgets/qapplication.h>
 
@@ -19,7 +20,7 @@ public:
   Application(int &, char **);
   
 private:
-  Window window;
+  std::optional<Window> window;
   
   bool event(QEvent *) override;
 };

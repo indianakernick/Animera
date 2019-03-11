@@ -13,30 +13,7 @@
 		453C78402234DF3200818B19 /* application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C783E2234DF3200818B19 /* application.cpp */; };
 		453C78432234E13E00818B19 /* window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C78412234E13E00818B19 /* window.cpp */; };
 		453C78462234F3C600818B19 /* status bar widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C78442234F3C600818B19 /* status bar widget.cpp */; };
-		453C785F2235C91600818B19 /* mask select tool enabled.png in Resources */ = {isa = PBXBuildFile; fileRef = 453C78472235C91200818B19 /* mask select tool enabled.png */; };
-		453C78602235C91600818B19 /* rotate tool enabled.png in Resources */ = {isa = PBXBuildFile; fileRef = 453C78482235C91300818B19 /* rotate tool enabled.png */; };
-		453C78612235C91600818B19 /* flood fill tool disabled.png in Resources */ = {isa = PBXBuildFile; fileRef = 453C78492235C91300818B19 /* flood fill tool disabled.png */; };
-		453C78622235C91600818B19 /* translate tool disabled.png in Resources */ = {isa = PBXBuildFile; fileRef = 453C784A2235C91300818B19 /* translate tool disabled.png */; };
-		453C78632235C91600818B19 /* brush tool enabled.png in Resources */ = {isa = PBXBuildFile; fileRef = 453C784B2235C91300818B19 /* brush tool enabled.png */; };
-		453C78642235C91600818B19 /* rectangle select tool disabled.png in Resources */ = {isa = PBXBuildFile; fileRef = 453C784C2235C91300818B19 /* rectangle select tool disabled.png */; };
-		453C78652235C91600818B19 /* rotate tool disabled.png in Resources */ = {isa = PBXBuildFile; fileRef = 453C784D2235C91300818B19 /* rotate tool disabled.png */; };
-		453C78662235C91600818B19 /* rectangle select tool enabled.png in Resources */ = {isa = PBXBuildFile; fileRef = 453C784E2235C91300818B19 /* rectangle select tool enabled.png */; };
-		453C78672235C91600818B19 /* line tool enabled.png in Resources */ = {isa = PBXBuildFile; fileRef = 453C784F2235C91300818B19 /* line tool enabled.png */; };
-		453C78682235C91600818B19 /* line tool disabled.png in Resources */ = {isa = PBXBuildFile; fileRef = 453C78502235C91300818B19 /* line tool disabled.png */; };
-		453C78692235C91600818B19 /* filled rectangle tool enabled.png in Resources */ = {isa = PBXBuildFile; fileRef = 453C78512235C91400818B19 /* filled rectangle tool enabled.png */; };
-		453C786A2235C91600818B19 /* filled circle tool disabled.png in Resources */ = {isa = PBXBuildFile; fileRef = 453C78522235C91400818B19 /* filled circle tool disabled.png */; };
-		453C786B2235C91600818B19 /* flood fill tool enabled.png in Resources */ = {isa = PBXBuildFile; fileRef = 453C78532235C91400818B19 /* flood fill tool enabled.png */; };
-		453C786C2235C91600818B19 /* stroked circle tool disabled.png in Resources */ = {isa = PBXBuildFile; fileRef = 453C78542235C91400818B19 /* stroked circle tool disabled.png */; };
-		453C786D2235C91600818B19 /* stroked rectangle tool disabled.png in Resources */ = {isa = PBXBuildFile; fileRef = 453C78552235C91400818B19 /* stroked rectangle tool disabled.png */; };
-		453C786E2235C91600818B19 /* mask select tool disabled.png in Resources */ = {isa = PBXBuildFile; fileRef = 453C78562235C91400818B19 /* mask select tool disabled.png */; };
-		453C786F2235C91600818B19 /* stroked rectangle tool enabled.png in Resources */ = {isa = PBXBuildFile; fileRef = 453C78572235C91400818B19 /* stroked rectangle tool enabled.png */; };
-		453C78702235C91600818B19 /* flip tool enabled.png in Resources */ = {isa = PBXBuildFile; fileRef = 453C78582235C91500818B19 /* flip tool enabled.png */; };
-		453C78722235C91600818B19 /* filled circle tool enabled.png in Resources */ = {isa = PBXBuildFile; fileRef = 453C785A2235C91500818B19 /* filled circle tool enabled.png */; };
-		453C78732235C91600818B19 /* stroked circle tool enabled.png in Resources */ = {isa = PBXBuildFile; fileRef = 453C785B2235C91500818B19 /* stroked circle tool enabled.png */; };
-		453C78742235C91600818B19 /* translate tool enabled.png in Resources */ = {isa = PBXBuildFile; fileRef = 453C785C2235C91500818B19 /* translate tool enabled.png */; };
-		453C78752235C91600818B19 /* brush tool disabled.png in Resources */ = {isa = PBXBuildFile; fileRef = 453C785D2235C91500818B19 /* brush tool disabled.png */; };
-		453C78762235C91600818B19 /* flip tool disabled.png in Resources */ = {isa = PBXBuildFile; fileRef = 453C785E2235C91600818B19 /* flip tool disabled.png */; };
-		453C78782235CE8500818B19 /* filled rectangle tool disabled.png in Resources */ = {isa = PBXBuildFile; fileRef = 453C78772235CE8400818B19 /* filled rectangle tool disabled.png */; };
+		453C787D2235D70D00818B19 /* resources.rcc in Resources */ = {isa = PBXBuildFile; fileRef = 453C787C2235D70D00818B19 /* resources.rcc */; };
 		455F285C2206890300C73F39 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 455F285B2206890300C73F39 /* Assets.xcassets */; };
 		455F2868220690A600C73F39 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 455F2867220690A600C73F39 /* main.cpp */; };
 		455F2875220691DE00C73F39 /* QtPositioningQuick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455F286A220691DC00C73F39 /* QtPositioningQuick.framework */; };
@@ -81,30 +58,32 @@
 		453C78422234E13E00818B19 /* window.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = window.hpp; sourceTree = "<group>"; };
 		453C78442234F3C600818B19 /* status bar widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "status bar widget.cpp"; sourceTree = "<group>"; };
 		453C78452234F3C600818B19 /* status bar widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "status bar widget.hpp"; sourceTree = "<group>"; };
-		453C78472235C91200818B19 /* mask select tool enabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mask select tool enabled.png"; sourceTree = "<group>"; };
-		453C78482235C91300818B19 /* rotate tool enabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rotate tool enabled.png"; sourceTree = "<group>"; };
-		453C78492235C91300818B19 /* flood fill tool disabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flood fill tool disabled.png"; sourceTree = "<group>"; };
-		453C784A2235C91300818B19 /* translate tool disabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "translate tool disabled.png"; sourceTree = "<group>"; };
-		453C784B2235C91300818B19 /* brush tool enabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "brush tool enabled.png"; sourceTree = "<group>"; };
-		453C784C2235C91300818B19 /* rectangle select tool disabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rectangle select tool disabled.png"; sourceTree = "<group>"; };
-		453C784D2235C91300818B19 /* rotate tool disabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rotate tool disabled.png"; sourceTree = "<group>"; };
-		453C784E2235C91300818B19 /* rectangle select tool enabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rectangle select tool enabled.png"; sourceTree = "<group>"; };
-		453C784F2235C91300818B19 /* line tool enabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "line tool enabled.png"; sourceTree = "<group>"; };
-		453C78502235C91300818B19 /* line tool disabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "line tool disabled.png"; sourceTree = "<group>"; };
-		453C78512235C91400818B19 /* filled rectangle tool enabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "filled rectangle tool enabled.png"; sourceTree = "<group>"; };
-		453C78522235C91400818B19 /* filled circle tool disabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "filled circle tool disabled.png"; sourceTree = "<group>"; };
-		453C78532235C91400818B19 /* flood fill tool enabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flood fill tool enabled.png"; sourceTree = "<group>"; };
-		453C78542235C91400818B19 /* stroked circle tool disabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "stroked circle tool disabled.png"; sourceTree = "<group>"; };
-		453C78552235C91400818B19 /* stroked rectangle tool disabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "stroked rectangle tool disabled.png"; sourceTree = "<group>"; };
-		453C78562235C91400818B19 /* mask select tool disabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mask select tool disabled.png"; sourceTree = "<group>"; };
-		453C78572235C91400818B19 /* stroked rectangle tool enabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "stroked rectangle tool enabled.png"; sourceTree = "<group>"; };
-		453C78582235C91500818B19 /* flip tool enabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flip tool enabled.png"; sourceTree = "<group>"; };
-		453C785A2235C91500818B19 /* filled circle tool enabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "filled circle tool enabled.png"; sourceTree = "<group>"; };
-		453C785B2235C91500818B19 /* stroked circle tool enabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "stroked circle tool enabled.png"; sourceTree = "<group>"; };
-		453C785C2235C91500818B19 /* translate tool enabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "translate tool enabled.png"; sourceTree = "<group>"; };
-		453C785D2235C91500818B19 /* brush tool disabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "brush tool disabled.png"; sourceTree = "<group>"; };
-		453C785E2235C91600818B19 /* flip tool disabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flip tool disabled.png"; sourceTree = "<group>"; };
-		453C78772235CE8400818B19 /* filled rectangle tool disabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "filled rectangle tool disabled.png"; sourceTree = "<group>"; };
+		453C78472235C91200818B19 /* mask select e.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mask select e.png"; sourceTree = "<group>"; };
+		453C78482235C91300818B19 /* rotate e.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rotate e.png"; sourceTree = "<group>"; };
+		453C78492235C91300818B19 /* flood fill d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flood fill d.png"; sourceTree = "<group>"; };
+		453C784A2235C91300818B19 /* translate d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "translate d.png"; sourceTree = "<group>"; };
+		453C784B2235C91300818B19 /* brush e.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "brush e.png"; sourceTree = "<group>"; };
+		453C784C2235C91300818B19 /* rectangle select d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rectangle select d.png"; sourceTree = "<group>"; };
+		453C784D2235C91300818B19 /* rotate d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rotate d.png"; sourceTree = "<group>"; };
+		453C784E2235C91300818B19 /* rectangle select e.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rectangle select e.png"; sourceTree = "<group>"; };
+		453C784F2235C91300818B19 /* line e.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "line e.png"; sourceTree = "<group>"; };
+		453C78502235C91300818B19 /* line d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "line d.png"; sourceTree = "<group>"; };
+		453C78512235C91400818B19 /* filled rectangle e.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "filled rectangle e.png"; sourceTree = "<group>"; };
+		453C78522235C91400818B19 /* filled circle d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "filled circle d.png"; sourceTree = "<group>"; };
+		453C78532235C91400818B19 /* flood fill e.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flood fill e.png"; sourceTree = "<group>"; };
+		453C78542235C91400818B19 /* stroked circle d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "stroked circle d.png"; sourceTree = "<group>"; };
+		453C78552235C91400818B19 /* stroked rectangle d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "stroked rectangle d.png"; sourceTree = "<group>"; };
+		453C78562235C91400818B19 /* mask select d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mask select d.png"; sourceTree = "<group>"; };
+		453C78572235C91400818B19 /* stroked rectangle e.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "stroked rectangle e.png"; sourceTree = "<group>"; };
+		453C78582235C91500818B19 /* flip e.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flip e.png"; sourceTree = "<group>"; };
+		453C785A2235C91500818B19 /* filled circle e.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "filled circle e.png"; sourceTree = "<group>"; };
+		453C785B2235C91500818B19 /* stroked circle e.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "stroked circle e.png"; sourceTree = "<group>"; };
+		453C785C2235C91500818B19 /* translate e.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "translate e.png"; sourceTree = "<group>"; };
+		453C785D2235C91500818B19 /* brush d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "brush d.png"; sourceTree = "<group>"; };
+		453C785E2235C91600818B19 /* flip d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flip d.png"; sourceTree = "<group>"; };
+		453C78772235CE8400818B19 /* filled rectangle d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "filled rectangle d.png"; sourceTree = "<group>"; };
+		453C78792235D4B500818B19 /* resources.qrc */ = {isa = PBXFileReference; lastKnownFileType = text; path = resources.qrc; sourceTree = "<group>"; };
+		453C787C2235D70D00818B19 /* resources.rcc */ = {isa = PBXFileReference; lastKnownFileType = file; path = resources.rcc; sourceTree = "<group>"; };
 		455F2851220688FD00C73F39 /* Pixel 2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pixel 2.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		455F285B2206890300C73F39 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		455F28602206890300C73F39 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -186,30 +165,9 @@
 		453C78222234CB5500818B19 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				453C785D2235C91500818B19 /* brush tool disabled.png */,
-				453C784B2235C91300818B19 /* brush tool enabled.png */,
-				453C78522235C91400818B19 /* filled circle tool disabled.png */,
-				453C785A2235C91500818B19 /* filled circle tool enabled.png */,
-				453C78772235CE8400818B19 /* filled rectangle tool disabled.png */,
-				453C78512235C91400818B19 /* filled rectangle tool enabled.png */,
-				453C785E2235C91600818B19 /* flip tool disabled.png */,
-				453C78582235C91500818B19 /* flip tool enabled.png */,
-				453C78492235C91300818B19 /* flood fill tool disabled.png */,
-				453C78532235C91400818B19 /* flood fill tool enabled.png */,
-				453C78502235C91300818B19 /* line tool disabled.png */,
-				453C784F2235C91300818B19 /* line tool enabled.png */,
-				453C78562235C91400818B19 /* mask select tool disabled.png */,
-				453C78472235C91200818B19 /* mask select tool enabled.png */,
-				453C784C2235C91300818B19 /* rectangle select tool disabled.png */,
-				453C784E2235C91300818B19 /* rectangle select tool enabled.png */,
-				453C784D2235C91300818B19 /* rotate tool disabled.png */,
-				453C78482235C91300818B19 /* rotate tool enabled.png */,
-				453C78542235C91400818B19 /* stroked circle tool disabled.png */,
-				453C785B2235C91500818B19 /* stroked circle tool enabled.png */,
-				453C78552235C91400818B19 /* stroked rectangle tool disabled.png */,
-				453C78572235C91400818B19 /* stroked rectangle tool enabled.png */,
-				453C784A2235C91300818B19 /* translate tool disabled.png */,
-				453C785C2235C91500818B19 /* translate tool enabled.png */,
+				453C787A2235D55600818B19 /* Tools */,
+				453C78792235D4B500818B19 /* resources.qrc */,
+				453C787C2235D70D00818B19 /* resources.rcc */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -264,6 +222,37 @@
 				453C78452234F3C600818B19 /* status bar widget.hpp */,
 			);
 			name = Widgets;
+			sourceTree = "<group>";
+		};
+		453C787A2235D55600818B19 /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+				453C785D2235C91500818B19 /* brush d.png */,
+				453C784B2235C91300818B19 /* brush e.png */,
+				453C78522235C91400818B19 /* filled circle d.png */,
+				453C785A2235C91500818B19 /* filled circle e.png */,
+				453C78772235CE8400818B19 /* filled rectangle d.png */,
+				453C78512235C91400818B19 /* filled rectangle e.png */,
+				453C785E2235C91600818B19 /* flip d.png */,
+				453C78582235C91500818B19 /* flip e.png */,
+				453C78492235C91300818B19 /* flood fill d.png */,
+				453C78532235C91400818B19 /* flood fill e.png */,
+				453C78502235C91300818B19 /* line d.png */,
+				453C784F2235C91300818B19 /* line e.png */,
+				453C78562235C91400818B19 /* mask select d.png */,
+				453C78472235C91200818B19 /* mask select e.png */,
+				453C784C2235C91300818B19 /* rectangle select d.png */,
+				453C784E2235C91300818B19 /* rectangle select e.png */,
+				453C784D2235C91300818B19 /* rotate d.png */,
+				453C78482235C91300818B19 /* rotate e.png */,
+				453C78542235C91400818B19 /* stroked circle d.png */,
+				453C785B2235C91500818B19 /* stroked circle e.png */,
+				453C78552235C91400818B19 /* stroked rectangle d.png */,
+				453C78572235C91400818B19 /* stroked rectangle e.png */,
+				453C784A2235C91300818B19 /* translate d.png */,
+				453C785C2235C91500818B19 /* translate e.png */,
+			);
+			path = Tools;
 			sourceTree = "<group>";
 		};
 		455F2848220688FC00C73F39 = {
@@ -340,6 +329,7 @@
 				453C7816223490B500818B19 /* Moc */,
 				455F284D220688FD00C73F39 /* Sources */,
 				455F284E220688FD00C73F39 /* Frameworks */,
+				453C787B2235D63B00818B19 /* RCC */,
 				455F284F220688FD00C73F39 /* Resources */,
 				455F288A2206A17600C73F39 /* Mac Deploy */,
 			);
@@ -396,31 +386,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				453C78662235C91600818B19 /* rectangle select tool enabled.png in Resources */,
-				453C78782235CE8500818B19 /* filled rectangle tool disabled.png in Resources */,
-				453C78652235C91600818B19 /* rotate tool disabled.png in Resources */,
-				453C786B2235C91600818B19 /* flood fill tool enabled.png in Resources */,
-				453C78732235C91600818B19 /* stroked circle tool enabled.png in Resources */,
-				453C786E2235C91600818B19 /* mask select tool disabled.png in Resources */,
-				453C78742235C91600818B19 /* translate tool enabled.png in Resources */,
-				453C78762235C91600818B19 /* flip tool disabled.png in Resources */,
-				453C78692235C91600818B19 /* filled rectangle tool enabled.png in Resources */,
-				453C78612235C91600818B19 /* flood fill tool disabled.png in Resources */,
-				453C78722235C91600818B19 /* filled circle tool enabled.png in Resources */,
-				453C786D2235C91600818B19 /* stroked rectangle tool disabled.png in Resources */,
-				453C78682235C91600818B19 /* line tool disabled.png in Resources */,
-				453C785F2235C91600818B19 /* mask select tool enabled.png in Resources */,
-				453C786C2235C91600818B19 /* stroked circle tool disabled.png in Resources */,
-				453C78632235C91600818B19 /* brush tool enabled.png in Resources */,
-				453C78702235C91600818B19 /* flip tool enabled.png in Resources */,
-				453C786F2235C91600818B19 /* stroked rectangle tool enabled.png in Resources */,
-				453C78672235C91600818B19 /* line tool enabled.png in Resources */,
-				453C78602235C91600818B19 /* rotate tool enabled.png in Resources */,
-				453C786A2235C91600818B19 /* filled circle tool disabled.png in Resources */,
-				453C78752235C91600818B19 /* brush tool disabled.png in Resources */,
+				453C787D2235D70D00818B19 /* resources.rcc in Resources */,
 				455F285C2206890300C73F39 /* Assets.xcassets in Resources */,
-				453C78622235C91600818B19 /* translate tool disabled.png in Resources */,
-				453C78642235C91600818B19 /* rectangle select tool disabled.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -444,6 +411,25 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "function moc {\n  local OUTPUT=\"$PROJECT_DIR/src/$1.moc\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.hpp\" > \"$OUTPUT\"\n  echo \"\" >> \"$OUTPUT\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.cpp\" >> \"$OUTPUT\"\n}\n\nmoc \"status bar widget\"\nmoc \"timeline widget\"\nmoc \"editor widget\"\nmoc \"tools widget\"\nmoc \"application\"\nmoc \"window\"\n";
+		};
+		453C787B2235D63B00818B19 /* RCC */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"",
+			);
+			inputPaths = (
+			);
+			name = RCC;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/opt/Qt/bin/rcc --no-compress --binary \"$PROJECT_DIR/Resources/resources.qrc\" -o \"$PROJECT_DIR/Resources/resources.rcc\"\n";
 		};
 		455F288A2206A17600C73F39 /* Mac Deploy */ = {
 			isa = PBXShellScriptBuildPhase;

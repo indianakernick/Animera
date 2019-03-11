@@ -8,11 +8,22 @@
 
 #include "application.hpp"
 
+#include <QtCore/qresource.h>
 #include <QtWidgets/qdesktopwidget.h>
 
 Application::Application(int &argc, char **argv)
-  : QApplication{argc, argv}, window{desktop()->availableGeometry()} {
-  
+  : QApplication{argc, argv} {
+  QString resPath = applicationDirPath();
+  #if defined(Q_OS_MACOS)
+  resPath += "/../Resources/";
+  #elif defined(Q_OS_WIN)
+  resPath += "/";
+  #else
+  resPath += "/";
+  #endif
+  [[maybe_unused]] bool registered = QResource::registerResource(resPath + "resources.rcc");
+  assert(registered);
+  window.emplace(desktop()->availableGeometry());
 }
 
 bool Application::event(QEvent *event) {

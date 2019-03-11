@@ -1,0 +1,29 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+  <file>./resources.qrc</file>
+  <file>./Tools/brush d.png</file>
+  <file>./Tools/brush e.png</file>
+  <file>./Tools/filled circle d.png</file>
+  <file>./Tools/filled circle e.png</file>
+  <file>./Tools/filled rectangle d.png</file>
+  <file>./Tools/filled rectangle e.png</file>
+  <file>./Tools/flip d.png</file>
+  <file>./Tools/flip e.png</file>
+  <file>./Tools/flood fill d.png</file>
+  <file>./Tools/flood fill e.png</file>
+  <file>./Tools/line d.png</file>
+  <file>./Tools/line e.png</file>
+  <file>./Tools/mask select d.png</file>
+  <file>./Tools/mask select e.png</file>
+  <file>./Tools/rectangle select d.png</file>
+  <file>./Tools/rectangle select e.png</file>
+  <file>./Tools/rotate d.png</file>
+  <file>./Tools/rotate e.png</file>
+  <file>./Tools/stroked circle d.png</file>
+  <file>./Tools/stroked circle e.png</file>
+  <file>./Tools/stroked rectangle d.png</file>
+  <file>./Tools/stroked rectangle e.png</file>
+  <file>./Tools/translate d.png</file>
+  <file>./Tools/translate e.png</file>
+</qresource>
+</RCC>
