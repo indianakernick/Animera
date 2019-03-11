@@ -14,7 +14,8 @@
 
 Window::Window(const QRect desktop)
   : tools{this}, editor{this, anim}, timeline{this, anim} {
-  setMinimumSize(640, 360);
+  setWindowTitle("Pixel 2");
+  setMinimumSize(1280, 720);
   setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
   setGeometry(QStyle::alignedRect(
     Qt::LeftToRight,
