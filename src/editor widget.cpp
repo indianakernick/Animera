@@ -41,10 +41,12 @@ public:
   void zoomIn() {
     scale = std::min(scale + 1, 64);
     updatePixmap();
+    Q_EMIT mouseMove(getPos(), &overlay);
   }
   void zoomOut() {
     scale = std::max(scale - 1, 1);
     updatePixmap();
+    Q_EMIT mouseMove(getPos(), &overlay);
   }
   
 Q_SIGNALS:
@@ -98,9 +100,15 @@ private:
     painter.drawImage(rect, overlay);
   }
   
-  QPoint getPos(QMouseEvent *event) {
-    const QPointF posF = event->localPos() / scale;
+  QPoint getPixelPos(const QPointF localPos) {
+    const QPointF posF = localPos / scale;
     return {static_cast<int>(posF.x()), static_cast<int>(posF.y())};
+  }
+  QPoint getPos(QMouseEvent *event) {
+    return getPixelPos(event->localPos());
+  }
+  QPoint getPos() {
+    return getPixelPos(mapFromGlobal(QCursor::pos()));
   }
   ButtonType getButton(QMouseEvent *event) {
     switch (event->button()) {
