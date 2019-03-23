@@ -12,6 +12,7 @@
 #include "tools widget.hpp"
 #include "editor widget.hpp"
 #include "timeline widget.hpp"
+#include "status bar widget.hpp"
 #include <QtWidgets/qmainwindow.h>
 
 class Window final : public QMainWindow {
@@ -21,10 +22,12 @@ public:
   explicit Window(QRect);
   
 private:
+  QWidget bottom;
   Animation anim;
   ToolsWidget tools;
   EditorWidget editor;
   TimelineWidget timeline;
+  StatusBarWidget statusBar;
   QMenuBar *menubar = nullptr;
   
   void setupUI();

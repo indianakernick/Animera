@@ -10,8 +10,8 @@
 
 TimelineWidget::TimelineWidget(QWidget *parent, Animation &anim)
   : QScrollArea{parent}, anim{anim} {
-  setMinimumHeight(100);
-  setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
+  setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+  setContentsMargins(0, 0, 0, 0);
 }
 
 void TimelineWidget::projectLoaded() {

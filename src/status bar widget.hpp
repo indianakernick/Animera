@@ -12,7 +12,7 @@
 #include <QtCore/qtimer.h>
 #include <QtWidgets/qlabel.h>
 
-class StatusBarWidget final : public QLabel {
+class StatusBarWidget final : public QWidget {
   Q_OBJECT
 
 public:
@@ -23,11 +23,12 @@ public Q_SLOTS:
   void showPerm(const QString &);
   
 private:
+  QPixmap textImg;
   QString permText;
   QString tempText;
   QTimer timer;
   
-  void updateText();
+  void paintEvent(QPaintEvent *) override;
 
 private Q_SLOTS:
   void hideTemp();

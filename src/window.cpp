@@ -10,10 +10,15 @@
 
 #include <QtWidgets/qstyle.h>
 #include <QtWidgets/qmenubar.h>
+#include <QtWidgets/qboxlayout.h>
 #include <QtWidgets/qdockwidget.h>
 
 Window::Window(const QRect desktop)
-  : tools{this}, editor{this, anim}, timeline{this, anim} {
+  : bottom{this},
+    tools{this},
+    editor{this, anim},
+    timeline{&bottom, anim},
+    statusBar{&bottom} {
   setWindowTitle("Pixel 2");
   setMinimumSize(1280, 720);
   setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
@@ -35,8 +40,16 @@ Window::Window(const QRect desktop)
 }
 
 void Window::setupUI() {
+  bottom.setMinimumHeight(100);
+  bottom.setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
+  QVBoxLayout *layout = new QVBoxLayout{&bottom};
+  bottom.setLayout(layout);
+  layout->addWidget(&timeline);
+  layout->addWidget(&statusBar);
+  layout->setContentsMargins(0, 0, 0, 0);
+  bottom.setContentsMargins(0, 0, 0, 0);
   makeDockWidget(Qt::LeftDockWidgetArea, &tools);
-  makeDockWidget(Qt::BottomDockWidgetArea, &timeline);
+  makeDockWidget(Qt::BottomDockWidgetArea, &bottom);
   setCentralWidget(&editor);
 }
 
