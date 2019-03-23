@@ -994,7 +994,78 @@ void midpointLine(
   }
 }
 
+#include <QtGui/qpainter.h>
+#include <QtWidgets/qscrollbar.h>
+#include <QtWidgets/qmainwindow.h>
+#include <QtWidgets/qscrollarea.h>
+#include <QtWidgets/qapplication.h>
+
+class InnerWidget final : public QWidget {
+public:
+  explicit InnerWidget(QScrollArea *parent)
+    : QWidget{parent}, parent{parent}, scale{1} {
+    updateSize();
+    setFocusPolicy(Qt::StrongFocus);
+  }
+
+private:
+  QScrollArea *parent;
+  int scale;
+  
+  void updateSize() {
+    setFixedSize(256 * scale, 256 * scale);
+  }
+
+  void paintEvent(QPaintEvent *) override {
+    QPainter painter{this};
+    const QColor green = {0, 255, 0};
+    painter.fillRect(0, 0, width(), height(), {255, 255, 255});
+    painter.fillRect(32 * scale, 32 * scale, 16 * scale, 16 * scale, green);
+    painter.fillRect(128 * scale, 128 * scale, 16 * scale, 16 * scale, green);
+  }
+  
+  void adjustScroll(const int oldScale) {
+    if (scale == oldScale) return;
+    QScrollBar *hbar = parent->horizontalScrollBar();
+    QScrollBar *vbar = parent->verticalScrollBar();
+    /*if (width() >= parent->width()) {
+      const int halfWidth = parent->width() / 2;
+      hbar->setValue((hbar->value() + halfWidth) * scale / oldScale - halfWidth);
+    }
+    if (height() >= parent->height()) {
+      const int halfHeight = parent->height() / 2;
+      vbar->setValue((vbar->value() + halfHeight) * scale / oldScale - halfHeight);
+    }*/
+    hbar->setValue((hbar->minimum() + hbar->maximum()) / 2);
+    vbar->setValue((vbar->minimum() + vbar->maximum()) / 2);
+  }
+  
+  void keyPressEvent(QKeyEvent *event) override {
+    const int oldScale = scale;
+    if (event->key() == Qt::Key_Z) {
+      scale = std::min(scale + 1, 64);
+      updateSize();
+      adjustScroll(oldScale);
+    } else if (event->key() == Qt::Key_X) {
+      scale = std::max(scale - 1, 1);
+      updateSize();
+      adjustScroll(oldScale);
+    }
+  }
+};
+
 int main(int argc, char **argv) {
+  /*QApplication app{argc, argv};
+  QMainWindow window;
+  QScrollArea scrollArea{&window};
+  InnerWidget inner{&scrollArea};
+  window.setBaseSize(512, 512);
+  window.setCentralWidget(&scrollArea);
+  scrollArea.setAlignment(Qt::AlignCenter);
+  scrollArea.setWidget(&inner);
+  window.show();
+  return app.exec();*/
+  
   /*Image img;
   img.data.load("/Users/indikernick/Library/Developer/Xcode/DerivedData/Pixel_2-gqoblrlhvynmicgniivandqktune/Build/Products/Debug/Pixel 2.app/Contents/Resources/icon.png");
   img.xform.angle = 1;

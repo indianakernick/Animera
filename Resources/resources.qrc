@@ -27,5 +27,7 @@
   <file>./Tools/translate e.png</file>
   <file>./Cursors/circle b.pbm</file>
   <file>./Cursors/circle m.pbm</file>
+  <file>./Fonts/5x9 ascii.atlas</file>
+  <file>./Fonts/5x9 ascii.png</file>
 </qresource>
 </RCC>

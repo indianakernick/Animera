@@ -9,6 +9,28 @@
 #include "status bar widget.hpp"
 
 #include <QtGui/qpainter.h>
+#include <QtGui/qfontdatabase.h>
+
+namespace {
+
+QFont loadGlobalFont() {
+  /*int id = QFontDatabase::addApplicationFont(":/Fonts/5x9 ascii.ttf");
+  assert(id != -1);
+  QFont font{QFontDatabase::applicationFontFamilies(id).at(0), 10};
+  font.setStyleStrategy(static_cast<QFont::StyleStrategy>(QFont::PreferBitmap | QFont::NoAntialias | QFont::PreferMatch));
+  font.setHintingPreference(QFont::PreferNoHinting);
+  return font;*/
+  QFont font{"Courier", 14};
+  font.setStyleStrategy(QFont::NoAntialias);
+  return font;
+}
+
+QFont getGlobalFont() {
+  static QFont font = loadGlobalFont();
+  return font;
+}
+
+}
 
 StatusBarWidget::StatusBarWidget(QWidget *parent)
   : QWidget{parent} {
@@ -41,9 +63,7 @@ void StatusBarWidget::paintEvent(QPaintEvent *) {
   QPainter textPainter{&textImg};
   textPainter.fillRect(rect(), {127, 127, 127});
   textPainter.setPen(QColor{255, 255, 255});
-  QFont font{"Courier", 14};
-  font.setStyleStrategy(QFont::NoAntialias);
-  textPainter.setFont(font);
+  textPainter.setFont(getGlobalFont());
   if (tempText.isEmpty()) {
     textPainter.drawText(1, 10, permText);
   } else {

@@ -133,6 +133,7 @@
 		45B284B7221E110F00D6D055 /* painting.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = painting.cpp; sourceTree = "<group>"; };
 		45B284B8221E110F00D6D055 /* painting.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = painting.hpp; sourceTree = "<group>"; };
 		45B284BB221E252300D6D055 /* paint params.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "paint params.hpp"; sourceTree = "<group>"; };
+		45BAD72E22460C22000D095C /* 5x9 ascii.bdf */ = {isa = PBXFileReference; lastKnownFileType = text; path = "5x9 ascii.bdf"; sourceTree = "<group>"; };
 		45C2A2562207BC4000E989C2 /* notes.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = notes.txt; sourceTree = "<group>"; };
 		45C2A27D220BFD1800E989C2 /* libpixman-1.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libpixman-1.a"; path = "../../../../../../usr/local/Cellar/pixman/0.36.0/lib/libpixman-1.a"; sourceTree = "<group>"; };
 		45C2A280220E821200E989C2 /* new plan.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "new plan.txt"; sourceTree = "<group>"; };
@@ -170,6 +171,7 @@
 		453C78222234CB5500818B19 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				45BAD72D22460C22000D095C /* Fonts */,
 				453C787E2236597600818B19 /* Cursors */,
 				453C787A2235D55600818B19 /* Tools */,
 				453C78792235D4B500818B19 /* resources.qrc */,
@@ -343,6 +345,14 @@
 				455F2872220691DD00C73F39 /* QtWidgets.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		45BAD72D22460C22000D095C /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				45BAD72E22460C22000D095C /* 5x9 ascii.bdf */,
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
