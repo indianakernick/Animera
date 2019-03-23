@@ -13,6 +13,7 @@
 #include <QtGui/qbitmap.h>
 #include <QtGui/qpainter.h>
 #include <QtWidgets/qlabel.h>
+#include <QtWidgets/qscrollbar.h>
 
 class EditorImage final : public QWidget {
   Q_OBJECT
@@ -21,13 +22,15 @@ class EditorImage final : public QWidget {
   static inline const QColor checker_color_b = {255, 255, 255};
   
 public:
-  explicit EditorImage(QWidget *parent)
-    : QWidget{parent} {
+  explicit EditorImage(QScrollArea *parent)
+    : QWidget{parent}, parent{parent} {
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     setFocusPolicy(Qt::StrongFocus);
     setMouseTracking(true);
     initCursor();
     setCursor(cursor);
+    connect(parent->horizontalScrollBar(), &QScrollBar::valueChanged, this, &EditorImage::updateMouse);
+    connect(parent->verticalScrollBar(), &QScrollBar::valueChanged, this, &EditorImage::updateMouse);
   }
   
   void setImage(const QImage &img) {
@@ -39,14 +42,18 @@ public:
     updatePixmap();
   }
   void zoomIn() {
+    const int oldScale = scale;
     scale = std::min(scale + 1, 64);
     updatePixmap();
-    Q_EMIT mouseMove(getPos(), &overlay);
+    adjustScroll(oldScale);
+    updateMouse();
   }
   void zoomOut() {
+    const int oldScale = scale;
     scale = std::max(scale - 1, 1);
     updatePixmap();
-    Q_EMIT mouseMove(getPos(), &overlay);
+    adjustScroll(oldScale);
+    updateMouse();
   }
   
 Q_SIGNALS:
@@ -56,6 +63,7 @@ Q_SIGNALS:
   void keyPress(Qt::Key, QImage *);
   
 private:
+  QScrollArea *parent;
   QCursor cursor;
   QPixmap checkers;
   QImage overlay;
@@ -63,6 +71,25 @@ private:
   QPoint pos;
   int scale = 2;
   int keysDown = 0;
+
+  void adjustScroll(const int oldScale) {
+    if (scale == oldScale) return;
+    QScrollBar *hbar = parent->horizontalScrollBar();
+    QScrollBar *vbar = parent->verticalScrollBar();
+    if (width() >= parent->width()) {
+      const int halfWidth = parent->width() / 2;
+      hbar->setValue((hbar->value() + halfWidth) * scale / oldScale - halfWidth);
+    }
+    if (height() >= parent->height()) {
+      const int halfHeight = parent->height() / 2;
+      vbar->setValue((vbar->value() + halfHeight) * scale / oldScale - halfHeight);
+    }
+  }
+  
+  void updateMouse() {
+    pos = getPos();
+    Q_EMIT mouseMove(pos, &overlay);
+  }
 
   void initCursor() {
     cursor = QCursor{
