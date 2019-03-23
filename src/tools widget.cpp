@@ -9,9 +9,9 @@
 #include "tools widget.hpp"
 
 #include "tool impls.hpp"
-#include <QtCore/qdir.h>
 #include <QtGui/qpainter.h>
-#include <QtWidgets/qradiobutton.h>
+#include <QtWidgets/qboxlayout.h>
+#include <QtWidgets/qabstractbutton.h>
 
 class ToolWidget final : public QAbstractButton {
   Q_OBJECT
@@ -20,15 +20,14 @@ class ToolWidget final : public QAbstractButton {
   static constexpr QSize button_size {52, 52};
 
 public:
-  ToolWidget(ToolsWidget *tools, std::unique_ptr<Tool> tool, const QString &name)
-    : QAbstractButton{tools}, tools{tools}, tool{std::move(tool)} {
+  ToolWidget(ToolsWidget *tools, QWidget *parent, std::unique_ptr<Tool> tool, const QString &name)
+    : QAbstractButton{parent}, tools{tools}, tool{std::move(tool)} {
     loadIcons(name);
     setToolTip(name);
     setCheckable(true);
     setAutoExclusive(true);
     setFixedSize(button_size);
     setContentsMargins(0, 0, 0, 0);
-    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     connect(this, &QAbstractButton::pressed, this, &ToolWidget::toolPressed);
   }
   
@@ -72,14 +71,18 @@ private:
 };
 
 ToolsWidget::ToolsWidget(QWidget *parent)
-  : QGroupBox{parent} {
-  setFixedWidth(52);
+  : QScrollArea{parent}, box{new QWidget{this}} {
+  setFixedWidth(54);
+
+  setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   
-  QVBoxLayout *layout = new QVBoxLayout{this};
+  QVBoxLayout *layout = new QVBoxLayout{box};
   layout->setSpacing(0);
   layout->setAlignment(Qt::AlignVCenter);
   layout->setContentsMargins(0, 0, 0, 0);
-  setLayout(layout);
+  box->setLayout(layout);
+  box->setContentsMargins(0, 0, 0, 0);
   setContentsMargins(0, 0, 0, 0);
   
   layout->addStretch();
@@ -96,6 +99,8 @@ ToolsWidget::ToolsWidget(QWidget *parent)
   makeToolWidget<FlipTool>("flip");
   makeToolWidget<RotateTool>("rotate");
   layout->addStretch();
+  
+  setWidget(box);
   
   // @TODO remove
   colors.primary = qRgba(255, 0, 0, 255);
@@ -130,9 +135,9 @@ void ToolsWidget::changeTool(Tool *tool) {
 template <typename ToolClass>
 ToolWidget *ToolsWidget::makeToolWidget(const QString &name) {
   std::unique_ptr<Tool> tool = std::make_unique<ToolClass>();
-  ToolWidget *widget = new ToolWidget{this, std::move(tool), name};
+  ToolWidget *widget = new ToolWidget{this, box, std::move(tool), name};
   tools.push_back(widget);
-  layout()->addWidget(widget);
+  box->layout()->addWidget(widget);
   return widget;
 }
 

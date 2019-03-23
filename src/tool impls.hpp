@@ -29,7 +29,8 @@ public:
 private:
   QPoint lastPos = no_point;
   SourceCell *source = nullptr;
-  int width = 1;
+  // @TODO restore these to 1 and none
+  int width = 8;
   SymmetryMode mode = SymmetryMode::both;
   QRgb color = 0;
   

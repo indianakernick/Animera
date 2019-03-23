@@ -10,12 +10,11 @@
 #define tools_widget_hpp
 
 #include "current tool.hpp"
-#include <QtWidgets/qgroupbox.h>
-#include <QtWidgets/qboxlayout.h>
+#include <QtWidgets/qscrollarea.h>
 
 class ToolWidget;
 
-class ToolsWidget final : public QGroupBox {
+class ToolsWidget final : public QScrollArea {
   Q_OBJECT
 
   friend class ToolWidget;
@@ -35,9 +34,10 @@ public Q_SLOTS:
   void changeCell(Cell *);
   
 private:
+  QWidget *box;
+  std::vector<ToolWidget *> tools;
   CurrentTool currTool;
   ToolColors colors;
-  std::vector<ToolWidget *> tools;
   
   void changeTool(Tool *);
   template <typename ToolClass>
