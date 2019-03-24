@@ -34,6 +34,7 @@ private:
   SymmetryMode mode = SymmetryMode::both;
   QRgb color = 0;
   
+  void symPoint(std::string &, QPoint);
   bool symPoint(QImage &, QRgb, QPoint);
   bool symLine(QImage &, QRgb, QLine);
 };
@@ -56,6 +57,7 @@ public:
   ToolChanges mouseDown(const ToolMouseEvent &) override;
   ToolChanges mouseMove(const ToolMouseEvent &) override;
   ToolChanges mouseUp(const ToolMouseEvent &) override;
+  ToolChanges keyPress(const ToolKeyEvent &) override;
 
   void setMode(SelectMode);
   
@@ -75,6 +77,7 @@ public:
   ToolChanges mouseDown(const ToolMouseEvent &) override;
   ToolChanges mouseMove(const ToolMouseEvent &) override;
   ToolChanges mouseUp(const ToolMouseEvent &) override;
+  ToolChanges keyPress(const ToolKeyEvent &) override;
   
   void setMode(SelectMode);
 
@@ -201,8 +204,6 @@ public:
   ToolChanges mouseUp(const ToolMouseEvent &) override;
   ToolChanges keyPress(const ToolKeyEvent &) override;
 
-  QPoint translation() const;
-
 private:
   SourceCell *source = nullptr;
   TransformCell *transform = nullptr;
@@ -211,7 +212,7 @@ private:
   QPoint pos = no_point;
   bool drag = false;
   
-  void translate(QPoint, QRgb);
+  void translate(std::string &, QPoint, QRgb);
   void updateSourceImage(QRgb);
 };
 
@@ -221,9 +222,6 @@ public:
   void detachCell() override;
   ToolChanges keyPress(const ToolKeyEvent &) override;
   
-  bool flippingX() const;
-  bool flippingY() const;
-
 private:
   SourceCell *source = nullptr;
   TransformCell *transform = nullptr;
@@ -236,8 +234,6 @@ public:
   bool attachCell(Cell *) override;
   void detachCell() override;
   ToolChanges keyPress(const ToolKeyEvent &) override;
-  
-  quint8 angle() const;
 
 private:
   SourceCell *source = nullptr;

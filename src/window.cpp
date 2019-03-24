@@ -15,8 +15,8 @@
 
 Window::Window(const QRect desktop)
   : bottom{this},
-    tools{this},
     editor{this, anim},
+    tools{this},
     timeline{&bottom, anim},
     statusBar{&bottom} {
   setWindowTitle("Pixel 2");
@@ -34,7 +34,7 @@ Window::Window(const QRect desktop)
   show();
   
   // @TODO remove
-  anim.initialize(QSize{256, 256}, Format::color);
+  anim.initialize(QSize{64, 64}, Format::color);
   anim.appendSource(0);
   timeline.projectLoaded();
 }
@@ -74,15 +74,19 @@ void Window::makeDockWidget(Qt::DockWidgetArea area, QWidget *widget) {
 }
 
 void Window::connectSignals() {
-  connect(&timeline, &TimelineWidget::posChange,         &editor, &EditorWidget::compositePos);
-  connect(&timeline, &TimelineWidget::posChange,         &tools,  &ToolSelectWidget::changeCell);
-  connect(&timeline, &TimelineWidget::layerVisibility,   &editor, &EditorWidget::compositeVis);
-  connect(&tools,    &ToolSelectWidget::cellModified,    &editor, &EditorWidget::composite);
-  connect(&tools,    &ToolSelectWidget::overlayModified, &editor, &EditorWidget::compositeOverlay);
-  connect(&editor,   &EditorWidget::mouseDown,           &tools,  &ToolSelectWidget::mouseDown);
-  connect(&editor,   &EditorWidget::mouseMove,           &tools,  &ToolSelectWidget::mouseMove);
-  connect(&editor,   &EditorWidget::mouseUp,             &tools,  &ToolSelectWidget::mouseUp);
-  connect(&editor,   &EditorWidget::keyPress,            &tools,  &ToolSelectWidget::keyPress);
+  connect(&timeline, &TimelineWidget::posChange,         &editor,    &EditorWidget::compositePos);
+  connect(&timeline, &TimelineWidget::posChange,         &tools,     &ToolSelectWidget::changeCell);
+  connect(&timeline, &TimelineWidget::layerVisibility,   &editor,    &EditorWidget::compositeVis);
+  
+  connect(&tools,    &ToolSelectWidget::cellModified,    &editor,    &EditorWidget::composite);
+  connect(&tools,    &ToolSelectWidget::overlayModified, &editor,    &EditorWidget::compositeOverlay);
+  connect(&tools,    &ToolSelectWidget::updateStatusBar, &statusBar, &StatusBarWidget::showPerm);
+  
+  connect(&editor,   &EditorWidget::mouseLeave,          &tools,     &ToolSelectWidget::mouseLeave);
+  connect(&editor,   &EditorWidget::mouseDown,           &tools,     &ToolSelectWidget::mouseDown);
+  connect(&editor,   &EditorWidget::mouseMove,           &tools,     &ToolSelectWidget::mouseMove);
+  connect(&editor,   &EditorWidget::mouseUp,             &tools,     &ToolSelectWidget::mouseUp);
+  connect(&editor,   &EditorWidget::keyPress,            &tools,     &ToolSelectWidget::keyPress);
 }
 
 #include "window.moc"

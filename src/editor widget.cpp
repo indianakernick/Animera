@@ -57,6 +57,7 @@ public:
   }
   
 Q_SIGNALS:
+  void mouseLeave();
   void mouseDown(QPoint, ButtonType, QImage *);
   void mouseMove(QPoint, QImage *);
   void mouseUp(QPoint, ButtonType, QImage *);
@@ -169,6 +170,11 @@ private:
   void enterEvent(QEvent *) override {
     setFocus();
   }
+  void leaveEvent(QEvent *) override {
+    clearImage(overlay);
+    repaint();
+    Q_EMIT mouseLeave();
+  }
 
 public:
   void keyPressEvent(QKeyEvent *event) override {
@@ -201,10 +207,11 @@ public:
 EditorWidget::EditorWidget(QWidget *parent, Animation &anim)
   : QScrollArea{parent}, anim{anim}, view{new EditorImage{this}} {
   setWidget(view);
-  connect(view, &EditorImage::mouseDown, this, &EditorWidget::mouseDown);
-  connect(view, &EditorImage::mouseMove, this, &EditorWidget::mouseMove);
-  connect(view, &EditorImage::mouseUp, this, &EditorWidget::mouseUp);
-  connect(view, &EditorImage::keyPress, this, &EditorWidget::keyPress);
+  connect(view, &EditorImage::mouseLeave, this, &EditorWidget::mouseLeave);
+  connect(view, &EditorImage::mouseDown,  this, &EditorWidget::mouseDown);
+  connect(view, &EditorImage::mouseMove,  this, &EditorWidget::mouseMove);
+  connect(view, &EditorImage::mouseUp,    this, &EditorWidget::mouseUp);
+  connect(view, &EditorImage::keyPress,   this, &EditorWidget::keyPress);
   setAlignment(Qt::AlignCenter);
   setFocusPolicy(Qt::WheelFocus);
 }

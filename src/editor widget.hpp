@@ -23,6 +23,7 @@ public:
   EditorWidget(QWidget *, Animation &);
 
 Q_SIGNALS:
+  void mouseLeave();
   void mouseDown(QPoint, ButtonType, QImage *);
   void mouseMove(QPoint, QImage *);
   void mouseUp(QPoint, ButtonType, QImage *);

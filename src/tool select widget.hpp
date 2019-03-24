@@ -25,8 +25,10 @@ public:
 Q_SIGNALS:
   void cellModified();
   void overlayModified();
+  void updateStatusBar(const std::string &);
 
 public Q_SLOTS:
+  void mouseLeave();
   void mouseDown(QPoint, ButtonType, QImage *);
   void mouseMove(QPoint, QImage *);
   void mouseUp(QPoint, ButtonType, QImage *);
@@ -37,11 +39,12 @@ private:
   QWidget *box;
   std::vector<ToolWidget *> tools;
   CurrentTool currTool;
+  ToolWidget *currWidget = nullptr;
   ToolColors colors;
   
-  void changeTool(Tool *);
-  template <typename ToolClass>
-  ToolWidget *makeToolWidget(const QString &);
+  void changeTool(ToolWidget *, Tool *);
+  template <typename WidgetClass>
+  ToolWidget *makeToolWidget();
   
   void emitModified(ToolChanges);
   

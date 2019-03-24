@@ -38,12 +38,14 @@ struct ToolMouseEvent {
   QPoint pos;
   ToolColors colors;
   QImage *overlay = nullptr; // @TODO does this really need to be a pointer?
+  std::string *status = nullptr;
 };
 
 struct ToolKeyEvent {
   Qt::Key key;
   ToolColors colors;
   QImage *overlay = nullptr;
+  std::string *status = nullptr;
 };
 
 constexpr int overlay_alpha = 127;

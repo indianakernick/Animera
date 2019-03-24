@@ -42,4 +42,12 @@ enum class SelectMode {
   paste
 };
 
+constexpr SelectMode opposite(const SelectMode mode) {
+  if (mode == SelectMode::copy) {
+    return SelectMode::paste;
+  } else if (mode == SelectMode::paste) {
+    return SelectMode::copy;
+  } else Q_UNREACHABLE();
+}
+
 #endif

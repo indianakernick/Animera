@@ -8,10 +8,16 @@
 
 #include "tool select widget.hpp"
 
-#include "tool impls.hpp"
+#include "tool widgets.hpp"
 #include <QtGui/qpainter.h>
 #include <QtWidgets/qboxlayout.h>
 #include <QtWidgets/qabstractbutton.h>
+
+template <typename T>
+struct tag_t {};
+
+template <typename T>
+constexpr tag_t<T> tag{};
 
 class ToolWidget final : public QAbstractButton {
   Q_OBJECT
@@ -20,10 +26,17 @@ class ToolWidget final : public QAbstractButton {
   static constexpr QSize button_size {52, 52};
 
 public:
-  ToolWidget(ToolSelectWidget *tools, QWidget *parent, std::unique_ptr<Tool> tool, const QString &name)
-    : QAbstractButton{parent}, tools{tools}, tool{std::move(tool)} {
-    loadIcons(name);
-    setToolTip(name);
+  template <typename WidgetClass>
+  ToolWidget(
+    ToolSelectWidget *tools,
+    QWidget *parent,
+    tag_t<WidgetClass>
+  ) : QAbstractButton{parent},
+      tools{tools},
+      tool{std::make_unique<typename WidgetClass::impl>()},
+      widget{std::make_unique<WidgetClass>()} {
+    loadIcons(WidgetClass::icon_name);
+    setToolTip(WidgetClass::tooltip);
     setCheckable(true);
     setAutoExclusive(true);
     setFixedSize(button_size);
@@ -33,12 +46,13 @@ public:
   
 public Q_SLOTS:
   void toolPressed() {
-    tools->changeTool(tool.get());
+    tools->changeTool(this, tool.get());
   }
 
 private:
   ToolSelectWidget *tools;
   std::unique_ptr<Tool> tool;
+  std::unique_ptr<QWidget> widget;
   QPixmap enabledIcon;
   QPixmap disabledIcon;
   
@@ -86,18 +100,18 @@ ToolSelectWidget::ToolSelectWidget(QWidget *parent)
   setContentsMargins(0, 0, 0, 0);
   
   layout->addStretch();
-  makeToolWidget<BrushTool>("brush")->click();
-  makeToolWidget<FloodFillTool>("flood fill");
-  makeToolWidget<RectangleSelectTool>("rectangle select");
-  makeToolWidget<MaskSelectTool>("mask select");
-  makeToolWidget<LineTool>("line");
-  makeToolWidget<StrokedCircleTool>("stroked circle");
-  makeToolWidget<FilledCircleTool>("filled circle");
-  makeToolWidget<StrokedRectangleTool>("stroked rectangle");
-  makeToolWidget<FilledRectangleTool>("filled rectangle");
-  makeToolWidget<TranslateTool>("translate");
-  makeToolWidget<FlipTool>("flip");
-  makeToolWidget<RotateTool>("rotate");
+  makeToolWidget<BrushToolWidget>()->click();
+  makeToolWidget<FloodFillToolWidget>();
+  makeToolWidget<RectangleSelectToolWidget>();
+  makeToolWidget<MaskSelectToolWidget>();
+  makeToolWidget<LineToolWidget>();
+  makeToolWidget<StrokedCircleToolWidget>();
+  makeToolWidget<FilledCircleToolWidget>();
+  makeToolWidget<StrokedRectangleToolWidget>();
+  makeToolWidget<FilledRectangleToolWidget>();
+  makeToolWidget<TranslateToolWidget>();
+  makeToolWidget<FlipToolWidget>();
+  makeToolWidget<RotateToolWidget>();
   layout->addStretch();
   
   setWidget(box);
@@ -108,34 +122,46 @@ ToolSelectWidget::ToolSelectWidget(QWidget *parent)
   colors.erase = qRgba(0, 0, 0, 0);
 }
 
+void ToolSelectWidget::mouseLeave() {
+  Q_EMIT updateStatusBar("");
+}
+
 void ToolSelectWidget::mouseDown(const QPoint pos, const ButtonType button, QImage *overlay) {
-  emitModified(currTool.mouseDown({button, pos, colors, overlay}));
+  std::string status;
+  emitModified(currTool.mouseDown({button, pos, colors, overlay, &status}));
+  if (!status.empty()) Q_EMIT updateStatusBar(status);
 }
 
 void ToolSelectWidget::mouseMove(const QPoint pos, QImage *overlay) {
-  emitModified(currTool.mouseMove({{}, pos, colors, overlay}));
+  std::string status;
+  emitModified(currTool.mouseMove({{}, pos, colors, overlay, &status}));
+  if (!status.empty()) Q_EMIT updateStatusBar(status);
 }
 
 void ToolSelectWidget::mouseUp(const QPoint pos, const ButtonType button, QImage *overlay) {
-  emitModified(currTool.mouseUp({button, pos, colors, overlay}));
+  std::string status;
+  emitModified(currTool.mouseUp({button, pos, colors, overlay, &status}));
+  if (!status.empty()) Q_EMIT updateStatusBar(status);
 }
 
 void ToolSelectWidget::keyPress(const Qt::Key key, QImage *overlay) {
-  emitModified(currTool.keyPress({key, colors, overlay}));
+  std::string status;
+  emitModified(currTool.keyPress({key, colors, overlay, &status}));
+  if (!status.empty()) Q_EMIT updateStatusBar(status);
 }
 
 void ToolSelectWidget::changeCell(Cell *cell) {
   currTool.changeCell(cell);
 }
 
-void ToolSelectWidget::changeTool(Tool *tool) {
+void ToolSelectWidget::changeTool(ToolWidget *widget, Tool *tool) {
+  currWidget = widget;
   currTool.changeTool(tool);
 }
 
-template <typename ToolClass>
-ToolWidget *ToolSelectWidget::makeToolWidget(const QString &name) {
-  std::unique_ptr<Tool> tool = std::make_unique<ToolClass>();
-  ToolWidget *widget = new ToolWidget{this, box, std::move(tool), name};
+template <typename WidgetClass>
+ToolWidget *ToolSelectWidget::makeToolWidget() {
+  ToolWidget *widget = new ToolWidget{this, box, tag<WidgetClass>};
   tools.push_back(widget);
   box->layout()->addWidget(widget);
   return widget;
