@@ -134,13 +134,12 @@ void blitTransformedImage(QImage &dst, const Image &src) {
 }
 
 void blitMaskImage(QImage &dst, const QImage &mask, const QImage &src, const QPoint pos) {
-  // @TODO clipping
   assert(mask.size() == src.size());
   assert(mask.format() == mask_format);
-  assert(dst.rect().contains(mask.rect().translated(pos)));
+  const QRect rect = mask.rect().intersected(dst.rect().translated(-pos));
   // @TODO correct but slow
-  for (int y = 0; y != mask.height(); ++y) {
-    for (int x = 0; x != mask.width(); ++x) {
+  for (int y = rect.top(); y <= rect.bottom(); ++y) {
+    for (int x = rect.left(); x <= rect.right(); ++x) {
       if (mask.pixel(x, y) == mask_color_on) {
         dst.setPixel(x + pos.x(), y + pos.y(), src.pixel(x, y));
       }
@@ -149,13 +148,12 @@ void blitMaskImage(QImage &dst, const QImage &mask, const QImage &src, const QPo
 }
 
 QImage blitMaskImage(const QImage &src, const QImage &mask, const QPoint pos) {
-  // @TODO clipping
   assert(mask.format() == mask_format);
-  assert(src.rect().contains(mask.rect().translated(pos)));
+  const QRect rect = mask.rect().intersected(src.rect().translated(-pos));
   QImage dst{mask.size(), src.format()};
   // @TODO correct but slow
-  for (int y = 0; y != mask.height(); ++y) {
-    for (int x = 0; x != mask.width(); ++x) {
+  for (int y = rect.top(); y <= rect.bottom(); ++y) {
+    for (int x = rect.left(); x <= rect.right(); ++x) {
       if (mask.pixel(x, y) == mask_color_on) {
         dst.setPixel(x, y, src.pixel(x + pos.x(), y + pos.y()));
       }
