@@ -83,12 +83,17 @@ public:
 
 private:
   std::vector<QPoint> polygon;
+  QRect bounds;
   SourceCell *source = nullptr;
   QImage selection;
   QImage mask;
   QImage overlay;
   QPoint offset;
   SelectMode mode = SelectMode::copy;
+  
+  // @TODO maybe factor this out into a polygon class
+  void initPolygon(QPoint);
+  void pushPolygon(QPoint);
 };
 
 template <typename Derived>
@@ -212,14 +217,16 @@ private:
   QPoint pos = no_point;
   bool drag = false;
   
-  void translate(std::string &, QPoint, QRgb);
+  void translate(QPoint, QRgb);
   void updateSourceImage(QRgb);
+  void updateStatus(std::string &);
 };
 
 class FlipTool final : public Tool {
 public:
   bool attachCell(Cell *) override;
   void detachCell() override;
+  ToolChanges mouseMove(const ToolMouseEvent &) override;
   ToolChanges keyPress(const ToolKeyEvent &) override;
   
 private:
@@ -227,12 +234,14 @@ private:
   TransformCell *transform = nullptr;
   
   void updateSourceImage();
+  void updateStatus(std::string &);
 };
 
 class RotateTool final : public Tool {
 public:
   bool attachCell(Cell *) override;
   void detachCell() override;
+  ToolChanges mouseMove(const ToolMouseEvent &) override;
   ToolChanges keyPress(const ToolKeyEvent &) override;
 
 private:
@@ -240,6 +249,7 @@ private:
   TransformCell *transform = nullptr;
   
   void updateSourceImage();
+  void updateStatus(std::string &);
 };
 
 #endif

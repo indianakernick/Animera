@@ -271,14 +271,14 @@ ToolChanges RectangleSelectTool::mouseUp(const ToolMouseEvent &event) {
     overlay = selection;
     colorToOverlay(overlay);
     offset = rect.topLeft() - event.pos;
-    startPos = no_point;
-    // @TODO maybe switch to paste mode here?
-    return ToolChanges::overlay;
-  } else if (mode == SelectMode::paste) {
-    blitImage(*event.overlay, overlay, event.pos + offset);
-    startPos = no_point;
-    return ToolChanges::overlay;
-  } else Q_UNREACHABLE();
+    mode = SelectMode::paste;
+  }
+  
+  startPos = no_point;
+  blitImage(*event.overlay, overlay, event.pos + offset);
+  statusMode(*event.status, mode);
+  statusPosSize(*event.status, event.pos + offset, overlay.size());
+  return ToolChanges::overlay;
 }
 
 ToolChanges RectangleSelectTool::keyPress(const ToolKeyEvent &event) {
@@ -308,13 +308,14 @@ ToolChanges MaskSelectTool::mouseDown(const ToolMouseEvent &event) {
   statusMode(*event.status, mode);
   if (mode == SelectMode::copy) {
     drawSquarePoint(*event.overlay, overlay_color, event.pos);
+    statusPos(*event.status, event.pos);
   } else if (mode == SelectMode::paste) {
     blitImage(*event.overlay, overlay, event.pos + offset);
+    statusPosSize(*event.status, event.pos + offset, overlay.size());
   } else Q_UNREACHABLE();
   if (event.button != ButtonType::primary) return ToolChanges::overlay;
   if (mode == SelectMode::copy) {
-    polygon.clear();
-    polygon.push_back(event.pos);
+    initPolygon(event.pos);
     return ToolChanges::overlay;
   } else if (mode == SelectMode::paste) {
     blitMaskImage(source->image.data, mask, selection, event.pos + offset);
@@ -328,55 +329,41 @@ ToolChanges MaskSelectTool::mouseMove(const ToolMouseEvent &event) {
   statusMode(*event.status, mode);
   if (mode == SelectMode::copy) {
     if (event.button == ButtonType::primary) {
-      polygon.push_back(event.pos);
+      pushPolygon(event.pos);
       drawFilledPolygon(*event.overlay, overlay_color, polygon, QPoint{0, 0});
+      statusPosSize(*event.status, bounds.topLeft(), bounds.size());
     } else {
       drawSquarePoint(*event.overlay, overlay_color, event.pos);
+      statusPos(*event.status, event.pos);
     }
   } else if (mode == SelectMode::paste) {
     blitImage(*event.overlay, overlay, event.pos + offset);
+    statusPosSize(*event.status, event.pos + offset, overlay.size());
   } else Q_UNREACHABLE();
   return ToolChanges::overlay;
 }
 
-namespace {
-
-QRect polyBounds(const std::vector<QPoint> &polygon) {
-  QRect rect;
-  if (!polygon.empty()) {
-    rect = {polygon.front(), QSize{1, 1}};
-  }
-  for (const QPoint p : polygon) {
-    if (p.x() < rect.left()) rect.setLeft(p.x());
-    if (p.y() < rect.top()) rect.setTop(p.y());
-    if (p.x() > rect.right()) rect.setRight(p.x());
-    if (p.y() > rect.bottom()) rect.setBottom(p.y());
-  }
-  return rect;
-}
-
-}
-
 ToolChanges MaskSelectTool::mouseUp(const ToolMouseEvent &event) {
+  QPolygon p;
   assert(source);
   clearImage(*event.overlay);
   if (mode == SelectMode::copy) {
-    if (polygon.back() != event.pos) {
-      polygon.push_back(event.pos);
-    }
-    const QRect bounds = polyBounds(polygon).intersected(source->image.data.rect());
-    mask = QImage{bounds.size(), mask_format};
+    pushPolygon(event.pos);
+    const QRect clippedBounds = bounds.intersected(source->image.data.rect());
+    mask = QImage{clippedBounds.size(), mask_format};
     clearImage(mask);
-    drawFilledPolygon(mask, mask_color_on, polygon, -bounds.topLeft());
-    selection = blitMaskImage(source->image.data, mask, bounds.topLeft());
+    drawFilledPolygon(mask, mask_color_on, polygon, -clippedBounds.topLeft());
+    selection = blitMaskImage(source->image.data, mask, clippedBounds.topLeft());
     overlay = selection;
     colorToOverlay(overlay, mask);
-    offset = bounds.topLeft() - event.pos;
-    return ToolChanges::overlay;
-  } else if (mode == SelectMode::paste) {
-    blitImage(*event.overlay, overlay, event.pos + offset);
-    return ToolChanges::overlay;
-  } else Q_UNREACHABLE();
+    offset = clippedBounds.topLeft() - event.pos;
+    mode = SelectMode::paste;
+  }
+  
+  blitImage(*event.overlay, overlay, event.pos + offset);
+  statusMode(*event.status, mode);
+  statusPosSize(*event.status, event.pos + offset, overlay.size());
+  return ToolChanges::overlay;
 }
 
 ToolChanges MaskSelectTool::keyPress(const ToolKeyEvent &event) {
@@ -390,6 +377,19 @@ ToolChanges MaskSelectTool::keyPress(const ToolKeyEvent &event) {
 
 void MaskSelectTool::setMode(const SelectMode newMode) {
   mode = newMode;
+}
+
+void MaskSelectTool::initPolygon(const QPoint point) {
+  polygon.clear();
+  polygon.push_back(point);
+  bounds = QRect{point, QSize{1, 1}};
+}
+
+void MaskSelectTool::pushPolygon(const QPoint point) {
+  assert(!polygon.empty());
+  if (polygon.back() == point) return;
+  polygon.push_back(point);
+  bounds = bounds.united(QRect{point, QSize{1, 1}});
 }
 
 template <typename Derived>
@@ -618,8 +618,12 @@ ToolChanges TranslateTool::mouseDown(const ToolMouseEvent &event) {
 
 ToolChanges TranslateTool::mouseMove(const ToolMouseEvent &event) {
   assert(oneNotNull(source, transform));
-  if (event.button != ButtonType::primary || !drag) return ToolChanges::none;
-  translate(*event.status, event.pos - lastPos, event.colors.erase);
+  if (event.button != ButtonType::primary || !drag) {
+    updateStatus(*event.status);
+    return ToolChanges::none;
+  }
+  translate(event.pos - lastPos, event.colors.erase);
+  updateStatus(*event.status);
   lastPos = event.pos;
   return ToolChanges::cell;
 }
@@ -627,7 +631,8 @@ ToolChanges TranslateTool::mouseMove(const ToolMouseEvent &event) {
 ToolChanges TranslateTool::mouseUp(const ToolMouseEvent &event) {
   assert(oneNotNull(source, transform));
   if (event.button != ButtonType::primary || !drag) return ToolChanges::none;
-  translate(*event.status, event.pos - lastPos, event.colors.erase);
+  translate(event.pos - lastPos, event.colors.erase);
+  updateStatus(*event.status);
   lastPos = event.pos;
   drag = false;
   return ToolChanges::cell;
@@ -651,7 +656,8 @@ ToolChanges TranslateTool::keyPress(const ToolKeyEvent &event) {
   assert(oneNotNull(source, transform));
   QPoint move = arrowToDir(event.key);
   if (move == QPoint{0, 0}) return ToolChanges::none;
-  translate(*event.status, move, event.colors.erase);
+  translate(move, event.colors.erase);
+  updateStatus(*event.status);
   return ToolChanges::cell;
 }
 
@@ -666,17 +672,15 @@ Transform xformFromPos(const QPoint pos) {
 
 }
 
-void TranslateTool::translate(std::string &status, const QPoint move, const QRgb eraseColor) {
+void TranslateTool::translate(const QPoint move, const QRgb eraseColor) {
   assert(oneNotNull(source, transform));
   if (source) {
     pos += move;
     updateSourceImage(eraseColor);
-    statusPos(status, pos);
   } else if (transform) {
     Transform &xform = transform->xform;
     xform.posX += move.x();
     xform.posY += move.y();
-    statusPos(status, {xform.posX, xform.posY});
   } else Q_UNREACHABLE();
 }
 
@@ -686,6 +690,15 @@ void TranslateTool::updateSourceImage(const QRgb eraseColor) {
   clearImage(source->image.data, eraseColor);
   Image src{cleanImage, xformFromPos(pos)};
   blitTransformedImage(source->image.data, src);
+}
+
+void TranslateTool::updateStatus(std::string &status) {
+  if (source) {
+    statusPos(status, pos);
+  } else if (transform) {
+    Transform &xform = transform->xform;
+    statusPos(status, {xform.posX, xform.posY});
+  } else Q_UNREACHABLE();
 }
 
 bool FlipTool::attachCell(Cell *cell) {
@@ -727,14 +740,16 @@ Transform &getTransform(SourceCell *source, TransformCell *transform) {
 
 }
 
+ToolChanges FlipTool::mouseMove(const ToolMouseEvent &event) {
+  updateStatus(*event.status);
+  return ToolChanges::none;
+}
+
 ToolChanges FlipTool::keyPress(const ToolKeyEvent &event) {
   assert(oneNotNull(source, transform));
   Transform &xform = getTransform(source, transform);
   if (arrowToFlip(event.key, xform)) {
-    *event.status += "X: ";
-    statusBool(*event.status, xform.flipX);
-    *event.status += " Y: ";
-    statusBool(*event.status, xform.flipY);
+    updateStatus(*event.status);
     return ToolChanges::cell;
   }
   return ToolChanges::none;
@@ -756,6 +771,14 @@ void FlipTool::updateSourceImage() {
   applyTransform(source->image);
   source->image.xform.flipX = false;
   source->image.xform.flipY = false;
+}
+
+void FlipTool::updateStatus(std::string &status) {
+  Transform &xform = getTransform(source, transform);
+  status += "X: ";
+  statusBool(status, xform.flipX);
+  status += " Y: ";
+  statusBool(status, xform.flipY);
 }
 
 bool RotateTool::attachCell(Cell *cell) {
@@ -787,14 +810,18 @@ quint8 arrowToRot(const Qt::Key key) {
 
 }
 
+ToolChanges RotateTool::mouseMove(const ToolMouseEvent &event) {
+  updateStatus(*event.status);
+  return ToolChanges::none;
+}
+
 ToolChanges RotateTool::keyPress(const ToolKeyEvent &event) {
   assert(oneNotNull(source, transform));
   const quint8 rot = arrowToRot(event.key);
   if (rot) {
     quint8 &angle = getTransform(source, transform).angle;
     angle = (angle + rot) & 3;
-    *event.status += "ANGLE: ";
-    *event.status += std::to_string(angle * 90);
+    updateStatus(*event.status);
     return ToolChanges::cell;
   }
   return ToolChanges::none;
@@ -805,4 +832,9 @@ void RotateTool::updateSourceImage() {
   assert(!transform);
   applyTransform(source->image);
   source->image.xform.angle = 0;
+}
+
+void RotateTool::updateStatus(std::string &status) {
+  status += "ANGLE: ";
+  status += std::to_string(getTransform(source, transform).angle * 90);
 }

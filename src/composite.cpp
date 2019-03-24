@@ -134,6 +134,7 @@ void blitTransformedImage(QImage &dst, const Image &src) {
 }
 
 void blitMaskImage(QImage &dst, const QImage &mask, const QImage &src, const QPoint pos) {
+  // @TODO clipping
   assert(mask.size() == src.size());
   assert(mask.format() == mask_format);
   assert(dst.rect().contains(mask.rect().translated(pos)));
@@ -148,6 +149,7 @@ void blitMaskImage(QImage &dst, const QImage &mask, const QImage &src, const QPo
 }
 
 QImage blitMaskImage(const QImage &src, const QImage &mask, const QPoint pos) {
+  // @TODO clipping
   assert(mask.format() == mask_format);
   assert(src.rect().contains(mask.rect().translated(pos)));
   QImage dst{mask.size(), src.format()};

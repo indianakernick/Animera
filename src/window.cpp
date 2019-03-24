@@ -34,7 +34,7 @@ Window::Window(const QRect desktop)
   show();
   
   // @TODO remove
-  anim.initialize(QSize{64, 64}, Format::color);
+  anim.initialize(QSize{256, 256}, Format::color);
   anim.appendSource(0);
   timeline.projectLoaded();
 }
