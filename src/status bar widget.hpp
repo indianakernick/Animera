@@ -9,6 +9,7 @@
 #ifndef status_bar_widget_hpp
 #define status_bar_widget_hpp
 
+#include <string>
 #include <QtCore/qtimer.h>
 #include <QtWidgets/qlabel.h>
 
@@ -19,13 +20,12 @@ public:
   explicit StatusBarWidget(QWidget *);
 
 public Q_SLOTS:
-  void showTemp(const QString &);
-  void showPerm(const QString &);
+  void showTemp(const std::string &);
+  void showPerm(const std::string &);
   
 private:
-  QPixmap textImg;
-  QString permText;
-  QString tempText;
+  std::string permText;
+  std::string tempText;
   QTimer timer;
   
   void paintEvent(QPaintEvent *) override;

@@ -8,29 +8,8 @@
 
 #include "status bar widget.hpp"
 
+#include "render text.hpp"
 #include <QtGui/qpainter.h>
-#include <QtGui/qfontdatabase.h>
-
-namespace {
-
-QFont loadGlobalFont() {
-  /*int id = QFontDatabase::addApplicationFont(":/Fonts/5x9 ascii.ttf");
-  assert(id != -1);
-  QFont font{QFontDatabase::applicationFontFamilies(id).at(0), 10};
-  font.setStyleStrategy(static_cast<QFont::StyleStrategy>(QFont::PreferBitmap | QFont::NoAntialias | QFont::PreferMatch));
-  font.setHintingPreference(QFont::PreferNoHinting);
-  return font;*/
-  QFont font{"Courier", 14};
-  font.setStyleStrategy(QFont::NoAntialias);
-  return font;
-}
-
-QFont getGlobalFont() {
-  static QFont font = loadGlobalFont();
-  return font;
-}
-
-}
 
 StatusBarWidget::StatusBarWidget(QWidget *parent)
   : QWidget{parent} {
@@ -45,34 +24,25 @@ StatusBarWidget::StatusBarWidget(QWidget *parent)
   showTemp("World");
 }
 
-void StatusBarWidget::showTemp(const QString &text) {
+void StatusBarWidget::showTemp(const std::string &text) {
   tempText = text;
   timer.start();
   repaint();
 }
 
-void StatusBarWidget::showPerm(const QString &text) {
+void StatusBarWidget::showPerm(const std::string &text) {
   permText = text;
   repaint();
 }
 
 void StatusBarWidget::paintEvent(QPaintEvent *) {
-  if (textImg.size() != size() / 2) {
-    textImg = QPixmap{size() / 2};
-  }
-  QPainter textPainter{&textImg};
-  textPainter.fillRect(rect(), {127, 127, 127});
-  textPainter.setPen(QColor{255, 255, 255});
-  textPainter.setFont(getGlobalFont());
-  if (tempText.isEmpty()) {
-    textPainter.drawText(1, 10, permText);
-  } else {
-    textPainter.drawText(1, 10, permText + " | " + tempText);
-  }
-  textPainter.end();
-  
   QPainter painter{this};
-  painter.drawPixmap(rect(), textImg);
+  painter.fillRect(rect(), {127, 127, 127});
+  if (tempText.empty()) {
+    renderText(painter, 2, 2, permText);
+  } else {
+    renderText(painter, 2, 2, permText + " | " + tempText);
+  }
 }
 
 void StatusBarWidget::hideTemp() {
