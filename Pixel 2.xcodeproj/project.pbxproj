@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		453C78192234935000818B19 /* timeline widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C78172234935000818B19 /* timeline widget.cpp */; };
 		453C781C22349BBD00818B19 /* editor widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C781A22349BBD00818B19 /* editor widget.cpp */; };
-		453C781F22349F0100818B19 /* tools widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C781D22349F0100818B19 /* tools widget.cpp */; };
+		453C781F22349F0100818B19 /* tool select widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C781D22349F0100818B19 /* tool select widget.cpp */; };
 		453C78402234DF3200818B19 /* application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C783E2234DF3200818B19 /* application.cpp */; };
 		453C78432234E13E00818B19 /* window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C78412234E13E00818B19 /* window.cpp */; };
 		453C78462234F3C600818B19 /* status bar widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C78442234F3C600818B19 /* status bar widget.cpp */; };
@@ -52,8 +52,8 @@
 		453C78182234935000818B19 /* timeline widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "timeline widget.hpp"; sourceTree = "<group>"; };
 		453C781A22349BBD00818B19 /* editor widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "editor widget.cpp"; sourceTree = "<group>"; };
 		453C781B22349BBD00818B19 /* editor widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "editor widget.hpp"; sourceTree = "<group>"; };
-		453C781D22349F0100818B19 /* tools widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "tools widget.cpp"; sourceTree = "<group>"; };
-		453C781E22349F0100818B19 /* tools widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "tools widget.hpp"; sourceTree = "<group>"; };
+		453C781D22349F0100818B19 /* tool select widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "tool select widget.cpp"; sourceTree = "<group>"; };
+		453C781E22349F0100818B19 /* tool select widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "tool select widget.hpp"; sourceTree = "<group>"; };
 		453C783E2234DF3200818B19 /* application.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = application.cpp; sourceTree = "<group>"; };
 		453C783F2234DF3200818B19 /* application.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = application.hpp; sourceTree = "<group>"; };
 		453C78412234E13E00818B19 /* window.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = window.cpp; sourceTree = "<group>"; };
@@ -844,8 +844,8 @@
 				453C78182234935000818B19 /* timeline widget.hpp */,
 				453C781A22349BBD00818B19 /* editor widget.cpp */,
 				453C781B22349BBD00818B19 /* editor widget.hpp */,
-				453C781D22349F0100818B19 /* tools widget.cpp */,
-				453C781E22349F0100818B19 /* tools widget.hpp */,
+				453C781D22349F0100818B19 /* tool select widget.cpp */,
+				453C781E22349F0100818B19 /* tool select widget.hpp */,
 				453C78442234F3C600818B19 /* status bar widget.cpp */,
 				453C78452234F3C600818B19 /* status bar widget.hpp */,
 			);
@@ -1884,7 +1884,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "function moc {\n  local OUTPUT=\"$PROJECT_DIR/src/$1.moc\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.hpp\" > \"$OUTPUT\"\n  echo \"\" >> \"$OUTPUT\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.cpp\" >> \"$OUTPUT\"\n}\n\nmoc \"status bar widget\"\nmoc \"timeline widget\"\nmoc \"editor widget\"\nmoc \"tools widget\"\nmoc \"application\"\nmoc \"window\"\n";
+			shellScript = "function moc {\n  local OUTPUT=\"$PROJECT_DIR/src/$1.moc\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.hpp\" > \"$OUTPUT\"\n  echo \"\" >> \"$OUTPUT\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.cpp\" >> \"$OUTPUT\"\n}\n\nmoc \"tool select widget\"\nmoc \"status bar widget\"\nmoc \"timeline widget\"\nmoc \"editor widget\"\nmoc \"application\"\nmoc \"window\"\n";
 		};
 		453C787B2235D63B00818B19 /* RCC */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1940,7 +1940,7 @@
 				453C781C22349BBD00818B19 /* editor widget.cpp in Sources */,
 				45BADA1D2247007F000D095C /* glm.cpp in Sources */,
 				45B284B6221B726200D6D055 /* tool impls.cpp in Sources */,
-				453C781F22349F0100818B19 /* tools widget.cpp in Sources */,
+				453C781F22349F0100818B19 /* tool select widget.cpp in Sources */,
 				453C78192234935000818B19 /* timeline widget.cpp in Sources */,
 				45F065F22222998300BCE863 /* current tool.cpp in Sources */,
 				453C78432234E13E00818B19 /* window.cpp in Sources */,
@@ -2084,6 +2084,11 @@
 					"$(inherited)",
 					/usr/local/opt/Qt/lib,
 				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					GLM_FORCE_SILENT_WARNINGS,
+					"DEBUG=1",
+					"$(inherited)",
+				);
 				HEADER_SEARCH_PATHS = $PROJECT_DIR/include;
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -2096,7 +2101,6 @@
 				);
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
-					"-DGLM_SILENT_WARNINGS",
 					"-Wall",
 					"-Wextra",
 					"-Weffc++",
@@ -2111,6 +2115,7 @@
 					"-Wno-comma",
 					"-Wweak-vtables",
 				);
+				OTHER_LDFLAGS = "-headerpad_max_install_names";
 				PRODUCT_BUNDLE_IDENTIFIER = "Indi-Kernick.Pixel-2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REEXPORTED_LIBRARY_PATHS = "";
@@ -2133,7 +2138,10 @@
 					/usr/local/opt/Qt/lib,
 				);
 				GCC_OPTIMIZATION_LEVEL = 3;
-				GCC_PREPROCESSOR_DEFINITIONS = NDEBUG;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					GLM_FORCE_SILENT_WARNINGS,
+					NDEBUG,
+				);
 				HEADER_SEARCH_PATHS = $PROJECT_DIR/include;
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -2146,7 +2154,6 @@
 				);
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
-					"-DGLM_SILENT_WARNINGS",
 					"-Wall",
 					"-Wextra",
 					"-Weffc++",
@@ -2161,6 +2168,7 @@
 					"-Wno-comma",
 					"-Wweak-vtables",
 				);
+				OTHER_LDFLAGS = "-headerpad_max_install_names";
 				PRODUCT_BUNDLE_IDENTIFIER = "Indi-Kernick.Pixel-2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REEXPORTED_LIBRARY_PATHS = "";

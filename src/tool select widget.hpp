@@ -1,26 +1,26 @@
 //
-//  tools widget.hpp
+//  tool select widget.hpp
 //  Pixel 2
 //
 //  Created by Indi Kernick on 10/3/19.
 //  Copyright © 2019 Indi Kernick. All rights reserved.
 //
 
-#ifndef tools_widget_hpp
-#define tools_widget_hpp
+#ifndef tool_select_widget_hpp
+#define tool_select_widget_hpp
 
 #include "current tool.hpp"
 #include <QtWidgets/qscrollarea.h>
 
 class ToolWidget;
 
-class ToolsWidget final : public QScrollArea {
+class ToolSelectWidget final : public QScrollArea {
   Q_OBJECT
 
   friend class ToolWidget;
 
 public:
-  explicit ToolsWidget(QWidget *);
+  explicit ToolSelectWidget(QWidget *);
 
 Q_SIGNALS:
   void cellModified();

@@ -74,15 +74,15 @@ void Window::makeDockWidget(Qt::DockWidgetArea area, QWidget *widget) {
 }
 
 void Window::connectSignals() {
-  connect(&timeline, &TimelineWidget::posChange,       &editor, &EditorWidget::compositePos);
-  connect(&timeline, &TimelineWidget::posChange,       &tools,  &ToolsWidget::changeCell);
-  connect(&timeline, &TimelineWidget::layerVisibility, &editor, &EditorWidget::compositeVis);
-  connect(&tools,    &ToolsWidget::cellModified,       &editor, &EditorWidget::composite);
-  connect(&tools,    &ToolsWidget::overlayModified,    &editor, &EditorWidget::compositeOverlay);
-  connect(&editor,   &EditorWidget::mouseDown,         &tools,  &ToolsWidget::mouseDown);
-  connect(&editor,   &EditorWidget::mouseMove,         &tools,  &ToolsWidget::mouseMove);
-  connect(&editor,   &EditorWidget::mouseUp,           &tools,  &ToolsWidget::mouseUp);
-  connect(&editor,   &EditorWidget::keyPress,          &tools,  &ToolsWidget::keyPress);
+  connect(&timeline, &TimelineWidget::posChange,         &editor, &EditorWidget::compositePos);
+  connect(&timeline, &TimelineWidget::posChange,         &tools,  &ToolSelectWidget::changeCell);
+  connect(&timeline, &TimelineWidget::layerVisibility,   &editor, &EditorWidget::compositeVis);
+  connect(&tools,    &ToolSelectWidget::cellModified,    &editor, &EditorWidget::composite);
+  connect(&tools,    &ToolSelectWidget::overlayModified, &editor, &EditorWidget::compositeOverlay);
+  connect(&editor,   &EditorWidget::mouseDown,           &tools,  &ToolSelectWidget::mouseDown);
+  connect(&editor,   &EditorWidget::mouseMove,           &tools,  &ToolSelectWidget::mouseMove);
+  connect(&editor,   &EditorWidget::mouseUp,             &tools,  &ToolSelectWidget::mouseUp);
+  connect(&editor,   &EditorWidget::keyPress,            &tools,  &ToolSelectWidget::keyPress);
 }
 
 #include "window.moc"

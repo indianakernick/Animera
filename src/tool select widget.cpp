@@ -1,12 +1,12 @@
 //
-//  tools widget.cpp
+//  tools select widget.cpp
 //  Pixel 2
 //
 //  Created by Indi Kernick on 10/3/19.
 //  Copyright © 2019 Indi Kernick. All rights reserved.
 //
 
-#include "tools widget.hpp"
+#include "tool select widget.hpp"
 
 #include "tool impls.hpp"
 #include <QtGui/qpainter.h>
@@ -20,7 +20,7 @@ class ToolWidget final : public QAbstractButton {
   static constexpr QSize button_size {52, 52};
 
 public:
-  ToolWidget(ToolsWidget *tools, QWidget *parent, std::unique_ptr<Tool> tool, const QString &name)
+  ToolWidget(ToolSelectWidget *tools, QWidget *parent, std::unique_ptr<Tool> tool, const QString &name)
     : QAbstractButton{parent}, tools{tools}, tool{std::move(tool)} {
     loadIcons(name);
     setToolTip(name);
@@ -37,7 +37,7 @@ public Q_SLOTS:
   }
 
 private:
-  ToolsWidget *tools;
+  ToolSelectWidget *tools;
   std::unique_ptr<Tool> tool;
   QPixmap enabledIcon;
   QPixmap disabledIcon;
@@ -70,7 +70,7 @@ private:
   }
 };
 
-ToolsWidget::ToolsWidget(QWidget *parent)
+ToolSelectWidget::ToolSelectWidget(QWidget *parent)
   : QScrollArea{parent}, box{new QWidget{this}} {
   setFixedWidth(54);
 
@@ -108,32 +108,32 @@ ToolsWidget::ToolsWidget(QWidget *parent)
   colors.erase = qRgba(0, 0, 0, 0);
 }
 
-void ToolsWidget::mouseDown(const QPoint pos, const ButtonType button, QImage *overlay) {
+void ToolSelectWidget::mouseDown(const QPoint pos, const ButtonType button, QImage *overlay) {
   emitModified(currTool.mouseDown({button, pos, colors, overlay}));
 }
 
-void ToolsWidget::mouseMove(const QPoint pos, QImage *overlay) {
+void ToolSelectWidget::mouseMove(const QPoint pos, QImage *overlay) {
   emitModified(currTool.mouseMove({{}, pos, colors, overlay}));
 }
 
-void ToolsWidget::mouseUp(const QPoint pos, const ButtonType button, QImage *overlay) {
+void ToolSelectWidget::mouseUp(const QPoint pos, const ButtonType button, QImage *overlay) {
   emitModified(currTool.mouseUp({button, pos, colors, overlay}));
 }
 
-void ToolsWidget::keyPress(const Qt::Key key, QImage *overlay) {
+void ToolSelectWidget::keyPress(const Qt::Key key, QImage *overlay) {
   emitModified(currTool.keyPress({key, colors, overlay}));
 }
 
-void ToolsWidget::changeCell(Cell *cell) {
+void ToolSelectWidget::changeCell(Cell *cell) {
   currTool.changeCell(cell);
 }
 
-void ToolsWidget::changeTool(Tool *tool) {
+void ToolSelectWidget::changeTool(Tool *tool) {
   currTool.changeTool(tool);
 }
 
 template <typename ToolClass>
-ToolWidget *ToolsWidget::makeToolWidget(const QString &name) {
+ToolWidget *ToolSelectWidget::makeToolWidget(const QString &name) {
   std::unique_ptr<Tool> tool = std::make_unique<ToolClass>();
   ToolWidget *widget = new ToolWidget{this, box, std::move(tool), name};
   tools.push_back(widget);
@@ -141,7 +141,7 @@ ToolWidget *ToolsWidget::makeToolWidget(const QString &name) {
   return widget;
 }
 
-void ToolsWidget::emitModified(const ToolChanges changes) {
+void ToolSelectWidget::emitModified(const ToolChanges changes) {
   if (changes == ToolChanges::cell || changes == ToolChanges::cell_overlay) {
     Q_EMIT cellModified();
   } else if (changes == ToolChanges::overlay) {
@@ -149,9 +149,9 @@ void ToolsWidget::emitModified(const ToolChanges changes) {
   }
 }
 
-void ToolsWidget::paintEvent(QPaintEvent *) {
+void ToolSelectWidget::paintEvent(QPaintEvent *) {
   QPainter painter{this};
   painter.fillRect(0, 0, width(), height(), QColor{127, 127, 127});
 }
 
-#include "tools widget.moc"
+#include "tool select widget.moc"

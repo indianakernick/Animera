@@ -20,8 +20,6 @@ StatusBarWidget::StatusBarWidget(QWidget *parent)
   setFixedHeight(22);
   setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
   setContentsMargins(0, 0, 0, 0);
-  showPerm("Hello");
-  showTemp("World");
 }
 
 void StatusBarWidget::showTemp(const std::string &text) {

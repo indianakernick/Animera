@@ -1,16 +1,16 @@
 /****************************************************************************
-** Meta object code from reading C++ file 'tools widget.hpp'
+** Meta object code from reading C++ file 'tool select widget.hpp'
 **
 ** Created by: The Qt Meta Object Compiler version 67 (Qt 5.12.2)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
-#include "/Users/indikernick/Dev/Projects/C++/Pixel 2/src/tools widget.hpp"
+#include "/Users/indikernick/Dev/Projects/C++/Pixel 2/src/tool select widget.hpp"
 #include <QtCore/qbytearray.h>
 #include <QtCore/qmetatype.h>
 #if !defined(Q_MOC_OUTPUT_REVISION)
-#error "The header file 'tools widget.hpp' doesn't include <QObject>."
+#error "The header file 'tool select widget.hpp' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 67
 #error "This file was generated using the moc from 5.12.2. It"
 #error "cannot be used with the include files from this version of Qt."
@@ -20,40 +20,40 @@
 QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
-struct qt_meta_stringdata_ToolsWidget_t {
+struct qt_meta_stringdata_ToolSelectWidget_t {
     QByteArrayData data[13];
-    char stringdata0[123];
+    char stringdata0[128];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
-    qptrdiff(offsetof(qt_meta_stringdata_ToolsWidget_t, stringdata0) + ofs \
+    qptrdiff(offsetof(qt_meta_stringdata_ToolSelectWidget_t, stringdata0) + ofs \
         - idx * sizeof(QByteArrayData)) \
     )
-static const qt_meta_stringdata_ToolsWidget_t qt_meta_stringdata_ToolsWidget = {
+static const qt_meta_stringdata_ToolSelectWidget_t qt_meta_stringdata_ToolSelectWidget = {
     {
-QT_MOC_LITERAL(0, 0, 11), // "ToolsWidget"
-QT_MOC_LITERAL(1, 12, 12), // "cellModified"
-QT_MOC_LITERAL(2, 25, 0), // ""
-QT_MOC_LITERAL(3, 26, 15), // "overlayModified"
-QT_MOC_LITERAL(4, 42, 9), // "mouseDown"
-QT_MOC_LITERAL(5, 52, 10), // "ButtonType"
-QT_MOC_LITERAL(6, 63, 7), // "QImage*"
-QT_MOC_LITERAL(7, 71, 9), // "mouseMove"
-QT_MOC_LITERAL(8, 81, 7), // "mouseUp"
-QT_MOC_LITERAL(9, 89, 8), // "keyPress"
-QT_MOC_LITERAL(10, 98, 7), // "Qt::Key"
-QT_MOC_LITERAL(11, 106, 10), // "changeCell"
-QT_MOC_LITERAL(12, 117, 5) // "Cell*"
+QT_MOC_LITERAL(0, 0, 16), // "ToolSelectWidget"
+QT_MOC_LITERAL(1, 17, 12), // "cellModified"
+QT_MOC_LITERAL(2, 30, 0), // ""
+QT_MOC_LITERAL(3, 31, 15), // "overlayModified"
+QT_MOC_LITERAL(4, 47, 9), // "mouseDown"
+QT_MOC_LITERAL(5, 57, 10), // "ButtonType"
+QT_MOC_LITERAL(6, 68, 7), // "QImage*"
+QT_MOC_LITERAL(7, 76, 9), // "mouseMove"
+QT_MOC_LITERAL(8, 86, 7), // "mouseUp"
+QT_MOC_LITERAL(9, 94, 8), // "keyPress"
+QT_MOC_LITERAL(10, 103, 7), // "Qt::Key"
+QT_MOC_LITERAL(11, 111, 10), // "changeCell"
+QT_MOC_LITERAL(12, 122, 5) // "Cell*"
 
     },
-    "ToolsWidget\0cellModified\0\0overlayModified\0"
-    "mouseDown\0ButtonType\0QImage*\0mouseMove\0"
-    "mouseUp\0keyPress\0Qt::Key\0changeCell\0"
-    "Cell*"
+    "ToolSelectWidget\0cellModified\0\0"
+    "overlayModified\0mouseDown\0ButtonType\0"
+    "QImage*\0mouseMove\0mouseUp\0keyPress\0"
+    "Qt::Key\0changeCell\0Cell*"
 };
 #undef QT_MOC_LITERAL
 
-static const uint qt_meta_data_ToolsWidget[] = {
+static const uint qt_meta_data_ToolSelectWidget[] = {
 
  // content:
        8,       // revision
@@ -91,10 +91,10 @@ static const uint qt_meta_data_ToolsWidget[] = {
        0        // eod
 };
 
-void ToolsWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+void ToolSelectWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
     if (_c == QMetaObject::InvokeMetaMethod) {
-        auto *_t = static_cast<ToolsWidget *>(_o);
+        auto *_t = static_cast<ToolSelectWidget *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->cellModified(); break;
@@ -109,15 +109,15 @@ void ToolsWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
     } else if (_c == QMetaObject::IndexOfMethod) {
         int *result = reinterpret_cast<int *>(_a[0]);
         {
-            using _t = void (ToolsWidget::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ToolsWidget::cellModified)) {
+            using _t = void (ToolSelectWidget::*)();
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ToolSelectWidget::cellModified)) {
                 *result = 0;
                 return;
             }
         }
         {
-            using _t = void (ToolsWidget::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ToolsWidget::overlayModified)) {
+            using _t = void (ToolSelectWidget::*)();
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ToolSelectWidget::overlayModified)) {
                 *result = 1;
                 return;
             }
@@ -125,30 +125,30 @@ void ToolsWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
     }
 }
 
-QT_INIT_METAOBJECT const QMetaObject ToolsWidget::staticMetaObject = { {
+QT_INIT_METAOBJECT const QMetaObject ToolSelectWidget::staticMetaObject = { {
     &QScrollArea::staticMetaObject,
-    qt_meta_stringdata_ToolsWidget.data,
-    qt_meta_data_ToolsWidget,
+    qt_meta_stringdata_ToolSelectWidget.data,
+    qt_meta_data_ToolSelectWidget,
     qt_static_metacall,
     nullptr,
     nullptr
 } };
 
 
-const QMetaObject *ToolsWidget::metaObject() const
+const QMetaObject *ToolSelectWidget::metaObject() const
 {
     return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
 }
 
-void *ToolsWidget::qt_metacast(const char *_clname)
+void *ToolSelectWidget::qt_metacast(const char *_clname)
 {
     if (!_clname) return nullptr;
-    if (!strcmp(_clname, qt_meta_stringdata_ToolsWidget.stringdata0))
+    if (!strcmp(_clname, qt_meta_stringdata_ToolSelectWidget.stringdata0))
         return static_cast<void*>(this);
     return QScrollArea::qt_metacast(_clname);
 }
 
-int ToolsWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+int ToolSelectWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
     _id = QScrollArea::qt_metacall(_c, _id, _a);
     if (_id < 0)
@@ -166,13 +166,13 @@ int ToolsWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void ToolsWidget::cellModified()
+void ToolSelectWidget::cellModified()
 {
     QMetaObject::activate(this, &staticMetaObject, 0, nullptr);
 }
 
 // SIGNAL 1
-void ToolsWidget::overlayModified()
+void ToolSelectWidget::overlayModified()
 {
     QMetaObject::activate(this, &staticMetaObject, 1, nullptr);
 }
@@ -180,7 +180,7 @@ QT_WARNING_POP
 QT_END_MOC_NAMESPACE
 
 /****************************************************************************
-** Meta object code from reading C++ file 'tools widget.cpp'
+** Meta object code from reading C++ file 'tool select widget.cpp'
 **
 ** Created by: The Qt Meta Object Compiler version 67 (Qt 5.12.2)
 **
@@ -190,7 +190,7 @@ QT_END_MOC_NAMESPACE
 #include <QtCore/qbytearray.h>
 #include <QtCore/qmetatype.h>
 #if !defined(Q_MOC_OUTPUT_REVISION)
-#error "The header file 'tools widget.cpp' doesn't include <QObject>."
+#error "The header file 'tool select widget.cpp' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 67
 #error "This file was generated using the moc from 5.12.2. It"
 #error "cannot be used with the include files from this version of Qt."
