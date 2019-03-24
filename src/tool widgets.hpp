@@ -43,7 +43,7 @@ class MaskSelectToolWidget final : public QWidget {
 public:
   using impl = MaskSelectTool;
   static constexpr const char icon_name[] = "mask select";
-  static constexpr const char tooltip[] = "Mask Select Tool";
+  static constexpr const char tooltip[] = "Mask Select Tool\n\nPress P to toggle between COPY and PASTE modes";
 };
 
 class LineToolWidget final : public QWidget {
@@ -85,21 +85,21 @@ class TranslateToolWidget final : public QWidget {
 public:
   using impl = TranslateTool;
   static constexpr const char icon_name[] = "translate";
-  static constexpr const char tooltip[] = "Translate Tool";
+  static constexpr const char tooltip[] = "Translate Tool\n\nUse arrow keys or drag";
 };
 
 class FlipToolWidget final : public QWidget {
 public:
   using impl = FlipTool;
   static constexpr const char icon_name[] = "flip";
-  static constexpr const char tooltip[] = "Flip Tool";
+  static constexpr const char tooltip[] = "Flip Tool\n\nUse arrow keys";
 };
 
 class RotateToolWidget final : public QWidget {
 public:
   using impl = RotateTool;
   static constexpr const char icon_name[] = "rotate";
-  static constexpr const char tooltip[] = "Rotate Tool";
+  static constexpr const char tooltip[] = "Rotate Tool\n\nUse arrow keys";
 };
 
 #endif
