@@ -43,6 +43,8 @@ std::string &operator+=(std::string &status, const QSize size) {
   return status += QPoint{size.width(), size.height()};
 }
 
+// @TODO should I put these functions in a class?
+
 void statusPos(std::string &status, const QPoint pos) {
   status += "POS: ";
   status += pos;
@@ -73,12 +75,10 @@ bool BrushTool::attachCell(Cell *cell) {
 }
 
 void BrushTool::detachCell() {
-  assert(source);
   source = nullptr;
 }
 
 ToolChanges BrushTool::mouseDown(const ToolMouseEvent &event) {
-  assert(source);
   clearImage(*event.overlay);
   symPoint(*event.overlay, overlay_color, event.pos);
   symPoint(*event.status, event.pos);
@@ -88,7 +88,6 @@ ToolChanges BrushTool::mouseDown(const ToolMouseEvent &event) {
 }
 
 ToolChanges BrushTool::mouseMove(const ToolMouseEvent &event) {
-  assert(source);
   clearImage(*event.overlay);
   symPoint(*event.overlay, overlay_color, event.pos);
   symPoint(*event.status, event.pos);
@@ -100,9 +99,16 @@ ToolChanges BrushTool::mouseMove(const ToolMouseEvent &event) {
 }
 
 ToolChanges BrushTool::mouseUp(const ToolMouseEvent &event) {
-  assert(source);
   symPoint(*event.status, event.pos);
   return drawnChanges(symLine(source->image.data, color, {lastPos, event.pos}));
+}
+
+ToolChanges BrushTool::keyPress(const ToolKeyEvent &event) {
+  if (event.key == Qt::Key_V) {
+    clearImage(source->image.data, event.colors.erase);
+    return ToolChanges::cell;
+  }
+  return ToolChanges::none;
 }
 
 void BrushTool::setWidth(const int newWidth) {

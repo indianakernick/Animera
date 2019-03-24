@@ -22,7 +22,7 @@ class BrushToolWidget final : public QWidget {
 public:
   using impl = BrushTool;
   static constexpr const char icon_name[] = "brush";
-  static constexpr const char tooltip[] = "Brush Tool";
+  static constexpr const char tooltip[] = "Brush Tool\n\nPress V to clear the frame";
 };
 
 class FloodFillToolWidget final : public QWidget {
