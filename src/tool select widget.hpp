@@ -47,8 +47,6 @@ private:
   ToolWidget *makeToolWidget();
   
   void emitModified(ToolChanges);
-  
-  void paintEvent(QPaintEvent *) override;
 };
 
 #endif

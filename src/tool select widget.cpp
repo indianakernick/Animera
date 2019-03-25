@@ -90,6 +90,7 @@ ToolSelectWidget::ToolSelectWidget(QWidget *parent)
 
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  setStyleSheet("background-color: " + QColor{63, 63, 127}.name());
   
   QVBoxLayout *layout = new QVBoxLayout{box};
   layout->setSpacing(0);
@@ -173,11 +174,6 @@ void ToolSelectWidget::emitModified(const ToolChanges changes) {
   } else if (changes == ToolChanges::overlay) {
     Q_EMIT overlayModified();
   }
-}
-
-void ToolSelectWidget::paintEvent(QPaintEvent *) {
-  QPainter painter{this};
-  painter.fillRect(0, 0, width(), height(), QColor{127, 127, 127});
 }
 
 #include "tool select widget.moc"

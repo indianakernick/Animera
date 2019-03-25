@@ -71,6 +71,8 @@ private:
   SelectMode mode = SelectMode::copy;
 };
 
+// @TODO maybe we could rename this to PolygonSelectTool
+// we could add a MaskSelectTool that uses flood fills to build up a mask
 class MaskSelectTool final : public Tool {
 public:
   bool attachCell(Cell *) override;
