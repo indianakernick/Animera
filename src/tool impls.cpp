@@ -322,7 +322,7 @@ ToolChanges MaskSelectTool::mouseDown(const ToolMouseEvent &event) {
   } else Q_UNREACHABLE();
   if (event.button != ButtonType::primary) return ToolChanges::overlay;
   if (mode == SelectMode::copy) {
-    initPolygon(event.pos);
+    polygon.init(event.pos);
     return ToolChanges::overlay;
   } else if (mode == SelectMode::paste) {
     blitMaskImage(source->image.data, mask, selection, event.pos + offset);
@@ -336,9 +336,9 @@ ToolChanges MaskSelectTool::mouseMove(const ToolMouseEvent &event) {
   statusMode(*event.status, mode);
   if (mode == SelectMode::copy) {
     if (event.button == ButtonType::primary) {
-      pushPolygon(event.pos);
+      polygon.push(event.pos);
       drawFilledPolygon(*event.overlay, overlay_color, polygon, QPoint{0, 0});
-      statusPosSize(*event.status, bounds.topLeft(), bounds.size());
+      statusPosSize(*event.status, polygon.bounds().topLeft(), polygon.bounds().size());
     } else {
       drawSquarePoint(*event.overlay, overlay_color, event.pos);
       statusPos(*event.status, event.pos);
@@ -355,8 +355,8 @@ ToolChanges MaskSelectTool::mouseUp(const ToolMouseEvent &event) {
   assert(source);
   clearImage(*event.overlay);
   if (mode == SelectMode::copy) {
-    pushPolygon(event.pos);
-    const QRect clippedBounds = bounds.intersected(source->image.data.rect());
+    polygon.push(event.pos);
+    const QRect clippedBounds = polygon.bounds().intersected(source->image.data.rect());
     mask = QImage{clippedBounds.size(), mask_format};
     clearImage(mask);
     drawFilledPolygon(mask, mask_color_on, polygon, -clippedBounds.topLeft());
@@ -384,19 +384,6 @@ ToolChanges MaskSelectTool::keyPress(const ToolKeyEvent &event) {
 
 void MaskSelectTool::setMode(const SelectMode newMode) {
   mode = newMode;
-}
-
-void MaskSelectTool::initPolygon(const QPoint point) {
-  polygon.clear();
-  polygon.push_back(point);
-  bounds = QRect{point, QSize{1, 1}};
-}
-
-void MaskSelectTool::pushPolygon(const QPoint point) {
-  assert(!polygon.empty());
-  if (polygon.back() == point) return;
-  polygon.push_back(point);
-  bounds = bounds.united(QRect{point, QSize{1, 1}});
 }
 
 template <typename Derived>

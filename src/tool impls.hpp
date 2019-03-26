@@ -10,6 +10,7 @@
 #define tool_impls_hpp
 
 #include "tool.hpp"
+#include "polygon.hpp"
 #include "paint params.hpp"
 
 class SourceCell;
@@ -85,18 +86,13 @@ public:
   void setMode(SelectMode);
 
 private:
-  std::vector<QPoint> polygon;
-  QRect bounds;
+  Polygon polygon;
   SourceCell *source = nullptr;
   QImage selection;
   QImage mask;
   QImage overlay;
   QPoint offset;
   SelectMode mode = SelectMode::copy;
-  
-  // @TODO maybe factor this out into a polygon class
-  void initPolygon(QPoint);
-  void pushPolygon(QPoint);
 };
 
 template <typename Derived>

@@ -449,7 +449,7 @@ bool drawRoundLine(QImage &img, const QRgb color, const QLine line, const int th
 bool drawFilledPolygon(
   QImage &img,
   const QRgb color,
-  const std::vector<QPoint> &poly,
+  const Polygon &poly,
   const QPoint offset
 ) {
   std::vector<QPoint> shiftedPoly;

@@ -21,6 +21,10 @@ constexpr QPoint toPoint(const QSize s) {
   return {s.width(), s.height()};
 }
 
+constexpr QRect toRect(const QPoint p) {
+  return {p, QSize{1, 1}};
+}
+
 inline QColor toColor(const QRgb rgba) {
   // the QRgb constructor sets alpha to 255 for some reason
   return QColor{qRed(rgba), qGreen(rgba), qBlue(rgba), qAlpha(rgba)};
