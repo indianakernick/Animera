@@ -8,6 +8,7 @@
 
 #include "painting.hpp"
 
+#include "utils.hpp"
 #include <QtGui/qpainter.h>
 
 namespace {
@@ -44,11 +45,6 @@ QRect adjustStrokedEllipse(const QRect rect, const int thickness) {
     rect.width() - thickness,
     rect.height() - thickness
   };
-}
-
-QColor toColor(const QRgb rgba) {
-  // the QRgb constructor sets alpha to 255 for some reason
-  return QColor{qRed(rgba), qGreen(rgba), qBlue(rgba), qAlpha(rgba)};
 }
 
 const QPen round_pen{

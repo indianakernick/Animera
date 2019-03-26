@@ -8,6 +8,7 @@
 
 #include "editor widget.hpp"
 
+#include "config.hpp"
 #include "composite.hpp"
 #include <QtGui/qevent.h>
 #include <QtGui/qbitmap.h>
@@ -17,9 +18,6 @@
 
 class EditorImage final : public QWidget {
   Q_OBJECT
-  
-  static inline const QColor checker_color_a = {191, 191, 191};
-  static inline const QColor checker_color_b = {255, 255, 255};
   
 public:
   explicit EditorImage(QScrollArea *parent)
@@ -43,14 +41,14 @@ public:
   }
   void zoomIn() {
     const int oldScale = scale;
-    scale = std::min(scale + 1, 64);
+    scale = std::min(scale + 1, edit_max_scale);
     updatePixmap();
     adjustScroll(oldScale);
     updateMouse();
   }
   void zoomOut() {
     const int oldScale = scale;
-    scale = std::max(scale - 1, 1);
+    scale = std::max(scale - 1, edit_min_scale);
     updatePixmap();
     adjustScroll(oldScale);
     updateMouse();
@@ -70,7 +68,7 @@ private:
   QImage overlay;
   QPixmap editor;
   QPoint pos;
-  int scale = 2;
+  int scale = edit_default_scale;
   int keysDown = 0;
 
   void adjustScroll(const int oldScale) {
@@ -94,10 +92,10 @@ private:
 
   void initCursor() {
     cursor = QCursor{
-      QBitmap{":/Cursors/circle b.pbm"}.scaled(8 * 2, 8 * 2),
-      QBitmap{":/Cursors/circle m.pbm"}.scaled(8 * 2, 8 * 2),
-      4 * 2,
-      4 * 2
+      QBitmap{":/Cursors/circle b.pbm"}.scaled(edit_cursor_size),
+      QBitmap{":/Cursors/circle m.pbm"}.scaled(edit_cursor_size),
+      edit_cursor_offset.x(),
+      edit_cursor_offset.y()
     };
   }
 
@@ -111,8 +109,8 @@ private:
     checkers = QPixmap{newSize * 2};
     QPainter painter{&checkers};
     const QRect rect{{}, newSize * 2};
-    painter.fillRect(rect, checker_color_a);
-    painter.fillRect(rect, {checker_color_b, Qt::Dense4Pattern});
+    painter.fillRect(rect, edit_checker_a);
+    painter.fillRect(rect, {edit_checker_b, Qt::Dense4Pattern});
   }
 
   void updatePixmap() {
@@ -140,17 +138,17 @@ private:
   }
   ButtonType getButton(QMouseEvent *event) {
     switch (event->button()) {
-      case Qt::LeftButton: return ButtonType::primary;
-      case Qt::RightButton: return ButtonType::secondary;
-      case Qt::MiddleButton: return ButtonType::erase;
+      case mouse_primary:   return ButtonType::primary;
+      case mouse_secondary: return ButtonType::secondary;
+      case mouse_tertiary:  return ButtonType::erase;
       default: Q_UNREACHABLE();
     }
   }
   ButtonType getButton(QKeyEvent *event) {
     switch (event->key()) {
-      case Qt::Key_Z: return ButtonType::primary;
-      case Qt::Key_X: return ButtonType::secondary;
-      case Qt::Key_C: return ButtonType::erase;
+      case key_primary:   return ButtonType::primary;
+      case key_secondary: return ButtonType::secondary;
+      case key_tertiary:  return ButtonType::erase;
       default: return ButtonType::none;
     }
   }
@@ -182,9 +180,9 @@ public:
       ++keysDown;
       if (keysDown == 1) grabMouse(cursor);
     }
-    if (event->key() == Qt::Key_Q) {
+    if (event->key() == key_zoom_out) {
       zoomOut();
-    } else if (event->key() == Qt::Key_E) {
+    } else if (event->key() == key_zoom_in) {
       zoomIn();
     } else if (ButtonType button = getButton(event); button != ButtonType::none) {
       if (!event->isAutoRepeat()) {

@@ -8,6 +8,7 @@
 
 #include "tool select widget.hpp"
 
+#include "config.hpp"
 #include "tool widgets.hpp"
 #include <QtGui/qpainter.h>
 #include <QtWidgets/qboxlayout.h>
@@ -21,10 +22,7 @@ constexpr tag_t<T> tag{};
 
 class ToolWidget final : public QAbstractButton {
   Q_OBJECT
-
-  static constexpr QSize icon_size {48, 48};
-  static constexpr QSize button_size {52, 52};
-
+  
 public:
   template <typename WidgetClass>
   ToolWidget(
@@ -39,7 +37,7 @@ public:
     setToolTip(WidgetClass::tooltip);
     setCheckable(true);
     setAutoExclusive(true);
-    setFixedSize(button_size);
+    setFixedSize(tool_button_size);
     setContentsMargins(0, 0, 0, 0);
     connect(this, &QAbstractButton::pressed, this, &ToolWidget::toolPressed);
   }
@@ -59,10 +57,10 @@ private:
   void loadIcons(const QString &name) {
     bool loaded = enabledIcon.load(":/Tools/" + name + " e.png");
     assert(loaded && name.data());
-    enabledIcon = enabledIcon.scaled(icon_size);
+    enabledIcon = enabledIcon.scaled(tool_icon_size);
     loaded = disabledIcon.load(":/Tools/" + name + " d.png");
     assert(loaded);
-    disabledIcon = disabledIcon.scaled(icon_size);
+    disabledIcon = disabledIcon.scaled(tool_icon_size);
   }
   
   void paintEvent(QPaintEvent *) override {
@@ -86,11 +84,11 @@ private:
 
 ToolSelectWidget::ToolSelectWidget(QWidget *parent)
   : QScrollArea{parent}, box{new QWidget{this}} {
-  setFixedWidth(54);
+  setFixedWidth(tool_select_width);
 
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  setStyleSheet("background-color: " + QColor{63, 63, 127}.name());
+  setStyleSheet("background-color: " + tool_select_background.name());
   
   QVBoxLayout *layout = new QVBoxLayout{box};
   layout->setSpacing(0);

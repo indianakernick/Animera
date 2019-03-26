@@ -114,6 +114,8 @@
 		455F28862206930D00C73F39 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		455F28882206942200C73F39 /* libqcocoa.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libqcocoa.dylib; path = ../../../../../../usr/local/Cellar/qt/5.12.0/plugins/platforms/libqcocoa.dylib; sourceTree = "<group>"; };
 		455F288B2206B57300C73F39 /* QtQuick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtQuick.framework; path = ../../../../../../usr/local/Cellar/qt/5.12.0/lib/QtQuick.framework; sourceTree = "<group>"; };
+		458F84032249CB7C005F91D0 /* config.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = config.hpp; sourceTree = "<group>"; };
+		458F84042249D4D9005F91D0 /* utils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = utils.hpp; sourceTree = "<group>"; };
 		45B284912218E38800D6D055 /* image.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = image.cpp; sourceTree = "<group>"; };
 		45B284922218E38800D6D055 /* image.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = image.hpp; sourceTree = "<group>"; };
 		45B284942218E39300D6D055 /* cell.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = cell.cpp; sourceTree = "<group>"; };
@@ -936,6 +938,8 @@
 		455F2853220688FD00C73F39 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				458F84032249CB7C005F91D0 /* config.hpp */,
+				458F84042249D4D9005F91D0 /* utils.hpp */,
 				453C783C2234DECE00818B19 /* Cells */,
 				453C783B2234DEBA00818B19 /* Tools */,
 				453C783D2234DEF100818B19 /* Widgets */,

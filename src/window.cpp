@@ -8,6 +8,7 @@
 
 #include "window.hpp"
 
+#include "config.hpp"
 #include <QtWidgets/qstyle.h>
 #include <QtWidgets/qmenubar.h>
 #include <QtWidgets/qboxlayout.h>
@@ -20,7 +21,7 @@ Window::Window(const QRect desktop)
     timeline{&bottom, anim},
     statusBar{&bottom} {
   setWindowTitle("Pixel 2");
-  setMinimumSize(1280, 720);
+  setMinimumSize(glob_min_window_size);
   setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
   setGeometry(QStyle::alignedRect(
     Qt::LeftToRight,

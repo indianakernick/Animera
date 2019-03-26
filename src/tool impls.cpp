@@ -9,6 +9,7 @@
 #include "tool impls.hpp"
 
 #include <cmath>
+#include "config.hpp"
 #include "painting.hpp"
 #include "composite.hpp"
 #include "cell impls.hpp"
@@ -104,7 +105,7 @@ ToolChanges BrushTool::mouseUp(const ToolMouseEvent &event) {
 }
 
 ToolChanges BrushTool::keyPress(const ToolKeyEvent &event) {
-  if (event.key == Qt::Key_V) {
+  if (event.key == key_clear) {
     clearImage(source->image.data, event.colors.erase);
     return ToolChanges::cell;
   }
@@ -288,7 +289,7 @@ ToolChanges RectangleSelectTool::mouseUp(const ToolMouseEvent &event) {
 }
 
 ToolChanges RectangleSelectTool::keyPress(const ToolKeyEvent &event) {
-  if (event.key == Qt::Key_P && startPos == no_point) {
+  if (event.key == key_toggle_copy_paste && startPos == no_point) {
     mode = opposite(mode);
   }
   statusMode(*event.status, mode);
@@ -374,7 +375,7 @@ ToolChanges MaskSelectTool::mouseUp(const ToolMouseEvent &event) {
 
 ToolChanges MaskSelectTool::keyPress(const ToolKeyEvent &event) {
   // @TODO make sure the mouse isn't down
-  if (event.key == Qt::Key_P) {
+  if (event.key == key_toggle_copy_paste) {
     mode = opposite(mode);
   }
   statusMode(*event.status, mode);
@@ -648,11 +649,11 @@ namespace {
 
 QPoint arrowToDir(const Qt::Key key) {
   switch (key) {
-    case Qt::Key_Up: return {0, -1};
-    case Qt::Key_Right: return {1, 0};
-    case Qt::Key_Down: return {0, 1};
-    case Qt::Key_Left: return {-1, 0};
-    default: return {0, 0};
+    case key_mov_up:    return {0, -1};
+    case key_mov_right: return {1, 0};
+    case key_mov_down:  return {0, 1};
+    case key_mov_left:  return {-1, 0};
+    default:            return {0, 0};
   }
 }
 
@@ -727,10 +728,10 @@ namespace {
 bool arrowToFlip(const Qt::Key key, Transform &xform) {
   switch (key) {
     // return true if changed
-    case Qt::Key_Up:    return  std::exchange(xform.flipY, false);
-    case Qt::Key_Right: return !std::exchange(xform.flipX, true);
-    case Qt::Key_Down:  return !std::exchange(xform.flipY, true);
-    case Qt::Key_Left:  return  std::exchange(xform.flipX, false);
+    case key_flp_on_x: return !std::exchange(xform.flipX, true);
+    case key_flp_on_y: return !std::exchange(xform.flipY, true);
+    case key_flp_off_y: return std::exchange(xform.flipY, false);
+    case key_flp_off_x: return std::exchange(xform.flipX, false);
     default: return false;
   }
 }
@@ -806,10 +807,10 @@ namespace {
 
 quint8 arrowToRot(const Qt::Key key) {
   switch (key) {
-    case Qt::Key_Up: return 3;
-    case Qt::Key_Right: return 1;
-    case Qt::Key_Down: return 1;
-    case Qt::Key_Left: return 3;
+    case key_rot_cw_a:
+    case key_rot_cw_b: return 1;
+    case key_rot_ccw_a:
+    case key_rot_ccw_b: return 3;
     default: return 0;
   }
 }

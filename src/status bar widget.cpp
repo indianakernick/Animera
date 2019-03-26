@@ -8,16 +8,17 @@
 
 #include "status bar widget.hpp"
 
+#include "config.hpp"
 #include "render text.hpp"
 #include <QtGui/qpainter.h>
 
 StatusBarWidget::StatusBarWidget(QWidget *parent)
   : QWidget{parent} {
-  timer.setInterval(5000);
+  timer.setInterval(stat_temp_duration_ms);
   timer.setSingleShot(true);
   connect(&timer, &QTimer::timeout, this, &StatusBarWidget::hideTemp);
-  setMinimumWidth(400);
-  setFixedHeight(22);
+  setMinimumWidth(stat_min_width);
+  setFixedHeight(stat_height);
   setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
   setContentsMargins(0, 0, 0, 0);
 }
@@ -35,11 +36,11 @@ void StatusBarWidget::showPerm(const std::string &text) {
 
 void StatusBarWidget::paintEvent(QPaintEvent *) {
   QPainter painter{this};
-  painter.fillRect(rect(), {127, 127, 127});
+  painter.fillRect(rect(), stat_background);
   if (tempText.empty()) {
-    renderText(painter, 2, 2, permText);
+    renderText(painter, stat_padding, stat_padding, permText);
   } else {
-    renderText(painter, 2, 2, permText + " | " + tempText);
+    renderText(painter, stat_padding, stat_padding, permText + " | " + tempText);
   }
 }
 
