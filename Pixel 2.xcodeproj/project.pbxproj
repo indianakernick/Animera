@@ -62,7 +62,7 @@
 		453C78422234E13E00818B19 /* window.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = window.hpp; sourceTree = "<group>"; };
 		453C78442234F3C600818B19 /* status bar widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "status bar widget.cpp"; sourceTree = "<group>"; };
 		453C78452234F3C600818B19 /* status bar widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "status bar widget.hpp"; sourceTree = "<group>"; };
-		453C78472235C91200818B19 /* mask select e.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mask select e.png"; sourceTree = "<group>"; };
+		453C78472235C91200818B19 /* polygon select e.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "polygon select e.png"; sourceTree = "<group>"; };
 		453C78482235C91300818B19 /* rotate e.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rotate e.png"; sourceTree = "<group>"; };
 		453C78492235C91300818B19 /* flood fill d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flood fill d.png"; sourceTree = "<group>"; };
 		453C784A2235C91300818B19 /* translate d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "translate d.png"; sourceTree = "<group>"; };
@@ -77,7 +77,7 @@
 		453C78532235C91400818B19 /* flood fill e.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flood fill e.png"; sourceTree = "<group>"; };
 		453C78542235C91400818B19 /* stroked circle d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "stroked circle d.png"; sourceTree = "<group>"; };
 		453C78552235C91400818B19 /* stroked rectangle d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "stroked rectangle d.png"; sourceTree = "<group>"; };
-		453C78562235C91400818B19 /* mask select d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mask select d.png"; sourceTree = "<group>"; };
+		453C78562235C91400818B19 /* polygon select d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "polygon select d.png"; sourceTree = "<group>"; };
 		453C78572235C91400818B19 /* stroked rectangle e.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "stroked rectangle e.png"; sourceTree = "<group>"; };
 		453C78582235C91500818B19 /* flip e.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flip e.png"; sourceTree = "<group>"; };
 		453C785A2235C91500818B19 /* filled circle e.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "filled circle e.png"; sourceTree = "<group>"; };
@@ -877,8 +877,8 @@
 				453C78532235C91400818B19 /* flood fill e.png */,
 				453C78502235C91300818B19 /* line d.png */,
 				453C784F2235C91300818B19 /* line e.png */,
-				453C78562235C91400818B19 /* mask select d.png */,
-				453C78472235C91200818B19 /* mask select e.png */,
+				453C78562235C91400818B19 /* polygon select d.png */,
+				453C78472235C91200818B19 /* polygon select e.png */,
 				453C784C2235C91300818B19 /* rectangle select d.png */,
 				453C784E2235C91300818B19 /* rectangle select e.png */,
 				453C784D2235C91300818B19 /* rotate d.png */,

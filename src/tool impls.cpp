@@ -300,16 +300,16 @@ void RectangleSelectTool::setMode(const SelectMode newMode) {
   mode = newMode;
 }
 
-bool MaskSelectTool::attachCell(Cell *cell) {
+bool PolygonSelectTool::attachCell(Cell *cell) {
   return source = dynamic_cast<SourceCell *>(cell);
 }
 
-void MaskSelectTool::detachCell() {
+void PolygonSelectTool::detachCell() {
   assert(source);
   source = nullptr;
 }
 
-ToolChanges MaskSelectTool::mouseDown(const ToolMouseEvent &event) {
+ToolChanges PolygonSelectTool::mouseDown(const ToolMouseEvent &event) {
   assert(source);
   clearImage(*event.overlay);
   statusMode(*event.status, mode);
@@ -330,7 +330,7 @@ ToolChanges MaskSelectTool::mouseDown(const ToolMouseEvent &event) {
   } else Q_UNREACHABLE();
 }
 
-ToolChanges MaskSelectTool::mouseMove(const ToolMouseEvent &event) {
+ToolChanges PolygonSelectTool::mouseMove(const ToolMouseEvent &event) {
   assert(source);
   clearImage(*event.overlay);
   statusMode(*event.status, mode);
@@ -350,7 +350,7 @@ ToolChanges MaskSelectTool::mouseMove(const ToolMouseEvent &event) {
   return ToolChanges::overlay;
 }
 
-ToolChanges MaskSelectTool::mouseUp(const ToolMouseEvent &event) {
+ToolChanges PolygonSelectTool::mouseUp(const ToolMouseEvent &event) {
   QPolygon p;
   assert(source);
   clearImage(*event.overlay);
@@ -373,7 +373,7 @@ ToolChanges MaskSelectTool::mouseUp(const ToolMouseEvent &event) {
   return ToolChanges::overlay;
 }
 
-ToolChanges MaskSelectTool::keyPress(const ToolKeyEvent &event) {
+ToolChanges PolygonSelectTool::keyPress(const ToolKeyEvent &event) {
   // @TODO make sure the mouse isn't down
   if (event.key == key_toggle_copy_paste) {
     mode = opposite(mode);
@@ -382,7 +382,7 @@ ToolChanges MaskSelectTool::keyPress(const ToolKeyEvent &event) {
   return ToolChanges::none;
 }
 
-void MaskSelectTool::setMode(const SelectMode newMode) {
+void PolygonSelectTool::setMode(const SelectMode newMode) {
   mode = newMode;
 }
 

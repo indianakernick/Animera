@@ -13,8 +13,8 @@
   <file>./Tools/flood fill e.png</file>
   <file>./Tools/line d.png</file>
   <file>./Tools/line e.png</file>
-  <file>./Tools/mask select d.png</file>
-  <file>./Tools/mask select e.png</file>
+  <file>./Tools/polygon select d.png</file>
+  <file>./Tools/polygon select e.png</file>
   <file>./Tools/rectangle select d.png</file>
   <file>./Tools/rectangle select e.png</file>
   <file>./Tools/rotate d.png</file>

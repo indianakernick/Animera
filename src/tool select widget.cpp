@@ -102,7 +102,7 @@ ToolSelectWidget::ToolSelectWidget(QWidget *parent)
   makeToolWidget<BrushToolWidget>()->click();
   makeToolWidget<FloodFillToolWidget>();
   makeToolWidget<RectangleSelectToolWidget>();
-  makeToolWidget<MaskSelectToolWidget>();
+  makeToolWidget<PolygonSelectToolWidget>();
   makeToolWidget<LineToolWidget>();
   makeToolWidget<StrokedCircleToolWidget>();
   makeToolWidget<FilledCircleToolWidget>();

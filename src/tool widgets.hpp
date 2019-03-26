@@ -39,11 +39,11 @@ public:
   static constexpr const char tooltip[] = "Rectangle Select Tool\n\nPress P to toggle between COPY and PASTE modes";
 };
 
-class MaskSelectToolWidget final : public QWidget {
+class PolygonSelectToolWidget final : public QWidget {
 public:
-  using impl = MaskSelectTool;
-  static constexpr const char icon_name[] = "mask select";
-  static constexpr const char tooltip[] = "Mask Select Tool\n\nPress P to toggle between COPY and PASTE modes";
+  using impl = PolygonSelectTool;
+  static constexpr const char icon_name[] = "polygon select";
+  static constexpr const char tooltip[] = "Polygon Select Tool\n\nPress P to toggle between COPY and PASTE modes";
 };
 
 class LineToolWidget final : public QWidget {
