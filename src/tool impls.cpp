@@ -415,6 +415,7 @@ ToolChanges DragPaintTool<Derived>::mouseDown(const ToolMouseEvent &event) {
   assert(source);
   clearImage(*event.overlay);
   that()->drawOverlay(*event.overlay, event.pos);
+  that()->updateStatus(*event.status, event.pos, event.pos);
   startPos = event.pos;
   copyImage(cleanImage, source->image.data);
   color = selectColor(event.colors, event.button);
@@ -426,7 +427,11 @@ ToolChanges DragPaintTool<Derived>::mouseMove(const ToolMouseEvent &event) {
   assert(source);
   clearImage(*event.overlay);
   that()->drawOverlay(*event.overlay, event.pos);
-  if (event.button == ButtonType::none) return ToolChanges::overlay;
+  if (event.button == ButtonType::none) {
+    statusPos(*event.status, event.pos);
+    return ToolChanges::overlay;
+  }
+  that()->updateStatus(*event.status, startPos, event.pos);
   copyImage(source->image.data, cleanImage);
   return drawnChanges(that()->drawDrag(source->image, startPos, event.pos));
 }
@@ -470,14 +475,17 @@ void LineTool::drawOverlay(QImage &overlay, const QPoint pos) {
   drawSquarePoint(overlay, overlay_color, pos);
 }
 
+void LineTool::updateStatus(std::string &status, const QPoint start, const QPoint end) {
+  status += "START: ";
+  status += start;
+  status += " END: ";
+  status += end;
+}
+
 StrokedCircleTool::~StrokedCircleTool() = default;
 
 void StrokedCircleTool::setShape(const CircleShape newShape) {
   shape = newShape;
-}
-
-int StrokedCircleTool::getRadius() const {
-  return isDragging() ? radius : no_radius;
 }
 
 bool StrokedCircleTool::drawPoint(Image &, QPoint) {
@@ -508,14 +516,17 @@ void StrokedCircleTool::drawOverlay(QImage &overlay, const QPoint pos) {
   drawFilledRect(overlay, overlay_color, centerToRect(pos, shape));
 }
 
+void StrokedCircleTool::updateStatus(std::string &status, const QPoint start, QPoint) {
+  status += "CENTER: ";
+  status += start;
+  status += " RADIUS: ";
+  status += std::to_string(radius);
+}
+
 FilledCircleTool::~FilledCircleTool() = default;
 
 void FilledCircleTool::setShape(const CircleShape newShape) {
   shape = newShape;
-}
-
-int FilledCircleTool::getRadius() const {
-  return isDragging() ? radius : no_radius;
 }
 
 bool FilledCircleTool::drawPoint(Image &, QPoint) {
@@ -532,20 +543,21 @@ void FilledCircleTool::drawOverlay(QImage &overlay, const QPoint pos) {
   drawFilledRect(overlay, overlay_color, centerToRect(pos, shape));
 }
 
-StrokedRectangleTool::~StrokedRectangleTool() = default;
-
-QSize StrokedRectangleTool::getSize() const {
-  return isDragging() ? size : no_size;
+void FilledCircleTool::updateStatus(std::string &status, const QPoint start, QPoint) {
+  status += "CENTER: ";
+  status += start;
+  status += " RADIUS: ";
+  status += std::to_string(radius);
 }
 
+StrokedRectangleTool::~StrokedRectangleTool() = default;
+
 bool StrokedRectangleTool::drawPoint(Image &image, const QPoint pos) {
-  size = QSize{1, 1};
   return drawSquarePoint(image.data, getColor(), pos);
 }
 
 bool StrokedRectangleTool::drawDrag(Image &image, const QPoint start, const QPoint end) {
   const QRect rect = QRect{start, end}.normalized();
-  size = rect.size();
   return drawStrokedRect(image.data, getColor(), rect);
 }
 
@@ -553,25 +565,29 @@ void StrokedRectangleTool::drawOverlay(QImage &overlay, const QPoint pos) {
   drawSquarePoint(overlay, overlay_color, pos);
 }
 
-FilledRectangleTool::~FilledRectangleTool() = default;
-
-QSize FilledRectangleTool::getSize() const {
-  return isDragging() ? size : no_size;
+void StrokedRectangleTool::updateStatus(std::string &status, const QPoint start, const QPoint end) {
+  QRect rect = QRect{start, end}.normalized();
+  statusPosSize(status, rect.topLeft(), rect.size());
 }
 
+FilledRectangleTool::~FilledRectangleTool() = default;
+
 bool FilledRectangleTool::drawPoint(Image &image, const QPoint pos) {
-  size = QSize{1, 1};
   return drawSquarePoint(image.data, getColor(), pos);
 }
 
 bool FilledRectangleTool::drawDrag(Image &image, const QPoint start, const QPoint end) {
   const QRect rect = QRect{start, end}.normalized();
-  size = rect.size();
   return drawFilledRect(image.data, getColor(), rect);
 }
 
 void FilledRectangleTool::drawOverlay(QImage &overlay, const QPoint pos) {
   drawSquarePoint(overlay, overlay_color, pos);
+}
+
+void FilledRectangleTool::updateStatus(std::string &status, const QPoint start, const QPoint end) {
+  QRect rect = QRect{start, end}.normalized();
+  statusPosSize(status, rect.topLeft(), rect.size());
 }
 
 bool TranslateTool::attachCell(Cell *cell) {

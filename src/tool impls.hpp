@@ -129,6 +129,7 @@ private:
   bool drawPoint(Image &, QPoint);
   bool drawDrag(Image &, QPoint, QPoint);
   void drawOverlay(QImage &, QPoint);
+  void updateStatus(std::string &, QPoint, QPoint);
 };
 
 class StrokedCircleTool final : public DragPaintTool<StrokedCircleTool> {
@@ -138,7 +139,6 @@ public:
   ~StrokedCircleTool();
 
   void setShape(CircleShape);
-  int getRadius() const;
   
 private:
   CircleShape shape = CircleShape::c1x1;
@@ -147,6 +147,7 @@ private:
   bool drawPoint(Image &, QPoint);
   bool drawDrag(Image &, QPoint, QPoint);
   void drawOverlay(QImage &, QPoint);
+  void updateStatus(std::string &, QPoint, QPoint);
 };
 
 class FilledCircleTool final : public DragPaintTool<FilledCircleTool> {
@@ -156,7 +157,6 @@ public:
   ~FilledCircleTool();
   
   void setShape(CircleShape);
-  int getRadius() const;
 
 private:
   CircleShape shape = CircleShape::c1x1;
@@ -165,6 +165,7 @@ private:
   bool drawPoint(Image &, QPoint);
   bool drawDrag(Image &, QPoint, QPoint);
   void drawOverlay(QImage &, QPoint);
+  void updateStatus(std::string &, QPoint, QPoint);
 };
 
 class StrokedRectangleTool final : public DragPaintTool<StrokedRectangleTool> {
@@ -172,15 +173,12 @@ public:
   friend class DragPaintTool;
   
   ~StrokedRectangleTool();
-  
-  QSize getSize() const;
 
 private:
-  QSize size = no_size;
-  
   bool drawPoint(Image &, QPoint);
   bool drawDrag(Image &, QPoint, QPoint);
   void drawOverlay(QImage &, QPoint);
+  void updateStatus(std::string &, QPoint, QPoint);
 };
 
 class FilledRectangleTool final : public DragPaintTool<FilledRectangleTool> {
@@ -189,14 +187,11 @@ public:
   
   ~FilledRectangleTool();
 
-  QSize getSize() const;
-
 private:
-  QSize size = no_size;
-  
   bool drawPoint(Image &, QPoint);
   bool drawDrag(Image &, QPoint, QPoint);
   void drawOverlay(QImage &, QPoint);
+  void updateStatus(std::string &, QPoint, QPoint);
 };
 
 class TranslateTool final : public Tool {
