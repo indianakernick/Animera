@@ -47,6 +47,7 @@
 		45BADA1D2247007F000D095C /* glm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45BAD9332247007E000D095C /* glm.cpp */; };
 		45BADA77224714A3000D095C /* tool widgets.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45BADA75224714A3000D095C /* tool widgets.cpp */; };
 		45DC2560224A034200F40116 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 45DC255F224A034200F40116 /* README.md */; };
+		45DC2566224B137C00F40116 /* status msg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45DC2564224B137C00F40116 /* status msg.cpp */; };
 		45F065F22222998300BCE863 /* current tool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45F065F02222998300BCE863 /* current tool.cpp */; };
 /* End PBXBuildFile section */
 
@@ -770,6 +771,8 @@
 		45DC2561224A0AC000F40116 /* title.anim */ = {isa = PBXFileReference; lastKnownFileType = file; path = title.anim; sourceTree = "<group>"; };
 		45DC2562224A0AEA00F40116 /* title.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = title.png; sourceTree = "<group>"; };
 		45DC2563224A0AEA00F40116 /* title@4x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "title@4x.png"; sourceTree = "<group>"; };
+		45DC2564224B137C00F40116 /* status msg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "status msg.cpp"; sourceTree = "<group>"; };
+		45DC2565224B137C00F40116 /* status msg.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "status msg.hpp"; sourceTree = "<group>"; };
 		45F065F02222998300BCE863 /* current tool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "current tool.cpp"; sourceTree = "<group>"; };
 		45F065F12222998300BCE863 /* current tool.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "current tool.hpp"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -828,6 +831,8 @@
 				45B284BB221E252300D6D055 /* paint params.hpp */,
 				45F065F02222998300BCE863 /* current tool.cpp */,
 				45F065F12222998300BCE863 /* current tool.hpp */,
+				45DC2564224B137C00F40116 /* status msg.cpp */,
+				45DC2565224B137C00F40116 /* status msg.hpp */,
 			);
 			name = Tools;
 			sourceTree = "<group>";
@@ -1975,6 +1980,7 @@
 				453C781F22349F0100818B19 /* tool select widget.cpp in Sources */,
 				453C78192234935000818B19 /* timeline widget.cpp in Sources */,
 				458F84082249DFC8005F91D0 /* polygon.cpp in Sources */,
+				45DC2566224B137C00F40116 /* status msg.cpp in Sources */,
 				45F065F22222998300BCE863 /* current tool.cpp in Sources */,
 				453C78432234E13E00818B19 /* window.cpp in Sources */,
 				45B284A72219079B00D6D055 /* animation.cpp in Sources */,

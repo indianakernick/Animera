@@ -126,27 +126,28 @@ void ToolSelectWidget::mouseLeave() {
 }
 
 void ToolSelectWidget::mouseDown(const QPoint pos, const ButtonType button, QImage *overlay) {
-  std::string status;
+  // @TODO I think we need to move the status.clear() call somewhere else
+  status.clear();
   emitModified(currTool.mouseDown({button, pos, colors, overlay, &status}));
-  if (!status.empty()) Q_EMIT updateStatusBar(status);
+  if (!status.empty()) Q_EMIT updateStatusBar(status.get());
 }
 
 void ToolSelectWidget::mouseMove(const QPoint pos, QImage *overlay) {
-  std::string status;
+  status.clear();
   emitModified(currTool.mouseMove({{}, pos, colors, overlay, &status}));
-  if (!status.empty()) Q_EMIT updateStatusBar(status);
+  if (!status.empty()) Q_EMIT updateStatusBar(status.get());
 }
 
 void ToolSelectWidget::mouseUp(const QPoint pos, const ButtonType button, QImage *overlay) {
-  std::string status;
+  status.clear();
   emitModified(currTool.mouseUp({button, pos, colors, overlay, &status}));
-  if (!status.empty()) Q_EMIT updateStatusBar(status);
+  if (!status.empty()) Q_EMIT updateStatusBar(status.get());
 }
 
 void ToolSelectWidget::keyPress(const Qt::Key key, QImage *overlay) {
-  std::string status;
+  status.clear();
   emitModified(currTool.keyPress({key, colors, overlay, &status}));
-  if (!status.empty()) Q_EMIT updateStatusBar(status);
+  if (!status.empty()) Q_EMIT updateStatusBar(status.get());
 }
 
 void ToolSelectWidget::changeCell(Cell *cell) {

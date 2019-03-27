@@ -22,7 +22,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_StatusBarWidget_t {
     QByteArrayData data[6];
-    char stringdata0[56];
+    char stringdata0[61];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -34,12 +34,12 @@ static const qt_meta_stringdata_StatusBarWidget_t qt_meta_stringdata_StatusBarWi
 QT_MOC_LITERAL(0, 0, 15), // "StatusBarWidget"
 QT_MOC_LITERAL(1, 16, 8), // "showTemp"
 QT_MOC_LITERAL(2, 25, 0), // ""
-QT_MOC_LITERAL(3, 26, 11), // "std::string"
-QT_MOC_LITERAL(4, 38, 8), // "showPerm"
-QT_MOC_LITERAL(5, 47, 8) // "hideTemp"
+QT_MOC_LITERAL(3, 26, 16), // "std::string_view"
+QT_MOC_LITERAL(4, 43, 8), // "showPerm"
+QT_MOC_LITERAL(5, 52, 8) // "hideTemp"
 
     },
-    "StatusBarWidget\0showTemp\0\0std::string\0"
+    "StatusBarWidget\0showTemp\0\0std::string_view\0"
     "showPerm\0hideTemp"
 };
 #undef QT_MOC_LITERAL
@@ -76,8 +76,8 @@ void StatusBarWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int 
         auto *_t = static_cast<StatusBarWidget *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->showTemp((*reinterpret_cast< const std::string(*)>(_a[1]))); break;
-        case 1: _t->showPerm((*reinterpret_cast< const std::string(*)>(_a[1]))); break;
+        case 0: _t->showTemp((*reinterpret_cast< std::string_view(*)>(_a[1]))); break;
+        case 1: _t->showPerm((*reinterpret_cast< std::string_view(*)>(_a[1]))); break;
         case 2: _t->hideTemp(); break;
         default: ;
         }

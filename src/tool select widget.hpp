@@ -9,6 +9,7 @@
 #ifndef tool_select_widget_hpp
 #define tool_select_widget_hpp
 
+#include "status msg.hpp"
 #include "current tool.hpp"
 #include <QtWidgets/qscrollarea.h>
 
@@ -25,7 +26,7 @@ public:
 Q_SIGNALS:
   void cellModified();
   void overlayModified();
-  void updateStatusBar(const std::string &);
+  void updateStatusBar(std::string_view);
 
 public Q_SLOTS:
   void mouseLeave();
@@ -41,6 +42,7 @@ private:
   CurrentTool currTool;
   ToolWidget *currWidget = nullptr;
   ToolColors colors;
+  StatusMsg status;
   
   void changeTool(ToolWidget *, Tool *);
   template <typename WidgetClass>

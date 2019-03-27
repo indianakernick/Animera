@@ -23,13 +23,13 @@ StatusBarWidget::StatusBarWidget(QWidget *parent)
   setContentsMargins(0, 0, 0, 0);
 }
 
-void StatusBarWidget::showTemp(const std::string &text) {
+void StatusBarWidget::showTemp(const std::string_view text) {
   tempText = text;
   timer.start();
   repaint();
 }
 
-void StatusBarWidget::showPerm(const std::string &text) {
+void StatusBarWidget::showPerm(const std::string_view text) {
   permText = text;
   repaint();
 }
@@ -45,7 +45,7 @@ void StatusBarWidget::paintEvent(QPaintEvent *) {
 }
 
 void StatusBarWidget::hideTemp() {
-  tempText = "";
+  tempText.clear();
   repaint();
 }
 

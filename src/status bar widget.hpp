@@ -20,8 +20,8 @@ public:
   explicit StatusBarWidget(QWidget *);
 
 public Q_SLOTS:
-  void showTemp(const std::string &);
-  void showPerm(const std::string &);
+  void showTemp(std::string_view);
+  void showPerm(std::string_view);
   
 private:
   std::string permText;

@@ -63,6 +63,8 @@ constexpr Qt::Key   key_zoom_in = Qt::Key_E;
 
 // brush
 constexpr Qt::Key   key_clear = Qt::Key_V;
+constexpr int       brsh_min_thick = 1;
+constexpr int       brsh_max_thick = 64;
 
 // select
 constexpr Qt::Key   key_toggle_copy_paste = Qt::Key_P;

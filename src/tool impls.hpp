@@ -36,7 +36,7 @@ private:
   SymmetryMode mode = SymmetryMode::both;
   QRgb color = 0;
   
-  void symPoint(std::string &, QPoint);
+  void symPoint(StatusMsg &, QPoint);
   bool symPoint(QImage &, QRgb, QPoint);
   bool symLine(QImage &, QRgb, QLine);
 };
@@ -52,6 +52,7 @@ private:
   SourceCell *source = nullptr;
 };
 
+// @TODO maybe provide some indication of the rectangle in the overlay
 class RectangleSelectTool final : public Tool {
 public:
   bool attachCell(Cell *) override;
@@ -72,8 +73,9 @@ private:
   SelectMode mode = SelectMode::copy;
 };
 
-// @TODO maybe we could rename this to PolygonSelectTool
-// we could add a MaskSelectTool that uses flood fills to build up a mask
+// @TODO we could add a MaskSelectTool that uses flood fills to build up a mask
+
+// @TODO maybe provide some indication of the polygon in the overlay
 class PolygonSelectTool final : public Tool {
 public:
   bool attachCell(Cell *) override;
@@ -129,7 +131,7 @@ private:
   bool drawPoint(Image &, QPoint);
   bool drawDrag(Image &, QPoint, QPoint);
   void drawOverlay(QImage &, QPoint);
-  void updateStatus(std::string &, QPoint, QPoint);
+  void updateStatus(StatusMsg &, QPoint, QPoint);
 };
 
 class StrokedCircleTool final : public DragPaintTool<StrokedCircleTool> {
@@ -147,7 +149,7 @@ private:
   bool drawPoint(Image &, QPoint);
   bool drawDrag(Image &, QPoint, QPoint);
   void drawOverlay(QImage &, QPoint);
-  void updateStatus(std::string &, QPoint, QPoint);
+  void updateStatus(StatusMsg &, QPoint, QPoint);
 };
 
 class FilledCircleTool final : public DragPaintTool<FilledCircleTool> {
@@ -165,7 +167,7 @@ private:
   bool drawPoint(Image &, QPoint);
   bool drawDrag(Image &, QPoint, QPoint);
   void drawOverlay(QImage &, QPoint);
-  void updateStatus(std::string &, QPoint, QPoint);
+  void updateStatus(StatusMsg &, QPoint, QPoint);
 };
 
 class StrokedRectangleTool final : public DragPaintTool<StrokedRectangleTool> {
@@ -178,7 +180,7 @@ private:
   bool drawPoint(Image &, QPoint);
   bool drawDrag(Image &, QPoint, QPoint);
   void drawOverlay(QImage &, QPoint);
-  void updateStatus(std::string &, QPoint, QPoint);
+  void updateStatus(StatusMsg &, QPoint, QPoint);
 };
 
 class FilledRectangleTool final : public DragPaintTool<FilledRectangleTool> {
@@ -191,7 +193,7 @@ private:
   bool drawPoint(Image &, QPoint);
   bool drawDrag(Image &, QPoint, QPoint);
   void drawOverlay(QImage &, QPoint);
-  void updateStatus(std::string &, QPoint, QPoint);
+  void updateStatus(StatusMsg &, QPoint, QPoint);
 };
 
 class TranslateTool final : public Tool {
@@ -213,7 +215,7 @@ private:
   
   void translate(QPoint, QRgb);
   void updateSourceImage(QRgb);
-  void updateStatus(std::string &);
+  void updateStatus(StatusMsg &);
 };
 
 class FlipTool final : public Tool {
@@ -228,7 +230,7 @@ private:
   TransformCell *transform = nullptr;
   
   void updateSourceImage();
-  void updateStatus(std::string &);
+  void updateStatus(StatusMsg &);
 };
 
 class RotateTool final : public Tool {
@@ -243,7 +245,7 @@ private:
   TransformCell *transform = nullptr;
   
   void updateSourceImage();
-  void updateStatus(std::string &);
+  void updateStatus(StatusMsg &);
 };
 
 #endif

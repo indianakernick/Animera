@@ -14,7 +14,7 @@
 #include "composite.hpp"
 #include "cell impls.hpp"
 
-#include <iostream>
+// @TODO this file is starting to get out of hand
 
 namespace {
 
@@ -29,44 +29,6 @@ QRgb selectColor(const ToolColors &colors, const ButtonType button) {
 
 ToolChanges drawnChanges(const bool drawn) {
   return drawn ? ToolChanges::cell_overlay : ToolChanges::overlay;
-}
-
-std::string &operator+=(std::string &status, const QPoint point) {
-  status += '[';
-  status += std::to_string(point.x());
-  status += ' ';
-  status += std::to_string(point.y());
-  status += ']';
-  return status;
-}
-
-std::string &operator+=(std::string &status, const QSize size) {
-  return status += QPoint{size.width(), size.height()};
-}
-
-// @TODO should I put these functions in a class?
-
-void statusPos(std::string &status, const QPoint pos) {
-  status += "POS: ";
-  status += pos;
-}
-
-void statusPosSize(std::string &status, const QPoint pos, const QSize size) {
-  statusPos(status, pos);
-  status += " SIZE: ";
-  status += size;
-}
-
-void statusMode(std::string &status, const SelectMode mode) {
-  if (mode == SelectMode::copy) {
-    status += "COPY - ";
-  } else if (mode == SelectMode::paste) {
-    status += "PASTE - ";
-  } else Q_UNREACHABLE();
-}
-
-void statusBool(std::string &status, const bool b) {
-  status += b ? "YES" : "NO";
 }
 
 }
@@ -113,7 +75,7 @@ ToolChanges BrushTool::keyPress(const ToolKeyEvent &event) {
 }
 
 void BrushTool::setWidth(const int newWidth) {
-  assert(min_thickness <= newWidth && newWidth <= max_thickness);
+  assert(brsh_min_thick <= newWidth && newWidth <= brsh_max_thick);
   width = newWidth;
 }
 
@@ -121,22 +83,21 @@ void BrushTool::setMode(const SymmetryMode newMode) {
   mode = newMode;
 }
 
-void BrushTool::symPoint(std::string &status, const QPoint point) {
+void BrushTool::symPoint(StatusMsg &status, const QPoint point) {
   const QSize size = source->image.data.size();
   const QPoint refl = {size.width() - point.x() - 1, size.height() - point.y() - 1};
-  status += "POS: ";
-  status += point;
+  status.appendLabeled(point);
   if (mode & SymmetryMode::hori) {
-    status += ' ';
-    status += QPoint{refl.x(), point.y()};
+    status.append(' ');
+    status.append(QPoint{refl.x(), point.y()});
   }
   if (mode & SymmetryMode::vert) {
-    status += ' ';
-    status += QPoint{point.x(), refl.y()};
+    status.append(' ');
+    status.append(QPoint{point.x(), refl.y()});
   }
   if (mode & SymmetryMode::both) {
-    status += ' ';
-    status += refl;
+    status.append(' ');
+    status.append(refl);
   }
 }
 
@@ -203,7 +164,7 @@ ToolChanges FloodFillTool::mouseDown(const ToolMouseEvent &event) {
   assert(source);
   clearImage(*event.overlay);
   drawSquarePoint(*event.overlay, overlay_color, event.pos);
-  statusPos(*event.status, event.pos);
+  event.status->appendLabeled(event.pos);
   const QRgb color = selectColor(event.colors, event.button);
   return drawnChanges(drawFloodFill(source->image.data, color, event.pos));
 }
@@ -212,7 +173,7 @@ ToolChanges FloodFillTool::mouseMove(const ToolMouseEvent &event) {
   assert(source);
   clearImage(*event.overlay);
   drawSquarePoint(*event.overlay, overlay_color, event.pos);
-  statusPos(*event.status, event.pos);
+  event.status->appendLabeled(event.pos);
   return ToolChanges::overlay;
 }
 
@@ -230,13 +191,13 @@ void RectangleSelectTool::detachCell() {
 ToolChanges RectangleSelectTool::mouseDown(const ToolMouseEvent &event) {
   assert(source);
   clearImage(*event.overlay);
-  statusMode(*event.status, mode);
+  event.status->appendLabeled(mode);
   if (mode == SelectMode::copy) {
     drawSquarePoint(*event.overlay, overlay_color, event.pos);
-    statusPos(*event.status, event.pos);
+    event.status->appendLabeled(event.pos);
   } else if (mode == SelectMode::paste) {
     blitImage(*event.overlay, overlay, event.pos + offset);
-    statusPosSize(*event.status, event.pos + offset, overlay.size());
+    event.status->appendLabeled({event.pos + offset, overlay.size()});
   } else Q_UNREACHABLE();
   if (event.button != ButtonType::primary) return ToolChanges::overlay;
   if (mode == SelectMode::copy) {
@@ -251,19 +212,19 @@ ToolChanges RectangleSelectTool::mouseDown(const ToolMouseEvent &event) {
 ToolChanges RectangleSelectTool::mouseMove(const ToolMouseEvent &event) {
   assert(source);
   clearImage(*event.overlay);
-  statusMode(*event.status, mode);
+  event.status->appendLabeled(mode);
   if (mode == SelectMode::copy) {
     if (event.button == ButtonType::primary) {
       const QRect rect = QRect{startPos, event.pos}.normalized();
       drawStrokedRect(*event.overlay, overlay_color, rect);
-      statusPosSize(*event.status, rect.topLeft(), rect.size());
+      event.status->appendLabeled(rect);
     } else {
       drawSquarePoint(*event.overlay, overlay_color, event.pos);
-      statusPos(*event.status, event.pos);
+      event.status->appendLabeled(event.pos);
     }
   } else if (mode == SelectMode::paste) {
     blitImage(*event.overlay, overlay, event.pos + offset);
-    statusPosSize(*event.status, event.pos + offset, overlay.size());
+    event.status->appendLabeled({event.pos + offset, overlay.size()});
   } else Q_UNREACHABLE();
   return ToolChanges::overlay;
 }
@@ -283,8 +244,8 @@ ToolChanges RectangleSelectTool::mouseUp(const ToolMouseEvent &event) {
   
   startPos = no_point;
   blitImage(*event.overlay, overlay, event.pos + offset);
-  statusMode(*event.status, mode);
-  statusPosSize(*event.status, event.pos + offset, overlay.size());
+  event.status->appendLabeled(mode);
+  event.status->appendLabeled({event.pos + offset, overlay.size()});
   return ToolChanges::overlay;
 }
 
@@ -292,7 +253,7 @@ ToolChanges RectangleSelectTool::keyPress(const ToolKeyEvent &event) {
   if (event.key == key_toggle_copy_paste && startPos == no_point) {
     mode = opposite(mode);
   }
-  statusMode(*event.status, mode);
+  event.status->append(mode);
   return ToolChanges::none;
 }
 
@@ -312,13 +273,13 @@ void PolygonSelectTool::detachCell() {
 ToolChanges PolygonSelectTool::mouseDown(const ToolMouseEvent &event) {
   assert(source);
   clearImage(*event.overlay);
-  statusMode(*event.status, mode);
+  event.status->appendLabeled(mode);
   if (mode == SelectMode::copy) {
     drawSquarePoint(*event.overlay, overlay_color, event.pos);
-    statusPos(*event.status, event.pos);
+    event.status->appendLabeled(event.pos);
   } else if (mode == SelectMode::paste) {
     blitImage(*event.overlay, overlay, event.pos + offset);
-    statusPosSize(*event.status, event.pos + offset, overlay.size());
+    event.status->appendLabeled({event.pos + offset, overlay.size()});
   } else Q_UNREACHABLE();
   if (event.button != ButtonType::primary) return ToolChanges::overlay;
   if (mode == SelectMode::copy) {
@@ -333,19 +294,19 @@ ToolChanges PolygonSelectTool::mouseDown(const ToolMouseEvent &event) {
 ToolChanges PolygonSelectTool::mouseMove(const ToolMouseEvent &event) {
   assert(source);
   clearImage(*event.overlay);
-  statusMode(*event.status, mode);
+  event.status->appendLabeled(mode);
   if (mode == SelectMode::copy) {
     if (event.button == ButtonType::primary) {
       polygon.push(event.pos);
       drawFilledPolygon(*event.overlay, overlay_color, polygon, QPoint{0, 0});
-      statusPosSize(*event.status, polygon.bounds().topLeft(), polygon.bounds().size());
+      event.status->appendLabeled(polygon.bounds());
     } else {
       drawSquarePoint(*event.overlay, overlay_color, event.pos);
-      statusPos(*event.status, event.pos);
+      event.status->appendLabeled(event.pos);
     }
   } else if (mode == SelectMode::paste) {
     blitImage(*event.overlay, overlay, event.pos + offset);
-    statusPosSize(*event.status, event.pos + offset, overlay.size());
+    event.status->appendLabeled({event.pos + offset, overlay.size()});
   } else Q_UNREACHABLE();
   return ToolChanges::overlay;
 }
@@ -368,8 +329,8 @@ ToolChanges PolygonSelectTool::mouseUp(const ToolMouseEvent &event) {
   }
   
   blitImage(*event.overlay, overlay, event.pos + offset);
-  statusMode(*event.status, mode);
-  statusPosSize(*event.status, event.pos + offset, overlay.size());
+  event.status->appendLabeled(mode);
+  event.status->appendLabeled({event.pos + offset, overlay.size()});
   return ToolChanges::overlay;
 }
 
@@ -378,7 +339,7 @@ ToolChanges PolygonSelectTool::keyPress(const ToolKeyEvent &event) {
   if (event.key == key_toggle_copy_paste) {
     mode = opposite(mode);
   }
-  statusMode(*event.status, mode);
+  event.status->append(mode);
   return ToolChanges::none;
 }
 
@@ -428,7 +389,7 @@ ToolChanges DragPaintTool<Derived>::mouseMove(const ToolMouseEvent &event) {
   clearImage(*event.overlay);
   that()->drawOverlay(*event.overlay, event.pos);
   if (event.button == ButtonType::none) {
-    statusPos(*event.status, event.pos);
+    event.status->append(event.pos);
     return ToolChanges::overlay;
   }
   that()->updateStatus(*event.status, startPos, event.pos);
@@ -475,11 +436,11 @@ void LineTool::drawOverlay(QImage &overlay, const QPoint pos) {
   drawSquarePoint(overlay, overlay_color, pos);
 }
 
-void LineTool::updateStatus(std::string &status, const QPoint start, const QPoint end) {
-  status += "START: ";
-  status += start;
-  status += " END: ";
-  status += end;
+void LineTool::updateStatus(StatusMsg &status, const QPoint start, const QPoint end) {
+  status.append("START: ");
+  status.append(start);
+  status.append(" END: ");
+  status.append(end);
 }
 
 StrokedCircleTool::~StrokedCircleTool() = default;
@@ -516,11 +477,11 @@ void StrokedCircleTool::drawOverlay(QImage &overlay, const QPoint pos) {
   drawFilledRect(overlay, overlay_color, centerToRect(pos, shape));
 }
 
-void StrokedCircleTool::updateStatus(std::string &status, const QPoint start, QPoint) {
-  status += "CENTER: ";
-  status += start;
-  status += " RADIUS: ";
-  status += std::to_string(radius);
+void StrokedCircleTool::updateStatus(StatusMsg &status, const QPoint start, QPoint) {
+  status.append("CENTER: ");
+  status.append(start);
+  status.append(" RADIUS: ");
+  status.append(radius);
 }
 
 FilledCircleTool::~FilledCircleTool() = default;
@@ -543,11 +504,11 @@ void FilledCircleTool::drawOverlay(QImage &overlay, const QPoint pos) {
   drawFilledRect(overlay, overlay_color, centerToRect(pos, shape));
 }
 
-void FilledCircleTool::updateStatus(std::string &status, const QPoint start, QPoint) {
-  status += "CENTER: ";
-  status += start;
-  status += " RADIUS: ";
-  status += std::to_string(radius);
+void FilledCircleTool::updateStatus(StatusMsg &status, const QPoint start, QPoint) {
+  status.append("CENTER: ");
+  status.append(start);
+  status.append(" RADIUS: ");
+  status.append(radius);
 }
 
 StrokedRectangleTool::~StrokedRectangleTool() = default;
@@ -565,9 +526,8 @@ void StrokedRectangleTool::drawOverlay(QImage &overlay, const QPoint pos) {
   drawSquarePoint(overlay, overlay_color, pos);
 }
 
-void StrokedRectangleTool::updateStatus(std::string &status, const QPoint start, const QPoint end) {
-  QRect rect = QRect{start, end}.normalized();
-  statusPosSize(status, rect.topLeft(), rect.size());
+void StrokedRectangleTool::updateStatus(StatusMsg &status, const QPoint start, const QPoint end) {
+  status.appendLabeled(QRect{start, end}.normalized());
 }
 
 FilledRectangleTool::~FilledRectangleTool() = default;
@@ -585,9 +545,8 @@ void FilledRectangleTool::drawOverlay(QImage &overlay, const QPoint pos) {
   drawSquarePoint(overlay, overlay_color, pos);
 }
 
-void FilledRectangleTool::updateStatus(std::string &status, const QPoint start, const QPoint end) {
-  QRect rect = QRect{start, end}.normalized();
-  statusPosSize(status, rect.topLeft(), rect.size());
+void FilledRectangleTool::updateStatus(StatusMsg &status, const QPoint start, const QPoint end) {
+  status.appendLabeled(QRect{start, end}.normalized());
 }
 
 bool TranslateTool::attachCell(Cell *cell) {
@@ -702,12 +661,12 @@ void TranslateTool::updateSourceImage(const QRgb eraseColor) {
   blitTransformedImage(source->image.data, src);
 }
 
-void TranslateTool::updateStatus(std::string &status) {
+void TranslateTool::updateStatus(StatusMsg &status) {
   if (source) {
-    statusPos(status, pos);
+    status.appendLabeled(pos);
   } else if (transform) {
     Transform &xform = transform->xform;
-    statusPos(status, {xform.posX, xform.posY});
+    status.appendLabeled({xform.posX, xform.posY});
   } else Q_UNREACHABLE();
 }
 
@@ -783,12 +742,12 @@ void FlipTool::updateSourceImage() {
   source->image.xform.flipY = false;
 }
 
-void FlipTool::updateStatus(std::string &status) {
+void FlipTool::updateStatus(StatusMsg &status) {
   Transform &xform = getTransform(source, transform);
-  status += "X: ";
-  statusBool(status, xform.flipX);
-  status += " Y: ";
-  statusBool(status, xform.flipY);
+  status.append("X: ");
+  status.append(xform.flipX);
+  status.append(" Y: ");
+  status.append(xform.flipY);
 }
 
 bool RotateTool::attachCell(Cell *cell) {
@@ -844,7 +803,7 @@ void RotateTool::updateSourceImage() {
   source->image.xform.angle = 0;
 }
 
-void RotateTool::updateStatus(std::string &status) {
-  status += "ANGLE: ";
-  status += std::to_string(getTransform(source, transform).angle * 90);
+void RotateTool::updateStatus(StatusMsg &status) {
+  status.append("ANGLE: ");
+  status.append(getTransform(source, transform).angle * 90);
 }

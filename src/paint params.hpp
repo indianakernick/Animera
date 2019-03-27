@@ -12,8 +12,6 @@
 #include <QtCore/qsize.h>
 #include <QtCore/qpoint.h>
 
-constexpr int min_thickness = 1;
-constexpr int max_thickness = 64;
 constexpr int no_radius = -1;
 constexpr QPoint no_point{-1, -1};
 constexpr QSize no_size{-1, -1};
@@ -43,11 +41,11 @@ enum class SelectMode {
 };
 
 constexpr SelectMode opposite(const SelectMode mode) {
-  if (mode == SelectMode::copy) {
-    return SelectMode::paste;
-  } else if (mode == SelectMode::paste) {
-    return SelectMode::copy;
-  } else Q_UNREACHABLE();
+  switch (mode) {
+    case SelectMode::copy: return SelectMode::paste;
+    case SelectMode::paste: return SelectMode::copy;
+    default: Q_UNREACHABLE();
+  }
 }
 
 #endif
