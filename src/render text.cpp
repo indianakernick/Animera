@@ -8,6 +8,7 @@
 
 #include "render text.hpp"
 
+#include "config.hpp"
 #include <QtCore/qfile.h>
 #include <QtGui/qbitmap.h>
 #include <QtGui/qpainter.h>
@@ -58,8 +59,8 @@ void renderText(QPainter &painter, int x, int y, const std::string &text) {
   const Sprite::Sheet &atlas = getAtlas();
   for (const char c : text) {
     if ('!' <= c && c <= '~') {
-      painter.drawPixmap(QRect{x, y, 10, 18}, tex, lookupChar(atlas, c));
+      painter.drawPixmap(QRect{x, y, 5 * glob_scale, 9 * glob_scale}, tex, lookupChar(atlas, c));
     }
-    x += 12;
+    x += (5 + 1) * glob_scale;
   }
 }

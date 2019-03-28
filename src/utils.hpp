@@ -11,6 +11,7 @@
 
 #include <QtGui/qcolor.h>
 #include <QtCore/qsize.h>
+#include <QtCore/qrect.h>
 #include <QtCore/qpoint.h>
 
 constexpr QSize toSize(const QPoint p) {
