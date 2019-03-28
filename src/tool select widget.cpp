@@ -9,6 +9,7 @@
 #include "tool select widget.hpp"
 
 #include "config.hpp"
+#include <QtGui/qbitmap.h>
 #include "tool widgets.hpp"
 #include <QtGui/qpainter.h>
 #include <QtWidgets/qboxlayout.h>
@@ -51,34 +52,34 @@ private:
   ToolSelectWidget *tools;
   std::unique_ptr<Tool> tool;
   std::unique_ptr<QWidget> widget;
-  QPixmap enabledIcon;
-  QPixmap disabledIcon;
+  // @TODO this bitmap is the same for all tool icons so you could share it
+  QBitmap base;
+  QBitmap shape;
   
   void loadIcons(const QString &name) {
-    bool loaded = enabledIcon.load(":/Tools/" + name + " e.png");
+    bool loaded = base.load(":/Tools/base.pbm");
     assert(loaded && name.data());
-    enabledIcon = enabledIcon.scaled(tool_icon_size);
-    loaded = disabledIcon.load(":/Tools/" + name + " d.png");
+    base = base.scaled(tool_icon_size);
+    loaded = shape.load(":/Tools/" + name + ".pbm");
     assert(loaded);
-    disabledIcon = disabledIcon.scaled(tool_icon_size);
+    shape = shape.scaled(tool_icon_size);
+  }
+  
+  QColor baseColor() const {
+    return isChecked() ? tool_base_enabled : tool_base_disabled;
+  }
+  QRegion maskRegion(const QBitmap &bitmap) const {
+    QRegion region{bitmap};
+    region.translate(tool_icon_pos);
+    return region;
   }
   
   void paintEvent(QPaintEvent *) override {
-    if (isChecked()) {
-      drawIcon(enabledIcon);
-    } else {
-      drawIcon(disabledIcon);
-    }
-  }
-  
-  void drawIcon(const QPixmap &icon) {
     QPainter painter{this};
-    painter.drawPixmap(QRect{
-      (width() - icon.width()) / 2,
-      (height() - icon.height()) / 2,
-      icon.width(),
-      icon.height()
-    }, icon);
+    painter.setClipRegion(maskRegion(base));
+    painter.fillRect(QRect{tool_icon_pos, tool_icon_size}, baseColor());
+    painter.setClipRegion(maskRegion(shape));
+    painter.fillRect(QRect{tool_icon_pos, tool_icon_size}, tool_shape);
   }
 };
 

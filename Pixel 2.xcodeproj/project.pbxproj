@@ -64,30 +64,6 @@
 		453C78422234E13E00818B19 /* window.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = window.hpp; sourceTree = "<group>"; };
 		453C78442234F3C600818B19 /* status bar widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "status bar widget.cpp"; sourceTree = "<group>"; };
 		453C78452234F3C600818B19 /* status bar widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "status bar widget.hpp"; sourceTree = "<group>"; };
-		453C78472235C91200818B19 /* polygon select e.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "polygon select e.png"; sourceTree = "<group>"; };
-		453C78482235C91300818B19 /* rotate e.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rotate e.png"; sourceTree = "<group>"; };
-		453C78492235C91300818B19 /* flood fill d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flood fill d.png"; sourceTree = "<group>"; };
-		453C784A2235C91300818B19 /* translate d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "translate d.png"; sourceTree = "<group>"; };
-		453C784B2235C91300818B19 /* brush e.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "brush e.png"; sourceTree = "<group>"; };
-		453C784C2235C91300818B19 /* rectangle select d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rectangle select d.png"; sourceTree = "<group>"; };
-		453C784D2235C91300818B19 /* rotate d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rotate d.png"; sourceTree = "<group>"; };
-		453C784E2235C91300818B19 /* rectangle select e.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rectangle select e.png"; sourceTree = "<group>"; };
-		453C784F2235C91300818B19 /* line e.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "line e.png"; sourceTree = "<group>"; };
-		453C78502235C91300818B19 /* line d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "line d.png"; sourceTree = "<group>"; };
-		453C78512235C91400818B19 /* filled rectangle e.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "filled rectangle e.png"; sourceTree = "<group>"; };
-		453C78522235C91400818B19 /* filled circle d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "filled circle d.png"; sourceTree = "<group>"; };
-		453C78532235C91400818B19 /* flood fill e.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flood fill e.png"; sourceTree = "<group>"; };
-		453C78542235C91400818B19 /* stroked circle d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "stroked circle d.png"; sourceTree = "<group>"; };
-		453C78552235C91400818B19 /* stroked rectangle d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "stroked rectangle d.png"; sourceTree = "<group>"; };
-		453C78562235C91400818B19 /* polygon select d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "polygon select d.png"; sourceTree = "<group>"; };
-		453C78572235C91400818B19 /* stroked rectangle e.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "stroked rectangle e.png"; sourceTree = "<group>"; };
-		453C78582235C91500818B19 /* flip e.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flip e.png"; sourceTree = "<group>"; };
-		453C785A2235C91500818B19 /* filled circle e.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "filled circle e.png"; sourceTree = "<group>"; };
-		453C785B2235C91500818B19 /* stroked circle e.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "stroked circle e.png"; sourceTree = "<group>"; };
-		453C785C2235C91500818B19 /* translate e.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "translate e.png"; sourceTree = "<group>"; };
-		453C785D2235C91500818B19 /* brush d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "brush d.png"; sourceTree = "<group>"; };
-		453C785E2235C91600818B19 /* flip d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flip d.png"; sourceTree = "<group>"; };
-		453C78772235CE8400818B19 /* filled rectangle d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "filled rectangle d.png"; sourceTree = "<group>"; };
 		453C78792235D4B500818B19 /* resources.qrc */ = {isa = PBXFileReference; lastKnownFileType = text; path = resources.qrc; sourceTree = "<group>"; };
 		453C787C2235D70D00818B19 /* resources.rcc */ = {isa = PBXFileReference; lastKnownFileType = file; path = resources.rcc; sourceTree = "<group>"; };
 		453C788122365ADC00818B19 /* circle b.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = "circle b.pbm"; sourceTree = "<group>"; };
@@ -773,6 +749,19 @@
 		45DC2563224A0AEA00F40116 /* title@4x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "title@4x.png"; sourceTree = "<group>"; };
 		45DC2564224B137C00F40116 /* status msg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "status msg.cpp"; sourceTree = "<group>"; };
 		45DC2565224B137C00F40116 /* status msg.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "status msg.hpp"; sourceTree = "<group>"; };
+		45DC2567224C78AE00F40116 /* base.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = base.pbm; sourceTree = "<group>"; };
+		45DC2568224CC46400F40116 /* stroked circle.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = "stroked circle.pbm"; sourceTree = "<group>"; };
+		45DC2569224CC46400F40116 /* translate.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = translate.pbm; sourceTree = "<group>"; };
+		45DC256A224CC46400F40116 /* line.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = line.pbm; sourceTree = "<group>"; };
+		45DC256B224CC46400F40116 /* rotate.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = rotate.pbm; sourceTree = "<group>"; };
+		45DC256C224CC46400F40116 /* rectangle select.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = "rectangle select.pbm"; sourceTree = "<group>"; };
+		45DC256D224CC46400F40116 /* filled rectangle.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = "filled rectangle.pbm"; sourceTree = "<group>"; };
+		45DC256E224CC46400F40116 /* brush.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = brush.pbm; sourceTree = "<group>"; };
+		45DC256F224CC46400F40116 /* filled circle.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = "filled circle.pbm"; sourceTree = "<group>"; };
+		45DC2570224CC46400F40116 /* flood fill.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = "flood fill.pbm"; sourceTree = "<group>"; };
+		45DC2571224CC46400F40116 /* stroked rectangle.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = "stroked rectangle.pbm"; sourceTree = "<group>"; };
+		45DC2572224CC46500F40116 /* flip.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = flip.pbm; sourceTree = "<group>"; };
+		45DC2573224CC46500F40116 /* polygon select.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = "polygon select.pbm"; sourceTree = "<group>"; };
 		45F065F02222998300BCE863 /* current tool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "current tool.cpp"; sourceTree = "<group>"; };
 		45F065F12222998300BCE863 /* current tool.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "current tool.hpp"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -878,30 +867,19 @@
 		453C787A2235D55600818B19 /* Tools */ = {
 			isa = PBXGroup;
 			children = (
-				453C785D2235C91500818B19 /* brush d.png */,
-				453C784B2235C91300818B19 /* brush e.png */,
-				453C78522235C91400818B19 /* filled circle d.png */,
-				453C785A2235C91500818B19 /* filled circle e.png */,
-				453C78772235CE8400818B19 /* filled rectangle d.png */,
-				453C78512235C91400818B19 /* filled rectangle e.png */,
-				453C785E2235C91600818B19 /* flip d.png */,
-				453C78582235C91500818B19 /* flip e.png */,
-				453C78492235C91300818B19 /* flood fill d.png */,
-				453C78532235C91400818B19 /* flood fill e.png */,
-				453C78502235C91300818B19 /* line d.png */,
-				453C784F2235C91300818B19 /* line e.png */,
-				453C78562235C91400818B19 /* polygon select d.png */,
-				453C78472235C91200818B19 /* polygon select e.png */,
-				453C784C2235C91300818B19 /* rectangle select d.png */,
-				453C784E2235C91300818B19 /* rectangle select e.png */,
-				453C784D2235C91300818B19 /* rotate d.png */,
-				453C78482235C91300818B19 /* rotate e.png */,
-				453C78542235C91400818B19 /* stroked circle d.png */,
-				453C785B2235C91500818B19 /* stroked circle e.png */,
-				453C78552235C91400818B19 /* stroked rectangle d.png */,
-				453C78572235C91400818B19 /* stroked rectangle e.png */,
-				453C784A2235C91300818B19 /* translate d.png */,
-				453C785C2235C91500818B19 /* translate e.png */,
+				45DC2567224C78AE00F40116 /* base.pbm */,
+				45DC256E224CC46400F40116 /* brush.pbm */,
+				45DC256F224CC46400F40116 /* filled circle.pbm */,
+				45DC256D224CC46400F40116 /* filled rectangle.pbm */,
+				45DC2572224CC46500F40116 /* flip.pbm */,
+				45DC2570224CC46400F40116 /* flood fill.pbm */,
+				45DC256A224CC46400F40116 /* line.pbm */,
+				45DC2573224CC46500F40116 /* polygon select.pbm */,
+				45DC256C224CC46400F40116 /* rectangle select.pbm */,
+				45DC256B224CC46400F40116 /* rotate.pbm */,
+				45DC2568224CC46400F40116 /* stroked circle.pbm */,
+				45DC2571224CC46400F40116 /* stroked rectangle.pbm */,
+				45DC2569224CC46400F40116 /* translate.pbm */,
 			);
 			path = Tools;
 			sourceTree = "<group>";

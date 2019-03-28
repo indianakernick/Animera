@@ -1,30 +1,19 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource>
   <file>./resources.qrc</file>
-  <file>./Tools/brush d.png</file>
-  <file>./Tools/brush e.png</file>
-  <file>./Tools/filled circle d.png</file>
-  <file>./Tools/filled circle e.png</file>
-  <file>./Tools/filled rectangle d.png</file>
-  <file>./Tools/filled rectangle e.png</file>
-  <file>./Tools/flip d.png</file>
-  <file>./Tools/flip e.png</file>
-  <file>./Tools/flood fill d.png</file>
-  <file>./Tools/flood fill e.png</file>
-  <file>./Tools/line d.png</file>
-  <file>./Tools/line e.png</file>
-  <file>./Tools/polygon select d.png</file>
-  <file>./Tools/polygon select e.png</file>
-  <file>./Tools/rectangle select d.png</file>
-  <file>./Tools/rectangle select e.png</file>
-  <file>./Tools/rotate d.png</file>
-  <file>./Tools/rotate e.png</file>
-  <file>./Tools/stroked circle d.png</file>
-  <file>./Tools/stroked circle e.png</file>
-  <file>./Tools/stroked rectangle d.png</file>
-  <file>./Tools/stroked rectangle e.png</file>
-  <file>./Tools/translate d.png</file>
-  <file>./Tools/translate e.png</file>
+  <file>./Tools/base.pbm</file>
+  <file>./Tools/brush.pbm</file>
+  <file>./Tools/flood fill.pbm</file>
+  <file>./Tools/rectangle select.pbm</file>
+  <file>./Tools/polygon select.pbm</file>
+  <file>./Tools/line.pbm</file>
+  <file>./Tools/stroked circle.pbm</file>
+  <file>./Tools/filled circle.pbm</file>
+  <file>./Tools/stroked rectangle.pbm</file>
+  <file>./Tools/filled rectangle.pbm</file>
+  <file>./Tools/translate.pbm</file>
+  <file>./Tools/flip.pbm</file>
+  <file>./Tools/rotate.pbm</file>
   <file>./Cursors/circle b.pbm</file>
   <file>./Cursors/circle m.pbm</file>
   <file>./Fonts/5x9 ascii.atlas</file>

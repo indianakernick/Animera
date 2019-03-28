@@ -389,7 +389,7 @@ ToolChanges DragPaintTool<Derived>::mouseMove(const ToolMouseEvent &event) {
   clearImage(*event.overlay);
   that()->drawOverlay(*event.overlay, event.pos);
   if (event.button == ButtonType::none) {
-    event.status->append(event.pos);
+    event.status->appendLabeled(event.pos);
     return ToolChanges::overlay;
   }
   that()->updateStatus(*event.status, startPos, event.pos);
