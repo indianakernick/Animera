@@ -21,12 +21,11 @@ constexpr int       glob_scale = 2;
 constexpr int       glob_text = 9 * glob_scale;
 constexpr QSize     glob_min_window_size = {1280, 720};
 
-// @TODO maybe give these more general names
-inline const QColor glob_dark_gray  = {82, 82, 93};
-inline const QColor glob_dark_blue  = {27, 38, 79};
-inline const QColor glob_blue       = {39, 70, 144};
-inline const QColor glob_light_blue = {87, 108, 168};
-inline const QColor glob_light_gray = {177, 200, 211};
+inline const QColor glob_dark_shade   = {82, 82, 93};
+inline const QColor glob_dark_accent  = {27, 38, 79};
+inline const QColor glob_main         = {39, 70, 144};
+inline const QColor glob_light_accent = {87, 108, 168};
+inline const QColor glob_light_shade  = {177, 200, 211};
 
 // -------------------------------- tools ------------------------------------//
 
@@ -36,10 +35,10 @@ constexpr QSize     tool_button_size = tool_icon_size + 2 * tool_icon_padding;
 constexpr QPoint    tool_icon_pos = toPoint((tool_button_size - tool_icon_size)) / 2;
 constexpr int       tool_select_width = tool_button_size.width() + 1 * glob_scale;
 
-inline const QColor tool_select_background = glob_blue;
-inline const QColor tool_base_disabled = glob_dark_blue;
-inline const QColor tool_base_enabled = glob_light_blue;
-inline const QColor tool_shape = glob_light_gray;
+inline const QColor tool_select_background = glob_main;
+inline const QColor tool_base_disabled = glob_dark_accent;
+inline const QColor tool_base_enabled = glob_light_accent;
+inline const QColor tool_shape = glob_light_shade;
 
 // ------------------------------- status bar --------------------------------//
 
@@ -47,7 +46,7 @@ constexpr int       stat_temp_duration_ms = 5000;
 constexpr int       stat_min_width = 200 * glob_scale;
 constexpr int       stat_padding = 1 * glob_scale;
 constexpr int       stat_height = glob_text + 2 * stat_padding;
-inline const QColor stat_background = glob_blue;
+inline const QColor stat_background = glob_main;
 
 // --------------------------------- editor ----------------------------------//
 
