@@ -9,7 +9,7 @@
 #include "status bar widget.hpp"
 
 #include "config.hpp"
-#include "render text.hpp"
+#include "global font.hpp"
 #include <QtGui/qpainter.h>
 
 StatusBarWidget::StatusBarWidget(QWidget *parent)
@@ -23,25 +23,36 @@ StatusBarWidget::StatusBarWidget(QWidget *parent)
   setContentsMargins(0, 0, 0, 0);
 }
 
+namespace {
+
+QLatin1String toLatinString(const std::string_view text) {
+  return QLatin1String{text.data(), static_cast<int>(text.size())};
+}
+
+}
+
 void StatusBarWidget::showTemp(const std::string_view text) {
-  tempText = text;
+  tempText = toLatinString(text);
   timer.start();
   repaint();
 }
 
 void StatusBarWidget::showPerm(const std::string_view text) {
-  permText = text;
+  permText = toLatinString(text);
   repaint();
 }
 
 void StatusBarWidget::paintEvent(QPaintEvent *) {
   QPainter painter{this};
   painter.fillRect(rect(), stat_background);
-  if (tempText.empty()) {
-    renderText(painter, stat_padding, stat_padding, permText);
+  painter.setFont(getGlobalFont());
+  const QPoint pos = {stat_padding, stat_height - stat_padding};
+  if (tempText.isEmpty()) {
+    painter.drawText(pos, permText);
   } else {
-    renderText(painter, stat_padding, stat_padding, permText + " | " + tempText);
+    painter.drawText(pos, permText + " | " + tempText);
   }
+  painter.setPen(stat_text);
 }
 
 void StatusBarWidget::hideTemp() {
