@@ -18,9 +18,9 @@
 // ------------------------------- global ------------------------------------//
 
 constexpr int       glob_scale = 2;
-constexpr int       glob_text = 9 * glob_scale;
+constexpr int       glob_font_px = 9 * glob_scale;
+constexpr int       glob_font_pt = 16 * glob_scale; // 16 pt for 72 dpi. 12 pt for 96 dpi
 constexpr QSize     glob_min_window_size = {1280, 720};
-constexpr int       glob_font_pt = glob_scale * 16; // 16 pt for 72 dpi. 12 pt for 96 dpi
 
 inline const QColor glob_dark_shade   = {82, 82, 93};
 inline const QColor glob_dark_accent  = {27, 38, 79};
@@ -46,7 +46,7 @@ inline const QColor tool_shape = glob_light_shade;
 constexpr int       stat_temp_duration_ms = 5000;
 constexpr int       stat_min_width = 200 * glob_scale;
 constexpr int       stat_padding = 1 * glob_scale;
-constexpr int       stat_height = glob_text + 2 * stat_padding;
+constexpr int       stat_height = glob_font_px + 2 * stat_padding;
 
 inline const QColor stat_background = glob_dark_accent;
 inline const QColor stat_text = glob_light_shade;
