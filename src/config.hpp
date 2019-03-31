@@ -21,6 +21,8 @@ constexpr int       glob_scale = 2;
 constexpr int       glob_font_px = 9 * glob_scale;
 constexpr int       glob_font_pt = 16 * glob_scale; // 16 pt for 72 dpi. 12 pt for 96 dpi
 constexpr QSize     glob_min_window_size = {1280, 720};
+constexpr QSize     glob_cursor_size = QSize{8, 8} * glob_scale;
+constexpr QPoint    glob_cursor_offset = toPoint(glob_cursor_size) / 2;
 
 inline const QColor glob_dark_shade   = {82, 82, 93};
 inline const QColor glob_dark_accent  = {27, 38, 79};
@@ -65,8 +67,6 @@ inline const QColor edit_checker_b = {255, 255, 255};
 constexpr int       edit_min_scale = 1;
 constexpr int       edit_max_scale = 64;
 constexpr int       edit_default_scale = 2;
-constexpr QSize     edit_cursor_size = QSize{8, 8} * glob_scale;
-constexpr QPoint    edit_cursor_offset = toPoint(edit_cursor_size) / 2;
 
 // ----------------------------------- keys --------------------------------- //
 

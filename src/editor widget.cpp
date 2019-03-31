@@ -9,9 +9,9 @@
 #include "editor widget.hpp"
 
 #include "config.hpp"
+#include "cursors.hpp"
 #include "composite.hpp"
 #include <QtGui/qevent.h>
-#include <QtGui/qbitmap.h>
 #include <QtGui/qpainter.h>
 #include <QtWidgets/qlabel.h>
 #include <QtWidgets/qscrollbar.h>
@@ -25,8 +25,7 @@ public:
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     setFocusPolicy(Qt::StrongFocus);
     setMouseTracking(true);
-    initCursor();
-    setCursor(cursor);
+    setCursor(getCircleCursor());
     connect(parent->horizontalScrollBar(), &QScrollBar::valueChanged, this, &EditorImage::updateMouse);
     connect(parent->verticalScrollBar(), &QScrollBar::valueChanged, this, &EditorImage::updateMouse);
   }
@@ -63,7 +62,6 @@ Q_SIGNALS:
   
 private:
   QScrollArea *parent;
-  QCursor cursor;
   QPixmap checkers;
   QImage overlay;
   QPixmap editor;
@@ -88,15 +86,6 @@ private:
   void updateMouse() {
     pos = getPos();
     Q_EMIT mouseMove(pos, &overlay);
-  }
-
-  void initCursor() {
-    cursor = QCursor{
-      QBitmap{":/Cursors/circle b.pbm"}.scaled(edit_cursor_size),
-      QBitmap{":/Cursors/circle m.pbm"}.scaled(edit_cursor_size),
-      edit_cursor_offset.x(),
-      edit_cursor_offset.y()
-    };
   }
 
   void resize(const QSize newSize) {
@@ -178,7 +167,7 @@ public:
   void keyPressEvent(QKeyEvent *event) override {
     if (!event->isAutoRepeat()) {
       ++keysDown;
-      if (keysDown == 1) grabMouse(cursor);
+      if (keysDown == 1) grabMouse(cursor());
     }
     if (event->key() == key_zoom_out) {
       zoomOut();
