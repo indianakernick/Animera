@@ -91,15 +91,14 @@ ToolSelectWidget::ToolSelectWidget(QWidget *parent)
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   setStyleSheet("background-color: " + tool_select_background.name());
   
-  QVBoxLayout *layout = new QVBoxLayout{box};
-  layout->setSpacing(0);
-  layout->setAlignment(Qt::AlignVCenter);
-  layout->setContentsMargins(0, 0, 0, 0);
-  box->setLayout(layout);
+  QVBoxLayout *boxLayout = new QVBoxLayout{box};
+  boxLayout->setSpacing(0);
+  boxLayout->setContentsMargins(0, 0, 0, 0);
+  box->setLayout(boxLayout);
   box->setContentsMargins(0, 0, 0, 0);
   setContentsMargins(0, 0, 0, 0);
   
-  layout->addStretch();
+  boxLayout->addStretch();
   makeToolWidget<BrushToolWidget>()->click();
   makeToolWidget<FloodFillToolWidget>();
   makeToolWidget<RectangleSelectToolWidget>();
@@ -112,9 +111,10 @@ ToolSelectWidget::ToolSelectWidget(QWidget *parent)
   makeToolWidget<TranslateToolWidget>();
   makeToolWidget<FlipToolWidget>();
   makeToolWidget<RotateToolWidget>();
-  layout->addStretch();
+  boxLayout->addStretch();
   
   setWidget(box);
+  setAlignment(Qt::AlignVCenter);
   
   // @TODO remove
   colors.primary = qRgba(255, 0, 0, 255);
