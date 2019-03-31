@@ -43,7 +43,7 @@ void BrushTool::detachCell() {
 
 ToolChanges BrushTool::mouseDown(const ToolMouseEvent &event) {
   clearImage(*event.overlay);
-  symPoint(*event.overlay, overlay_color, event.pos);
+  symPoint(*event.overlay, tool_overlay_color, event.pos);
   symPoint(*event.status, event.pos);
   lastPos = event.pos;
   color = selectColor(event.colors, event.button);
@@ -52,7 +52,7 @@ ToolChanges BrushTool::mouseDown(const ToolMouseEvent &event) {
 
 ToolChanges BrushTool::mouseMove(const ToolMouseEvent &event) {
   clearImage(*event.overlay);
-  symPoint(*event.overlay, overlay_color, event.pos);
+  symPoint(*event.overlay, tool_overlay_color, event.pos);
   symPoint(*event.status, event.pos);
   if (event.button == ButtonType::none) return ToolChanges::overlay;
   Image &img = source->image;
@@ -163,7 +163,7 @@ void FloodFillTool::detachCell() {
 ToolChanges FloodFillTool::mouseDown(const ToolMouseEvent &event) {
   assert(source);
   clearImage(*event.overlay);
-  drawSquarePoint(*event.overlay, overlay_color, event.pos);
+  drawSquarePoint(*event.overlay, tool_overlay_color, event.pos);
   event.status->appendLabeled(event.pos);
   const QRgb color = selectColor(event.colors, event.button);
   return drawnChanges(drawFloodFill(source->image.data, color, event.pos));
@@ -172,7 +172,7 @@ ToolChanges FloodFillTool::mouseDown(const ToolMouseEvent &event) {
 ToolChanges FloodFillTool::mouseMove(const ToolMouseEvent &event) {
   assert(source);
   clearImage(*event.overlay);
-  drawSquarePoint(*event.overlay, overlay_color, event.pos);
+  drawSquarePoint(*event.overlay, tool_overlay_color, event.pos);
   event.status->appendLabeled(event.pos);
   return ToolChanges::overlay;
 }
@@ -194,7 +194,7 @@ ToolChanges RectangleSelectTool::mouseDown(const ToolMouseEvent &event) {
   }
   event.status->appendLabeled(mode);
   if (mode == SelectMode::copy) {
-    drawSquarePoint(*event.overlay, overlay_color, event.pos);
+    drawSquarePoint(*event.overlay, tool_overlay_color, event.pos);
     event.status->appendLabeled(event.pos);
   } else if (mode == SelectMode::paste) {
     blitImage(*event.overlay, overlay, event.pos + offset);
@@ -217,10 +217,10 @@ ToolChanges RectangleSelectTool::mouseMove(const ToolMouseEvent &event) {
   if (mode == SelectMode::copy) {
     if (event.button == ButtonType::primary) {
       const QRect rect = QRect{startPos, event.pos}.normalized();
-      drawStrokedRect(*event.overlay, overlay_color, rect);
+      drawStrokedRect(*event.overlay, tool_overlay_color, rect);
       event.status->appendLabeled(rect);
     } else {
-      drawSquarePoint(*event.overlay, overlay_color, event.pos);
+      drawSquarePoint(*event.overlay, tool_overlay_color, event.pos);
       event.status->appendLabeled(event.pos);
     }
   } else if (mode == SelectMode::paste) {
@@ -235,7 +235,7 @@ ToolChanges RectangleSelectTool::mouseUp(const ToolMouseEvent &event) {
   if (event.button != ButtonType::primary) return ToolChanges::none;
   clearImage(*event.overlay);
   if (mode == SelectMode::copy) {
-    drawSquarePoint(*event.overlay, overlay_color, event.pos);
+    drawSquarePoint(*event.overlay, tool_overlay_color, event.pos);
     const QRect rect = QRect{startPos, event.pos}.normalized();
     selection = blitImage(source->image.data, rect);
     overlay = selection;
@@ -247,10 +247,6 @@ ToolChanges RectangleSelectTool::mouseUp(const ToolMouseEvent &event) {
   event.status->appendLabeled(mode);
   event.status->appendLabeled({event.pos + offset, overlay.size()});
   return ToolChanges::overlay;
-}
-
-void RectangleSelectTool::setMode(const SelectMode newMode) {
-  mode = newMode;
 }
 
 bool PolygonSelectTool::attachCell(Cell *cell) {
@@ -270,7 +266,7 @@ ToolChanges PolygonSelectTool::mouseDown(const ToolMouseEvent &event) {
   }
   event.status->appendLabeled(mode);
   if (mode == SelectMode::copy) {
-    drawSquarePoint(*event.overlay, overlay_color, event.pos);
+    drawSquarePoint(*event.overlay, tool_overlay_color, event.pos);
     event.status->appendLabeled(event.pos);
   } else if (mode == SelectMode::paste) {
     blitImage(*event.overlay, overlay, event.pos + offset);
@@ -293,10 +289,10 @@ ToolChanges PolygonSelectTool::mouseMove(const ToolMouseEvent &event) {
   if (mode == SelectMode::copy) {
     if (event.button == ButtonType::primary) {
       polygon.push(event.pos);
-      drawFilledPolygon(*event.overlay, overlay_color, polygon, QPoint{0, 0});
+      drawFilledPolygon(*event.overlay, tool_overlay_color, polygon, QPoint{0, 0});
       event.status->appendLabeled(polygon.bounds());
     } else {
-      drawSquarePoint(*event.overlay, overlay_color, event.pos);
+      drawSquarePoint(*event.overlay, tool_overlay_color, event.pos);
       event.status->appendLabeled(event.pos);
     }
   } else if (mode == SelectMode::paste) {
@@ -327,10 +323,6 @@ ToolChanges PolygonSelectTool::mouseUp(const ToolMouseEvent &event) {
   event.status->appendLabeled(mode);
   event.status->appendLabeled({event.pos + offset, overlay.size()});
   return ToolChanges::overlay;
-}
-
-void PolygonSelectTool::setMode(const SelectMode newMode) {
-  mode = newMode;
 }
 
 template <typename Derived>
@@ -419,7 +411,7 @@ bool LineTool::drawDrag(Image &image, const QPoint start, const QPoint end) {
 }
 
 void LineTool::drawOverlay(QImage &overlay, const QPoint pos) {
-  drawSquarePoint(overlay, overlay_color, pos);
+  drawSquarePoint(overlay, tool_overlay_color, pos);
 }
 
 void LineTool::updateStatus(StatusMsg &status, const QPoint start, const QPoint end) {
@@ -460,7 +452,7 @@ bool StrokedCircleTool::drawDrag(Image &image, const QPoint start, const QPoint 
 }
 
 void StrokedCircleTool::drawOverlay(QImage &overlay, const QPoint pos) {
-  drawFilledRect(overlay, overlay_color, centerToRect(pos, shape));
+  drawFilledRect(overlay, tool_overlay_color, centerToRect(pos, shape));
 }
 
 void StrokedCircleTool::updateStatus(StatusMsg &status, const QPoint start, QPoint) {
@@ -487,7 +479,7 @@ bool FilledCircleTool::drawDrag(Image &image, const QPoint start, const QPoint e
 }
 
 void FilledCircleTool::drawOverlay(QImage &overlay, const QPoint pos) {
-  drawFilledRect(overlay, overlay_color, centerToRect(pos, shape));
+  drawFilledRect(overlay, tool_overlay_color, centerToRect(pos, shape));
 }
 
 void FilledCircleTool::updateStatus(StatusMsg &status, const QPoint start, QPoint) {
@@ -509,7 +501,7 @@ bool StrokedRectangleTool::drawDrag(Image &image, const QPoint start, const QPoi
 }
 
 void StrokedRectangleTool::drawOverlay(QImage &overlay, const QPoint pos) {
-  drawSquarePoint(overlay, overlay_color, pos);
+  drawSquarePoint(overlay, tool_overlay_color, pos);
 }
 
 void StrokedRectangleTool::updateStatus(StatusMsg &status, const QPoint start, const QPoint end) {
@@ -528,7 +520,7 @@ bool FilledRectangleTool::drawDrag(Image &image, const QPoint start, const QPoin
 }
 
 void FilledRectangleTool::drawOverlay(QImage &overlay, const QPoint pos) {
-  drawSquarePoint(overlay, overlay_color, pos);
+  drawSquarePoint(overlay, tool_overlay_color, pos);
 }
 
 void FilledRectangleTool::updateStatus(StatusMsg &status, const QPoint start, const QPoint end) {

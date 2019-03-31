@@ -49,12 +49,6 @@ struct ToolKeyEvent {
   StatusMsg *status = nullptr;
 };
 
-constexpr int overlay_alpha = 127;
-constexpr int overlay_gray = 127;
-constexpr QRgb overlay_color = qRgba(
-  overlay_gray, overlay_gray, overlay_gray, overlay_alpha
-);
-
 class Tool {
 public:
   virtual ~Tool() = default;

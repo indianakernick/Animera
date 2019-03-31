@@ -8,6 +8,7 @@
 
 #include "composite.hpp"
 
+#include "config.hpp"
 #include <QtGui/qpainter.h>
 
 /*
@@ -167,7 +168,8 @@ namespace {
 void colorToOverlay(QRgb *const pixel) {
   const QRgb pxval = *pixel;
   const int gray = qGray(qRed(pxval), qGreen(pxval), qBlue(pxval));
-  *pixel = qRgba(gray, gray, gray, qAlpha(pxval) * 3 / 4);
+  const int alpha = std::max(tool_overlay_alpha_min, qAlpha(pxval) * 3 / 4);
+  *pixel = qRgba(gray, gray, gray, alpha);
 }
 
 void applyMaskPixel(QRgb *const pixel, const uchar mask) {

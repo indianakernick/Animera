@@ -52,7 +52,6 @@ private:
   SourceCell *source = nullptr;
 };
 
-// @TODO maybe provide some indication of the rectangle in the overlay
 class RectangleSelectTool final : public Tool {
 public:
   bool attachCell(Cell *) override;
@@ -60,8 +59,6 @@ public:
   ToolChanges mouseDown(const ToolMouseEvent &) override;
   ToolChanges mouseMove(const ToolMouseEvent &) override;
   ToolChanges mouseUp(const ToolMouseEvent &) override;
-
-  void setMode(SelectMode);
   
 private:
   QPoint startPos = no_point;
@@ -74,7 +71,6 @@ private:
 
 // @TODO we could add a MaskSelectTool that uses flood fills to build up a mask
 
-// @TODO maybe provide some indication of the polygon in the overlay
 class PolygonSelectTool final : public Tool {
 public:
   bool attachCell(Cell *) override;
@@ -83,8 +79,6 @@ public:
   ToolChanges mouseMove(const ToolMouseEvent &) override;
   ToolChanges mouseUp(const ToolMouseEvent &) override;
   
-  void setMode(SelectMode);
-
 private:
   Polygon polygon;
   SourceCell *source = nullptr;

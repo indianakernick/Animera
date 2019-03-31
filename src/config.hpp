@@ -15,7 +15,7 @@
 #include <QtCore/qpoint.h>
 #include <QtCore/qnamespace.h>
 
-// ------------------------------- global ------------------------------------//
+// ------------------------------- global ----------------------------------- //
 
 constexpr int       glob_scale = 2;
 constexpr int       glob_font_px = 9 * glob_scale;
@@ -28,7 +28,7 @@ inline const QColor glob_main         = {39, 70, 144};
 inline const QColor glob_light_accent = {87, 108, 168};
 inline const QColor glob_light_shade  = {184, 205, 215};
 
-// -------------------------------- tools ------------------------------------//
+// -------------------------------- tools ----------------------------------- //
 
 constexpr QSize     tool_icon_size = QSize{24, 24} * glob_scale;
 constexpr QSize     tool_icon_padding = QSize{1, 1} * glob_scale;
@@ -41,7 +41,14 @@ inline const QColor tool_base_disabled = glob_main;
 inline const QColor tool_base_enabled = glob_light_accent;
 inline const QColor tool_shape = glob_light_shade;
 
-// ------------------------------- status bar --------------------------------//
+constexpr int       tool_overlay_alpha_min = 31;
+constexpr int       tool_overlay_alpha = 127;
+constexpr int       tool_overlay_gray = 127;
+constexpr QRgb      tool_overlay_color = qRgba(
+  tool_overlay_gray, tool_overlay_gray, tool_overlay_gray, tool_overlay_alpha
+);
+
+// ------------------------------- status bar ------------------------------- //
 
 constexpr int       stat_temp_duration_ms = 5000;
 constexpr int       stat_min_width = 200 * glob_scale;
@@ -51,7 +58,7 @@ constexpr int       stat_height = glob_font_px + 2 * stat_padding;
 inline const QColor stat_background = glob_dark_accent;
 inline const QColor stat_text = glob_light_shade;
 
-// --------------------------------- editor ----------------------------------//
+// --------------------------------- editor --------------------------------- //
 
 inline const QColor edit_checker_a = {191, 191, 191};
 inline const QColor edit_checker_b = {255, 255, 255};
@@ -61,7 +68,7 @@ constexpr int       edit_default_scale = 2;
 constexpr QSize     edit_cursor_size = QSize{8, 8} * glob_scale;
 constexpr QPoint    edit_cursor_offset = toPoint(edit_cursor_size) / 2;
 
-// ----------------------------------- keys ----------------------------------//
+// ----------------------------------- keys --------------------------------- //
 
 // all tools
 constexpr Qt::MouseButton mouse_primary = Qt::LeftButton;
