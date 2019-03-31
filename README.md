@@ -23,3 +23,31 @@ and you can't switch layers or frames (no timeline).
 I plan on putting a timeline down the bottom and a color/palette menu on the right.
 There's still a lot to do and given the free time I have nowadays (far less than I had in 2015),
 this may end up taking a year as well!
+
+## Demos
+
+Here's a few quick gifs that demostrate some of the features I have implemented so far.
+
+![Brush](https://i.imgur.com/awJ8cOf.gif)
+
+![Fill](https://i.imgur.com/15cNBDr.gif)
+
+![Rect Select](https://i.imgur.com/JdbRhW8.gif)
+
+![Poly Select](https://i.imgur.com/KM8Sown.gif)
+
+![Filled Circle](https://i.imgur.com/wVTqfYF.gif)
+
+![Stroked Circle](https://i.imgur.com/8ntlkEW.gif)
+
+![Filled Rect](https://i.imgur.com/lUGYKW2.gif)
+
+![Stroked Rect](https://i.imgur.com/r7M8XUi.gif)
+
+![Line](https://i.imgur.com/BQ6LEtj.gif)
+
+![Translate](https://i.imgur.com/VlO5mrl.gif)
+
+![Flip](https://i.imgur.com/HJnQuiK.gif)
+
+![Rotate](https://i.imgur.com/Xj1AG30.gif)
