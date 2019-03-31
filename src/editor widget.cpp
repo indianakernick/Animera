@@ -105,7 +105,7 @@ private:
     clearImage(overlay);
   }
 
-  void updateCheckers(QSize newSize) {
+  void updateCheckers(const QSize newSize) {
     checkers = QPixmap{newSize * 2};
     QPainter painter{&checkers};
     const QRect rect{{}, newSize * 2};

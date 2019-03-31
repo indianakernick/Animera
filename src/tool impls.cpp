@@ -186,11 +186,12 @@ void RectangleSelectTool::detachCell() {
   source = nullptr;
 }
 
-// @TODO maybe dragging a rectangle with secondary will cut instead of copy?
-
 ToolChanges RectangleSelectTool::mouseDown(const ToolMouseEvent &event) {
   assert(source);
   clearImage(*event.overlay);
+  if (event.button == ButtonType::secondary && !overlay.isNull()) {
+    mode = opposite(mode);
+  }
   event.status->appendLabeled(mode);
   if (mode == SelectMode::copy) {
     drawSquarePoint(*event.overlay, overlay_color, event.pos);
@@ -231,6 +232,7 @@ ToolChanges RectangleSelectTool::mouseMove(const ToolMouseEvent &event) {
 
 ToolChanges RectangleSelectTool::mouseUp(const ToolMouseEvent &event) {
   assert(source);
+  if (event.button != ButtonType::primary) return ToolChanges::none;
   clearImage(*event.overlay);
   if (mode == SelectMode::copy) {
     drawSquarePoint(*event.overlay, overlay_color, event.pos);
@@ -241,20 +243,10 @@ ToolChanges RectangleSelectTool::mouseUp(const ToolMouseEvent &event) {
     offset = rect.topLeft() - event.pos;
     mode = SelectMode::paste;
   }
-  
-  startPos = no_point;
   blitImage(*event.overlay, overlay, event.pos + offset);
   event.status->appendLabeled(mode);
   event.status->appendLabeled({event.pos + offset, overlay.size()});
   return ToolChanges::overlay;
-}
-
-ToolChanges RectangleSelectTool::keyPress(const ToolKeyEvent &event) {
-  if (event.key == key_toggle_copy_paste && startPos == no_point) {
-    mode = opposite(mode);
-  }
-  event.status->append(mode);
-  return ToolChanges::none;
 }
 
 void RectangleSelectTool::setMode(const SelectMode newMode) {
@@ -273,6 +265,9 @@ void PolygonSelectTool::detachCell() {
 ToolChanges PolygonSelectTool::mouseDown(const ToolMouseEvent &event) {
   assert(source);
   clearImage(*event.overlay);
+  if (event.button == ButtonType::secondary && !overlay.isNull()) {
+    mode = opposite(mode);
+  }
   event.status->appendLabeled(mode);
   if (mode == SelectMode::copy) {
     drawSquarePoint(*event.overlay, overlay_color, event.pos);
@@ -312,9 +307,10 @@ ToolChanges PolygonSelectTool::mouseMove(const ToolMouseEvent &event) {
 }
 
 ToolChanges PolygonSelectTool::mouseUp(const ToolMouseEvent &event) {
-  QPolygon p;
   assert(source);
+  if (event.button != ButtonType::primary) return ToolChanges::none;
   clearImage(*event.overlay);
+  QPolygon p;
   if (mode == SelectMode::copy) {
     polygon.push(event.pos);
     const QRect clippedBounds = polygon.bounds().intersected(source->image.data.rect());
@@ -327,20 +323,10 @@ ToolChanges PolygonSelectTool::mouseUp(const ToolMouseEvent &event) {
     offset = clippedBounds.topLeft() - event.pos;
     mode = SelectMode::paste;
   }
-  
   blitImage(*event.overlay, overlay, event.pos + offset);
   event.status->appendLabeled(mode);
   event.status->appendLabeled({event.pos + offset, overlay.size()});
   return ToolChanges::overlay;
-}
-
-ToolChanges PolygonSelectTool::keyPress(const ToolKeyEvent &event) {
-  // @TODO make sure the mouse isn't down
-  if (event.key == key_toggle_copy_paste) {
-    mode = opposite(mode);
-  }
-  event.status->append(mode);
-  return ToolChanges::none;
 }
 
 void PolygonSelectTool::setMode(const SelectMode newMode) {

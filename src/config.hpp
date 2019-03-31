@@ -80,9 +80,6 @@ constexpr Qt::Key   key_clear = Qt::Key_V;
 constexpr int       brsh_min_thick = 1;
 constexpr int       brsh_max_thick = 64;
 
-// select
-constexpr Qt::Key   key_toggle_copy_paste = Qt::Key_P;
-
 // translate
 constexpr Qt::Key   key_mov_up = Qt::Key_Up;
 constexpr Qt::Key   key_mov_right = Qt::Key_Right;
