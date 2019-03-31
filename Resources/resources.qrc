@@ -16,6 +16,6 @@
   <file>./Tools/rotate.pbm</file>
   <file>./Cursors/circle b.pbm</file>
   <file>./Cursors/circle m.pbm</file>
-  <file>./Fonts/5x9ascii.ttf</file>
+  <file>./Fonts/5x7ascii.ttf</file>
 </qresource>
 </RCC>

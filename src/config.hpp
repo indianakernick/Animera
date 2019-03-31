@@ -18,8 +18,8 @@
 // ------------------------------- global ----------------------------------- //
 
 constexpr int       glob_scale = 2;
-constexpr int       glob_font_px = 9 * glob_scale;
-constexpr int       glob_font_pt = 16 * glob_scale; // 16 pt for 72 dpi. 12 pt for 96 dpi
+constexpr int       glob_font_px = 7 * glob_scale;
+constexpr int       glob_font_pt = 8 * glob_scale; // 8 pt for 72 dpi. 6 pt for 96 dpi
 constexpr QSize     glob_min_window_size = {1280, 720};
 constexpr QSize     glob_cursor_size = QSize{8, 8} * glob_scale;
 constexpr QPoint    glob_cursor_offset = toPoint(glob_cursor_size) / 2;

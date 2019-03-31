@@ -34,6 +34,7 @@ public:
       tools{tools},
       tool{std::make_unique<typename WidgetClass::impl>()},
       widget{std::make_unique<WidgetClass>()} {
+    setCursor(Qt::PointingHandCursor);
     loadIcons(WidgetClass::icon_name);
     setToolTip(WidgetClass::tooltip);
     setCheckable(true);
