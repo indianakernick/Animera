@@ -428,7 +428,6 @@ void StrokedCircleTool::setShape(const CircleShape newShape) {
 }
 
 bool StrokedCircleTool::drawPoint(Image &, QPoint) {
-  radius = 0;
   return false;
 }
 
@@ -447,19 +446,19 @@ int calcRadius(const QPoint start, const QPoint end) {
 }
 
 bool StrokedCircleTool::drawDrag(Image &image, const QPoint start, const QPoint end) {
-  radius = calcRadius(start, end);
-  return drawStrokedEllipse(image.data, getColor(), circleToRect(start, radius, shape));
+  const QRect rect = circleToRect(start, calcRadius(start, end), shape);
+  return drawStrokedEllipse(image.data, getColor(), rect);
 }
 
 void StrokedCircleTool::drawOverlay(QImage &overlay, const QPoint pos) {
   drawFilledRect(overlay, tool_overlay_color, centerToRect(pos, shape));
 }
 
-void StrokedCircleTool::updateStatus(StatusMsg &status, const QPoint start, QPoint) {
+void StrokedCircleTool::updateStatus(StatusMsg &status, const QPoint start, const QPoint end) {
   status.append("CENTER: ");
   status.append(start);
   status.append(" RADIUS: ");
-  status.append(radius);
+  status.append(calcRadius(start, end));
 }
 
 FilledCircleTool::~FilledCircleTool() = default;
@@ -469,24 +468,23 @@ void FilledCircleTool::setShape(const CircleShape newShape) {
 }
 
 bool FilledCircleTool::drawPoint(Image &, QPoint) {
-  radius = 0;
   return false;
 }
 
 bool FilledCircleTool::drawDrag(Image &image, const QPoint start, const QPoint end) {
-  radius = calcRadius(start, end);
-  return drawFilledEllipse(image.data, getColor(), circleToRect(start, radius, shape));
+  const QRect rect = circleToRect(start, calcRadius(start, end), shape);
+  return drawFilledEllipse(image.data, getColor(), rect);
 }
 
 void FilledCircleTool::drawOverlay(QImage &overlay, const QPoint pos) {
   drawFilledRect(overlay, tool_overlay_color, centerToRect(pos, shape));
 }
 
-void FilledCircleTool::updateStatus(StatusMsg &status, const QPoint start, QPoint) {
+void FilledCircleTool::updateStatus(StatusMsg &status, const QPoint start, const QPoint end) {
   status.append("CENTER: ");
   status.append(start);
   status.append(" RADIUS: ");
-  status.append(radius);
+  status.append(calcRadius(start, end));
 }
 
 StrokedRectangleTool::~StrokedRectangleTool() = default;

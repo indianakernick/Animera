@@ -136,7 +136,6 @@ public:
   
 private:
   CircleShape shape = CircleShape::c1x1;
-  int radius = no_radius;
 
   bool drawPoint(Image &, QPoint);
   bool drawDrag(Image &, QPoint, QPoint);
@@ -154,7 +153,6 @@ public:
 
 private:
   CircleShape shape = CircleShape::c1x1;
-  int radius = no_radius;
   
   bool drawPoint(Image &, QPoint);
   bool drawDrag(Image &, QPoint, QPoint);
