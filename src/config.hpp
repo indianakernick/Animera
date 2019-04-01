@@ -18,7 +18,14 @@
 // ------------------------------- global ----------------------------------- //
 
 constexpr int       glob_scale = 2;
-constexpr int       glob_font_px = 7 * glob_scale;
+// @TODO robust font system
+// we might end up using
+// 5x7ascii for the status bar and
+// 5x7+2_var_ascii for the tooltips
+// so global constants probably aren't gonna cut it
+constexpr int       glob_font_accent_px = 7 * glob_scale;
+constexpr int       glob_font_decent_px = 0 * glob_scale;
+constexpr int       glob_font_px = glob_font_accent_px + glob_font_decent_px;
 constexpr int       glob_font_pt = 8 * glob_scale; // 8 pt for 72 dpi. 6 pt for 96 dpi
 constexpr QSize     glob_min_window_size = {1280, 720};
 constexpr QSize     glob_cursor_size = QSize{8, 8} * glob_scale;

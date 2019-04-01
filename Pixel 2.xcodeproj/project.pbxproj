@@ -765,6 +765,8 @@
 		45DFE49C2250835900EA40C5 /* cursors.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = cursors.cpp; sourceTree = "<group>"; };
 		45DFE49D2250835900EA40C5 /* cursors.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = cursors.hpp; sourceTree = "<group>"; };
 		45DFE4A02250A10D00EA40C5 /* 5x7ascii.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = 5x7ascii.ttf; sourceTree = "<group>"; };
+		45DFE4A12252038700EA40C5 /* 5x7+2_var_ascii.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "5x7+2_var_ascii.ttf"; sourceTree = "<group>"; };
+		45DFE4A22252039600EA40C5 /* 5x7+2ascii.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "5x7+2ascii.ttf"; sourceTree = "<group>"; };
 		45F065F02222998300BCE863 /* current tool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "current tool.cpp"; sourceTree = "<group>"; };
 		45F065F12222998300BCE863 /* current tool.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "current tool.hpp"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -993,6 +995,8 @@
 			isa = PBXGroup;
 			children = (
 				45DFE4A02250A10D00EA40C5 /* 5x7ascii.ttf */,
+				45DFE4A22252039600EA40C5 /* 5x7+2ascii.ttf */,
+				45DFE4A12252038700EA40C5 /* 5x7+2_var_ascii.ttf */,
 			);
 			path = Fonts;
 			sourceTree = "<group>";
