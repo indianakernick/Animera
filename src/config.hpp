@@ -74,6 +74,7 @@ inline const QColor edit_checker_b = {255, 255, 255};
 constexpr int       edit_min_scale = 1;
 constexpr int       edit_max_scale = 64;
 constexpr int       edit_default_scale = 2;
+constexpr int       edit_undo_stack = 64;
 
 // ----------------------------------- keys --------------------------------- //
 

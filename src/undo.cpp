@@ -8,8 +8,10 @@
 
 #include "undo.hpp"
 
+#include "config.hpp"
+
 UndoStack::UndoStack() {
-  stack.reserve(max_stack_size);
+  stack.reserve(edit_undo_stack);
   top = -1;
 }
 
@@ -32,8 +34,8 @@ void UndoStack::reset(Image img) {
 void UndoStack::modify(Image img) {
   assert(!stack.empty());
   stack.erase(stack.begin() + top + 1, stack.end());
-  if (stack.size() >= max_stack_size) {
-    const size_t oldImages = stack.size() - max_stack_size + 1;
+  if (stack.size() >= edit_undo_stack) {
+    const size_t oldImages = stack.size() - edit_undo_stack + 1;
     stack.erase(stack.begin(), stack.begin() + oldImages);
   }
   img.data.detach();

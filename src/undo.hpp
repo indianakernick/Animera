@@ -12,8 +12,6 @@
 #include <vector>
 #include "image.hpp"
 
-constexpr size_t max_stack_size = 64;
-
 struct UndoState {
   Image img;
   bool undid;
