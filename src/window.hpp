@@ -9,6 +9,7 @@
 #ifndef window_hpp
 #define window_hpp
 
+#include "clear object.hpp"
 #include "editor widget.hpp"
 #include "timeline widget.hpp"
 #include "status bar widget.hpp"
@@ -24,6 +25,7 @@ public:
 private:
   QWidget bottom;
   Animation anim;
+  ClearObject clear;
   EditorWidget editor;
   ToolSelectWidget tools;
   TimelineWidget timeline;

@@ -66,14 +66,6 @@ ToolChanges BrushTool::mouseUp(const ToolMouseEvent &event) {
   return drawnChanges(symLine(source->image.data, color, {lastPos, event.pos}));
 }
 
-ToolChanges BrushTool::keyPress(const ToolKeyEvent &event) {
-  if (event.key == key_clear) {
-    clearImage(source->image.data, event.colors.erase);
-    return ToolChanges::cell;
-  }
-  return ToolChanges::none;
-}
-
 void BrushTool::setWidth(const int newWidth) {
   assert(brsh_min_thick <= newWidth && newWidth <= brsh_max_thick);
   width = newWidth;

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		45054F6D22596BC10078350B /* clear object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45054F6B22596BC10078350B /* clear object.cpp */; };
 		453C78192234935000818B19 /* timeline widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C78172234935000818B19 /* timeline widget.cpp */; };
 		453C781C22349BBD00818B19 /* editor widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C781A22349BBD00818B19 /* editor widget.cpp */; };
 		453C781F22349F0100818B19 /* tool select widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C781D22349F0100818B19 /* tool select widget.cpp */; };
@@ -53,6 +54,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		45054F6B22596BC10078350B /* clear object.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "clear object.cpp"; sourceTree = "<group>"; };
+		45054F6C22596BC10078350B /* clear object.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "clear object.hpp"; sourceTree = "<group>"; };
 		453C78172234935000818B19 /* timeline widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "timeline widget.cpp"; sourceTree = "<group>"; };
 		453C78182234935000818B19 /* timeline widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "timeline widget.hpp"; sourceTree = "<group>"; };
 		453C781A22349BBD00818B19 /* editor widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "editor widget.cpp"; sourceTree = "<group>"; };
@@ -865,6 +868,8 @@
 				45BADA76224714A3000D095C /* tool widgets.hpp */,
 				453C78442234F3C600818B19 /* status bar widget.cpp */,
 				453C78452234F3C600818B19 /* status bar widget.hpp */,
+				45054F6B22596BC10078350B /* clear object.cpp */,
+				45054F6C22596BC10078350B /* clear object.hpp */,
 			);
 			name = Widgets;
 			sourceTree = "<group>";
@@ -1908,7 +1913,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "function moc {\n  local OUTPUT=\"$PROJECT_DIR/src/$1.moc\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.hpp\" > \"$OUTPUT\"\n  echo \"\" >> \"$OUTPUT\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.cpp\" >> \"$OUTPUT\"\n}\n\nmoc \"tool select widget\"\nmoc \"status bar widget\"\nmoc \"timeline widget\"\nmoc \"editor widget\"\nmoc \"tool widgets\"\nmoc \"application\"\nmoc \"window\"\n";
+			shellScript = "function moc {\n  local OUTPUT=\"$PROJECT_DIR/src/$1.moc\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.hpp\" > \"$OUTPUT\"\n  echo \"\" >> \"$OUTPUT\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.cpp\" >> \"$OUTPUT\"\n}\n\nmoc \"tool select widget\"\nmoc \"status bar widget\"\nmoc \"timeline widget\"\nmoc \"editor widget\"\nmoc \"clear object\"\nmoc \"tool widgets\"\nmoc \"application\"\nmoc \"window\"\n";
 		};
 		453C787B2235D63B00818B19 /* RCC */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1966,6 +1971,7 @@
 				45BADA1D2247007F000D095C /* glm.cpp in Sources */,
 				45B284B6221B726200D6D055 /* tool impls.cpp in Sources */,
 				453C781F22349F0100818B19 /* tool select widget.cpp in Sources */,
+				45054F6D22596BC10078350B /* clear object.cpp in Sources */,
 				453C78192234935000818B19 /* timeline widget.cpp in Sources */,
 				458F84082249DFC8005F91D0 /* polygon.cpp in Sources */,
 				45DC2566224B137C00F40116 /* status msg.cpp in Sources */,

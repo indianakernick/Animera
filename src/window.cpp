@@ -77,6 +77,7 @@ void Window::makeDockWidget(Qt::DockWidgetArea area, QWidget *widget) {
 void Window::connectSignals() {
   connect(&timeline, &TimelineWidget::posChange,         &editor,    &EditorWidget::compositePos);
   connect(&timeline, &TimelineWidget::posChange,         &tools,     &ToolSelectWidget::changeCell);
+  connect(&timeline, &TimelineWidget::posChange,         &clear,     &ClearObject::posChange);
   connect(&timeline, &TimelineWidget::layerVisibility,   &editor,    &EditorWidget::compositeVis);
   
   connect(&tools,    &ToolSelectWidget::cellModified,    &editor,    &EditorWidget::composite);
@@ -88,6 +89,9 @@ void Window::connectSignals() {
   connect(&editor,   &EditorWidget::mouseMove,           &tools,     &ToolSelectWidget::mouseMove);
   connect(&editor,   &EditorWidget::mouseUp,             &tools,     &ToolSelectWidget::mouseUp);
   connect(&editor,   &EditorWidget::keyPress,            &tools,     &ToolSelectWidget::keyPress);
+  connect(&editor,   &EditorWidget::keyPress,            &clear,     &ClearObject::keyPress);
+  
+  connect(&clear,    &ClearObject::cellModified,         &tools,    &ToolSelectWidget::cellModified);
 }
 
 #include "window.moc"

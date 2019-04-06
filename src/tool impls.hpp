@@ -23,7 +23,6 @@ public:
   ToolChanges mouseDown(const ToolMouseEvent &) override;
   ToolChanges mouseMove(const ToolMouseEvent &) override;
   ToolChanges mouseUp(const ToolMouseEvent &) override;
-  ToolChanges keyPress(const ToolKeyEvent &) override;
 
   void setWidth(int);
   void setMode(SymmetryMode);
