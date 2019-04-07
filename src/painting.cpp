@@ -146,10 +146,10 @@ QPoint left(const QPoint p) {
 // http://www.adammil.net/blog/v126_A_More_Efficient_Flood_Fill.html
 
 template <typename Pixel>
-void startFloodFill(PixelGetter<Pixel>, QPoint, QSize);
+void floodFillStart(PixelGetter<Pixel>, QPoint, QSize);
 
 template <typename Pixel>
-void floodFillImpl(PixelGetter<Pixel> px, QPoint pos, const QSize size) {
+void floodFillCore(PixelGetter<Pixel> px, QPoint pos, const QSize size) {
   int lastRowLength = 0;
   do {
     int rowLength = 0;
@@ -163,7 +163,7 @@ void floodFillImpl(PixelGetter<Pixel> px, QPoint pos, const QSize size) {
       while (pos.x() != 0 && !px.filled(left(pos))) {
         pos = left(pos);
         px.fill(pos);
-        if (pos.y() != 0 && !px.filled(up(pos))) startFloodFill(px, up(pos), size);
+        if (pos.y() != 0 && !px.filled(up(pos))) floodFillStart(px, up(pos), size);
         ++rowLength;
         ++lastRowLength;
       }
@@ -176,12 +176,12 @@ void floodFillImpl(PixelGetter<Pixel> px, QPoint pos, const QSize size) {
     if (rowLength < lastRowLength) {
       const int endX = pos.x() + lastRowLength;
       while (++start.rx() < endX) {
-        if (!px.filled(start)) floodFillImpl(px, start, size);
+        if (!px.filled(start)) floodFillCore(px, start, size);
       }
     } else if (rowLength > lastRowLength && pos.y() != 0) {
       QPoint above = up({pos.x() + lastRowLength, pos.y()});
       while (++above.rx() < start.x()) {
-        if (!px.filled(above)) startFloodFill(px, above, size);
+        if (!px.filled(above)) floodFillStart(px, above, size);
       }
     }
     lastRowLength = rowLength;
@@ -190,14 +190,14 @@ void floodFillImpl(PixelGetter<Pixel> px, QPoint pos, const QSize size) {
 }
 
 template <typename Pixel>
-void startFloodFill(PixelGetter<Pixel> px, QPoint pos, const QSize size) {
+void floodFillStart(PixelGetter<Pixel> px, QPoint pos, const QSize size) {
   while (true) {
     const QPoint startPos = pos;
     while (pos.y() != 0 && !px.filled(up(pos))) pos = up(pos);
     while (pos.x() != 0 && !px.filled(left(pos))) pos = left(pos);
     if (pos == startPos) break;
   }
-  floodFillImpl(px, pos, size);
+  floodFillCore(px, pos, size);
 }
 
 template <typename Pixel>
@@ -207,7 +207,7 @@ bool floodFill(QImage &img, const QPoint startPos, const QRgb color) {
   const Pixel startColor = *pixelAddr<Pixel>(img.bits(), img.bytesPerLine(), startPos);
   if (startColor == toolColor) return false;
   PixelGetter<Pixel> px{img, startColor, toolColor};
-  startFloodFill(px, startPos, img.size());
+  floodFillStart(px, startPos, img.size());
   return true;
 }
 
