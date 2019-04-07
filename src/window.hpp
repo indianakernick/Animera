@@ -9,6 +9,7 @@
 #ifndef window_hpp
 #define window_hpp
 
+#include "undo object.hpp"
 #include "clear object.hpp"
 #include "editor widget.hpp"
 #include "timeline widget.hpp"
@@ -25,6 +26,7 @@ public:
 private:
   QWidget bottom;
   Animation anim;
+  UndoObject undo;
   ClearObject clear;
   EditorWidget editor;
   ToolSelectWidget tools;

@@ -78,8 +78,10 @@ void Window::connectSignals() {
   connect(&timeline, &TimelineWidget::posChange,         &editor,    &EditorWidget::compositePos);
   connect(&timeline, &TimelineWidget::posChange,         &tools,     &ToolSelectWidget::changeCell);
   connect(&timeline, &TimelineWidget::posChange,         &clear,     &ClearObject::posChange);
+  connect(&timeline, &TimelineWidget::posChange,         &undo,      &UndoObject::posChange);
   connect(&timeline, &TimelineWidget::layerVisibility,   &editor,    &EditorWidget::compositeVis);
   
+  connect(&tools,    &ToolSelectWidget::cellModified,    &undo,      &UndoObject::cellModified);
   connect(&tools,    &ToolSelectWidget::cellModified,    &editor,    &EditorWidget::composite);
   connect(&tools,    &ToolSelectWidget::overlayModified, &editor,    &EditorWidget::compositeOverlay);
   connect(&tools,    &ToolSelectWidget::updateStatusBar, &statusBar, &StatusBarWidget::showPerm);
@@ -90,8 +92,12 @@ void Window::connectSignals() {
   connect(&editor,   &EditorWidget::mouseUp,             &tools,     &ToolSelectWidget::mouseUp);
   connect(&editor,   &EditorWidget::keyPress,            &tools,     &ToolSelectWidget::keyPress);
   connect(&editor,   &EditorWidget::keyPress,            &clear,     &ClearObject::keyPress);
+  connect(&editor,   &EditorWidget::keyPress,            &undo,      &UndoObject::keyPress);
   
-  connect(&clear,    &ClearObject::cellModified,         &tools,    &ToolSelectWidget::cellModified);
+  connect(&clear,    &ClearObject::cellModified,         &tools,     &ToolSelectWidget::cellModified);
+  
+  connect(&undo,     &UndoObject::cellReverted,          &editor,    &EditorWidget::composite);
+  connect(&undo,     &UndoObject::showTempStatus,        &statusBar, &StatusBarWidget::showTemp);
 }
 
 #include "window.moc"

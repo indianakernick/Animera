@@ -37,6 +37,7 @@ void UndoStack::modify(Image img) {
   if (stack.size() >= edit_undo_stack) {
     const size_t oldImages = stack.size() - edit_undo_stack + 1;
     stack.erase(stack.begin(), stack.begin() + oldImages);
+    top -= oldImages;
   }
   img.data.detach();
   stack.push_back(img);

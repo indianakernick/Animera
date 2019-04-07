@@ -59,7 +59,7 @@ constexpr QRgb      tool_overlay_color = qRgba(
 
 // ------------------------------- status bar ------------------------------- //
 
-constexpr int       stat_temp_duration_ms = 5000;
+constexpr int       stat_temp_duration_ms = 4000;
 constexpr int       stat_min_width = 200 * glob_scale;
 constexpr int       stat_padding = 1 * glob_scale;
 constexpr int       stat_height = glob_font_px + 2 * stat_padding;
@@ -74,7 +74,7 @@ inline const QColor edit_checker_b = {255, 255, 255};
 constexpr int       edit_min_scale = 1;
 constexpr int       edit_max_scale = 64;
 constexpr int       edit_default_scale = 2;
-constexpr int       edit_undo_stack = 64;
+constexpr int       edit_undo_stack = 128;
 
 // ----------------------------------- keys --------------------------------- //
 
@@ -90,6 +90,8 @@ constexpr Qt::Key   key_tertiary = Qt::Key_C;
 constexpr Qt::Key   key_zoom_out = Qt::Key_Q;
 constexpr Qt::Key   key_zoom_in = Qt::Key_E;
 constexpr Qt::Key   key_clear = Qt::Key_V;
+constexpr Qt::Key   key_undo = Qt::Key_N;
+constexpr Qt::Key   key_redo = Qt::Key_M;
 
 // brush
 constexpr int       brsh_min_thick = 1;

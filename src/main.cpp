@@ -1126,7 +1126,7 @@ int main(int argc, char **argv) {
   // painter filled   17.7ms
   // midpoint filled  7.59ms
   timer.start("Alloc");
-  QImage image{2048, 2048, QImage::Format_ARGB32};
+  QImage image{256, 256, QImage::Format_ARGB32};
   timer.stop();
   
   timer.start("Clear");
@@ -1154,13 +1154,26 @@ int main(int argc, char **argv) {
   copy.detach();
   timer.stop();
   
+  timer.start("Make");
+  QImage compat = makeCompatible(image);
+  timer.stop();
+  
+  timer.start("Detach unique");
+  compat.detach();
+  timer.stop();
+  
   timer.start("Memcpy");
-  std::memcpy(copy.bits(), image.constBits(), image.sizeInBytes());
+  std::memcpy(compat.bits(), image.constBits(), image.sizeInBytes());
+  timer.stop();
+  
+  timer.start("Memcpy again");
+  std::memcpy(compat.bits(), image.constBits(), image.sizeInBytes());
   timer.stop();
   
   timer.start("Duplicate");
   QImage dup = dupImage(image);
   timer.stop();
+  
   
   const QRgb fillColor = qRgba(0, 0, 255, 255);
   const QRect fillRect{

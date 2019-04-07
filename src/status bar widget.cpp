@@ -49,6 +49,8 @@ void StatusBarWidget::paintEvent(QPaintEvent *) {
   const QPoint pos = {stat_padding, glob_font_accent_px + stat_padding};
   if (tempText.isEmpty()) {
     painter.drawText(pos, permText);
+  } else if (permText.isEmpty()) {
+    painter.drawText(pos, tempText);
   } else {
     painter.drawText(pos, permText + " | " + tempText);
   }
