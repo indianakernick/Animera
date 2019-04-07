@@ -15,6 +15,7 @@
 #include "timeline widget.hpp"
 #include "status bar widget.hpp"
 #include "tool select widget.hpp"
+#include "color picker widget.hpp"
 #include <QtWidgets/qmainwindow.h>
 
 class Window final : public QMainWindow {
@@ -32,6 +33,7 @@ private:
   ToolSelectWidget tools;
   TimelineWidget timeline;
   StatusBarWidget statusBar;
+  ColorPickerWidget colorPicker;
   QMenuBar *menubar = nullptr;
   
   void setupUI();

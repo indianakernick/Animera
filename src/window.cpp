@@ -19,7 +19,8 @@ Window::Window(const QRect desktop)
     editor{this, anim},
     tools{this},
     timeline{&bottom, anim},
-    statusBar{&bottom} {
+    statusBar{&bottom},
+    colorPicker{this} {
   setWindowTitle("Pixel 2");
   setMinimumSize(glob_min_window_size);
   setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
@@ -51,6 +52,7 @@ void Window::setupUI() {
   bottom.setContentsMargins(0, 0, 0, 0);
   makeDockWidget(Qt::LeftDockWidgetArea, &tools);
   makeDockWidget(Qt::BottomDockWidgetArea, &bottom);
+  makeDockWidget(Qt::RightDockWidgetArea, &colorPicker);
   setCentralWidget(&editor);
 }
 

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		45054F6D22596BC10078350B /* clear object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45054F6B22596BC10078350B /* clear object.cpp */; };
 		45054F70225970150078350B /* undo object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45054F6E225970150078350B /* undo object.cpp */; };
+		45054F732259C9AB0078350B /* color picker widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45054F712259C9AA0078350B /* color picker widget.cpp */; };
 		453C78192234935000818B19 /* timeline widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C78172234935000818B19 /* timeline widget.cpp */; };
 		453C781C22349BBD00818B19 /* editor widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C781A22349BBD00818B19 /* editor widget.cpp */; };
 		453C781F22349F0100818B19 /* tool select widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C781D22349F0100818B19 /* tool select widget.cpp */; };
@@ -59,6 +60,8 @@
 		45054F6C22596BC10078350B /* clear object.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "clear object.hpp"; sourceTree = "<group>"; };
 		45054F6E225970150078350B /* undo object.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "undo object.cpp"; sourceTree = "<group>"; };
 		45054F6F225970150078350B /* undo object.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "undo object.hpp"; sourceTree = "<group>"; };
+		45054F712259C9AA0078350B /* color picker widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "color picker widget.cpp"; sourceTree = "<group>"; };
+		45054F722259C9AA0078350B /* color picker widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "color picker widget.hpp"; sourceTree = "<group>"; };
 		453C78172234935000818B19 /* timeline widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "timeline widget.cpp"; sourceTree = "<group>"; };
 		453C78182234935000818B19 /* timeline widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "timeline widget.hpp"; sourceTree = "<group>"; };
 		453C781A22349BBD00818B19 /* editor widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "editor widget.cpp"; sourceTree = "<group>"; };
@@ -875,6 +878,8 @@
 				45054F6C22596BC10078350B /* clear object.hpp */,
 				45054F6E225970150078350B /* undo object.cpp */,
 				45054F6F225970150078350B /* undo object.hpp */,
+				45054F712259C9AA0078350B /* color picker widget.cpp */,
+				45054F722259C9AA0078350B /* color picker widget.hpp */,
 			);
 			name = Widgets;
 			sourceTree = "<group>";
@@ -1918,7 +1923,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "function moc {\n  local OUTPUT=\"$PROJECT_DIR/src/$1.moc\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.hpp\" > \"$OUTPUT\"\n  echo \"\" >> \"$OUTPUT\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.cpp\" >> \"$OUTPUT\"\n}\n\nmoc \"tool select widget\"\nmoc \"status bar widget\"\nmoc \"timeline widget\"\nmoc \"editor widget\"\nmoc \"tool widgets\"\nmoc \"clear object\"\nmoc \"undo object\"\nmoc \"application\"\nmoc \"window\"\n";
+			shellScript = "function moc {\n  local OUTPUT=\"$PROJECT_DIR/src/$1.moc\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.hpp\" > \"$OUTPUT\"\n  echo \"\" >> \"$OUTPUT\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.cpp\" >> \"$OUTPUT\"\n}\n\nmoc \"color picker widget\"\nmoc \"tool select widget\"\nmoc \"status bar widget\"\nmoc \"timeline widget\"\nmoc \"editor widget\"\nmoc \"tool widgets\"\nmoc \"clear object\"\nmoc \"undo object\"\nmoc \"application\"\nmoc \"window\"\n";
 		};
 		453C787B2235D63B00818B19 /* RCC */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1984,6 +1989,7 @@
 				453C78432234E13E00818B19 /* window.cpp in Sources */,
 				45B284A72219079B00D6D055 /* animation.cpp in Sources */,
 				45B284932218E38800D6D055 /* image.cpp in Sources */,
+				45054F732259C9AB0078350B /* color picker widget.cpp in Sources */,
 				45B284962218E39300D6D055 /* cell.cpp in Sources */,
 				45054F70225970150078350B /* undo object.cpp in Sources */,
 				45B284A42219071200D6D055 /* cell impls.cpp in Sources */,
