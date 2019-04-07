@@ -109,16 +109,13 @@ Transformations
   Transformations on SourceCells can be baked
 
 Palette Mode
-  There are 256 colors in the palette
-  Clicking on a color will attach that color to the color picker
-  Clicking on the tool color will set it to the index of the color in the
-    color picker
-  Pressing z, x, c on a palette color will set tool color
+  Left/middle/right clicking on a palette color will attach that color to the
+    color picker and set the tool color to that color
+  Clicking on the tool color will attach the palette color to the color picker
 
 RGBA Mode
-  Clicking on a color in the default palette will set the color picker to that color
-    this does not attach the color
-    this sets the color of the attached ColorHandle to the color in the palette
+  Left/middle/right clicking on a palette color will attach the tool color to
+    the color picker and set the tool color to that color
   Clicking on the tool color will attach that color to the color picker
 
 ColorHandle
@@ -365,4 +362,18 @@ Undo
       the pointer is incremented
       the current source cell will be updated with the pointed image
 
-Does having three colors overcomplicate things? Could we get away with just a foreground and background color?
+Maybe an ellipse tool
+Maybe a select tool that uses flood fill
+
+use a pattern to name sprites
+player \frame
+char_\(frame + 33)
+assign names to each frame (e.g. brush, line, rotate)
+
+https://lospec.com/pixel-art-tutorials
+https://coolors.co/52525d-1b264f-274690-576ca8-b8cdd7
+https://www.cosmigo.com/
+https://lospec.com/palette-list/importing-palettes
+https://worms2d.info/Palette_file#File_format
+http://www.selapa.net/swatches/colors/fileformats.php
+
