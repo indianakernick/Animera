@@ -21,8 +21,6 @@ struct HSV {
   int h, s, v;
 };
 
-constexpr HSV default_color = {0, 100, 100};
-
 QRgb hsv2rgb(const qreal h, const qreal s, const qreal v) {
   QColor color;
   color.setHsvF(h / 360.0, s / 100.0, v / 100.0);
@@ -60,32 +58,53 @@ QPixmap initColorBitmap(
 
 }
 
-constexpr int graph_pixels = 101;
-constexpr int graph_size = graph_pixels * glob_scale;
-constexpr int border_size = 1 * glob_scale;
-constexpr int widget_size = graph_size + 2 * border_size;
-constexpr int padding_size = 1 * glob_scale;
+constexpr HSV default_color = {0, 100, 100};
 inline const QColor border_color = glob_light_shade;
 inline const QColor circle_primary_color = {0, 0, 0};
 inline const QColor circle_secondary_color = {255, 255, 255};
 
-constexpr QRect svgraph_widget_rect = {
-  0, 0,
-  widget_size + 2 * padding_size,
-  widget_size + 2 * padding_size
+struct RectWidgetSize {
+  int padding;
+  int border;
+  QSize content;
 };
-constexpr QRect svgraph_outer_rect = {
-  svgraph_widget_rect.x() + padding_size,
-  svgraph_widget_rect.y() + padding_size,
-  svgraph_widget_rect.width() - 2 * padding_size,
-  svgraph_widget_rect.height() - 2 * padding_size
+
+constexpr QRect makeWidgetRect(const RectWidgetSize spec) {
+  return {
+    0,
+    0,
+    spec.content.width() + 2 * spec.border + 2 * spec.padding,
+    spec.content.height() + 2 * spec.border + 2 * spec.padding
+  };
+}
+
+constexpr QRect makeOuterRect(const RectWidgetSize spec) {
+  return {
+    spec.padding,
+    spec.padding,
+    spec.content.width() + 2 * spec.border,
+    spec.content.height() + 2 * spec.border
+  };
+}
+
+constexpr QRect makeInnerRect(const RectWidgetSize spec) {
+  return {
+    spec.padding + spec.border,
+    spec.padding + spec.border,
+    spec.content.width(),
+    spec.content.height()
+  };
+}
+
+constexpr int graph_pixels = 101;
+constexpr RectWidgetSize svgraph_size = {
+  1 * glob_scale,
+  1 * glob_scale,
+  {graph_pixels * glob_scale, graph_pixels * glob_scale}
 };
-constexpr QRect svgraph_inner_rect = {
-  svgraph_outer_rect.x() + border_size,
-  svgraph_outer_rect.y() + border_size,
-  svgraph_outer_rect.width() - 2 * border_size,
-  svgraph_outer_rect.height() - 2 * border_size
-};
+constexpr QRect svgraph_widget_rect = makeWidgetRect(svgraph_size);
+constexpr QRect svgraph_outer_rect = makeOuterRect(svgraph_size);
+constexpr QRect svgraph_inner_rect = makeInnerRect(svgraph_size);
 
 class SVGraph final : public QWidget {
   Q_OBJECT
@@ -191,7 +210,7 @@ private:
   }
   
   void setColor(QPointF point) {
-    point -= QPointF{border_size, border_size};
+    point -= QPointF{svgraph_inner_rect.topLeft()};
     point /= glob_scale;
     const int sat = std::clamp(qRound(point.x()), 0, 100);
     const int val = 100 - std::clamp(qRound(point.y()), 0, 100);
@@ -224,26 +243,14 @@ private:
   }
 };
 
-constexpr int slider_height = 12 * glob_scale;
-constexpr int slider_widget_height = slider_height + 2 * border_size;
-
-constexpr QRect slider_widget_rect = {
-  0, 0,
-  widget_size + 2 * padding_size,
-  slider_widget_height + 2 * padding_size
+constexpr RectWidgetSize slider_size = {
+  svgraph_size.padding,
+  svgraph_size.border,
+  {svgraph_size.content.width(), 12 * glob_scale}
 };
-constexpr QRect slider_outer_rect = {
-  slider_widget_rect.x() + padding_size,
-  slider_widget_rect.y() + padding_size,
-  slider_widget_rect.width() - 2 * padding_size,
-  slider_widget_rect.height() - 2 * padding_size
-};
-constexpr QRect slider_inner_rect = {
-  slider_outer_rect.x() + border_size,
-  slider_outer_rect.y() + border_size,
-  slider_outer_rect.width() - 2 * border_size,
-  slider_outer_rect.height() - 2 * border_size
-};
+constexpr QRect slider_widget_rect = makeWidgetRect(slider_size);
+constexpr QRect slider_outer_rect = makeOuterRect(slider_size);
+constexpr QRect slider_inner_rect = makeInnerRect(slider_size);
 
 class HueSlider final : public QWidget {
   Q_OBJECT
@@ -348,7 +355,7 @@ private:
   }
   
   void setColor(qreal pointX) {
-    pointX -= border_size;
+    pointX -= slider_inner_rect.x();
     pointX /= glob_scale;
     const int hue = std::clamp(qRound(pointX * 359.0 / 100.0), 0, 359);
     if (hue != color.h) {
