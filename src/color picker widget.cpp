@@ -96,11 +96,10 @@ constexpr QRect makeInnerRect(const RectWidgetSize spec) {
   };
 }
 
-constexpr int graph_pixels = 101;
 constexpr RectWidgetSize svgraph_size = {
   1 * glob_scale,
   1 * glob_scale,
-  {graph_pixels * glob_scale, graph_pixels * glob_scale}
+  {101 * glob_scale, 101 * glob_scale}
 };
 constexpr QRect svgraph_widget_rect = makeWidgetRect(svgraph_size);
 constexpr QRect svgraph_outer_rect = makeOuterRect(svgraph_size);
@@ -112,7 +111,7 @@ class SVGraph final : public QWidget {
 public:
   explicit SVGraph(QWidget *parent)
     : QWidget{parent},
-      graph{{graph_pixels, graph_pixels}, QImage::Format_ARGB32_Premultiplied} {
+      graph{svgraph_inner_rect.size(), QImage::Format_ARGB32_Premultiplied} {
     setFixedSize(svgraph_widget_rect.size());
     initCircle();
     plotGraph(color.h);
@@ -158,13 +157,17 @@ private:
     const ptrdiff_t width = graph.width();
     const ptrdiff_t padding = pitch - width;
     int sat = 0;
-    int val = 100;
+    int val = svgraph_inner_rect.height() - 1;
     
     QRgb *const imgEnd = pixels + pitch * graph.height();
     while (pixels != imgEnd) {
       QRgb *const rowEnd = pixels + width;
       while (pixels != rowEnd) {
-        *pixels++ = hsv2rgb(hue, sat++, val);
+        *pixels++ = hsv2rgb(
+          hue,
+          sat++ * 100.0 / (svgraph_inner_rect.width() - 1),
+          val * 100.0 / (svgraph_inner_rect.height() - 1)
+        );
       }
       pixels += padding;
       --val;
@@ -258,7 +261,7 @@ class HueSlider final : public QWidget {
 public:
   explicit HueSlider(QWidget *parent)
     : QWidget{parent},
-      graph{{graph_pixels, 1}, QImage::Format_ARGB32_Premultiplied} {
+      graph{{slider_inner_rect.width(), 1}, QImage::Format_ARGB32_Premultiplied} {
     setFixedSize(slider_widget_rect.size());
     initBar();
     plotGraph(color.s, color.v);
@@ -307,13 +310,13 @@ private:
     
     QRgb *pixels = reinterpret_cast<QRgb *>(graph.bits());
     const ptrdiff_t width = graph.width();
-    qreal hue = 0;
+    qreal hue = 0.0;
     int idx = 0;
     
     QRgb *const imgEnd = pixels + width;
     while (pixels != imgEnd) {
       *pixels++ = hsv2rgb(hue, sat, val);
-      hue = ++idx * 359.0 / 100.0;
+      hue = ++idx * 360.0 / slider_inner_rect.width();
     }
   }
   
@@ -337,7 +340,7 @@ private:
   }
   
   void renderBar(QPainter &painter) {
-    const QRect barRect = {
+    const QRect barRect = {// @TODO is this right
       slider_inner_rect.x() + (color.h * 101 / 360) * glob_scale - (bar.width() - glob_scale) / 2,
       0,
       bar.width(),
@@ -356,7 +359,7 @@ private:
   
   void setColor(qreal pointX) {
     pointX -= slider_inner_rect.x();
-    pointX /= glob_scale;
+    pointX /= glob_scale; // @TODO is this right?
     const int hue = std::clamp(qRound(pointX * 359.0 / 100.0), 0, 359);
     if (hue != color.h) {
       color.h = hue;
@@ -406,7 +409,7 @@ ColorPickerWidget::ColorPickerWidget(QWidget *parent)
 void ColorPickerWidget::setupLayout() {
   QVBoxLayout *layout = new QVBoxLayout{this};
   layout->setSpacing(0);
-  layout->setContentsMargins(0, 2 * glob_scale, 0, 2 * glob_scale);
+  layout->setContentsMargins(0, 0, 0, 0);
   layout->addWidget(svGraph);
   layout->addWidget(hueSlider);
   layout->addStretch();
