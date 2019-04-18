@@ -13,17 +13,78 @@
 #include <QtGui/qevent.h>
 #include <QtGui/qbitmap.h>
 #include <QtGui/qpainter.h>
+#include <QtWidgets/qboxlayout.h>
+
+namespace {
+
+struct HSV {
+  int h, s, v;
+};
+
+constexpr HSV default_color = {0, 100, 100};
+
+QRgb hsv2rgb(const qreal h, const qreal s, const qreal v) {
+  QColor color;
+  color.setHsvF(h / 360.0, s / 100.0, v / 100.0);
+  return color.rgba();
+}
+
+void renderBorder(QPainter &painter, const QRect innerRect, const QRect outerRect) {
+  painter.setClipRegion(QRegion{outerRect}.subtracted(innerRect));
+  painter.drawRect(outerRect);
+}
+
+QPixmap initColorBitmap(
+  const QString &pathP,
+  const QString &pathS,
+  const QColor colorP,
+  const QColor colorS
+) {
+  QBitmap primary{pathP};
+  QBitmap secondary{pathS};
+  assert(primary.size() == secondary.size());
+  primary = primary.scaled(primary.size() * glob_scale);
+  secondary = secondary.scaled(secondary.size() * glob_scale);
+  QPixmap pixmap{primary.size()};
+  pixmap.fill(QColor{0, 0, 0, 0});
+  const QRect rect = {QPoint{}, pixmap.size()};
+
+  QPainter painter{&pixmap};
+  painter.setCompositionMode(QPainter::CompositionMode_Source);
+  painter.setClipRegion(primary);
+  painter.fillRect(rect, colorP);
+  painter.setClipRegion(secondary);
+  painter.fillRect(rect, colorS);
+  return pixmap;
+}
+
+}
 
 constexpr int graph_pixels = 101;
 constexpr int graph_size = graph_pixels * glob_scale;
 constexpr int border_size = 1 * glob_scale;
 constexpr int widget_size = graph_size + 2 * border_size;
+constexpr int padding_size = 1 * glob_scale;
 inline const QColor border_color = glob_light_shade;
 inline const QColor circle_primary_color = {0, 0, 0};
 inline const QColor circle_secondary_color = {255, 255, 255};
 
-struct HSV {
-  int h, s, v;
+constexpr QRect svgraph_widget_rect = {
+  0, 0,
+  widget_size + 2 * padding_size,
+  widget_size + 2 * padding_size
+};
+constexpr QRect svgraph_outer_rect = {
+  svgraph_widget_rect.x() + padding_size,
+  svgraph_widget_rect.y() + padding_size,
+  svgraph_widget_rect.width() - 2 * padding_size,
+  svgraph_widget_rect.height() - 2 * padding_size
+};
+constexpr QRect svgraph_inner_rect = {
+  svgraph_outer_rect.x() + border_size,
+  svgraph_outer_rect.y() + border_size,
+  svgraph_outer_rect.width() - 2 * border_size,
+  svgraph_outer_rect.height() - 2 * border_size
 };
 
 class SVGraph final : public QWidget {
@@ -33,7 +94,7 @@ public:
   explicit SVGraph(QWidget *parent)
     : QWidget{parent},
       graph{{graph_pixels, graph_pixels}, QImage::Format_ARGB32_Premultiplied} {
-    setFixedSize(widget_size, widget_size);
+    setFixedSize(svgraph_widget_rect.size());
     initCircle();
     plotGraph(color.h);
     show();
@@ -65,14 +126,8 @@ public Q_SLOTS:
 private:
   QImage graph;
   QPixmap circle;
-  HSV color = {0, 100, 100};
+  HSV color = default_color;
   bool mouseDown = false;
-  
-  static QRgb hsv2rgb(const int h, const int s, const int v) {
-    QColor color;
-    color.setHsvF(static_cast<qreal>(h), s / 100.0, v / 100.0);
-    return color.rgba();
-  }
   
   void plotGraph(const int hue) {
     // x   - saturation
@@ -99,47 +154,32 @@ private:
   }
   
   void initCircle() {
-    QBitmap primary{":/Color Picker/sv circle p.pbm"};
-    QBitmap secondary{":/Color Picker/sv circle s.pbm"};
-    assert(primary.size() == secondary.size());
-    primary = primary.scaled(primary.size() * glob_scale);
-    secondary = secondary.scaled(secondary.size() * glob_scale);
-    circle = QPixmap{primary.size()};
-    circle.fill(QColor{0, 0, 0, 0});
-    const QRect circleRect = {QPoint{}, circle.size()};
-    
-    QPainter painter{&circle};
-    painter.setCompositionMode(QPainter::CompositionMode_Source);
-    painter.setClipRegion(primary);
-    painter.fillRect(circleRect, circle_primary_color);
-    painter.setClipRegion(secondary);
-    painter.fillRect(circleRect, circle_secondary_color);
+    circle = initColorBitmap(
+      ":/Color Picker/sv circle p.pbm",
+      ":/Color Picker/sv circle s.pbm",
+      circle_primary_color,
+      circle_secondary_color
+    );
   }
   
   void renderGraph(QPainter &painter) {
-    const QRect graphRect = {border_size, border_size, graph_size, graph_size};
-    painter.drawImage(graphRect, graph);
+    painter.drawImage(svgraph_inner_rect, graph);
   }
   
   void renderBorder(QPainter &painter) {
-    const QRect border[] = {
-      {0, 0, widget_size, border_size}, // top
-      {0, border_size, border_size, graph_size}, // left
-      {0, widget_size - border_size, widget_size, border_size}, // bottom
-      {widget_size - border_size, border_size, border_size, graph_size}, // right
-    };
     painter.setBrush(border_color);
     painter.setPen(Qt::NoPen);
-    painter.drawRects(border, std::size(border));
+    ::renderBorder(painter, svgraph_inner_rect, svgraph_outer_rect);
   }
   
   void renderCircle(QPainter &painter) {
     const QRect circleRect = {
-      border_size + color.s * glob_scale - (circle.width() - glob_scale) / 2,
-      border_size + (100 - color.v) * glob_scale - (circle.height() - glob_scale) / 2,
+      svgraph_inner_rect.x() + color.s * glob_scale - (circle.width() - glob_scale) / 2,
+      svgraph_inner_rect.y() + (100 - color.v) * glob_scale - (circle.height() - glob_scale) / 2,
       circle.width(),
       circle.height()
     };
+    painter.setClipRegion(svgraph_inner_rect);
     painter.drawPixmap(circleRect, circle);
   }
   
@@ -155,7 +195,7 @@ private:
     point /= glob_scale;
     const int sat = std::clamp(qRound(point.x()), 0, 100);
     const int val = 100 - std::clamp(qRound(point.y()), 0, 100);
-    if (sat != color.s != val != color.v) {
+    if (sat != color.s || val != color.v) {
       color.s = sat;
       color.v = val;
       repaint();
@@ -184,10 +224,159 @@ private:
   }
 };
 
+constexpr int slider_height = 12 * glob_scale;
+constexpr int slider_widget_height = slider_height + 2 * border_size;
+
+constexpr QRect slider_widget_rect = {
+  0, 0,
+  widget_size + 2 * padding_size,
+  slider_widget_height + 2 * padding_size
+};
+constexpr QRect slider_outer_rect = {
+  slider_widget_rect.x() + padding_size,
+  slider_widget_rect.y() + padding_size,
+  slider_widget_rect.width() - 2 * padding_size,
+  slider_widget_rect.height() - 2 * padding_size
+};
+constexpr QRect slider_inner_rect = {
+  slider_outer_rect.x() + border_size,
+  slider_outer_rect.y() + border_size,
+  slider_outer_rect.width() - 2 * border_size,
+  slider_outer_rect.height() - 2 * border_size
+};
+
 class HueSlider final : public QWidget {
+  Q_OBJECT
+
 public:
   explicit HueSlider(QWidget *parent)
-    : QWidget{parent} {}
+    : QWidget{parent},
+      graph{{graph_pixels, 1}, QImage::Format_ARGB32_Premultiplied} {
+    setFixedSize(slider_widget_rect.size());
+    initBar();
+    plotGraph(color.s, color.v);
+    show();
+  }
+
+Q_SIGNALS:
+  void hueChanged(int);
+
+public Q_SLOTS:
+  void changeHue(const int hue) {
+    color.h = hue;
+    repaint();
+  }
+  void changeSat(const int sat) {
+    color.s = sat;
+    plotGraph(sat, color.v);
+    repaint();
+  }
+  void changeVal(const int val) {
+    color.v = val;
+    plotGraph(color.s, val);
+    repaint();
+  }
+  void changeSV(const int sat, const int val) {
+    color.s = sat;
+    color.v = val;
+    plotGraph(sat, val);
+    repaint();
+  }
+  void changeHSV(const HSV hsv) {
+    color = hsv;
+    plotGraph(hsv.s, hsv.v);
+    repaint();
+  }
+  
+private:
+  QImage graph;
+  QPixmap bar;
+  HSV color = default_color;
+  bool mouseDown = false;
+  
+  void plotGraph(const int sat, const int val) {
+    // x - hue
+    // 0 - left
+    
+    QRgb *pixels = reinterpret_cast<QRgb *>(graph.bits());
+    const ptrdiff_t width = graph.width();
+    qreal hue = 0;
+    int idx = 0;
+    
+    QRgb *const imgEnd = pixels + width;
+    while (pixels != imgEnd) {
+      *pixels++ = hsv2rgb(hue, sat, val);
+      hue = ++idx * 359.0 / 100.0;
+    }
+  }
+  
+  void initBar() {
+    bar = initColorBitmap(
+      ":/Color Picker/slider bar p.pbm",
+      ":/Color Picker/slider bar s.pbm",
+      circle_primary_color,
+      circle_secondary_color
+    );
+  }
+  
+  void renderGraph(QPainter &painter) {
+    painter.drawImage(slider_inner_rect, graph);
+  }
+  
+  void renderBorder(QPainter &painter) {
+    painter.setPen(Qt::NoPen);
+    painter.setBrush(border_color);
+    ::renderBorder(painter, slider_inner_rect, slider_outer_rect);
+  }
+  
+  void renderBar(QPainter &painter) {
+    const QRect barRect = {
+      slider_inner_rect.x() + (color.h * 101 / 360) * glob_scale - (bar.width() - glob_scale) / 2,
+      0,
+      bar.width(),
+      bar.height()
+    };
+    painter.setClipRegion(slider_widget_rect);
+    painter.drawPixmap(barRect, bar);
+  }
+  
+  void paintEvent(QPaintEvent *) override {
+    QPainter painter{this};
+    renderGraph(painter);
+    renderBorder(painter);
+    renderBar(painter);
+  }
+  
+  void setColor(qreal pointX) {
+    pointX -= border_size;
+    pointX /= glob_scale;
+    const int hue = std::clamp(qRound(pointX * 359.0 / 100.0), 0, 359);
+    if (hue != color.h) {
+      color.h = hue;
+      repaint();
+      Q_EMIT hueChanged(hue);
+    }
+  }
+  
+  void mousePressEvent(QMouseEvent *event) override {
+    if (event->button() == Qt::LeftButton) {
+      mouseDown = true;
+      setColor(event->localPos().x());
+      grabMouse();
+    }
+  }
+  void mouseReleaseEvent(QMouseEvent *event) override {
+    if (event->button() == Qt::LeftButton) {
+      mouseDown = false;
+      setColor(event->localPos().x());
+      releaseMouse();
+    }
+  }
+  void mouseMoveEvent(QMouseEvent *event) override {
+    if (mouseDown) {
+      setColor(event->localPos().x());
+    }
+  }
 };
 
 class AlphaSlider final : public QWidget {
@@ -201,9 +390,26 @@ ColorPickerWidget::ColorPickerWidget(QWidget *parent)
     svGraph{new SVGraph{this}},
     hueSlider{new HueSlider{this}},
     alphaSlider{new AlphaSlider{this}} {
-  setFixedWidth(widget_size);
-  setMinimumHeight(widget_size);
+  setFixedWidth(svgraph_widget_rect.width());
+  setupLayout();
+  connectSignals();
   show();
+}
+
+void ColorPickerWidget::setupLayout() {
+  QVBoxLayout *layout = new QVBoxLayout{this};
+  layout->setSpacing(0);
+  layout->setContentsMargins(0, 2 * glob_scale, 0, 2 * glob_scale);
+  layout->addWidget(svGraph);
+  layout->addWidget(hueSlider);
+  layout->addStretch();
+  layout->setAlignment(Qt::AlignTop);
+  setLayout(layout);
+}
+
+void ColorPickerWidget::connectSignals() {
+  connect(svGraph, &SVGraph::svChanged, hueSlider, &HueSlider::changeSV);
+  connect(hueSlider, &HueSlider::hueChanged, svGraph, &SVGraph::changeHue);
 }
 
 #include "color picker widget.moc"

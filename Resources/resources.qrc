@@ -19,5 +19,7 @@
   <file>./Fonts/5x7ascii.ttf</file>
   <file>./Color Picker/sv circle p.pbm</file>
   <file>./Color Picker/sv circle s.pbm</file>
+  <file>./Color Picker/slider bar p.pbm</file>
+  <file>./Color Picker/slider bar s.pbm</file>
 </qresource>
 </RCC>

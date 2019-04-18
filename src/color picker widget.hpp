@@ -29,6 +29,9 @@ private:
   SVGraph *svGraph;
   HueSlider *hueSlider;
   AlphaSlider *alphaSlider;
+  
+  void setupLayout();
+  void connectSignals();
 };
 
 #endif
