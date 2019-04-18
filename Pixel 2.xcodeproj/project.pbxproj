@@ -747,6 +747,8 @@
 		45BAD9EF2247007E000D095C /* type_aligned.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = type_aligned.hpp; sourceTree = "<group>"; };
 		45BADA75224714A3000D095C /* tool widgets.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "tool widgets.cpp"; sourceTree = "<group>"; };
 		45BADA76224714A3000D095C /* tool widgets.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "tool widgets.hpp"; sourceTree = "<group>"; };
+		45BE2A2922680B0900E21A85 /* sv circle s.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = "sv circle s.pbm"; sourceTree = "<group>"; };
+		45BE2A2A22680B0900E21A85 /* sv circle p.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = "sv circle p.pbm"; sourceTree = "<group>"; };
 		45C2A2562207BC4000E989C2 /* notes.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = notes.txt; sourceTree = "<group>"; };
 		45C2A27D220BFD1800E989C2 /* libpixman-1.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libpixman-1.a"; path = "../../../../../../usr/local/Cellar/pixman/0.36.0/lib/libpixman-1.a"; sourceTree = "<group>"; };
 		45C2A280220E821200E989C2 /* new plan.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "new plan.txt"; sourceTree = "<group>"; };
@@ -813,6 +815,7 @@
 				45DC2563224A0AEA00F40116 /* title@4x.png */,
 				45DC2562224A0AEA00F40116 /* title.png */,
 				45B284972219003B00D6D055 /* icon.png */,
+				45BE2A2822680B0900E21A85 /* Color Picker */,
 				45BAD72D22460C22000D095C /* Fonts */,
 				453C787E2236597600818B19 /* Cursors */,
 				453C787A2235D55600818B19 /* Tools */,
@@ -1829,6 +1832,15 @@
 				45BAD9EF2247007E000D095C /* type_aligned.hpp */,
 			);
 			path = gtx;
+			sourceTree = "<group>";
+		};
+		45BE2A2822680B0900E21A85 /* Color Picker */ = {
+			isa = PBXGroup;
+			children = (
+				45BE2A2A22680B0900E21A85 /* sv circle p.pbm */,
+				45BE2A2922680B0900E21A85 /* sv circle s.pbm */,
+			);
+			path = "Color Picker";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

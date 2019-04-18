@@ -53,7 +53,7 @@ private:
   ToolSelectWidget *tools;
   std::unique_ptr<Tool> tool;
   std::unique_ptr<QWidget> widget;
-  // @TODO this bitmap is the same for all tool icons so you could share it
+  // @TODO base bitmap is the same for all tool icons so you could share it
   QBitmap base;
   QBitmap shape;
   
