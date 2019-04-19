@@ -194,10 +194,23 @@ private:
     ::renderBorder(painter, svgraph_inner_rect, svgraph_outer_rect);
   }
   
+  static int sat2pix(const int sat) {
+    return qRound(sat / 100.0 * (svgraph_inner_rect.width() - glob_scale));
+  }
+  static int val2pix(const int val) {
+    return qRound((100 - val) / 100.0 * (svgraph_inner_rect.height() - glob_scale));
+  }
+  static int pix2sat(const int pix) {
+    return std::clamp(qRound(pix * 100.0 / (svgraph_inner_rect.width() - glob_scale)), 0, 100);
+  }
+  static int pix2val(const int pix) {
+    return 100 - std::clamp(qRound(pix * 100.0 / (svgraph_inner_rect.height() - glob_scale)), 0, 100);
+  }
+  
   void renderCircle(QPainter &painter) {
     const QRect circleRect = {
-      svgraph_inner_rect.x() + color.s * glob_scale - (circle.width() - glob_scale) / 2,
-      svgraph_inner_rect.y() + (100 - color.v) * glob_scale - (circle.height() - glob_scale) / 2,
+      svgraph_inner_rect.x() + sat2pix(color.s) - (circle.width() - glob_scale) / 2,
+      svgraph_inner_rect.y() + val2pix(color.v) - (circle.height() - glob_scale) / 2,
       circle.width(),
       circle.height()
     };
@@ -212,11 +225,9 @@ private:
     renderBorder(painter);
   }
   
-  void setColor(QPointF point) {
-    point -= QPointF{svgraph_inner_rect.topLeft()};
-    point /= glob_scale;
-    const int sat = std::clamp(qRound(point.x()), 0, 100);
-    const int val = 100 - std::clamp(qRound(point.y()), 0, 100);
+  void setColor(const QPointF point) {
+    const int sat = pix2sat(point.x() - svgraph_inner_rect.left());
+    const int val = pix2val(point.y() - svgraph_inner_rect.top());
     if (sat != color.s || val != color.v) {
       color.s = sat;
       color.v = val;
