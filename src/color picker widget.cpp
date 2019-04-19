@@ -229,7 +229,7 @@ private:
     if (event->button() == Qt::LeftButton) {
       mouseDown = true;
       setColor(event->localPos());
-      grabMouse();
+      grabMouse(Qt::BlankCursor);
     }
   }
   void mouseReleaseEvent(QMouseEvent *event) override {
@@ -378,7 +378,7 @@ private:
     if (event->button() == Qt::LeftButton) {
       mouseDown = true;
       setColor(event->localPos().x());
-      grabMouse();
+      grabMouse(Qt::BlankCursor);
     }
   }
   void mouseReleaseEvent(QMouseEvent *event) override {
