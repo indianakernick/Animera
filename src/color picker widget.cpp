@@ -339,9 +339,17 @@ private:
     ::renderBorder(painter, slider_inner_rect, slider_outer_rect);
   }
   
+  static int hue2pix(const int hue) {
+    return qRound(hue / 360.0 * slider_inner_rect.width());
+  }
+  
+  static int pix2hue(const int pix) {
+    return std::clamp(qRound(pix * 360.0 / slider_inner_rect.width()), 0, 359);
+  }
+  
   void renderBar(QPainter &painter) {
-    const QRect barRect = {// @TODO is this right
-      slider_inner_rect.x() + (color.h * 101 / 360) * glob_scale - (bar.width() - glob_scale) / 2,
+    const QRect barRect = {
+      slider_inner_rect.x() + hue2pix(color.h) - (bar.width() - glob_scale) / 2,
       0,
       bar.width(),
       bar.height()
@@ -357,10 +365,8 @@ private:
     renderBar(painter);
   }
   
-  void setColor(qreal pointX) {
-    pointX -= slider_inner_rect.x();
-    pointX /= glob_scale; // @TODO is this right?
-    const int hue = std::clamp(qRound(pointX * 359.0 / 100.0), 0, 359);
+  void setColor(const int pointX) {
+    const int hue = pix2hue(pointX - slider_inner_rect.x());
     if (hue != color.h) {
       color.h = hue;
       repaint();
