@@ -164,7 +164,7 @@ private:
       QRgb *const rowEnd = pixels + width;
       while (pixels != rowEnd) {
         *pixels++ = hsv2rgb(
-          hue,
+          hue, // can't use sat2pix and val2pix here
           sat++ * 100.0 / (svgraph_inner_rect.width() - 1),
           val * 100.0 / (svgraph_inner_rect.height() - 1)
         );
@@ -327,6 +327,7 @@ private:
     QRgb *const imgEnd = pixels + width;
     while (pixels != imgEnd) {
       *pixels++ = hsv2rgb(hue, sat, val);
+      // can't use hue2pix here
       hue = ++idx * 360.0 / slider_inner_rect.width();
     }
   }
@@ -351,11 +352,10 @@ private:
   }
   
   static int hue2pix(const int hue) {
-    return qRound(hue / 360.0 * slider_inner_rect.width());
+    return qRound(hue / 359.0 * (slider_inner_rect.width() - glob_scale));
   }
-  
   static int pix2hue(const int pix) {
-    return std::clamp(qRound(pix * 360.0 / slider_inner_rect.width()), 0, 359);
+    return std::clamp(qRound(pix * 359.0 / (slider_inner_rect.width() - glob_scale)), 0, 359);
   }
   
   void renderBar(QPainter &painter) {
