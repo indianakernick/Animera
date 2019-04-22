@@ -264,60 +264,23 @@ constexpr QRect slider_widget_rect = makeWidgetRect(slider_size);
 constexpr QRect slider_outer_rect = makeOuterRect(slider_size);
 constexpr QRect slider_inner_rect = makeInnerRect(slider_size);
 
-class HueSlider final : public QWidget {
-  Q_OBJECT
-
+template <typename Derived>
+class Slider : public QWidget {
 public:
-  explicit HueSlider(QWidget *parent)
+  explicit Slider(QWidget *parent)
     : QWidget{parent},
-      graph{{slider_inner_rect.width(), 1}, QImage::Format_ARGB32_Premultiplied} {
+      graph{slider_inner_rect.width(), 1, QImage::Format_ARGB32_Premultiplied} {
     setFixedSize(slider_widget_rect.size());
     initBar();
-    plotGraph(color.s, color.v);
     show();
   }
 
-Q_SIGNALS:
-  void hueChanged(int);
-
-public Q_SLOTS:
-  void changeHue(const int hue) {
-    color.h = hue;
-    repaint();
-  }
-  void changeSV(const int sat, const int val) {
-    color.s = sat;
-    color.v = val;
-    plotGraph(sat, val);
-    repaint();
-  }
-  void changeHSV(const HSV hsv) {
-    color = hsv;
-    plotGraph(hsv.s, hsv.v);
-    repaint();
-  }
-  
-private:
+protected:
   QImage graph;
+
+private:
   QPixmap bar;
-  HSV color = default_color;
   bool mouseDown = false;
-  
-  void plotGraph(const int sat, const int val) {
-    // x - hue
-    // 0 - left
-    
-    QRgb *pixels = reinterpret_cast<QRgb *>(graph.bits());
-    QRgb *const pixelsEnd = pixels + graph.width();
-    qreal hue = 0.0;
-    int idx = 0;
-    
-    while (pixels != pixelsEnd) {
-      *pixels++ = hsv2rgb(hue, sat, val);
-      // can't use hue2pix here
-      hue = ++idx * 360.0 / slider_inner_rect.width();
-    }
-  }
   
   void initBar() {
     bar = initColorBitmap(
@@ -338,16 +301,10 @@ private:
     ::renderBorder(painter, slider_inner_rect, slider_outer_rect);
   }
   
-  static int hue2pix(const int hue) {
-    return qRound(hue / 359.0 * (slider_inner_rect.width() - glob_scale));
-  }
-  static int pix2hue(const int pix) {
-    return std::clamp(qRound(pix * 359.0 / (slider_inner_rect.width() - glob_scale)), 0, 359);
-  }
-  
   void renderBar(QPainter &painter) {
+    const int pix = static_cast<Derived *>(this)->getPixel();
     const QRect barRect = {
-      slider_inner_rect.x() + hue2pix(color.h) - (bar.width() - glob_scale) / 2,
+      slider_inner_rect.x() + pix - (bar.width() - glob_scale) / 2,
       0,
       bar.width(),
       bar.height()
@@ -358,55 +315,121 @@ private:
   
   void paintEvent(QPaintEvent *) override {
     QPainter painter{this};
+    static_cast<Derived *>(this)->renderBackground(painter);
     renderGraph(painter);
     renderBorder(painter);
     renderBar(painter);
   }
   
-  void setColor(const int pointX) {
-    const int hue = pix2hue(pointX - slider_inner_rect.x());
-    if (hue != color.h) {
-      color.h = hue;
-      repaint();
-      Q_EMIT hueChanged(hue);
-    }
+  void setColor(QMouseEvent *event) {
+    static_cast<Derived *>(this)->setColor(event->localPos().x() - slider_inner_rect.x());
   }
   
   void mousePressEvent(QMouseEvent *event) override {
     if (event->button() == Qt::LeftButton) {
       mouseDown = true;
-      setColor(event->localPos().x());
+      setColor(event);
       grabMouse(Qt::BlankCursor);
     }
   }
   void mouseReleaseEvent(QMouseEvent *event) override {
     if (event->button() == Qt::LeftButton) {
       mouseDown = false;
-      setColor(event->localPos().x());
+      setColor(event);
       releaseMouse();
     }
   }
   void mouseMoveEvent(QMouseEvent *event) override {
     if (mouseDown) {
-      setColor(event->localPos().x());
+      setColor(event);
+    }
+  }
+};
+
+class HueSlider final : public Slider<HueSlider> {
+  Q_OBJECT
+  
+  friend class Slider<HueSlider>;
+
+public:
+  explicit HueSlider(QWidget *parent)
+    : Slider{parent} {
+    plotGraph();
+  }
+
+Q_SIGNALS:
+  void hueChanged(int);
+
+public Q_SLOTS:
+  void changeHue(const int hue) {
+    color.h = hue;
+    repaint();
+  }
+  void changeSV(const int sat, const int val) {
+    color.s = sat;
+    color.v = val;
+    plotGraph();
+    repaint();
+  }
+  void changeHSV(const HSV hsv) {
+    color = hsv;
+    plotGraph();
+    repaint();
+  }
+  
+private:
+  HSV color = default_color;
+  
+  void plotGraph() {
+    // x - hue
+    // 0 - left
+    
+    QRgb *pixels = reinterpret_cast<QRgb *>(graph.bits());
+    QRgb *const pixelsEnd = pixels + graph.width();
+    qreal hue = 0.0;
+    int idx = 0;
+    
+    while (pixels != pixelsEnd) {
+      *pixels++ = hsv2rgb(hue, color.s, color.v);
+      // can't use hue2pix here
+      hue = ++idx * 360.0 / slider_inner_rect.width();
+    }
+  }
+  
+  void renderBackground(QPainter &) {}
+  
+  static int hue2pix(const int hue) {
+    return qRound(hue / 359.0 * (slider_inner_rect.width() - glob_scale));
+  }
+  static int pix2hue(const int pix) {
+    return std::clamp(qRound(pix * 359.0 / (slider_inner_rect.width() - glob_scale)), 0, 359);
+  }
+  
+  int getPixel() {
+    return hue2pix(color.h);
+  }
+  
+  void setColor(const int pointX) {
+    const int hue = pix2hue(pointX);
+    if (hue != color.h) {
+      color.h = hue;
+      repaint();
+      Q_EMIT hueChanged(hue);
     }
   }
 };
 
 constexpr int alpha_vert_tiles = 2;
 
-// @TODO this is very similar to HueSlider
-class AlphaSlider final : public QWidget {
+class AlphaSlider final : public Slider<AlphaSlider> {
   Q_OBJECT
+  
+  friend class Slider<AlphaSlider>;
   
 public:
   explicit AlphaSlider(QWidget *parent)
-    : QWidget{parent},
-      graph{{slider_inner_rect.width(), 1}, QImage::Format_ARGB32_Premultiplied} {
-    setFixedSize(slider_widget_rect.size());
-    initBar();
+    : Slider{parent} {
     plotGraph();
-    show();
   }
   
 Q_SIGNALS:
@@ -431,11 +454,8 @@ public Q_SLOTS:
   }
   
 private:
-  QImage graph;
-  QPixmap bar;
   HSV color = default_color;
   int alpha = default_alpha;
-  bool mouseDown = false;
   
   static QRgb setAlpha(const QRgb color, const int alpha) {
     return qPremultiply(qRgba(qRed(color), qGreen(color), qBlue(color), alpha));
@@ -455,16 +475,7 @@ private:
     }
   }
   
-  void initBar() {
-    bar = initColorBitmap(
-      ":/Color Picker/slider bar p.pbm",
-      ":/Color Picker/slider bar s.pbm",
-      circle_primary_color,
-      circle_secondary_color
-    );
-  }
-  
-  void renderCheckerBoard(QPainter &painter) {
+  void renderBackground(QPainter &painter) {
     painter.setPen(Qt::NoPen);
     painter.setBrush(edit_checker_a);
     painter.drawRect(slider_inner_rect);
@@ -484,16 +495,6 @@ private:
     }
   }
   
-  void renderGraph(QPainter &painter) {
-    painter.drawImage(slider_inner_rect, graph);
-  }
-  
-  void renderBorder(QPainter &painter) {
-    painter.setPen(Qt::NoPen);
-    painter.setBrush(border_color);
-    ::renderBorder(painter, slider_inner_rect, slider_outer_rect);
-  }
-  
   static int alp2pix(const int alp) {
     return qRound(alp / 255.0 * (slider_inner_rect.width() - glob_scale));
   }
@@ -501,51 +502,16 @@ private:
     return std::clamp(qRound(pix * 255.0 / (slider_inner_rect.width() - glob_scale)), 0, 255);
   }
   
-  void renderBar(QPainter &painter) {
-    const QRect barRect = {
-      slider_inner_rect.x() + alp2pix(alpha) - (bar.width() - glob_scale) / 2,
-      0,
-      bar.width(),
-      bar.height()
-    };
-    painter.setClipRegion(slider_widget_rect);
-    painter.drawPixmap(barRect, bar);
-  }
-  
-  void paintEvent(QPaintEvent *) override {
-    QPainter painter{this};
-    renderCheckerBoard(painter);
-    renderGraph(painter);
-    renderBorder(painter);
-    renderBar(painter);
+  int getPixel() {
+    return alp2pix(alpha);
   }
   
   void setColor(const int pointX) {
-    const int alp = pix2alp(pointX - slider_inner_rect.x());
+    const int alp = pix2alp(pointX);
     if (alp != alpha) {
       alpha = alp;
       repaint();
       Q_EMIT alphaChanged(alpha);
-    }
-  }
-  
-  void mousePressEvent(QMouseEvent *event) override {
-    if (event->button() == Qt::LeftButton) {
-      mouseDown = true;
-      setColor(event->localPos().x());
-      grabMouse(Qt::BlankCursor);
-    }
-  }
-  void mouseReleaseEvent(QMouseEvent *event) override {
-    if (event->button() == Qt::LeftButton) {
-      mouseDown = false;
-      setColor(event->localPos().x());
-      releaseMouse();
-    }
-  }
-  void mouseMoveEvent(QMouseEvent *event) override {
-    if (mouseDown) {
-      setColor(event->localPos().x());
     }
   }
 };
