@@ -59,6 +59,7 @@ QPixmap initColorBitmap(
 }
 
 constexpr HSV default_color = {0, 100, 100};
+constexpr int default_alpha = 255;
 inline const QColor border_color = glob_light_shade;
 inline const QColor circle_primary_color = {0, 0, 0};
 inline const QColor circle_secondary_color = {255, 255, 255};
@@ -127,11 +128,8 @@ public Q_SLOTS:
     plotGraph(hue);
     repaint();
   }
-  void changeSat(const int sat) {
+  void changeSV(const int sat, const int val) {
     color.s = sat;
-    repaint();
-  }
-  void changeVal(const int val) {
     color.v = val;
     repaint();
   }
@@ -287,16 +285,6 @@ public Q_SLOTS:
     color.h = hue;
     repaint();
   }
-  void changeSat(const int sat) {
-    color.s = sat;
-    plotGraph(sat, color.v);
-    repaint();
-  }
-  void changeVal(const int val) {
-    color.v = val;
-    plotGraph(color.s, val);
-    repaint();
-  }
   void changeSV(const int sat, const int val) {
     color.s = sat;
     color.v = val;
@@ -320,12 +308,11 @@ private:
     // 0 - left
     
     QRgb *pixels = reinterpret_cast<QRgb *>(graph.bits());
-    const ptrdiff_t width = graph.width();
+    QRgb *const pixelsEnd = pixels + graph.width();
     qreal hue = 0.0;
     int idx = 0;
     
-    QRgb *const imgEnd = pixels + width;
-    while (pixels != imgEnd) {
+    while (pixels != pixelsEnd) {
       *pixels++ = hsv2rgb(hue, sat, val);
       // can't use hue2pix here
       hue = ++idx * 360.0 / slider_inner_rect.width();
@@ -406,10 +393,161 @@ private:
   }
 };
 
+constexpr int alpha_vert_tiles = 2;
+
+// @TODO this is very similar to HueSlider
 class AlphaSlider final : public QWidget {
+  Q_OBJECT
+  
 public:
   explicit AlphaSlider(QWidget *parent)
-    : QWidget{parent} {}
+    : QWidget{parent},
+      graph{{slider_inner_rect.width(), 1}, QImage::Format_ARGB32_Premultiplied} {
+    setFixedSize(slider_widget_rect.size());
+    initBar();
+    plotGraph();
+    show();
+  }
+  
+Q_SIGNALS:
+  void alphaChanged(int);
+
+public Q_SLOTS:
+  void changeHue(const int hue) {
+    color.h = hue;
+    plotGraph();
+    repaint();
+  }
+  void changeSV(const int sat, const int val) {
+    color.s = sat;
+    color.v = val;
+    plotGraph();
+    repaint();
+  }
+  void changeHSV(const HSV hsv) {
+    color = hsv;
+    plotGraph();
+    repaint();
+  }
+  
+private:
+  QImage graph;
+  QPixmap bar;
+  HSV color = default_color;
+  int alpha = default_alpha;
+  bool mouseDown = false;
+  
+  static QRgb setAlpha(const QRgb color, const int alpha) {
+    return qPremultiply(qRgba(qRed(color), qGreen(color), qBlue(color), alpha));
+  }
+  
+  void plotGraph() {
+    QRgb *pixels = reinterpret_cast<QRgb *>(graph.bits());
+    QRgb *const pixelsEnd = pixels + graph.width();
+    const QRgb rgb = hsv2rgb(color.h, color.s, color.v);
+    int alp = 0;
+    int idx = 0;
+    
+    while (pixels != pixelsEnd) {
+      *pixels++ = setAlpha(rgb, alp);
+      // can't use alp2pix here
+      alp = qRound(++idx * 255.0 / (slider_inner_rect.width() - 1));
+    }
+  }
+  
+  void initBar() {
+    bar = initColorBitmap(
+      ":/Color Picker/slider bar p.pbm",
+      ":/Color Picker/slider bar s.pbm",
+      circle_primary_color,
+      circle_secondary_color
+    );
+  }
+  
+  void renderCheckerBoard(QPainter &painter) {
+    painter.setPen(Qt::NoPen);
+    painter.setBrush(edit_checker_a);
+    painter.drawRect(slider_inner_rect);
+    painter.setBrush(edit_checker_b);
+    painter.setClipRegion(slider_inner_rect);
+    const int tileSize = slider_inner_rect.height() / alpha_vert_tiles;
+    const int horiTiles = slider_inner_rect.width() / tileSize;
+    for (int y = 0; y != alpha_vert_tiles; ++y) {
+      for (int x = 1 - y; x <= horiTiles; x += 2) {
+        painter.drawRect(
+          slider_inner_rect.x() + tileSize * x,
+          slider_inner_rect.y() + tileSize * y,
+          tileSize,
+          tileSize
+        );
+      }
+    }
+  }
+  
+  void renderGraph(QPainter &painter) {
+    painter.drawImage(slider_inner_rect, graph);
+  }
+  
+  void renderBorder(QPainter &painter) {
+    painter.setPen(Qt::NoPen);
+    painter.setBrush(border_color);
+    ::renderBorder(painter, slider_inner_rect, slider_outer_rect);
+  }
+  
+  static int alp2pix(const int alp) {
+    return qRound(alp / 255.0 * (slider_inner_rect.width() - glob_scale));
+  }
+  static int pix2alp(const int pix) {
+    return std::clamp(qRound(pix * 255.0 / (slider_inner_rect.width() - glob_scale)), 0, 255);
+  }
+  
+  void renderBar(QPainter &painter) {
+    const QRect barRect = {
+      slider_inner_rect.x() + alp2pix(alpha) - (bar.width() - glob_scale) / 2,
+      0,
+      bar.width(),
+      bar.height()
+    };
+    painter.setClipRegion(slider_widget_rect);
+    painter.drawPixmap(barRect, bar);
+  }
+  
+  void paintEvent(QPaintEvent *) override {
+    QPainter painter{this};
+    renderCheckerBoard(painter);
+    renderGraph(painter);
+    renderBorder(painter);
+    renderBar(painter);
+  }
+  
+  void setColor(const int pointX) {
+    const int alp = pix2alp(pointX - slider_inner_rect.x());
+    if (alp != alpha) {
+      alpha = alp;
+      repaint();
+      Q_EMIT alphaChanged(alpha);
+    }
+  }
+  
+  void mousePressEvent(QMouseEvent *event) override {
+    if (event->button() == Qt::LeftButton) {
+      mouseDown = true;
+      setColor(event->localPos().x());
+      grabMouse(Qt::BlankCursor);
+    }
+  }
+  void mouseReleaseEvent(QMouseEvent *event) override {
+    if (event->button() == Qt::LeftButton) {
+      mouseDown = false;
+      setColor(event->localPos().x());
+      releaseMouse();
+    }
+  }
+  void mouseMoveEvent(QMouseEvent *event) override {
+    if (mouseDown) {
+      setColor(event->localPos().x());
+    }
+  }
 };
 
 ColorPickerWidget::ColorPickerWidget(QWidget *parent)
@@ -429,6 +567,7 @@ void ColorPickerWidget::setupLayout() {
   layout->setContentsMargins(0, 0, 0, 0);
   layout->addWidget(svGraph);
   layout->addWidget(hueSlider);
+  layout->addWidget(alphaSlider);
   layout->addStretch();
   layout->setAlignment(Qt::AlignTop);
   setLayout(layout);
@@ -437,6 +576,8 @@ void ColorPickerWidget::setupLayout() {
 void ColorPickerWidget::connectSignals() {
   connect(svGraph, &SVGraph::svChanged, hueSlider, &HueSlider::changeSV);
   connect(hueSlider, &HueSlider::hueChanged, svGraph, &SVGraph::changeHue);
+  connect(hueSlider, &HueSlider::hueChanged, alphaSlider, &AlphaSlider::changeHue);
+  connect(svGraph, &SVGraph::svChanged, alphaSlider, &AlphaSlider::changeSV);
 }
 
 #include "color picker widget.moc"
