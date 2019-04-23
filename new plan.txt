@@ -377,3 +377,8 @@ https://lospec.com/palette-list/importing-palettes
 https://worms2d.info/Palette_file#File_format
 http://www.selapa.net/swatches/colors/fileformats.php
 
+Consider porting to SDL2 + Dear Imgui + Bgfx in the distant future
+Assess the benfits
+Overall performance will definitely improve but I will have to rewrite a
+lot of code
+I would have been better off choosing this trio at the beginning of the project
