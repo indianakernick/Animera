@@ -15,6 +15,9 @@
 class SVGraph;
 class HueSlider;
 class AlphaSlider;
+class NumberBox;
+class HexBox;
+class BoxLabel;
 
 class ColorPickerWidget final : public QWidget {
   Q_OBJECT
@@ -29,6 +32,22 @@ private:
   SVGraph *svGraph;
   HueSlider *hueSlider;
   AlphaSlider *alphaSlider;
+  NumberBox *boxR;
+  NumberBox *boxG;
+  NumberBox *boxB;
+  NumberBox *boxH;
+  NumberBox *boxS;
+  NumberBox *boxV;
+  NumberBox *boxA;
+  HexBox *boxHex;
+  BoxLabel *labelR;
+  BoxLabel *labelG;
+  BoxLabel *labelB;
+  BoxLabel *labelH;
+  BoxLabel *labelS;
+  BoxLabel *labelV;
+  BoxLabel *labelA;
+  BoxLabel *labelHex;
   
   void setupLayout();
   void connectSignals();
