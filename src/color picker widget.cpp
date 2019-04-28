@@ -661,7 +661,7 @@ public:
     : QValidator{parent} {}
   
   void fixup(QString &input) const override {
-    if (input.size() == 6 && allHex(input)) {
+    if (input.size() == 6) {
       input.append('F');
       input.append('F');
     } else {
@@ -674,7 +674,17 @@ public:
       input.remove(0, 1);
       pos = std::max(pos - 1, 0);
     }
-    if (input.size() > 8 || !allHex(input)) return State::Invalid;
+    if (input.size() > 8) return State::Invalid;
+    for (QChar &ch : input) {
+      const char latin1 = ch.toLatin1();
+      if ('0' <= latin1 && latin1 <= '9') continue;
+      if ('A' <= latin1 && latin1 <= 'F') continue;
+      if ('a' <= latin1 && latin1 <= 'f') {
+        ch = ch.toUpper();
+        continue;
+      }
+      return State::Invalid;
+    }
     if (input.size() == 8) {
       return State::Acceptable;
     } else {
@@ -688,15 +698,6 @@ public:
 
 private:
   QString lastValidValue;
-  
-  static bool allHex(const QString &str) {
-    for (const QChar ch : str) {
-      if (!std::isxdigit(ch.toLatin1())) {
-        return false;
-      }
-    }
-    return true;
-  }
 };
 
 class NumberBox final : public TextBox {
