@@ -9,6 +9,7 @@
 #include "window.hpp"
 
 #include "config.hpp"
+#include "connect.hpp"
 #include <QtWidgets/qstyle.h>
 #include <QtWidgets/qmenubar.h>
 #include <QtWidgets/qboxlayout.h>
@@ -63,8 +64,8 @@ void Window::setupMenubar() {
   file->addAction("Save");
   file->addSeparator();
   file->addAction("Export");
-  // connect(open, &QAction::triggered, this, &Window::openDoc);
-  // connect(save, &QAction::triggered, this, &Window::saveDoc);
+  // CONNECT(open, triggered, this, openDoc);
+  // CONNECT(save, triggered, this, saveDoc);
 }
 
 void Window::makeDockWidget(Qt::DockWidgetArea area, QWidget *widget) {
@@ -72,34 +73,34 @@ void Window::makeDockWidget(Qt::DockWidgetArea area, QWidget *widget) {
   dock->setFeatures(QDockWidget::NoDockWidgetFeatures);
   dock->setAllowedAreas(area);
   dock->setWidget(widget);
-  dock->setTitleBarWidget(new QWidget{});
+  dock->setTitleBarWidget(new QWidget{dock});
   addDockWidget(area, dock);
 }
 
 void Window::connectSignals() {
-  connect(&timeline, &TimelineWidget::posChange,         &editor,    &EditorWidget::compositePos);
-  connect(&timeline, &TimelineWidget::posChange,         &tools,     &ToolSelectWidget::changeCell);
-  connect(&timeline, &TimelineWidget::posChange,         &clear,     &ClearObject::posChange);
-  connect(&timeline, &TimelineWidget::posChange,         &undo,      &UndoObject::posChange);
-  connect(&timeline, &TimelineWidget::layerVisibility,   &editor,    &EditorWidget::compositeVis);
+  CONNECT(&timeline, posChange,       &editor,    compositePos);
+  CONNECT(&timeline, posChange,       &tools,     changeCell);
+  CONNECT(&timeline, posChange,       &clear,     posChange);
+  CONNECT(&timeline, posChange,       &undo,      posChange);
+  CONNECT(&timeline, layerVisibility, &editor,    compositeVis);
   
-  connect(&tools,    &ToolSelectWidget::cellModified,    &undo,      &UndoObject::cellModified);
-  connect(&tools,    &ToolSelectWidget::cellModified,    &editor,    &EditorWidget::composite);
-  connect(&tools,    &ToolSelectWidget::overlayModified, &editor,    &EditorWidget::compositeOverlay);
-  connect(&tools,    &ToolSelectWidget::updateStatusBar, &statusBar, &StatusBarWidget::showPerm);
+  CONNECT(&tools,    cellModified,    &undo,      cellModified);
+  CONNECT(&tools,    cellModified,    &editor,    composite);
+  CONNECT(&tools,    overlayModified, &editor,    compositeOverlay);
+  CONNECT(&tools,    updateStatusBar, &statusBar, showPerm);
   
-  connect(&editor,   &EditorWidget::mouseLeave,          &tools,     &ToolSelectWidget::mouseLeave);
-  connect(&editor,   &EditorWidget::mouseDown,           &tools,     &ToolSelectWidget::mouseDown);
-  connect(&editor,   &EditorWidget::mouseMove,           &tools,     &ToolSelectWidget::mouseMove);
-  connect(&editor,   &EditorWidget::mouseUp,             &tools,     &ToolSelectWidget::mouseUp);
-  connect(&editor,   &EditorWidget::keyPress,            &tools,     &ToolSelectWidget::keyPress);
-  connect(&editor,   &EditorWidget::keyPress,            &clear,     &ClearObject::keyPress);
-  connect(&editor,   &EditorWidget::keyPress,            &undo,      &UndoObject::keyPress);
+  CONNECT(&editor,   mouseLeave,      &tools,     mouseLeave);
+  CONNECT(&editor,   mouseDown,       &tools,     mouseDown);
+  CONNECT(&editor,   mouseMove,       &tools,     mouseMove);
+  CONNECT(&editor,   mouseUp,         &tools,     mouseUp);
+  CONNECT(&editor,   keyPress,        &tools,     keyPress);
+  CONNECT(&editor,   keyPress,        &clear,     keyPress);
+  CONNECT(&editor,   keyPress,        &undo,      keyPress);
   
-  connect(&clear,    &ClearObject::cellModified,         &tools,     &ToolSelectWidget::cellModified);
+  CONNECT(&clear,    cellModified,    &tools,     cellModified);
   
-  connect(&undo,     &UndoObject::cellReverted,          &editor,    &EditorWidget::composite);
-  connect(&undo,     &UndoObject::showTempStatus,        &statusBar, &StatusBarWidget::showTemp);
+  CONNECT(&undo,     cellReverted,    &editor,    composite);
+  CONNECT(&undo,     showTempStatus,  &statusBar, showTemp);
 }
 
 #include "window.moc"

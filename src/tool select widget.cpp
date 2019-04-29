@@ -9,6 +9,7 @@
 #include "tool select widget.hpp"
 
 #include "config.hpp"
+#include "connect.hpp"
 #include <QtGui/qbitmap.h>
 #include "tool widgets.hpp"
 #include <QtGui/qpainter.h>
@@ -42,7 +43,7 @@ public:
     setAutoExclusive(true);
     setFixedSize(tool_button_size);
     setContentsMargins(0, 0, 0, 0);
-    connect(this, &QAbstractButton::pressed, this, &ToolWidget::toolPressed);
+    CONNECT(this, pressed, this, toolPressed);
   }
   
 public Q_SLOTS:

@@ -9,6 +9,7 @@
 #include "status bar widget.hpp"
 
 #include "config.hpp"
+#include "connect.hpp"
 #include "global font.hpp"
 #include <QtGui/qpainter.h>
 
@@ -16,7 +17,7 @@ StatusBarWidget::StatusBarWidget(QWidget *parent)
   : QWidget{parent} {
   timer.setInterval(stat_temp_duration_ms);
   timer.setSingleShot(true);
-  connect(&timer, &QTimer::timeout, this, &StatusBarWidget::hideTemp);
+  CONNECT(&timer, timeout, this, hideTemp);
   setMinimumWidth(stat_min_width);
   setFixedHeight(stat_height);
   setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);

@@ -9,6 +9,7 @@
 #include "color picker widget.hpp"
 
 #include "config.hpp"
+#include "connect.hpp"
 #include "color input widget.hpp"
 #include "color label widget.hpp"
 #include "color graph widget.hpp"
@@ -74,28 +75,20 @@ void ColorPickerWidget::setupLayout() {
   setLayout(layout);
 }
 
-// @TODO yes or no?
-#define CONNECT(SENDER, SENDER_FUN, RECEIVER, RECEIVER_FUN)                     \
-  QObject::connect(                                                             \
-    SENDER,                                                                     \
-    &std::remove_cv_t<std::remove_pointer_t<decltype(SENDER)>>::SENDER_FUN,                                \
-    RECEIVER,                                                                   \
-    &std::remove_cv_t<std::remove_pointer_t<decltype(RECEIVER)>>::RECEIVER_FUN                             \
-  )
-
 void ColorPickerWidget::connectSignals() {
-  CONNECT(svGraph, svChanged, hueSlider, changeSV);
+  CONNECT(svGraph,     svChanged,    hueSlider,   changeSV);
+  CONNECT(hueSlider,   hueChanged,   svGraph,     changeHue);
+  CONNECT(hueSlider,   hueChanged,   alphaSlider, changeHue);
+  CONNECT(svGraph,     svChanged,    alphaSlider, changeSV);
 
-  //connect(svGraph, &SVGraphWidget::svChanged, hueSlider, &HueSliderWidget::changeSV);
-  connect(hueSlider, &HueSliderWidget::hueChanged, svGraph, &SVGraphWidget::changeHue);
-  connect(hueSlider, &HueSliderWidget::hueChanged, alphaSlider, &AlphaSliderWidget::changeHue);
-  connect(svGraph, &SVGraphWidget::svChanged, alphaSlider, &AlphaSliderWidget::changeSV);
+  CONNECT(hueSlider,   hueChanged,   alphaSlider, changeHue);
+  CONNECT(svGraph,     svChanged,    alphaSlider, changeSV);
   
-  connect(alphaSlider, &AlphaSliderWidget::alphaChanged, boxA, &NumberInputWidget::changeValue);
-  connect(boxA, &NumberInputWidget::valueChanged, alphaSlider, &AlphaSliderWidget::changeAlpha);
+  CONNECT(alphaSlider, alphaChanged, boxA,        changeValue);
+  CONNECT(boxA,        valueChanged, alphaSlider, changeAlpha);
   
-  connect(hueSlider, &HueSliderWidget::hueChanged, boxH, &NumberInputWidget::changeValue);
-  connect(boxH, &NumberInputWidget::valueChanged, hueSlider, &HueSliderWidget::changeHue);
+  CONNECT(hueSlider,   hueChanged,   boxH,        changeValue);
+  CONNECT(boxH,        valueChanged, hueSlider,   changeHue);
   
   // create an object that has a bunch of signals and slots for converting
   // between hsv and rgb

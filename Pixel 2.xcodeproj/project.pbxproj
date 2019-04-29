@@ -104,6 +104,7 @@
 		453D28CF2276A9DF00D0E5F9 /* color convert.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "color convert.hpp"; sourceTree = "<group>"; };
 		453D28D12276F0FD00D0E5F9 /* color label widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "color label widget.cpp"; sourceTree = "<group>"; };
 		453D28D22276F0FD00D0E5F9 /* color label widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "color label widget.hpp"; sourceTree = "<group>"; };
+		453D28D42277129800D0E5F9 /* connect.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = connect.hpp; sourceTree = "<group>"; };
 		455F2851220688FD00C73F39 /* Pixel 2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pixel 2.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		455F285B2206890300C73F39 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		455F28602206890300C73F39 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1076,6 +1077,7 @@
 				453D28C2227698F200D0E5F9 /* widget painting.hpp */,
 				453D28CE2276A9DF00D0E5F9 /* color convert.cpp */,
 				453D28CF2276A9DF00D0E5F9 /* color convert.hpp */,
+				453D28D42277129800D0E5F9 /* connect.hpp */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";

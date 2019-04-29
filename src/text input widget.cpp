@@ -8,6 +8,8 @@
 
 #include "text input widget.hpp"
 
+#include "config.hpp"
+#include "connect.hpp"
 #include "global font.hpp"
 #include <QtGui/qpainter.h>
 #include "widget painting.hpp"
@@ -24,13 +26,13 @@ TextInputWidget::TextInputWidget(QWidget *parent, const RectWidgetSize size, con
   setFrame(false);
   setAttribute(Qt::WA_MacShowFocusRect, 0);
   
+  CONNECT(&cursorBlinkTimer, timeout,               this, blinkSlot);
+  CONNECT(this,              selectionChanged,      this, showCursor);
+  CONNECT(this,              cursorPositionChanged, this, showCursor);
+  
   cursorBlinkTimer.setInterval(box_cursor_blink_interval_ms);
   cursorBlinkTimer.setTimerType(Qt::CoarseTimer);
-  connect(&cursorBlinkTimer, &QTimer::timeout, this, &TextInputWidget::blinkSlot);
   cursorBlinkTimer.start();
-  
-  connect(this, &QLineEdit::selectionChanged, this, &TextInputWidget::showCursor);
-  connect(this, &QLineEdit::cursorPositionChanged, this, &TextInputWidget::showCursor);
 }
 
 void TextInputWidget::blinkSlot() {

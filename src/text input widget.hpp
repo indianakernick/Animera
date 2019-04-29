@@ -9,7 +9,6 @@
 #ifndef text_input_widget_hpp
 #define text_input_widget_hpp
 
-#include "config.hpp"
 #include <QtCore/qtimer.h>
 #include "rect widget size.hpp"
 #include <QtWidgets/qlineedit.h>

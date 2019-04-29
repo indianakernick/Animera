@@ -476,7 +476,7 @@ public:
     : QWidget{parent}, label{this} {
     timer.setInterval(5000);
     timer.setSingleShot(true);
-    connect(&timer, &QTimer::timeout, this, &StatusBar::hideTemp);
+    CONNECT(&timer, timeout, this, hideTemp);
     label.setMinimumWidth(400);
   }
   
@@ -633,8 +633,8 @@ private:
     QAction *save = file->addAction("Save");
     file->addSeparator();
     file->addAction("Export");
-    connect(open, &QAction::triggered, this, &Window::openDoc);
-    connect(save, &QAction::triggered, this, &Window::saveDoc);
+    CONNECT(open, triggered, this, openDoc);
+    CONNECT(save, triggered, this, saveDoc);
   }
 
   void openDoc() {

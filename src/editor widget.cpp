@@ -9,6 +9,7 @@
 #include "editor widget.hpp"
 
 #include "config.hpp"
+#include "connect.hpp"
 #include "cursors.hpp"
 #include "composite.hpp"
 #include <QtGui/qevent.h>
@@ -26,8 +27,8 @@ public:
     setFocusPolicy(Qt::StrongFocus);
     setMouseTracking(true);
     setCursor(getCircleCursor());
-    connect(parent->horizontalScrollBar(), &QScrollBar::valueChanged, this, &EditorImage::updateMouse);
-    connect(parent->verticalScrollBar(), &QScrollBar::valueChanged, this, &EditorImage::updateMouse);
+    CONNECT(parent->horizontalScrollBar(), valueChanged, this, updateMouse);
+    CONNECT(parent->verticalScrollBar(),   valueChanged, this, updateMouse);
   }
   
   void setImage(const QImage &img) {
@@ -194,11 +195,11 @@ public:
 EditorWidget::EditorWidget(QWidget *parent, Animation &anim)
   : QScrollArea{parent}, anim{anim}, view{new EditorImage{this}} {
   setWidget(view);
-  connect(view, &EditorImage::mouseLeave, this, &EditorWidget::mouseLeave);
-  connect(view, &EditorImage::mouseDown,  this, &EditorWidget::mouseDown);
-  connect(view, &EditorImage::mouseMove,  this, &EditorWidget::mouseMove);
-  connect(view, &EditorImage::mouseUp,    this, &EditorWidget::mouseUp);
-  connect(view, &EditorImage::keyPress,   this, &EditorWidget::keyPress);
+  CONNECT(view, mouseLeave, this, mouseLeave);
+  CONNECT(view, mouseDown,  this, mouseDown);
+  CONNECT(view, mouseMove,  this, mouseMove);
+  CONNECT(view, mouseUp,    this, mouseUp);
+  CONNECT(view, keyPress,   this, keyPress);
   setAlignment(Qt::AlignCenter);
   setFocusPolicy(Qt::WheelFocus);
 }

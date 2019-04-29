@@ -8,6 +8,9 @@
 
 #include "color input widget.hpp"
 
+#include "config.hpp"
+#include "connect.hpp"
+
 NumberValidator::NumberValidator(QWidget *parent, const int max)
   : QIntValidator{0, max, parent} {}
 
@@ -62,8 +65,8 @@ NumberInputWidget::NumberInputWidget(QWidget *parent, const int defaultValue, co
   : TextInputWidget{parent, pick_number_size, 0}, boxValidator{parent, max} {
   setValidator(&boxValidator);
   changeValue(defaultValue);
-  connect(this, &QLineEdit::textEdited, this, &NumberInputWidget::textChanged);
-  connect(this, &QLineEdit::editingFinished, this, &NumberInputWidget::newValidValue);
+  CONNECT(this, textEdited,      this, textChanged);
+  CONNECT(this, editingFinished, this, newValidValue);
 }
 
 void NumberInputWidget::changeValue(const int num) {
@@ -91,8 +94,8 @@ HexInputWidget::HexInputWidget(QWidget *parent, const QRgb defaultValue)
   : TextInputWidget{parent, pick_hex_size, 2_px}, boxValidator{parent} {
   setValidator(&boxValidator);
   changeRgba(defaultValue);
-  connect(this, &QLineEdit::textEdited, this, &HexInputWidget::textChanged);
-  connect(this, &QLineEdit::editingFinished, this, &HexInputWidget::newValidValue);
+  CONNECT(this, textEdited, this, textChanged);
+  CONNECT(this, editingFinished, this, newValidValue);
 }
 
 namespace {
