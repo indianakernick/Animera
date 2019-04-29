@@ -529,15 +529,15 @@ class TextBox : public QLineEdit {
   Q_OBJECT
   
 public:
-  TextBox(QWidget *parent, const RectWidgetSize size)
+  TextBox(QWidget *parent, const RectWidgetSize size, const int offsetX)
     : QLineEdit{parent},
       cursorBlinkTimer{this},
-      boxSize{size} {
+      boxSize{size},
+      offsetX{offsetX} {
     setFixedSize(boxSize.widget().size());
     setFont(getGlobalFont());
     const int margin = boxSize.padding + boxSize.border;
-    setTextMargins(margin, margin, margin, margin);
-    setAlignment(Qt::AlignLeft);
+    setTextMargins(margin + offsetX, margin, margin, margin);
     setFrame(false);
     setAttribute(Qt::WA_MacShowFocusRect, 0);
     
@@ -566,6 +566,7 @@ private Q_SLOTS:
 private:
   QTimer cursorBlinkTimer;
   RectWidgetSize boxSize;
+  int offsetX;
   bool cursorBlinkStatus = true;
   
   void focusInEvent(QFocusEvent *event) override {
@@ -591,7 +592,7 @@ private:
     painter.setBrush(Qt::NoBrush);
     painter.setPen(glob_light_shade);
     QPoint textPos = boxSize.inner().topLeft();
-    textPos.ry() += glob_font_accent_px;
+    textPos += QPoint{offsetX, glob_font_accent_px};
     textPos += QPoint{1 * glob_scale, 1 * glob_scale};
     painter.drawText(textPos, text());
   }
@@ -600,7 +601,10 @@ private:
     if (!hasFocus() || !cursorBlinkStatus || selectionStart() != -1) return;
     painter.setBrush(glob_light_shade);
     painter.setPen(Qt::NoPen);
-    painter.drawRect(QRect{cursorPosition() * 2 * 6 + 4, 4, 2, glob_font_accent_px + 4});
+    painter.drawRect(QRect{
+      cursorPosition() * glob_scale * 6 + 4 + offsetX, 4,
+      2, glob_font_accent_px + 4
+    });
   }
 
   void renderSelection(QPainter &painter) {
@@ -610,9 +614,9 @@ private:
     painter.setBrush(color);
     painter.setPen(Qt::NoPen);
     painter.drawRect(QRect{
-      selectionStart() * 2 * 6 + 4,
+      selectionStart() * glob_scale * 6 + 4 + offsetX,
       4,
-      selectionLength() * 2 * 6 + 2,
+      selectionLength() * glob_scale * 6 + 2,
       glob_font_accent_px + 4
     });
   }
@@ -635,7 +639,7 @@ constexpr RectWidgetSize number_box_size = {
 constexpr RectWidgetSize hex_box_size = {
   svgraph_size.padding,
   svgraph_size.border,
-  {((5 + 1) * 8 + 1) * glob_scale, glob_font_px + 2 * glob_scale}
+  {((5 + 1) * 8 + 1 + 5) * glob_scale, glob_font_px + 2 * glob_scale}
 };
 
 class NumberBoxValidator final : public QIntValidator {
@@ -704,7 +708,7 @@ class NumberBox final : public TextBox {
   Q_OBJECT
 public:
   NumberBox(QWidget *parent, const int defaultValue, const int max)
-    : TextBox{parent, number_box_size}, boxValidator{parent, max} {
+    : TextBox{parent, number_box_size, 0}, boxValidator{parent, max} {
     setValidator(&boxValidator);
     changeValue(defaultValue);
     connect(this, &QLineEdit::textEdited, this, &NumberBox::textChanged);
@@ -746,7 +750,7 @@ class HexBox final : public TextBox {
   Q_OBJECT
 public:
   HexBox(QWidget *parent, const QRgb defaultValue)
-    : TextBox{parent, hex_box_size}, boxValidator{parent} {
+    : TextBox{parent, hex_box_size, 2 * glob_scale}, boxValidator{parent} {
     setValidator(&boxValidator);
     changeRgba(defaultValue);
     connect(this, &QLineEdit::textEdited, this, &HexBox::textChanged);
@@ -808,7 +812,7 @@ private:
 constexpr RectWidgetSize label_size = {
   svgraph_size.padding,
   svgraph_size.border,
-  {((5 + 1) * 1 + 1) * glob_scale, glob_font_px + 2 * glob_scale}
+  {((5 + 1) * 1 + 2) * glob_scale, glob_font_px + 2 * glob_scale}
 };
 
 class BoxLabel final : public QWidget {
@@ -828,7 +832,7 @@ private:
     painter.setPen(glob_light_shade);
     QPoint textPos = label_size.inner().topLeft();
     textPos.ry() += glob_font_accent_px;
-    textPos += QPoint{1 * glob_scale, 1 * glob_scale};
+    textPos += QPoint{2 * glob_scale, 1 * glob_scale};
     painter.drawText(textPos, text);
   }
 };
@@ -841,11 +845,11 @@ ColorPickerWidget::ColorPickerWidget(QWidget *parent)
     boxR{new NumberBox{this, 89, 255}},
     boxG{new NumberBox{this, 89, 255}},
     boxB{new NumberBox{this, 89, 255}},
-    boxH{new NumberBox{this, 89, 359}},
+    boxH{new NumberBox{this, default_color.h, 359}},
     boxS{new NumberBox{this, 89, 100}},
     boxV{new NumberBox{this, 89, 100}},
     boxA{new NumberBox{this, default_alpha, 255}},
-    boxHex{new HexBox{this, 0}},
+    boxHex{new HexBox{this, 0x89898989}},
     labelR{new BoxLabel{this, "R"}},
     labelG{new BoxLabel{this, "G"}},
     labelB{new BoxLabel{this, "B"}},
@@ -883,10 +887,10 @@ void ColorPickerWidget::setupLayout() {
   layout->addWidget(labelV, 4, 4);
   layout->addWidget(boxV,   4, 5);
   
-  layout->addWidget(labelA, 5, 0);
-  layout->addWidget(boxA, 5, 1);
+  layout->addWidget(labelA,   5, 0);
+  layout->addWidget(boxA,     5, 1);
   layout->addWidget(labelHex, 5, 2);
-  layout->addWidget(boxHex, 5, 3, 1, 3);
+  layout->addWidget(boxHex,   5, 3, 1, 3);
   
   layout->setAlignment(Qt::AlignTop);
   setLayout(layout);
@@ -900,6 +904,15 @@ void ColorPickerWidget::connectSignals() {
   
   connect(alphaSlider, &AlphaSlider::alphaChanged, boxA, &NumberBox::changeValue);
   connect(boxA, &NumberBox::valueChanged, alphaSlider, &AlphaSlider::changeAlpha);
+  
+  connect(hueSlider, &HueSlider::hueChanged, boxH, &NumberBox::changeValue);
+  connect(boxH, &NumberBox::valueChanged, hueSlider, &HueSlider::changeHue);
+  
+  // create an object that has a bunch of signals and slots for converting
+  // between hsv and rgb
+  
+  // maybe it could be the ColorPickerWidget?
 }
 
 #include "color picker widget.moc"
+
