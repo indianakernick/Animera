@@ -523,7 +523,15 @@ private:
   }
 };
 
+inline QColor setAlpha(QColor color, const int alpha) {
+  color.setAlpha(alpha);
+  return color;
+}
+
 constexpr int cursor_blink_interval_ms = 500;
+constexpr int cursor_width = 1 * glob_scale;
+constexpr int text_padding = 1 * glob_scale;
+inline const QColor selection_color = setAlpha(glob_light_accent, 127);
 
 class TextBox : public QLineEdit {
   Q_OBJECT
@@ -593,7 +601,7 @@ private:
     painter.setPen(glob_light_shade);
     QPoint textPos = boxSize.inner().topLeft();
     textPos += QPoint{offsetX, glob_font_accent_px};
-    textPos += QPoint{1 * glob_scale, 1 * glob_scale};
+    textPos += QPoint{text_padding, text_padding};
     painter.drawText(textPos, text());
   }
   
@@ -602,22 +610,22 @@ private:
     painter.setBrush(glob_light_shade);
     painter.setPen(Qt::NoPen);
     painter.drawRect(QRect{
-      cursorPosition() * glob_scale * 6 + 4 + offsetX, 4,
-      2, glob_font_accent_px + 4
+      boxSize.inner().x() + cursorPosition() * glob_font_stride_px + offsetX,
+      boxSize.inner().y(),
+      cursor_width,
+      boxSize.inner().height()
     });
   }
 
   void renderSelection(QPainter &painter) {
     if (!hasFocus() || selectionStart() == -1) return;
-    QColor color = glob_light_accent;
-    color.setAlpha(127);
-    painter.setBrush(color);
+    painter.setBrush(selection_color);
     painter.setPen(Qt::NoPen);
     painter.drawRect(QRect{
-      selectionStart() * glob_scale * 6 + 4 + offsetX,
-      4,
-      selectionLength() * glob_scale * 6 + 2,
-      glob_font_accent_px + 4
+      boxSize.inner().x() + selectionStart() * glob_font_stride_px + offsetX,
+      boxSize.inner().y(),
+      text_padding + selectionLength() * glob_font_stride_px,
+      boxSize.inner().height()
     });
   }
 
@@ -634,12 +642,12 @@ private:
 constexpr RectWidgetSize number_box_size = {
   svgraph_size.padding,
   svgraph_size.border,
-  {((5 + 1) * 3 + 1) * glob_scale, glob_font_px + 2 * glob_scale}
+  {glob_font_stride_px * 3 + 1 * glob_scale, glob_font_px + 2 * glob_scale}
 };
 constexpr RectWidgetSize hex_box_size = {
   svgraph_size.padding,
   svgraph_size.border,
-  {((5 + 1) * 8 + 1 + 5) * glob_scale, glob_font_px + 2 * glob_scale}
+  {glob_font_stride_px * 8 + 6 * glob_scale, glob_font_px + 2 * glob_scale}
 };
 
 class NumberBoxValidator final : public QIntValidator {
