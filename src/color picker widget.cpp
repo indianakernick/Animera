@@ -71,39 +71,51 @@ inline const QColor circle_secondary_color = {255, 255, 255};
 class RectWidgetSize {
 public:
   constexpr RectWidgetSize(const int padding, const int border, const QSize content)
-    : padding{padding}, border{border}, content{content} {}
+    : padding_{padding}, border_{border}, content_{content} {}
 
   constexpr QRect widget() const noexcept {
     return {
       0,
       0,
-      content.width() + 2 * border + 2 * padding,
-      content.height() + 2 * border + 2 * padding
+      content_.width() + 2 * border_ + 2 * padding_,
+      content_.height() + 2 * border_ + 2 * padding_
     };
   }
   
   constexpr QRect outer() const noexcept {
     return {
-      padding,
-      padding,
-      content.width() + 2 * border,
-      content.height() + 2 * border
+      padding_,
+      padding_,
+      content_.width() + 2 * border_,
+      content_.height() + 2 * border_
     };
   }
   
   constexpr QRect inner() const noexcept {
     return {
-      padding + border,
-      padding + border,
-      content.width(),
-      content.height()
+      padding_ + border_,
+      padding_ + border_,
+      content_.width(),
+      content_.height()
     };
   }
+  
+  constexpr int padding() const noexcept {
+    return padding_;
+  }
+  
+  constexpr int border() const noexcept {
+    return border_;
+  }
+  
+  constexpr QSize content() const noexcept {
+    return content_;
+  }
 
-//private:
-  int padding;
-  int border;
-  QSize content;
+private:
+  int padding_;
+  int border_;
+  QSize content_;
 };
 
 constexpr RectWidgetSize svgraph_size = {
@@ -262,9 +274,9 @@ private:
 };
 
 constexpr RectWidgetSize slider_size = {
-  svgraph_size.padding,
-  svgraph_size.border,
-  {svgraph_size.content.width(), 12_px}
+  svgraph_size.padding(),
+  svgraph_size.border(),
+  {svgraph_size.content().width(), 12_px}
 };
 
 template <typename Derived>
@@ -544,7 +556,7 @@ public:
       offsetX{offsetX} {
     setFixedSize(boxSize.widget().size());
     setFont(getGlobalFont());
-    const int margin = boxSize.padding + boxSize.border;
+    const int margin = boxSize.padding() + boxSize.border();
     setTextMargins(margin + offsetX, margin, margin, margin);
     setFrame(false);
     setAttribute(Qt::WA_MacShowFocusRect, 0);
@@ -640,13 +652,13 @@ private:
 };
 
 constexpr RectWidgetSize number_box_size = {
-  svgraph_size.padding,
-  svgraph_size.border,
+  svgraph_size.padding(),
+  svgraph_size.border(),
   {3 * glob_font_stride_px + 1_px, glob_font_px + 2_px}
 };
 constexpr RectWidgetSize hex_box_size = {
-  svgraph_size.padding,
-  svgraph_size.border,
+  svgraph_size.padding(),
+  svgraph_size.border(),
   {8 * glob_font_stride_px + 6_px, glob_font_px + 2_px}
 };
 
@@ -818,8 +830,8 @@ private:
 };
 
 constexpr RectWidgetSize label_size = {
-  svgraph_size.padding,
-  svgraph_size.border,
+  svgraph_size.padding(),
+  svgraph_size.border(),
   {1 * glob_font_stride_px + 2_px, glob_font_px + 2_px}
 };
 
