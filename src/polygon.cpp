@@ -8,7 +8,7 @@
 
 #include "polygon.hpp"
 
-#include "utils.hpp"
+#include "geometry.hpp"
 
 void Polygon::init(const QPoint point) {
   points.clear();

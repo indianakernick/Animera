@@ -9,11 +9,12 @@
 #ifndef config_hpp
 #define config_hpp
 
-#include "utils.hpp"
+#include "geometry.hpp"
 #include <QtGui/qcolor.h>
 #include <QtCore/qsize.h>
 #include <QtCore/qpoint.h>
 #include <QtCore/qnamespace.h>
+#include "rect widget size.hpp"
 
 // ------------------------------- global ----------------------------------- //
 
@@ -84,7 +85,63 @@ constexpr int       edit_max_scale = 64;
 constexpr int       edit_default_scale = 1_px;
 constexpr int       edit_undo_stack = 128;
 
-// ----------------------------------- keys --------------------------------- //
+// ------------------------------ color picker ------------------------------ //
+
+constexpr RectWidgetSize pick_svgraph_size = {
+  1_px,
+  1_px,
+  {101_px, 101_px}
+};
+
+constexpr RectWidgetSize pick_slider_size = {
+  pick_svgraph_size.padding(),
+  pick_svgraph_size.border(),
+  {pick_svgraph_size.content().width(), 12_px}
+};
+
+constexpr RectWidgetSize pick_label_size = {
+  pick_svgraph_size.padding(),
+  pick_svgraph_size.border(),
+  {1 * glob_font_stride_px + 2_px, glob_font_px + 2_px}
+};
+
+constexpr RectWidgetSize pick_number_size = {
+  pick_svgraph_size.padding(),
+  pick_svgraph_size.border(),
+  {3 * glob_font_stride_px + 1_px, glob_font_px + 2_px}
+};
+
+constexpr RectWidgetSize pick_hex_size = {
+  pick_svgraph_size.padding(),
+  pick_svgraph_size.border(),
+  {8 * glob_font_stride_px + 6_px, glob_font_px + 2_px}
+};
+
+inline const QColor pick_label_text_color = glob_light_shade;
+inline const QColor pick_svgraph_border_color = glob_light_shade;
+inline const QColor pick_slider_border_color = glob_light_shade;
+inline const QColor pick_primary_color = {0, 0, 0};
+inline const QColor pick_secondary_color = {255, 255, 255};
+inline const QColor pick_default_color = {255, 0, 0, 255};
+
+// -------------------------------- text box -------------------------------- //
+
+inline QColor setAlpha(QColor color, const int alpha) {
+  color.setAlpha(alpha);
+  return color;
+}
+
+constexpr int box_cursor_blink_interval_ms = 500;
+constexpr int box_cursor_width = 1_px;
+constexpr int box_text_padding = 1_px;
+
+inline const QColor box_selection_color = setAlpha(glob_light_accent, 127);
+inline const QColor box_text_color = glob_light_shade;
+inline const QColor box_border_color = glob_light_shade;
+inline const QColor box_cursor_color = glob_light_shade;
+inline const QColor box_background_color = glob_dark_accent;
+
+// ---------------------------------- keys ---------------------------------- //
 
 // all tools
 constexpr Qt::MouseButton mouse_primary = Qt::LeftButton;

@@ -12,6 +12,7 @@
 #include <QtGui/qbitmap.h>
 #include "tool widgets.hpp"
 #include <QtGui/qpainter.h>
+#include "widget painting.hpp"
 #include <QtWidgets/qboxlayout.h>
 #include <QtWidgets/qabstractbutton.h>
 
@@ -53,34 +54,21 @@ private:
   ToolSelectWidget *tools;
   std::unique_ptr<Tool> tool;
   std::unique_ptr<QWidget> widget;
-  // @TODO base bitmap is the same for all tool icons so you could share it
-  QBitmap base;
-  QBitmap shape;
+  QPixmap enabledIcon;
+  QPixmap disabledIcon;
   
   void loadIcons(const QString &name) {
-    bool loaded = base.load(":/Tools/base.pbm");
-    assert(loaded && name.data());
+    QBitmap base{":/Tools/base.pbm"};
+    QBitmap shape{":/Tools/" + name + ".pbm"};
     base = base.scaled(tool_icon_size);
-    loaded = shape.load(":/Tools/" + name + ".pbm");
-    assert(loaded);
     shape = shape.scaled(tool_icon_size);
-  }
-  
-  QColor baseColor() const {
-    return isChecked() ? tool_base_enabled : tool_base_disabled;
-  }
-  QRegion maskRegion(const QBitmap &bitmap) const {
-    QRegion region{bitmap};
-    region.translate(tool_icon_pos);
-    return region;
+    enabledIcon = bakeColoredBitmaps(base, shape, tool_base_enabled, tool_shape);
+    disabledIcon = bakeColoredBitmaps(base, shape, tool_base_disabled, tool_shape);
   }
   
   void paintEvent(QPaintEvent *) override {
     QPainter painter{this};
-    painter.setClipRegion(maskRegion(base));
-    painter.fillRect(QRect{tool_icon_pos, tool_icon_size}, baseColor());
-    painter.setClipRegion(maskRegion(shape));
-    painter.fillRect(QRect{tool_icon_pos, tool_icon_size}, tool_shape);
+    painter.drawPixmap(tool_icon_pos, isChecked() ? enabledIcon : disabledIcon);
   }
 };
 

@@ -8,7 +8,7 @@
 
 #include "painting.hpp"
 
-#include "utils.hpp"
+#include "geometry.hpp"
 #include <QtGui/qpainter.h>
 
 namespace {
@@ -53,6 +53,11 @@ const QPen round_pen{
 const QPen square_pen{
   Qt::NoBrush, 1.0, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin
 };
+
+inline QColor toColor(const QRgb rgba) {
+  // the QRgb constructor sets alpha to 255 for some reason
+  return QColor{qRed(rgba), qGreen(rgba), qBlue(rgba), qAlpha(rgba)};
+}
 
 QPen makePen(const QPen &base, const QRgb color, const int width) {
   QPen pen = base;

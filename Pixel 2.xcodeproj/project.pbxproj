@@ -17,6 +17,13 @@
 		453C78432234E13E00818B19 /* window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C78412234E13E00818B19 /* window.cpp */; };
 		453C78462234F3C600818B19 /* status bar widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C78442234F3C600818B19 /* status bar widget.cpp */; };
 		453C787D2235D70D00818B19 /* resources.rcc in Resources */ = {isa = PBXBuildFile; fileRef = 453C787C2235D70D00818B19 /* resources.rcc */; };
+		453D28BD22768D9900D0E5F9 /* text input widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453D28BB22768D9900D0E5F9 /* text input widget.cpp */; };
+		453D28C02276956A00D0E5F9 /* color input widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453D28BE2276956A00D0E5F9 /* color input widget.cpp */; };
+		453D28C3227698F200D0E5F9 /* widget painting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453D28C1227698F200D0E5F9 /* widget painting.cpp */; };
+		453D28C622769EC000D0E5F9 /* color slider widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453D28C422769EC000D0E5F9 /* color slider widget.cpp */; };
+		453D28C92276A7DD00D0E5F9 /* color graph widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453D28C72276A7DD00D0E5F9 /* color graph widget.cpp */; };
+		453D28D02276A9DF00D0E5F9 /* color convert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453D28CE2276A9DF00D0E5F9 /* color convert.cpp */; };
+		453D28D32276F0FE00D0E5F9 /* color label widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453D28D12276F0FD00D0E5F9 /* color label widget.cpp */; };
 		455F285C2206890300C73F39 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 455F285B2206890300C73F39 /* Assets.xcassets */; };
 		455F2868220690A600C73F39 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 455F2867220690A600C73F39 /* main.cpp */; };
 		455F2875220691DE00C73F39 /* QtPositioningQuick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455F286A220691DC00C73F39 /* QtPositioningQuick.framework */; };
@@ -81,6 +88,22 @@
 		453C78842236626C00818B19 /* tool icons.anim */ = {isa = PBXFileReference; lastKnownFileType = file; path = "tool icons.anim"; sourceTree = "<group>"; };
 		453C78852236626C00818B19 /* cursors.anim */ = {isa = PBXFileReference; lastKnownFileType = file; path = cursors.anim; sourceTree = "<group>"; };
 		453C78862236626C00818B19 /* icon.anim */ = {isa = PBXFileReference; lastKnownFileType = file; path = icon.anim; sourceTree = "<group>"; };
+		453D28B922768A9F00D0E5F9 /* rect widget size.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "rect widget size.hpp"; sourceTree = "<group>"; };
+		453D28BA22768B2B00D0E5F9 /* geometry.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = geometry.hpp; sourceTree = "<group>"; };
+		453D28BB22768D9900D0E5F9 /* text input widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "text input widget.cpp"; sourceTree = "<group>"; };
+		453D28BC22768D9900D0E5F9 /* text input widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "text input widget.hpp"; sourceTree = "<group>"; };
+		453D28BE2276956A00D0E5F9 /* color input widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "color input widget.cpp"; sourceTree = "<group>"; };
+		453D28BF2276956A00D0E5F9 /* color input widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "color input widget.hpp"; sourceTree = "<group>"; };
+		453D28C1227698F200D0E5F9 /* widget painting.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "widget painting.cpp"; sourceTree = "<group>"; };
+		453D28C2227698F200D0E5F9 /* widget painting.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "widget painting.hpp"; sourceTree = "<group>"; };
+		453D28C422769EC000D0E5F9 /* color slider widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "color slider widget.cpp"; sourceTree = "<group>"; };
+		453D28C522769EC000D0E5F9 /* color slider widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "color slider widget.hpp"; sourceTree = "<group>"; };
+		453D28C72276A7DD00D0E5F9 /* color graph widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "color graph widget.cpp"; sourceTree = "<group>"; };
+		453D28C82276A7DD00D0E5F9 /* color graph widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "color graph widget.hpp"; sourceTree = "<group>"; };
+		453D28CE2276A9DF00D0E5F9 /* color convert.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "color convert.cpp"; sourceTree = "<group>"; };
+		453D28CF2276A9DF00D0E5F9 /* color convert.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "color convert.hpp"; sourceTree = "<group>"; };
+		453D28D12276F0FD00D0E5F9 /* color label widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "color label widget.cpp"; sourceTree = "<group>"; };
+		453D28D22276F0FD00D0E5F9 /* color label widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "color label widget.hpp"; sourceTree = "<group>"; };
 		455F2851220688FD00C73F39 /* Pixel 2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pixel 2.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		455F285B2206890300C73F39 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		455F28602206890300C73F39 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -104,7 +127,6 @@
 		455F28882206942200C73F39 /* libqcocoa.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libqcocoa.dylib; path = ../../../../../../usr/local/Cellar/qt/5.12.0/plugins/platforms/libqcocoa.dylib; sourceTree = "<group>"; };
 		455F288B2206B57300C73F39 /* QtQuick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtQuick.framework; path = ../../../../../../usr/local/Cellar/qt/5.12.0/lib/QtQuick.framework; sourceTree = "<group>"; };
 		458F84032249CB7C005F91D0 /* config.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = config.hpp; sourceTree = "<group>"; };
-		458F84042249D4D9005F91D0 /* utils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = utils.hpp; sourceTree = "<group>"; };
 		458F84062249DFC8005F91D0 /* polygon.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = polygon.cpp; sourceTree = "<group>"; };
 		458F84072249DFC8005F91D0 /* polygon.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = polygon.hpp; sourceTree = "<group>"; };
 		45B284912218E38800D6D055 /* image.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = image.cpp; sourceTree = "<group>"; };
@@ -747,8 +769,8 @@
 		45BAD9EF2247007E000D095C /* type_aligned.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = type_aligned.hpp; sourceTree = "<group>"; };
 		45BADA75224714A3000D095C /* tool widgets.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "tool widgets.cpp"; sourceTree = "<group>"; };
 		45BADA76224714A3000D095C /* tool widgets.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "tool widgets.hpp"; sourceTree = "<group>"; };
-		45BE2A2922680B0900E21A85 /* sv circle s.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = "sv circle s.pbm"; sourceTree = "<group>"; };
-		45BE2A2A22680B0900E21A85 /* sv circle p.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = "sv circle p.pbm"; sourceTree = "<group>"; };
+		45BE2A2922680B0900E21A85 /* sv circle s.pbm */ = {isa = PBXFileReference; lastKnownFileType = text; path = "sv circle s.pbm"; sourceTree = "<group>"; };
+		45BE2A2A22680B0900E21A85 /* sv circle p.pbm */ = {isa = PBXFileReference; lastKnownFileType = text; path = "sv circle p.pbm"; sourceTree = "<group>"; };
 		45BE2A2B22683A2F00E21A85 /* slider bar p.pbm */ = {isa = PBXFileReference; lastKnownFileType = text; path = "slider bar p.pbm"; sourceTree = "<group>"; };
 		45BE2A2C22683A3000E21A85 /* slider bar s.pbm */ = {isa = PBXFileReference; lastKnownFileType = text; path = "slider bar s.pbm"; sourceTree = "<group>"; };
 		45C2A2562207BC4000E989C2 /* notes.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = notes.txt; sourceTree = "<group>"; };
@@ -869,22 +891,10 @@
 				453C783F2234DF3200818B19 /* application.hpp */,
 				453C78412234E13E00818B19 /* window.cpp */,
 				453C78422234E13E00818B19 /* window.hpp */,
-				453C78172234935000818B19 /* timeline widget.cpp */,
-				453C78182234935000818B19 /* timeline widget.hpp */,
-				453C781A22349BBD00818B19 /* editor widget.cpp */,
-				453C781B22349BBD00818B19 /* editor widget.hpp */,
-				453C781D22349F0100818B19 /* tool select widget.cpp */,
-				453C781E22349F0100818B19 /* tool select widget.hpp */,
-				45BADA75224714A3000D095C /* tool widgets.cpp */,
-				45BADA76224714A3000D095C /* tool widgets.hpp */,
-				453C78442234F3C600818B19 /* status bar widget.cpp */,
-				453C78452234F3C600818B19 /* status bar widget.hpp */,
-				45054F6B22596BC10078350B /* clear object.cpp */,
-				45054F6C22596BC10078350B /* clear object.hpp */,
-				45054F6E225970150078350B /* undo object.cpp */,
-				45054F6F225970150078350B /* undo object.hpp */,
-				45054F712259C9AA0078350B /* color picker widget.cpp */,
-				45054F722259C9AA0078350B /* color picker widget.hpp */,
+				453D28CD2276A81B00D0E5F9 /* Timeline */,
+				453D28CB2276A80800D0E5F9 /* Editor */,
+				453D28CC2276A81100D0E5F9 /* Tool select */,
+				453D28CA2276A7E800D0E5F9 /* Color picker */,
 			);
 			name = Widgets;
 			sourceTree = "<group>";
@@ -927,6 +937,60 @@
 				453C78842236626C00818B19 /* tool icons.anim */,
 			);
 			path = Anims;
+			sourceTree = "<group>";
+		};
+		453D28CA2276A7E800D0E5F9 /* Color picker */ = {
+			isa = PBXGroup;
+			children = (
+				45054F712259C9AA0078350B /* color picker widget.cpp */,
+				45054F722259C9AA0078350B /* color picker widget.hpp */,
+				453D28BB22768D9900D0E5F9 /* text input widget.cpp */,
+				453D28BC22768D9900D0E5F9 /* text input widget.hpp */,
+				453D28BE2276956A00D0E5F9 /* color input widget.cpp */,
+				453D28BF2276956A00D0E5F9 /* color input widget.hpp */,
+				453D28C422769EC000D0E5F9 /* color slider widget.cpp */,
+				453D28C522769EC000D0E5F9 /* color slider widget.hpp */,
+				453D28C72276A7DD00D0E5F9 /* color graph widget.cpp */,
+				453D28C82276A7DD00D0E5F9 /* color graph widget.hpp */,
+				453D28D12276F0FD00D0E5F9 /* color label widget.cpp */,
+				453D28D22276F0FD00D0E5F9 /* color label widget.hpp */,
+			);
+			name = "Color picker";
+			sourceTree = "<group>";
+		};
+		453D28CB2276A80800D0E5F9 /* Editor */ = {
+			isa = PBXGroup;
+			children = (
+				453C781A22349BBD00818B19 /* editor widget.cpp */,
+				453C781B22349BBD00818B19 /* editor widget.hpp */,
+				45054F6B22596BC10078350B /* clear object.cpp */,
+				45054F6C22596BC10078350B /* clear object.hpp */,
+				45054F6E225970150078350B /* undo object.cpp */,
+				45054F6F225970150078350B /* undo object.hpp */,
+			);
+			name = Editor;
+			sourceTree = "<group>";
+		};
+		453D28CC2276A81100D0E5F9 /* Tool select */ = {
+			isa = PBXGroup;
+			children = (
+				453C781D22349F0100818B19 /* tool select widget.cpp */,
+				453C781E22349F0100818B19 /* tool select widget.hpp */,
+				45BADA75224714A3000D095C /* tool widgets.cpp */,
+				45BADA76224714A3000D095C /* tool widgets.hpp */,
+			);
+			name = "Tool select";
+			sourceTree = "<group>";
+		};
+		453D28CD2276A81B00D0E5F9 /* Timeline */ = {
+			isa = PBXGroup;
+			children = (
+				453C78172234935000818B19 /* timeline widget.cpp */,
+				453C78182234935000818B19 /* timeline widget.hpp */,
+				453C78442234F3C600818B19 /* status bar widget.cpp */,
+				453C78452234F3C600818B19 /* status bar widget.hpp */,
+			);
+			name = Timeline;
 			sourceTree = "<group>";
 		};
 		455F2848220688FC00C73F39 = {
@@ -996,7 +1060,6 @@
 		458F84052249DF97005F91D0 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				458F84042249D4D9005F91D0 /* utils.hpp */,
 				45B284AB221A59EB00D6D055 /* undo.cpp */,
 				45B284AC221A59EB00D6D055 /* undo.hpp */,
 				45B284AE221A83C300D6D055 /* composite.cpp */,
@@ -1007,6 +1070,12 @@
 				45DFE498224DE89E00EA40C5 /* global font.hpp */,
 				45DFE49C2250835900EA40C5 /* cursors.cpp */,
 				45DFE49D2250835900EA40C5 /* cursors.hpp */,
+				453D28BA22768B2B00D0E5F9 /* geometry.hpp */,
+				453D28B922768A9F00D0E5F9 /* rect widget size.hpp */,
+				453D28C1227698F200D0E5F9 /* widget painting.cpp */,
+				453D28C2227698F200D0E5F9 /* widget painting.hpp */,
+				453D28CE2276A9DF00D0E5F9 /* color convert.cpp */,
+				453D28CF2276A9DF00D0E5F9 /* color convert.hpp */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -1939,7 +2008,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "function moc {\n  local OUTPUT=\"$PROJECT_DIR/src/$1.moc\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.hpp\" > \"$OUTPUT\"\n  echo \"\" >> \"$OUTPUT\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.cpp\" >> \"$OUTPUT\"\n}\n\nmoc \"color picker widget\"\nmoc \"tool select widget\"\nmoc \"status bar widget\"\nmoc \"timeline widget\"\nmoc \"editor widget\"\nmoc \"tool widgets\"\nmoc \"clear object\"\nmoc \"undo object\"\nmoc \"application\"\nmoc \"window\"\n";
+			shellScript = "function moc {\n  local OUTPUT=\"$PROJECT_DIR/src/$1.moc\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.hpp\" > \"$OUTPUT\"\n  echo \"\" >> \"$OUTPUT\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.cpp\" >> \"$OUTPUT\"\n}\n\nmoc \"color picker widget\"\nmoc \"color slider widget\"\nmoc \"color graph widget\"\nmoc \"tool select widget\"\nmoc \"color input widget\"\nmoc \"text input widget\"\nmoc \"status bar widget\"\nmoc \"timeline widget\"\nmoc \"editor widget\"\nmoc \"tool widgets\"\nmoc \"clear object\"\nmoc \"undo object\"\nmoc \"application\"\nmoc \"window\"\n";
 		};
 		453C787B2235D63B00818B19 /* RCC */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1986,7 +2055,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				45B284AD221A59EB00D6D055 /* undo.cpp in Sources */,
+				453D28D02276A9DF00D0E5F9 /* color convert.cpp in Sources */,
 				45B284B0221A83C300D6D055 /* composite.cpp in Sources */,
+				453D28C3227698F200D0E5F9 /* widget painting.cpp in Sources */,
+				453D28C622769EC000D0E5F9 /* color slider widget.cpp in Sources */,
 				45DFE499224DE89E00EA40C5 /* global font.cpp in Sources */,
 				45B284B9221E110F00D6D055 /* painting.cpp in Sources */,
 				45B284B3221A919000D6D055 /* tool.cpp in Sources */,
@@ -1995,6 +2067,7 @@
 				455F2868220690A600C73F39 /* main.cpp in Sources */,
 				453C781C22349BBD00818B19 /* editor widget.cpp in Sources */,
 				45BADA1D2247007F000D095C /* glm.cpp in Sources */,
+				453D28BD22768D9900D0E5F9 /* text input widget.cpp in Sources */,
 				45B284B6221B726200D6D055 /* tool impls.cpp in Sources */,
 				453C781F22349F0100818B19 /* tool select widget.cpp in Sources */,
 				45054F6D22596BC10078350B /* clear object.cpp in Sources */,
@@ -2003,14 +2076,17 @@
 				45DC2566224B137C00F40116 /* status msg.cpp in Sources */,
 				45F065F22222998300BCE863 /* current tool.cpp in Sources */,
 				453C78432234E13E00818B19 /* window.cpp in Sources */,
+				453D28C02276956A00D0E5F9 /* color input widget.cpp in Sources */,
 				45B284A72219079B00D6D055 /* animation.cpp in Sources */,
 				45B284932218E38800D6D055 /* image.cpp in Sources */,
 				45054F732259C9AB0078350B /* color picker widget.cpp in Sources */,
 				45B284962218E39300D6D055 /* cell.cpp in Sources */,
 				45054F70225970150078350B /* undo object.cpp in Sources */,
 				45B284A42219071200D6D055 /* cell impls.cpp in Sources */,
+				453D28C92276A7DD00D0E5F9 /* color graph widget.cpp in Sources */,
 				45BADA77224714A3000D095C /* tool widgets.cpp in Sources */,
 				453C78462234F3C600818B19 /* status bar widget.cpp in Sources */,
+				453D28D32276F0FE00D0E5F9 /* color label widget.cpp in Sources */,
 				45B284AA221A331500D6D055 /* serial.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

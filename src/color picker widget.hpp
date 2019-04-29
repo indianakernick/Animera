@@ -12,12 +12,12 @@
 #include "tool.hpp"
 #include <QtWidgets/qwidget.h>
 
-class SVGraph;
-class HueSlider;
-class AlphaSlider;
-class NumberBox;
-class HexBox;
-class BoxLabel;
+class SVGraphWidget;
+class HueSliderWidget;
+class AlphaSliderWidget;
+class NumberInputWidget;
+class HexInputWidget;
+class ColorLabelWidget;
 
 class ColorPickerWidget final : public QWidget {
   Q_OBJECT
@@ -29,25 +29,25 @@ Q_SIGNALS:
   void colorsModified(ToolColors);
 
 private:
-  SVGraph *svGraph;
-  HueSlider *hueSlider;
-  AlphaSlider *alphaSlider;
-  NumberBox *boxR;
-  NumberBox *boxG;
-  NumberBox *boxB;
-  NumberBox *boxH;
-  NumberBox *boxS;
-  NumberBox *boxV;
-  NumberBox *boxA;
-  HexBox *boxHex;
-  BoxLabel *labelR;
-  BoxLabel *labelG;
-  BoxLabel *labelB;
-  BoxLabel *labelH;
-  BoxLabel *labelS;
-  BoxLabel *labelV;
-  BoxLabel *labelA;
-  BoxLabel *labelHex;
+  SVGraphWidget *svGraph;
+  HueSliderWidget *hueSlider;
+  AlphaSliderWidget *alphaSlider;
+  NumberInputWidget *boxR;
+  NumberInputWidget *boxG;
+  NumberInputWidget *boxB;
+  NumberInputWidget *boxH;
+  NumberInputWidget *boxS;
+  NumberInputWidget *boxV;
+  NumberInputWidget *boxA;
+  HexInputWidget *boxHex;
+  ColorLabelWidget *labelR;
+  ColorLabelWidget *labelG;
+  ColorLabelWidget *labelB;
+  ColorLabelWidget *labelH;
+  ColorLabelWidget *labelS;
+  ColorLabelWidget *labelV;
+  ColorLabelWidget *labelA;
+  ColorLabelWidget *labelHex;
   
   void setupLayout();
   void connectSignals();

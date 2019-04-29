@@ -8,7 +8,7 @@
 
 #include "status msg.hpp"
 
-#include "utils.hpp"
+#include "geometry.hpp"
 
 void StatusMsg::clear() {
   msg.clear();
