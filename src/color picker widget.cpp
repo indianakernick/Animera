@@ -107,9 +107,9 @@ public:
 };
 
 constexpr RectWidgetSize svgraph_size = {
-  1 * glob_scale,
-  1 * glob_scale,
-  {101 * glob_scale, 101 * glob_scale}
+  1_px,
+  1_px,
+  {101_px, 101_px}
 };
 
 class SVGraph final : public QWidget {
@@ -199,22 +199,22 @@ private:
   }
   
   static int sat2pix(const int sat) {
-    return qRound(sat / 100.0 * (svgraph_size.inner().width() - glob_scale));
+    return qRound(sat / 100.0 * (svgraph_size.inner().width() - 1_px));
   }
   static int val2pix(const int val) {
-    return qRound((100 - val) / 100.0 * (svgraph_size.inner().height() - glob_scale));
+    return qRound((100 - val) / 100.0 * (svgraph_size.inner().height() - 1_px));
   }
   static int pix2sat(const int pix) {
-    return std::clamp(qRound(pix * 100.0 / (svgraph_size.inner().width() - glob_scale)), 0, 100);
+    return std::clamp(qRound(pix * 100.0 / (svgraph_size.inner().width() - 1_px)), 0, 100);
   }
   static int pix2val(const int pix) {
-    return 100 - std::clamp(qRound(pix * 100.0 / (svgraph_size.inner().height() - glob_scale)), 0, 100);
+    return 100 - std::clamp(qRound(pix * 100.0 / (svgraph_size.inner().height() - 1_px)), 0, 100);
   }
   
   void renderCircle(QPainter &painter) {
     const QRect circleRect = {
-      svgraph_size.inner().x() + sat2pix(color.s) - (circle.width() - glob_scale) / 2,
-      svgraph_size.inner().y() + val2pix(color.v) - (circle.height() - glob_scale) / 2,
+      svgraph_size.inner().x() + sat2pix(color.s) - (circle.width() - 1_px) / 2,
+      svgraph_size.inner().y() + val2pix(color.v) - (circle.height() - 1_px) / 2,
       circle.width(),
       circle.height()
     };
@@ -264,7 +264,7 @@ private:
 constexpr RectWidgetSize slider_size = {
   svgraph_size.padding,
   svgraph_size.border,
-  {svgraph_size.content.width(), 12 * glob_scale}
+  {svgraph_size.content.width(), 12_px}
 };
 
 template <typename Derived>
@@ -307,7 +307,7 @@ private:
   void renderBar(QPainter &painter) {
     const int pix = static_cast<Derived *>(this)->getPixel();
     const QRect barRect = {
-      slider_size.inner().x() + pix - (bar.width() - glob_scale) / 2,
+      slider_size.inner().x() + pix - (bar.width() - 1_px) / 2,
       0,
       bar.width(),
       bar.height()
@@ -402,10 +402,10 @@ private:
   void renderBackground(QPainter &) {}
   
   static int hue2pix(const int hue) {
-    return qRound(hue / 359.0 * (slider_size.inner().width() - glob_scale));
+    return qRound(hue / 359.0 * (slider_size.inner().width() - 1_px));
   }
   static int pix2hue(const int pix) {
-    return std::clamp(qRound(pix * 359.0 / (slider_size.inner().width() - glob_scale)), 0, 359);
+    return std::clamp(qRound(pix * 359.0 / (slider_size.inner().width() - 1_px)), 0, 359);
   }
   
   int getPixel() {
@@ -503,10 +503,10 @@ private:
   }
   
   static int alp2pix(const int alp) {
-    return qRound(alp / 255.0 * (slider_size.inner().width() - glob_scale));
+    return qRound(alp / 255.0 * (slider_size.inner().width() - 1_px));
   }
   static int pix2alp(const int pix) {
-    return std::clamp(qRound(pix * 255.0 / (slider_size.inner().width() - glob_scale)), 0, 255);
+    return std::clamp(qRound(pix * 255.0 / (slider_size.inner().width() - 1_px)), 0, 255);
   }
   
   int getPixel() {
@@ -529,8 +529,8 @@ inline QColor setAlpha(QColor color, const int alpha) {
 }
 
 constexpr int cursor_blink_interval_ms = 500;
-constexpr int cursor_width = 1 * glob_scale;
-constexpr int text_padding = 1 * glob_scale;
+constexpr int cursor_width = 1_px;
+constexpr int text_padding = 1_px;
 inline const QColor selection_color = setAlpha(glob_light_accent, 127);
 
 class TextBox : public QLineEdit {
@@ -642,12 +642,12 @@ private:
 constexpr RectWidgetSize number_box_size = {
   svgraph_size.padding,
   svgraph_size.border,
-  {glob_font_stride_px * 3 + 1 * glob_scale, glob_font_px + 2 * glob_scale}
+  {3 * glob_font_stride_px + 1_px, glob_font_px + 2_px}
 };
 constexpr RectWidgetSize hex_box_size = {
   svgraph_size.padding,
   svgraph_size.border,
-  {glob_font_stride_px * 8 + 6 * glob_scale, glob_font_px + 2 * glob_scale}
+  {8 * glob_font_stride_px + 6_px, glob_font_px + 2_px}
 };
 
 class NumberBoxValidator final : public QIntValidator {
@@ -758,7 +758,7 @@ class HexBox final : public TextBox {
   Q_OBJECT
 public:
   HexBox(QWidget *parent, const QRgb defaultValue)
-    : TextBox{parent, hex_box_size, 2 * glob_scale}, boxValidator{parent} {
+    : TextBox{parent, hex_box_size, 2_px}, boxValidator{parent} {
     setValidator(&boxValidator);
     changeRgba(defaultValue);
     connect(this, &QLineEdit::textEdited, this, &HexBox::textChanged);
@@ -820,7 +820,7 @@ private:
 constexpr RectWidgetSize label_size = {
   svgraph_size.padding,
   svgraph_size.border,
-  {((5 + 1) * 1 + 2) * glob_scale, glob_font_px + 2 * glob_scale}
+  {1 * glob_font_stride_px + 2_px, glob_font_px + 2_px}
 };
 
 class BoxLabel final : public QWidget {
@@ -840,7 +840,7 @@ private:
     painter.setPen(glob_light_shade);
     QPoint textPos = label_size.inner().topLeft();
     textPos.ry() += glob_font_accent_px;
-    textPos += QPoint{2 * glob_scale, 1 * glob_scale};
+    textPos += QPoint{2_px, 1_px};
     painter.drawText(textPos, text);
   }
 };

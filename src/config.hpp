@@ -18,17 +18,25 @@
 // ------------------------------- global ----------------------------------- //
 
 constexpr int       glob_scale = 2;
+
+constexpr int operator""_px(const unsigned long long literal) {
+  return static_cast<int>(literal * glob_scale);
+}
+
 // @TODO robust font system
 // we might end up using
 // 5x7ascii for the status bar and
 // 5x7+2_var_ascii for the tooltips
 // so global constants probably aren't gonna cut it
-constexpr int       glob_font_accent_px = 7 * glob_scale;
-constexpr int       glob_font_decent_px = 0 * glob_scale;
+constexpr int       glob_font_width_px = 5_px;
+constexpr int       glob_font_stride_px = glob_font_width_px + 1_px;
+constexpr int       glob_font_accent_px = 7_px;
+constexpr int       glob_font_decent_px = 0_px;
 constexpr int       glob_font_px = glob_font_accent_px + glob_font_decent_px;
-constexpr int       glob_font_pt = 8 * glob_scale; // 8 pt for 72 dpi. 6 pt for 96 dpi
+constexpr int       glob_font_pt = 8_px; // 8 pt for 72 dpi. 6 pt for 96 dpi
+
 constexpr QSize     glob_min_window_size = {1280, 720};
-constexpr QSize     glob_cursor_size = QSize{8, 8} * glob_scale;
+constexpr QSize     glob_cursor_size = {8_px, 8_px};
 constexpr QPoint    glob_cursor_offset = toPoint(glob_cursor_size) / 2;
 
 inline const QColor glob_dark_shade   = {82, 82, 93};
@@ -39,11 +47,11 @@ inline const QColor glob_light_shade  = {184, 205, 215};
 
 // -------------------------------- tools ----------------------------------- //
 
-constexpr QSize     tool_icon_size = QSize{24, 24} * glob_scale;
-constexpr QSize     tool_icon_padding = QSize{1, 1} * glob_scale;
+constexpr QSize     tool_icon_size = {24_px, 24_px};
+constexpr QSize     tool_icon_padding = {1_px, 1_px};
 constexpr QSize     tool_button_size = tool_icon_size + 2 * tool_icon_padding;
 constexpr QPoint    tool_icon_pos = toPoint((tool_button_size - tool_icon_size)) / 2;
-constexpr int       tool_select_width = tool_button_size.width() + 1 * glob_scale;
+constexpr int       tool_select_width = tool_button_size.width() + 1_px;
 
 inline const QColor tool_select_background = glob_dark_accent;
 inline const QColor tool_base_disabled = glob_main;
@@ -60,8 +68,8 @@ constexpr QRgb      tool_overlay_color = qRgba(
 // ------------------------------- status bar ------------------------------- //
 
 constexpr int       stat_temp_duration_ms = 4000;
-constexpr int       stat_min_width = 200 * glob_scale;
-constexpr int       stat_padding = 1 * glob_scale;
+constexpr int       stat_min_width = 200_px;
+constexpr int       stat_padding = 1_px;
 constexpr int       stat_height = glob_font_px + 2 * stat_padding;
 
 inline const QColor stat_background = glob_dark_accent;
@@ -73,7 +81,7 @@ inline const QColor edit_checker_a = {191, 191, 191};
 inline const QColor edit_checker_b = {255, 255, 255};
 constexpr int       edit_min_scale = 1;
 constexpr int       edit_max_scale = 64;
-constexpr int       edit_default_scale = 1 * glob_scale;
+constexpr int       edit_default_scale = 1_px;
 constexpr int       edit_undo_stack = 128;
 
 // ----------------------------------- keys --------------------------------- //
