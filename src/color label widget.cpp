@@ -19,6 +19,11 @@ LabelWidget::LabelWidget(
   setFixedSize(rect.widget().size());
 }
 
+void LabelWidget::setText(const QString &newText) {
+  text = newText;
+  repaint();
+}
+
 void LabelWidget::paintEvent(QPaintEvent *) {
   QPainter painter{this};
   painter.setFont(getGlobalFont());

@@ -109,15 +109,16 @@ Transformations
   Transformations on SourceCells can be baked
 
 Palette Mode
-  Left/middle/right clicking on a palette color will attach that color to the
-    color picker and set the tool color to that color
-  Clicking on the tool color will attach the palette color to the color picker
+  Clicking on a palette color will attach that color to the color picker and
+    set the active tool color to that color
+  Clicking on a tool color will set that color to the active tool color and
+    attach the palette color to the color picker
 
 RGBA Mode
-  Left/middle/right clicking on a palette color will attach the tool color to
-    the color picker and set the tool color to that color
-  Clicking on the tool color will attach that color to the color picker
-
+  Clicking on a palette color will set the active tool color to that color
+  Clicking on a tool color will set that color to the active tool color and
+    attach the palette color to the color picker
+    
 ColorHandle
   a handle to a color
   used for attaching colors to the color picker

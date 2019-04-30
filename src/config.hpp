@@ -159,6 +159,10 @@ constexpr WidgetRect pick_hex_rect = {
   QPoint{glob_text_padding + 2_px, glob_text_padding},
   textBoxSize(8, 2_px + 3_px)
 };
+constexpr WidgetRect pick_name_rect = {
+  toPoint(glob_text_padding),
+  QSize{pick_svgraph_rect.inner().width(), glob_font_px + 2 * glob_text_padding}
+};
 
 inline const QColor pick_primary_color = {0, 0, 0};
 inline const QColor pick_secondary_color = {255, 255, 255};

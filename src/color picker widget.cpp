@@ -21,6 +21,7 @@ ColorPickerWidget::ColorPickerWidget(QWidget *parent)
     colorHsv{color2hsv(pick_default_color)},
     colorRgb{color2rgb(pick_default_color)},
     alpha{pick_default_color.alpha()},
+    nameLabel{new LabelWidget{this, "Palette 42", pick_name_rect}},
     svGraph{new SVGraphWidget{this}},
     hueSlider{new HueSliderWidget{this}},
     alphaSlider{new AlphaSliderWidget{this}},
@@ -46,33 +47,43 @@ ColorPickerWidget::ColorPickerWidget(QWidget *parent)
   show();
 }
 
+void ColorPickerWidget::attach(ColorHandle *newHandle) {
+  handle = nullptr;
+  if (newHandle) {
+    setColor(newHandle->getInitialColor());
+    nameLabel->setText(newHandle->getName());
+  }
+  handle = newHandle;
+}
+
 void ColorPickerWidget::setupLayout() {
   QGridLayout *layout = new QGridLayout{this};
   layout->setSpacing(0);
   layout->setContentsMargins(0, 0, 0, 0);
   
-  layout->addWidget(svGraph, 0, 0, 1, 6);
-  layout->addWidget(hueSlider, 1, 0, 1, 6);
-  layout->addWidget(alphaSlider, 2, 0, 1, 6);
+  layout->addWidget(nameLabel, 0, 0, 1, 6);
+  layout->addWidget(svGraph, 1, 0, 1, 6);
+  layout->addWidget(hueSlider, 2, 0, 1, 6);
+  layout->addWidget(alphaSlider, 3, 0, 1, 6);
   
-  layout->addWidget(labelR, 3, 0);
-  layout->addWidget(boxR,   3, 1);
-  layout->addWidget(labelG, 3, 2);
-  layout->addWidget(boxG,   3, 3);
-  layout->addWidget(labelB, 3, 4);
-  layout->addWidget(boxB,   3, 5);
+  layout->addWidget(labelR, 4, 0);
+  layout->addWidget(boxR,   4, 1);
+  layout->addWidget(labelG, 4, 2);
+  layout->addWidget(boxG,   4, 3);
+  layout->addWidget(labelB, 4, 4);
+  layout->addWidget(boxB,   4, 5);
   
-  layout->addWidget(labelH, 4, 0);
-  layout->addWidget(boxH,   4, 1);
-  layout->addWidget(labelS, 4, 2);
-  layout->addWidget(boxS,   4, 3);
-  layout->addWidget(labelV, 4, 4);
-  layout->addWidget(boxV,   4, 5);
+  layout->addWidget(labelH, 5, 0);
+  layout->addWidget(boxH,   5, 1);
+  layout->addWidget(labelS, 5, 2);
+  layout->addWidget(boxS,   5, 3);
+  layout->addWidget(labelV, 5, 4);
+  layout->addWidget(boxV,   5, 5);
   
-  layout->addWidget(labelA,   5, 0);
-  layout->addWidget(boxA,     5, 1);
-  layout->addWidget(labelHex, 5, 2);
-  layout->addWidget(boxHex,   5, 3, 1, 3);
+  layout->addWidget(labelA,   6, 0);
+  layout->addWidget(boxA,     6, 1);
+  layout->addWidget(labelHex, 6, 2);
+  layout->addWidget(boxHex,   6, 3, 1, 3);
   
   layout->setAlignment(Qt::AlignTop);
   setLayout(layout);
@@ -112,12 +123,28 @@ void ColorPickerWidget::connectSignals() {
   CONNECT(boxHex,      rgbaChanged,  this,        changeRGBA);
 }
 
+void ColorPickerWidget::updateHandle() {
+  if (handle) {
+    handle->changeColor(qRgba(colorRgb.r, colorRgb.g, colorRgb.b, alpha));
+  }
+}
+
+void ColorPickerWidget::setColor(const QRgb color) {
+  colorRgb.r = qRed(color);
+  colorRgb.g = qGreen(color);
+  colorRgb.b = qBlue(color);
+  alpha = qAlpha(color);
+  changeRGBA(colorRgb, alpha);
+  boxHex->changeRgba(colorRgb, alpha);
+}
+
 void ColorPickerWidget::changeRGB() {
   colorRgb = hsv2rgb(colorHsv);
   Q_EMIT boxR->changeValue(colorRgb.r);
   Q_EMIT boxG->changeValue(colorRgb.g);
   Q_EMIT boxB->changeValue(colorRgb.b);
   Q_EMIT boxHex->changeRgba(colorRgb, alpha);
+  updateHandle();
 }
 
 void ColorPickerWidget::changeHSV() {
@@ -175,6 +202,7 @@ void ColorPickerWidget::changeRGBA(const RGB rgb, const int alp) {
   Q_EMIT boxR->changeValue(rgb.r);
   Q_EMIT boxG->changeValue(rgb.g);
   Q_EMIT boxB->changeValue(rgb.b);
+  updateHandle();
 }
 
 void ColorPickerWidget::changeRed(const int red) {

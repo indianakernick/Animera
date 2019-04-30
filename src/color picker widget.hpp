@@ -9,7 +9,7 @@
 #ifndef color_picker_widget_hpp
 #define color_picker_widget_hpp
 
-#include "tool.hpp"
+#include "color handle.hpp"
 #include "color convert.hpp"
 #include <QtWidgets/qwidget.h>
 
@@ -26,13 +26,15 @@ class ColorPickerWidget final : public QWidget {
 public:
   explicit ColorPickerWidget(QWidget *);
 
-Q_SIGNALS:
-  void colorsModified(ToolColors);
+  void attach(ColorHandle *);
 
 private:
+  ColorHandle *handle = nullptr;
   HSV colorHsv;
   RGB colorRgb;
   int alpha;
+  
+  LabelWidget *nameLabel;
   
   SVGraphWidget *svGraph;
   HueSliderWidget *hueSlider;
@@ -58,6 +60,9 @@ private:
   
   void setupLayout();
   void connectSignals();
+
+  void updateHandle();
+  void setColor(QRgb);
 
   void changeRGB();
   void changeHSV();

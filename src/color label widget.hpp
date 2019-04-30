@@ -16,6 +16,8 @@ class LabelWidget final : public QWidget {
 public:
   LabelWidget(QWidget *, const QString &, WidgetRect);
 
+  void setText(const QString &);
+
 private:
   QString text;
   WidgetRect rect;
