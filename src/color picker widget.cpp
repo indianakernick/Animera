@@ -186,6 +186,7 @@ void ColorPickerWidget::changeSVfromBoxV(const int val) {
 void ColorPickerWidget::changeAlpha(const int alp) {
   alpha = alp;
   Q_EMIT boxHex->changeRgba(colorRgb, alp);
+  updateHandle();
 }
 
 void ColorPickerWidget::changeHue(const int hue) {

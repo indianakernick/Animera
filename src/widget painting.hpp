@@ -15,5 +15,6 @@
 QPixmap bakeColoredBitmaps(const QString &, const QString &, QColor, QColor);
 QPixmap bakeColoredBitmaps(const QBitmap &, const QBitmap &, QColor, QColor);
 void paintBorder(QPainter &, WidgetRect, QColor);
+void paintChecker(QPainter &, WidgetRect, int);
 
 #endif

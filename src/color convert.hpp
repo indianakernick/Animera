@@ -25,4 +25,10 @@ RGB color2rgb(QColor);
 RGB hsv2rgb(HSV);
 HSV rgb2hsv(RGB);
 
+// @TODO this feels out of place
+inline QColor toColor(const QRgb rgba) {
+  // the QRgb constructor sets alpha to 255 for some reason
+  return QColor{qRed(rgba), qGreen(rgba), qBlue(rgba), qAlpha(rgba)};
+}
+
 #endif

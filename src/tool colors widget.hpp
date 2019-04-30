@@ -21,6 +21,8 @@ class ToolColorsWidget final : public QWidget {
 public:
   explicit ToolColorsWidget(QWidget *);
 
+  void attachPrimary();
+
 Q_SIGNALS:
   void colorsChanged(ToolColors);
   void attachColor(ColorHandle *);

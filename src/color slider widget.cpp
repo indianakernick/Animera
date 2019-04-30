@@ -209,24 +209,7 @@ void AlphaSliderWidget::plotGraph() {
 }
 
 void AlphaSliderWidget::renderBackground(QPainter &painter) {
-  painter.setPen(Qt::NoPen);
-  painter.setBrush(edit_checker_a);
-  painter.drawRect(pick_slider_rect.inner());
-  painter.setBrush(edit_checker_b);
-  painter.setClipRect(pick_slider_rect.inner());
-  const int tileSize = pick_slider_rect.inner().height() / pick_alpha_vert_tiles;
-  const int horiTiles = pick_slider_rect.inner().width() / tileSize;
-  for (int y = 0; y != pick_alpha_vert_tiles; ++y) {
-    for (int x = 1 - y; x <= horiTiles; x += 2) {
-      painter.drawRect(
-        pick_slider_rect.inner().x() + tileSize * x,
-        pick_slider_rect.inner().y() + tileSize * y,
-        tileSize,
-        tileSize
-      );
-    }
-  }
-  painter.setClipRect(pick_slider_rect.widget());
+  paintChecker(painter, pick_slider_rect, pick_alpha_tiles);
 }
 
 namespace {

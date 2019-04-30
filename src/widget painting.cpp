@@ -71,3 +71,29 @@ void paintBorder(QPainter &painter, const WidgetRect rect, const QColor color) {
   painter.setBrush(color);
   painter.drawRects(rects, 4);
 }
+
+void paintChecker(
+  QPainter &painter,
+  const WidgetRect rect,
+  const int vertTiles
+) {
+  const QRect inner = rect.inner();
+  painter.setPen(Qt::NoPen);
+  painter.setBrush(edit_checker_a);
+  painter.drawRect(inner);
+  painter.setBrush(edit_checker_b);
+  painter.setClipRect(inner);
+  const int tileSize = inner.height() / vertTiles;
+  const int horiTiles = inner.width() / tileSize;
+  for (int y = 0; y != vertTiles; ++y) {
+    for (int x = 1 - y; x <= horiTiles; x += 2) {
+      painter.drawRect(
+        inner.x() + tileSize * x,
+        inner.y() + tileSize * y,
+        tileSize,
+        tileSize
+      );
+    }
+  }
+  painter.setClipRect(rect.widget());
+}

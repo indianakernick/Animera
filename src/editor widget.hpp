@@ -9,7 +9,6 @@
 #ifndef editor_widget_hpp
 #define editor_widget_hpp
 
-#include <iostream>
 #include "tool.hpp"
 #include "animation.hpp"
 #include <QtWidgets/qscrollarea.h>

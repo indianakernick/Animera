@@ -202,6 +202,7 @@ EditorWidget::EditorWidget(QWidget *parent, Animation &anim)
   CONNECT(view, keyPress,   this, keyPress);
   setAlignment(Qt::AlignCenter);
   setFocusPolicy(Qt::WheelFocus);
+  setFrameShape(NoFrame);
 }
 
 void EditorWidget::composite() {

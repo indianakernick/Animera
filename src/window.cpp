@@ -36,6 +36,7 @@ Window::Window(const QRect desktop)
   setupUI();
   setupMenubar();
   connectSignals();
+  colors.attachPrimary();
   show();
   
   // @TODO remove
@@ -50,17 +51,23 @@ void Window::setupUI() {
   
   QVBoxLayout *bottomLayout = new QVBoxLayout{&bottom};
   bottom.setLayout(bottomLayout);
+  bottom.setContentsMargins(0, 0, 0, 0);
+  bottomLayout->setContentsMargins(0, 0, 0, 0);
+  bottomLayout->setSpacing(0);
   bottomLayout->addWidget(&timeline);
   bottomLayout->addWidget(&statusBar);
-  bottomLayout->setContentsMargins(0, 0, 0, 0);
-  bottom.setContentsMargins(0, 0, 0, 0);
+  bottomLayout->setAlignment(Qt::AlignBottom);
   
   QVBoxLayout *rightLayout = new QVBoxLayout{&right};
   right.setLayout(rightLayout);
+  right.setContentsMargins(0, 0, 0, 0);
+  rightLayout->setContentsMargins(0, 0, 0, 0);
+  rightLayout->setSpacing(0);
   rightLayout->addWidget(&colorPicker);
   rightLayout->addWidget(&colors);
-  rightLayout->setContentsMargins(0, 0, 0, 0);
-  right.setContentsMargins(0, 0, 0, 0);
+  rightLayout->setAlignment(Qt::AlignTop);
+  right.setStyleSheet("background-color: " + glob_main.name());
+  right.setSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
   
   makeDockWidget(Qt::LeftDockWidgetArea, &tools);
   makeDockWidget(Qt::BottomDockWidgetArea, &bottom);

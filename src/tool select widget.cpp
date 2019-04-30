@@ -81,6 +81,8 @@ ToolSelectWidget::ToolSelectWidget(QWidget *parent)
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   setStyleSheet("background-color: " + tool_select_background.name());
   
+  setFrameShape(NoFrame);
+  
   QVBoxLayout *boxLayout = new QVBoxLayout{box};
   boxLayout->setSpacing(0);
   boxLayout->setContentsMargins(0, 0, 0, 0);

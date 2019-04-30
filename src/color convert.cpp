@@ -8,6 +8,8 @@
 
 #include "color convert.hpp"
 
+#include <cmath>
+
 QRgb hsv2rgb(const qreal h, const qreal s, const qreal v) {
   QColor color;
   color.setHsvF(h / 360.0, s / 100.0, v / 100.0);
@@ -19,7 +21,7 @@ HSV color2hsv(const QColor color) {
   qreal h, s, v;
   hsvColor.getHsvF(&h, &s, &v);
   return {
-    qRound(h * 359.0),
+    qRound(h * 360.0) % 360,
     qRound(s * 100.0),
     qRound(v * 100.0)
   };

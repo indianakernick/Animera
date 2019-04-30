@@ -12,6 +12,7 @@
 #include "connect.hpp"
 #include <QtGui/qpainter.h>
 #include "color handle.hpp"
+#include "color convert.hpp"
 #include "widget painting.hpp"
 #include <QtWidgets/qboxlayout.h>
 #include <QtWidgets/qabstractbutton.h>
@@ -55,7 +56,8 @@ private:
   void paintEvent(QPaintEvent *) override {
     QPainter painter{this};
     paintBorder(painter, active_color_rect, glob_border_color);
-    painter.fillRect(active_color_rect.inner(), *color);
+    paintChecker(painter, active_color_rect, active_color_tiles);
+    painter.fillRect(active_color_rect.inner(), toColor(*color));
   }
 
 private Q_SLOTS:
@@ -73,9 +75,14 @@ ToolColorsWidget::ToolColorsWidget(QWidget *parent)
   colors.primary = qRgba(255, 0, 0, 255);
   colors.secondary = qRgba(0, 0, 255, 255);
   colors.erase = qRgba(0, 0, 0, 0);
-  primary->click();
   setupLayout();
   connectSignals();
+}
+
+void ToolColorsWidget::attachPrimary() {
+  // @TODO should I do a QTimer::singleShot instead
+  primary->click();
+  Q_EMIT colorsChanged(colors);
 }
 
 void ToolColorsWidget::setupLayout() {
@@ -104,7 +111,6 @@ void ToolColorsWidget::paintEvent(QPaintEvent *) {
 }
 
 void ToolColorsWidget::changeColors() {
-  repaint();
   Q_EMIT colorsChanged(colors);
 }
 

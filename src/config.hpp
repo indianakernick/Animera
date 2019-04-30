@@ -99,8 +99,7 @@ constexpr QSize     tool_icon_size = {24_px, 24_px};
 constexpr QSize     tool_icon_padding = {1_px, 1_px};
 constexpr QSize     tool_button_size = tool_icon_size + 2 * tool_icon_padding;
 constexpr QPoint    tool_icon_pos = toPoint((tool_button_size - tool_icon_size)) / 2;
-// this + 1_px is because of the dock widget separator that I can't remove!!!
-constexpr int       tool_select_width = tool_button_size.width() + 1_px;
+constexpr int       tool_select_width = tool_button_size.width();
 
 inline const QColor tool_select_background = glob_dark_1;
 inline const QColor tool_base_disabled = glob_main;
@@ -167,7 +166,7 @@ constexpr WidgetRect pick_name_rect = {
 inline const QColor pick_primary_color = {0, 0, 0};
 inline const QColor pick_secondary_color = {255, 255, 255};
 inline const QColor pick_default_color = {255, 0, 0, 255};
-constexpr int       pick_alpha_vert_tiles = 2;
+constexpr int       pick_alpha_tiles = 2;
 
 // -------------------------------- text box -------------------------------- //
 
@@ -184,7 +183,8 @@ inline const QColor box_background_color = glob_dark_1;
 
 // ------------------------------- tool colors ------------------------------ //
 
-constexpr WidgetRect active_color_rect = boxRect(20_px, 20_px);
+constexpr WidgetRect active_color_rect = boxRect(24_px, 12_px);
+constexpr int        active_color_tiles = 2;
 constexpr WidgetRect tool_colors_rect = boxRect(
   pick_svgraph_rect.inner().width(),
   active_color_rect.inner().height()

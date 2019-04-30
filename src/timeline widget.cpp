@@ -12,6 +12,7 @@ TimelineWidget::TimelineWidget(QWidget *parent, Animation &anim)
   : QScrollArea{parent}, anim{anim} {
   setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
   setContentsMargins(0, 0, 0, 0);
+  setFrameShape(NoFrame);
 }
 
 void TimelineWidget::projectLoaded() {
