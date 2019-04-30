@@ -78,6 +78,8 @@ void ColorPickerWidget::setupLayout() {
   setLayout(layout);
 }
 
+// @TODO there has to be a better way
+
 void ColorPickerWidget::connectSignals() {
   CONNECT(svGraph,     svChanged,    hueSlider,   changeSV);
   CONNECT(hueSlider,   hueChanged,   svGraph,     changeHue);
@@ -168,8 +170,11 @@ void ColorPickerWidget::changeRGBA(const RGB rgb, const int alp) {
   colorRgb = rgb;
   alpha = alp;
   changeHSV();
-  Q_EMIT alphaSlider->alphaChanged(alp);
-  Q_EMIT boxA->valueChanged(alp);
+  Q_EMIT alphaSlider->changeAlpha(alp);
+  Q_EMIT boxA->changeValue(alp);
+  Q_EMIT boxR->changeValue(rgb.r);
+  Q_EMIT boxG->changeValue(rgb.g);
+  Q_EMIT boxB->changeValue(rgb.b);
 }
 
 void ColorPickerWidget::changeRed(const int red) {
