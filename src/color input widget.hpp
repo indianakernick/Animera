@@ -9,6 +9,7 @@
 #ifndef color_input_widget_hpp
 #define color_input_widget_hpp
 
+#include "color convert.hpp"
 #include <QtGui/qvalidator.h>
 #include "text input widget.hpp"
 
@@ -58,13 +59,13 @@ private:
 class HexInputWidget final : public TextInputWidget {
   Q_OBJECT
 public:
-  HexInputWidget(QWidget *, QRgb);
+  HexInputWidget(QWidget *, RGB, int);
 
 Q_SIGNALS:
-  void rgbaChanged(QRgb);
+  void rgbaChanged(RGB, int);
 
 public Q_SLOTS:
-  void changeRgba(QRgb);
+  void changeRgba(RGB, int);
 
 private Q_SLOTS:
   void textChanged();
@@ -72,7 +73,8 @@ private Q_SLOTS:
 
 private:
   HexValidator boxValidator;
-  QRgb value;
+  RGB rgb;
+  int alpha;
 };
 
 #endif

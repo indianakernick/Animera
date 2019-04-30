@@ -148,7 +148,7 @@ void NumberInputWidget::valueChanged(int _t1)
 }
 struct qt_meta_stringdata_HexInputWidget_t {
     QByteArrayData data[7];
-    char stringdata0[70];
+    char stringdata0[69];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -160,13 +160,13 @@ static const qt_meta_stringdata_HexInputWidget_t qt_meta_stringdata_HexInputWidg
 QT_MOC_LITERAL(0, 0, 14), // "HexInputWidget"
 QT_MOC_LITERAL(1, 15, 11), // "rgbaChanged"
 QT_MOC_LITERAL(2, 27, 0), // ""
-QT_MOC_LITERAL(3, 28, 4), // "QRgb"
-QT_MOC_LITERAL(4, 33, 10), // "changeRgba"
-QT_MOC_LITERAL(5, 44, 11), // "textChanged"
-QT_MOC_LITERAL(6, 56, 13) // "newValidValue"
+QT_MOC_LITERAL(3, 28, 3), // "RGB"
+QT_MOC_LITERAL(4, 32, 10), // "changeRgba"
+QT_MOC_LITERAL(5, 43, 11), // "textChanged"
+QT_MOC_LITERAL(6, 55, 13) // "newValidValue"
 
     },
-    "HexInputWidget\0rgbaChanged\0\0QRgb\0"
+    "HexInputWidget\0rgbaChanged\0\0RGB\0"
     "changeRgba\0textChanged\0newValidValue"
 };
 #undef QT_MOC_LITERAL
@@ -185,18 +185,18 @@ static const uint qt_meta_data_HexInputWidget[] = {
        1,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    1,   34,    2, 0x06 /* Public */,
+       1,    2,   34,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       4,    1,   37,    2, 0x0a /* Public */,
-       5,    0,   40,    2, 0x08 /* Private */,
-       6,    0,   41,    2, 0x08 /* Private */,
+       4,    2,   39,    2, 0x0a /* Public */,
+       5,    0,   44,    2, 0x08 /* Private */,
+       6,    0,   45,    2, 0x08 /* Private */,
 
  // signals: parameters
-    QMetaType::Void, 0x80000000 | 3,    2,
+    QMetaType::Void, 0x80000000 | 3, QMetaType::Int,    2,    2,
 
  // slots: parameters
-    QMetaType::Void, 0x80000000 | 3,    2,
+    QMetaType::Void, 0x80000000 | 3, QMetaType::Int,    2,    2,
     QMetaType::Void,
     QMetaType::Void,
 
@@ -209,8 +209,8 @@ void HexInputWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
         auto *_t = static_cast<HexInputWidget *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->rgbaChanged((*reinterpret_cast< QRgb(*)>(_a[1]))); break;
-        case 1: _t->changeRgba((*reinterpret_cast< QRgb(*)>(_a[1]))); break;
+        case 0: _t->rgbaChanged((*reinterpret_cast< RGB(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
+        case 1: _t->changeRgba((*reinterpret_cast< RGB(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
         case 2: _t->textChanged(); break;
         case 3: _t->newValidValue(); break;
         default: ;
@@ -218,7 +218,7 @@ void HexInputWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
     } else if (_c == QMetaObject::IndexOfMethod) {
         int *result = reinterpret_cast<int *>(_a[0]);
         {
-            using _t = void (HexInputWidget::*)(QRgb );
+            using _t = void (HexInputWidget::*)(RGB , int );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&HexInputWidget::rgbaChanged)) {
                 *result = 0;
                 return;
@@ -268,9 +268,9 @@ int HexInputWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void HexInputWidget::rgbaChanged(QRgb _t1)
+void HexInputWidget::rgbaChanged(RGB _t1, int _t2)
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);
 }
 QT_WARNING_POP

@@ -86,25 +86,26 @@ void NumberInputWidget::textChanged() {
 
 void NumberInputWidget::newValidValue() {
   if (hasAcceptableInput()) {
+    textChanged(); // text may have been fixed up
     boxValidator.updateValidValue(text());
   }
 }
 
-HexInputWidget::HexInputWidget(QWidget *parent, const QRgb defaultValue)
+HexInputWidget::HexInputWidget(QWidget *parent, const RGB rgb, const int a)
   : TextInputWidget{parent, pick_hex_rect}, boxValidator{parent} {
   setValidator(&boxValidator);
-  changeRgba(defaultValue);
+  changeRgba(rgb, a);
   CONNECT(this, textEdited, this, textChanged);
   CONNECT(this, editingFinished, this, newValidValue);
 }
 
 namespace {
 
-QString toString(const QRgb color) {
-  const uint number = (qRed(color)   << 24) |
-                      (qGreen(color) << 16) |
-                      (qBlue(color)  <<  8) |
-                       qAlpha(color);
+QString toString(const RGB rgb, const int a) {
+  const uint number = (rgb.r << 24) |
+                      (rgb.g << 16) |
+                      (rgb.b <<  8) |
+                       a;
   QString str = QString::number(number, 16);
   while (str.size() < 8) {
     str.prepend("0");
@@ -112,35 +113,38 @@ QString toString(const QRgb color) {
   return str;
 }
 
-QRgb fromString(const QString &string) {
+void fromString(const QString &string, RGB &rgb, int &a) {
   uint number = string.toUInt(nullptr, 16);
-  return qRgba(
-     number >> 24,
-    (number >> 16) & 255,
-    (number >>  8) & 255,
-     number        & 255
-  );
+  rgb.r =  number >> 24;
+  rgb.g = (number >> 16) & 255;
+  rgb.b = (number >>  8) & 255;
+  a     =  number        & 255;
 }
 
 }
 
-void HexInputWidget::changeRgba(const QRgb color) {
-  value = color;
-  setText(toString(value));
+void HexInputWidget::changeRgba(const RGB newRgb, const int newAlpha) {
+  rgb = newRgb;
+  alpha = newAlpha;
+  setText(toString(rgb, alpha));
   boxValidator.updateValidValue(text());
 }
 
 void HexInputWidget::textChanged() {
   if (!hasAcceptableInput()) return;
-  const QRgb newValue = fromString(text());
-  if (value != newValue) {
-    value = newValue;
-    Q_EMIT rgbaChanged(value);
+  RGB newRgb;
+  int newAlpha;
+  fromString(text(), newRgb, newAlpha);
+  if (rgb.r != newRgb.r || rgb.g != newRgb.g || rgb.b != newRgb.b || alpha != newAlpha) {
+    rgb = newRgb;
+    alpha = newAlpha;
+    Q_EMIT rgbaChanged(rgb, alpha);
   }
 }
 
 void HexInputWidget::newValidValue() {
   if (hasAcceptableInput()) {
+    textChanged(); // text may have been fixed up
     boxValidator.updateValidValue(text());
   }
 }

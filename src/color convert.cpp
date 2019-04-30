@@ -19,8 +19,27 @@ HSV color2hsv(const QColor color) {
   qreal h, s, v;
   hsvColor.getHsvF(&h, &s, &v);
   return {
-    qRound(h * 359),
-    qRound(s * 100),
-    qRound(v * 100)
+    qRound(h * 359.0),
+    qRound(s * 100.0),
+    qRound(v * 100.0)
   };
+}
+
+RGB color2rgb(const QColor color) {
+  const QColor rgbColor = color.toRgb();
+  RGB rgb;
+  rgbColor.getRgb(&rgb.r, &rgb.g, &rgb.b);
+  return rgb;
+}
+
+RGB hsv2rgb(const HSV hsv) {
+  QColor color;
+  color.setHsvF(hsv.h / 360.0, hsv.s / 100.0, hsv.v / 100.0);
+  return color2rgb(color);
+}
+
+HSV rgb2hsv(const RGB rgb) {
+  QColor color;
+  color.setRgb(rgb.r, rgb.g, rgb.b);
+  return color2hsv(color);
 }

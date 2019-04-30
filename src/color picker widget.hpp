@@ -10,6 +10,7 @@
 #define color_picker_widget_hpp
 
 #include "tool.hpp"
+#include "color convert.hpp"
 #include <QtWidgets/qwidget.h>
 
 class SVGraphWidget;
@@ -29,9 +30,14 @@ Q_SIGNALS:
   void colorsModified(ToolColors);
 
 private:
+  HSV colorHsv;
+  RGB colorRgb;
+  int alpha;
+  
   SVGraphWidget *svGraph;
   HueSliderWidget *hueSlider;
   AlphaSliderWidget *alphaSlider;
+  
   NumberInputWidget *boxR;
   NumberInputWidget *boxG;
   NumberInputWidget *boxB;
@@ -40,6 +46,7 @@ private:
   NumberInputWidget *boxV;
   NumberInputWidget *boxA;
   HexInputWidget *boxHex;
+  
   LabelWidget *labelR;
   LabelWidget *labelG;
   LabelWidget *labelB;
@@ -51,6 +58,20 @@ private:
   
   void setupLayout();
   void connectSignals();
+
+  void changeRGB();
+  void changeHSV();
+
+private Q_SLOTS:
+  void changeSVfromGraph(int, int);
+  void changeSVfromBoxS(int);
+  void changeSVfromBoxV(int);
+  void changeAlpha(int);
+  void changeHue(int);
+  void changeRGBA(RGB, int);
+  void changeRed(int);
+  void changeGreen(int);
+  void changeBlue(int);
 };
 
 #endif

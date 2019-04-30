@@ -99,6 +99,7 @@ constexpr QSize     tool_icon_size = {24_px, 24_px};
 constexpr QSize     tool_icon_padding = {1_px, 1_px};
 constexpr QSize     tool_button_size = tool_icon_size + 2 * tool_icon_padding;
 constexpr QPoint    tool_icon_pos = toPoint((tool_button_size - tool_icon_size)) / 2;
+// this + 1_px is because of the dock widget separator that I can't remove!!!
 constexpr int       tool_select_width = tool_button_size.width() + 1_px;
 
 inline const QColor tool_select_background = glob_dark_1;

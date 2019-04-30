@@ -18,17 +18,20 @@
 
 ColorPickerWidget::ColorPickerWidget(QWidget *parent)
   : QWidget{parent},
+    colorHsv{color2hsv(pick_default_color)},
+    colorRgb{color2rgb(pick_default_color)},
+    alpha{pick_default_color.alpha()},
     svGraph{new SVGraphWidget{this}},
     hueSlider{new HueSliderWidget{this}},
     alphaSlider{new AlphaSliderWidget{this}},
-    boxR{new NumberInputWidget{this, 89, 255}},
-    boxG{new NumberInputWidget{this, 89, 255}},
-    boxB{new NumberInputWidget{this, 89, 255}},
-    boxH{new NumberInputWidget{this, pick_default_color.hue(), 359}},
-    boxS{new NumberInputWidget{this, 89, 100}},
-    boxV{new NumberInputWidget{this, 89, 100}},
-    boxA{new NumberInputWidget{this, pick_default_color.alpha(), 255}},
-    boxHex{new HexInputWidget{this, 0x89898989}},
+    boxR{new NumberInputWidget{this, colorRgb.r, 255}},
+    boxG{new NumberInputWidget{this, colorRgb.g, 255}},
+    boxB{new NumberInputWidget{this, colorRgb.b, 255}},
+    boxH{new NumberInputWidget{this, colorHsv.h, 359}},
+    boxS{new NumberInputWidget{this, colorHsv.s, 100}},
+    boxV{new NumberInputWidget{this, colorHsv.v, 100}},
+    boxA{new NumberInputWidget{this, alpha, 255}},
+    boxHex{new HexInputWidget{this, colorRgb, alpha}},
     labelR{new LabelWidget{this, "R", pick_label_rect}},
     labelG{new LabelWidget{this, "G", pick_label_rect}},
     labelB{new LabelWidget{this, "B", pick_label_rect}},
@@ -90,10 +93,101 @@ void ColorPickerWidget::connectSignals() {
   CONNECT(hueSlider,   hueChanged,   boxH,        changeValue);
   CONNECT(boxH,        valueChanged, hueSlider,   changeHue);
   
-  // create an object that has a bunch of signals and slots for converting
-  // between hsv and rgb
+  CONNECT(hueSlider,   hueChanged,   this,        changeHue);
+  CONNECT(boxH,        valueChanged, this,        changeHue);
   
-  // maybe it could be the ColorPickerWidget?
+  CONNECT(svGraph,     svChanged,    this,        changeSVfromGraph);
+  CONNECT(boxS,        valueChanged, this,        changeSVfromBoxS);
+  CONNECT(boxV,        valueChanged, this,        changeSVfromBoxV);
+  
+  CONNECT(alphaSlider, alphaChanged, this,        changeAlpha);
+  CONNECT(boxA,        valueChanged, this,        changeAlpha);
+  
+  CONNECT(boxR,        valueChanged, this,        changeRed);
+  CONNECT(boxG,        valueChanged, this,        changeGreen);
+  CONNECT(boxB,        valueChanged, this,        changeBlue);
+  
+  CONNECT(boxHex,      rgbaChanged,  this,        changeRGBA);
+}
+
+void ColorPickerWidget::changeRGB() {
+  colorRgb = hsv2rgb(colorHsv);
+  Q_EMIT boxR->changeValue(colorRgb.r);
+  Q_EMIT boxG->changeValue(colorRgb.g);
+  Q_EMIT boxB->changeValue(colorRgb.b);
+  Q_EMIT boxHex->changeRgba(colorRgb, alpha);
+}
+
+void ColorPickerWidget::changeHSV() {
+  colorHsv = rgb2hsv(colorRgb);
+  Q_EMIT boxH->changeValue(colorHsv.h);
+  Q_EMIT boxS->changeValue(colorHsv.s);
+  Q_EMIT boxV->changeValue(colorHsv.v);
+  Q_EMIT hueSlider->changeHSV(colorHsv);
+  Q_EMIT alphaSlider->changeHSV(colorHsv);
+  Q_EMIT svGraph->changeHSV(colorHsv);
+}
+
+void ColorPickerWidget::changeSVfromGraph(const int sat, const int val) {
+  colorHsv.s = sat;
+  colorHsv.v = val;
+  Q_EMIT hueSlider->changeSV(sat, val);
+  Q_EMIT alphaSlider->changeSV(sat, val);
+  Q_EMIT boxS->changeValue(sat);
+  Q_EMIT boxV->changeValue(val);
+  changeRGB();
+}
+
+void ColorPickerWidget::changeSVfromBoxS(const int sat) {
+  colorHsv.s = sat;
+  Q_EMIT hueSlider->changeSV(sat, colorHsv.v);
+  Q_EMIT alphaSlider->changeSV(sat, colorHsv.v);
+  Q_EMIT svGraph->changeSV(sat, colorHsv.v);
+  changeRGB();
+}
+
+void ColorPickerWidget::changeSVfromBoxV(const int val) {
+  colorHsv.v = val;
+  Q_EMIT hueSlider->changeSV(colorHsv.s, val);
+  Q_EMIT alphaSlider->changeSV(colorHsv.s, val);
+  Q_EMIT svGraph->changeSV(colorHsv.s, val);
+  changeRGB();
+}
+
+void ColorPickerWidget::changeAlpha(const int alp) {
+  alpha = alp;
+  Q_EMIT boxHex->changeRgba(colorRgb, alp);
+}
+
+void ColorPickerWidget::changeHue(const int hue) {
+  colorHsv.h = hue;
+  changeRGB();
+}
+
+void ColorPickerWidget::changeRGBA(const RGB rgb, const int alp) {
+  colorRgb = rgb;
+  alpha = alp;
+  changeHSV();
+  Q_EMIT alphaSlider->alphaChanged(alp);
+  Q_EMIT boxA->valueChanged(alp);
+}
+
+void ColorPickerWidget::changeRed(const int red) {
+  colorRgb.r = red;
+  changeHSV();
+  Q_EMIT boxHex->changeRgba(colorRgb, alpha);
+}
+
+void ColorPickerWidget::changeGreen(const int green) {
+  colorRgb.g = green;
+  changeHSV();
+  Q_EMIT boxHex->changeRgba(colorRgb, alpha);
+}
+
+void ColorPickerWidget::changeBlue(const int blue) {
+  colorRgb.b = blue;
+  changeHSV();
+  Q_EMIT boxHex->changeRgba(colorRgb, alpha);
 }
 
 #include "color picker widget.moc"
