@@ -14,6 +14,7 @@
 #include "editor widget.hpp"
 #include "timeline widget.hpp"
 #include "status bar widget.hpp"
+#include "tool colors widget.hpp"
 #include "tool select widget.hpp"
 #include "color picker widget.hpp"
 #include <QtWidgets/qmainwindow.h>
@@ -26,10 +27,12 @@ public:
   
 private:
   QWidget bottom;
+  QWidget right;
   Animation anim;
   UndoObject undo;
   ClearObject clear;
   EditorWidget editor;
+  ToolColorsWidget colors;
   ToolSelectWidget tools;
   TimelineWidget timeline;
   StatusBarWidget statusBar;

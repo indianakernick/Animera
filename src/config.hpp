@@ -182,6 +182,14 @@ constexpr int       box_cursor_width = glob_font_kern_px;
 inline const QColor box_selection_color = setAlpha(glob_light_1, 127);
 inline const QColor box_background_color = glob_dark_1;
 
+// ------------------------------- tool colors ------------------------------ //
+
+constexpr WidgetRect active_color_rect = boxRect(20_px, 20_px);
+constexpr WidgetRect tool_colors_rect = boxRect(
+  pick_svgraph_rect.inner().width(),
+  active_color_rect.inner().height()
+);
+
 // ---------------------------------- keys ---------------------------------- //
 
 // all tools

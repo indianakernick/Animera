@@ -105,11 +105,6 @@ ToolSelectWidget::ToolSelectWidget(QWidget *parent)
   
   setWidget(box);
   setAlignment(Qt::AlignVCenter);
-  
-  // @TODO remove
-  colors.primary = qRgba(255, 0, 0, 255);
-  colors.secondary = qRgba(0, 0, 255, 255);
-  colors.erase = qRgba(0, 0, 0, 0);
 }
 
 void ToolSelectWidget::mouseLeave() {
@@ -143,6 +138,10 @@ void ToolSelectWidget::keyPress(const Qt::Key key, QImage *overlay) {
 
 void ToolSelectWidget::changeCell(Cell *cell) {
   currTool.changeCell(cell);
+}
+
+void ToolSelectWidget::changeColors(const ToolColors newColors) {
+  colors = newColors;
 }
 
 void ToolSelectWidget::changeTool(ToolWidget *widget, Tool *tool) {

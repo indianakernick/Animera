@@ -26,8 +26,9 @@ class ColorPickerWidget final : public QWidget {
 public:
   explicit ColorPickerWidget(QWidget *);
 
+public Q_SLOTS:
   void attach(ColorHandle *);
-
+  
 private:
   ColorHandle *handle = nullptr;
   HSV colorHsv;

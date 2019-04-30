@@ -21,7 +21,7 @@ ColorPickerWidget::ColorPickerWidget(QWidget *parent)
     colorHsv{color2hsv(pick_default_color)},
     colorRgb{color2rgb(pick_default_color)},
     alpha{pick_default_color.alpha()},
-    nameLabel{new LabelWidget{this, "Palette 42", pick_name_rect}},
+    nameLabel{new LabelWidget{this, "PALETTE 42", pick_name_rect}},
     svGraph{new SVGraphWidget{this}},
     hueSlider{new HueSliderWidget{this}},
     alphaSlider{new AlphaSliderWidget{this}},

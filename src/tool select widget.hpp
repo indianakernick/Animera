@@ -35,6 +35,7 @@ public Q_SLOTS:
   void mouseUp(QPoint, ButtonType, QImage *);
   void keyPress(Qt::Key, QImage *);
   void changeCell(Cell *);
+  void changeColors(ToolColors);
   
 private:
   QWidget *box;

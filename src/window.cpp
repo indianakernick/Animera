@@ -17,11 +17,13 @@
 
 Window::Window(const QRect desktop)
   : bottom{this},
+    right{this},
     editor{this, anim},
+    colors{&right},
     tools{this},
     timeline{&bottom, anim},
     statusBar{&bottom},
-    colorPicker{this} {
+    colorPicker{&right} {
   setWindowTitle("Pixel 2");
   setMinimumSize(glob_min_window_size);
   setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
@@ -45,15 +47,24 @@ Window::Window(const QRect desktop)
 void Window::setupUI() {
   bottom.setMinimumHeight(100);
   bottom.setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
-  QVBoxLayout *layout = new QVBoxLayout{&bottom};
-  bottom.setLayout(layout);
-  layout->addWidget(&timeline);
-  layout->addWidget(&statusBar);
-  layout->setContentsMargins(0, 0, 0, 0);
+  
+  QVBoxLayout *bottomLayout = new QVBoxLayout{&bottom};
+  bottom.setLayout(bottomLayout);
+  bottomLayout->addWidget(&timeline);
+  bottomLayout->addWidget(&statusBar);
+  bottomLayout->setContentsMargins(0, 0, 0, 0);
   bottom.setContentsMargins(0, 0, 0, 0);
+  
+  QVBoxLayout *rightLayout = new QVBoxLayout{&right};
+  right.setLayout(rightLayout);
+  rightLayout->addWidget(&colorPicker);
+  rightLayout->addWidget(&colors);
+  rightLayout->setContentsMargins(0, 0, 0, 0);
+  right.setContentsMargins(0, 0, 0, 0);
+  
   makeDockWidget(Qt::LeftDockWidgetArea, &tools);
   makeDockWidget(Qt::BottomDockWidgetArea, &bottom);
-  makeDockWidget(Qt::RightDockWidgetArea, &colorPicker);
+  makeDockWidget(Qt::RightDockWidgetArea, &right);
   setCentralWidget(&editor);
 }
 
@@ -78,29 +89,33 @@ void Window::makeDockWidget(Qt::DockWidgetArea area, QWidget *widget) {
 }
 
 void Window::connectSignals() {
-  CONNECT(&timeline, posChange,       &editor,    compositePos);
-  CONNECT(&timeline, posChange,       &tools,     changeCell);
-  CONNECT(&timeline, posChange,       &clear,     posChange);
-  CONNECT(&timeline, posChange,       &undo,      posChange);
-  CONNECT(&timeline, layerVisibility, &editor,    compositeVis);
+  CONNECT(&timeline, posChange,       &editor,      compositePos);
+  CONNECT(&timeline, posChange,       &tools,       changeCell);
+  CONNECT(&timeline, posChange,       &clear,       posChange);
+  CONNECT(&timeline, posChange,       &undo,        posChange);
+  CONNECT(&timeline, layerVisibility, &editor,      compositeVis);
   
-  CONNECT(&tools,    cellModified,    &undo,      cellModified);
-  CONNECT(&tools,    cellModified,    &editor,    composite);
-  CONNECT(&tools,    overlayModified, &editor,    compositeOverlay);
-  CONNECT(&tools,    updateStatusBar, &statusBar, showPerm);
+  CONNECT(&tools,    cellModified,    &undo,        cellModified);
+  CONNECT(&tools,    cellModified,    &editor,      composite);
+  CONNECT(&tools,    overlayModified, &editor,      compositeOverlay);
+  CONNECT(&tools,    updateStatusBar, &statusBar,   showPerm);
   
-  CONNECT(&editor,   mouseLeave,      &tools,     mouseLeave);
-  CONNECT(&editor,   mouseDown,       &tools,     mouseDown);
-  CONNECT(&editor,   mouseMove,       &tools,     mouseMove);
-  CONNECT(&editor,   mouseUp,         &tools,     mouseUp);
-  CONNECT(&editor,   keyPress,        &tools,     keyPress);
-  CONNECT(&editor,   keyPress,        &clear,     keyPress);
-  CONNECT(&editor,   keyPress,        &undo,      keyPress);
+  CONNECT(&editor,   mouseLeave,      &tools,       mouseLeave);
+  CONNECT(&editor,   mouseDown,       &tools,       mouseDown);
+  CONNECT(&editor,   mouseMove,       &tools,       mouseMove);
+  CONNECT(&editor,   mouseUp,         &tools,       mouseUp);
+  CONNECT(&editor,   keyPress,        &tools,       keyPress);
+  CONNECT(&editor,   keyPress,        &clear,       keyPress);
+  CONNECT(&editor,   keyPress,        &undo,        keyPress);
   
-  CONNECT(&clear,    cellModified,    &tools,     cellModified);
+  CONNECT(&colors,   colorsChanged,   &tools,       changeColors);
+  CONNECT(&colors,   attachColor,     &colorPicker, attach);
   
-  CONNECT(&undo,     cellReverted,    &editor,    composite);
-  CONNECT(&undo,     showTempStatus,  &statusBar, showTemp);
+  CONNECT(&clear,    cellModified,    &tools,       cellModified);
+  
+  CONNECT(&undo,     cellReverted,    &editor,      composite);
+  CONNECT(&undo,     showTempStatus,  &statusBar,   showTemp);
+  
 }
 
 #include "window.moc"
