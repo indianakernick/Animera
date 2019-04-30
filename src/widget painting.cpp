@@ -47,12 +47,27 @@ QPixmap bakeColoredBitmaps(
   return pixmap;
 }
 
-void paintBorder(QPainter &painter, const RectWidgetSize size, const QColor color) {
-  // @TODO this is lazy and inefficient
-  // would be more efficient to render 4 rects
+void paintBorder(QPainter &painter, const WidgetRect rect, const QColor color) {
+  const QSize innerSize = rect.inner().size();
+  const QRect rects[4] = {
+    { // top
+      glob_widget_space, glob_widget_space,
+      innerSize.width() + 2 * glob_border_width, glob_border_width
+    },
+    { // bottom
+      glob_widget_space, glob_widget_space + glob_border_width + innerSize.height(),
+      innerSize.width() + 2 * glob_border_width, glob_border_width
+    },
+    { // left
+      glob_widget_space, glob_widget_space + glob_border_width,
+      glob_border_width, innerSize.height()
+    },
+    { // right
+      glob_widget_space + glob_border_width + innerSize.width(), glob_widget_space + glob_border_width,
+      glob_border_width, innerSize.height()
+    }
+  };
   painter.setPen(Qt::NoPen);
   painter.setBrush(color);
-  painter.setClipRegion(QRegion{size.outer()}.subtracted(size.inner()));
-  painter.drawRect(size.outer());
-  painter.setClipRect(size.widget());
+  painter.drawRects(rects, 4);
 }

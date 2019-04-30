@@ -16,8 +16,8 @@
 template <typename Derived>
 ColorSliderWidget<Derived>::ColorSliderWidget(QWidget *parent)
   : QWidget{parent},
-    graph{pick_slider_size.inner().width(), 1, QImage::Format_ARGB32_Premultiplied} {
-  setFixedSize(pick_slider_size.widget().size());
+    graph{pick_slider_rect.inner().width(), 1, QImage::Format_ARGB32_Premultiplied} {
+  setFixedSize(pick_slider_rect.widget().size());
   initBar();
   show();
 }
@@ -34,14 +34,14 @@ void ColorSliderWidget<Derived>::initBar() {
 
 template <typename Derived>
 void ColorSliderWidget<Derived>::renderGraph(QPainter &painter) {
-  painter.drawImage(pick_slider_size.inner(), graph);
+  painter.drawImage(pick_slider_rect.inner(), graph);
 }
 
 template <typename Derived>
 void ColorSliderWidget<Derived>::renderBar(QPainter &painter) {
   const int pix = static_cast<Derived *>(this)->getPixel();
   const QRect barRect = {
-    pick_slider_size.inner().x() + pix - (bar.width() - 1_px) / 2,
+    pick_slider_rect.inner().x() + pix - (bar.width() - 1_px) / 2,
     0,
     bar.width(),
     bar.height()
@@ -54,13 +54,13 @@ void ColorSliderWidget<Derived>::paintEvent(QPaintEvent *) {
   QPainter painter{this};
   static_cast<Derived *>(this)->renderBackground(painter);
   renderGraph(painter);
-  paintBorder(painter, pick_slider_size, pick_slider_border_color);
+  paintBorder(painter, pick_slider_rect, glob_border_color);
   renderBar(painter);
 }
 
 template <typename Derived>
 void ColorSliderWidget<Derived>::setColor(QMouseEvent *event) {
-  static_cast<Derived *>(this)->setColor(event->localPos().x() - pick_slider_size.inner().x());
+  static_cast<Derived *>(this)->setColor(event->localPos().x() - pick_slider_rect.inner().x());
 }
 
 template <typename Derived>
@@ -124,7 +124,7 @@ void HueSliderWidget::plotGraph() {
   while (pixels != pixelsEnd) {
     *pixels++ = hsv2rgb(hue, color.s, color.v);
     // can't use hue2pix here
-    hue = ++idx * 360.0 / pick_slider_size.inner().width();
+    hue = ++idx * 360.0 / pick_slider_rect.inner().width();
   }
 }
 
@@ -133,11 +133,11 @@ void HueSliderWidget::renderBackground(QPainter &) {}
 namespace {
 
 int hue2pix(const int hue) {
-  return qRound(hue / 359.0 * (pick_slider_size.inner().width() - 1_px));
+  return qRound(hue / 359.0 * (pick_slider_rect.inner().width() - 1_px));
 }
 
 int pix2hue(const int pix) {
-  return std::clamp(qRound(pix * 359.0 / (pick_slider_size.inner().width() - 1_px)), 0, 359);
+  return std::clamp(qRound(pix * 359.0 / (pick_slider_rect.inner().width() - 1_px)), 0, 359);
 }
 
 }
@@ -204,38 +204,39 @@ void AlphaSliderWidget::plotGraph() {
   while (pixels != pixelsEnd) {
     *pixels++ = setAlpha(rgb, alp);
     // can't use alp2pix here
-    alp = qRound(++idx * 255.0 / (pick_slider_size.inner().width() - 1));
+    alp = qRound(++idx * 255.0 / (pick_slider_rect.inner().width() - 1));
   }
 }
 
 void AlphaSliderWidget::renderBackground(QPainter &painter) {
   painter.setPen(Qt::NoPen);
   painter.setBrush(edit_checker_a);
-  painter.drawRect(pick_slider_size.inner());
+  painter.drawRect(pick_slider_rect.inner());
   painter.setBrush(edit_checker_b);
-  painter.setClipRect(pick_slider_size.inner());
-  const int tileSize = pick_slider_size.inner().height() / alpha_vert_tiles;
-  const int horiTiles = pick_slider_size.inner().width() / tileSize;
-  for (int y = 0; y != alpha_vert_tiles; ++y) {
+  painter.setClipRect(pick_slider_rect.inner());
+  const int tileSize = pick_slider_rect.inner().height() / pick_alpha_vert_tiles;
+  const int horiTiles = pick_slider_rect.inner().width() / tileSize;
+  for (int y = 0; y != pick_alpha_vert_tiles; ++y) {
     for (int x = 1 - y; x <= horiTiles; x += 2) {
       painter.drawRect(
-        pick_slider_size.inner().x() + tileSize * x,
-        pick_slider_size.inner().y() + tileSize * y,
+        pick_slider_rect.inner().x() + tileSize * x,
+        pick_slider_rect.inner().y() + tileSize * y,
         tileSize,
         tileSize
       );
     }
   }
+  painter.setClipRect(pick_slider_rect.widget());
 }
 
 namespace {
 
 int alp2pix(const int alp) {
-  return qRound(alp / 255.0 * (pick_slider_size.inner().width() - 1_px));
+  return qRound(alp / 255.0 * (pick_slider_rect.inner().width() - 1_px));
 }
 
 int pix2alp(const int pix) {
-  return std::clamp(qRound(pix * 255.0 / (pick_slider_size.inner().width() - 1_px)), 0, 255);
+  return std::clamp(qRound(pix * 255.0 / (pick_slider_rect.inner().width() - 1_px)), 0, 255);
 }
 
 }

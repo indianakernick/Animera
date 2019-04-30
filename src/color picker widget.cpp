@@ -29,15 +29,15 @@ ColorPickerWidget::ColorPickerWidget(QWidget *parent)
     boxV{new NumberInputWidget{this, 89, 100}},
     boxA{new NumberInputWidget{this, pick_default_color.alpha(), 255}},
     boxHex{new HexInputWidget{this, 0x89898989}},
-    labelR{new ColorLabelWidget{this, "R"}},
-    labelG{new ColorLabelWidget{this, "G"}},
-    labelB{new ColorLabelWidget{this, "B"}},
-    labelH{new ColorLabelWidget{this, "H"}},
-    labelS{new ColorLabelWidget{this, "S"}},
-    labelV{new ColorLabelWidget{this, "V"}},
-    labelA{new ColorLabelWidget{this, "A"}},
-    labelHex{new ColorLabelWidget{this, "#"}} {
-  setFixedWidth(pick_svgraph_size.widget().width());
+    labelR{new LabelWidget{this, "R", pick_label_rect}},
+    labelG{new LabelWidget{this, "G", pick_label_rect}},
+    labelB{new LabelWidget{this, "B", pick_label_rect}},
+    labelH{new LabelWidget{this, "H", pick_label_rect}},
+    labelS{new LabelWidget{this, "S", pick_label_rect}},
+    labelV{new LabelWidget{this, "V", pick_label_rect}},
+    labelA{new LabelWidget{this, "A", pick_label_rect}},
+    labelHex{new LabelWidget{this, "#", pick_label_rect}} {
+  setFixedWidth(pick_svgraph_rect.widget().width());
   setupLayout();
   connectSignals();
   show();

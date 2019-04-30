@@ -47,8 +47,8 @@ void StatusBarWidget::paintEvent(QPaintEvent *) {
   QPainter painter{this};
   painter.fillRect(rect(), stat_background);
   painter.setFont(getGlobalFont());
-  painter.setPen(stat_text);
-  const QPoint pos = {stat_padding, glob_font_accent_px + stat_padding};
+  painter.setPen(glob_text_color);
+  const QPoint pos = {glob_text_padding, glob_text_padding + glob_font_accent_px};
   if (tempText.isEmpty()) {
     painter.drawText(pos, permText);
   } else if (permText.isEmpty()) {

@@ -9,15 +9,15 @@
 #ifndef text_input_widget_hpp
 #define text_input_widget_hpp
 
+#include "config.hpp"
 #include <QtCore/qtimer.h>
-#include "rect widget size.hpp"
 #include <QtWidgets/qlineedit.h>
 
 class TextInputWidget : public QLineEdit {
   Q_OBJECT
   
 public:
-  TextInputWidget(QWidget *, RectWidgetSize, int);
+  TextInputWidget(QWidget *, WidgetRect);
 
 private Q_SLOTS:
   void blinkSlot();
@@ -25,8 +25,7 @@ private Q_SLOTS:
 
 private:
   QTimer cursorBlinkTimer;
-  RectWidgetSize boxSize;
-  int offsetX;
+  WidgetRect rect;
   bool cursorBlinkStatus = true;
   
   void focusInEvent(QFocusEvent *) override;

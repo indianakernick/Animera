@@ -15,9 +15,9 @@
 
 SVGraphWidget::SVGraphWidget(QWidget *parent)
   : QWidget{parent},
-    graph{pick_svgraph_size.inner().size(), QImage::Format_ARGB32_Premultiplied},
+    graph{pick_svgraph_rect.inner().size(), QImage::Format_ARGB32_Premultiplied},
     color{color2hsv(pick_default_color)} {
-  setFixedSize(pick_svgraph_size.widget().size());
+  setFixedSize(pick_svgraph_rect.widget().size());
   initCircle();
   plotGraph(color.h);
   show();
@@ -51,7 +51,7 @@ void SVGraphWidget::plotGraph(const int hue) {
   const ptrdiff_t width = graph.width();
   const ptrdiff_t padding = pitch - width;
   int sat = 0;
-  int val = pick_svgraph_size.inner().height() - 1;
+  int val = pick_svgraph_rect.inner().height() - 1;
   
   QRgb *const imgEnd = pixels + pitch * graph.height();
   while (pixels != imgEnd) {
@@ -59,8 +59,8 @@ void SVGraphWidget::plotGraph(const int hue) {
     while (pixels != rowEnd) {
       *pixels++ = hsv2rgb(
         hue, // can't use sat2pix and val2pix here
-        sat++ * 100.0 / (pick_svgraph_size.inner().width() - 1),
-        val * 100.0 / (pick_svgraph_size.inner().height() - 1)
+        sat++ * 100.0 / (pick_svgraph_rect.inner().width() - 1),
+        val * 100.0 / (pick_svgraph_rect.inner().height() - 1)
       );
     }
     pixels += padding;
@@ -79,50 +79,51 @@ void SVGraphWidget::initCircle() {
 }
 
 void SVGraphWidget::renderGraph(QPainter &painter) {
-  painter.drawImage(pick_svgraph_size.inner(), graph);
+  painter.drawImage(pick_svgraph_rect.inner(), graph);
 }
 
 namespace {
 
 int sat2pix(const int sat) {
-  return qRound(sat / 100.0 * (pick_svgraph_size.inner().width() - 1_px));
+  return qRound(sat / 100.0 * (pick_svgraph_rect.inner().width() - 1_px));
 }
 
 int val2pix(const int val) {
-  return qRound((100 - val) / 100.0 * (pick_svgraph_size.inner().height() - 1_px));
+  return qRound((100 - val) / 100.0 * (pick_svgraph_rect.inner().height() - 1_px));
 }
 
 int pix2sat(const int pix) {
-  return std::clamp(qRound(pix * 100.0 / (pick_svgraph_size.inner().width() - 1_px)), 0, 100);
+  return std::clamp(qRound(pix * 100.0 / (pick_svgraph_rect.inner().width() - 1_px)), 0, 100);
 }
 
 int pix2val(const int pix) {
-  return 100 - std::clamp(qRound(pix * 100.0 / (pick_svgraph_size.inner().height() - 1_px)), 0, 100);
+  return 100 - std::clamp(qRound(pix * 100.0 / (pick_svgraph_rect.inner().height() - 1_px)), 0, 100);
 }
 
 }
 
 void SVGraphWidget::renderCircle(QPainter &painter) {
   const QRect circleRect = {
-    pick_svgraph_size.inner().x() + sat2pix(color.s) - (circle.width() - 1_px) / 2,
-    pick_svgraph_size.inner().y() + val2pix(color.v) - (circle.height() - 1_px) / 2,
+    pick_svgraph_rect.inner().x() + sat2pix(color.s) - (circle.width() - 1_px) / 2,
+    pick_svgraph_rect.inner().y() + val2pix(color.v) - (circle.height() - 1_px) / 2,
     circle.width(),
     circle.height()
   };
-  painter.setClipRect(pick_svgraph_size.inner());
+  painter.setClipRect(pick_svgraph_rect.inner());
   painter.drawPixmap(circleRect, circle);
+  painter.setClipRect(pick_svgraph_rect.widget());
 }
 
 void SVGraphWidget::paintEvent(QPaintEvent *) {
   QPainter painter{this};
   renderGraph(painter);
   renderCircle(painter);
-  paintBorder(painter, pick_svgraph_size, pick_svgraph_border_color);
+  paintBorder(painter, pick_svgraph_rect, glob_border_color);
 }
 
 void SVGraphWidget::setColor(const QPointF point) {
-  const int sat = pix2sat(point.x() - pick_svgraph_size.inner().x());
-  const int val = pix2val(point.y() - pick_svgraph_size.inner().y());
+  const int sat = pix2sat(point.x() - pick_svgraph_rect.inner().x());
+  const int val = pix2val(point.y() - pick_svgraph_rect.inner().y());
   if (sat != color.s || val != color.v) {
     color.s = sat;
     color.v = val;

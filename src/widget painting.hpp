@@ -9,11 +9,11 @@
 #ifndef widget_painting_hpp
 #define widget_painting_hpp
 
+#include "config.hpp"
 #include <QtGui/qpixmap.h>
-#include "rect widget size.hpp"
 
 QPixmap bakeColoredBitmaps(const QString &, const QString &, QColor, QColor);
 QPixmap bakeColoredBitmaps(const QBitmap &, const QBitmap &, QColor, QColor);
-void paintBorder(QPainter &, RectWidgetSize, QColor);
+void paintBorder(QPainter &, WidgetRect, QColor);
 
 #endif

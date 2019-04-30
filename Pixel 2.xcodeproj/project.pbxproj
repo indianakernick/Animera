@@ -88,7 +88,6 @@
 		453C78842236626C00818B19 /* tool icons.anim */ = {isa = PBXFileReference; lastKnownFileType = file; path = "tool icons.anim"; sourceTree = "<group>"; };
 		453C78852236626C00818B19 /* cursors.anim */ = {isa = PBXFileReference; lastKnownFileType = file; path = cursors.anim; sourceTree = "<group>"; };
 		453C78862236626C00818B19 /* icon.anim */ = {isa = PBXFileReference; lastKnownFileType = file; path = icon.anim; sourceTree = "<group>"; };
-		453D28B922768A9F00D0E5F9 /* rect widget size.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "rect widget size.hpp"; sourceTree = "<group>"; };
 		453D28BA22768B2B00D0E5F9 /* geometry.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = geometry.hpp; sourceTree = "<group>"; };
 		453D28BB22768D9900D0E5F9 /* text input widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "text input widget.cpp"; sourceTree = "<group>"; };
 		453D28BC22768D9900D0E5F9 /* text input widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "text input widget.hpp"; sourceTree = "<group>"; };
@@ -1072,7 +1071,6 @@
 				45DFE49C2250835900EA40C5 /* cursors.cpp */,
 				45DFE49D2250835900EA40C5 /* cursors.hpp */,
 				453D28BA22768B2B00D0E5F9 /* geometry.hpp */,
-				453D28B922768A9F00D0E5F9 /* rect widget size.hpp */,
 				453D28C1227698F200D0E5F9 /* widget painting.cpp */,
 				453D28C2227698F200D0E5F9 /* widget painting.hpp */,
 				453D28CE2276A9DF00D0E5F9 /* color convert.cpp */,

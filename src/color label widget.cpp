@@ -8,22 +8,24 @@
 
 #include "color label widget.hpp"
 
-#include "config.hpp"
 #include "global font.hpp"
 #include <QtGui/qpainter.h>
 
-ColorLabelWidget::ColorLabelWidget(QWidget *parent, const QString &text)
-  : QWidget{parent}, text{text} {
-  setFixedSize(pick_label_size.widget().size());
+LabelWidget::LabelWidget(
+  QWidget *parent,
+  const QString &text,
+  const WidgetRect rect
+) : QWidget{parent}, text{text}, rect{rect} {
+  setFixedSize(rect.widget().size());
 }
 
-void ColorLabelWidget::paintEvent(QPaintEvent *) {
+void LabelWidget::paintEvent(QPaintEvent *) {
   QPainter painter{this};
   painter.setFont(getGlobalFont());
   painter.setBrush(Qt::NoBrush);
-  painter.setPen(pick_label_text_color);
-  QPoint textPos = pick_label_size.inner().topLeft();
-  textPos.ry() += glob_font_accent_px;
-  textPos += QPoint{2_px, 1_px};
+  painter.setPen(glob_text_color);
+  QPoint textPos = rect.inner().topLeft();
+  textPos += QPoint{0, glob_font_accent_px};
+  textPos += toPoint(glob_text_padding);
   painter.drawText(textPos, text);
 }

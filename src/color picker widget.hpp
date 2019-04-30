@@ -17,7 +17,7 @@ class HueSliderWidget;
 class AlphaSliderWidget;
 class NumberInputWidget;
 class HexInputWidget;
-class ColorLabelWidget;
+class LabelWidget;
 
 class ColorPickerWidget final : public QWidget {
   Q_OBJECT
@@ -40,14 +40,14 @@ private:
   NumberInputWidget *boxV;
   NumberInputWidget *boxA;
   HexInputWidget *boxHex;
-  ColorLabelWidget *labelR;
-  ColorLabelWidget *labelG;
-  ColorLabelWidget *labelB;
-  ColorLabelWidget *labelH;
-  ColorLabelWidget *labelS;
-  ColorLabelWidget *labelV;
-  ColorLabelWidget *labelA;
-  ColorLabelWidget *labelHex;
+  LabelWidget *labelR;
+  LabelWidget *labelG;
+  LabelWidget *labelB;
+  LabelWidget *labelH;
+  LabelWidget *labelS;
+  LabelWidget *labelV;
+  LabelWidget *labelA;
+  LabelWidget *labelHex;
   
   void setupLayout();
   void connectSignals();

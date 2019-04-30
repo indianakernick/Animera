@@ -63,8 +63,6 @@ private:
   void setColor(int);
 };
 
-constexpr int alpha_vert_tiles = 2;
-
 class AlphaSliderWidget final : public ColorSliderWidget<AlphaSliderWidget> {
   Q_OBJECT
   

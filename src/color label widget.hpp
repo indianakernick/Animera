@@ -9,17 +9,16 @@
 #ifndef color_label_widget_hpp
 #define color_label_widget_hpp
 
+#include "config.hpp"
 #include <QtWidgets/qwidget.h>
 
-// @TODO maybe we could do something similar to text box
-// accept a RectWidgetSize and an offsetX
-
-class ColorLabelWidget final : public QWidget {
+class LabelWidget final : public QWidget {
 public:
-  ColorLabelWidget(QWidget *, const QString &);
+  LabelWidget(QWidget *, const QString &, WidgetRect);
 
 private:
   QString text;
+  WidgetRect rect;
 
   void paintEvent(QPaintEvent *) override;
 };
