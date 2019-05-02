@@ -1,5 +1,11 @@
 ![Imgur](https://i.imgur.com/2Iqka11.png)
 
+## A picture is a thousand words
+
+![Screenshot](https://i.imgur.com/IrG6yZy.png)
+
+## A story...
+
 Way back in 2014, I learnt my first programming language: JavaScript. 
 I spent most of the year 2015 working on my first major project: a pixel-art drawing tool. 
 By November-ish, I had a working tool that I used for drawing game sprites in future years
@@ -13,16 +19,15 @@ My experience using the old tool for drawing sprites and performing the tedious 
 should influence the design of this application. I aim to build something that I'll be able
 to use for future projects. I'll certainly use this tool if no-one else does!
 
+## Progress
+
 Most of the business logic of the application is complete. The majority of the time spent on
-this project is building the UI with Qt. Below is a screenshot of what I have so far.
+this project is building the UI with Qt.
 
-![Screenshot](https://i.imgur.com/GLgM21e.png)
-
-The tools are fully implemented but you can't change the colors (no color picker) 
-and you can't switch layers or frames (no timeline).
-I plan on putting a timeline down the bottom and a color/palette menu on the right.
-There's still a lot to do and given the free time I have nowadays (far less than I had in 2015),
-this may end up taking a year as well!
+The tools are fully implemented but there's no UI to configure them (e.g. change the brush size 
+or symmetry mode) and you can't switch layers or frames (no timeline).
+I plan on putting a timeline in the big rectangle down the bottom and the tool settings will
+go on the right side of the status bar (under the timeline).
 
 ## Demos
 
@@ -51,3 +56,5 @@ Here's a few quick gifs that demostrate some of the features I have implemented 
 ![Flip](https://i.imgur.com/HJnQuiK.gif)
 
 ![Rotate](https://i.imgur.com/Xj1AG30.gif)
+
+![Color Picker](https://i.imgur.com/UCoMrYK.gif)
