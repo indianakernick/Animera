@@ -57,7 +57,7 @@ private:
     QPainter painter{this};
     paintBorder(painter, active_color_rect, glob_border_color);
     paintChecker(painter, active_color_rect, active_color_tiles);
-    painter.fillRect(active_color_rect.inner(), toColor(*color));
+    painter.fillRect(active_color_rect.inner(), QColor::fromRgba(*color));
   }
 
 private Q_SLOTS:

@@ -10,7 +10,6 @@
 
 #include "geometry.hpp"
 #include <QtGui/qpainter.h>
-#include "color convert.hpp"
 
 namespace {
 
@@ -57,7 +56,7 @@ const QPen square_pen{
 
 QPen makePen(const QPen &base, const QRgb color, const int width) {
   QPen pen = base;
-  pen.setColor(toColor(color));
+  pen.setColor(QColor::fromRgba(color));
   pen.setWidth(width);
   return pen;
 }
@@ -230,7 +229,7 @@ bool drawFilledEllipse(QImage &img, const QRgb color, const QRect ellipse) {
   if (!img.rect().intersects(ellipse)) return false;
   QPainter painter{&img};
   preparePainter(painter);
-  painter.setBrush(toColor(color));
+  painter.setBrush(QColor::fromRgba(color));
   painter.setPen(makePen(round_pen, color, 1));
   painter.drawEllipse(adjustStrokedEllipse(ellipse, 1));
   return true;
@@ -460,7 +459,7 @@ bool drawFilledPolygon(
   }
   QPainter painter{&img};
   preparePainter(painter);
-  painter.setBrush(toColor(color));
+  painter.setBrush(QColor::fromRgba(color));
   painter.setPen(makePen(round_pen, color, 1));
   painter.drawPolygon(shiftedPoly.data(), static_cast<int>(shiftedPoly.size()));
   return true;
