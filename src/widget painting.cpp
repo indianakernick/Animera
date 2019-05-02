@@ -51,20 +51,20 @@ void paintBorder(QPainter &painter, const WidgetRect rect, const QColor color) {
   const QSize innerSize = rect.inner().size();
   const QRect rects[4] = {
     { // top
-      glob_widget_space, glob_widget_space,
-      innerSize.width() + 2 * glob_border_width, glob_border_width
+      rect.widgetSpace(), rect.widgetSpace(),
+      innerSize.width() + 2 * rect.borderWidth(), rect.borderWidth()
     },
     { // bottom
-      glob_widget_space, glob_widget_space + glob_border_width + innerSize.height(),
-      innerSize.width() + 2 * glob_border_width, glob_border_width
+      rect.widgetSpace(), rect.widgetSpace() + rect.borderWidth() + innerSize.height(),
+      innerSize.width() + 2 * rect.borderWidth(), rect.borderWidth()
     },
     { // left
-      glob_widget_space, glob_widget_space + glob_border_width,
-      glob_border_width, innerSize.height()
+      rect.widgetSpace(), rect.widgetSpace() + rect.borderWidth(),
+      rect.borderWidth(), innerSize.height()
     },
     { // right
-      glob_widget_space + glob_border_width + innerSize.width(), glob_widget_space + glob_border_width,
-      glob_border_width, innerSize.height()
+      rect.widgetSpace() + rect.borderWidth() + innerSize.width(), rect.widgetSpace() + rect.borderWidth(),
+      rect.borderWidth(), innerSize.height()
     }
   };
   painter.setPen(Qt::NoPen);

@@ -27,6 +27,8 @@ Window::Window(const QRect desktop)
   setWindowTitle("Pixel 2");
   setMinimumSize(glob_min_window_size);
   setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+  setFocusPolicy(Qt::StrongFocus);
+  setFocus();
   setGeometry(QStyle::alignedRect(
     Qt::LeftToRight,
     Qt::AlignCenter,

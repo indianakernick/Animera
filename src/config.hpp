@@ -60,37 +60,54 @@ constexpr int       glob_widget_space = 1_px;
 
 class WidgetRect {
 public:
-  constexpr WidgetRect(const QPoint contentOffset, const QSize innerSize)
-    : contentOffset{contentOffset}, innerSize{innerSize} {}
+  constexpr WidgetRect(
+    const QPoint contentOffset,
+    const QSize innerSize,
+    const int borderWidth = glob_border_width,
+    const int widgetSpace = glob_widget_space
+  ) : contentOffset_{contentOffset},
+      innerSize_{innerSize},
+      borderWidth_{borderWidth},
+      widgetSpace_{widgetSpace} {}
   
   constexpr QRect widget() const noexcept {
     return {
       QPoint{},
-      innerSize + toSize(2 * glob_border_width + 2 * glob_widget_space)
+      innerSize_ + toSize(2 * borderWidth_ + 2 * widgetSpace_)
     };
   }
   
   constexpr QRect outer() const noexcept {
     return {
-      toPoint(glob_widget_space),
-      innerSize + toSize(2 * glob_border_width)
+      toPoint(widgetSpace_),
+      innerSize_ + toSize(2 * borderWidth_)
     };
   }
   
   constexpr QRect inner() const noexcept {
     return {
-      toPoint(glob_widget_space + glob_border_width),
-      innerSize
+      toPoint(widgetSpace_ + borderWidth_),
+      innerSize_
     };
   }
   
   constexpr QPoint contentPos() const noexcept {
-    return toPoint(glob_widget_space + glob_border_width) + contentOffset;
+    return toPoint(widgetSpace_ + borderWidth_) + contentOffset_;
+  }
+  
+  constexpr int borderWidth() const noexcept {
+    return borderWidth_;
+  }
+  
+  constexpr int widgetSpace() const noexcept {
+    return widgetSpace_;
   }
 
 private:
-  QPoint contentOffset;
-  QSize innerSize;
+  QPoint contentOffset_;
+  QSize innerSize_;
+  int borderWidth_;
+  int widgetSpace_;
 };
 
 // -------------------------------- tools ----------------------------------- //
@@ -141,13 +158,13 @@ constexpr QSize textBoxSize(const int chars, const int offsetX) {
 
 constexpr WidgetRect textBoxRect(const int chars, const int offsetX) {
   return {
-    QPoint{glob_text_padding + offsetX, glob_text_padding},
+    {glob_text_padding + offsetX, glob_text_padding},
     textBoxSize(chars, offsetX)
   };
 }
 
 constexpr WidgetRect boxRect(const int width, const int height) {
-  return {QPoint{}, QSize{width, height}};
+  return {{}, {width, height}};
 }
 
 constexpr WidgetRect pick_svgraph_rect = boxRect(101_px, 101_px);
@@ -183,11 +200,12 @@ inline const QColor box_background_color = glob_dark_1;
 
 // ------------------------------- tool colors ------------------------------ //
 
-constexpr WidgetRect active_color_rect = boxRect(24_px, 12_px);
-constexpr int        active_color_tiles = 2;
+constexpr WidgetRect tool_color_rect = boxRect(24_px, 12_px);
+constexpr WidgetRect active_color_rect = {{}, {24_px, 12_px}, 2_px, 0_px};
+constexpr int        tool_color_tiles = 2;
 constexpr WidgetRect tool_colors_rect = boxRect(
   pick_svgraph_rect.inner().width(),
-  active_color_rect.inner().height()
+  tool_color_rect.inner().height()
 );
 
 // ---------------------------------- keys ---------------------------------- //

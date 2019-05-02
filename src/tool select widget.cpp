@@ -43,6 +43,7 @@ public:
     setAutoExclusive(true);
     setFixedSize(tool_button_size);
     setContentsMargins(0, 0, 0, 0);
+    // @TODO should this be pressed or toggled?
     CONNECT(this, pressed, this, toolPressed);
   }
   

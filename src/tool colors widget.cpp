@@ -24,11 +24,9 @@ public:
   ActiveColorWidget(QWidget *parent, const QString &name, QRgb *color)
     : QAbstractButton{parent}, name{name}, color{color} {
     setCursor(Qt::PointingHandCursor);
-    setToolTip(name);
     setCheckable(true);
     setAutoExclusive(true);
-    setFixedSize(active_color_rect.widget().size());
-    CONNECT(this, pressed, this, changeActive);
+    setFixedSize(tool_color_rect.widget().size());
   }
   
   QRgb getInitialColor() const override {
@@ -47,7 +45,6 @@ public:
 
 Q_SIGNALS:
   void colorChanged();
-  void activeChanged(ColorHandle *);
   
 private:
   QString name;
@@ -55,14 +52,14 @@ private:
   
   void paintEvent(QPaintEvent *) override {
     QPainter painter{this};
-    paintBorder(painter, active_color_rect, glob_border_color);
-    paintChecker(painter, active_color_rect, active_color_tiles);
-    painter.fillRect(active_color_rect.inner(), QColor::fromRgba(*color));
-  }
-
-private Q_SLOTS:
-  void changeActive() {
-    Q_EMIT activeChanged(this);
+    paintChecker(painter, tool_color_rect, tool_color_tiles);
+    if (isChecked()) {
+      painter.fillRect(active_color_rect.inner(), QColor::fromRgba(*color));
+      paintBorder(painter, active_color_rect, glob_border_color);
+    } else {
+      painter.fillRect(tool_color_rect.inner(), QColor::fromRgba(*color));
+      paintBorder(painter, tool_color_rect, glob_border_color);
+    }
   }
 };
 
@@ -101,9 +98,25 @@ void ToolColorsWidget::connectSignals() {
   CONNECT(primary, colorChanged, this, changeColors);
   CONNECT(secondary, colorChanged, this, changeColors);
   CONNECT(erase, colorChanged, this, changeColors);
-  CONNECT(primary, activeChanged, this, attachColor);
-  CONNECT(secondary, activeChanged, this, attachColor);
-  CONNECT(erase, activeChanged, this, attachColor);
+  
+  connect(primary, &QAbstractButton::toggled, [this](const bool checked) {
+    if (checked) {
+      Q_EMIT attachColor(primary);
+      repaint();
+    }
+  });
+  connect(secondary, &QAbstractButton::toggled, [this](const bool checked) {
+    if (checked) {
+      Q_EMIT attachColor(secondary);
+      repaint();
+    }
+  });
+  connect(erase, &QAbstractButton::toggled, [this](const bool checked) {
+    if (checked) {
+      Q_EMIT attachColor(erase);
+      repaint();
+    }
+  });
 }
 
 void ToolColorsWidget::paintEvent(QPaintEvent *) {
