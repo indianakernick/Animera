@@ -15,14 +15,14 @@
 #include "color convert.hpp"
 #include "widget painting.hpp"
 #include <QtWidgets/qboxlayout.h>
-#include <QtWidgets/qabstractbutton.h>
+#include "radio button widget.hpp"
 
-class ActiveColorWidget final : public QAbstractButton, public ColorHandle {
+class ActiveColorWidget final : public RadioButtonWidget, public ColorHandle {
   Q_OBJECT
   
 public:
   ActiveColorWidget(QWidget *parent, const QString &name, QRgb *color)
-    : QAbstractButton{parent}, name{name}, color{color} {
+    : RadioButtonWidget{parent}, name{name}, color{color} {
     setCursor(Qt::PointingHandCursor);
     setCheckable(true);
     setAutoExclusive(true);
@@ -51,6 +51,7 @@ private:
   QRgb *color;
   
   void paintEvent(QPaintEvent *) override {
+    // @TODO consider baking checkerboard and border
     QPainter painter{this};
     paintChecker(painter, tool_color_rect, tool_color_tiles);
     if (isChecked()) {

@@ -248,7 +248,7 @@ void ActiveColorWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, in
 }
 
 QT_INIT_METAOBJECT const QMetaObject ActiveColorWidget::staticMetaObject = { {
-    &QAbstractButton::staticMetaObject,
+    &RadioButtonWidget::staticMetaObject,
     qt_meta_stringdata_ActiveColorWidget.data,
     qt_meta_data_ActiveColorWidget,
     qt_static_metacall,
@@ -269,12 +269,12 @@ void *ActiveColorWidget::qt_metacast(const char *_clname)
         return static_cast<void*>(this);
     if (!strcmp(_clname, "ColorHandle"))
         return static_cast< ColorHandle*>(this);
-    return QAbstractButton::qt_metacast(_clname);
+    return RadioButtonWidget::qt_metacast(_clname);
 }
 
 int ActiveColorWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
-    _id = QAbstractButton::qt_metacall(_c, _id, _a);
+    _id = RadioButtonWidget::qt_metacall(_c, _id, _a);
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {

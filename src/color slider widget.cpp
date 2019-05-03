@@ -209,6 +209,7 @@ void AlphaSliderWidget::plotGraph() {
 }
 
 void AlphaSliderWidget::renderBackground(QPainter &painter) {
+  // @TODO consider baking the checkerboard
   paintChecker(painter, pick_slider_rect, pick_alpha_tiles);
 }
 

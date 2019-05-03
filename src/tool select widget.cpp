@@ -15,7 +15,7 @@
 #include <QtGui/qpainter.h>
 #include "widget painting.hpp"
 #include <QtWidgets/qboxlayout.h>
-#include <QtWidgets/qabstractbutton.h>
+#include "radio button widget.hpp"
 
 template <typename T>
 struct tag_t {};
@@ -23,7 +23,7 @@ struct tag_t {};
 template <typename T>
 constexpr tag_t<T> tag{};
 
-class ToolWidget final : public QAbstractButton {
+class ToolWidget final : public RadioButtonWidget {
   Q_OBJECT
   
 public:
@@ -32,7 +32,7 @@ public:
     ToolSelectWidget *tools,
     QWidget *parent,
     tag_t<WidgetClass>
-  ) : QAbstractButton{parent},
+  ) : RadioButtonWidget{parent},
       tools{tools},
       tool{std::make_unique<typename WidgetClass::impl>()},
       widget{std::make_unique<WidgetClass>()} {
@@ -43,13 +43,12 @@ public:
     setAutoExclusive(true);
     setFixedSize(tool_button_size);
     setContentsMargins(0, 0, 0, 0);
-    // @TODO should this be pressed or toggled?
-    CONNECT(this, pressed, this, toolPressed);
+    CONNECT(this, toggled, this, toolChanged);
   }
   
 public Q_SLOTS:
-  void toolPressed() {
-    tools->changeTool(this, tool.get());
+  void toolChanged(const bool checked) {
+    if (checked) tools->changeTool(this, tool.get());
   }
 
 private:
