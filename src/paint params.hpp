@@ -23,6 +23,14 @@ enum class CircleShape {
   c2x2
 };
 
+constexpr int centerOffsetX(const CircleShape shape) {
+  return (static_cast<std::underlying_type_t<CircleShape>>(shape) & 0b10) >> 1;
+}
+
+constexpr int centerOffsetY(const CircleShape shape) {
+  return (static_cast<std::underlying_type_t<CircleShape>>(shape) & 0b01);
+}
+
 enum class SymmetryMode {
   none,
   hori,
@@ -41,11 +49,7 @@ enum class SelectMode {
 };
 
 constexpr SelectMode opposite(const SelectMode mode) {
-  switch (mode) {
-    case SelectMode::copy: return SelectMode::paste;
-    case SelectMode::paste: return SelectMode::copy;
-    default: Q_UNREACHABLE();
-  }
+  return static_cast<SelectMode>(static_cast<std::underlying_type_t<SelectMode>>(mode) ^ 1);
 }
 
 #endif

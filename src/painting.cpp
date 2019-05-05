@@ -295,6 +295,7 @@ bool drawFilledRect(QImage &img, const QRgb color, const QRect rect) {
 bool drawStrokedRect(QImage &img, const QRgb color, const QRect rect) {
   if (!img.rect().intersects(rect)) return false;
   bool drawn = false;
+  // @TODO don't use drawLine
   drawn |= drawLine(img, color, {rect.topLeft(), rect.topRight()});
   drawn |= drawLine(img, color, {rect.topRight(), rect.bottomRight()});
   drawn |= drawLine(img, color, {rect.bottomLeft(), rect.bottomRight()});
@@ -306,118 +307,48 @@ namespace {
 
 template <typename Pixel>
 void setPixel(QImage &img, const QPoint pos, const Pixel color) {
-  // @TODO clip the line
-  // we can increment and decrement the pointer instead of using this function
-  if (img.rect().contains(pos)) {
-    const uintptr_t ppl = img.bytesPerLine() / sizeof(Pixel);
-    Pixel *const px = reinterpret_cast<Pixel *>(img.bits()) + pos.y() * ppl + pos.x();
-    *px = color;
-  }
+  assert(img.rect().contains(pos));
+  const uintptr_t ppl = img.bytesPerLine() / sizeof(Pixel);
+  Pixel *const px = reinterpret_cast<Pixel *>(img.bits()) + pos.y() * ppl + pos.x();
+  *px = color;
 }
 
-template <typename Pixel>
-void lineLilPos(QImage &img, const Pixel col, const QPoint p1, const QPoint p2) {
-  const int dx = p2.x() - p1.x();
-  const int dy = p2.y() - p1.y();
-  const int incE = 2 * dy;
-  const int incSE = 2 * (dy - dx);
-  int err = 2 * dy - dx;
-  QPoint pos = p1;
-  
-  while (pos.x() <= p2.x()) {
-    setPixel(img, pos, col);
-    ++pos.rx();
-    if (err < 0) {
-      err += incE;
-    } else {
-      err += incSE;
-      ++pos.ry();
-    }
-  }
-}
-
-template <typename Pixel>
-void lineBigPos(QImage &img, const Pixel col, const QPoint p1, const QPoint p2) {
-  const int dx = p2.x() - p1.x();
-  const int dy = p2.y() - p1.y();
-  const int incS = 2 * dx;
-  const int incSE = 2 * (dx - dy);
-  int err = 2 * dx - dy;
-  QPoint pos = p1;
-  
-  while (pos.y() <= p2.y()) {
-    setPixel(img, pos, col);
-    ++pos.ry();
-    if (err < 0) {
-      err += incS;
-    } else {
-      err += incSE;
-      ++pos.rx();
-    }
-  }
-}
-
-template <typename Pixel>
-void lineLilNeg(QImage &img, const Pixel col, const QPoint p1, const QPoint p2) {
-  const int dx = p2.x() - p1.x();
-  const int dy = p1.y() - p2.y();
-  const int incE = 2 * dy;
-  const int incNE = 2 * (dy - dx);
-  int err = 2 * dy - dx;
-  QPoint pos = p1;
-  
-  while (pos.x() <= p2.x()) {
-    setPixel(img, pos, col);
-    ++pos.rx();
-    if (err < 0) {
-      err += incE;
-    } else {
-      err += incNE;
-      --pos.ry();
-    }
-  }
-}
-
-template <typename Pixel>
-void lineBigNeg(QImage &img, const Pixel col, const QPoint p1, const QPoint p2) {
-  const int dx = p2.x() - p1.x();
-  const int dy = p1.y() - p2.y();
-  const int incN = 2 * dx;
-  const int incNE = 2 * (dx - dy);
-  int err = 2 * dx - dy;
-  QPoint pos = p1;
-  
-  while (pos.y() >= p2.y()) {
-    setPixel(img, pos, col);
-    --pos.ry();
-    if (err < 0) {
-      err += incN;
-    } else {
-      err += incNE;
-      ++pos.rx();
-    }
-  }
-}
-
-template <typename Pixel>
-void midpointLine(QImage &img, const Pixel col, QPoint p1, QPoint p2) {
-  img.detach();
-  
-  if (p2.x() < p1.x()) {
-    std::swap(p1, p2);
-  }
-  
-  const int dx = p2.x() - p1.x();
-  const int dy = p2.y() - p1.y();
-  
-  if (0 < dy && dy <= dx) {
-    return lineLilPos(img, col, p1, p2);
-  } else if (dx < dy) {
-    return lineBigPos(img, col, p1, p2);
-  } else if (-dy <= dx) {
-    return lineLilNeg(img, col, p1, p2);
+std::pair<int, int> signdiff(const int a, const int b) {
+  if (a < b) {
+    return {1, b - a};
   } else {
-    return lineBigNeg(img, col, p1, p2);
+    return {-1, a - b};
+  }
+}
+
+bool insideImage(const QPoint p, const QSize s) {
+  return 0 <= p.x() && p.x() < s.width() &&
+         0 <= p.y() && p.y() < s.height();
+}
+
+template <typename Pixel>
+void midpointLine(QImage &img, const Pixel col, QPoint p1, const QPoint p2) {
+  assert(img.isDetached());
+  
+  const QSize imgSize = img.size();
+  const auto [sx, dx] = signdiff(p1.x(), p2.x());
+  auto [sy, dy] = signdiff(p1.y(), p2.y());
+  dy = -dy;
+  int err = dx + dy;
+  
+  while (insideImage(p1, imgSize)) {
+    setPixel(img, p1, col);
+    const int err2 = 2 * err;
+    if (err2 >= dy) {
+      if (p1.x() == p2.x()) break;
+      err += dy;
+      p1.rx() += sx;
+    }
+    if (err2 <= dx) {
+      if (p1.y() == p2.y()) break;
+      err += dx;
+      p1.ry() += sy;
+    }
   }
 }
 
