@@ -324,16 +324,15 @@ void lineLilPos(QImage &img, const Pixel col, const QPoint p1, const QPoint p2) 
   int err = 2 * dy - dx;
   QPoint pos = p1;
   
-  setPixel(img, pos, col);
-  while (pos.x() < p2.x()) {
+  while (pos.x() <= p2.x()) {
+    setPixel(img, pos, col);
+    ++pos.rx();
     if (err < 0) {
       err += incE;
     } else {
       err += incSE;
       ++pos.ry();
     }
-    ++pos.rx();
-    setPixel(img, pos, col);
   }
 }
 
@@ -346,16 +345,15 @@ void lineBigPos(QImage &img, const Pixel col, const QPoint p1, const QPoint p2) 
   int err = 2 * dx - dy;
   QPoint pos = p1;
   
-  setPixel(img, pos, col);
-  while (pos.y() < p2.y()) {
+  while (pos.y() <= p2.y()) {
+    setPixel(img, pos, col);
+    ++pos.ry();
     if (err < 0) {
       err += incS;
     } else {
       err += incSE;
       ++pos.rx();
     }
-    ++pos.ry();
-    setPixel(img, pos, col);
   }
 }
 
@@ -368,16 +366,15 @@ void lineLilNeg(QImage &img, const Pixel col, const QPoint p1, const QPoint p2) 
   int err = 2 * dy - dx;
   QPoint pos = p1;
   
-  setPixel(img, pos, col);
-  while (pos.x() < p2.x()) {
+  while (pos.x() <= p2.x()) {
+    setPixel(img, pos, col);
+    ++pos.rx();
     if (err < 0) {
       err += incE;
     } else {
       err += incNE;
       --pos.ry();
     }
-    ++pos.rx();
-    setPixel(img, pos, col);
   }
 }
 
@@ -390,16 +387,15 @@ void lineBigNeg(QImage &img, const Pixel col, const QPoint p1, const QPoint p2) 
   int err = 2 * dx - dy;
   QPoint pos = p1;
   
-  setPixel(img, pos, col);
-  while (pos.y() > p2.y()) {
+  while (pos.y() >= p2.y()) {
+    setPixel(img, pos, col);
+    --pos.ry();
     if (err < 0) {
       err += incN;
     } else {
       err += incNE;
       ++pos.rx();
     }
-    --pos.ry();
-    setPixel(img, pos, col);
   }
 }
 
