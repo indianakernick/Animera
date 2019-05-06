@@ -9,6 +9,7 @@
 #ifndef window_hpp
 #define window_hpp
 
+#include "fps widget.hpp"
 #include "undo object.hpp"
 #include "clear object.hpp"
 #include "editor widget.hpp"
@@ -28,6 +29,7 @@ public:
 private:
   QWidget bottom;
   QWidget right;
+  FPSWidget fps;
   Animation anim;
   UndoObject undo;
   ClearObject clear;

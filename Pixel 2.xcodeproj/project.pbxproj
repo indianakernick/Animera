@@ -26,6 +26,7 @@
 		453D28D02276A9DF00D0E5F9 /* color convert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453D28CE2276A9DF00D0E5F9 /* color convert.cpp */; };
 		453D28D32276F0FE00D0E5F9 /* color label widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453D28D12276F0FD00D0E5F9 /* color label widget.cpp */; };
 		453D28D72278134200D0E5F9 /* color handle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453D28D52278134200D0E5F9 /* color handle.cpp */; };
+		454FDE992280024800928068 /* fps widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 454FDE972280024800928068 /* fps widget.cpp */; };
 		455F285C2206890300C73F39 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 455F285B2206890300C73F39 /* Assets.xcassets */; };
 		455F2868220690A600C73F39 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 455F2867220690A600C73F39 /* main.cpp */; };
 		455F2875220691DE00C73F39 /* QtPositioningQuick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455F286A220691DC00C73F39 /* QtPositioningQuick.framework */; };
@@ -112,6 +113,8 @@
 		453D28D42277129800D0E5F9 /* connect.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = connect.hpp; sourceTree = "<group>"; };
 		453D28D52278134200D0E5F9 /* color handle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "color handle.cpp"; sourceTree = "<group>"; };
 		453D28D62278134200D0E5F9 /* color handle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "color handle.hpp"; sourceTree = "<group>"; };
+		454FDE972280024800928068 /* fps widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "fps widget.cpp"; sourceTree = "<group>"; };
+		454FDE982280024800928068 /* fps widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "fps widget.hpp"; sourceTree = "<group>"; };
 		455F2851220688FD00C73F39 /* Pixel 2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pixel 2.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		455F285B2206890300C73F39 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		455F28602206890300C73F39 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -909,6 +912,7 @@
 				453C783F2234DF3200818B19 /* application.hpp */,
 				453C78412234E13E00818B19 /* window.cpp */,
 				453C78422234E13E00818B19 /* window.hpp */,
+				454FDE962280020900928068 /* General */,
 				453D28CD2276A81B00D0E5F9 /* Timeline */,
 				453D28CB2276A80800D0E5F9 /* Editor */,
 				453D28CC2276A81100D0E5F9 /* Tool select */,
@@ -1015,6 +1019,15 @@
 				453C78452234F3C600818B19 /* status bar widget.hpp */,
 			);
 			name = Timeline;
+			sourceTree = "<group>";
+		};
+		454FDE962280020900928068 /* General */ = {
+			isa = PBXGroup;
+			children = (
+				454FDE972280024800928068 /* fps widget.cpp */,
+				454FDE982280024800928068 /* fps widget.hpp */,
+			);
+			name = General;
 			sourceTree = "<group>";
 		};
 		455F2848220688FC00C73F39 = {
@@ -2095,6 +2108,7 @@
 				453D28BD22768D9900D0E5F9 /* text input widget.cpp in Sources */,
 				45B284B6221B726200D6D055 /* tool impls.cpp in Sources */,
 				453C781F22349F0100818B19 /* tool select widget.cpp in Sources */,
+				454FDE992280024800928068 /* fps widget.cpp in Sources */,
 				45054F6D22596BC10078350B /* clear object.cpp in Sources */,
 				453D28D72278134200D0E5F9 /* color handle.cpp in Sources */,
 				453C78192234935000818B19 /* timeline widget.cpp in Sources */,

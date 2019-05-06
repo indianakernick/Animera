@@ -18,6 +18,7 @@
 Window::Window(const QRect desktop)
   : bottom{this},
     right{this},
+    fps{&bottom},
     editor{this, anim},
     colors{&right},
     tools{this},
@@ -55,6 +56,8 @@ void Window::setupUI() {
   bottom.setContentsMargins(0, 0, 0, 0);
   bottomLayout->setContentsMargins(0, 0, 0, 0);
   bottomLayout->setSpacing(0);
+  // simply placing a widget on top is apparently very difficult
+  bottomLayout->addWidget(&fps);
   bottomLayout->addWidget(&timeline);
   bottomLayout->addWidget(&statusBar);
   bottomLayout->setAlignment(Qt::AlignBottom);
@@ -74,6 +77,8 @@ void Window::setupUI() {
   makeDockWidget(Qt::BottomDockWidgetArea, &bottom);
   makeDockWidget(Qt::RightDockWidgetArea, &right);
   setCentralWidget(&editor);
+  
+  fps.start();
 }
 
 void Window::setupMenubar() {
