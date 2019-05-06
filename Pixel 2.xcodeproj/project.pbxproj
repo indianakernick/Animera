@@ -74,6 +74,7 @@
 		45054F722259C9AA0078350B /* color picker widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "color picker widget.hpp"; sourceTree = "<group>"; };
 		4512636422781D7B00C66A19 /* tool colors widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "tool colors widget.cpp"; sourceTree = "<group>"; };
 		4512636522781D7B00C66A19 /* tool colors widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "tool colors widget.hpp"; sourceTree = "<group>"; };
+		453C0A7F227FCE760080FEF2 /* pixel manip.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "pixel manip.hpp"; sourceTree = "<group>"; };
 		453C78172234935000818B19 /* timeline widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "timeline widget.cpp"; sourceTree = "<group>"; };
 		453C78182234935000818B19 /* timeline widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "timeline widget.hpp"; sourceTree = "<group>"; };
 		453C781A22349BBD00818B19 /* editor widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "editor widget.cpp"; sourceTree = "<group>"; };
@@ -842,6 +843,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		453B7C76227ECF62003BB799 /* Graphics */ = {
+			isa = PBXGroup;
+			children = (
+				453C0A7F227FCE760080FEF2 /* pixel manip.hpp */,
+			);
+			name = Graphics;
+			sourceTree = "<group>";
+		};
 		453C78222234CB5500818B19 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -1040,6 +1049,7 @@
 				458F84032249CB7C005F91D0 /* config.hpp */,
 				455F2867220690A600C73F39 /* main.cpp */,
 				458F84052249DF97005F91D0 /* Utilities */,
+				453B7C76227ECF62003BB799 /* Graphics */,
 				453C783C2234DECE00818B19 /* Cells */,
 				453C783B2234DEBA00818B19 /* Tools */,
 				453C783D2234DEF100818B19 /* Widgets */,
