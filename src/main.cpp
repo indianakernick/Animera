@@ -1874,7 +1874,7 @@ int main(int argc, char **argv) {
   dup.fill(0);
   
   timer.start("midpoint filled");
-  drawFilledCircle(dup, fillColor, circPos, CircleShape::c1x1, circRad);
+  drawFilledCircle(dup, fillColor, circPos, circRad);
   timer.stop();
   
   dup.save("/Users/indikernick/Desktop/Test/circle.png");
@@ -1907,7 +1907,7 @@ int main(int argc, char **argv) {
   
   timer.start("1 stroked smear");
   for (int x = 64; x < image.width() - 64; ++x) {
-    drawStrokedCircle(image, fillColor, {x, x}, CircleShape::c1x1, 32, 1);
+    drawStrokedCircle(image, fillColor, {x, x}, 32, 1);
   }
   timer.stop();
   
@@ -1916,7 +1916,7 @@ int main(int argc, char **argv) {
   
   timer.start("2 stroked smear");
   for (int x = 64; x < image.width() - 64; ++x) {
-    drawStrokedCircle(image, fillColor, {x, x}, CircleShape::c1x1, 32, 2);
+    drawStrokedCircle(image, fillColor, {x, x}, 32, 2);
   }
   timer.stop();
   

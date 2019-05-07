@@ -127,18 +127,18 @@ QPoint reflectXY(const QSize size, const QPoint point) {
 
 bool BrushTool::symLine(QImage &img, const QRgb col, const QLine line) {
   const QSize size = img.size();
-  bool drawn = drawRoundLine(img, col, line, width);
+  bool drawn = drawLine(img, col, line, width);
   if (mode & SymmetryMode::hori) {
     const QLine refl = {reflectX(size, line.p1()), reflectX(size, line.p2())};
-    drawn |= drawRoundLine(img, col, refl, width);
+    drawn |= drawLine(img, col, refl, width);
   }
   if (mode & SymmetryMode::vert) {
     const QLine refl = {reflectY(size, line.p1()), reflectY(size, line.p2())};
-    drawn |= drawRoundLine(img, col, refl, width);
+    drawn |= drawLine(img, col, refl, width);
   }
   if (mode & SymmetryMode::both) {
     const QLine refl = {reflectXY(size, line.p1()), reflectXY(size, line.p2())};
-    drawn |= drawRoundLine(img, col, refl, width);
+    drawn |= drawLine(img, col, refl, width);
   }
   return drawn;
 }
@@ -371,6 +371,7 @@ template <typename Derived>
 ToolChanges DragPaintTool<Derived>::mouseUp(const ToolMouseEvent &event) {
   assert(source);
   clearImage(*event.overlay);
+  that()->drawOverlay(*event.overlay, event.pos);
   copyImage(source->image.data, cleanImage);
   const bool drawn = that()->drawDrag(source->image, startPos, event.pos);
   startPos = no_point;
@@ -394,16 +395,20 @@ Derived *DragPaintTool<Derived>::that() {
 
 LineTool::~LineTool() = default;
 
+void LineTool::setThick(const int newThick) {
+  thickness = newThick;
+}
+
 bool LineTool::drawPoint(Image &image, const QPoint pos) {
-  return drawSquarePoint(image.data, getColor(), pos);
+  return drawRoundPoint(image.data, getColor(), pos, thickness);
 }
 
 bool LineTool::drawDrag(Image &image, const QPoint start, const QPoint end) {
-  return drawLine(image.data, getColor(), {start, end});
+  return drawLine(image.data, getColor(), {start, end}, thickness);
 }
 
 void LineTool::drawOverlay(QImage &overlay, const QPoint pos) {
-  drawSquarePoint(overlay, tool_overlay_color, pos);
+  drawRoundPoint(overlay, tool_overlay_color, pos, thickness);
 }
 
 void LineTool::updateStatus(StatusMsg &status, const QPoint start, const QPoint end) {
@@ -419,8 +424,12 @@ void StrokedCircleTool::setShape(const CircleShape newShape) {
   shape = newShape;
 }
 
-bool StrokedCircleTool::drawPoint(Image &, QPoint) {
-  return false;
+void StrokedCircleTool::setThick(const int newThick) {
+  thickness = newThick;
+}
+
+bool StrokedCircleTool::drawPoint(Image &image, const QPoint pos) {
+  return drawSquarePoint(image.data, getColor(), pos, shape);
 }
 
 namespace {
@@ -438,7 +447,7 @@ int calcRadius(const QPoint start, const QPoint end) {
 }
 
 bool StrokedCircleTool::drawDrag(Image &image, const QPoint start, const QPoint end) {
-  return drawStrokedCircle(image.data, getColor(), start, shape, calcRadius(start, end), thickness);
+  return drawStrokedCircle(image.data, getColor(), start, calcRadius(start, end), thickness, shape);
 }
 
 void StrokedCircleTool::drawOverlay(QImage &overlay, const QPoint pos) {
@@ -458,12 +467,12 @@ void FilledCircleTool::setShape(const CircleShape newShape) {
   shape = newShape;
 }
 
-bool FilledCircleTool::drawPoint(Image &, QPoint) {
-  return false;
+bool FilledCircleTool::drawPoint(Image &image, const QPoint pos) {
+  return drawSquarePoint(image.data, getColor(), pos, shape);
 }
 
 bool FilledCircleTool::drawDrag(Image &image, const QPoint start, const QPoint end) {
-  return drawFilledCircle(image.data, getColor(), start, shape, calcRadius(start, end));
+  return drawFilledCircle(image.data, getColor(), start, calcRadius(start, end), shape);
 }
 
 void FilledCircleTool::drawOverlay(QImage &overlay, const QPoint pos) {
@@ -478,6 +487,10 @@ void FilledCircleTool::updateStatus(StatusMsg &status, const QPoint start, const
 }
 
 StrokedRectangleTool::~StrokedRectangleTool() = default;
+
+void StrokedRectangleTool::setThick(const int newThick) {
+  thickness = newThick;
+}
 
 bool StrokedRectangleTool::drawPoint(Image &image, const QPoint pos) {
   return drawSquarePoint(image.data, getColor(), pos);

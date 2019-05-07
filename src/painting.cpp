@@ -31,39 +31,25 @@ PixelManip<Pixel> makePixelManip(QImage &image) {
   };
 }
 
-const QPen round_pen{
-  Qt::NoBrush, 1.0, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin
-};
-
-QPen makePen(const QPen &base, const QRgb color, const int width) {
-  QPen pen = base;
-  pen.setColor(QColor::fromRgba(color));
-  pen.setWidth(width);
-  return pen;
 }
 
-void preparePainter(QPainter &painter) {
-  painter.setCompositionMode(QPainter::CompositionMode_Source);
-}
-
-}
-
-bool drawSquarePoint(QImage &img, const QRgb color, const QPoint pos) {
+bool drawSquarePoint(QImage &img, const QRgb color, const QPoint pos, const CircleShape shape) {
   if (img.depth() == 8) {
-    return makePixelManip<uint8_t>(img).setPixelClip(color, pos);
+    return makePixelManip<uint8_t>(img).fillRectClip(color, centerRect(pos, shape));
   } else if (img.depth() == 32) {
-    return makePixelManip<uint32_t>(img).setPixelClip(color, pos);
+    return makePixelManip<uint32_t>(img).fillRectClip(color, centerRect(pos, shape));
   } else {
     Q_UNREACHABLE();
   }
 }
 
-bool drawRoundPoint(QImage &img, const QRgb color, const QPoint pos, const int thickness) {
-  QPainter painter{&img};
-  preparePainter(painter);
-  painter.setPen(makePen(round_pen, color, thickness));
-  painter.drawPoint(pos);
-  return true;
+bool drawRoundPoint(QImage &img, const QRgb color, const QPoint pos, const int thickness, const CircleShape shape) {
+  assert(thickness > 0);
+  if (thickness == 1) {
+    return drawSquarePoint(img, color, pos, shape);
+  } else {
+    return drawFilledCircle(img, color, pos, thickness, shape);
+  }
 }
 
 namespace {
@@ -228,7 +214,7 @@ bool midpointFilledCircle(
 
 }
 
-bool drawFilledCircle(QImage &img, const QRgb color, const QPoint center, const CircleShape shape, const int radius) {
+bool drawFilledCircle(QImage &img, const QRgb color, const QPoint center, const int radius, const CircleShape shape) {
   if (img.depth() == 8) {
     return midpointFilledCircle<uint8_t>(img, color, center, radius, shape);
   } else if (img.depth() == 32) {
@@ -338,7 +324,7 @@ bool midpointThickCircle(
 
 }
 
-bool drawStrokedCircle(QImage &img, const QRgb color, const QPoint center, const CircleShape shape, const int radius, const int thickness) {
+bool drawStrokedCircle(QImage &img, const QRgb color, const QPoint center, const int radius, const int thickness, const CircleShape shape) {
   assert(thickness > 0);
   if (img.depth() == 8) {
     if (thickness == 1) {
@@ -424,9 +410,8 @@ std::pair<int, int> signdiff(const int a, const int b) {
   }
 }
 
-template <typename Pixel>
-bool midpointLine(QImage &img, const Pixel col, QPoint p1, const QPoint p2) {
-  PixelManip manip = makePixelManip<Pixel>(img);
+template <typename SetPixel>
+bool midpointLine(QPoint p1, const QPoint p2, SetPixel &&setPixel) {
   const auto [sx, dx] = signdiff(p1.x(), p2.x());
   auto [sy, dy] = signdiff(p1.y(), p2.y());
   dy = -dy;
@@ -434,7 +419,7 @@ bool midpointLine(QImage &img, const Pixel col, QPoint p1, const QPoint p2) {
   bool drawn = false;
   
   while (true) {
-    drawn |= manip.setPixelClip(col, p1);
+    drawn |= setPixel(p1);
     const int err2 = 2 * err;
     if (err2 >= dy) {
       if (p1.x() == p2.x()) break;
@@ -451,24 +436,42 @@ bool midpointLine(QImage &img, const Pixel col, QPoint p1, const QPoint p2) {
   return drawn;
 }
 
+template <typename Pixel>
+bool midpointLine(QImage &img, const Pixel col, const QPoint p1, const QPoint p2) {
+  PixelManip<Pixel> manip = makePixelManip<Pixel>(img);
+  return midpointLine(p1, p2, [manip, col](const QPoint pos) mutable {
+    return manip.setPixelClip(col, pos);
+  });
 }
 
-bool drawLine(QImage &img, const QRgb color, const QLine line) {
+// @TODO this is suboptimial but seems to be fast enough
+template <typename Pixel>
+bool midpointThickLine(QImage &img, const Pixel col, const QPoint p1, const QPoint p2, const int thickness) {
+  midpointFilledCircle(img, col, p1, thickness, CircleShape::c1x1);
+  return midpointLine(p1, p2, [&img, col, thickness](const QPoint pos) {
+    return midpointThickCircle(img, col, pos, thickness - 1, thickness, CircleShape::c1x1);
+  });
+}
+
+}
+
+bool drawLine(QImage &img, const QRgb color, const QLine line, const int thickness) {
+  assert(thickness > 0);
   if (img.depth() == 8) {
-    return midpointLine<uint8_t>(img, color, line.p1(), line.p2());
+    if (thickness == 1) {
+      return midpointLine<uint8_t>(img, color, line.p1(), line.p2());
+    } else {
+      return midpointThickLine<uint8_t>(img, color, line.p1(), line.p2(), thickness);
+    }
   } else if (img.depth() == 32) {
-    return midpointLine<uint32_t>(img, color, line.p1(), line.p2());
+    if (thickness == 1) {
+      return midpointLine<uint32_t>(img, color, line.p1(), line.p2());
+    } else {
+      return midpointThickLine<uint32_t>(img, color, line.p1(), line.p2(), thickness);
+    }
   } else {
     Q_UNREACHABLE();
   }
-}
-
-bool drawRoundLine(QImage &img, const QRgb color, const QLine line, const int thickness) {
-  QPainter painter{&img};
-  preparePainter(painter);
-  painter.setPen(makePen(round_pen, color, thickness));
-  painter.drawLine(line);
-  return true;
 }
 
 bool drawFilledPolygon(
@@ -483,9 +486,9 @@ bool drawFilledPolygon(
     shiftedPoly.push_back(vertex + offset);
   }
   QPainter painter{&img};
-  preparePainter(painter);
+  painter.setCompositionMode(QPainter::CompositionMode_Source);
   painter.setBrush(QColor::fromRgba(color));
-  painter.setPen(makePen(round_pen, color, 1));
+  painter.setPen(QColor::fromRgba(color));
   painter.drawPolygon(shiftedPoly.data(), static_cast<int>(shiftedPoly.size()));
   return true;
 }

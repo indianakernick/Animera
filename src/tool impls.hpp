@@ -31,7 +31,7 @@ private:
   QPoint lastPos = no_point;
   SourceCell *source = nullptr;
   // @TODO restore these to 1 and none
-  int width = 8;
+  int width = 4;
   SymmetryMode mode = SymmetryMode::both;
   QRgb color = 0;
   
@@ -117,8 +117,13 @@ public:
   friend class DragPaintTool;
 
   ~LineTool();
+  
+  void setThick(int);
 
 private:
+  // @TODO restore this to 1
+  int thickness = 4;
+ 
   bool drawPoint(Image &, QPoint);
   bool drawDrag(Image &, QPoint, QPoint);
   void drawOverlay(QImage &, QPoint);
@@ -132,9 +137,11 @@ public:
   ~StrokedCircleTool();
 
   void setShape(CircleShape);
+  void setThick(int);
   
 private:
   CircleShape shape = CircleShape::c1x1;
+  // @TODO restore this to 1
   int thickness = 8;
 
   bool drawPoint(Image &, QPoint);
@@ -165,8 +172,11 @@ public:
   friend class DragPaintTool;
   
   ~StrokedRectangleTool();
+  
+  void setThick(int);
 
 private:
+  // @TODO restore this to 1
   int thickness = 4;
 
   bool drawPoint(Image &, QPoint);
