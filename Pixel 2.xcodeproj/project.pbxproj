@@ -29,22 +29,13 @@
 		454FDE992280024800928068 /* fps widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 454FDE972280024800928068 /* fps widget.cpp */; };
 		455F285C2206890300C73F39 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 455F285B2206890300C73F39 /* Assets.xcassets */; };
 		455F2868220690A600C73F39 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 455F2867220690A600C73F39 /* main.cpp */; };
-		455F2875220691DE00C73F39 /* QtPositioningQuick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455F286A220691DC00C73F39 /* QtPositioningQuick.framework */; };
-		455F2876220691DE00C73F39 /* QtMacExtras.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455F286B220691DD00C73F39 /* QtMacExtras.framework */; };
-		455F2877220691DE00C73F39 /* QtMultimediaWidgets.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455F286C220691DD00C73F39 /* QtMultimediaWidgets.framework */; };
-		455F2878220691DE00C73F39 /* QtOpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455F286D220691DD00C73F39 /* QtOpenGL.framework */; };
 		455F2879220691DE00C73F39 /* QtCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455F286E220691DD00C73F39 /* QtCore.framework */; };
-		455F287A220691DE00C73F39 /* QtMultimedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455F286F220691DD00C73F39 /* QtMultimedia.framework */; };
-		455F287B220691DE00C73F39 /* QtHelp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455F2870220691DD00C73F39 /* QtHelp.framework */; };
-		455F287C220691DE00C73F39 /* QtPositioning.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455F2871220691DD00C73F39 /* QtPositioning.framework */; };
 		455F287D220691DE00C73F39 /* QtWidgets.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455F2872220691DD00C73F39 /* QtWidgets.framework */; };
-		455F287E220691DE00C73F39 /* QtMultimediaQuick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455F2873220691DD00C73F39 /* QtMultimediaQuick.framework */; };
 		455F287F220691DE00C73F39 /* QtGui.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455F2874220691DD00C73F39 /* QtGui.framework */; };
 		455F2881220692EE00C73F39 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455F2880220692EE00C73F39 /* Cocoa.framework */; };
 		455F28832206930200C73F39 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455F28822206930200C73F39 /* IOKit.framework */; };
 		455F28852206930800C73F39 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455F28842206930800C73F39 /* CoreVideo.framework */; };
 		455F28872206930E00C73F39 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455F28862206930D00C73F39 /* OpenGL.framework */; };
-		455F288C2206B57300C73F39 /* QtQuick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455F288B2206B57300C73F39 /* QtQuick.framework */; };
 		4571C132227C383A00479006 /* radio button widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4571C130227C383A00479006 /* radio button widget.cpp */; };
 		458F84082249DFC8005F91D0 /* polygon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 458F84062249DFC8005F91D0 /* polygon.cpp */; };
 		45B284932218E38800D6D055 /* image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45B284912218E38800D6D055 /* image.cpp */; };
@@ -824,21 +815,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				455F288C2206B57300C73F39 /* QtQuick.framework in Frameworks */,
 				455F28872206930E00C73F39 /* OpenGL.framework in Frameworks */,
 				455F28852206930800C73F39 /* CoreVideo.framework in Frameworks */,
 				455F28832206930200C73F39 /* IOKit.framework in Frameworks */,
 				455F2881220692EE00C73F39 /* Cocoa.framework in Frameworks */,
-				455F2875220691DE00C73F39 /* QtPositioningQuick.framework in Frameworks */,
-				455F2876220691DE00C73F39 /* QtMacExtras.framework in Frameworks */,
-				455F2877220691DE00C73F39 /* QtMultimediaWidgets.framework in Frameworks */,
-				455F2878220691DE00C73F39 /* QtOpenGL.framework in Frameworks */,
 				455F2879220691DE00C73F39 /* QtCore.framework in Frameworks */,
-				455F287A220691DE00C73F39 /* QtMultimedia.framework in Frameworks */,
-				455F287B220691DE00C73F39 /* QtHelp.framework in Frameworks */,
-				455F287C220691DE00C73F39 /* QtPositioning.framework in Frameworks */,
 				455F287D220691DE00C73F39 /* QtWidgets.framework in Frameworks */,
-				455F287E220691DE00C73F39 /* QtMultimediaQuick.framework in Frameworks */,
 				455F287F220691DE00C73F39 /* QtGui.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
