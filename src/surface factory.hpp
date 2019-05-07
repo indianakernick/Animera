@@ -1,19 +1,21 @@
 //
-//  pixel manip factory.hpp
+//  surface factory.hpp
 //  Pixel 2
 //
 //  Created by Indi Kernick on 7/5/19.
 //  Copyright © 2019 Indi Kernick. All rights reserved.
 //
 
-#ifndef pixel_manip_factory_hpp
-#define pixel_manip_factory_hpp
+#ifndef surface_factory_hpp
+#define surface_factory_hpp
 
+#include "surface.hpp"
 #include <QtGui/qimage.h>
-#include "pixel manip.hpp"
+
+// @TODO is there some way of dealing with the duplication?
 
 template <typename Pixel>
-PixelManip<Pixel> makePixelManip(QImage &image) {
+Surface<Pixel> makeSurface(QImage &image) {
   assert(image.isDetached());
   assert(image.depth() == sizeof(Pixel) * CHAR_BIT);
   // QImage::bits() is aligned to 4 bytes
@@ -28,7 +30,7 @@ PixelManip<Pixel> makePixelManip(QImage &image) {
 }
 
 template <typename Pixel>
-PixelManip<const Pixel> makePixelManip(const QImage &image) {
+Surface<const Pixel> makeSurface(const QImage &image) {
   assert(image.isDetached());
   assert(image.depth() == sizeof(Pixel) * CHAR_BIT);
   // QImage::bits() is aligned to 4 bytes

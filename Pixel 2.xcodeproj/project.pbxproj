@@ -66,7 +66,7 @@
 		45054F722259C9AA0078350B /* color picker widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "color picker widget.hpp"; sourceTree = "<group>"; };
 		4512636422781D7B00C66A19 /* tool colors widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "tool colors widget.cpp"; sourceTree = "<group>"; };
 		4512636522781D7B00C66A19 /* tool colors widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "tool colors widget.hpp"; sourceTree = "<group>"; };
-		453C0A7F227FCE760080FEF2 /* pixel manip.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "pixel manip.hpp"; sourceTree = "<group>"; };
+		453C0A7F227FCE760080FEF2 /* surface.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = surface.hpp; sourceTree = "<group>"; };
 		453C78172234935000818B19 /* timeline widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "timeline widget.cpp"; sourceTree = "<group>"; };
 		453C78182234935000818B19 /* timeline widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "timeline widget.hpp"; sourceTree = "<group>"; };
 		453C781A22349BBD00818B19 /* editor widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "editor widget.cpp"; sourceTree = "<group>"; };
@@ -799,7 +799,7 @@
 		45DC2571224CC46400F40116 /* stroked rectangle.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = "stroked rectangle.pbm"; sourceTree = "<group>"; };
 		45DC2572224CC46500F40116 /* flip.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = flip.pbm; sourceTree = "<group>"; };
 		45DC2573224CC46500F40116 /* polygon select.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = "polygon select.pbm"; sourceTree = "<group>"; };
-		45DECE1422813AA2000920A9 /* pixel manip factory.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "pixel manip factory.hpp"; sourceTree = "<group>"; };
+		45DECE1422813AA2000920A9 /* surface factory.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "surface factory.hpp"; sourceTree = "<group>"; };
 		45DFE497224DE89E00EA40C5 /* global font.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "global font.cpp"; sourceTree = "<group>"; };
 		45DFE498224DE89E00EA40C5 /* global font.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "global font.hpp"; sourceTree = "<group>"; };
 		45DFE49C2250835900EA40C5 /* cursors.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = cursors.cpp; sourceTree = "<group>"; };
@@ -832,8 +832,8 @@
 		453B7C76227ECF62003BB799 /* Graphics */ = {
 			isa = PBXGroup;
 			children = (
-				453C0A7F227FCE760080FEF2 /* pixel manip.hpp */,
-				45DECE1422813AA2000920A9 /* pixel manip factory.hpp */,
+				453C0A7F227FCE760080FEF2 /* surface.hpp */,
+				45DECE1422813AA2000920A9 /* surface factory.hpp */,
 			);
 			name = Graphics;
 			sourceTree = "<group>";

@@ -10,7 +10,7 @@
 
 #include "config.hpp"
 #include <QtGui/qpainter.h>
-#include "pixel manip factory.hpp"
+#include "surface factory.hpp"
 
 /*
 #include <cmath>
@@ -189,7 +189,7 @@ void applyMaskPixel(QRgb &pixel, const uchar mask) {
 void colorToOverlay(QImage &img) {
   assert(img.format() == getImageFormat(Format::color));
   img.detach();
-  for (auto row : makePixelManip<uint32_t>(img).range()) {
+  for (auto row : makeSurface<uint32_t>(img).range()) {
     for (uint32_t &pixel : row) {
       colorToOverlay(pixel);
     }
@@ -201,8 +201,8 @@ void colorToOverlay(QImage &img, const QImage &mask) {
   assert(img.size() == mask.size());
   img.detach();
   
-  Range imgRange = makePixelManip<uint32_t>(img).range();
-  auto maskRowIter = makePixelManip<uint8_t>(mask).range().begin();
+  Range imgRange = makeSurface<uint32_t>(img).range();
+  auto maskRowIter = makeSurface<uint8_t>(mask).range().begin();
   
   for (auto imgRow : imgRange) {
     const uint8_t *maskPixelIter = (*maskRowIter).begin();

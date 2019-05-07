@@ -10,15 +10,15 @@
 
 #include "geometry.hpp"
 #include <QtGui/qpainter.h>
-#include "pixel manip factory.hpp"
+#include "surface factory.hpp"
 
 // @TODO naming and parameter order are not very consistent in this file
 
 bool drawSquarePoint(QImage &img, const QRgb color, const QPoint pos, const CircleShape shape) {
   if (img.depth() == 8) {
-    return makePixelManip<uint8_t>(img).fillRectClip(color, centerRect(pos, shape));
+    return makeSurface<uint8_t>(img).fillRectClip(color, centerRect(pos, shape));
   } else if (img.depth() == 32) {
-    return makePixelManip<uint32_t>(img).fillRectClip(color, centerRect(pos, shape));
+    return makeSurface<uint32_t>(img).fillRectClip(color, centerRect(pos, shape));
   } else {
     Q_UNREACHABLE();
   }
@@ -36,22 +36,22 @@ bool drawRoundPoint(QImage &img, const QRgb color, const QPoint pos, const int t
 namespace {
 
 template <typename Pixel>
-class FloodFillPixelManip {
+class FloodFillSurface {
 public:
-  FloodFillPixelManip(const PixelManip<Pixel> &manip, const Pixel startColor, const Pixel toolColor)
-    : manip{manip},
+  FloodFillSurface(const Surface<Pixel> &surface, const Pixel startColor, const Pixel toolColor)
+    : surface{surface},
       startColor{startColor},
       toolColor{toolColor} {}
 
   bool filled(const QPoint pos) const {
-    return manip.getPixel(pos) != startColor;
+    return surface.getPixel(pos) != startColor;
   }
   void fill(const QPoint pos) {
-    manip.setPixel(toolColor, pos);
+    surface.setPixel(toolColor, pos);
   }
 
 private:
-  PixelManip<Pixel> manip;
+  Surface<Pixel> surface;
   Pixel startColor;
   Pixel toolColor;
 };
@@ -76,10 +76,10 @@ QPoint left(const QPoint p) {
 // http://www.adammil.net/blog/v126_A_More_Efficient_Flood_Fill.html
 
 template <typename Pixel>
-void floodFillStart(FloodFillPixelManip<Pixel>, QPoint, QSize);
+void floodFillStart(FloodFillSurface<Pixel>, QPoint, QSize);
 
 template <typename Pixel>
-void floodFillCore(FloodFillPixelManip<Pixel> px, QPoint pos, const QSize size) {
+void floodFillCore(FloodFillSurface<Pixel> px, QPoint pos, const QSize size) {
   int lastRowLength = 0;
   do {
     int rowLength = 0;
@@ -120,7 +120,7 @@ void floodFillCore(FloodFillPixelManip<Pixel> px, QPoint pos, const QSize size) 
 }
 
 template <typename Pixel>
-void floodFillStart(FloodFillPixelManip<Pixel> px, QPoint pos, const QSize size) {
+void floodFillStart(FloodFillSurface<Pixel> px, QPoint pos, const QSize size) {
   while (true) {
     const QPoint startPos = pos;
     while (pos.y() != 0 && !px.filled(up(pos))) pos = up(pos);
@@ -133,11 +133,11 @@ void floodFillStart(FloodFillPixelManip<Pixel> px, QPoint pos, const QSize size)
 template <typename Pixel>
 bool floodFill(QImage &img, const QPoint startPos, const Pixel color) {
   img.detach();
-  PixelManip manip = makePixelManip<Pixel>(img);
+  Surface surface = makeSurface<Pixel>(img);
   const Pixel toolColor = static_cast<Pixel>(color);
-  const Pixel startColor = manip.getPixel(startPos);
+  const Pixel startColor = surface.getPixel(startPos);
   if (startColor == toolColor) return false;
-  FloodFillPixelManip<Pixel> px{manip, startColor, toolColor};
+  FloodFillSurface<Pixel> px{surface, startColor, toolColor};
   floodFillStart(px, startPos, img.size());
   return true;
 }
@@ -167,7 +167,7 @@ bool midpointFilledCircle(
   const int rad,
   const CircleShape shape
 ) {
-  PixelManip manip = makePixelManip<Pixel>(img);
+  Surface surface = makeSurface<Pixel>(img);
   QPoint pos = {rad, 0};
   int err = 1 - rad;
   const int extraX = centerOffsetX(shape);
@@ -175,10 +175,10 @@ bool midpointFilledCircle(
   bool drawn = false;
   
   while (pos.x() >= pos.y()) {
-    drawn |= manip.horiLineClip(col, {ctr.x() - pos.x(), ctr.y() + pos.y() + extraY}, ctr.x() + pos.x() + extraX);
-    drawn |= manip.horiLineClip(col, {ctr.x() - pos.x(), ctr.y() - pos.y()},          ctr.x() + pos.x() + extraX);
-    drawn |= manip.horiLineClip(col, {ctr.x() - pos.y(), ctr.y() + pos.x() + extraY}, ctr.x() + pos.y() + extraX);
-    drawn |= manip.horiLineClip(col, {ctr.x() - pos.y(), ctr.y() - pos.x()},          ctr.x() + pos.y() + extraX);
+    drawn |= surface.horiLineClip(col, {ctr.x() - pos.x(), ctr.y() + pos.y() + extraY}, ctr.x() + pos.x() + extraX);
+    drawn |= surface.horiLineClip(col, {ctr.x() - pos.x(), ctr.y() - pos.y()},          ctr.x() + pos.x() + extraX);
+    drawn |= surface.horiLineClip(col, {ctr.x() - pos.y(), ctr.y() + pos.x() + extraY}, ctr.x() + pos.y() + extraX);
+    drawn |= surface.horiLineClip(col, {ctr.x() - pos.y(), ctr.y() - pos.x()},          ctr.x() + pos.y() + extraX);
     
     ++pos.ry();
     
@@ -215,7 +215,7 @@ bool midpointCircle(
   int radius,
   CircleShape shape
 ) {
-  PixelManip manip = makePixelManip<Pixel>(image);
+  Surface surface = makeSurface<Pixel>(image);
   QPoint pos = {radius, 0};
   int err = 1 - radius;
   const int extraX = centerOffsetX(shape);
@@ -223,15 +223,15 @@ bool midpointCircle(
   bool drawn = false;
   
   while (pos.x() >= pos.y()) {
-    drawn |= manip.setPixelClip(color, {center.x() + pos.x() + extraX, center.y() + pos.y() + extraY});
-    drawn |= manip.setPixelClip(color, {center.x() - pos.x(),          center.y() + pos.y() + extraY});
-    drawn |= manip.setPixelClip(color, {center.x() + pos.x() + extraX, center.y() - pos.y()});
-    drawn |= manip.setPixelClip(color, {center.x() - pos.x(),          center.y() - pos.y()});
+    drawn |= surface.setPixelClip(color, {center.x() + pos.x() + extraX, center.y() + pos.y() + extraY});
+    drawn |= surface.setPixelClip(color, {center.x() - pos.x(),          center.y() + pos.y() + extraY});
+    drawn |= surface.setPixelClip(color, {center.x() + pos.x() + extraX, center.y() - pos.y()});
+    drawn |= surface.setPixelClip(color, {center.x() - pos.x(),          center.y() - pos.y()});
     
-    drawn |= manip.setPixelClip(color, {center.x() + pos.y() + extraX, center.y() + pos.x() + extraY});
-    drawn |= manip.setPixelClip(color, {center.x() - pos.y(),          center.y() + pos.x() + extraY});
-    drawn |= manip.setPixelClip(color, {center.x() + pos.y() + extraX, center.y() - pos.x()});
-    drawn |= manip.setPixelClip(color, {center.x() - pos.y(),          center.y() - pos.x()});
+    drawn |= surface.setPixelClip(color, {center.x() + pos.y() + extraX, center.y() + pos.x() + extraY});
+    drawn |= surface.setPixelClip(color, {center.x() - pos.y(),          center.y() + pos.x() + extraY});
+    drawn |= surface.setPixelClip(color, {center.x() + pos.y() + extraX, center.y() - pos.x()});
+    drawn |= surface.setPixelClip(color, {center.x() - pos.y(),          center.y() - pos.x()});
     
     pos.ry()++;
     
@@ -258,7 +258,7 @@ bool midpointThickCircle(
   assert(0 <= innerRadius);
   assert(innerRadius <= outerRadius);
 
-  PixelManip manip = makePixelManip<Pixel>(image);
+  Surface surface = makeSurface<Pixel>(image);
   int innerX = innerRadius;
   int outerX = outerRadius;
   int posY = 0;
@@ -269,15 +269,15 @@ bool midpointThickCircle(
   bool drawn = false;
   
   while (outerX >= posY) {
-    drawn |= manip.horiLineClip(color, {center.x() + innerX + extraX, center.y() + posY + extraY},   center.x() + outerX + extraX); // right down
-    drawn |= manip.vertLineClip(color, {center.x() + posY + extraX,   center.y() + innerX + extraY}, center.y() + outerX + extraY); // right down
-    drawn |= manip.horiLineClip(color, {center.x() - outerX,          center.y() + posY + extraY},   center.x() - innerX);          //       down
-    drawn |= manip.vertLineClip(color, {center.x() - posY,            center.y() + innerX + extraY}, center.y() + outerX + extraY); //       down
+    drawn |= surface.horiLineClip(color, {center.x() + innerX + extraX, center.y() + posY + extraY},   center.x() + outerX + extraX); // right down
+    drawn |= surface.vertLineClip(color, {center.x() + posY + extraX,   center.y() + innerX + extraY}, center.y() + outerX + extraY); // right down
+    drawn |= surface.horiLineClip(color, {center.x() - outerX,          center.y() + posY + extraY},   center.x() - innerX);          //       down
+    drawn |= surface.vertLineClip(color, {center.x() - posY,            center.y() + innerX + extraY}, center.y() + outerX + extraY); //       down
     
-    drawn |= manip.horiLineClip(color, {center.x() - outerX,          center.y() - posY},   center.x() - innerX);                   //
-    drawn |= manip.vertLineClip(color, {center.x() - posY,            center.y() - outerX}, center.y() - innerX);                   //
-    drawn |= manip.horiLineClip(color, {center.x() + innerX + extraX, center.y() - posY},   center.x() + outerX + extraX);          // right
-    drawn |= manip.vertLineClip(color, {center.x() + posY + extraX,   center.y() - outerX}, center.y() - innerX);                   // right
+    drawn |= surface.horiLineClip(color, {center.x() - outerX,          center.y() - posY},   center.x() - innerX);                   //
+    drawn |= surface.vertLineClip(color, {center.x() - posY,            center.y() - outerX}, center.y() - innerX);                   //
+    drawn |= surface.horiLineClip(color, {center.x() + innerX + extraX, center.y() - posY},   center.x() + outerX + extraX);          // right
+    drawn |= surface.vertLineClip(color, {center.x() + posY + extraX,   center.y() - outerX}, center.y() - innerX);                   // right
     
     posY++;
     
@@ -326,9 +326,9 @@ bool drawStrokedCircle(QImage &img, const QRgb color, const QPoint center, const
 
 bool drawFilledRect(QImage &img, const QRgb color, const QRect rect) {
   if (img.depth() == 8) {
-    return makePixelManip<uint8_t>(img).fillRectClip(color, rect);
+    return makeSurface<uint8_t>(img).fillRectClip(color, rect);
   } else if (img.depth() == 32) {
-    return makePixelManip<uint32_t>(img).fillRectClip(color, rect);
+    return makeSurface<uint32_t>(img).fillRectClip(color, rect);
   } else {
     Q_UNREACHABLE();
   }
@@ -338,9 +338,9 @@ namespace {
 
 template <typename Pixel>
 bool strokedRect(QImage &image, const Pixel color, const QRect rect, const int thickness) {
-  PixelManip manip = makePixelManip<Pixel>(image);
+  Surface surface = makeSurface<Pixel>(image);
   if (rect.width() <= thickness * 2 || rect.height() <= thickness * 2) {
-    return manip.fillRectClip(color, rect);
+    return surface.fillRectClip(color, rect);
   }
   const QRect sideRects[] = {
     { // top
@@ -362,7 +362,7 @@ bool strokedRect(QImage &image, const Pixel color, const QRect rect, const int t
   };
   bool drawn = false;
   for (const QRect &sideRect : sideRects) {
-    drawn |= manip.fillRectClip(color, sideRect);
+    drawn |= surface.fillRectClip(color, sideRect);
   }
   return drawn;
 }
@@ -419,9 +419,9 @@ bool midpointLine(QPoint p1, const QPoint p2, SetPixel &&setPixel) {
 
 template <typename Pixel>
 bool midpointLine(QImage &img, const Pixel col, const QPoint p1, const QPoint p2) {
-  PixelManip<Pixel> manip = makePixelManip<Pixel>(img);
-  return midpointLine(p1, p2, [manip, col](const QPoint pos) mutable {
-    return manip.setPixelClip(col, pos);
+  Surface surface = makeSurface<Pixel>(img);
+  return midpointLine(p1, p2, [surface, col](const QPoint pos) mutable {
+    return surface.setPixelClip(col, pos);
   });
 }
 

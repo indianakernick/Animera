@@ -1,13 +1,13 @@
 //
-//  pixel manip.hpp
+//  surface.hpp
 //  Pixel 2
 //
 //  Created by Indi Kernick on 6/5/19.
 //  Copyright © 2019 Indi Kernick. All rights reserved.
 //
 
-#ifndef pixel_manip_hpp
-#define pixel_manip_hpp
+#ifndef surface_hpp
+#define surface_hpp
 
 #include <cstring>
 #include <algorithm>
@@ -40,9 +40,9 @@ Range(Begin &&, End &&) -> Range<
 
 // @TODO maybe we could call this a Surface?
 template <typename Pixel>
-class PixelManip {
+class Surface {
 public:
-  PixelManip(Pixel *data, const ptrdiff_t pitch, const int width, const int height) noexcept
+  Surface(Pixel *data, const ptrdiff_t pitch, const int width, const int height) noexcept
     : data{data}, pitch{pitch}, width{width}, height{height} {}
   
   bool insideImageX(const int posX) const noexcept {
@@ -153,9 +153,11 @@ public:
     return true;
   }
   
+  using Row = Range<Pixel *>;
+  
   class Sentinel {
     friend class Iterator;
-    friend class PixelManip;
+    friend Surface;
     
     Pixel *row;
     
@@ -163,10 +165,8 @@ public:
       : row{row} {}
   };
   
-  using Row = Range<Pixel *>;
-  
   class Iterator {
-    friend class PixelManip;
+    friend Surface;
   public:
     Row operator*() const noexcept {
       return {row, row + width};
