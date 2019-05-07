@@ -724,26 +724,6 @@ QImage dupImage(const QImage &img) {
 #include "composite.hpp"
 #include "painting.hpp"
 
-void freshFilledCircle(
-  QImage &image,
-  const QRgb color,
-  const QPoint pos,
-  const int radius,
-  const CircleShape shape
-) {
-  const QRect rect = circleToRect(pos, radius, shape);
-  const int radius2 = radius * radius;
-  for (int y = rect.top(); y <= rect.bottom(); ++y) {
-    for (int x = rect.left(); x <= rect.right(); ++x) {
-      const int dx = std::abs(x - pos.x());
-      const int dy = std::abs(y - pos.y());
-      if (dx*dx + dy*dy < radius2 + radius) {
-        image.setPixel(x, y, color);
-      }
-    }
-  }
-}
-
 void drawSectors(
   QImage &image,
   const QPoint c,
@@ -792,34 +772,27 @@ void midpointStroked(
   const QPoint ctr,
   const int rad,
   CircleShape
-) {
+) { // radius 6
   QPoint pos = {rad, 0};
-  img.setPixel(ctr.x() + pos.x(), ctr.y() + pos.y(), col);
-  if (rad > 0) {
-    img.setPixel(ctr.x() - pos.x(), ctr.y() + pos.y(), col);
-    img.setPixel(ctr.x() + pos.y(), ctr.y() + pos.x(), col);
-    img.setPixel(ctr.x() + pos.y(), ctr.y() - pos.x(), col);
-  }
-  int mid = 1 - rad;
-  while (pos.x() > pos.y()) {
-    ++pos.ry();
-    if (mid < 0) {
-      mid = mid + 2 * pos.y() + 1;
-    } else {
-      --pos.rx();
-      mid = mid + 2 * pos.y() - 2 * pos.x() + 1;
-    }
-    if (pos.x() < pos.y()) break;
+  int err = 1 - rad;
+  while (pos.x() >= pos.y()) {
     img.setPixel(ctr.x() + pos.x(), ctr.y() + pos.y(), col);
     img.setPixel(ctr.x() - pos.x(), ctr.y() + pos.y(), col);
     img.setPixel(ctr.x() + pos.x(), ctr.y() - pos.y(), col);
     img.setPixel(ctr.x() - pos.x(), ctr.y() - pos.y(), col);
-    moreGreen(col);
-    if (pos.x() != pos.y()) {
-      img.setPixel(ctr.x() + pos.y(), ctr.y() + pos.x(), col);
-      img.setPixel(ctr.x() - pos.y(), ctr.y() + pos.x(), col);
-      img.setPixel(ctr.x() + pos.y(), ctr.y() - pos.x(), col);
-      img.setPixel(ctr.x() - pos.y(), ctr.y() - pos.x(), col);
+    
+    img.setPixel(ctr.x() + pos.y(), ctr.y() + pos.x(), col);
+    img.setPixel(ctr.x() - pos.y(), ctr.y() + pos.x(), col);
+    img.setPixel(ctr.x() + pos.y(), ctr.y() - pos.x(), col);
+    img.setPixel(ctr.x() - pos.y(), ctr.y() - pos.x(), col);
+    
+    ++pos.ry();
+    
+    if (err < 0) {
+      err += 2 * pos.y() + 1;
+    } else {
+      --pos.rx();
+      err += 2 * (pos.y() - pos.x()) + 1;
     }
   }
 }
@@ -849,29 +822,234 @@ void midpointFilled(
   const QPoint ctr,
   const int rad,
   CircleShape
-) {
+) { // radius 6
   QPoint pos = {rad, 0};
-  img.setPixel(ctr.x() + pos.x(), ctr.y() + pos.y(), col);
-  if (rad > 0) {
-    fillScanLine(img, col, {ctr.x() - pos.x(), ctr.y() + pos.y()}, ctr.x() + pos.x());
-    img.setPixel(ctr.x() + pos.y(), ctr.y() + pos.x(), col);
-    img.setPixel(ctr.x() + pos.y(), ctr.y() - pos.x(), col);
-  }
-  int mid = 1 - rad;
-  while (pos.x() > pos.y()) {
-    ++pos.ry();
-    if (mid < 0) {
-      mid = mid + 2 * pos.y() + 1;
-    } else {
-      --pos.rx();
-      mid = mid + 2 * pos.y() - 2 * pos.x() + 1;
-    }
-    if (pos.x() < pos.y()) break;
+  int err = 1 - rad;
+  while (pos.x() >= pos.y()) {
     fillScanLine(img, col, {ctr.x() - pos.x(), ctr.y() + pos.y()}, ctr.x() + pos.x());
     fillScanLine(img, col, {ctr.x() - pos.x(), ctr.y() - pos.y()}, ctr.x() + pos.x());
-    if (pos.x() != pos.y()) {
-      fillScanLine(img, col, {ctr.x() - pos.y(), ctr.y() + pos.x()}, ctr.x() + pos.y());
-      fillScanLine(img, col, {ctr.x() - pos.y(), ctr.y() - pos.x()}, ctr.x() + pos.y());
+    fillScanLine(img, col, {ctr.x() - pos.y(), ctr.y() + pos.x()}, ctr.x() + pos.y());
+    fillScanLine(img, col, {ctr.x() - pos.y(), ctr.y() - pos.x()}, ctr.x() + pos.y());
+    
+    ++pos.ry();
+    
+    if (err < 0) {
+      err += 2 * pos.y() + 1;
+    } else {
+      --pos.rx();
+      err += 2 * (pos.y() - pos.x()) + 1;
+    }
+  }
+}
+
+void midpointCircleThick(
+  QImage &img,
+  const QRgb col,
+  const QPoint ctr,
+  const int innerRad,
+  const int outerRad
+) { // radius 6
+  int innerX = innerRad;
+  int outerX = outerRad;
+  int y = 0;
+  int innerErr = 1 - innerRad;
+  int outerErr = 1 - outerRad;
+  
+  while (outerX >= y) {
+    fillScanLine(img, col, {ctr.x() + innerX, ctr.y() + y}, ctr.x() + outerX);
+    fillVertLine(img, col, {ctr.x() + y,      ctr.y() + innerX}, ctr.y() + outerX);
+    fillScanLine(img, col, {ctr.x() - outerX, ctr.y() + y}, ctr.x() - innerX);
+    fillVertLine(img, col, {ctr.x() - y,      ctr.y() + innerX}, ctr.y() + outerX);
+    
+    fillScanLine(img, col, {ctr.x() - outerX, ctr.y() - y}, ctr.x() - innerX);
+    fillVertLine(img, col, {ctr.x() - y,      ctr.y() - outerX}, ctr.y() - innerX);
+    fillScanLine(img, col, {ctr.x() + innerX, ctr.y() - y}, ctr.x() + outerX);
+    fillVertLine(img, col, {ctr.x() + y,      ctr.y() - outerX}, ctr.y() - innerX);
+    
+    ++y;
+    
+    if (outerErr < 0) {
+      outerErr += 2 * y + 1;
+    } else {
+      --outerX;
+      outerErr += 2 * (y - outerX) + 1;
+    }
+    
+    if (y > innerRad) {
+      innerX = y;
+    } else {
+      if (innerErr < 0) {
+        innerErr += 2 * y + 1;
+      } else {
+        --innerX;
+        innerErr += 2 * (y - innerX) + 1;
+      }
+    }
+  }
+}
+
+void midpointEllipse(
+  QImage &img,
+  const QRgb col,
+  QPoint ctr,
+  const QPoint rad
+) {
+  QPoint pos = {0, rad.y()};
+  QPoint del = {2 * rad.y() * rad.y() * pos.x(), 2 * rad.x() * rad.x() * pos.y()};
+  int err = rad.y() * rad.y()
+          - rad.x() * rad.x() * rad.y()
+          + (rad.x() * rad.x()) / 4;
+  
+  while (del.x() < del.y()) {
+    img.setPixel(ctr.x() + pos.x(), ctr.y() + pos.y(), col);
+    img.setPixel(ctr.x() - pos.x(), ctr.y() + pos.y(), col);
+    img.setPixel(ctr.x() + pos.x(), ctr.y() - pos.y(), col);
+    img.setPixel(ctr.x() - pos.x(), ctr.y() - pos.y(), col);
+    
+    ++pos.rx();
+    
+    if (err < 0) {
+      del.rx() += 2 * rad.y() * rad.y();
+      err += del.x() + rad.y() * rad.y();
+    } else {
+      --pos.ry();
+      del.rx() += 2 * rad.y() * rad.y();
+      del.ry() -= 2 * rad.x() * rad.x();
+      err += del.x() - del.y() + rad.y() * rad.y();
+    }
+  }
+  
+  err = rad.y() * rad.y() * (pos.x() * pos.x() + pos.x())
+      + rad.x() * rad.x() * (pos.y() - 1) * (pos.y() - 1)
+      - rad.x() * rad.x() * rad.y() * rad.y();
+  
+  while (pos.y() >= 0) {
+    img.setPixel(ctr.x() + pos.x(), ctr.y() + pos.y(), col);
+    img.setPixel(ctr.x() - pos.x(), ctr.y() + pos.y(), col);
+    img.setPixel(ctr.x() + pos.x(), ctr.y() - pos.y(), col);
+    img.setPixel(ctr.x() - pos.x(), ctr.y() - pos.y(), col);
+    
+    --pos.ry();
+    
+    if (err > 0) {
+      del.ry() -= 2 * rad.x() * rad.x();
+      err += rad.x() * rad.x() - del.y();
+    } else {
+      ++pos.rx();
+      del.rx() += 2 * rad.y() * rad.y();
+      del.ry() -= 2 * rad.x() * rad.x();
+      err += del.x() - del.y() + rad.x() * rad.x();
+    }
+  }
+}
+
+void midpointEllipseFilled(
+  QImage &img,
+  const QRgb col,
+  QPoint ctr,
+  const QPoint rad
+) {
+  QPoint pos = {0, rad.y()};
+  QPoint del = {2 * rad.y() * rad.y() * pos.x(), 2 * rad.x() * rad.x() * pos.y()};
+  int err = rad.y() * rad.y()
+          - rad.x() * rad.x() * rad.y()
+          + (rad.x() * rad.x()) / 4;
+  
+  while (del.x() < del.y()) {
+    if (err >= 0) {
+      fillScanLine(img, col, {ctr.x() - pos.x(), ctr.y() + pos.y()}, ctr.x() + pos.x());
+      fillScanLine(img, col, {ctr.x() - pos.x(), ctr.y() - pos.y()}, ctr.x() + pos.x());
+    }
+    
+    ++pos.rx();
+    
+    if (err < 0) {
+      del.rx() += 2 * rad.y() * rad.y();
+      err += del.x() + rad.y() * rad.y();
+    } else {
+      --pos.ry();
+      del.rx() += 2 * rad.y() * rad.y();
+      del.ry() -= 2 * rad.x() * rad.x();
+      err += del.x() - del.y() + rad.y() * rad.y();
+    }
+  }
+  
+  err = rad.y() * rad.y() * (pos.x() * pos.x() + pos.x())
+      + rad.x() * rad.x() * (pos.y() - 1) * (pos.y() - 1)
+      - rad.x() * rad.x() * rad.y() * rad.y();
+  
+  while (pos.y() >= 0) {
+    fillScanLine(img, col, {ctr.x() - pos.x(), ctr.y() + pos.y()}, ctr.x() + pos.x());
+    fillScanLine(img, col, {ctr.x() - pos.x(), ctr.y() - pos.y()}, ctr.x() + pos.x());
+    
+    --pos.ry();
+    
+    if (err > 0) {
+      del.ry() -= 2 * rad.x() * rad.x();
+      err += rad.x() * rad.x() - del.y();
+    } else {
+      ++pos.rx();
+      del.rx() += 2 * rad.y() * rad.y();
+      del.ry() -= 2 * rad.x() * rad.x();
+      err += del.x() - del.y() + rad.x() * rad.x();
+    }
+  }
+}
+
+void midpointEllipseThick(
+  QImage &img,
+  const QRgb col,
+  QPoint ctr,
+  const int radX,
+  const int radY
+) {
+  int x = 0;
+  int y = radY;
+  int err = radY * radY
+          - radX * radX * radY
+          + (radX * radX) / 4;
+  int dx = 2 * radY * radY * x;
+  int dy = 2 * radX * radX * y;
+  
+  while (dx < dy) {
+    img.setPixel(ctr.x() + x, ctr.y() + y, col);
+    img.setPixel(ctr.x() - x, ctr.y() + y, col);
+    img.setPixel(ctr.x() + x, ctr.y() - y, col);
+    img.setPixel(ctr.x() - x, ctr.y() - y, col);
+    
+    ++x;
+    
+    if (err < 0) {
+      dx += 2 * radY * radY;
+      err += dx + radY * radY;
+    } else {
+      --y;
+      dx += 2 * radY * radY;
+      dy -= 2 * radX * radX;
+      err += dx - dy + radY * radY;
+    }
+  }
+  
+  err = radY * radY * (x * x + x)
+      + radX * radX * (y - 1) * (y - 1)
+      - radX * radX * radY * radY;
+  
+  while (y >= 0) {
+    img.setPixel(ctr.x() + x, ctr.y() + y, col);
+    img.setPixel(ctr.x() - x, ctr.y() + y, col);
+    img.setPixel(ctr.x() + x, ctr.y() - y, col);
+    img.setPixel(ctr.x() - x, ctr.y() - y, col);
+    
+    --y;
+    
+    if (err > 0) {
+      dy -= 2 * radX * radX;
+      err += radX * radX - dy;
+    } else {
+      ++x;
+      dx += 2 * radY * radY;
+      dy -= 2 * radX * radX;
+      err += dx - dy + radX * radX;
     }
   }
 }
@@ -1054,6 +1232,438 @@ private:
   }
 };
 
+namespace test {
+
+#if 1
+
+struct Point {
+  int x, y;
+};
+
+using Image = QImage;
+using Color = QRgb;
+
+void setPixel(Image &image, Color color, Point pos) {
+  image.setPixel(pos.x, pos.y, color);
+}
+
+#else
+
+struct Point {
+  int x, y;
+};
+
+struct Image {};
+using Color = int;
+
+void setPixel(Image &, Color, Point pos) {
+  std::cout << pos.x << ' ' << pos.y << '\n';
+}
+
+#endif
+
+void horiLine(Image &img, Color color, Point first, int last) {
+  assert(first.x <= last);
+  assert(img.isDetached());
+  const uintptr_t ppl = img.bytesPerLine() / sizeof(QRgb);
+  QRgb *row = reinterpret_cast<QRgb *>(img.bits()) + first.y * ppl + first.x;
+  QRgb *const rowEnd = row + (last - first.x);
+  while (row != rowEnd) {
+    *row++ = color;
+  }
+}
+
+void vertLine(Image &image, Color color, Point first, int last) {
+  assert(first.y <= last);
+  while (first.y <= last) {
+    setPixel(image, color, first);
+    first.y++;
+  }
+}
+
+void midpointCircle(
+  Image &image,
+  Color color,
+  Point center,
+  int radius,
+  CircleShape shape
+) {
+  Point pos = {radius, 0};
+  int err = 1 - radius;
+  const int extraX = centerOffsetX(shape);
+  const int extraY = centerOffsetY(shape);
+  
+  while (pos.x >= pos.y) {
+    setPixel(image, color, {center.x + pos.x + extraX, center.y + pos.y + extraY});
+    setPixel(image, color, {center.x - pos.x,          center.y + pos.y + extraY});
+    setPixel(image, color, {center.x + pos.x + extraX, center.y - pos.y});
+    setPixel(image, color, {center.x - pos.x,          center.y - pos.y});
+    
+    setPixel(image, color, {center.x + pos.y + extraX, center.y + pos.x + extraY});
+    setPixel(image, color, {center.x - pos.y,          center.y + pos.x + extraY});
+    setPixel(image, color, {center.x + pos.y + extraX, center.y - pos.x});
+    setPixel(image, color, {center.x - pos.y,          center.y - pos.x});
+    
+    pos.y++;
+    
+    if (err < 0) {
+      err += 2 * pos.y + 1;
+    } else {
+      pos.x--;
+      err += 2 * (pos.y - pos.x) + 1;
+    }
+  }
+}
+
+void midpointCircleThick(
+  Image &image,
+  Color color,
+  Point center,
+  int innerRadius,
+  int outerRadius,
+  CircleShape shape
+) {
+  assert(0 <= innerRadius);
+  assert(innerRadius <= outerRadius);
+
+  int innerX = innerRadius;
+  int outerX = outerRadius;
+  int posY = 0;
+  int innerErr = 1 - innerRadius;
+  int outerErr = 1 - outerRadius;
+  const int extraX = centerOffsetX(shape);
+  const int extraY = centerOffsetY(shape);
+  
+  while (outerX >= posY) {
+    horiLine(image, color, {center.x + innerX + extraX, center.y + posY + extraY},   center.x + outerX + extraX); // right down
+    vertLine(image, color, {center.x + posY + extraX,   center.y + innerX + extraY}, center.y + outerX + extraY); // right down
+    horiLine(image, color, {center.x - outerX,          center.y + posY + extraY},   center.x - innerX);          //       down
+    vertLine(image, color, {center.x - posY,            center.y + innerX + extraY}, center.y + outerX + extraY); //       down
+    
+    horiLine(image, color, {center.x - outerX,          center.y - posY},   center.x - innerX);                   //
+    vertLine(image, color, {center.x - posY,            center.y - outerX}, center.y - innerX);                   //
+    horiLine(image, color, {center.x + innerX + extraX, center.y - posY},   center.x + outerX + extraX);          // right
+    vertLine(image, color, {center.x + posY + extraX,   center.y - outerX}, center.y - innerX);                   // right
+    
+    posY++;
+    
+    if (outerErr < 0) {
+      outerErr += 2 * posY + 1;
+    } else {
+      outerX--;
+      outerErr += 2 * (posY - outerX) + 1;
+    }
+    
+    if (posY > innerRadius) {
+      innerX = posY;
+    } else {
+      if (innerErr < 0) {
+        innerErr += 2 * posY + 1;
+      } else {
+        innerX--;
+        innerErr += 2 * (posY - innerX) + 1;
+      }
+    }
+  }
+}
+
+void midpointEllipse(
+  Image &image,
+  Color color,
+  Point center,
+  Point radius
+) {
+  Point pos = {radius.x, 0};
+  Point delta = {
+    2 * radius.y * radius.y * pos.x,
+    2 * radius.x * radius.x * pos.y
+  };
+  int err = radius.x * radius.x
+          - radius.y * radius.y * radius.x
+          + (radius.y * radius.y) / 4;
+  
+  while (delta.y < delta.x) {
+    setPixel(image, color, {center.x + pos.x, center.y + pos.y});
+    setPixel(image, color, {center.x + pos.x, center.y - pos.y});
+    setPixel(image, color, {center.x - pos.x, center.y + pos.y});
+    setPixel(image, color, {center.x - pos.x, center.y - pos.y});
+    
+    pos.y++;
+    
+    if (err < 0) {
+      delta.y += 2 * radius.x * radius.x;
+      err += delta.y + radius.x * radius.x;
+    } else {
+      pos.x--;
+      delta.y += 2 * radius.x * radius.x;
+      delta.x -= 2 * radius.y * radius.y;
+      err += delta.y - delta.x + radius.x * radius.x;
+    }
+  }
+  
+  err = radius.x * radius.x * (pos.y * pos.y + pos.y)
+      + (radius.x * radius.x) / 4
+      + radius.y * radius.y * (pos.x - 1) * (pos.x - 1)
+      - radius.y * radius.y * radius.x * radius.x;
+  
+  while (pos.x >= 0) {
+    setPixel(image, color, {center.x + pos.x, center.y + pos.y});
+    setPixel(image, color, {center.x + pos.x, center.y - pos.y});
+    setPixel(image, color, {center.x - pos.x, center.y + pos.y});
+    setPixel(image, color, {center.x - pos.x, center.y - pos.y});
+    
+    pos.x--;
+    
+    if (err > 0) {
+      delta.x -= 2 * radius.y * radius.y;
+      err += radius.y * radius.y - delta.x;
+    } else {
+      pos.y++;
+      delta.y += 2 * radius.x * radius.x;
+      delta.x -= 2 * radius.y * radius.y;
+      err += delta.y - delta.x + radius.y * radius.y;
+    }
+  }
+}
+
+void midpointEllipseThick(
+  Image &image,
+  Color color,
+  Point center,
+  Point innerRadius,
+  Point outerRadius
+) {
+  
+}
+
+void midpointEllipseThick(
+  Point center,
+  Point innerRadius,
+  Point outerRadius,
+  std::function<void(const Color&, const Point&, int)> horiLine)
+{
+  /// @todo validate/correct innerRadius and outerRadius
+  Point pos = { outerRadius.x, 0 };
+  Point deltaOuter = {
+    2 * outerRadius.y * outerRadius.y * pos.x,
+    2 * outerRadius.x * outerRadius.x * pos.y
+  };
+  auto errOuterYX
+    = [&]() {
+      return outerRadius.x * outerRadius.x
+        - outerRadius.y * outerRadius.y * outerRadius.x
+        + (outerRadius.y * outerRadius.y) / 4;
+    };
+  auto errOuterXY
+    = [&]() {
+      return outerRadius.x * outerRadius.x * (pos.y * pos.y + pos.y)
+        + (outerRadius.x * outerRadius.x) / 4
+        + outerRadius.y * outerRadius.y * (pos.x - 1) * (pos.x - 1)
+        - outerRadius.y * outerRadius.y * outerRadius.x * outerRadius.x;
+    };
+  int errOuter = errOuterYX();
+  int xInner = innerRadius.x;
+  Point deltaInner = {
+    2 * innerRadius.y * innerRadius.y * xInner,
+    2 * innerRadius.x * innerRadius.x * pos.y
+  };
+  auto errInnerYX
+    = [&]() {
+      return innerRadius.x * innerRadius.x
+        - innerRadius.y * innerRadius.y * innerRadius.x
+        + (innerRadius.y * innerRadius.y) / 4;
+    };
+  auto errInnerXY
+    = [&]() {
+      return innerRadius.x * innerRadius.x * (pos.y * pos.y + pos.y)
+        + (innerRadius.x * innerRadius.x) / 4
+        + innerRadius.y * innerRadius.y * (xInner - 1) * (xInner - 1)
+        - innerRadius.y * innerRadius.y * innerRadius.x * innerRadius.x;
+    };
+  int errInner = errInnerYX();
+  // helpers (to reduce code duplication)
+  auto stepOuterYX
+    = [&]() {
+      ++pos.y;
+      if (errOuter < 0) {
+        deltaOuter.y += 2 * outerRadius.x * outerRadius.x;
+        errOuter += deltaOuter.y + outerRadius.x * outerRadius.x;
+      } else {
+        --pos.x;
+        deltaOuter.y += 2 * outerRadius.x * outerRadius.x;
+        deltaOuter.x -= 2 * outerRadius.y * outerRadius.y;
+        errOuter += deltaOuter.y - deltaOuter.x + outerRadius.x * outerRadius.x;
+      }
+    };
+  auto stepOuterXY
+    = [&]() {
+      while (--pos.x > 0) {
+        if (errOuter > 0) {
+          deltaOuter.x -= 2 * outerRadius.y * outerRadius.y;
+          errOuter += outerRadius.y * outerRadius.y - deltaOuter.x;
+        } else {
+          ++pos.y;
+          deltaOuter.y += 2 * outerRadius.x * outerRadius.x;
+          deltaOuter.x -= 2 * outerRadius.y * outerRadius.y;
+          errOuter += deltaOuter.y - deltaOuter.x + outerRadius.y * outerRadius.y;
+          break;
+        }
+      }
+    };
+  auto stepInnerYX
+    = [&]() {
+      if (errInner < 0) {
+        deltaInner.y += 2 * innerRadius.x * innerRadius.x;
+        errInner += deltaInner.y + innerRadius.x * innerRadius.x;
+      } else {
+        --xInner;
+        deltaInner.y += 2 * innerRadius.x * innerRadius.x;
+        deltaInner.x -= 2 * innerRadius.y * innerRadius.y;
+        errInner += deltaInner.y - deltaInner.x + innerRadius.x * innerRadius.x;
+      }
+    };
+  auto stepInnerXY
+    = [&]() {
+      while (--xInner >= 0) {
+        if (errInner > 0) {
+          deltaInner.x -= 2 * innerRadius.y * innerRadius.y;
+          errInner += innerRadius.y * innerRadius.y - deltaInner.x;
+        } else {
+          deltaInner.y += 2 * innerRadius.x * innerRadius.x;
+          deltaInner.x -= 2 * innerRadius.y * innerRadius.y;
+          errInner += deltaInner.y - deltaInner.x + innerRadius.y * innerRadius.y;
+          break;
+        }
+      }
+    };
+  // 1st phase
+  while (deltaOuter.y < deltaOuter.x && deltaInner.y < deltaInner.x) {
+    horiLine(Qt::blue, { center.x - pos.x, center.y + pos.y }, center.x - xInner);
+    horiLine(Qt::blue, { center.x + pos.x, center.y + pos.y }, center.x + xInner); // hori swap
+    horiLine(Qt::blue, { center.x - pos.x, center.y - pos.y }, center.x - xInner);
+    horiLine(Qt::blue, { center.x + pos.x, center.y - pos.y }, center.x + xInner); // hori swap
+    stepOuterYX();
+    stepInnerYX();
+  }
+
+  // 2nd phase
+  if (deltaOuter.y < deltaOuter.x) { // inner flipped
+    //errOuter = errOuterYX();
+    errInner = errInnerXY();
+    while (deltaOuter.y < deltaOuter.x && xInner >= 0) {
+      horiLine(Qt::green, { center.x - pos.x, center.y + pos.y }, center.x - xInner);
+      horiLine(Qt::green, { center.x + pos.x, center.y + pos.y }, center.x + xInner); // hori swap
+      horiLine(Qt::green, { center.x - pos.x, center.y - pos.y }, center.x - xInner);
+      horiLine(Qt::green, { center.x + pos.x, center.y - pos.y }, center.x + xInner); // hori swap
+      stepOuterYX();
+      stepInnerXY();
+    }
+    //errOuter = errOuterYX();
+    while (deltaOuter.y < deltaOuter.x) {
+      horiLine(Qt::red, { center.x - pos.x, center.y + pos.y }, center.x + pos.x);
+      horiLine(Qt::red, { center.x - pos.x, center.y - pos.y }, center.x + pos.x);
+      stepOuterYX();
+    }
+  } else { // outer flipped
+    errOuter = errOuterXY();
+    //errInner = errInnerYX();
+    while (deltaInner.y < deltaInner.x) {
+      horiLine(Qt::cyan, { center.x - pos.x, center.y + pos.y }, center.x - xInner);
+      horiLine(Qt::cyan, { center.x + pos.x, center.y + pos.y }, center.x + xInner);
+      horiLine(Qt::cyan, { center.x - pos.x, center.y - pos.y }, center.x - xInner);
+      horiLine(Qt::cyan, { center.x + pos.x, center.y - pos.y }, center.x + xInner);
+      stepOuterXY();
+      stepInnerYX();
+    }
+    //errOuter = errOuterXY();
+  }
+  // 3rd phase
+  errOuter = errOuterXY();
+  errInner = errInnerXY();
+  while (xInner >= 0) {
+    horiLine(Qt::yellow, { center.x - pos.x, center.y + pos.y }, center.x - xInner);
+    horiLine(Qt::yellow, { center.x + pos.x, center.y + pos.y }, center.x + xInner); // hori swap
+    horiLine(Qt::yellow, { center.x - pos.x, center.y - pos.y }, center.x - xInner);
+    horiLine(Qt::yellow, { center.x + pos.x, center.y - pos.y }, center.x + xInner); // hori swap
+    stepOuterXY();
+    stepInnerXY();
+  }
+  // 4th phase
+  //errOuter = errOuterXY();
+  while (pos.x >= 0) {
+    horiLine(Qt::magenta, { center.x - pos.x, center.y + pos.y }, center.x + pos.x);
+    horiLine(Qt::magenta, { center.x - pos.x, center.y - pos.y }, center.x + pos.x);
+    stepOuterXY();
+  }
+}
+
+}
+
+int centerWidth(const CircleShape shape) {
+  return (shape == CircleShape::c2x1 || shape == CircleShape::c2x2) ? 2 : 1;
+}
+
+int centerHeight(const CircleShape shape) {
+  return (shape == CircleShape::c1x2 || shape == CircleShape::c2x2) ? 2 : 1;
+}
+
+QRect circleToRect(const QPoint center, const int radius, const CircleShape shape) {
+  return QRect{
+    center.x() - radius,
+    center.y() - radius,
+    radius * 2 + centerWidth(shape),
+    radius * 2 + centerHeight(shape)
+  };
+}
+
+QRect adjustStrokedEllipse(const QRect rect, const int thickness) {
+  return QRect{
+    rect.left() + thickness / 2,
+    rect.top() + thickness / 2,
+    rect.width() - thickness,
+    rect.height() - thickness
+  };
+}
+
+const QPen round_pen{
+  Qt::NoBrush, 1.0, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin
+};
+const QPen square_pen{
+  Qt::NoBrush, 1.0, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin
+};
+
+QPen makePen(const QPen &base, const QRgb color, const int width) {
+  QPen pen = base;
+  pen.setColor(QColor::fromRgba(color));
+  pen.setWidth(width);
+  return pen;
+}
+
+void preparePainter(QPainter &painter) {
+  painter.setCompositionMode(QPainter::CompositionMode_Source);
+}
+
+bool drawFilledEllipse(QImage &img, const QRgb color, const QRect ellipse) {
+  assert(ellipse.isValid());
+  if (!img.rect().intersects(ellipse)) return false;
+  QPainter painter{&img};
+  preparePainter(painter);
+  painter.setBrush(QColor::fromRgba(color));
+  painter.setPen(makePen(round_pen, color, 1));
+  painter.drawEllipse(adjustStrokedEllipse(ellipse, 1));
+  return true;
+}
+
+bool drawStrokedEllipse(QImage &img, const QRgb color, const QRect ellipse) {
+  assert(ellipse.isValid());
+  if (!img.rect().intersects(ellipse)) return false;
+  QPainter painter{&img};
+  preparePainter(painter);
+  painter.setPen(makePen(round_pen, color, 1));
+  painter.drawEllipse(adjustStrokedEllipse(ellipse, 1));
+  return true;
+}
+
 int main(int argc, char **argv) {
   /*QApplication app{argc, argv};
   QMainWindow window;
@@ -1115,7 +1725,7 @@ int main(int argc, char **argv) {
   
   std::cout << "\n\n";*/
   
-  /*Timer timer;
+  Timer timer;
   // 128
   // painter filled   0.0975ms
   // midpoint filled  0.0121ms
@@ -1126,7 +1736,7 @@ int main(int argc, char **argv) {
   // painter filled   17.7ms
   // midpoint filled  7.59ms
   timer.start("Alloc");
-  QImage image{256, 256, QImage::Format_ARGB32};
+  QImage image{2048, 2048, QImage::Format_ARGB32};
   timer.stop();
   
   timer.start("Clear");
@@ -1174,7 +1784,6 @@ int main(int argc, char **argv) {
   QImage dup = dupImage(image);
   timer.stop();
   
-  
   const QRgb fillColor = qRgba(0, 0, 255, 255);
   const QRect fillRect{
     image.width() / 8,
@@ -1203,12 +1812,38 @@ int main(int argc, char **argv) {
   clearImage(image);
   
   for (int r = 0; r <= 24; ++r) {
+    auto horiLine = [&](test::Color color, test::Point first, int last) {
+      if (last < first.x) {
+       
+      }
+      QPainter painter{&image};
+      painter.setPen(color);
+      painter.setBrush(Qt::NoBrush);
+      painter.drawLine(first.x, first.y, last, first.y);
+    };
+    
     const int x = 64 * (r + 1);
-    drawStrokedEllipse(image, fillColor, circleToRect({x, 64}, r, CircleShape::c1x1));
-    bresenhamStroked(image, fillColor, {x, 128}, r, CircleShape::c1x1);
-    midpointStroked(image, fillColor, {x, 192}, r, CircleShape::c1x1);
-    midpointFilled(image, fillColor, {x, 256}, r, CircleShape::c1x1);
-    drawFilledEllipse(image, fillColor, circleToRect({x, 320}, r, CircleShape::c1x1));
+    const int rx = 4 * r / 3;
+    const int ry = r;
+    drawStrokedEllipse(image, fillColor, circleToRect({x, 64 * 1}, r, CircleShape::c1x1));
+    bresenhamStroked(image, fillColor, {x, 64 * 2}, r, CircleShape::c1x1);
+    test::midpointCircle(image, fillColor, {x, 64 * 3}, r, CircleShape::c1x1);
+    test::midpointCircleThick(image, fillColor, {x, 64 * 4}, std::max(r - 3 + 1, 0), r, CircleShape::c1x1);
+    midpointEllipse(image, fillColor, {x, 64 * 5}, {r, r});
+    test::midpointEllipse(image, fillColor, {x, 64 * 6}, {r, r});
+    test::midpointEllipseThick({x, 64 * 7}, {rx, ry}, {rx, ry}, horiLine);
+    const QRect ellipseRect = {
+      x - rx,
+      64 * 8 - ry,
+      rx * 2 + 1,
+      ry * 2 + 1
+    };
+    drawStrokedEllipse(image, fillColor, ellipseRect);
+    midpointEllipse(image, fillColor, {x, 64 * 9}, {rx, ry});
+    test::midpointEllipseThick({x, 64 * 10}, {std::max(rx - 3 + 1, 0), std::max(ry - 3 + 1, 0)}, {rx, ry}, horiLine);
+    midpointEllipseFilled(image, fillColor, {x, 64 * 11}, {rx, ry});
+    midpointFilled(image, fillColor, {x, 64 * 12}, r, CircleShape::c1x1);
+    drawFilledEllipse(image, fillColor, circleToRect({x, 64 * 13}, r, CircleShape::c1x1));
   }
   
   const QPoint circPos = {dup.width() / 2, dup.height() / 2};
@@ -1218,13 +1853,19 @@ int main(int argc, char **argv) {
   drawStrokedEllipse(dup, fillColor, circleToRect(circPos, circRad, CircleShape::c1x1));
   timer.stop();
   
+  dup.fill(0);
+  
   timer.start("bres stroked");
   bresenhamStroked(dup, fillColor, circPos, circRad, CircleShape::c1x1);
   timer.stop();
   
+  dup.fill(0);
+  
   timer.start("midpoint stroked");
   midpointStroked(dup, fillColor, circPos, circRad, CircleShape::c1x1);
   timer.stop();
+  
+  dup.fill(0);
   
   timer.start("painter filled");
   drawFilledEllipse(dup, fillColor, circleToRect(circPos, circRad, CircleShape::c1x1));
@@ -1233,7 +1874,7 @@ int main(int argc, char **argv) {
   dup.fill(0);
   
   timer.start("midpoint filled");
-  midpointFilled(dup, fillColor, circPos, circRad, CircleShape::c1x1);
+  drawFilledCircle(dup, fillColor, circPos, CircleShape::c1x1, circRad);
   timer.stop();
   
   dup.save("/Users/indikernick/Desktop/Test/circle.png");
@@ -1255,7 +1896,7 @@ int main(int argc, char **argv) {
   image.save("/Users/indikernick/Desktop/Test/smear_0.png");
   image.fill(0);
   
-  timer.start("midpoint smear");
+  timer.start("filled smear");
   for (int x = 64; x < image.width() - 64; ++x) {
     midpointFilled(image, fillColor, {x, x}, 32, CircleShape::c1x1);
   }
@@ -1264,15 +1905,33 @@ int main(int argc, char **argv) {
   image.save("/Users/indikernick/Desktop/Test/smear_1.png");
   image.fill(0);
   
-  timer.start("painter smear");
+  timer.start("1 stroked smear");
   for (int x = 64; x < image.width() - 64; ++x) {
-    drawFilledEllipse(image, fillColor, circleToRect({x, x}, 32, CircleShape::c1x1));
+    drawStrokedCircle(image, fillColor, {x, x}, CircleShape::c1x1, 32, 1);
   }
   timer.stop();
   
   image.save("/Users/indikernick/Desktop/Test/smear_2.png");
   image.fill(0);
   
+  timer.start("2 stroked smear");
+  for (int x = 64; x < image.width() - 64; ++x) {
+    drawStrokedCircle(image, fillColor, {x, x}, CircleShape::c1x1, 32, 2);
+  }
+  timer.stop();
+  
+  image.save("/Users/indikernick/Desktop/Test/smear_3.png");
+  image.fill(0);
+  
+  timer.start("painter smear");
+  for (int x = 64; x < image.width() - 64; ++x) {
+    drawFilledEllipse(image, fillColor, circleToRect({x, x}, 32, CircleShape::c1x1));
+  }
+  timer.stop();
+  
+  image.save("/Users/indikernick/Desktop/Test/smear_4.png");
+  image.fill(0);
+  /*
   midpointLine(image, fillColor, {10, 10}, {20, 10});
   midpointLine(image, fillColor, {20, 20}, {10, 20});
   midpointLine(image, fillColor, {10, 30}, {10, 40});
@@ -1285,11 +1944,11 @@ int main(int argc, char **argv) {
   midpointLine(image, fillColor, {10, 170}, {20, 160});
   
   image.save("/Users/indikernick/Desktop/Test/lines.png");
-  image.fill(0);
+  image.fill(0);*/
   
   //testComposite();
   
-  SourceCell source({32, 32}, Format::color);
+  /*SourceCell source({32, 32}, Format::color);
   source.image.xform.angle = 0;
   QImage overlay({32, 32}, getImageFormat(Format::color));
   overlay.fill(0);

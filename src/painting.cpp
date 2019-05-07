@@ -9,49 +9,30 @@
 #include "painting.hpp"
 
 #include "geometry.hpp"
+#include "pixel manip.hpp"
 #include <QtGui/qpainter.h>
 
-namespace {
-
-int centerWidth(const CircleShape shape) {
-  return (shape == CircleShape::c2x1 || shape == CircleShape::c2x2) ? 2 : 1;
-}
-
-int centerHeight(const CircleShape shape) {
-  return (shape == CircleShape::c1x2 || shape == CircleShape::c2x2) ? 2 : 1;
-}
-
-}
-
-QRect circleToRect(const QPoint center, const int radius, const CircleShape shape) {
-  return QRect{
-    center.x() - radius,
-    center.y() - radius,
-    radius * 2 + centerWidth(shape),
-    radius * 2 + centerHeight(shape)
-  };
-}
-
-QRect centerToRect(const QPoint center, const CircleShape shape) {
-  return circleToRect(center, 0, shape);
-}
+// @TODO naming and parameter order are not very consistent in this file
 
 namespace {
 
-QRect adjustStrokedEllipse(const QRect rect, const int thickness) {
-  return QRect{
-    rect.left() + thickness / 2,
-    rect.top() + thickness / 2,
-    rect.width() - thickness,
-    rect.height() - thickness
+template <typename Pixel>
+PixelManip<Pixel> makePixelManip(QImage &image) {
+  assert(image.isDetached());
+  assert(image.depth() == sizeof(Pixel) * CHAR_BIT);
+  // QImage::bits() is aligned to 4 bytes
+  assert(image.bytesPerLine() % sizeof(Pixel) == 0);
+  assert(!image.isNull());
+  return {
+    reinterpret_cast<Pixel *>(image.bits()),
+    image.bytesPerLine() / static_cast<ptrdiff_t>(sizeof(Pixel)),
+    image.width(),
+    image.height()
   };
 }
 
 const QPen round_pen{
   Qt::NoBrush, 1.0, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin
-};
-const QPen square_pen{
-  Qt::NoBrush, 1.0, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin
 };
 
 QPen makePen(const QPen &base, const QRgb color, const int width) {
@@ -65,29 +46,13 @@ void preparePainter(QPainter &painter) {
   painter.setCompositionMode(QPainter::CompositionMode_Source);
 }
 
-template <typename Pixel>
-Pixel *pixelAddr(
-  uchar *const bits,
-  const int bbl,
-  const QPoint pos
-) noexcept {
-  return reinterpret_cast<Pixel *>(bits + pos.y() * bbl + pos.x() * sizeof(Pixel));
-}
-
-template <typename Pixel>
-bool drawSquarePoint(QImage &img, const QRgb color, const QPoint pos) {
-  *pixelAddr<Pixel>(img.bits(), img.bytesPerLine(), pos) = static_cast<Pixel>(color);
-  return true;
-}
-
 }
 
 bool drawSquarePoint(QImage &img, const QRgb color, const QPoint pos) {
-  if (!img.rect().contains(pos)) return false;
   if (img.depth() == 8) {
-    return drawSquarePoint<uint8_t>(img, color, pos);
+    return makePixelManip<uint8_t>(img).setPixelClip(color, pos);
   } else if (img.depth() == 32) {
-    return drawSquarePoint<uint32_t>(img, color, pos);
+    return makePixelManip<uint32_t>(img).setPixelClip(color, pos);
   } else {
     Q_UNREACHABLE();
   }
@@ -104,24 +69,22 @@ bool drawRoundPoint(QImage &img, const QRgb color, const QPoint pos, const int t
 namespace {
 
 template <typename Pixel>
-class PixelGetter {
+class FloodFillPixelManip {
 public:
-  PixelGetter(QImage &img, const Pixel startColor, const Pixel toolColor)
-    : bits{img.bits()},
-      bbl{img.bytesPerLine()},
+  FloodFillPixelManip(const PixelManip<Pixel> &manip, const Pixel startColor, const Pixel toolColor)
+    : manip{manip},
       startColor{startColor},
       toolColor{toolColor} {}
-  
-  bool filled(const QPoint pos) const noexcept {
-    return *pixelAddr<Pixel>(bits, bbl, pos) != startColor;
+
+  bool filled(const QPoint pos) const {
+    return manip.getPixel(pos) != startColor;
   }
-  void fill(const QPoint pos) noexcept {
-    *pixelAddr<Pixel>(bits, bbl, pos) = toolColor;
+  void fill(const QPoint pos) {
+    manip.setPixel(toolColor, pos);
   }
 
 private:
-  uchar *const bits;
-  const int bbl;
+  PixelManip<Pixel> manip;
   Pixel startColor;
   Pixel toolColor;
 };
@@ -146,10 +109,10 @@ QPoint left(const QPoint p) {
 // http://www.adammil.net/blog/v126_A_More_Efficient_Flood_Fill.html
 
 template <typename Pixel>
-void floodFillStart(PixelGetter<Pixel>, QPoint, QSize);
+void floodFillStart(FloodFillPixelManip<Pixel>, QPoint, QSize);
 
 template <typename Pixel>
-void floodFillCore(PixelGetter<Pixel> px, QPoint pos, const QSize size) {
+void floodFillCore(FloodFillPixelManip<Pixel> px, QPoint pos, const QSize size) {
   int lastRowLength = 0;
   do {
     int rowLength = 0;
@@ -190,7 +153,7 @@ void floodFillCore(PixelGetter<Pixel> px, QPoint pos, const QSize size) {
 }
 
 template <typename Pixel>
-void floodFillStart(PixelGetter<Pixel> px, QPoint pos, const QSize size) {
+void floodFillStart(FloodFillPixelManip<Pixel> px, QPoint pos, const QSize size) {
   while (true) {
     const QPoint startPos = pos;
     while (pos.y() != 0 && !px.filled(up(pos))) pos = up(pos);
@@ -201,12 +164,13 @@ void floodFillStart(PixelGetter<Pixel> px, QPoint pos, const QSize size) {
 }
 
 template <typename Pixel>
-bool floodFill(QImage &img, const QPoint startPos, const QRgb color) {
+bool floodFill(QImage &img, const QPoint startPos, const Pixel color) {
   img.detach();
+  PixelManip manip = makePixelManip<Pixel>(img);
   const Pixel toolColor = static_cast<Pixel>(color);
-  const Pixel startColor = *pixelAddr<Pixel>(img.bits(), img.bytesPerLine(), startPos);
+  const Pixel startColor = manip.getPixel(startPos);
   if (startColor == toolColor) return false;
-  PixelGetter<Pixel> px{img, startColor, toolColor};
+  FloodFillPixelManip<Pixel> px{manip, startColor, toolColor};
   floodFillStart(px, startPos, img.size());
   return true;
 }
@@ -224,94 +188,233 @@ bool drawFloodFill(QImage &img, const QRgb color, const QPoint pos) {
   }
 }
 
-bool drawFilledEllipse(QImage &img, const QRgb color, const QRect ellipse) {
-  assert(ellipse.isValid());
-  if (!img.rect().intersects(ellipse)) return false;
-  QPainter painter{&img};
-  preparePainter(painter);
-  painter.setBrush(QColor::fromRgba(color));
-  painter.setPen(makePen(round_pen, color, 1));
-  painter.drawEllipse(adjustStrokedEllipse(ellipse, 1));
-  return true;
-}
-
-bool drawStrokedEllipse(QImage &img, const QRgb color, const QRect ellipse) {
-  assert(ellipse.isValid());
-  if (!img.rect().intersects(ellipse)) return false;
-  QPainter painter{&img};
-  preparePainter(painter);
-  painter.setPen(makePen(round_pen, color, 1));
-  painter.drawEllipse(adjustStrokedEllipse(ellipse, 1));
-  return true;
-}
+// @TODO radius 6
 
 namespace {
 
 template <typename Pixel>
-void fillScanLine(Pixel *row, const uintptr_t size, const Pixel color) noexcept {
-  Pixel *const rowEnd = row + size;
-  while (row != rowEnd) {
-    *row++ = color;
-  }
-}
-
-template <>
-void fillScanLine(uint8_t *const row, const uintptr_t size, const uint8_t color) noexcept {
-  std::memset(row, color, size);
-}
-
-template <typename Pixel>
-void fillRect(QImage &img, const QRgb color, const QPoint topLeft, const QSize size) {
-  img.detach();
-  const Pixel toolColor = static_cast<Pixel>(color);
-  const uintptr_t ppl = img.bytesPerLine() / sizeof(Pixel);
-  Pixel *row = reinterpret_cast<Pixel *>(img.bits()) + topLeft.y() * ppl + topLeft.x();
-  Pixel *const endRow = row + size.height() * ppl;
-  const uintptr_t width = size.width();
-  
-  while (row != endRow) {
-    fillScanLine(row, width, toolColor);
-    row += ppl;
-  }
-}
-
-}
-
-bool drawFilledRect(QImage &img, const QRgb color, const QRect rect) {
-  const QRect clipped = img.rect().intersected(rect);
-  if (clipped.isEmpty()) return false;
-  
-  if (img.depth() == 8) {
-    fillRect<uint8_t>(img, color, clipped.topLeft(), clipped.size());
-  } else if (img.depth() == 32) {
-    fillRect<uint32_t>(img, color, clipped.topLeft(), clipped.size());
-  } else {
-    Q_UNREACHABLE();
-  }
-  
-  return true;
-}
-
-bool drawStrokedRect(QImage &img, const QRgb color, const QRect rect) {
-  if (!img.rect().intersects(rect)) return false;
+bool midpointFilledCircle(
+  QImage &img,
+  const Pixel col,
+  const QPoint ctr,
+  const int rad,
+  const CircleShape shape
+) {
+  PixelManip manip = makePixelManip<Pixel>(img);
+  QPoint pos = {rad, 0};
+  int err = 1 - rad;
+  const int extraX = centerOffsetX(shape);
+  const int extraY = centerOffsetY(shape);
   bool drawn = false;
-  // @TODO don't use drawLine
-  drawn |= drawLine(img, color, {rect.topLeft(), rect.topRight()});
-  drawn |= drawLine(img, color, {rect.topRight(), rect.bottomRight()});
-  drawn |= drawLine(img, color, {rect.bottomLeft(), rect.bottomRight()});
-  drawn |= drawLine(img, color, {rect.topLeft(), rect.bottomLeft()});
+  
+  while (pos.x() >= pos.y()) {
+    drawn |= manip.horiLineClip(col, {ctr.x() - pos.x(), ctr.y() + pos.y() + extraY}, ctr.x() + pos.x() + extraX);
+    drawn |= manip.horiLineClip(col, {ctr.x() - pos.x(), ctr.y() - pos.y()},          ctr.x() + pos.x() + extraX);
+    drawn |= manip.horiLineClip(col, {ctr.x() - pos.y(), ctr.y() + pos.x() + extraY}, ctr.x() + pos.y() + extraX);
+    drawn |= manip.horiLineClip(col, {ctr.x() - pos.y(), ctr.y() - pos.x()},          ctr.x() + pos.y() + extraX);
+    
+    ++pos.ry();
+    
+    if (err < 0) {
+      err += 2 * pos.y() + 1;
+    } else {
+      --pos.rx();
+      err += 2 * (pos.y() - pos.x()) + 1;
+    }
+  }
+  
   return drawn;
 }
 
+}
+
+bool drawFilledCircle(QImage &img, const QRgb color, const QPoint center, const CircleShape shape, const int radius) {
+  if (img.depth() == 8) {
+    return midpointFilledCircle<uint8_t>(img, color, center, radius, shape);
+  } else if (img.depth() == 32) {
+    return midpointFilledCircle<uint32_t>(img, color, center, radius, shape);
+  } else {
+    Q_UNREACHABLE();
+  }
+}
+
 namespace {
 
 template <typename Pixel>
-void setPixel(QImage &img, const QPoint pos, const Pixel color) {
-  assert(img.rect().contains(pos));
-  const uintptr_t ppl = img.bytesPerLine() / sizeof(Pixel);
-  Pixel *const px = reinterpret_cast<Pixel *>(img.bits()) + pos.y() * ppl + pos.x();
-  *px = color;
+bool midpointCircle(
+  QImage &image,
+  Pixel color,
+  QPoint center,
+  int radius,
+  CircleShape shape
+) {
+  PixelManip manip = makePixelManip<Pixel>(image);
+  QPoint pos = {radius, 0};
+  int err = 1 - radius;
+  const int extraX = centerOffsetX(shape);
+  const int extraY = centerOffsetY(shape);
+  bool drawn = false;
+  
+  while (pos.x() >= pos.y()) {
+    drawn |= manip.setPixelClip(color, {center.x() + pos.x() + extraX, center.y() + pos.y() + extraY});
+    drawn |= manip.setPixelClip(color, {center.x() - pos.x(),          center.y() + pos.y() + extraY});
+    drawn |= manip.setPixelClip(color, {center.x() + pos.x() + extraX, center.y() - pos.y()});
+    drawn |= manip.setPixelClip(color, {center.x() - pos.x(),          center.y() - pos.y()});
+    
+    drawn |= manip.setPixelClip(color, {center.x() + pos.y() + extraX, center.y() + pos.x() + extraY});
+    drawn |= manip.setPixelClip(color, {center.x() - pos.y(),          center.y() + pos.x() + extraY});
+    drawn |= manip.setPixelClip(color, {center.x() + pos.y() + extraX, center.y() - pos.x()});
+    drawn |= manip.setPixelClip(color, {center.x() - pos.y(),          center.y() - pos.x()});
+    
+    pos.ry()++;
+    
+    if (err < 0) {
+      err += 2 * pos.y() + 1;
+    } else {
+      pos.rx()--;
+      err += 2 * (pos.y() - pos.x()) + 1;
+    }
+  }
+  
+  return drawn;
 }
+
+template <typename Pixel>
+bool midpointThickCircle(
+  QImage &image,
+  Pixel color,
+  QPoint center,
+  int innerRadius,
+  int outerRadius,
+  CircleShape shape
+) {
+  assert(0 <= innerRadius);
+  assert(innerRadius <= outerRadius);
+
+  PixelManip manip = makePixelManip<Pixel>(image);
+  int innerX = innerRadius;
+  int outerX = outerRadius;
+  int posY = 0;
+  int innerErr = 1 - innerRadius;
+  int outerErr = 1 - outerRadius;
+  const int extraX = centerOffsetX(shape);
+  const int extraY = centerOffsetY(shape);
+  bool drawn = false;
+  
+  while (outerX >= posY) {
+    drawn |= manip.horiLineClip(color, {center.x() + innerX + extraX, center.y() + posY + extraY},   center.x() + outerX + extraX); // right down
+    drawn |= manip.vertLineClip(color, {center.x() + posY + extraX,   center.y() + innerX + extraY}, center.y() + outerX + extraY); // right down
+    drawn |= manip.horiLineClip(color, {center.x() - outerX,          center.y() + posY + extraY},   center.x() - innerX);          //       down
+    drawn |= manip.vertLineClip(color, {center.x() - posY,            center.y() + innerX + extraY}, center.y() + outerX + extraY); //       down
+    
+    drawn |= manip.horiLineClip(color, {center.x() - outerX,          center.y() - posY},   center.x() - innerX);                   //
+    drawn |= manip.vertLineClip(color, {center.x() - posY,            center.y() - outerX}, center.y() - innerX);                   //
+    drawn |= manip.horiLineClip(color, {center.x() + innerX + extraX, center.y() - posY},   center.x() + outerX + extraX);          // right
+    drawn |= manip.vertLineClip(color, {center.x() + posY + extraX,   center.y() - outerX}, center.y() - innerX);                   // right
+    
+    posY++;
+    
+    if (outerErr < 0) {
+      outerErr += 2 * posY + 1;
+    } else {
+      outerX--;
+      outerErr += 2 * (posY - outerX) + 1;
+    }
+    
+    if (posY > innerRadius) {
+      innerX = posY;
+    } else {
+      if (innerErr < 0) {
+        innerErr += 2 * posY + 1;
+      } else {
+        innerX--;
+        innerErr += 2 * (posY - innerX) + 1;
+      }
+    }
+  }
+  
+  return drawn;
+}
+
+}
+
+bool drawStrokedCircle(QImage &img, const QRgb color, const QPoint center, const CircleShape shape, const int radius, const int thickness) {
+  assert(thickness > 0);
+  if (img.depth() == 8) {
+    if (thickness == 1) {
+      return midpointCircle<uint8_t>(img, color, center, radius, shape);
+    } else {
+      return midpointThickCircle<uint8_t>(img, color, center, std::max(radius - thickness + 1, 0), radius, shape);
+    }
+  } else if (img.depth() == 32) {
+    if (thickness == 1) {
+      return midpointCircle<uint32_t>(img, color, center, radius, shape);
+    } else {
+      return midpointThickCircle<uint32_t>(img, color, center, std::max(radius - thickness + 1, 0), radius, shape);
+    }
+  } else {
+    Q_UNREACHABLE();
+  }
+}
+
+bool drawFilledRect(QImage &img, const QRgb color, const QRect rect) {
+  if (img.depth() == 8) {
+    return makePixelManip<uint8_t>(img).fillRectClip(color, rect);
+  } else if (img.depth() == 32) {
+    return makePixelManip<uint32_t>(img).fillRectClip(color, rect);
+  } else {
+    Q_UNREACHABLE();
+  }
+}
+
+namespace {
+
+template <typename Pixel>
+bool strokedRect(QImage &image, const Pixel color, const QRect rect, const int thickness) {
+  PixelManip manip = makePixelManip<Pixel>(image);
+  if (rect.width() <= thickness * 2 || rect.height() <= thickness * 2) {
+    return manip.fillRectClip(color, rect);
+  }
+  const QRect sideRects[] = {
+    { // top
+      QPoint{rect.left(), rect.top()},
+      QPoint{rect.right(), rect.top() + thickness - 1}
+    },
+    { // left
+      QPoint{rect.left(), rect.top() + thickness},
+      QPoint{rect.left() + thickness - 1, rect.bottom() - thickness}
+    },
+    { // right
+      QPoint{rect.right() - thickness + 1, rect.top() + thickness},
+      QPoint{rect.right(), rect.bottom() - thickness}
+    },
+    { // bottom
+      QPoint{rect.left(), rect.bottom() - thickness + 1},
+      QPoint{rect.right(), rect.bottom()}
+    }
+  };
+  bool drawn = false;
+  for (const QRect &sideRect : sideRects) {
+    drawn |= manip.fillRectClip(color, sideRect);
+  }
+  return drawn;
+}
+
+}
+
+bool drawStrokedRect(QImage &img, const QRgb color, const QRect rect, const int thickness) {
+  assert(thickness > 0);
+  if (!img.rect().intersects(rect)) return false;
+  if (img.depth() == 8) {
+    return strokedRect<uint8_t>(img, color, rect, thickness);
+  } else if (img.depth() == 32) {
+    return strokedRect<uint32_t>(img, color, rect, thickness);
+  } else {
+    Q_UNREACHABLE();
+  }
+}
+
+namespace {
 
 std::pair<int, int> signdiff(const int a, const int b) {
   if (a < b) {
@@ -321,23 +424,17 @@ std::pair<int, int> signdiff(const int a, const int b) {
   }
 }
 
-bool insideImage(const QPoint p, const QSize s) {
-  return 0 <= p.x() && p.x() < s.width() &&
-         0 <= p.y() && p.y() < s.height();
-}
-
 template <typename Pixel>
-void midpointLine(QImage &img, const Pixel col, QPoint p1, const QPoint p2) {
-  assert(img.isDetached());
-  
-  const QSize imgSize = img.size();
+bool midpointLine(QImage &img, const Pixel col, QPoint p1, const QPoint p2) {
+  PixelManip manip = makePixelManip<Pixel>(img);
   const auto [sx, dx] = signdiff(p1.x(), p2.x());
   auto [sy, dy] = signdiff(p1.y(), p2.y());
   dy = -dy;
   int err = dx + dy;
+  bool drawn = false;
   
-  while (insideImage(p1, imgSize)) {
-    setPixel(img, p1, col);
+  while (true) {
+    drawn |= manip.setPixelClip(col, p1);
     const int err2 = 2 * err;
     if (err2 >= dy) {
       if (p1.x() == p2.x()) break;
@@ -350,19 +447,20 @@ void midpointLine(QImage &img, const Pixel col, QPoint p1, const QPoint p2) {
       p1.ry() += sy;
     }
   }
+  
+  return drawn;
 }
 
 }
 
 bool drawLine(QImage &img, const QRgb color, const QLine line) {
   if (img.depth() == 8) {
-    midpointLine<uint8_t>(img, color, line.p1(), line.p2());
+    return midpointLine<uint8_t>(img, color, line.p1(), line.p2());
   } else if (img.depth() == 32) {
-    midpointLine<uint32_t>(img, color, line.p1(), line.p2());
+    return midpointLine<uint32_t>(img, color, line.p1(), line.p2());
   } else {
     Q_UNREACHABLE();
   }
-  return true;
 }
 
 bool drawRoundLine(QImage &img, const QRgb color, const QLine line, const int thickness) {

@@ -209,7 +209,7 @@ ToolChanges RectangleSelectTool::mouseMove(const ToolMouseEvent &event) {
   if (mode == SelectMode::copy) {
     if (event.button == ButtonType::primary) {
       const QRect rect = QRect{startPos, event.pos}.normalized();
-      drawStrokedRect(*event.overlay, tool_overlay_color, rect);
+      drawStrokedRect(*event.overlay, tool_overlay_color, rect, 1);
       event.status->appendLabeled(rect);
     } else {
       drawSquarePoint(*event.overlay, tool_overlay_color, event.pos);
@@ -438,12 +438,11 @@ int calcRadius(const QPoint start, const QPoint end) {
 }
 
 bool StrokedCircleTool::drawDrag(Image &image, const QPoint start, const QPoint end) {
-  const QRect rect = circleToRect(start, calcRadius(start, end), shape);
-  return drawStrokedEllipse(image.data, getColor(), rect);
+  return drawStrokedCircle(image.data, getColor(), start, shape, calcRadius(start, end), thickness);
 }
 
 void StrokedCircleTool::drawOverlay(QImage &overlay, const QPoint pos) {
-  drawFilledRect(overlay, tool_overlay_color, centerToRect(pos, shape));
+  drawFilledRect(overlay, tool_overlay_color, centerRect(pos, shape));
 }
 
 void StrokedCircleTool::updateStatus(StatusMsg &status, const QPoint start, const QPoint end) {
@@ -464,12 +463,11 @@ bool FilledCircleTool::drawPoint(Image &, QPoint) {
 }
 
 bool FilledCircleTool::drawDrag(Image &image, const QPoint start, const QPoint end) {
-  const QRect rect = circleToRect(start, calcRadius(start, end), shape);
-  return drawFilledEllipse(image.data, getColor(), rect);
+  return drawFilledCircle(image.data, getColor(), start, shape, calcRadius(start, end));
 }
 
 void FilledCircleTool::drawOverlay(QImage &overlay, const QPoint pos) {
-  drawFilledRect(overlay, tool_overlay_color, centerToRect(pos, shape));
+  drawFilledRect(overlay, tool_overlay_color, centerRect(pos, shape));
 }
 
 void FilledCircleTool::updateStatus(StatusMsg &status, const QPoint start, const QPoint end) {
@@ -487,7 +485,7 @@ bool StrokedRectangleTool::drawPoint(Image &image, const QPoint pos) {
 
 bool StrokedRectangleTool::drawDrag(Image &image, const QPoint start, const QPoint end) {
   const QRect rect = QRect{start, end}.normalized();
-  return drawStrokedRect(image.data, getColor(), rect);
+  return drawStrokedRect(image.data, getColor(), rect, thickness);
 }
 
 void StrokedRectangleTool::drawOverlay(QImage &overlay, const QPoint pos) {

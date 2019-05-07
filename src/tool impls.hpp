@@ -135,6 +135,7 @@ public:
   
 private:
   CircleShape shape = CircleShape::c1x1;
+  int thickness = 8;
 
   bool drawPoint(Image &, QPoint);
   bool drawDrag(Image &, QPoint, QPoint);
@@ -166,6 +167,8 @@ public:
   ~StrokedRectangleTool();
 
 private:
+  int thickness = 4;
+
   bool drawPoint(Image &, QPoint);
   bool drawDrag(Image &, QPoint, QPoint);
   void drawOverlay(QImage &, QPoint);

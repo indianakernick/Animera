@@ -9,8 +9,7 @@
 #ifndef paint_params_hpp
 #define paint_params_hpp
 
-#include <QtCore/qsize.h>
-#include <QtCore/qpoint.h>
+#include <QtCore/qrect.h>
 
 constexpr int no_radius = -1;
 constexpr QPoint no_point{-1, -1};
@@ -29,6 +28,10 @@ constexpr int centerOffsetX(const CircleShape shape) {
 
 constexpr int centerOffsetY(const CircleShape shape) {
   return (static_cast<std::underlying_type_t<CircleShape>>(shape) & 0b01);
+}
+
+constexpr QRect centerRect(const QPoint point, const CircleShape shape) {
+  return {point, QPoint{point.x() + centerOffsetX(shape), point.y() + centerOffsetY(shape)}};
 }
 
 enum class SymmetryMode {

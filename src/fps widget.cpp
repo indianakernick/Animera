@@ -47,11 +47,11 @@ void FPSWidget::paintEvent(QPaintEvent *) {
     frames = 0;
   }
   
-  if (fps > 5000) {
+  if (fps > 10000) {
     QTimer::singleShot(1000, [this]{
       timer.restart();
       frames = 0;
-      update();
+      repaint();
     });
   } else {
     update();

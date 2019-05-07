@@ -78,13 +78,13 @@ public:
   void horiLine(const Pixel color, const QPoint first, const int last) noexcept {
     assert(first.x() <= last);
     assert(insideImage(first));
-    assert(insideImage({first.x() + last, first.y()}));
+    assert(insideImage({last, first.y()}));
     fillRow(color, pixelAddr(first), last - first.x() + 1);
   }
   void vertLine(const Pixel color, const QPoint first, const int last) noexcept {
     assert(first.y() <= last);
     assert(insideImage(first));
-    assert(insideImage({first.x(), first.y() + last}));
+    assert(insideImage({first.x(), last}));
     fillCol(color, pixelAddr(first), last - first.y() + 1);
   }
   
