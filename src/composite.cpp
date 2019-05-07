@@ -10,6 +10,7 @@
 
 #include "config.hpp"
 #include <QtGui/qpainter.h>
+#include "pixel manip factory.hpp"
 
 /*
 #include <cmath>
@@ -165,61 +166,51 @@ QImage blitMaskImage(const QImage &src, const QImage &mask, const QPoint pos) {
 
 namespace {
 
-void colorToOverlay(QRgb *const pixel) {
-  const QRgb pxval = *pixel;
+void colorToOverlay(QRgb &pixel) {
+  const QRgb pxval = pixel;
   const int gray = qGray(qRed(pxval), qGreen(pxval), qBlue(pxval));
   const int alpha = std::max(tool_overlay_alpha_min, qAlpha(pxval) * 3 / 4);
-  *pixel = qRgba(gray, gray, gray, alpha);
+  pixel = qRgba(gray, gray, gray, alpha);
 }
 
-void applyMaskPixel(QRgb *const pixel, const uchar mask) {
-  *pixel &= qRgba(mask, mask, mask, mask);
+uint32_t spread(const uint8_t byte) {
+  int32_t i32 = byte;
+  i32 <<= 24;
+  i32 >>= 24; // C++20 says this is a sign extension
+  return i32;
+}
+
+void applyMaskPixel(QRgb &pixel, const uchar mask) {
+  pixel &= spread(mask);
 }
 
 }
 
 void colorToOverlay(QImage &img) {
   assert(img.format() == getImageFormat(Format::color));
-  assert(img.depth() == 32);
   img.detach();
-  const uintptr_t ppl = img.bytesPerLine() / sizeof(QRgb);
-  QRgb *row = reinterpret_cast<QRgb *>(img.bits());
-  QRgb *const lastRow = row + img.height() * ppl;
-  const uintptr_t width = img.width();
-  
-  while (row != lastRow) {
-    QRgb *pixel = row;
-    QRgb *const lastPixel = row + width;
-    while (pixel != lastPixel) {
-      colorToOverlay(pixel++);
+  for (auto row : makePixelManip<uint32_t>(img).range()) {
+    for (uint32_t &pixel : row) {
+      colorToOverlay(pixel);
     }
-    row += ppl;
   }
 }
 
 void colorToOverlay(QImage &img, const QImage &mask) {
   assert(img.format() == getImageFormat(Format::color));
-  assert(img.depth() == 32);
   assert(img.size() == mask.size());
   img.detach();
-  const uintptr_t ppl = img.bytesPerLine() / sizeof(QRgb);
-  const uintptr_t maskPpl = mask.bytesPerLine() / sizeof(uchar);
-  QRgb *row = reinterpret_cast<QRgb *>(img.bits());
-  const uchar *maskRow = mask.bits();
-  QRgb *const lastRow = row + img.height() * ppl;
-  const uintptr_t width = img.width();
   
-  while (row != lastRow) {
-    QRgb *pixel = row;
-    const uchar *maskPixel = maskRow;
-    QRgb *const lastPixel = row + width;
-    while (pixel != lastPixel) {
-      colorToOverlay(pixel);
-      applyMaskPixel(pixel, *maskPixel);
-      ++pixel;
-      ++maskPixel;
+  Range imgRange = makePixelManip<uint32_t>(img).range();
+  auto maskRowIter = makePixelManip<uint8_t>(mask).range().begin();
+  
+  for (auto imgRow : imgRange) {
+    const uint8_t *maskPixelIter = (*maskRowIter).begin();
+    for (uint32_t &imgPixel : imgRow) {
+      colorToOverlay(imgPixel);
+      applyMaskPixel(imgPixel, *maskPixelIter);
+      ++maskPixelIter;
     }
-    row += ppl;
-    maskRow += maskPpl;
+    ++maskRowIter;
   }
 }

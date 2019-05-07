@@ -9,29 +9,10 @@
 #include "painting.hpp"
 
 #include "geometry.hpp"
-#include "pixel manip.hpp"
 #include <QtGui/qpainter.h>
+#include "pixel manip factory.hpp"
 
 // @TODO naming and parameter order are not very consistent in this file
-
-namespace {
-
-template <typename Pixel>
-PixelManip<Pixel> makePixelManip(QImage &image) {
-  assert(image.isDetached());
-  assert(image.depth() == sizeof(Pixel) * CHAR_BIT);
-  // QImage::bits() is aligned to 4 bytes
-  assert(image.bytesPerLine() % sizeof(Pixel) == 0);
-  assert(!image.isNull());
-  return {
-    reinterpret_cast<Pixel *>(image.bits()),
-    image.bytesPerLine() / static_cast<ptrdiff_t>(sizeof(Pixel)),
-    image.width(),
-    image.height()
-  };
-}
-
-}
 
 bool drawSquarePoint(QImage &img, const QRgb color, const QPoint pos, const CircleShape shape) {
   if (img.depth() == 8) {

@@ -13,6 +13,31 @@
 #include <algorithm>
 #include <QtCore/qrect.h>
 
+template <typename Begin, typename End = Begin>
+class Range {
+public:
+  Range(const Begin &begin, const End &end)
+    : beginIter{begin},
+      endIter{end} {}
+  
+  Begin begin() const noexcept {
+    return beginIter;
+  }
+  End end() const noexcept {
+    return endIter;
+  }
+
+private:
+  Begin beginIter;
+  End endIter;
+};
+
+template <typename Begin, typename End>
+Range(Begin &&, End &&) -> Range<
+  std::remove_cv_t<std::remove_reference_t<Begin>>,
+  std::remove_cv_t<std::remove_reference_t<End>>
+>;
+
 // @TODO maybe we could call this a Surface?
 template <typename Pixel>
 class PixelManip {
@@ -126,6 +151,53 @@ public:
     if (rect.isEmpty()) return false;
     fillRect(color, rect);
     return true;
+  }
+  
+  class Sentinel {
+    friend class Iterator;
+    friend class PixelManip;
+    
+    Pixel *row;
+    
+    explicit Sentinel(Pixel *row)
+      : row{row} {}
+  };
+  
+  using Row = Range<Pixel *>;
+  
+  class Iterator {
+    friend class PixelManip;
+  public:
+    Row operator*() const noexcept {
+      return {row, row + width};
+    }
+    Iterator &operator++() noexcept {
+      row += pitch;
+      return *this;
+    }
+    bool operator!=(const Sentinel sentinel) const noexcept {
+      return row != sentinel.row;
+    }
+    
+  private:
+    Pixel *row;
+    ptrdiff_t pitch;
+    ptrdiff_t width;
+    
+    Iterator(Pixel *row, ptrdiff_t pitch, ptrdiff_t width)
+      : row{row}, pitch{pitch}, width{width} {}
+  };
+  
+  using Range = Range<Iterator, Sentinel>;
+  
+  Range range() noexcept {
+    return {Iterator{data, pitch, width}, Sentinel{data + pitch * height}};
+  }
+  Range range(const QRect rect) noexcept {
+    return {
+      Iterator{pixelAddr(rect.topLeft()), pitch, rect.width()},
+      Sentinel{pixelAddr({rect.left(), rect.bottom() + 1})}
+    };
   }
 
 private:

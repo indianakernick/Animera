@@ -15,6 +15,7 @@
 #include <QtGui/qpainter.h>
 
 constexpr int fps_digits = 4;
+constexpr bool fps_enabled = false;
 
 FPSWidget::FPSWidget(QWidget *parent)
   : QWidget{parent} {
@@ -25,10 +26,12 @@ FPSWidget::FPSWidget(QWidget *parent)
 }
 
 void FPSWidget::start() {
-  timer.start();
+  if constexpr (fps_enabled) timer.start();
 }
 
 void FPSWidget::paintEvent(QPaintEvent *) {
+  if constexpr (!fps_enabled) return;
+
   ++frames;
   const int fps = qRound(frames / (timer.elapsed() / 1000.0));
 

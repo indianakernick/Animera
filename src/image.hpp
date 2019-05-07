@@ -37,7 +37,7 @@ struct Image {
 constexpr QImage::Format color_format = QImage::Format_ARGB32;
 constexpr QImage::Format palette_format = QImage::Format_Grayscale8;
 
-inline QImage::Format getImageFormat(const Format format) {
+constexpr QImage::Format getImageFormat(const Format format) {
   return format == Format::color ? color_format : palette_format;
 }
 
