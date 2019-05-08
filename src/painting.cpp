@@ -15,13 +15,9 @@
 // @TODO naming and parameter order are not very consistent in this file
 
 bool drawSquarePoint(QImage &img, const QRgb color, const QPoint pos, const CircleShape shape) {
-  if (img.depth() == 8) {
-    return makeSurface<uint8_t>(img).fillRectClip(color, centerRect(pos, shape));
-  } else if (img.depth() == 32) {
-    return makeSurface<uint32_t>(img).fillRectClip(color, centerRect(pos, shape));
-  } else {
-    Q_UNREACHABLE();
-  }
+  return makeSurface(img, [color, pos, shape](auto surface) {
+    return surface.fillRectClip(color, centerRect(pos, shape));
+  });
 }
 
 bool drawRoundPoint(QImage &img, const QRgb color, const QPoint pos, const int thickness, const CircleShape shape) {
@@ -131,14 +127,11 @@ void floodFillStart(FloodFillSurface<Pixel> px, QPoint pos, const QSize size) {
 }
 
 template <typename Pixel>
-bool floodFill(QImage &img, const QPoint startPos, const Pixel color) {
-  img.detach();
-  Surface surface = makeSurface<Pixel>(img);
-  const Pixel toolColor = static_cast<Pixel>(color);
+bool floodFill(Surface<Pixel> surface, const QPoint startPos, const Pixel toolColor) {
   const Pixel startColor = surface.getPixel(startPos);
   if (startColor == toolColor) return false;
   FloodFillSurface<Pixel> px{surface, startColor, toolColor};
-  floodFillStart(px, startPos, img.size());
+  floodFillStart(px, startPos, surface.size());
   return true;
 }
 
@@ -146,13 +139,9 @@ bool floodFill(QImage &img, const QPoint startPos, const Pixel color) {
 
 bool drawFloodFill(QImage &img, const QRgb color, const QPoint pos) {
   if (!img.rect().contains(pos)) return false;
-  if (img.depth() == 8) {
-    return floodFill<uint8_t>(img, pos, color);
-  } else if (img.depth() == 32) {
-    return floodFill<uint32_t>(img, pos, color);
-  } else {
-    Q_UNREACHABLE();
-  }
+  return makeSurface(img, color, [pos](auto surface, auto color) {
+    return floodFill(surface, pos, color);
+  });
 }
 
 // @TODO radius 6
@@ -161,13 +150,12 @@ namespace {
 
 template <typename Pixel>
 bool midpointFilledCircle(
-  QImage &img,
+  Surface<Pixel> surface,
   const Pixel col,
   const QPoint ctr,
   const int rad,
   const CircleShape shape
 ) {
-  Surface surface = makeSurface<Pixel>(img);
   QPoint pos = {rad, 0};
   int err = 1 - rad;
   const int extraX = centerOffsetX(shape);
@@ -196,26 +184,21 @@ bool midpointFilledCircle(
 }
 
 bool drawFilledCircle(QImage &img, const QRgb color, const QPoint center, const int radius, const CircleShape shape) {
-  if (img.depth() == 8) {
-    return midpointFilledCircle<uint8_t>(img, color, center, radius, shape);
-  } else if (img.depth() == 32) {
-    return midpointFilledCircle<uint32_t>(img, color, center, radius, shape);
-  } else {
-    Q_UNREACHABLE();
-  }
+  return makeSurface(img, color, [center, radius, shape](auto surface, auto color) {
+    return midpointFilledCircle(surface, color, center, radius, shape);
+  });
 }
 
 namespace {
 
 template <typename Pixel>
 bool midpointCircle(
-  QImage &image,
+  Surface<Pixel> surface,
   Pixel color,
   QPoint center,
   int radius,
   CircleShape shape
 ) {
-  Surface surface = makeSurface<Pixel>(image);
   QPoint pos = {radius, 0};
   int err = 1 - radius;
   const int extraX = centerOffsetX(shape);
@@ -248,7 +231,7 @@ bool midpointCircle(
 
 template <typename Pixel>
 bool midpointThickCircle(
-  QImage &image,
+  Surface<Pixel> surface,
   Pixel color,
   QPoint center,
   int innerRadius,
@@ -258,7 +241,6 @@ bool midpointThickCircle(
   assert(0 <= innerRadius);
   assert(innerRadius <= outerRadius);
 
-  Surface surface = makeSurface<Pixel>(image);
   int innerX = innerRadius;
   int outerX = outerRadius;
   int posY = 0;
@@ -307,38 +289,25 @@ bool midpointThickCircle(
 
 bool drawStrokedCircle(QImage &img, const QRgb color, const QPoint center, const int radius, const int thickness, const CircleShape shape) {
   assert(thickness > 0);
-  if (img.depth() == 8) {
+  return makeSurface(img, color, [center, radius, thickness, shape](auto surface, auto color) {
     if (thickness == 1) {
-      return midpointCircle<uint8_t>(img, color, center, radius, shape);
+      return midpointCircle(surface, color, center, radius, shape);
     } else {
-      return midpointThickCircle<uint8_t>(img, color, center, std::max(radius - thickness + 1, 0), radius, shape);
+      return midpointThickCircle(surface, color, center, std::max(radius - thickness + 1, 0), radius, shape);
     }
-  } else if (img.depth() == 32) {
-    if (thickness == 1) {
-      return midpointCircle<uint32_t>(img, color, center, radius, shape);
-    } else {
-      return midpointThickCircle<uint32_t>(img, color, center, std::max(radius - thickness + 1, 0), radius, shape);
-    }
-  } else {
-    Q_UNREACHABLE();
-  }
+  });
 }
 
 bool drawFilledRect(QImage &img, const QRgb color, const QRect rect) {
-  if (img.depth() == 8) {
-    return makeSurface<uint8_t>(img).fillRectClip(color, rect);
-  } else if (img.depth() == 32) {
-    return makeSurface<uint32_t>(img).fillRectClip(color, rect);
-  } else {
-    Q_UNREACHABLE();
-  }
+  return makeSurface(img, color, [rect](auto surface, auto color) {
+    return surface.fillRectClip(color, rect);
+  });
 }
 
 namespace {
 
 template <typename Pixel>
-bool strokedRect(QImage &image, const Pixel color, const QRect rect, const int thickness) {
-  Surface surface = makeSurface<Pixel>(image);
+bool strokedRect(Surface<Pixel> surface, const Pixel color, const QRect rect, const int thickness) {
   if (rect.width() <= thickness * 2 || rect.height() <= thickness * 2) {
     return surface.fillRectClip(color, rect);
   }
@@ -372,13 +341,9 @@ bool strokedRect(QImage &image, const Pixel color, const QRect rect, const int t
 bool drawStrokedRect(QImage &img, const QRgb color, const QRect rect, const int thickness) {
   assert(thickness > 0);
   if (!img.rect().intersects(rect)) return false;
-  if (img.depth() == 8) {
-    return strokedRect<uint8_t>(img, color, rect, thickness);
-  } else if (img.depth() == 32) {
-    return strokedRect<uint32_t>(img, color, rect, thickness);
-  } else {
-    Q_UNREACHABLE();
-  }
+  return makeSurface(img, color, [rect, thickness](auto surface, auto color) {
+    return strokedRect(surface, color, rect, thickness);
+  });
 }
 
 namespace {
@@ -418,8 +383,7 @@ bool midpointLine(QPoint p1, const QPoint p2, SetPixel &&setPixel) {
 }
 
 template <typename Pixel>
-bool midpointLine(QImage &img, const Pixel col, const QPoint p1, const QPoint p2) {
-  Surface surface = makeSurface<Pixel>(img);
+bool midpointLine(Surface<Pixel> surface, const Pixel col, const QPoint p1, const QPoint p2) {
   return midpointLine(p1, p2, [surface, col](const QPoint pos) mutable {
     return surface.setPixelClip(col, pos);
   });
@@ -427,10 +391,10 @@ bool midpointLine(QImage &img, const Pixel col, const QPoint p1, const QPoint p2
 
 // @TODO this is suboptimial but seems to be fast enough
 template <typename Pixel>
-bool midpointThickLine(QImage &img, const Pixel col, const QPoint p1, const QPoint p2, const int thickness) {
-  midpointFilledCircle(img, col, p1, thickness, CircleShape::c1x1);
-  return midpointLine(p1, p2, [&img, col, thickness](const QPoint pos) {
-    return midpointThickCircle(img, col, pos, thickness - 1, thickness, CircleShape::c1x1);
+bool midpointThickLine(Surface<Pixel> surface, const Pixel col, const QPoint p1, const QPoint p2, const int thickness) {
+  midpointFilledCircle(surface, col, p1, thickness, CircleShape::c1x1);
+  return midpointLine(p1, p2, [surface, col, thickness](const QPoint pos) {
+    return midpointThickCircle(surface, col, pos, thickness - 1, thickness, CircleShape::c1x1);
   });
 }
 
@@ -438,21 +402,13 @@ bool midpointThickLine(QImage &img, const Pixel col, const QPoint p1, const QPoi
 
 bool drawLine(QImage &img, const QRgb color, const QLine line, const int thickness) {
   assert(thickness > 0);
-  if (img.depth() == 8) {
+  return makeSurface(img, color, [line, thickness](auto surface, auto color) {
     if (thickness == 1) {
-      return midpointLine<uint8_t>(img, color, line.p1(), line.p2());
+      return midpointLine(surface, color, line.p1(), line.p2());
     } else {
-      return midpointThickLine<uint8_t>(img, color, line.p1(), line.p2(), thickness);
+      return midpointThickLine(surface, color, line.p1(), line.p2(), thickness);
     }
-  } else if (img.depth() == 32) {
-    if (thickness == 1) {
-      return midpointLine<uint32_t>(img, color, line.p1(), line.p2());
-    } else {
-      return midpointThickLine<uint32_t>(img, color, line.p1(), line.p2(), thickness);
-    }
-  } else {
-    Q_UNREACHABLE();
-  }
+  });
 }
 
 bool drawFilledPolygon(

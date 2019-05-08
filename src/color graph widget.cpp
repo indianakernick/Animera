@@ -12,6 +12,7 @@
 #include <QtGui/qevent.h>
 #include <QtGui/qpainter.h>
 #include "widget painting.hpp"
+#include "surface factory.hpp"
 
 SVGraphWidget::SVGraphWidget(QWidget *parent)
   : QWidget{parent},
@@ -46,24 +47,16 @@ void SVGraphWidget::plotGraph(const int hue) {
   // y   - value
   // 0,0 - bottom left
   
-  QRgb *pixels = reinterpret_cast<QRgb *>(graph.bits());
-  const ptrdiff_t pitch = graph.bytesPerLine() / sizeof(QRgb);
-  const ptrdiff_t width = graph.width();
-  const ptrdiff_t padding = pitch - width;
   int sat = 0;
   int val = pick_svgraph_rect.inner().height() - 1;
-  
-  QRgb *const imgEnd = pixels + pitch * graph.height();
-  while (pixels != imgEnd) {
-    QRgb *const rowEnd = pixels + width;
-    while (pixels != rowEnd) {
-      *pixels++ = hsv2rgb(
+  for (auto row : makeSurface<QRgb>(graph).range()) {
+    for (QRgb &pixel : row) {
+      pixel = hsv2rgb(
         hue, // can't use sat2pix and val2pix here
         sat++ * 100.0 / (pick_svgraph_rect.inner().width() - 1),
         val * 100.0 / (pick_svgraph_rect.inner().height() - 1)
       );
     }
-    pixels += padding;
     --val;
     sat = 0;
   }

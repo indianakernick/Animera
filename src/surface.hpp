@@ -38,12 +38,26 @@ Range(Begin &&, End &&) -> Range<
   std::remove_cv_t<std::remove_reference_t<End>>
 >;
 
-// @TODO maybe we could call this a Surface?
 template <typename Pixel>
 class Surface {
 public:
+  using pixel_type = Pixel;
+
   Surface(Pixel *data, const ptrdiff_t pitch, const int width, const int height) noexcept
     : data{data}, pitch{pitch}, width{width}, height{height} {}
+  
+  template <typename Dummy = Pixel>
+  std::enable_if_t<
+    !std::is_const_v<Pixel> && std::is_same_v<Dummy, Pixel>,
+    Surface<const Pixel>
+  >
+  addConst() const noexcept {
+    return {data, pitch, width, height};
+  }
+  
+  QSize size() const noexcept {
+    return {width, height};
+  }
   
   bool insideImageX(const int posX) const noexcept {
     return 0 <= posX && posX < width;
@@ -83,13 +97,9 @@ public:
   }
   
   void fillRow(const Pixel color, Pixel *firstPixel, const ptrdiff_t count) noexcept {
-    if constexpr (std::is_same_v<Pixel, uint8_t>) {
-      std::memset(firstPixel, color, count);
-    } else {
-      Pixel *const afterLastPixel = firstPixel + count;
-      while (firstPixel != afterLastPixel) {
-        *firstPixel++ = color;
-      }
+    Pixel *const afterLastPixel = firstPixel + count;
+    while (firstPixel != afterLastPixel) {
+      *firstPixel++ = color;
     }
   }
   void fillCol(const Pixel color, Pixel *firstPixel, const ptrdiff_t count) noexcept {
@@ -134,12 +144,10 @@ public:
     assert(!rect.isEmpty());
     assert(insideImage(rect.topLeft()));
     assert(insideImage(rect.bottomRight()));
-    Pixel *firstRow = pixelAddr(rect.topLeft());
-    Pixel *const afterLastRow = pixelAddr({rect.left(), rect.bottom() + 1});
-    const ptrdiff_t rowWidth = rect.width();
-    while (firstRow != afterLastRow) {
-      fillRow(color, firstRow, rowWidth);
-      firstRow += pitch;
+    for (auto row : range(rect)) {
+      for (Pixel &pixel : row) {
+        pixel = color;
+      }
     }
   }
   
@@ -151,6 +159,25 @@ public:
     if (rect.isEmpty()) return false;
     fillRect(color, rect);
     return true;
+  }
+  
+  void fill(const Pixel color) noexcept {
+    for (auto row : range()) {
+      for (Pixel &pixel : row) {
+        pixel = color;
+      }
+    }
+  }
+  void fill() noexcept {
+    fill(0);
+  }
+  void overFill(const Pixel color) noexcept {
+    for (Pixel &pixel : Row{data, pixelAddr({width, height - 1})}) {
+      pixel = color;
+    }
+  }
+  void overFill() noexcept {
+    std::memset(data, 0, pitch * height);
   }
   
   using Row = Range<Pixel *>;
@@ -198,6 +225,12 @@ public:
       Iterator{pixelAddr(rect.topLeft()), pitch, rect.width()},
       Sentinel{pixelAddr({rect.left(), rect.bottom() + 1})}
     };
+  }
+  Row row() noexcept {
+    return {data, data + width};
+  }
+  Row row(const int y) noexcept {
+    return {pixelAddr({0, y}), pixelAddr({width, y})};
   }
 
 private:

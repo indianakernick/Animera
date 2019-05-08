@@ -189,8 +189,8 @@ void applyMaskPixel(QRgb &pixel, const uchar mask) {
 void colorToOverlay(QImage &img) {
   assert(img.format() == getImageFormat(Format::color));
   img.detach();
-  for (auto row : makeSurface<uint32_t>(img).range()) {
-    for (uint32_t &pixel : row) {
+  for (auto row : makeSurface<QRgb>(img).range()) {
+    for (QRgb &pixel : row) {
       colorToOverlay(pixel);
     }
   }
@@ -201,12 +201,12 @@ void colorToOverlay(QImage &img, const QImage &mask) {
   assert(img.size() == mask.size());
   img.detach();
   
-  Range imgRange = makeSurface<uint32_t>(img).range();
+  Range imgRange = makeSurface<QRgb>(img).range();
   auto maskRowIter = makeSurface<uint8_t>(mask).range().begin();
   
   for (auto imgRow : imgRange) {
     const uint8_t *maskPixelIter = (*maskRowIter).begin();
-    for (uint32_t &imgPixel : imgRow) {
+    for (QRgb &imgPixel : imgRow) {
       colorToOverlay(imgPixel);
       applyMaskPixel(imgPixel, *maskPixelIter);
       ++maskPixelIter;

@@ -12,6 +12,7 @@
 #include <QtGui/qevent.h>
 #include <QtGui/qpainter.h>
 #include "widget painting.hpp"
+#include "surface factory.hpp"
 
 template <typename Derived>
 ColorSliderWidget<Derived>::ColorSliderWidget(QWidget *parent)
@@ -116,13 +117,11 @@ void HueSliderWidget::plotGraph() {
   // x - hue
   // 0 - left
   
-  QRgb *pixels = reinterpret_cast<QRgb *>(graph.bits());
-  QRgb *const pixelsEnd = pixels + graph.width();
   qreal hue = 0.0;
   int idx = 0;
   
-  while (pixels != pixelsEnd) {
-    *pixels++ = hsv2rgb(hue, color.s, color.v);
+  for (QRgb &pixel : makeSurface<QRgb>(graph).row()) {
+    pixel = hsv2rgb(hue, color.s, color.v);
     // can't use hue2pix here
     hue = ++idx * 360.0 / pick_slider_rect.inner().width();
   }
@@ -195,14 +194,12 @@ QRgb setAlpha(const QRgb color, const int alpha) {
 }
 
 void AlphaSliderWidget::plotGraph() {
-  QRgb *pixels = reinterpret_cast<QRgb *>(graph.bits());
-  QRgb *const pixelsEnd = pixels + graph.width();
   const QRgb rgb = hsv2rgb(color.h, color.s, color.v);
   int alp = 0;
   int idx = 0;
   
-  while (pixels != pixelsEnd) {
-    *pixels++ = setAlpha(rgb, alp);
+  for (QRgb &pixel : makeSurface<QRgb>(graph).row()) {
+    pixel = setAlpha(rgb, alp);
     // can't use alp2pix here
     alp = qRound(++idx * 255.0 / (pick_slider_rect.inner().width() - 1));
   }

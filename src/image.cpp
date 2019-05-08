@@ -9,6 +9,7 @@
 #include "image.hpp"
 
 #include "serial.hpp"
+#include "surface factory.hpp"
 
 QTransform getTransform(const Image &img) {
   QTransform xform;
@@ -94,41 +95,8 @@ void clearImage(QImage &dst) {
   std::memset(dst.bits(), 0, dst.sizeInBytes());
 }
 
-namespace {
-
-template <typename Pixel>
-void clearImage(QImage &dst, const QRgb genericColor) {
-  dst.detach();
-  const Pixel color = static_cast<Pixel>(genericColor);
-  const uintptr_t ppl = dst.bytesPerLine() / sizeof(Pixel);
-  Pixel *row = reinterpret_cast<Pixel *>(dst.bits());
-  Pixel *const lastRow = row + dst.height() * ppl;
-  const uintptr_t width = dst.width();
-
-  while (row != lastRow) {
-    Pixel *pixel = row;
-    Pixel *const lastPixel = row + width;
-    while (pixel != lastPixel) {
-      *pixel++ = color;
-    }
-    row += ppl;
-  }
-}
-
-template <>
-void clearImage<uint8_t>(QImage &dst, const QRgb genericColor) {
-  dst.detach();
-  std::memset(dst.bits(), static_cast<uint8_t>(genericColor), dst.sizeInBytes());
-}
-
-}
-
 void clearImage(QImage &dst, const QRgb color) {
-  if (dst.depth() == 32) {
-    clearImage<uint32_t>(dst, color);
-  } else if (dst.depth() == 8) {
-    clearImage<uint8_t>(dst, color);
-  } else {
-    Q_UNREACHABLE();
-  }
+  makeSurface(dst, color, [](auto surface, auto color) {
+    surface.overFill(color);
+  });
 }
