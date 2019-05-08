@@ -780,6 +780,7 @@
 		45C2A2562207BC4000E989C2 /* notes.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = notes.txt; sourceTree = "<group>"; };
 		45C2A27D220BFD1800E989C2 /* libpixman-1.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libpixman-1.a"; path = "../../../../../../usr/local/Cellar/pixman/0.36.0/lib/libpixman-1.a"; sourceTree = "<group>"; };
 		45C2A280220E821200E989C2 /* new plan.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "new plan.txt"; sourceTree = "<group>"; };
+		45D34F1C22825FE400339A4E /* masking.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = masking.hpp; sourceTree = "<group>"; };
 		45DC255F224A034200F40116 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		45DC2561224A0AC000F40116 /* title.anim */ = {isa = PBXFileReference; lastKnownFileType = file; path = title.anim; sourceTree = "<group>"; };
 		45DC2562224A0AEA00F40116 /* title.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = title.png; sourceTree = "<group>"; };
@@ -834,6 +835,7 @@
 			children = (
 				453C0A7F227FCE760080FEF2 /* surface.hpp */,
 				45DECE1422813AA2000920A9 /* surface factory.hpp */,
+				45D34F1C22825FE400339A4E /* masking.hpp */,
 			);
 			name = Graphics;
 			sourceTree = "<group>";

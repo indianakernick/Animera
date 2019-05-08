@@ -9,6 +9,7 @@
 #include "composite.hpp"
 
 #include "config.hpp"
+#include "masking.hpp"
 #include <QtGui/qpainter.h>
 #include "surface factory.hpp"
 
@@ -137,30 +138,25 @@ void blitTransformedImage(QImage &dst, const Image &src) {
 
 void blitMaskImage(QImage &dst, const QImage &mask, const QImage &src, const QPoint pos) {
   assert(mask.size() == src.size());
-  assert(mask.format() == mask_format);
-  const QRect rect = mask.rect().intersected(dst.rect().translated(-pos));
-  // @TODO correct but slow
-  for (int y = rect.top(); y <= rect.bottom(); ++y) {
-    for (int x = rect.left(); x <= rect.right(); ++x) {
-      if (mask.pixel(x, y) == mask_color_on) {
-        dst.setPixel(x + pos.x(), y + pos.y(), src.pixel(x, y));
-      }
-    }
-  }
+  maskCopyRegion(
+    makeSurface<QRgb>(dst),
+    makeSurface<QRgb>(src),
+    makeSurface<uint8_t>(mask),
+    pos,
+    pos
+  );
 }
 
 QImage blitMaskImage(const QImage &src, const QImage &mask, const QPoint pos) {
-  assert(mask.format() == mask_format);
-  const QRect rect = mask.rect().intersected(src.rect().translated(-pos));
+  // @TODO does it really make sense allocate a new QImage?
   QImage dst{mask.size(), src.format()};
-  // @TODO correct but slow
-  for (int y = rect.top(); y <= rect.bottom(); ++y) {
-    for (int x = rect.left(); x <= rect.right(); ++x) {
-      if (mask.pixel(x, y) == mask_color_on) {
-        dst.setPixel(x, y, src.pixel(x + pos.x(), y + pos.y()));
-      }
-    }
-  }
+  maskCopyRegion(
+    makeSurface<QRgb>(dst),
+    makeSurface<QRgb>(src),
+    makeSurface<uint8_t>(mask),
+    -pos,
+    {0, 0}
+  );
   return dst;
 }
 
@@ -173,44 +169,25 @@ void colorToOverlay(QRgb &pixel) {
   pixel = qRgba(gray, gray, gray, alpha);
 }
 
-uint32_t spread(const uint8_t byte) {
-  int32_t i32 = byte;
-  i32 <<= 24;
-  i32 >>= 24; // C++20 says this is a sign extension
-  return i32;
-}
-
-void applyMaskPixel(QRgb &pixel, const uchar mask) {
-  pixel &= spread(mask);
-}
-
-}
-
-void colorToOverlay(QImage &img) {
-  assert(img.format() == getImageFormat(Format::color));
-  img.detach();
-  for (auto row : makeSurface<QRgb>(img).range()) {
+void colorToOverlay(Surface<QRgb> surface) {
+  for (auto row : surface.range()) {
     for (QRgb &pixel : row) {
       colorToOverlay(pixel);
     }
   }
 }
 
+}
+
+void colorToOverlay(QImage &img) {
+  assert(img.format() == getImageFormat(Format::color));
+  colorToOverlay(makeSurface<QRgb>(img));
+}
+
 void colorToOverlay(QImage &img, const QImage &mask) {
   assert(img.format() == getImageFormat(Format::color));
   assert(img.size() == mask.size());
-  img.detach();
-  
-  Range imgRange = makeSurface<QRgb>(img).range();
-  auto maskRowIter = makeSurface<uint8_t>(mask).range().begin();
-  
-  for (auto imgRow : imgRange) {
-    const uint8_t *maskPixelIter = (*maskRowIter).begin();
-    for (QRgb &imgPixel : imgRow) {
-      colorToOverlay(imgPixel);
-      applyMaskPixel(imgPixel, *maskPixelIter);
-      ++maskPixelIter;
-    }
-    ++maskRowIter;
-  }
+  Surface surface = makeSurface<QRgb>(img);
+  colorToOverlay(surface);
+  maskClip(surface, makeSurface<uint8_t>(mask));
 }

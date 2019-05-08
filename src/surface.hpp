@@ -11,6 +11,7 @@
 
 #include <cstring>
 #include <algorithm>
+#include <type_traits>
 #include <QtCore/qrect.h>
 
 template <typename Begin, typename End = Begin>
@@ -55,8 +56,20 @@ public:
     return {data, pitch, width, height};
   }
   
+  template <typename Dummy = Pixel>
+  operator std::enable_if_t<
+    !std::is_const_v<Pixel> && std::is_same_v<Dummy, Pixel>,
+    Surface<const Pixel>
+  >
+  () const noexcept {
+    return {data, pitch, width, height};
+  }
+  
   QSize size() const noexcept {
     return {width, height};
+  }
+  QRect rect() const noexcept {
+    return {{}, size()};
   }
   
   bool insideImageX(const int posX) const noexcept {

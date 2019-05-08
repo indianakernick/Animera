@@ -1664,6 +1664,34 @@ bool drawStrokedEllipse(QImage &img, const QRgb color, const QRect ellipse) {
   return true;
 }
 
+#include "masking.hpp"
+#include "geometry.hpp"
+#include "surface factory.hpp"
+
+void blitMaskImageNew(QImage &dst, const QImage &mask, const QImage &src, const QPoint pos) {
+  assert(mask.size() == src.size());
+  maskCopyRegion(
+    makeSurface<QRgb>(dst),
+    makeSurface<QRgb>(src),
+    makeSurface<uint8_t>(mask),
+    pos,
+    pos
+  );
+}
+
+void blitMaskImageOld(QImage &dst, const QImage &mask, const QImage &src, const QPoint pos) {
+  assert(mask.size() == src.size());
+  assert(mask.format() == mask_format);
+  const QRect rect = mask.rect().intersected(dst.rect().translated(-pos));
+  for (int y = rect.top(); y <= rect.bottom(); ++y) {
+    for (int x = rect.left(); x <= rect.right(); ++x) {
+      if (mask.pixel(x, y) == mask_color_on) {
+        dst.setPixel(x + pos.x(), y + pos.y(), src.pixel(x, y));
+      }
+    }
+  }
+}
+
 int main(int argc, char **argv) {
   /*QApplication app{argc, argv};
   QMainWindow window;
@@ -1931,6 +1959,22 @@ int main(int argc, char **argv) {
   
   image.save("/Users/indikernick/Desktop/Test/smear_4.png");
   image.fill(0);
+  
+  QImage mask{image.size() / 2, mask_format};
+  makeSurface<uint8_t>(mask).fillRect(0xFF, {toPoint(image.size() / 8), image.size() / 4});
+  QImage sauce{image.size() / 2, image.format()};
+  
+  timer.start("new blit mask");
+  blitMaskImageNew(image, mask, sauce, toPoint(image.size() / 4));
+  timer.stop();
+  
+  timer.start("old blit mask");
+  blitMaskImageOld(image, mask, sauce, toPoint(image.size() / 4));
+  timer.stop();
+  
+  timer.start("new blit mask");
+  blitMaskImageNew(image, mask, sauce, toPoint(image.size() / 4));
+  timer.stop();
   /*
   midpointLine(image, fillColor, {10, 10}, {20, 10});
   midpointLine(image, fillColor, {20, 20}, {10, 20});
