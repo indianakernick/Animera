@@ -85,10 +85,8 @@ ToolSelectWidget::ToolSelectWidget(QWidget *parent)
   
   QVBoxLayout *boxLayout = new QVBoxLayout{box};
   boxLayout->setSpacing(0);
-  boxLayout->setContentsMargins(0, 0, 0, 0);
+  boxLayout->setContentsMargins(glob_padding, glob_padding, glob_padding, glob_padding);
   box->setLayout(boxLayout);
-  box->setContentsMargins(0, 0, 0, 0);
-  setContentsMargins(0, 0, 0, 0);
   
   boxLayout->addStretch();
   makeToolWidget<BrushToolWidget>()->click();

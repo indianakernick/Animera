@@ -54,6 +54,7 @@ inline const QColor glob_border_color = glob_light_2;
 
 // ----------------------------- global dimensions -------------------------- //
 
+constexpr int       glob_padding      = 1_px;
 constexpr int       glob_text_padding = 1_px;
 constexpr int       glob_border_width = 1_px;
 constexpr int       glob_widget_space = 1_px;
@@ -116,7 +117,7 @@ constexpr QSize     tool_icon_size = {24_px, 24_px};
 constexpr QSize     tool_icon_padding = {1_px, 1_px};
 constexpr QSize     tool_button_size = tool_icon_size + 2 * tool_icon_padding;
 constexpr QPoint    tool_icon_pos = toPoint((tool_button_size - tool_icon_size)) / 2;
-constexpr int       tool_select_width = tool_button_size.width();
+constexpr int       tool_select_width = tool_button_size.width() + 2 * glob_padding;
 
 inline const QColor tool_select_background = glob_dark_1;
 inline const QColor tool_base_disabled = glob_main;
@@ -134,7 +135,7 @@ constexpr QRgb      tool_overlay_color = qRgba(
 
 constexpr int       stat_temp_duration_ms = 4000;
 constexpr int       stat_min_width = 200_px;
-constexpr int       stat_height = glob_font_px + 2 * glob_text_padding;
+constexpr int       stat_height = glob_font_px + 2 * glob_text_padding + 2 * glob_padding;
 
 inline const QColor stat_background = glob_dark_1;
 

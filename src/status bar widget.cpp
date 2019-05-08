@@ -21,7 +21,6 @@ StatusBarWidget::StatusBarWidget(QWidget *parent)
   setMinimumWidth(stat_min_width);
   setFixedHeight(stat_height);
   setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
-  setContentsMargins(0, 0, 0, 0);
 }
 
 namespace {
@@ -48,7 +47,10 @@ void StatusBarWidget::paintEvent(QPaintEvent *) {
   painter.fillRect(rect(), stat_background);
   painter.setFont(getGlobalFont());
   painter.setPen(glob_text_color);
-  const QPoint pos = {glob_text_padding, glob_text_padding + glob_font_accent_px};
+  const QPoint pos = {
+    glob_padding + glob_text_padding,
+    glob_padding + glob_text_padding + glob_font_accent_px
+  };
   if (tempText.isEmpty()) {
     painter.drawText(pos, permText);
   } else if (permText.isEmpty()) {

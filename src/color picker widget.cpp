@@ -41,7 +41,7 @@ ColorPickerWidget::ColorPickerWidget(QWidget *parent)
     labelV{new LabelWidget{this, "V", pick_label_rect}},
     labelA{new LabelWidget{this, "A", pick_label_rect}},
     labelHex{new LabelWidget{this, "#", pick_label_rect}} {
-  setFixedWidth(pick_svgraph_rect.widget().width());
+  setFixedWidth(pick_svgraph_rect.widget().width() + 2 * glob_padding);
   setupLayout();
   connectSignals();
   show();
@@ -59,7 +59,7 @@ void ColorPickerWidget::attach(ColorHandle *newHandle) {
 void ColorPickerWidget::setupLayout() {
   QGridLayout *layout = new QGridLayout{this};
   layout->setSpacing(0);
-  layout->setContentsMargins(0, 0, 0, 0);
+  layout->setContentsMargins(glob_padding, glob_padding, glob_padding, glob_padding);
   
   layout->addWidget(nameLabel, 0, 0, 1, 6);
   layout->addWidget(svGraph, 1, 0, 1, 6);
@@ -225,4 +225,3 @@ void ColorPickerWidget::changeBlue(const int blue) {
 }
 
 #include "color picker widget.moc"
-
