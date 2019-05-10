@@ -26,7 +26,19 @@ HexValidator::HexValidator(QWidget *parent)
   : QValidator{parent} {}
 
 void HexValidator::fixup(QString &input) const {
-  if (input.size() == 6) {
+  // Why does this remind me of Fizz-Buzz?
+  if (input.size() == 3) {
+    input.insert(0, input[0]);
+    input.insert(2, input[2]);
+    input.insert(4, input[4]);
+    input.append('F');
+    input.append('F');
+  } else if (input.size() == 4) {
+    input.insert(0, input[0]);
+    input.insert(2, input[2]);
+    input.insert(4, input[4]);
+    input.insert(6, input[6]);
+  } else if (input.size() == 6) {
     input.append('F');
     input.append('F');
   } else {
