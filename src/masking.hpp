@@ -57,7 +57,7 @@ void maskFill(Surface<Pixel> dst, Surface<const uint8_t> msk, const Pixel color)
 template <typename Pixel>
 void maskCopy(Surface<Pixel> dst, Surface<const Pixel> src, Surface<const uint8_t> msk) noexcept {
   assert(dst.size() == src.size());
-  assert(dst.size() == mask.size());
+  assert(dst.size() == msk.size());
   auto srcRowIter = src.range().begin();
   auto mskRowIter = msk.range().begin();
   for (auto row : dst.range()) {

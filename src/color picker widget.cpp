@@ -94,6 +94,7 @@ void ColorPickerWidget::setupLayout() {
 void ColorPickerWidget::connectSignals() {
   CONNECT(svGraph,     svChanged,    hueSlider,   changeSV);
   CONNECT(hueSlider,   hueChanged,   svGraph,     changeHue);
+  CONNECT(boxH,        valueChanged, svGraph,     changeHue);
   CONNECT(hueSlider,   hueChanged,   alphaSlider, changeHue);
   CONNECT(svGraph,     svChanged,    alphaSlider, changeSV);
 

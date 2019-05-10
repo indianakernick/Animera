@@ -2279,7 +2279,6 @@
 					"-Wnonportable-include-path",
 					"-Wstrict-aliasing",
 					"-Wno-comma",
-					"-Wweak-vtables",
 				);
 				OTHER_LDFLAGS = "-headerpad_max_install_names";
 				PRODUCT_BUNDLE_IDENTIFIER = "Indi-Kernick.Pixel-2";
@@ -2332,7 +2331,6 @@
 					"-Wnonportable-include-path",
 					"-Wstrict-aliasing",
 					"-Wno-comma",
-					"-Wweak-vtables",
 				);
 				OTHER_LDFLAGS = "-headerpad_max_install_names";
 				PRODUCT_BUNDLE_IDENTIFIER = "Indi-Kernick.Pixel-2";
