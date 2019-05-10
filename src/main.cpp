@@ -1692,6 +1692,21 @@ void blitMaskImageOld(QImage &dst, const QImage &mask, const QImage &src, const 
   }
 }
 
+void blitImageNew(QImage &dst, const QImage &src, const QPoint pos) {
+  copyRegion(
+    makeSurface<QRgb>(dst),
+    makeSurface<QRgb>(src),
+    pos
+  );
+}
+
+void blitImageOld(QImage &dst, const QImage &src, const QPoint pos) {
+  // @TODO avoid using QPainter
+  QPainter painter{&dst};
+  painter.setCompositionMode(QPainter::CompositionMode_Source);
+  painter.drawImage(pos, src);
+}
+
 int main(int argc, char **argv) {
   /*QApplication app{argc, argv};
   QMainWindow window;
@@ -1974,6 +1989,14 @@ int main(int argc, char **argv) {
   
   timer.start("new blit mask");
   blitMaskImageNew(image, mask, sauce, toPoint(image.size() / 4));
+  timer.stop();
+  
+  timer.start("new blit");
+  blitImageNew(image, sauce, toPoint(image.size() / 4));
+  timer.stop();
+  
+  timer.start("old blit");
+  blitImageOld(image, sauce, toPoint(image.size() / 4));
   timer.stop();
   /*
   midpointLine(image, fillColor, {10, 10}, {20, 10});

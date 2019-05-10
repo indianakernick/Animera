@@ -103,4 +103,21 @@ void maskCopyRegion(
   }
 }
 
+template <typename Pixel>
+void copyRegion(
+  Surface<Pixel> dst,
+  Surface<const Pixel> src,
+  const QPoint srcPos
+) noexcept {
+  const QRect srcRect = {srcPos, src.size()};
+  const QRect dstRect = srcRect.intersected(dst.rect());
+  if (dstRect.isEmpty()) return;
+  
+  auto srcRowIter = src.range({dstRect.topLeft() - srcPos, dstRect.size()}).begin();
+  for (auto row : dst.range(dstRect)) {
+    std::memcpy(row.begin(), (*srcRowIter).begin(), (row.end() - row.begin()) * sizeof(Pixel));
+    ++srcRowIter;
+  }
+}
+
 #endif

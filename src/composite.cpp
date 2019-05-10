@@ -114,18 +114,21 @@ void compositeOverlay(QImage &drawing, const QImage &overlay) {
 }
 
 void blitImage(QImage &dst, const QImage &src, const QPoint pos) {
-  // @TODO avoid using QPainter
-  QPainter painter{&dst};
-  painter.setCompositionMode(QPainter::CompositionMode_Source);
-  painter.drawImage(pos, src);
+  copyRegion(
+    makeSurface<QRgb>(dst),
+    makeSurface<QRgb>(src),
+    pos
+  );
 }
 
 QImage blitImage(const QImage &src, const QRect rect) {
-  // @TODO avoid using QPainter
+  // @TODO does it really make sense allocate a new QImage?
   QImage dst{rect.size(), src.format()};
-  QPainter painter{&dst};
-  painter.setCompositionMode(QPainter::CompositionMode_Source);
-  painter.drawImage({0, 0}, src, rect);
+  copyRegion(
+    makeSurface<QRgb>(dst),
+    makeSurface<QRgb>(src),
+    -rect.topLeft()
+  );
   return dst;
 }
 
