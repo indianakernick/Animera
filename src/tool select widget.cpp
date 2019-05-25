@@ -63,8 +63,8 @@ private:
     QBitmap shape{":/Tools/" + name + ".pbm"};
     base = base.scaled(tool_icon_size);
     shape = shape.scaled(tool_icon_size);
-    enabledIcon = bakeColoredBitmaps(base, shape, tool_base_enabled, tool_shape);
-    disabledIcon = bakeColoredBitmaps(base, shape, tool_base_disabled, tool_shape);
+    enabledIcon = bakeColoredBitmaps(base, shape, tool_base_enabled, tool_shape_enabled);
+    disabledIcon = bakeColoredBitmaps(base, shape, tool_base_disabled, tool_shape_disabled);
   }
   
   void paintEvent(QPaintEvent *) override {

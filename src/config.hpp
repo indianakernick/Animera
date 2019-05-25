@@ -42,11 +42,11 @@ constexpr QPoint    glob_cursor_offset = toPoint(glob_cursor_size) / 2;
 
 // ------------------------ global color scheme ----------------------------- //
 
-// https://coolors.co/52525d-1b264f-274690-576ca8-b8cdd7
-inline const QColor glob_dark_2  = {82, 82, 93};
-inline const QColor glob_dark_1  = {27, 38, 79};
+// https://coolors.co/49495b-2f395f-274690-445b99-b8cdd7
+inline const QColor glob_dark_2  = {73, 73, 91};
+inline const QColor glob_dark_1  = {47, 57, 95};
 inline const QColor glob_main    = {39, 70, 144};
-inline const QColor glob_light_1 = {87, 108, 168};
+inline const QColor glob_light_1 = {68, 91, 153};
 inline const QColor glob_light_2 = {184, 205, 215};
 
 inline const QColor glob_text_color = glob_light_2;
@@ -120,10 +120,11 @@ constexpr QSize     tool_button_size = tool_icon_size + 2 * tool_icon_padding;
 constexpr QPoint    tool_icon_pos = toPoint((tool_button_size - tool_icon_size)) / 2;
 constexpr int       tool_select_width = tool_button_size.width() + 2 * glob_padding;
 
-inline const QColor tool_select_background = glob_dark_1;
-inline const QColor tool_base_disabled = glob_main;
-inline const QColor tool_base_enabled = glob_light_1;
-inline const QColor tool_shape = glob_light_2;
+inline const QColor tool_select_background = glob_main;
+inline const QColor tool_base_disabled = glob_light_1;
+inline const QColor tool_base_enabled = glob_light_2;
+inline const QColor tool_shape_disabled = glob_light_2;
+inline const QColor tool_shape_enabled = glob_light_1;
 
 constexpr int       tool_overlay_alpha_min = 31;
 constexpr int       tool_overlay_alpha = 127;

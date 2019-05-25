@@ -15,7 +15,7 @@ TimelineWidget::TimelineWidget(QWidget *parent, Animation &anim)
   setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
   setContentsMargins(0, 0, 0, 0);
   setFrameShape(NoFrame);
-  setStyleSheet("background-color: " + glob_back_color.name());
+  setStyleSheet("background-color: " + glob_main.name());
 }
 
 void TimelineWidget::projectLoaded() {
