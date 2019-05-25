@@ -6,6 +6,8 @@
 //  Copyright © 2019 Indi Kernick. All rights reserved.
 //
 
+#if 1
+
 #include "application.hpp"
 #include <iostream>
 #include <QtGui/qevent.h>
@@ -181,10 +183,7 @@ In case I decide that we need KC filters
 */
 
 #include <cmath>
-
-struct Color {
-  uint8_t r, g, b, a;
-};
+#include "porter duff.hpp"
 
 struct ColorF {
   float r, g, b, a;
@@ -1701,24 +1700,65 @@ void blitImageNew(QImage &dst, const QImage &src, const QPoint pos) {
 }
 
 void blitImageOld(QImage &dst, const QImage &src, const QPoint pos) {
-  // @TODO avoid using QPainter
   QPainter painter{&dst};
   painter.setCompositionMode(QPainter::CompositionMode_Source);
   painter.drawImage(pos, src);
 }
 
+#endif
+
+#if 0
+
+#include <QtWidgets/qdockwidget.h>
+#include <QtWidgets/qmainwindow.h>
+#include <QtWidgets/qapplication.h>
+
+void addDock(QMainWindow *window, Qt::DockWidgetArea area, QWidget *widget) {
+  QDockWidget *dock = new QDockWidget{window};
+  dock->setFeatures(QDockWidget::NoDockWidgetFeatures);
+  dock->setAllowedAreas(area);
+  dock->setWidget(widget);
+  dock->setTitleBarWidget(new QWidget{dock});
+  window->addDockWidget(area, dock);
+}
+
 int main(int argc, char **argv) {
-  /*QApplication app{argc, argv};
+  QApplication app{argc, argv};
   QMainWindow window;
-  QScrollArea scrollArea{&window};
-  InnerWidget inner{&scrollArea};
-  window.setBaseSize(512, 512);
-  window.setCentralWidget(&scrollArea);
-  scrollArea.setAlignment(Qt::AlignCenter);
-  scrollArea.setWidget(&inner);
-  window.show();
-  return app.exec();*/
   
+  window.setStyleSheet(R"(
+    QMainWindow::separator {
+      width: 10px;
+      height: 10px;
+      background-color: #F00;
+    }
+  )");
+  
+  QWidget bottom{&window};
+  bottom.setMinimumHeight(100);
+  bottom.setStyleSheet("background-color: #0F0");
+  addDock(&window, Qt::BottomDockWidgetArea, &bottom);
+  
+  QWidget left{&window};
+  left.setFixedWidth(100);
+  left.setStyleSheet("background-color: #00F");
+  addDock(&window, Qt::LeftDockWidgetArea, &left);
+  
+  QWidget center{&window};
+  center.setMinimumSize(300, 300);
+  center.setStyleSheet("background-color: #0FF");
+  window.setCentralWidget(&center);
+  
+  window.show();
+  
+  return app.exec();
+}
+
+#endif
+
+#if 1
+
+int main(int argc, char **argv) {
   /*Image img;
   img.data.load("/Users/indikernick/Library/Developer/Xcode/DerivedData/Pixel_2-gqoblrlhvynmicgniivandqktune/Build/Products/Debug/Pixel 2.app/Contents/Resources/icon.png");
   img.xform.angle = 1;
@@ -1998,6 +2038,26 @@ int main(int argc, char **argv) {
   timer.start("old blit");
   blitImageOld(image, sauce, toPoint(image.size() / 4));
   timer.stop();
+  
+  timer.start("painter source-over");
+  {
+    QPainter painter{&image};
+    painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+    painter.drawImage(0, 0, dup);
+  }
+  timer.stop();
+  
+  timer.start("surface source-over");
+  struct ARGB_Format {
+    static Color toColor(const QRgb pixel) {
+      return {(uchar)qRed(pixel), (uchar)qGreen(pixel), (uchar)qBlue(pixel), (uchar)qAlpha(pixel)};
+    }
+    static QRgb toPixel(const Color color) {
+      return qRgba(color.r, color.g, color.b, color.a);
+    }
+  };
+  porterDuff<ARGB_Format>(mode_src_over, makeSurface<QRgb>(image), makeSurface<const QRgb>(dup));
+  timer.stop();
   /*
   midpointLine(image, fillColor, {10, 10}, {20, 10});
   midpointLine(image, fillColor, {20, 20}, {10, 20});
@@ -2173,3 +2233,5 @@ int main(int argc, char **argv) {
   Application app{argc, argv};
   return app.exec();
 }
+
+#endif
