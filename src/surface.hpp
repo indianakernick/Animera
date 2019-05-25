@@ -39,6 +39,7 @@ Range(Begin &&, End &&) -> Range<
   std::remove_cv_t<std::remove_reference_t<End>>
 >;
 
+// @TODO is it Regular?
 template <typename Pixel>
 class Surface {
 public:
