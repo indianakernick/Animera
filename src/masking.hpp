@@ -24,9 +24,16 @@ Uint spread(const uint8_t byte) noexcept {
 
 /// Set pixels not on the mask to 0 while leaving the others unchanged
 template <typename Pixel>
-void maskClip(Surface<Pixel> dst, Surface<const uint8_t> msk) noexcept {
-  assert(dst.size() == msk.size());
-  auto mskRowIter = msk.range().begin();
+void maskClipRegion(
+  Surface<Pixel> dst,
+  Surface<const uint8_t> msk,
+  const QPoint mskPos
+) noexcept {
+  const QRect srcRect = {mskPos, msk.size()};
+  const QRect dstRect = srcRect.intersected(dst.rect());
+  if (dstRect.isEmpty()) return;
+  
+  auto mskRowIter = msk.range({dstRect.topLeft() - mskPos, dstRect.size()}).begin();
   for (auto row : dst.range()) {
     const uint8_t *mskPixelIter = (*mskRowIter).begin();
     for (Pixel &pixel : row) {
@@ -37,20 +44,11 @@ void maskClip(Surface<Pixel> dst, Surface<const uint8_t> msk) noexcept {
   }
 }
 
-/// Set pixels on the mask to the color while leaving the others unchanged
+/// Set pixels not on the mask to 0 while leaving the others unchanged
 template <typename Pixel>
-void maskFill(Surface<Pixel> dst, Surface<const uint8_t> msk, const Pixel color) noexcept {
-  assert(dst.size() == msk.size());
-  auto mskRowIter = msk.range().begin();
-  for (auto row : dst.range()) {
-    const uint8_t *mskPixelIter = (*mskRowIter).begin();
-    for (Pixel &pixel : row) {
-      const Pixel mskPx = spread<Pixel>(*mskPixelIter);
-      pixel = (pixel & ~mskPx) | (color & mskPx);
-      ++mskPixelIter;
-    }
-    ++mskRowIter;
-  }
+void maskClip(Surface<Pixel> dst, Surface<const uint8_t> msk) noexcept {
+  Q_ASSUME(dst.size() == msk.size());
+  maskClipRegion(dst, msk, {0, 0});
 }
 
 /// Set pixels on the mask to the color while leaving the others unchanged
@@ -77,27 +75,14 @@ void maskFillRegion(
   }
 }
 
-/// Copy pixels on the mask while leaving the others unchanged
+/// Set pixels on the mask to the color while leaving the others unchanged
 template <typename Pixel>
-void maskCopy(Surface<Pixel> dst, Surface<const Pixel> src, Surface<const uint8_t> msk) noexcept {
-  assert(dst.size() == src.size());
-  assert(dst.size() == msk.size());
-  auto srcRowIter = src.range().begin();
-  auto mskRowIter = msk.range().begin();
-  for (auto row : dst.range()) {
-    const Pixel *srcPixelIter = (*srcRowIter).begin();
-    const uint8_t *mskPixelIter = (*mskRowIter).begin();
-    for (Pixel &pixel : row) {
-      const Pixel maskPx = spread<Pixel>(*mskPixelIter);
-      pixel = (pixel & ~maskPx) | (*srcPixelIter & maskPx);
-      ++srcPixelIter;
-      ++mskPixelIter;
-    }
-    ++srcRowIter;
-    ++mskRowIter;
-  }
+void maskFill(Surface<Pixel> dst, Surface<const uint8_t> msk, const Pixel color) noexcept {
+  Q_ASSUME(dst.size() == msk.size());
+  maskFillRegion(dst, msk, color, {0, 0});
 }
 
+/// Copy pixels on the mask while leaving the others unchanged
 template <typename Pixel>
 void maskCopyRegion(
   Surface<Pixel> dst,
@@ -127,6 +112,15 @@ void maskCopyRegion(
   }
 }
 
+/// Copy pixels on the mask while leaving the others unchanged
+template <typename Pixel>
+void maskCopy(Surface<Pixel> dst, Surface<const Pixel> src, Surface<const uint8_t> msk) noexcept {
+  Q_ASSUME(dst.size() == src.size());
+  Q_ASSUME(dst.size() == msk.size());
+  maskCopyRegion(dst, src, msk, {0, 0}, {0, 0});
+}
+
+/// Copy pixels
 template <typename Pixel>
 void copyRegion(
   Surface<Pixel> dst,
@@ -142,6 +136,16 @@ void copyRegion(
     std::memcpy(row.begin(), (*srcRowIter).begin(), (row.end() - row.begin()) * sizeof(Pixel));
     ++srcRowIter;
   }
+}
+
+/// Copy pixels
+template <typename Pixel>
+void copy(
+  Surface<Pixel> dst,
+  Surface<const Pixel> src
+) noexcept {
+  Q_ASSUME(dst.size() == src.size());
+  copyRegion(dst, src, {0, 0});
 }
 
 #endif

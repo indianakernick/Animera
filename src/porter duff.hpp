@@ -79,28 +79,6 @@ struct Format {
 */
 
 template <typename Format, typename Pixel, typename Mode>
-void porterDuff(
-  const Mode mode,
-  Surface<Pixel> dst,
-  Surface<const Pixel> src
-) {
-  assert(dst.size() == src.size());
-  auto srcRowIter = src.range().begin();
-  for (auto row : dst.range()) {
-    const Pixel *srcPixelIter = (*srcRowIter).begin();
-    for (Pixel &pixel : row) {
-      pixel = Format::toPixel(porterDuff(
-        Format::toColor(*srcPixelIter),
-        Format::toColor(pixel),
-        mode
-      ));
-      ++srcPixelIter;
-    }
-    ++srcRowIter;
-  }
-}
-
-template <typename Format, typename Pixel, typename Mode>
 void porterDuffRegion(
   const Mode mode,
   Surface<Pixel> dst,
@@ -124,6 +102,16 @@ void porterDuffRegion(
     }
     ++srcRowIter;
   }
+}
+
+template <typename Format, typename Pixel, typename Mode>
+void porterDuff(
+  const Mode mode,
+  Surface<Pixel> dst,
+  Surface<const Pixel> src
+) {
+  Q_ASSUME(dst.size() == src.size());
+  porterDuffRegion<Format>(mode, dst, src, {0, 0});
 }
 
 #endif

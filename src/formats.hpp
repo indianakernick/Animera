@@ -12,6 +12,8 @@
 #include "color.hpp"
 #include <QtGui/qrgb.h>
 
+// @TODO Need a PaletteFormat that stores the palette
+
 struct ARGB_Format {
   static Color toColor(const QRgb pixel) {
     return {
