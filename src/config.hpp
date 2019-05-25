@@ -51,6 +51,7 @@ inline const QColor glob_light_2 = {184, 205, 215};
 
 inline const QColor glob_text_color = glob_light_2;
 inline const QColor glob_border_color = glob_light_2;
+inline const QColor glob_back_color = glob_dark_2;
 
 // ----------------------------- global dimensions -------------------------- //
 
@@ -137,16 +138,21 @@ constexpr int       stat_temp_duration_ms = 4000;
 constexpr int       stat_min_width = 200_px;
 constexpr int       stat_height = glob_font_px + 2 * glob_text_padding + 2 * glob_padding;
 
-inline const QColor stat_background = glob_dark_1;
+inline const QColor stat_background = glob_main;
 
 // --------------------------------- editor --------------------------------- //
 
-inline const QColor edit_checker_a = {191, 191, 191};
-inline const QColor edit_checker_b = {255, 255, 255};
 constexpr int       edit_min_scale = 1;
 constexpr int       edit_max_scale = 64;
 constexpr int       edit_default_scale = 1_px;
 constexpr int       edit_undo_stack = 128;
+constexpr int       edit_scroll_width = 4_px;
+
+inline const QColor edit_checker_a = {191, 191, 191};
+inline const QColor edit_checker_b = {255, 255, 255};
+inline const QColor edit_scroll_corner = glob_dark_2;
+inline const QColor edit_scroll_back = glob_main;
+inline const QColor edit_scroll_handle = glob_light_1;
 
 // ------------------------------ color picker ------------------------------ //
 

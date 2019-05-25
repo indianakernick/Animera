@@ -48,6 +48,18 @@ Window::Window(const QRect desktop)
 }
 
 void Window::setupUI() {
+  setStyleSheet("QMainWindow::separator {"
+    "width: " + QString::number(glob_border_width) + "px;"
+    "height: " + QString::number(glob_border_width) + "px;"
+    "background-color: " + glob_border_color.name() + ";"
+  "}"
+  
+  // @TODO remove this bug workaround
+  // https://bugreports.qt.io/browse/QTBUG-75783
+  "QMainWindow {"
+    "background-color: " + glob_border_color.name() + ";"
+  "}");
+  
   bottom.setMinimumHeight(100);
   bottom.setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
   
@@ -57,7 +69,7 @@ void Window::setupUI() {
   bottomLayout->setContentsMargins(0, 0, 0, 0);
   bottomLayout->setSpacing(0);
   // simply placing a widget on top is apparently very difficult
-  bottomLayout->addWidget(&fps);
+  // bottomLayout->addWidget(&fps);
   bottomLayout->addWidget(&timeline);
   bottomLayout->addWidget(&statusBar);
   bottomLayout->setAlignment(Qt::AlignBottom);

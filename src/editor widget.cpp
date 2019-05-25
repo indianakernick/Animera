@@ -17,6 +17,66 @@
 #include <QtWidgets/qlabel.h>
 #include <QtWidgets/qscrollbar.h>
 
+class EditorScrollBar final : public QScrollBar {
+public:
+  EditorScrollBar(Qt::Orientation orient, QWidget *parent)
+    : QScrollBar{orient, parent} {
+    if (orient == Qt::Vertical) {
+      setStyleSheet("width: " + QString::number(edit_scroll_width));
+    } else if (orient == Qt::Horizontal) {
+      setStyleSheet("height: " + QString::number(edit_scroll_width));
+    } else {
+      Q_UNREACHABLE();
+    }
+  }
+  
+private:
+  int pagePixels(const int length) const {
+    return (length * pageStep()) / (maximum() - minimum() + pageStep());
+  }
+  int valuePixels(const int length) const {
+    if (minimum() == maximum()) {
+      return 0;
+    } else {
+      return (length - pagePixels(length)) * value() / (maximum() - minimum());
+    }
+  }
+
+  void paintEvent(QPaintEvent *) override {
+    QPainter painter{this};
+    painter.fillRect(rect(), edit_scroll_back);
+    if (orientation() == Qt::Horizontal) {
+      painter.fillRect(QRect{
+        valuePixels(width()),
+        0,
+        pagePixels(width()),
+        height()
+      }, edit_scroll_handle);
+    } else if (orientation() == Qt::Vertical) {
+      painter.fillRect(QRect{
+        0,
+        valuePixels(height()),
+        width(),
+        pagePixels(height())
+      }, edit_scroll_handle);
+    } else {
+      Q_UNREACHABLE();
+    }
+  }
+};
+
+class EditorCorner final : public QWidget {
+public:
+  explicit EditorCorner(QWidget *parent)
+    : QWidget{parent} {}
+  
+private:
+  void paintEvent(QPaintEvent *) override {
+    QPainter painter{this};
+    painter.fillRect(rect(), edit_scroll_corner);
+  }
+};
+
 class EditorImage final : public QWidget {
   Q_OBJECT
   
@@ -39,6 +99,8 @@ public:
     assert(converted);
     updatePixmap();
   }
+  // @TODO mouseMove events when zooming
+  // there seem to be some funky mouse move events when zooming
   void zoomIn() {
     const int oldScale = scale;
     scale = std::min(scale + 1, edit_max_scale);
@@ -194,15 +256,20 @@ public:
 
 EditorWidget::EditorWidget(QWidget *parent, Animation &anim)
   : QScrollArea{parent}, anim{anim}, view{new EditorImage{this}} {
+  setAlignment(Qt::AlignCenter);
+  setFocusPolicy(Qt::WheelFocus);
+  setVerticalScrollBar(new EditorScrollBar{Qt::Vertical, this});
+  setHorizontalScrollBar(new EditorScrollBar{Qt::Horizontal, this});
+  setCornerWidget(new EditorCorner{this});
+  view = new EditorImage{this};
   setWidget(view);
+  setFrameShape(NoFrame);
   CONNECT(view, mouseLeave, this, mouseLeave);
   CONNECT(view, mouseDown,  this, mouseDown);
   CONNECT(view, mouseMove,  this, mouseMove);
   CONNECT(view, mouseUp,    this, mouseUp);
   CONNECT(view, keyPress,   this, keyPress);
-  setAlignment(Qt::AlignCenter);
-  setFocusPolicy(Qt::WheelFocus);
-  setFrameShape(NoFrame);
+  setStyleSheet("background-color: " + glob_back_color.name());
 }
 
 void EditorWidget::composite() {
