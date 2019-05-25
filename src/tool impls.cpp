@@ -10,9 +10,11 @@
 
 #include <cmath>
 #include "config.hpp"
+#include "masking.hpp"
 #include "painting.hpp"
 #include "composite.hpp"
 #include "cell impls.hpp"
+#include "surface factory.hpp"
 
 // @TODO this file is starting to get out of hand
 
@@ -185,6 +187,7 @@ ToolChanges RectangleSelectTool::mouseDown(const ToolMouseEvent &event) {
     mode = opposite(mode);
   }
   event.status->appendLabeled(mode);
+  
   if (mode == SelectMode::copy) {
     drawSquarePoint(*event.overlay, tool_overlay_color, event.pos);
     event.status->appendLabeled(event.pos);
@@ -192,12 +195,19 @@ ToolChanges RectangleSelectTool::mouseDown(const ToolMouseEvent &event) {
     blitImage(*event.overlay, overlay, event.pos + offset);
     event.status->appendLabeled({event.pos + offset, overlay.size()});
   } else Q_UNREACHABLE();
-  if (event.button != ButtonType::primary) return ToolChanges::overlay;
+  
   if (mode == SelectMode::copy) {
-    startPos = event.pos;
+    if (event.button == ButtonType::primary) startPos = event.pos;
     return ToolChanges::overlay;
   } else if (mode == SelectMode::paste) {
-    blitImage(source->image.data, selection, event.pos + offset);
+    if (event.button == ButtonType::primary) {
+      blitImage(source->image.data, selection, event.pos + offset);
+    } else if (event.button == ButtonType::erase) {
+      const QRect rect{event.pos + offset, selection.size()};
+      drawFilledRect(source->image.data, event.colors.erase, rect);
+    } else {
+      return ToolChanges::overlay;
+    }
     return ToolChanges::cell_overlay;
   } else Q_UNREACHABLE();
 }
@@ -257,6 +267,7 @@ ToolChanges PolygonSelectTool::mouseDown(const ToolMouseEvent &event) {
     mode = opposite(mode);
   }
   event.status->appendLabeled(mode);
+  
   if (mode == SelectMode::copy) {
     drawSquarePoint(*event.overlay, tool_overlay_color, event.pos);
     event.status->appendLabeled(event.pos);
@@ -264,12 +275,21 @@ ToolChanges PolygonSelectTool::mouseDown(const ToolMouseEvent &event) {
     blitImage(*event.overlay, overlay, event.pos + offset);
     event.status->appendLabeled({event.pos + offset, overlay.size()});
   } else Q_UNREACHABLE();
-  if (event.button != ButtonType::primary) return ToolChanges::overlay;
+  
   if (mode == SelectMode::copy) {
-    polygon.init(event.pos);
+    if (event.button == ButtonType::primary) polygon.init(event.pos);
     return ToolChanges::overlay;
   } else if (mode == SelectMode::paste) {
-    blitMaskImage(source->image.data, mask, selection, event.pos + offset);
+    if (event.button == ButtonType::primary) {
+      blitMaskImage(source->image.data, mask, selection, event.pos + offset);
+    } else if (event.button == ButtonType::erase) {
+      // @TODO should this be encapsulated in another file?
+      makeSurface(source->image.data, event.colors.erase, [this, &event](auto surface, auto color) {
+        maskFillRegion(surface, makeSurface<uint8_t>(mask), color, event.pos + offset);
+      });
+    } else {
+      return ToolChanges::overlay;
+    }
     return ToolChanges::cell_overlay;
   } else Q_UNREACHABLE();
 }

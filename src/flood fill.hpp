@@ -18,7 +18,7 @@ struct Manip {
   // size of the underlying surface
   QSize size() const;
   // should this pixel be filled?
-  bool shouldSet(QPoint) const; // !filled
+  bool shouldSet(QPoint) const;
   // fill a pixel
   void set(QPoint);
 };

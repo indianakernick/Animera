@@ -45,8 +45,32 @@ void maskFill(Surface<Pixel> dst, Surface<const uint8_t> msk, const Pixel color)
   for (auto row : dst.range()) {
     const uint8_t *mskPixelIter = (*mskRowIter).begin();
     for (Pixel &pixel : row) {
-      const Pixel maskPx = spread<Pixel>(*mskPixelIter);
-      pixel = (pixel & ~maskPx) | (color & maskPx);
+      const Pixel mskPx = spread<Pixel>(*mskPixelIter);
+      pixel = (pixel & ~mskPx) | (color & mskPx);
+      ++mskPixelIter;
+    }
+    ++mskRowIter;
+  }
+}
+
+/// Set pixels on the mask to the color while leaving the others unchanged
+template <typename Pixel>
+void maskFillRegion(
+  Surface<Pixel> dst,
+  Surface<const uint8_t> msk,
+  const Pixel color,
+  const QPoint mskPos
+) noexcept {
+  const QRect mskRect = {mskPos, msk.size()};
+  const QRect dstRect = mskRect.intersected(dst.rect());
+  if (dstRect.isEmpty()) return;
+  
+  auto mskRowIter = msk.range({dstRect.topLeft() - mskPos, dstRect.size()}).begin();
+  for (auto row : dst.range(dstRect)) {
+    const uint8_t *mskPixelIter = (*mskRowIter).begin();
+    for (Pixel &pixel : row) {
+      const Pixel mskPx = spread<Pixel>(*mskPixelIter);
+      pixel = (pixel & ~mskPx) | (color & mskPx);
       ++mskPixelIter;
     }
     ++mskRowIter;
