@@ -9,6 +9,7 @@
 #include "painting.hpp"
 
 #include "geometry.hpp"
+#include "flood fill.hpp"
 #include <QtGui/qpainter.h>
 #include "surface factory.hpp"
 
@@ -32,115 +33,91 @@ bool drawRoundPoint(QImage &img, const QRgb color, const QPoint pos, const int t
 namespace {
 
 template <typename Pixel>
-class FloodFillSurface {
+class FillManip {
 public:
-  FloodFillSurface(const Surface<Pixel> &surface, const Pixel startColor, const Pixel toolColor)
+  FillManip(const Surface<Pixel> surface, const Pixel toolColor)
     : surface{surface},
-      startColor{startColor},
       toolColor{toolColor} {}
-
-  bool filled(const QPoint pos) const {
-    return surface.getPixel(pos) != startColor;
+  
+  bool start(const QPoint pos) {
+    startColor = surface.getPixel(pos);
+    return startColor != toolColor;
   }
-  void fill(const QPoint pos) {
+  QSize size() const {
+    return surface.size();
+  }
+  bool shouldSet(const QPoint pos) const {
+    return surface.getPixel(pos) == startColor;
+  }
+  void set(const QPoint pos) {
     surface.setPixel(toolColor, pos);
   }
-
+  
 private:
   Surface<Pixel> surface;
-  Pixel startColor;
   Pixel toolColor;
+  Pixel startColor;
 };
 
-QPoint up(const QPoint p) {
-  return {p.x(), p.y() - 1};
-}
+/*
 
-QPoint right(const QPoint p) {
-  return {p.x() + 1, p.y()};
-}
-
-QPoint down(const QPoint p) {
-  return {p.x(), p.y() + 1};
-}
-
-QPoint left(const QPoint p) {
-  return {p.x() - 1, p.y()};
-}
-
-// Flood Fill algorithm by Adam Milazzo
-// http://www.adammil.net/blog/v126_A_More_Efficient_Flood_Fill.html
+// @TODO do we need this?
 
 template <typename Pixel>
-void floodFillStart(FloodFillSurface<Pixel>, QPoint, QSize);
-
-template <typename Pixel>
-void floodFillCore(FloodFillSurface<Pixel> px, QPoint pos, const QSize size) {
-  int lastRowLength = 0;
-  do {
-    int rowLength = 0;
-    QPoint start = pos;
-    if (lastRowLength != 0 && px.filled(pos)) {
-      do {
-        if (--lastRowLength == 0) return;
-        pos = right(pos);
-      } while (px.filled(pos));
-    } else {
-      while (pos.x() != 0 && !px.filled(left(pos))) {
-        pos = left(pos);
-        px.fill(pos);
-        if (pos.y() != 0 && !px.filled(up(pos))) floodFillStart(px, up(pos), size);
-        ++rowLength;
-        ++lastRowLength;
-      }
-    }
-    while (start.x() < size.width() && !px.filled(start)) {
-      px.fill(start);
-      start = right(start);
-      ++rowLength;
-    }
-    if (rowLength < lastRowLength) {
-      const int endX = pos.x() + lastRowLength;
-      while (++start.rx() < endX) {
-        if (!px.filled(start)) floodFillCore(px, start, size);
-      }
-    } else if (rowLength > lastRowLength && pos.y() != 0) {
-      QPoint above = up({pos.x() + lastRowLength, pos.y()});
-      while (++above.rx() < start.x()) {
-        if (!px.filled(above)) floodFillStart(px, above, size);
-      }
-    }
-    lastRowLength = rowLength;
-    pos = down(pos);
-  } while (lastRowLength != 0 && pos.y() < size.height());
-}
-
-template <typename Pixel>
-void floodFillStart(FloodFillSurface<Pixel> px, QPoint pos, const QSize size) {
-  while (true) {
-    const QPoint startPos = pos;
-    while (pos.y() != 0 && !px.filled(up(pos))) pos = up(pos);
-    while (pos.x() != 0 && !px.filled(left(pos))) pos = left(pos);
-    if (pos == startPos) break;
+uint32_t distance2(const Pixel a, const Pixel b) {
+  union Components {
+    Pixel p;
+    uint8_t c[sizeof(Pixel)];
+  };
+  Components compA{a};
+  Components compB{b};
+  uint32_t dist = 0;
+  for (size_t i = 0; i != sizeof(Pixel); ++i) {
+    const uint32_t diff = compA.c[i] - compB.c[i];
+    dist += diff * diff;
   }
-  floodFillCore(px, pos, size);
+  return dist;
 }
 
 template <typename Pixel>
-bool floodFill(Surface<Pixel> surface, const QPoint startPos, const Pixel toolColor) {
-  const Pixel startColor = surface.getPixel(startPos);
-  if (startColor == toolColor) return false;
-  FloodFillSurface<Pixel> px{surface, startColor, toolColor};
-  floodFillStart(px, startPos, surface.size());
-  return true;
-}
+class ThresholdFillManip {
+public:
+  ThresholdFillManip(const Surface<Pixel> surface, const Pixel toolColor, const uint32_t threshold)
+    : surface{surface},
+      threshold2{threshold * threshold},
+      toolColor{toolColor} {
+    assert(threshold != 0);
+  }
+  
+  bool start(const QPoint pos) {
+    startColor = surface.getPixel(pos);
+    return startColor != toolColor;
+  }
+  QSize size() const {
+    return surface.size();
+  }
+  bool shouldSet(const QPoint pos) const {
+    return distance2(surface.getPixel(pos), startColor) <= threshold2;
+  }
+  void set(const QPoint pos) {
+    surface.setPixel(toolColor, pos);
+  }
+  
+private:
+  Surface<Pixel> surface;
+  uint32_t threshold2;
+  Pixel toolColor;
+  Pixel startColor;
+};
+
+*/
 
 }
 
 bool drawFloodFill(QImage &img, const QRgb color, const QPoint pos) {
   if (!img.rect().contains(pos)) return false;
   return makeSurface(img, color, [pos](auto surface, auto color) {
-    return floodFill(surface, pos, color);
+    return floodFill(FillManip{surface, color}, pos);
   });
 }
 
