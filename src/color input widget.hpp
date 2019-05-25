@@ -54,6 +54,8 @@ private Q_SLOTS:
 private:
   NumberValidator boxValidator;
   int value;
+  
+  void keyPressEvent(QKeyEvent *) override;
 };
 
 class HexInputWidget final : public TextInputWidget {

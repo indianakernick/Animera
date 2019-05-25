@@ -40,11 +40,13 @@ private:
   
   void paintEvent(QPaintEvent *) override;
   
+  void updateSV(int, int);
   void setColor(QPointF);
   
-  void mousePressEvent(QMouseEvent *event) override;
-  void mouseReleaseEvent(QMouseEvent *event) override;
-  void mouseMoveEvent(QMouseEvent *event) override;
+  void mousePressEvent(QMouseEvent *) override;
+  void mouseReleaseEvent(QMouseEvent *) override;
+  void mouseMoveEvent(QMouseEvent *) override;
+  void keyPressEvent(QKeyEvent *) override;
 };
 
 #endif

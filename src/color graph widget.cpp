@@ -18,6 +18,7 @@ SVGraphWidget::SVGraphWidget(QWidget *parent)
   : QWidget{parent},
     graph{pick_svgraph_rect.inner().size(), QImage::Format_ARGB32_Premultiplied},
     color{color2hsv(pick_default_color)} {
+  setFocusPolicy(Qt::ClickFocus);
   setFixedSize(pick_svgraph_rect.widget().size());
   initCircle();
   plotGraph(color.h);
@@ -114,15 +115,18 @@ void SVGraphWidget::paintEvent(QPaintEvent *) {
   paintBorder(painter, pick_svgraph_rect, glob_border_color);
 }
 
-void SVGraphWidget::setColor(const QPointF point) {
-  const int sat = pix2sat(point.x() - pick_svgraph_rect.inner().x());
-  const int val = pix2val(point.y() - pick_svgraph_rect.inner().y());
+void SVGraphWidget::updateSV(const int sat, const int val) {
   if (sat != color.s || val != color.v) {
     color.s = sat;
     color.v = val;
     repaint();
     Q_EMIT svChanged(sat, val);
   }
+}
+
+void SVGraphWidget::setColor(QPointF point) {
+  point -= pick_svgraph_rect.inner().topLeft();
+  updateSV(pix2sat(point.x()), pix2val(point.y()));
 }
 
 void SVGraphWidget::mousePressEvent(QMouseEvent *event) {
@@ -144,6 +148,19 @@ void SVGraphWidget::mouseReleaseEvent(QMouseEvent *event) {
 void SVGraphWidget::mouseMoveEvent(QMouseEvent *event) {
   if (mouseDown) {
     setColor(event->localPos());
+  }
+}
+
+void SVGraphWidget::keyPressEvent(QKeyEvent *event) {
+  switch (event->key()) {
+    case Qt::Key_Up:
+      return updateSV(color.s, std::min(color.v + 1, 100));
+    case Qt::Key_Right:
+      return updateSV(std::min(color.s + 1, 100), color.v);
+    case Qt::Key_Down:
+      return updateSV(color.s, std::max(color.v - 1, 0));
+    case Qt::Key_Left:
+      return updateSV(std::max(color.s - 1, 0), color.v);
   }
 }
 

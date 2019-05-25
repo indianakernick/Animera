@@ -10,6 +10,7 @@
 
 #include "config.hpp"
 #include "connect.hpp"
+#include <QtGui/qevent.h>
 
 NumberValidator::NumberValidator(QWidget *parent, const int max)
   : QIntValidator{0, max, parent} {}
@@ -100,6 +101,18 @@ void NumberInputWidget::newValidValue() {
   if (hasAcceptableInput()) {
     textChanged(); // text may have been fixed up
     boxValidator.updateValidValue(text());
+  }
+}
+
+void NumberInputWidget::keyPressEvent(QKeyEvent *event) {
+  if (event->key() == Qt::Key_Up) {
+    setText(QString::number(std::min(value + 1, boxValidator.top())));
+    textChanged();
+  } else if (event->key() == Qt::Key_Down) {
+    setText(QString::number(std::max(value - 1, boxValidator.bottom())));
+    textChanged();
+  } else {
+    TextInputWidget::keyPressEvent(event);
   }
 }
 

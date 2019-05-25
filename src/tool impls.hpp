@@ -31,8 +31,8 @@ private:
   QPoint lastPos = no_point;
   SourceCell *source = nullptr;
   // @TODO restore these to 1 and none
-  int width = 4;
-  SymmetryMode mode = SymmetryMode::both;
+  int width = 2;
+  SymmetryMode mode = SymmetryMode::none;
   QRgb color = 0;
   
   void symPoint(StatusMsg &, QPoint);

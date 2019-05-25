@@ -35,6 +35,7 @@ private:
   void mousePressEvent(QMouseEvent *) override;
   void mouseReleaseEvent(QMouseEvent *) override;
   void mouseMoveEvent(QMouseEvent *) override;
+  void keyPressEvent(QKeyEvent *) override;
 };
 
 class HueSliderWidget final : public ColorSliderWidget<HueSliderWidget> {
@@ -59,8 +60,11 @@ private:
   void plotGraph();
   void renderBackground(QPainter &);
   
+  void updateHue(int);
   int getPixel();
   void setColor(int);
+  void incColor();
+  void decColor();
 };
 
 class AlphaSliderWidget final : public ColorSliderWidget<AlphaSliderWidget> {
@@ -87,8 +91,11 @@ private:
   void plotGraph();
   void renderBackground(QPainter &);
   
+  void updateAlpha(int);
   int getPixel();
   void setColor(int);
+  void incColor();
+  void decColor();
 };
 
 #endif

@@ -18,6 +18,7 @@ template <typename Derived>
 ColorSliderWidget<Derived>::ColorSliderWidget(QWidget *parent)
   : QWidget{parent},
     graph{pick_slider_rect.inner().width(), 1, QImage::Format_ARGB32_Premultiplied} {
+  setFocusPolicy(Qt::ClickFocus);
   setFixedSize(pick_slider_rect.widget().size());
   initBar();
   show();
@@ -89,6 +90,15 @@ void ColorSliderWidget<Derived>::mouseMoveEvent(QMouseEvent *event) {
   }
 }
 
+template <typename Derived>
+void ColorSliderWidget<Derived>::keyPressEvent(QKeyEvent *event) {
+  if (event->key() == Qt::Key_Right) {
+    static_cast<Derived *>(this)->incColor();
+  } else if (event->key() == Qt::Key_Left) {
+    static_cast<Derived *>(this)->decColor();
+  }
+}
+
 HueSliderWidget::HueSliderWidget(QWidget *parent)
   : ColorSliderWidget{parent},
     color{color2hsv(pick_default_color)} {
@@ -141,17 +151,28 @@ int pix2hue(const int pix) {
 
 }
 
-int HueSliderWidget::getPixel() {
-  return hue2pix(color.h);
-}
-
-void HueSliderWidget::setColor(const int pointX) {
-  const int hue = pix2hue(pointX);
+void HueSliderWidget::updateHue(const int hue) {
   if (hue != color.h) {
     color.h = hue;
     repaint();
     Q_EMIT hueChanged(hue);
   }
+}
+
+int HueSliderWidget::getPixel() {
+  return hue2pix(color.h);
+}
+
+void HueSliderWidget::setColor(const int pointX) {
+  updateHue(pix2hue(pointX));
+}
+
+void HueSliderWidget::incColor() {
+  updateHue(std::min(color.h + 1, 359));
+}
+
+void HueSliderWidget::decColor() {
+  updateHue(std::max(color.h - 1, 0));
 }
 
 AlphaSliderWidget::AlphaSliderWidget(QWidget *parent)
@@ -222,17 +243,28 @@ int pix2alp(const int pix) {
 
 }
 
-int AlphaSliderWidget::getPixel() {
-  return alp2pix(alpha);
-}
-
-void AlphaSliderWidget::setColor(const int pointX) {
-  const int alp = pix2alp(pointX);
+void AlphaSliderWidget::updateAlpha(const int alp) {
   if (alp != alpha) {
     alpha = alp;
     repaint();
     Q_EMIT alphaChanged(alpha);
   }
+}
+
+int AlphaSliderWidget::getPixel() {
+  return alp2pix(alpha);
+}
+
+void AlphaSliderWidget::setColor(const int pointX) {
+  updateAlpha(pix2alp(pointX));
+}
+
+void AlphaSliderWidget::incColor() {
+  updateAlpha(std::min(alpha + 1, 255));
+}
+
+void AlphaSliderWidget::decColor() {
+  updateAlpha(std::max(alpha - 1, 0));
 }
 
 #include "color slider widget.moc"
