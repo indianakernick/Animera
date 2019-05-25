@@ -30,7 +30,7 @@ Surface<Pixel> makeSurface(QImage &image) {
 }
 
 template <typename Pixel>
-Surface<const Pixel> makeSurface(const QImage &image) {
+CSurface<Pixel> makeSurface(const QImage &image) {
   // image doesn't need to be detached
   assert(image.depth() == sizeof(Pixel) * CHAR_BIT);
   // QImage::bits() is aligned to 4 bytes

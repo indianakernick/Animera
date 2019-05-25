@@ -25,8 +25,8 @@ Uint spread(const uint8_t byte) noexcept {
 /// Set pixels not on the mask to 0 while leaving the others unchanged
 template <typename Pixel>
 void maskClipRegion(
-  Surface<Pixel> dst,
-  Surface<const uint8_t> msk,
+  const Surface<Pixel> dst,
+  const CSurface<uint8_t> msk,
   const QPoint mskPos
 ) noexcept {
   const QRect srcRect = {mskPos, msk.size()};
@@ -46,7 +46,7 @@ void maskClipRegion(
 
 /// Set pixels not on the mask to 0 while leaving the others unchanged
 template <typename Pixel>
-void maskClip(Surface<Pixel> dst, Surface<const uint8_t> msk) noexcept {
+void maskClip(const Surface<Pixel> dst, const CSurface<uint8_t> msk) noexcept {
   Q_ASSUME(dst.size() == msk.size());
   maskClipRegion(dst, msk, {0, 0});
 }
@@ -54,8 +54,8 @@ void maskClip(Surface<Pixel> dst, Surface<const uint8_t> msk) noexcept {
 /// Set pixels on the mask to the color while leaving the others unchanged
 template <typename Pixel>
 void maskFillRegion(
-  Surface<Pixel> dst,
-  Surface<const uint8_t> msk,
+  const Surface<Pixel> dst,
+  const CSurface<uint8_t> msk,
   const Pixel color,
   const QPoint mskPos
 ) noexcept {
@@ -77,7 +77,11 @@ void maskFillRegion(
 
 /// Set pixels on the mask to the color while leaving the others unchanged
 template <typename Pixel>
-void maskFill(Surface<Pixel> dst, Surface<const uint8_t> msk, const Pixel color) noexcept {
+void maskFill(
+  const Surface<Pixel> dst,
+  const CSurface<uint8_t> msk,
+  const Pixel color
+) noexcept {
   Q_ASSUME(dst.size() == msk.size());
   maskFillRegion(dst, msk, color, {0, 0});
 }
@@ -85,9 +89,9 @@ void maskFill(Surface<Pixel> dst, Surface<const uint8_t> msk, const Pixel color)
 /// Copy pixels on the mask while leaving the others unchanged
 template <typename Pixel>
 void maskCopyRegion(
-  Surface<Pixel> dst,
-  Surface<const Pixel> src,
-  Surface<const uint8_t> msk,
+  const Surface<Pixel> dst,
+  const CSurface<Pixel> src,
+  const CSurface<uint8_t> msk,
   const QPoint srcPos,
   const QPoint mskPos
 ) noexcept {
@@ -114,7 +118,11 @@ void maskCopyRegion(
 
 /// Copy pixels on the mask while leaving the others unchanged
 template <typename Pixel>
-void maskCopy(Surface<Pixel> dst, Surface<const Pixel> src, Surface<const uint8_t> msk) noexcept {
+void maskCopy(
+  const Surface<Pixel> dst,
+  const CSurface<Pixel> src,
+  const CSurface<uint8_t> msk
+) noexcept {
   Q_ASSUME(dst.size() == src.size());
   Q_ASSUME(dst.size() == msk.size());
   maskCopyRegion(dst, src, msk, {0, 0}, {0, 0});
@@ -123,8 +131,8 @@ void maskCopy(Surface<Pixel> dst, Surface<const Pixel> src, Surface<const uint8_
 /// Copy pixels
 template <typename Pixel>
 void copyRegion(
-  Surface<Pixel> dst,
-  Surface<const Pixel> src,
+  const Surface<Pixel> dst,
+  const CSurface<Pixel> src,
   const QPoint srcPos
 ) noexcept {
   const QRect srcRect = {srcPos, src.size()};
@@ -141,8 +149,8 @@ void copyRegion(
 /// Copy pixels
 template <typename Pixel>
 void copy(
-  Surface<Pixel> dst,
-  Surface<const Pixel> src
+  const Surface<Pixel> dst,
+  const CSurface<Pixel> src
 ) noexcept {
   Q_ASSUME(dst.size() == src.size());
   copyRegion(dst, src, {0, 0});

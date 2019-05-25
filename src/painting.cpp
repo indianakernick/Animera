@@ -127,7 +127,7 @@ namespace {
 
 template <typename Pixel>
 bool midpointFilledCircle(
-  Surface<Pixel> surface,
+  const Surface<Pixel> surface,
   const Pixel col,
   const QPoint ctr,
   const int rad,
@@ -170,11 +170,11 @@ namespace {
 
 template <typename Pixel>
 bool midpointCircle(
-  Surface<Pixel> surface,
-  Pixel color,
-  QPoint center,
-  int radius,
-  CircleShape shape
+  const Surface<Pixel> surface,
+  const Pixel color,
+  const QPoint center,
+  const int radius,
+  const CircleShape shape
 ) {
   QPoint pos = {radius, 0};
   int err = 1 - radius;
@@ -208,12 +208,12 @@ bool midpointCircle(
 
 template <typename Pixel>
 bool midpointThickCircle(
-  Surface<Pixel> surface,
-  Pixel color,
-  QPoint center,
-  int innerRadius,
-  int outerRadius,
-  CircleShape shape
+  const Surface<Pixel> surface,
+  const Pixel color,
+  const QPoint center,
+  const int innerRadius,
+  const int outerRadius,
+  const CircleShape shape
 ) {
   assert(0 <= innerRadius);
   assert(innerRadius <= outerRadius);
@@ -284,7 +284,7 @@ bool drawFilledRect(QImage &img, const QRgb color, const QRect rect) {
 namespace {
 
 template <typename Pixel>
-bool strokedRect(Surface<Pixel> surface, const Pixel color, const QRect rect, const int thickness) {
+bool strokedRect(const Surface<Pixel> surface, const Pixel color, const QRect rect, const int thickness) {
   if (rect.width() <= thickness * 2 || rect.height() <= thickness * 2) {
     return surface.fillRectClip(color, rect);
   }
@@ -360,7 +360,7 @@ bool midpointLine(QPoint p1, const QPoint p2, SetPixel &&setPixel) {
 }
 
 template <typename Pixel>
-bool midpointLine(Surface<Pixel> surface, const Pixel col, const QPoint p1, const QPoint p2) {
+bool midpointLine(const Surface<Pixel> surface, const Pixel col, const QPoint p1, const QPoint p2) {
   return midpointLine(p1, p2, [surface, col](const QPoint pos) mutable {
     return surface.setPixelClip(col, pos);
   });
@@ -368,7 +368,7 @@ bool midpointLine(Surface<Pixel> surface, const Pixel col, const QPoint p1, cons
 
 // @TODO this is suboptimial but seems to be fast enough
 template <typename Pixel>
-bool midpointThickLine(Surface<Pixel> surface, const Pixel col, const QPoint p1, const QPoint p2, const int thickness) {
+bool midpointThickLine(const Surface<Pixel> surface, const Pixel col, const QPoint p1, const QPoint p2, const int thickness) {
   midpointFilledCircle(surface, col, p1, thickness, CircleShape::c1x1);
   return midpointLine(p1, p2, [surface, col, thickness](const QPoint pos) {
     return midpointThickCircle(surface, col, pos, thickness - 1, thickness, CircleShape::c1x1);

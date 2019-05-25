@@ -81,8 +81,8 @@ struct Format {
 template <typename Format, typename Pixel, typename Mode>
 void porterDuffRegion(
   const Mode mode,
-  Surface<Pixel> dst,
-  Surface<const Pixel> src,
+  const Surface<Pixel> dst,
+  const CSurface<Pixel> src,
   const QPoint srcPos
 ) {
   const QRect srcRect = {srcPos, src.size()};
@@ -107,8 +107,8 @@ void porterDuffRegion(
 template <typename Format, typename Pixel, typename Mode>
 void porterDuff(
   const Mode mode,
-  Surface<Pixel> dst,
-  Surface<const Pixel> src
+  const Surface<Pixel> dst,
+  const CSurface<Pixel> src
 ) {
   Q_ASSUME(dst.size() == src.size());
   porterDuffRegion<Format>(mode, dst, src, {0, 0});

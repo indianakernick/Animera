@@ -53,7 +53,7 @@ void compositeOverlay(QImage &drawing, const QImage &overlay) {
   porterDuff<ARGB_Format>(
     mode_src_over,
     makeSurface<QRgb>(drawing),
-    makeSurface<const QRgb>(overlay)
+    makeSurface<QRgb>(overlay)
   );
 }
 
@@ -117,7 +117,7 @@ void colorToOverlay(QRgb &pixel) {
   pixel = qRgba(gray, gray, gray, alpha);
 }
 
-void colorToOverlay(Surface<QRgb> surface) {
+void colorToOverlay(const Surface<QRgb> surface) {
   for (auto row : surface.range()) {
     for (QRgb &pixel : row) {
       colorToOverlay(pixel);
@@ -135,7 +135,7 @@ void colorToOverlay(QImage &img) {
 void colorToOverlay(QImage &img, const QImage &mask) {
   assert(img.format() == getImageFormat(Format::color));
   assert(img.size() == mask.size());
-  Surface surface = makeSurface<QRgb>(img);
+  const Surface surface = makeSurface<QRgb>(img);
   colorToOverlay(surface);
   maskClip(surface, makeSurface<uint8_t>(mask));
 }

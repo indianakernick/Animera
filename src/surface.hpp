@@ -39,32 +39,24 @@ Range(Begin &&, End &&) -> Range<
   std::remove_cv_t<std::remove_reference_t<End>>
 >;
 
-// @TODO is it Regular?
+/// A non-owning view onto pixel data. Think of it as a 2D std::span
 template <typename Pixel>
 class Surface {
 public:
+  template <typename OtherPixel>
+  friend class Surface;
+
   using pixel_type = Pixel;
 
   Surface(Pixel *data, const ptrdiff_t pitch, const int width, const int height) noexcept
     : data{data}, pitch{pitch}, width{width}, height{height} {}
   
-  template <typename Dummy = Pixel>
-  std::enable_if_t<
-    !std::is_const_v<Pixel> && std::is_same_v<Dummy, Pixel>,
-    Surface<const Pixel>
-  >
-  addConst() const noexcept {
-    return {data, pitch, width, height};
-  }
-  
-  template <typename Dummy = Pixel>
-  operator std::enable_if_t<
-    !std::is_const_v<Pixel> && std::is_same_v<Dummy, Pixel>,
-    Surface<const Pixel>
-  >
-  () const noexcept {
-    return {data, pitch, width, height};
-  }
+  template <typename OtherPixel, typename = std::enable_if_t<
+    std::is_convertible_v<OtherPixel (*)[], Pixel (*)[]>
+  >>
+  Surface(const Surface<OtherPixel> &other) noexcept
+    : Surface{other.data, other.pitch, other.width, other.height} {}
+  Surface(const Surface &) noexcept = default;
   
   QSize size() const noexcept {
     return {width, height};
@@ -86,14 +78,19 @@ public:
   ptrdiff_t pixelIndex(const QPoint pos) const noexcept {
     return pos.y() * pitch + pos.x();
   }
-  Pixel *pixelAddr(const QPoint pos) noexcept {
-    return data + pixelIndex(pos);
-  }
-  const Pixel *pixelAddr(const QPoint pos) const noexcept {
+  Pixel *pixelAddr(const QPoint pos) const noexcept {
     return data + pixelIndex(pos);
   }
   
-  bool setPixelClip(const Pixel color, const QPoint pos) noexcept {
+  // @TODO Better error messages with CRTP
+  #define MODIFYING(RET)                                                        \
+    template <typename Dummy = Pixel>                                           \
+    std::enable_if_t<                                                           \
+      !std::is_const_v<Pixel> && std::is_same_v<Dummy, Pixel>,                  \
+      RET                                                                       \
+    >
+  
+  MODIFYING(bool) setPixelClip(const Pixel color, const QPoint pos) const noexcept {
     if (insideImage(pos)) {
       *pixelAddr(pos) = color;
       return true;
@@ -101,7 +98,7 @@ public:
       return false;
     }
   }
-  void setPixel(const Pixel color, const QPoint pos) noexcept {
+  MODIFYING(void) setPixel(const Pixel color, const QPoint pos) const noexcept {
     assert(insideImage(pos));
     *pixelAddr(pos) = color;
   }
@@ -110,13 +107,13 @@ public:
     return *pixelAddr(pos);
   }
   
-  void fillRow(const Pixel color, Pixel *firstPixel, const ptrdiff_t count) noexcept {
+  MODIFYING(void) fillRow(const Pixel color, Pixel *firstPixel, const ptrdiff_t count) const noexcept {
     Pixel *const afterLastPixel = firstPixel + count;
     while (firstPixel != afterLastPixel) {
       *firstPixel++ = color;
     }
   }
-  void fillCol(const Pixel color, Pixel *firstPixel, const ptrdiff_t count) noexcept {
+  MODIFYING(void) fillCol(const Pixel color, Pixel *firstPixel, const ptrdiff_t count) const noexcept {
     Pixel *const afterLastPixel = firstPixel + count * pitch;
     while (firstPixel != afterLastPixel) {
       *firstPixel = color;
@@ -124,20 +121,20 @@ public:
     }
   }
   
-  void horiLine(const Pixel color, const QPoint first, const int last) noexcept {
+  MODIFYING(void) horiLine(const Pixel color, const QPoint first, const int last) const noexcept {
     assert(first.x() <= last);
     assert(insideImage(first));
     assert(insideImage({last, first.y()}));
     fillRow(color, pixelAddr(first), last - first.x() + 1);
   }
-  void vertLine(const Pixel color, const QPoint first, const int last) noexcept {
+  MODIFYING(void) vertLine(const Pixel color, const QPoint first, const int last) const noexcept {
     assert(first.y() <= last);
     assert(insideImage(first));
     assert(insideImage({first.x(), last}));
     fillCol(color, pixelAddr(first), last - first.y() + 1);
   }
   
-  bool horiLineClip(const Pixel color, QPoint first, int last) noexcept {
+  MODIFYING(bool) horiLineClip(const Pixel color, QPoint first, int last) const noexcept {
     if (!insideImageY(first.y())) return false;
     first.setX(std::max(first.x(), 0));
     last = std::min(last, width - 1);
@@ -145,7 +142,7 @@ public:
     horiLine(color, first, last);
     return true;
   }
-  bool vertLineClip(const Pixel color, QPoint first, int last) noexcept {
+  MODIFYING(bool) vertLineClip(const Pixel color, QPoint first, int last) const noexcept {
     if (!insideImageX(first.x())) return false;
     first.setY(std::max(first.y(), 0));
     last = std::min(last, height - 1);
@@ -154,7 +151,7 @@ public:
     return true;
   }
   
-  void fillRect(const Pixel color, const QRect rect) noexcept {
+  MODIFYING(void) fillRect(const Pixel color, const QRect rect) const noexcept {
     assert(!rect.isEmpty());
     assert(insideImage(rect.topLeft()));
     assert(insideImage(rect.bottomRight()));
@@ -165,7 +162,7 @@ public:
     }
   }
   
-  bool fillRectClip(const Pixel color, QRect rect) noexcept {
+  MODIFYING(bool) fillRectClip(const Pixel color, QRect rect) const noexcept {
     rect.setLeft(std::max(rect.left(), 0));
     rect.setTop(std::max(rect.top(), 0));
     rect.setRight(std::min(rect.right(), width - 1));
@@ -175,22 +172,22 @@ public:
     return true;
   }
   
-  void fill(const Pixel color) noexcept {
+  MODIFYING(void) fill(const Pixel color) const noexcept {
     for (auto row : range()) {
       for (Pixel &pixel : row) {
         pixel = color;
       }
     }
   }
-  void fill() noexcept {
+  MODIFYING(void) fill() const noexcept {
     fill(0);
   }
-  void overFill(const Pixel color) noexcept {
+  MODIFYING(void) overFill(const Pixel color) const noexcept {
     for (Pixel &pixel : Row{data, pixelAddr({width, height - 1})}) {
       pixel = color;
     }
   }
-  void overFill() noexcept {
+  MODIFYING(void) overFill() const noexcept {
     std::memset(data, 0, pitch * height);
   }
   
@@ -231,21 +228,23 @@ public:
   
   using Range = Range<Iterator, Sentinel>;
   
-  Range range() noexcept {
+  Range range() const noexcept {
     return {Iterator{data, pitch, width}, Sentinel{data + pitch * height}};
   }
-  Range range(const QRect rect) noexcept {
+  Range range(const QRect rect) const noexcept {
     return {
       Iterator{pixelAddr(rect.topLeft()), pitch, rect.width()},
       Sentinel{pixelAddr({rect.left(), rect.bottom() + 1})}
     };
   }
-  Row row() noexcept {
+  Row row() const noexcept {
     return {data, data + width};
   }
-  Row row(const int y) noexcept {
+  Row row(const int y) const noexcept {
     return {pixelAddr({0, y}), pixelAddr({width, y})};
   }
+  
+  #undef MODIFYING
 
 private:
   Pixel *data;
@@ -253,5 +252,9 @@ private:
   int width;
   int height;
 };
+
+/// A non-owning view onto immutable pixel data. Think of it as a 2D std::cspan
+template <typename Pixel>
+using CSurface = Surface<const Pixel>;
 
 #endif
