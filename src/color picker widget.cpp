@@ -211,18 +211,21 @@ void ColorPickerWidget::changeRed(const int red) {
   colorRgb.r = red;
   changeHSV();
   Q_EMIT boxHex->changeRgba(colorRgb, alpha);
+  updateHandle();
 }
 
 void ColorPickerWidget::changeGreen(const int green) {
   colorRgb.g = green;
   changeHSV();
   Q_EMIT boxHex->changeRgba(colorRgb, alpha);
+  updateHandle();
 }
 
 void ColorPickerWidget::changeBlue(const int blue) {
   colorRgb.b = blue;
   changeHSV();
   Q_EMIT boxHex->changeRgba(colorRgb, alpha);
+  updateHandle();
 }
 
 #include "color picker widget.moc"
