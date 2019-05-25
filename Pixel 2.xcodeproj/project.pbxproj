@@ -37,6 +37,7 @@
 		455F28852206930800C73F39 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455F28842206930800C73F39 /* CoreVideo.framework */; };
 		455F28872206930E00C73F39 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455F28862206930D00C73F39 /* OpenGL.framework */; };
 		4571C132227C383A00479006 /* radio button widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4571C130227C383A00479006 /* radio button widget.cpp */; };
+		4576DFE82298DB2D00FDECA3 /* separator widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4576DFE62298DB2D00FDECA3 /* separator widget.cpp */; };
 		458F84082249DFC8005F91D0 /* polygon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 458F84062249DFC8005F91D0 /* polygon.cpp */; };
 		45B284932218E38800D6D055 /* image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45B284912218E38800D6D055 /* image.cpp */; };
 		45B284962218E39300D6D055 /* cell.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45B284942218E39300D6D055 /* cell.cpp */; };
@@ -130,6 +131,8 @@
 		455F288B2206B57300C73F39 /* QtQuick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtQuick.framework; path = ../../../../../../usr/local/Cellar/qt/5.12.0/lib/QtQuick.framework; sourceTree = "<group>"; };
 		4571C130227C383A00479006 /* radio button widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "radio button widget.cpp"; sourceTree = "<group>"; };
 		4571C131227C383A00479006 /* radio button widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "radio button widget.hpp"; sourceTree = "<group>"; };
+		4576DFE62298DB2D00FDECA3 /* separator widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "separator widget.cpp"; sourceTree = "<group>"; };
+		4576DFE72298DB2D00FDECA3 /* separator widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "separator widget.hpp"; sourceTree = "<group>"; };
 		458F84032249CB7C005F91D0 /* config.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = config.hpp; sourceTree = "<group>"; };
 		458F84062249DFC8005F91D0 /* polygon.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = polygon.cpp; sourceTree = "<group>"; };
 		458F84072249DFC8005F91D0 /* polygon.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = polygon.hpp; sourceTree = "<group>"; };
@@ -1012,6 +1015,8 @@
 			children = (
 				454FDE972280024800928068 /* fps widget.cpp */,
 				454FDE982280024800928068 /* fps widget.hpp */,
+				4576DFE62298DB2D00FDECA3 /* separator widget.cpp */,
+				4576DFE72298DB2D00FDECA3 /* separator widget.hpp */,
 			);
 			name = General;
 			sourceTree = "<group>";
@@ -2114,6 +2119,7 @@
 				453D28C92276A7DD00D0E5F9 /* color graph widget.cpp in Sources */,
 				45BADA77224714A3000D095C /* tool widgets.cpp in Sources */,
 				453C78462234F3C600818B19 /* status bar widget.cpp in Sources */,
+				4576DFE82298DB2D00FDECA3 /* separator widget.cpp in Sources */,
 				453D28D32276F0FE00D0E5F9 /* color label widget.cpp in Sources */,
 				45B284AA221A331500D6D055 /* serial.cpp in Sources */,
 			);
