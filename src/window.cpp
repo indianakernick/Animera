@@ -11,6 +11,7 @@
 #include "config.hpp"
 #include "connect.hpp"
 #include <QtWidgets/qstyle.h>
+#include "separator widget.hpp"
 #include <QtWidgets/qmenubar.h>
 #include <QtWidgets/qboxlayout.h>
 #include <QtWidgets/qdockwidget.h>
@@ -71,6 +72,7 @@ void Window::setupUI() {
   // simply placing a widget on top is apparently very difficult
   // bottomLayout->addWidget(&fps);
   bottomLayout->addWidget(&timeline);
+  bottomLayout->addWidget(new HoriSeparator{&bottom});
   bottomLayout->addWidget(&statusBar);
   bottomLayout->setAlignment(Qt::AlignBottom);
   
@@ -80,7 +82,9 @@ void Window::setupUI() {
   rightLayout->setContentsMargins(0, 0, 0, 0);
   rightLayout->setSpacing(0);
   rightLayout->addWidget(&colorPicker);
+  rightLayout->addWidget(new HoriSeparator{&right});
   rightLayout->addWidget(&colors);
+  rightLayout->addWidget(new HoriSeparator{&right});
   rightLayout->setAlignment(Qt::AlignTop);
   right.setStyleSheet("background-color: " + glob_main.name());
   right.setSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);

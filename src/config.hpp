@@ -137,7 +137,7 @@ constexpr QRgb      tool_overlay_color = qRgba(
 
 constexpr int       stat_temp_duration_ms = 4000;
 constexpr int       stat_min_width = 200_px;
-constexpr int       stat_height = glob_font_px + 2 * glob_text_padding + 2 * glob_padding;
+constexpr int       stat_height = glob_font_px + 2 * glob_text_padding + glob_padding;
 
 inline const QColor stat_background = glob_main;
 
@@ -208,13 +208,12 @@ inline const QColor box_background_color = glob_dark_1;
 
 // ------------------------------- tool colors ------------------------------ //
 
-constexpr WidgetRect tool_color_rect = boxRect(24_px, 12_px);
-constexpr WidgetRect active_color_rect = {{}, {24_px, 12_px}, 2_px, 0_px};
+constexpr WidgetRect tool_color_rect = {{}, {24_px, 12_px}, 1_px, 2_px};
+constexpr WidgetRect active_color_rect = {{}, {24_px, 12_px}, 2_px, 1_px};
 constexpr int        tool_color_tiles = 2;
-constexpr WidgetRect tool_colors_rect = boxRect(
-  pick_svgraph_rect.inner().width(),
-  tool_color_rect.inner().height()
-);
+constexpr WidgetRect tool_colors_rect = {
+  {}, {pick_svgraph_rect.inner().width(), 12_px}, 0_px, 3_px
+};
 
 // ---------------------------------- keys ---------------------------------- //
 
