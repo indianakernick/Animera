@@ -10,6 +10,7 @@
 
 #include "config.hpp"
 #include "masking.hpp"
+#include "formats.hpp"
 #include "porter duff.hpp"
 #include <QtGui/qpainter.h>
 #include "surface factory.hpp"
@@ -46,24 +47,6 @@ QImage compositeFrame(const Palette &palette, const Frame &frame, const LayerVis
   }
   
   return output;
-}
-
-namespace {
-
-struct ARGB_Format {
-  static Color toColor(const QRgb pixel) {
-    return {
-      static_cast<uint8_t>(qRed(pixel)),
-      static_cast<uint8_t>(qGreen(pixel)),
-      static_cast<uint8_t>(qBlue(pixel)),
-      static_cast<uint8_t>(qAlpha(pixel))
-    };
-  }
-  static QRgb toPixel(const Color color) {
-    return qRgba(color.r, color.g, color.b, color.a);
-  }
-};
-
 }
 
 void compositeOverlay(QImage &drawing, const QImage &overlay) {

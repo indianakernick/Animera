@@ -9,11 +9,8 @@
 #ifndef porter_duff_hpp
 #define porter_duff_hpp
 
+#include "color.hpp"
 #include "surface.hpp"
-
-struct Color {
-  uint8_t r, g, b, a;
-};
 
 struct Factor {
   uint8_t a, b;

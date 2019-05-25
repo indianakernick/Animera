@@ -183,6 +183,7 @@ In case I decide that we need KC filters
 */
 
 #include <cmath>
+#include "formats.hpp"
 #include "porter duff.hpp"
 
 struct ColorF {
@@ -2048,14 +2049,6 @@ int main(int argc, char **argv) {
   timer.stop();
   
   timer.start("surface source-over");
-  struct ARGB_Format {
-    static Color toColor(const QRgb pixel) {
-      return {(uchar)qRed(pixel), (uchar)qGreen(pixel), (uchar)qBlue(pixel), (uchar)qAlpha(pixel)};
-    }
-    static QRgb toPixel(const Color color) {
-      return qRgba(color.r, color.g, color.b, color.a);
-    }
-  };
   porterDuff<ARGB_Format>(mode_src_over, makeSurface<QRgb>(image), makeSurface<const QRgb>(dup));
   timer.stop();
   /*

@@ -135,6 +135,8 @@
 		4576DFE72298DB2D00FDECA3 /* separator widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "separator widget.hpp"; sourceTree = "<group>"; };
 		4589188022990520002ADF77 /* flood fill.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "flood fill.hpp"; sourceTree = "<group>"; };
 		45891881229927D4002ADF77 /* porter duff.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "porter duff.hpp"; sourceTree = "<group>"; };
+		4589188222993BBC002ADF77 /* formats.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = formats.hpp; sourceTree = "<group>"; };
+		4589188322993BDB002ADF77 /* color.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = color.hpp; sourceTree = "<group>"; };
 		458F84032249CB7C005F91D0 /* config.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = config.hpp; sourceTree = "<group>"; };
 		458F84062249DFC8005F91D0 /* polygon.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = polygon.cpp; sourceTree = "<group>"; };
 		458F84072249DFC8005F91D0 /* polygon.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = polygon.hpp; sourceTree = "<group>"; };
@@ -843,6 +845,8 @@
 				45D34F1C22825FE400339A4E /* masking.hpp */,
 				4589188022990520002ADF77 /* flood fill.hpp */,
 				45891881229927D4002ADF77 /* porter duff.hpp */,
+				4589188222993BBC002ADF77 /* formats.hpp */,
+				4589188322993BDB002ADF77 /* color.hpp */,
 			);
 			name = Graphics;
 			sourceTree = "<group>";
