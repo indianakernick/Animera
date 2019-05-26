@@ -383,3 +383,7 @@ Assess the benfits
 Overall performance will definitely improve but I will have to rewrite a
 lot of code
 I would have been better off choosing this trio at the beginning of the project
+
+@Paolo-Oliverio Suggested I look into choosing a color palette
+
+Have a look at Pro Motion NG
