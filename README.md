@@ -33,6 +33,8 @@ go on the right side of the status bar (under the timeline).
 
 Here's a few quick gifs that demostrate some of the features I have implemented so far.
 
+![Magic Wand](https://i.imgur.com/kmQziuq.gif)
+
 ![Brush](https://i.imgur.com/awJ8cOf.gif)
 
 ![Fill](https://i.imgur.com/15cNBDr.gif)
