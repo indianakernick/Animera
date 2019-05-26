@@ -151,8 +151,8 @@ constexpr int       edit_scroll_width = 4_px;
 
 inline const QColor edit_checker_a = {191, 191, 191};
 inline const QColor edit_checker_b = {255, 255, 255};
-inline const QColor edit_scroll_corner = glob_dark_2;
-inline const QColor edit_scroll_back = glob_main;
+inline const QColor edit_scroll_corner = glob_dark_1;
+inline const QColor edit_scroll_back = glob_dark_1;
 inline const QColor edit_scroll_handle = glob_light_1;
 
 // ------------------------------ color picker ------------------------------ //

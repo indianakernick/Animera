@@ -38,9 +38,9 @@ QT_MOC_LITERAL(3, 31, 15), // "overlayModified"
 QT_MOC_LITERAL(4, 47, 15), // "updateStatusBar"
 QT_MOC_LITERAL(5, 63, 16), // "std::string_view"
 QT_MOC_LITERAL(6, 80, 10), // "mouseLeave"
-QT_MOC_LITERAL(7, 91, 9), // "mouseDown"
-QT_MOC_LITERAL(8, 101, 10), // "ButtonType"
-QT_MOC_LITERAL(9, 112, 7), // "QImage*"
+QT_MOC_LITERAL(7, 91, 7), // "QImage*"
+QT_MOC_LITERAL(8, 99, 9), // "mouseDown"
+QT_MOC_LITERAL(9, 109, 10), // "ButtonType"
 QT_MOC_LITERAL(10, 120, 9), // "mouseMove"
 QT_MOC_LITERAL(11, 130, 7), // "mouseUp"
 QT_MOC_LITERAL(12, 138, 8), // "keyPress"
@@ -53,8 +53,8 @@ QT_MOC_LITERAL(17, 185, 10) // "ToolColors"
     },
     "ToolSelectWidget\0cellModified\0\0"
     "overlayModified\0updateStatusBar\0"
-    "std::string_view\0mouseLeave\0mouseDown\0"
-    "ButtonType\0QImage*\0mouseMove\0mouseUp\0"
+    "std::string_view\0mouseLeave\0QImage*\0"
+    "mouseDown\0ButtonType\0mouseMove\0mouseUp\0"
     "keyPress\0Qt::Key\0changeCell\0Cell*\0"
     "changeColors\0ToolColors"
 };
@@ -79,13 +79,13 @@ static const uint qt_meta_data_ToolSelectWidget[] = {
        4,    1,   66,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       6,    0,   69,    2, 0x0a /* Public */,
-       7,    3,   70,    2, 0x0a /* Public */,
-      10,    2,   77,    2, 0x0a /* Public */,
-      11,    3,   82,    2, 0x0a /* Public */,
-      12,    2,   89,    2, 0x0a /* Public */,
-      14,    1,   94,    2, 0x0a /* Public */,
-      16,    1,   97,    2, 0x0a /* Public */,
+       6,    1,   69,    2, 0x0a /* Public */,
+       8,    3,   72,    2, 0x0a /* Public */,
+      10,    2,   79,    2, 0x0a /* Public */,
+      11,    3,   84,    2, 0x0a /* Public */,
+      12,    2,   91,    2, 0x0a /* Public */,
+      14,    1,   96,    2, 0x0a /* Public */,
+      16,    1,   99,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void,
@@ -93,11 +93,11 @@ static const uint qt_meta_data_ToolSelectWidget[] = {
     QMetaType::Void, 0x80000000 | 5,    2,
 
  // slots: parameters
-    QMetaType::Void,
-    QMetaType::Void, QMetaType::QPoint, 0x80000000 | 8, 0x80000000 | 9,    2,    2,    2,
-    QMetaType::Void, QMetaType::QPoint, 0x80000000 | 9,    2,    2,
-    QMetaType::Void, QMetaType::QPoint, 0x80000000 | 8, 0x80000000 | 9,    2,    2,    2,
-    QMetaType::Void, 0x80000000 | 13, 0x80000000 | 9,    2,    2,
+    QMetaType::Void, 0x80000000 | 7,    2,
+    QMetaType::Void, QMetaType::QPoint, 0x80000000 | 9, 0x80000000 | 7,    2,    2,    2,
+    QMetaType::Void, QMetaType::QPoint, 0x80000000 | 7,    2,    2,
+    QMetaType::Void, QMetaType::QPoint, 0x80000000 | 9, 0x80000000 | 7,    2,    2,    2,
+    QMetaType::Void, 0x80000000 | 13, 0x80000000 | 7,    2,    2,
     QMetaType::Void, 0x80000000 | 15,    2,
     QMetaType::Void, 0x80000000 | 17,    2,
 
@@ -113,7 +113,7 @@ void ToolSelectWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
         case 0: _t->cellModified(); break;
         case 1: _t->overlayModified(); break;
         case 2: _t->updateStatusBar((*reinterpret_cast< std::string_view(*)>(_a[1]))); break;
-        case 3: _t->mouseLeave(); break;
+        case 3: _t->mouseLeave((*reinterpret_cast< QImage*(*)>(_a[1]))); break;
         case 4: _t->mouseDown((*reinterpret_cast< QPoint(*)>(_a[1])),(*reinterpret_cast< ButtonType(*)>(_a[2])),(*reinterpret_cast< QImage*(*)>(_a[3]))); break;
         case 5: _t->mouseMove((*reinterpret_cast< QPoint(*)>(_a[1])),(*reinterpret_cast< QImage*(*)>(_a[2]))); break;
         case 6: _t->mouseUp((*reinterpret_cast< QPoint(*)>(_a[1])),(*reinterpret_cast< ButtonType(*)>(_a[2])),(*reinterpret_cast< QImage*(*)>(_a[3]))); break;

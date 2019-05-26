@@ -46,6 +46,13 @@ public:
   static constexpr const char tooltip[] = "Polygon Select Tool\n\nPress P to toggle between COPY and PASTE modes";
 };
 
+class WandSelectToolWidget final : public QWidget {
+public:
+  using impl = WandSelectTool;
+  static constexpr const char icon_name[] = "wand select";
+  static constexpr const char tooltip[] = "Wand Select Tool";
+};
+
 class LineToolWidget final : public QWidget {
 public:
   using impl = LineTool;

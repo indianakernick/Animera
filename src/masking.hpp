@@ -11,6 +11,13 @@
 
 #include "surface.hpp"
 
+constexpr uint8_t mask_on = 0xFF;
+constexpr uint8_t mask_off = 0x00;
+
+constexpr uint8_t maskNot(const uint8_t pixel) noexcept {
+  return ~pixel;
+}
+
 template <typename Uint>
 Uint spread(const uint8_t byte) noexcept {
   static_assert(std::is_unsigned_v<Uint>);

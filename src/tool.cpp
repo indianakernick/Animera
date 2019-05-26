@@ -8,6 +8,12 @@
 
 #include "tool.hpp"
 
+ToolChanges Tool::mouseLeave(const ToolLeaveEvent &event) {
+  // this feels out of place
+  clearImage(*event.overlay);
+  return ToolChanges::overlay;
+}
+
 ToolChanges Tool::mouseDown(const ToolMouseEvent &) {
   return ToolChanges::none;
 }

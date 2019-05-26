@@ -6,6 +6,7 @@
   <file>./Tools/flood fill.pbm</file>
   <file>./Tools/rectangle select.pbm</file>
   <file>./Tools/polygon select.pbm</file>
+  <file>./Tools/wand select.pbm</file>
   <file>./Tools/line.pbm</file>
   <file>./Tools/stroked circle.pbm</file>
   <file>./Tools/filled circle.pbm</file>

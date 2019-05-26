@@ -34,6 +34,12 @@ struct ToolColors {
   QRgb erase;
 };
 
+struct ToolLeaveEvent {
+  ButtonType button;
+  QImage *overlay = nullptr;
+  StatusMsg *status = nullptr;
+};
+
 struct ToolMouseEvent {
   ButtonType button;
   QPoint pos;
@@ -55,6 +61,7 @@ public:
   
   virtual bool attachCell(Cell *) = 0;
   virtual void detachCell() = 0;
+  virtual ToolChanges mouseLeave(const ToolLeaveEvent &);
   virtual ToolChanges mouseDown(const ToolMouseEvent &);
   virtual ToolChanges mouseMove(const ToolMouseEvent &);
   virtual ToolChanges mouseUp(const ToolMouseEvent &);

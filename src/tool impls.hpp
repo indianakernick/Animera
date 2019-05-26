@@ -68,8 +68,6 @@ private:
   SelectMode mode = SelectMode::copy;
 };
 
-// @TODO we could add a MaskSelectTool that uses flood fills to build up a mask
-
 class PolygonSelectTool final : public Tool {
 public:
   bool attachCell(Cell *) override;
@@ -86,6 +84,29 @@ private:
   QImage overlay;
   QPoint offset;
   SelectMode mode = SelectMode::copy;
+};
+
+// @TODO What if you could remove from the selection by pressing undo?
+
+class WandSelectTool final : public Tool {
+public:
+  bool attachCell(Cell *) override;
+  void detachCell() override;
+  ToolChanges mouseLeave(const ToolLeaveEvent &) override;
+  ToolChanges mouseDown(const ToolMouseEvent &) override;
+  ToolChanges mouseMove(const ToolMouseEvent &) override;
+  ToolChanges mouseUp(const ToolMouseEvent &) override;
+
+private:
+  SourceCell *source = nullptr;
+  QImage selection;
+  QImage mask;
+  QImage overlay;
+  QPoint offset;
+  SelectMode mode = SelectMode::copy;
+  
+  void toggleMode(const ToolMouseEvent &);
+  void addToSelection(const ToolMouseEvent &);
 };
 
 template <typename Derived>

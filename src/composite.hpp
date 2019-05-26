@@ -11,10 +11,6 @@
 
 #include "cell.hpp"
 
-constexpr QImage::Format mask_format = QImage::Format_Grayscale8;
-constexpr QRgb mask_color_on = 0xFFFFFFFF;
-constexpr QRgb mask_color_off = 0;
-
 /// Take all of the images that make up a frame and composite them together into
 /// a single image
 QImage compositeFrame(const Palette &, const Frame &, const LayerVisible &);

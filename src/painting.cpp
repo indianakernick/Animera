@@ -32,33 +32,6 @@ bool drawRoundPoint(QImage &img, const QRgb color, const QPoint pos, const int t
 
 namespace {
 
-template <typename Pixel>
-class FillManip {
-public:
-  FillManip(const Surface<Pixel> surface, const Pixel toolColor)
-    : surface{surface},
-      toolColor{toolColor} {}
-  
-  bool start(const QPoint pos) {
-    startColor = surface.getPixel(pos);
-    return startColor != toolColor;
-  }
-  QSize size() const {
-    return surface.size();
-  }
-  bool shouldSet(const QPoint pos) const {
-    return surface.getPixel(pos) == startColor;
-  }
-  void set(const QPoint pos) {
-    surface.setPixel(toolColor, pos);
-  }
-  
-private:
-  Surface<Pixel> surface;
-  Pixel toolColor;
-  Pixel startColor;
-};
-
 /*
 
 // @TODO do we need this?
@@ -111,6 +84,33 @@ private:
 };
 
 */
+
+template <typename Pixel>
+class FillManip {
+public:
+  FillManip(const Surface<Pixel> surface, const Pixel toolColor)
+    : surface{surface},
+      toolColor{toolColor} {}
+  
+  bool start(const QPoint pos) {
+    startColor = surface.getPixel(pos);
+    return startColor != toolColor;
+  }
+  QSize size() const {
+    return surface.size();
+  }
+  bool shouldSet(const QPoint pos) const {
+    return surface.getPixel(pos) == startColor;
+  }
+  void set(const QPoint pos) {
+    surface.setPixel(toolColor, pos);
+  }
+  
+private:
+  Surface<Pixel> surface;
+  Pixel toolColor;
+  Pixel startColor;
+};
 
 }
 

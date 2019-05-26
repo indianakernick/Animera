@@ -84,6 +84,10 @@ QImage makeCompatible(const QImage &img) {
   return QImage{img.size(), img.format()};
 }
 
+QImage makeMask(const QSize size) {
+  return QImage{size, mask_format};
+}
+
 void copyImage(QImage &dst, const QImage &src) {
   assert(compatible(dst, src));
   dst.detach();

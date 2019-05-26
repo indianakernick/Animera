@@ -104,20 +104,22 @@ public:
   void zoomIn() {
     const int oldScale = scale;
     scale = std::min(scale + 1, edit_max_scale);
-    updatePixmap();
+    setFixedSize(editor.size() * scale);
     adjustScroll(oldScale);
     updateMouse();
+    repaint();
   }
   void zoomOut() {
     const int oldScale = scale;
     scale = std::max(scale - 1, edit_min_scale);
-    updatePixmap();
+    setFixedSize(editor.size() * scale);
     adjustScroll(oldScale);
     updateMouse();
+    repaint();
   }
   
 Q_SIGNALS:
-  void mouseLeave();
+  void mouseLeave(QImage *);
   void mouseDown(QPoint, ButtonType, QImage *);
   void mouseMove(QPoint, QImage *);
   void mouseUp(QPoint, ButtonType, QImage *);
@@ -221,9 +223,7 @@ private:
     setFocus();
   }
   void leaveEvent(QEvent *) override {
-    clearImage(overlay);
-    repaint();
-    Q_EMIT mouseLeave();
+    Q_EMIT mouseLeave(&overlay);
   }
 
 public:

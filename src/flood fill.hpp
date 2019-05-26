@@ -27,19 +27,19 @@ struct Manip {
 
 namespace detail {
 
-QPoint up(const QPoint p) {
+inline QPoint up(const QPoint p) {
   return {p.x(), p.y() - 1};
 }
 
-QPoint right(const QPoint p) {
+inline QPoint right(const QPoint p) {
   return {p.x() + 1, p.y()};
 }
 
-QPoint down(const QPoint p) {
+inline QPoint down(const QPoint p) {
   return {p.x(), p.y() + 1};
 }
 
-QPoint left(const QPoint p) {
+inline QPoint left(const QPoint p) {
   return {p.x() - 1, p.y()};
 }
 

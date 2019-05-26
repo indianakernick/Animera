@@ -21,6 +21,14 @@ void CurrentTool::changeCell(Cell *newCell) {
   attach();
 }
 
+ToolChanges CurrentTool::mouseLeave(const ToolLeaveEvent &event) {
+  assert(tool);
+  assert(event.overlay);
+  assert(event.status);
+  const ToolLeaveEvent newEvent{button, event.overlay, event.status};
+  return enabled ? tool->mouseLeave(newEvent) : ToolChanges::none;
+}
+
 ToolChanges CurrentTool::mouseDown(const ToolMouseEvent &event) {
   assert(tool);
   assert(event.overlay);

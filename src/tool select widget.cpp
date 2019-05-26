@@ -93,6 +93,7 @@ ToolSelectWidget::ToolSelectWidget(QWidget *parent)
   makeToolWidget<FloodFillToolWidget>();
   makeToolWidget<RectangleSelectToolWidget>();
   makeToolWidget<PolygonSelectToolWidget>();
+  makeToolWidget<WandSelectToolWidget>();
   makeToolWidget<LineToolWidget>();
   makeToolWidget<StrokedCircleToolWidget>();
   makeToolWidget<FilledCircleToolWidget>();
@@ -107,8 +108,10 @@ ToolSelectWidget::ToolSelectWidget(QWidget *parent)
   setAlignment(Qt::AlignVCenter);
 }
 
-void ToolSelectWidget::mouseLeave() {
-  Q_EMIT updateStatusBar("");
+void ToolSelectWidget::mouseLeave(QImage *overlay) {
+  status.clear();
+  emitModified(currTool.mouseLeave({{}, overlay, &status}));
+  Q_EMIT updateStatusBar(status.get());
 }
 
 void ToolSelectWidget::mouseDown(const QPoint pos, const ButtonType button, QImage *overlay) {

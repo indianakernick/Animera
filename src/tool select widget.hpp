@@ -29,7 +29,7 @@ Q_SIGNALS:
   void updateStatusBar(std::string_view);
 
 public Q_SLOTS:
-  void mouseLeave();
+  void mouseLeave(QImage *);
   void mouseDown(QPoint, ButtonType, QImage *);
   void mouseMove(QPoint, QImage *);
   void mouseUp(QPoint, ButtonType, QImage *);

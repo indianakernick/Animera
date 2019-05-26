@@ -36,6 +36,9 @@ struct Image {
 
 constexpr QImage::Format color_format = QImage::Format_ARGB32;
 constexpr QImage::Format palette_format = QImage::Format_Grayscale8;
+constexpr QImage::Format mask_format = QImage::Format_Grayscale8;
+constexpr QRgb mask_color_on = 0xFFFFFFFF;
+constexpr QRgb mask_color_off = 0;
 
 constexpr QImage::Format getImageFormat(const Format format) {
   return format == Format::color ? color_format : palette_format;
@@ -71,6 +74,7 @@ void deserialize(QIODevice *, Palette &);
 
 bool compatible(const QImage &, const QImage &);
 QImage makeCompatible(const QImage &);
+QImage makeMask(QSize);
 void copyImage(QImage &, const QImage &);
 void clearImage(QImage &);
 void clearImage(QImage &, QRgb);

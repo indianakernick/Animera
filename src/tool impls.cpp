@@ -14,6 +14,7 @@
 #include "painting.hpp"
 #include "composite.hpp"
 #include "cell impls.hpp"
+#include "flood fill.hpp"
 #include "surface factory.hpp"
 
 // @TODO this file is starting to get out of hand
@@ -285,7 +286,7 @@ ToolChanges PolygonSelectTool::mouseDown(const ToolMouseEvent &event) {
     } else if (event.button == ButtonType::erase) {
       // @TODO should this be encapsulated in another file?
       makeSurface(source->image.data, event.colors.erase, [this, &event](auto surface, auto color) {
-        maskFillRegion(surface, makeSurface<uint8_t>(mask), color, event.pos + offset);
+        maskFillRegion(surface, makeCSurface<uint8_t>(mask), color, event.pos + offset);
       });
     } else {
       return ToolChanges::overlay;
@@ -335,6 +336,163 @@ ToolChanges PolygonSelectTool::mouseUp(const ToolMouseEvent &event) {
   event.status->appendLabeled(mode);
   event.status->appendLabeled({event.pos + offset, overlay.size()});
   return ToolChanges::overlay;
+}
+
+bool WandSelectTool::attachCell(Cell *cell) {
+  if ((source = dynamic_cast<SourceCell *>(cell))) {
+    selection = makeCompatible(source->image.data);
+    overlay = makeCompatible(selection);
+    mask = makeMask(selection.size());
+    clearImage(mask);
+    return true;
+  } else {
+    return false;
+  }
+}
+
+void WandSelectTool::detachCell() {
+  // @TODO clear the overlay somehow
+  // If we don't clear the overlay on mouseLeave then we have to clear it here
+  assert(source);
+  source = nullptr;
+}
+
+ToolChanges WandSelectTool::mouseLeave(const ToolLeaveEvent &event) {
+  // @TODO Maybe we could cache event.overlay?
+  if (mode == SelectMode::copy) {
+    return ToolChanges::none;
+  } else if (mode == SelectMode::paste) {
+    clearImage(*event.overlay);
+    return ToolChanges::overlay;
+  } Q_UNREACHABLE();
+}
+
+ToolChanges WandSelectTool::mouseDown(const ToolMouseEvent &event) {
+  assert(source);
+  if (event.button == ButtonType::secondary) {
+    toggleMode(event);
+  }
+  event.status->appendLabeled(mode);
+  
+  if (mode == SelectMode::copy) {
+    event.status->appendLabeled(event.pos);
+  } else if (mode == SelectMode::paste) {
+    event.status->appendLabeled({event.pos + offset, selection.size()});
+    clearImage(*event.overlay);
+    blitImage(*event.overlay, overlay, event.pos + offset);
+  } else Q_UNREACHABLE();
+
+  if (mode == SelectMode::copy) {
+    if (event.button == ButtonType::primary) {
+      addToSelection(event);
+    }
+    return ToolChanges::overlay;
+  } else if (mode == SelectMode::paste) {
+    // @TODO this is very similar to PolygonSelectTool
+    if (event.button == ButtonType::primary) {
+      blitMaskImage(source->image.data, mask, selection, event.pos + offset);
+    } else if (event.button == ButtonType::erase) {
+      makeSurface(source->image.data, event.colors.erase, [this, &event](auto surface, auto color) {
+        maskFillRegion(surface, makeCSurface<uint8_t>(mask), color, event.pos + offset);
+      });
+    } else {
+      return ToolChanges::overlay;
+    }
+    return ToolChanges::cell_overlay;
+  } else Q_UNREACHABLE();
+}
+
+ToolChanges WandSelectTool::mouseMove(const ToolMouseEvent &event) {
+  assert(source);
+  event.status->appendLabeled(mode);
+  if (mode == SelectMode::copy) {
+    event.status->appendLabeled(event.pos);
+    return ToolChanges::none;
+  } else if (mode == SelectMode::paste) {
+    event.status->appendLabeled({event.pos + offset, selection.size()});
+    clearImage(*event.overlay);
+    blitImage(*event.overlay, overlay, event.pos + offset);
+    return ToolChanges::overlay;
+  } else Q_UNREACHABLE();
+}
+
+ToolChanges WandSelectTool::mouseUp(const ToolMouseEvent &) {
+  assert(source);
+  return ToolChanges::none;
+}
+
+void WandSelectTool::toggleMode(const ToolMouseEvent &event) {
+  mode = opposite(mode);
+  if (mode == SelectMode::copy) {
+    clearImage(*event.overlay);
+    clearImage(overlay);
+    clearImage(selection);
+    clearImage(mask);
+  } else if (mode == SelectMode::paste) {
+    selection = blitMaskImage(source->image.data, mask, {0, 0});
+    copyImage(overlay, selection);
+    colorToOverlay(overlay, mask);
+    offset = -event.pos;
+    mode = SelectMode::paste;
+  } else Q_UNREACHABLE();
+}
+
+namespace {
+
+// @TODO support palette images
+
+class WandManip {
+public:
+  WandManip(Surface<QRgb> overlay, Surface<uint8_t> mask, CSurface<QRgb> source)
+    : overlay{overlay}, mask{mask}, source{source} {}
+
+  bool start(const QPoint pos) {
+    startColor = source.getPixel(pos);
+    maskCheckColor = mask.getPixel(pos);
+    maskColor = ~maskCheckColor;
+    if (maskColor == mask_off) {
+      overlayColor = qRgba(0, 0, 0, 0);
+    } else if (qGray(startColor) <= 127) {
+      overlayColor = qRgb(255, 255, 255);
+    } else {
+      overlayColor = qRgb(0, 0, 0);
+    }
+    return true;
+  }
+  
+  QSize size() const {
+    return source.size();
+  }
+  
+  bool shouldSet(const QPoint pos) const {
+    return source.getPixel(pos) == startColor &&
+           mask.getPixel(pos) == maskCheckColor;
+  }
+  
+  void set(const QPoint pos) const {
+    overlay.setPixel(overlayColor, pos);
+    mask.setPixel(maskColor, pos);
+  }
+
+private:
+  Surface<QRgb> overlay;
+  Surface<uint8_t> mask;
+  CSurface<QRgb> source;
+  QRgb startColor;
+  QRgb overlayColor;
+  uint8_t maskColor;
+  uint8_t maskCheckColor;
+};
+
+}
+
+void WandSelectTool::addToSelection(const ToolMouseEvent &event) {
+  WandManip manip{
+    makeSurface<QRgb>(*event.overlay),
+    makeSurface<uint8_t>(mask),
+    makeCSurface<QRgb>(source->image.data)
+  };
+  floodFill(manip, event.pos);
 }
 
 template <typename Derived>
