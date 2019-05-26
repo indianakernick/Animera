@@ -2049,7 +2049,7 @@ int main(int argc, char **argv) {
   timer.stop();
   
   timer.start("surface source-over");
-  porterDuff<ARGB_Format>(mode_src_over, makeSurface<QRgb>(image), makeSurface<const QRgb>(dup));
+  porterDuff<ARGB_Format>(mode_src_over, makeSurface<QRgb>(image), makeCSurface<QRgb>(dup));
   timer.stop();
   /*
   midpointLine(image, fillColor, {10, 10}, {20, 10});

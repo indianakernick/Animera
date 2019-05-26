@@ -20,8 +20,8 @@ Surface<Pixel> makeSurface(QImage &image) {
   // QImage::bits() is aligned to 4 bytes
   assert(image.bytesPerLine() % sizeof(Pixel) == 0);
   assert(!image.isNull());
-  image.detach();
   return {
+    // non-const QImage::bits calls QImage::detach
     reinterpret_cast<Pixel *>(image.bits()),
     image.bytesPerLine() / static_cast<ptrdiff_t>(sizeof(Pixel)),
     image.width(),
@@ -31,7 +31,6 @@ Surface<Pixel> makeSurface(QImage &image) {
 
 template <typename Pixel>
 CSurface<Pixel> makeSurface(const QImage &image) {
-  // image doesn't need to be detached
   assert(image.depth() == sizeof(Pixel) * CHAR_BIT);
   // QImage::bits() is aligned to 4 bytes
   assert(image.bytesPerLine() % sizeof(Pixel) == 0);
@@ -42,6 +41,11 @@ CSurface<Pixel> makeSurface(const QImage &image) {
     image.width(),
     image.height()
   };
+}
+
+template <typename Pixel>
+CSurface<Pixel> makeCSurface(const QImage &image) {
+  return makeSurface<const Pixel>(image);
 }
 
 template <typename Func>
@@ -56,9 +60,9 @@ template <typename Func>
 }
 
 template <typename Func>
- [[nodiscard]] decltype(auto) makeSurface(const QImage &image, Func &&func) {
+[[nodiscard]] decltype(auto) makeSurface(const QImage &image, Func &&func) {
   return makeSurface(const_cast<QImage &>(image), [&func](auto surface) {
-    return func(surface.addConst());
+    return func(CSurface<typename decltype(surface)::pixel_type>{surface});
   });
 }
 
@@ -72,7 +76,7 @@ template <typename Func>
 template <typename Func>
 [[nodiscard]] decltype(auto) makeSurface(const QImage &image, const QRgb color, Func &&func) {
   return makeSurface(const_cast<QImage &>(image), color, [&func](auto surface, auto color) {
-    return func(surface.addConst(), color);
+    return func(CSurface<typename decltype(surface)::pixel_type>{surface}, color);
   });
 }
 
