@@ -1,6 +1,6 @@
 ![Imgur](https://i.imgur.com/2Iqka11.png)
 
-## A picture is a thousand words
+## A picture is a thousand words (scroll down for GIFs!)
 
 ![Screenshot](https://i.imgur.com/IrG6yZy.png)
 
