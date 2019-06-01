@@ -44,6 +44,9 @@ private:
   LayerVisible visibility;
   LayerIdx layer = 0;
   FrameIdx frame = 0;
+  
+  void enterEvent(QEvent *) override;
+  void leaveEvent(QEvent *) override;
 };
 
 #endif

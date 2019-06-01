@@ -90,6 +90,8 @@ public:
     setCursor(Qt::CrossCursor);
     CONNECT(parent->horizontalScrollBar(), valueChanged, this, updateMouse);
     CONNECT(parent->verticalScrollBar(),   valueChanged, this, updateMouse);
+    zoomIn();
+    zoomOut();
   }
   
   void setImage(const QImage &img) {
@@ -100,8 +102,7 @@ public:
     assert(converted);
     updatePixmap();
   }
-  // @TODO mouseMove events when zooming
-  // there seem to be some funky mouse move events when zooming
+  
   void zoomIn() {
     const int oldScale = scale;
     scale = std::min(scale + 1, edit_max_scale);
@@ -290,6 +291,16 @@ void EditorWidget::compositePos(Cell *, LayerIdx newLayer, FrameIdx newFrame) {
 void EditorWidget::compositeVis(const LayerVisible &newVisibility) {
   visibility = newVisibility;
   composite();
+}
+
+// @TODO Use QAbstractScrollArea and remove this hack
+
+void EditorWidget::enterEvent(QEvent *) {
+  view->setFocus();
+}
+
+void EditorWidget::leaveEvent(QEvent *) {
+  view->clearFocus();
 }
 
 #include "editor widget.moc"
