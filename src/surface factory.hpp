@@ -16,10 +16,10 @@
 
 template <typename Pixel>
 Surface<Pixel> makeSurface(QImage &image) {
+  assert(!image.isNull());
   assert(image.depth() == sizeof(Pixel) * CHAR_BIT);
   // QImage::bits() is aligned to 4 bytes
   assert(image.bytesPerLine() % sizeof(Pixel) == 0);
-  assert(!image.isNull());
   return {
     // non-const QImage::bits calls QImage::detach
     reinterpret_cast<Pixel *>(image.bits()),
@@ -31,10 +31,10 @@ Surface<Pixel> makeSurface(QImage &image) {
 
 template <typename Pixel>
 CSurface<Pixel> makeSurface(const QImage &image) {
+  assert(!image.isNull());
   assert(image.depth() == sizeof(Pixel) * CHAR_BIT);
   // QImage::bits() is aligned to 4 bytes
   assert(image.bytesPerLine() % sizeof(Pixel) == 0);
-  assert(!image.isNull());
   return {
     reinterpret_cast<const Pixel *>(image.bits()),
     image.bytesPerLine() / static_cast<ptrdiff_t>(sizeof(Pixel)),

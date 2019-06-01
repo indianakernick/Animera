@@ -1710,6 +1710,8 @@ void blitImageOld(QImage &dst, const QImage &src, const QPoint pos) {
 
 #endif
 
+// @TODO reproduce the alignment issue when drawing upscaled images and pixmaps together
+
 #if BUG_TEST
 
 #include <QtWidgets/qdockwidget.h>

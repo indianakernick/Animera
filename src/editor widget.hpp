@@ -47,6 +47,7 @@ private:
   
   void enterEvent(QEvent *) override;
   void leaveEvent(QEvent *) override;
+  void resizeEvent(QResizeEvent *) override;
 };
 
 #endif

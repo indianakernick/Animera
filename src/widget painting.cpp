@@ -79,9 +79,9 @@ void paintChecker(
 ) {
   const QRect inner = rect.inner();
   painter.setPen(Qt::NoPen);
-  painter.setBrush(edit_checker_a);
+  painter.setBrush(QColor{edit_checker_a});
   painter.drawRect(inner);
-  painter.setBrush(edit_checker_b);
+  painter.setBrush(QColor{edit_checker_b});
   painter.setClipRect(inner);
   const int tileSize = inner.height() / vertTiles;
   const int horiTiles = inner.width() / tileSize;

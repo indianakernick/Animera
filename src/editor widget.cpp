@@ -14,6 +14,7 @@
 #include <QtGui/qevent.h>
 #include <QtGui/qpainter.h>
 #include <QtWidgets/qlabel.h>
+#include "surface factory.hpp"
 #include <QtWidgets/qscrollbar.h>
 
 class EditorScrollBar final : public QScrollBar {
@@ -88,17 +89,14 @@ public:
     setCursor(Qt::CrossCursor);
     CONNECT(parent->horizontalScrollBar(), actionTriggered, this, updateMouse);
     CONNECT(parent->verticalScrollBar(),   actionTriggered, this, updateMouse);
-    zoomIn();
-    zoomOut();
   }
   
   void setImage(const QImage &img) {
     if (editor.size() != img.size()) {
       resize(img.size());
     }
-    [[maybe_unused]] bool converted = editor.convertFromImage(img);
-    assert(converted);
-    updatePixmap();
+    editor = img;
+    repaint();
   }
   
   void zoomIn() {
@@ -106,6 +104,9 @@ public:
   }
   void zoomOut() {
     zoom(-1);
+  }
+  void resize() {
+    updateCheckers();
   }
   
 Q_SIGNALS:
@@ -117,9 +118,9 @@ Q_SIGNALS:
   
 private:
   QScrollArea *parent;
-  QPixmap checkers;
+  QImage checkers;
   QImage overlay;
-  QPixmap editor;
+  QImage editor;
   QPoint pos;
   int scale = edit_default_scale;
   int keysDown = 0;
@@ -127,14 +128,15 @@ private:
   void zoom(const int dir) {
     const int oldScale = scale;
     scale = std::clamp(scale + dir, edit_min_scale, edit_max_scale);
+    if (scale == oldScale) return;
     setFixedSize(editor.size() * scale);
     adjustScroll(oldScale);
     updateMouse();
+    updateCheckers();
     repaint();
   }
 
   void adjustScroll(const int oldScale) {
-    if (scale == oldScale) return;
     QScrollBar *hbar = parent->horizontalScrollBar();
     QScrollBar *vbar = parent->verticalScrollBar();
     if (width() >= parent->width()) {
@@ -153,30 +155,60 @@ private:
   }
 
   void resize(const QSize newSize) {
-    updateCheckers(newSize);
     overlay = QImage{newSize, QImage::Format_ARGB32};
     clearImage(overlay);
+    setFixedSize(newSize * scale);
+    updateCheckers();
   }
 
-  void updateCheckers(const QSize newSize) {
-    checkers = QPixmap{newSize * 2};
-    QPainter painter{&checkers};
-    const QRect rect{{}, newSize * 2};
-    painter.fillRect(rect, edit_checker_a);
-    painter.fillRect(rect, {edit_checker_b, Qt::Dense4Pattern});
+  void updateCheckers() {
+    QSize size = rect().intersected(parent->viewport()->rect()).size();
+    size.setWidth(size.width() - size.width() % scale + 4 * scale);
+    size.setHeight(size.height() - size.height() % scale + 4 * scale);
+    updateCheckers(size);
   }
-
-  void updatePixmap() {
-    setFixedSize(editor.size() * scale);
-    repaint();
+  
+  void updateCheckers(const QSize size) {
+    /*
+    
+    scale = 3
+    
+    O O * O * *
+    O O * O * *
+    * * O * O O
+    O O * O * *
+    * * O * O O
+    * * O * O O
+    
+    */
+  
+    checkers = QImage{size, QImage::Format_ARGB32};
+    const int lilScale = scale / 2;
+    const int bigScale = lilScale + scale % 2;
+    Surface surface = makeSurface<QRgb>(checkers);
+    int x = 0;
+    int y = 0;
+    for (auto row : surface.range()) {
+      for (QRgb &pixel : row) {
+        const bool color = (x < bigScale || (scale <= x && x < scale + lilScale))
+                        == (y < bigScale || (scale <= y && y < scale + lilScale));
+        pixel = color ? edit_checker_a : edit_checker_b;
+        x = (x + 1) % (scale * 2);
+      }
+      y = (y + 1) % (scale * 2);
+      x = 0;
+    }
   }
   
   void paintEvent(QPaintEvent *) override {
     QPainter painter{this};
-    const QRect rect{{}, editor.size() * scale};
-    painter.drawPixmap(rect, checkers);
-    painter.drawPixmap(rect, editor);
-    painter.drawImage(rect, overlay);
+    QScrollBar *hbar = parent->horizontalScrollBar();
+    QScrollBar *vbar = parent->verticalScrollBar();
+    const QPoint viewPos = {hbar->value(), vbar->value()};
+    const QSize viewSize = rect().intersected(parent->viewport()->rect()).size();
+    painter.drawImage({viewPos, viewSize}, checkers, QRect{{viewPos.x() % (scale * 2), viewPos.y() % (scale * 2)}, viewSize});
+    painter.drawImage(rect(), editor);
+    painter.drawImage(rect(), overlay);
   }
   
   QPoint getPixelPos(const QPointF localPos) {
@@ -298,6 +330,10 @@ void EditorWidget::enterEvent(QEvent *) {
 
 void EditorWidget::leaveEvent(QEvent *) {
   view->clearFocus();
+}
+
+void EditorWidget::resizeEvent(QResizeEvent *) {
+  view->resize();
 }
 
 #include "editor widget.moc"

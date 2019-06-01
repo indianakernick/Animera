@@ -147,8 +147,8 @@ constexpr int       edit_default_scale = 1_px;
 constexpr int       edit_undo_stack = 128;
 constexpr int       edit_scroll_width = 4_px;
 
-inline const QColor edit_checker_a = {191, 191, 191};
-inline const QColor edit_checker_b = {255, 255, 255};
+inline const QRgb edit_checker_a = qRgb(191, 191, 191);
+inline const QRgb edit_checker_b = qRgb(255, 255, 255);
 inline const QColor edit_scroll_corner = glob_dark_1;
 inline const QColor edit_scroll_back = glob_dark_1;
 inline const QColor edit_scroll_handle = glob_light_1;
