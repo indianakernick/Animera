@@ -85,11 +85,9 @@ public:
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     setFocusPolicy(Qt::StrongFocus);
     setMouseTracking(true);
-    // @TODO mouse cursor changes when mouse is outside of EditorImage
-    // top left corner of editor when fully zoomed out
     setCursor(Qt::CrossCursor);
-    CONNECT(parent->horizontalScrollBar(), valueChanged, this, updateMouse);
-    CONNECT(parent->verticalScrollBar(),   valueChanged, this, updateMouse);
+    CONNECT(parent->horizontalScrollBar(), actionTriggered, this, updateMouse);
+    CONNECT(parent->verticalScrollBar(),   actionTriggered, this, updateMouse);
     zoomIn();
     zoomOut();
   }
@@ -104,20 +102,10 @@ public:
   }
   
   void zoomIn() {
-    const int oldScale = scale;
-    scale = std::min(scale + 1, edit_max_scale);
-    setFixedSize(editor.size() * scale);
-    adjustScroll(oldScale);
-    updateMouse();
-    repaint();
+    zoom(1);
   }
   void zoomOut() {
-    const int oldScale = scale;
-    scale = std::max(scale - 1, edit_min_scale);
-    setFixedSize(editor.size() * scale);
-    adjustScroll(oldScale);
-    updateMouse();
-    repaint();
+    zoom(-1);
   }
   
 Q_SIGNALS:
@@ -135,6 +123,15 @@ private:
   QPoint pos;
   int scale = edit_default_scale;
   int keysDown = 0;
+
+  void zoom(const int dir) {
+    const int oldScale = scale;
+    scale = std::clamp(scale + dir, edit_min_scale, edit_max_scale);
+    setFixedSize(editor.size() * scale);
+    adjustScroll(oldScale);
+    updateMouse();
+    repaint();
+  }
 
   void adjustScroll(const int oldScale) {
     if (scale == oldScale) return;
