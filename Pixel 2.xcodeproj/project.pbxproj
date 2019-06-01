@@ -54,7 +54,6 @@
 		45DC2560224A034200F40116 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 45DC255F224A034200F40116 /* README.md */; };
 		45DC2566224B137C00F40116 /* status msg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45DC2564224B137C00F40116 /* status msg.cpp */; };
 		45DFE499224DE89E00EA40C5 /* global font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45DFE497224DE89E00EA40C5 /* global font.cpp */; };
-		45DFE49E2250835900EA40C5 /* cursors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45DFE49C2250835900EA40C5 /* cursors.cpp */; };
 		45F065F22222998300BCE863 /* current tool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45F065F02222998300BCE863 /* current tool.cpp */; };
 /* End PBXBuildFile section */
 
@@ -810,8 +809,6 @@
 		45DECE1422813AA2000920A9 /* surface factory.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "surface factory.hpp"; sourceTree = "<group>"; };
 		45DFE497224DE89E00EA40C5 /* global font.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "global font.cpp"; sourceTree = "<group>"; };
 		45DFE498224DE89E00EA40C5 /* global font.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "global font.hpp"; sourceTree = "<group>"; };
-		45DFE49C2250835900EA40C5 /* cursors.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = cursors.cpp; sourceTree = "<group>"; };
-		45DFE49D2250835900EA40C5 /* cursors.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = cursors.hpp; sourceTree = "<group>"; };
 		45DFE4A02250A10D00EA40C5 /* 5x7ascii.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = 5x7ascii.ttf; sourceTree = "<group>"; };
 		45DFE4A12252038700EA40C5 /* 5x7+2_var_ascii.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "5x7+2_var_ascii.ttf"; sourceTree = "<group>"; };
 		45DFE4A22252039600EA40C5 /* 5x7+2ascii.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "5x7+2ascii.ttf"; sourceTree = "<group>"; };
@@ -1105,8 +1102,6 @@
 				458F84072249DFC8005F91D0 /* polygon.hpp */,
 				45DFE497224DE89E00EA40C5 /* global font.cpp */,
 				45DFE498224DE89E00EA40C5 /* global font.hpp */,
-				45DFE49C2250835900EA40C5 /* cursors.cpp */,
-				45DFE49D2250835900EA40C5 /* cursors.hpp */,
 				453D28BA22768B2B00D0E5F9 /* geometry.hpp */,
 				453D28C1227698F200D0E5F9 /* widget painting.cpp */,
 				453D28C2227698F200D0E5F9 /* widget painting.hpp */,
@@ -2099,7 +2094,6 @@
 				45DFE499224DE89E00EA40C5 /* global font.cpp in Sources */,
 				45B284B9221E110F00D6D055 /* painting.cpp in Sources */,
 				45B284B3221A919000D6D055 /* tool.cpp in Sources */,
-				45DFE49E2250835900EA40C5 /* cursors.cpp in Sources */,
 				453C78402234DF3200818B19 /* application.cpp in Sources */,
 				455F2868220690A600C73F39 /* main.cpp in Sources */,
 				453C781C22349BBD00818B19 /* editor widget.cpp in Sources */,

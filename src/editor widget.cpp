@@ -10,7 +10,6 @@
 
 #include "config.hpp"
 #include "connect.hpp"
-#include "cursors.hpp"
 #include "composite.hpp"
 #include <QtGui/qevent.h>
 #include <QtGui/qpainter.h>
@@ -86,7 +85,9 @@ public:
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     setFocusPolicy(Qt::StrongFocus);
     setMouseTracking(true);
-    setCursor(getCircleCursor());
+    // @TODO mouse cursor changes when mouse is outside of EditorImage
+    // top left corner of editor when fully zoomed out
+    setCursor(Qt::CrossCursor);
     CONNECT(parent->horizontalScrollBar(), valueChanged, this, updateMouse);
     CONNECT(parent->verticalScrollBar(),   valueChanged, this, updateMouse);
   }

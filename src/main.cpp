@@ -6,7 +6,9 @@
 //  Copyright © 2019 Indi Kernick. All rights reserved.
 //
 
-#if 1
+#define BUG_TEST 0
+
+#if !BUG_TEST
 
 #include "application.hpp"
 #include <iostream>
@@ -1708,7 +1710,7 @@ void blitImageOld(QImage &dst, const QImage &src, const QPoint pos) {
 
 #endif
 
-#if 0
+#if BUG_TEST
 
 #include <QtWidgets/qdockwidget.h>
 #include <QtWidgets/qmainwindow.h>
@@ -1757,7 +1759,7 @@ int main(int argc, char **argv) {
 
 #endif
 
-#if 1
+#if !BUG_TEST
 
 int main(int argc, char **argv) {
   /*Image img;

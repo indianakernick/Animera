@@ -15,8 +15,6 @@
   <file>./Tools/translate.pbm</file>
   <file>./Tools/flip.pbm</file>
   <file>./Tools/rotate.pbm</file>
-  <file>./Cursors/circle b.pbm</file>
-  <file>./Cursors/circle m.pbm</file>
   <file>./Fonts/5x7ascii.ttf</file>
   <file>./Color Picker/sv circle p.pbm</file>
   <file>./Color Picker/sv circle s.pbm</file>

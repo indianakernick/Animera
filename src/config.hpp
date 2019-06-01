@@ -37,8 +37,6 @@ constexpr int       glob_font_px = glob_font_accent_px + glob_font_decent_px;
 constexpr int       glob_font_pt = 8_px; // 8 pt for 72 dpi. 6 pt for 96 dpi
 
 constexpr QSize     glob_min_window_size = {1280, 720};
-constexpr QSize     glob_cursor_size = {8_px, 8_px};
-constexpr QPoint    glob_cursor_offset = toPoint(glob_cursor_size) / 2;
 
 // ------------------------ global color scheme ----------------------------- //
 
