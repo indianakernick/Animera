@@ -83,7 +83,6 @@ class EditorImage final : public QWidget {
 public:
   explicit EditorImage(QScrollArea *parent)
     : QWidget{parent}, parent{parent} {
-    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     setFocusPolicy(Qt::StrongFocus);
     setMouseTracking(true);
     setCursor(Qt::CrossCursor);
@@ -123,7 +122,8 @@ private:
   QImage editor;
   QPoint pos;
   int scale = edit_default_scale;
-  int keysDown = 0;
+  ButtonType buttonDown = ButtonType::none;
+  bool keyButton = false;
 
   void zoom(const int dir) {
     const int oldScale = scale;
@@ -156,7 +156,6 @@ private:
     pos = getPos();
     Q_EMIT mouseMove(pos, &overlay);
     if (!rect().contains(pos)) {
-      cursor();
       Q_EMIT mouseLeave(&overlay);
     }
   }
@@ -246,17 +245,31 @@ private:
   }
 
   void mousePressEvent(QMouseEvent *event) override {
-    pos = getPos(event);
-    Q_EMIT mouseDown(pos, getButton(event), &overlay);
+    const ButtonType button = getButton(event);
+    if (buttonDown == ButtonType::none) {
+      buttonDown = button;
+      keyButton = false;
+      grabMouse(cursor());
+      pos = getPos(event);
+      Q_EMIT mouseDown(pos, button, &overlay);
+    }
   }
   void mouseReleaseEvent(QMouseEvent *event) override {
-    pos = getPos(event);
-    Q_EMIT mouseUp(pos, getButton(event), &overlay);
+    const ButtonType button = getButton(event);
+    if (button == buttonDown && !keyButton) {
+      buttonDown = ButtonType::none;
+      releaseMouse();
+      pos = getPos(event);
+      Q_EMIT mouseUp(pos, getButton(event), &overlay);
+      if (!rect().contains(pos)) {
+        Q_EMIT mouseLeave(&overlay);
+      }
+    }
   }
   void mouseMoveEvent(QMouseEvent *event) override {
     pos = getPos(event);
     Q_EMIT mouseMove(pos, &overlay);
-    setCursor(Qt::CrossCursor);
+    setCursor(cursor());
   }
   void enterEvent(QEvent *) override {
     setFocus();
@@ -268,28 +281,35 @@ private:
 
 public:
   void keyPressEvent(QKeyEvent *event) override {
-    if (!event->isAutoRepeat()) {
-      ++keysDown;
-      if (keysDown == 1) grabMouse(Qt::CrossCursor);
-    }
     if (event->key() == key_zoom_out) {
       zoomOut();
     } else if (event->key() == key_zoom_in) {
       zoomIn();
     } else if (ButtonType button = getButton(event); button != ButtonType::none) {
       if (!event->isAutoRepeat()) {
-        Q_EMIT mouseDown(pos, button, &overlay);
+        if (buttonDown == ButtonType::none) {
+          buttonDown = button;
+          keyButton = true;
+          grabMouse(cursor());
+          Q_EMIT mouseDown(pos, button, &overlay);
+        }
       }
     } else {
       Q_EMIT keyPress(static_cast<Qt::Key>(event->key()), &overlay);
     }
   }
   void keyReleaseEvent(QKeyEvent *event) override {
-    --keysDown;
-    if (keysDown == 0) releaseMouse();
     const ButtonType button = getButton(event);
     if (button != ButtonType::none) {
-      Q_EMIT mouseUp(pos, button, &overlay);
+      if (button == buttonDown && keyButton) {
+        buttonDown = ButtonType::none;
+        releaseMouse();
+        Q_EMIT mouseUp(pos, button, &overlay);
+        if (!rect().contains(pos)) {
+          Q_EMIT mouseLeave(&overlay);
+          setCursor(cursor());
+        }
+      }
     }
   }
 };
