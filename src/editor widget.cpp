@@ -152,12 +152,16 @@ private:
     }
   }
   
-  void updateMouse() {
-    pos = getPos();
-    Q_EMIT mouseMove(pos, &overlay);
+  void checkMouseLeave() {
     if (!rect().contains(pos)) {
       Q_EMIT mouseLeave(&overlay);
     }
+  }
+  
+  void updateMouse() {
+    pos = getPos();
+    Q_EMIT mouseMove(pos, &overlay);
+    checkMouseLeave();
   }
 
   void resize(const QSize newSize) {
@@ -261,9 +265,7 @@ private:
       releaseMouse();
       pos = getPos(event);
       Q_EMIT mouseUp(pos, getButton(event), &overlay);
-      if (!rect().contains(pos)) {
-        Q_EMIT mouseLeave(&overlay);
-      }
+      checkMouseLeave();
     }
   }
   void mouseMoveEvent(QMouseEvent *event) override {
@@ -305,10 +307,7 @@ public:
         buttonDown = ButtonType::none;
         releaseMouse();
         Q_EMIT mouseUp(pos, button, &overlay);
-        if (!rect().contains(pos)) {
-          Q_EMIT mouseLeave(&overlay);
-          setCursor(cursor());
-        }
+        checkMouseLeave();
       }
     }
   }
