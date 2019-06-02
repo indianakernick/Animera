@@ -10,6 +10,13 @@
 
 #include <QtGui/qevent.h>
 
+RadioButtonWidget::RadioButtonWidget(QWidget *parent)
+  : QAbstractButton{parent} {
+  setCursor(Qt::PointingHandCursor);
+  setCheckable(true);
+  setAutoExclusive(true);
+}
+
 void RadioButtonWidget::mousePressEvent(QMouseEvent *event) {
   if (event->button() == Qt::LeftButton) {
     nextCheckState();

@@ -23,9 +23,6 @@ class ActiveColorWidget final : public RadioButtonWidget, public ColorHandle {
 public:
   ActiveColorWidget(QWidget *parent, const QString &name, QRgb *color)
     : RadioButtonWidget{parent}, name{name}, color{color} {
-    setCursor(Qt::PointingHandCursor);
-    setCheckable(true);
-    setAutoExclusive(true);
     setFixedSize(tool_color_rect.widget().size());
   }
   

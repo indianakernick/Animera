@@ -36,13 +36,9 @@ public:
       tools{tools},
       tool{std::make_unique<typename WidgetClass::impl>()},
       widget{std::make_unique<WidgetClass>()} {
-    setCursor(Qt::PointingHandCursor);
     loadIcons(WidgetClass::icon_name);
     setToolTip(WidgetClass::tooltip);
-    setCheckable(true);
-    setAutoExclusive(true);
     setFixedSize(tool_button_size);
-    setContentsMargins(0, 0, 0, 0);
     CONNECT(this, toggled, this, toolChanged);
   }
   

@@ -139,12 +139,15 @@ private:
   void adjustScroll(const int oldScale) {
     QScrollBar *hbar = parent->horizontalScrollBar();
     QScrollBar *vbar = parent->verticalScrollBar();
-    if (width() >= parent->width()) {
-      const int halfWidth = parent->width() / 2;
+    const QSize viewportSize = parent->viewport()->size();
+    // the scroll bars are expected to be transparent
+    if (width() >= viewportSize.width()) {
+      // this aint quite right
+      const int halfWidth = viewportSize.width() / 2;
       hbar->setValue((hbar->value() + halfWidth) * scale / oldScale - halfWidth);
     }
-    if (height() >= parent->height()) {
-      const int halfHeight = parent->height() / 2;
+    if (height() >= viewportSize.height()) {
+      const int halfHeight = viewportSize.height() / 2;
       vbar->setValue((vbar->value() + halfHeight) * scale / oldScale - halfHeight);
     }
   }
@@ -152,6 +155,10 @@ private:
   void updateMouse() {
     pos = getPos();
     Q_EMIT mouseMove(pos, &overlay);
+    if (!rect().contains(pos)) {
+      cursor();
+      Q_EMIT mouseLeave(&overlay);
+    }
   }
 
   void resize(const QSize newSize) {
@@ -249,19 +256,21 @@ private:
   void mouseMoveEvent(QMouseEvent *event) override {
     pos = getPos(event);
     Q_EMIT mouseMove(pos, &overlay);
+    setCursor(Qt::CrossCursor);
   }
   void enterEvent(QEvent *) override {
     setFocus();
   }
   void leaveEvent(QEvent *) override {
     Q_EMIT mouseLeave(&overlay);
+    clearFocus();
   }
 
 public:
   void keyPressEvent(QKeyEvent *event) override {
     if (!event->isAutoRepeat()) {
       ++keysDown;
-      if (keysDown == 1) grabMouse(cursor());
+      if (keysDown == 1) grabMouse(Qt::CrossCursor);
     }
     if (event->key() == key_zoom_out) {
       zoomOut();
@@ -287,8 +296,8 @@ public:
 
 EditorWidget::EditorWidget(QWidget *parent, Animation &anim)
   : QScrollArea{parent}, anim{anim}, view{new EditorImage{this}} {
+  setFocusPolicy(Qt::NoFocus);
   setAlignment(Qt::AlignCenter);
-  setFocusPolicy(Qt::WheelFocus);
   setVerticalScrollBar(new EditorScrollBar{Qt::Vertical, this});
   setHorizontalScrollBar(new EditorScrollBar{Qt::Horizontal, this});
   setCornerWidget(new EditorCorner{this});
@@ -320,16 +329,6 @@ void EditorWidget::compositePos(Cell *, LayerIdx newLayer, FrameIdx newFrame) {
 void EditorWidget::compositeVis(const LayerVisible &newVisibility) {
   visibility = newVisibility;
   composite();
-}
-
-// @TODO Use QAbstractScrollArea and remove this hack
-
-void EditorWidget::enterEvent(QEvent *) {
-  view->setFocus();
-}
-
-void EditorWidget::leaveEvent(QEvent *) {
-  view->clearFocus();
 }
 
 void EditorWidget::resizeEvent(QResizeEvent *) {

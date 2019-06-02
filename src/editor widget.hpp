@@ -45,8 +45,6 @@ private:
   LayerIdx layer = 0;
   FrameIdx frame = 0;
   
-  void enterEvent(QEvent *) override;
-  void leaveEvent(QEvent *) override;
   void resizeEvent(QResizeEvent *) override;
 };
 

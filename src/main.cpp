@@ -1714,7 +1714,116 @@ void blitImageOld(QImage &dst, const QImage &src, const QPoint pos) {
 
 #if BUG_TEST
 
-#include <QtWidgets/qdockwidget.h>
+#include <QtGui/qevent.h>
+#include <QtGui/qpainter.h>
+#include <QtWidgets/qscrollbar.h>
+#include <QtWidgets/qscrollarea.h>
+#include <QtWidgets/qmainwindow.h>
+#include <QtWidgets/qapplication.h>
+
+class MyScrollBar final : public QScrollBar {
+public:
+  MyScrollBar(Qt::Orientation orient, QWidget *parent)
+    : QScrollBar{orient, parent} {
+    setStyleSheet("width: 8px; height: 8px");
+  }
+  
+private:
+  int pagePixels(const int length) const {
+    return (length * pageStep()) / (maximum() - minimum() + pageStep());
+  }
+  int valuePixels(const int length) const {
+    if (minimum() == maximum()) {
+      return 0;
+    } else {
+      return (length - pagePixels(length)) * value() / (maximum() - minimum());
+    }
+  }
+
+  void paintEvent(QPaintEvent *) override {
+    QPainter painter{this};
+    painter.fillRect(rect(), QColor{255, 255, 255, 127});
+    if (orientation() == Qt::Horizontal) {
+      painter.fillRect(QRect{
+        valuePixels(width()),
+        0,
+        pagePixels(width()),
+        height()
+      }, QColor{127, 127, 127, 127});
+    } else if (orientation() == Qt::Vertical) {
+      painter.fillRect(QRect{
+        0,
+        valuePixels(height()),
+        width(),
+        pagePixels(height())
+      }, QColor{127, 127, 127, 127});
+    } else {
+      Q_UNREACHABLE();
+    }
+  }
+};
+
+class MyCorner final : public QWidget {
+public:
+  explicit MyCorner(QWidget *parent)
+    : QWidget{parent} {}
+
+private:
+  void paintEvent(QPaintEvent *) override {
+    QPainter painter{this};
+    painter.fillRect(rect(), QColor{255, 255, 255, 127});
+  }
+};
+
+class MyContents final : public QWidget {
+public:
+  explicit MyContents(QWidget *parent)
+    : QWidget{parent} {
+    setFixedSize(100, 100);
+    setFocusPolicy(Qt::StrongFocus);
+  }
+
+private:
+  int scale = 1;
+
+  void paintEvent(QPaintEvent *) override {
+    QPainter painter{this};
+    
+    painter.setPen(Qt::NoPen);
+    painter.setBrush(Qt::darkGray);
+    painter.drawRect(rect());
+    
+    painter.setPen(QPen{Qt::red, 4.0});
+    painter.setBrush(Qt::NoBrush);
+    painter.drawRect(2, 2, width() - 4, height() - 4);
+  }
+  
+  void keyPressEvent(QKeyEvent *event) override {
+    if (event->key() == Qt::Key_Z) {
+      scale++;
+    } else if (event->key() == Qt::Key_X) {
+      scale = std::max(scale - 1, 1);
+    }
+    setFixedSize(100 * scale, 100 * scale);
+  }
+};
+
+int main(int argc, char **argv) {
+  QApplication app{argc, argv};
+  QMainWindow window;
+  window.setMinimumSize(200, 200);
+  QScrollArea area{&window};
+  area.setAlignment(Qt::AlignCenter);
+  area.setVerticalScrollBar(new MyScrollBar{Qt::Vertical, &area});
+  area.setHorizontalScrollBar(new MyScrollBar{Qt::Horizontal, &area});
+  area.setCornerWidget(new MyCorner{&area});
+  area.setWidget(new MyContents{&area});
+  window.setCentralWidget(&area);
+  window.show();
+  return app.exec();
+}
+
+/*#include <QtWidgets/qdockwidget.h>
 #include <QtWidgets/qmainwindow.h>
 #include <QtWidgets/qapplication.h>
 
@@ -1757,7 +1866,7 @@ int main(int argc, char **argv) {
   window.show();
   
   return app.exec();
-}
+}*/
 
 #endif
 

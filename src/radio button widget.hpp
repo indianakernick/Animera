@@ -15,7 +15,7 @@
 // to override the default behaviour?
 class RadioButtonWidget : public QAbstractButton {
 public:
-  using QAbstractButton::QAbstractButton;
+  explicit RadioButtonWidget(QWidget *);
 
 private:
   void mousePressEvent(QMouseEvent *) override;
