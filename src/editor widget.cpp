@@ -98,12 +98,6 @@ public:
     repaint();
   }
   
-  void zoomIn() {
-    zoom(1);
-  }
-  void zoomOut() {
-    zoom(-1);
-  }
   void resize() {
     updateCheckers();
   }
@@ -284,9 +278,9 @@ private:
 public:
   void keyPressEvent(QKeyEvent *event) override {
     if (event->key() == key_zoom_out) {
-      zoomOut();
+      zoom(-1);
     } else if (event->key() == key_zoom_in) {
-      zoomIn();
+      zoom(1);
     } else if (ButtonType button = getButton(event); button != ButtonType::none) {
       if (!event->isAutoRepeat()) {
         if (buttonDown == ButtonType::none) {
@@ -320,7 +314,6 @@ EditorWidget::EditorWidget(QWidget *parent, Animation &anim)
   setVerticalScrollBar(new EditorScrollBar{Qt::Vertical, this});
   setHorizontalScrollBar(new EditorScrollBar{Qt::Horizontal, this});
   setCornerWidget(new EditorCorner{this});
-  view = new EditorImage{this};
   setWidget(view);
   setFrameShape(NoFrame);
   CONNECT(view, mouseLeave, this, mouseLeave);
