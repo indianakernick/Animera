@@ -163,4 +163,27 @@ void copy(
   copyRegion(dst, src, {0, 0});
 }
 
+template <typename Pixel>
+void copyTile(
+  const Surface<Pixel> dst,
+  const CSurface<Pixel> src,
+  const QPoint srcPos
+) {
+  // @TODO GCC produces significantly better assembly than clang for this function
+  // I think GCC is better at constant folding
+  const auto srcRange = src.range();
+  auto srcRowIter = srcRange.begin();
+  srcRowIter += src.height() - srcPos.y() % src.height();
+  const ptrdiff_t pixelOffset = src.width() - srcPos.x() % src.width();
+  for (auto row : dst.range()) {
+    const auto srcPixelRange = *srcRowIter;
+    const Pixel *srcPixelIter = srcPixelRange.begin() + pixelOffset;
+    for (Pixel &pixel : row) {
+      pixel = *srcPixelIter;
+      srcPixelIter = srcRowIter.nextWrappedPixel(srcPixelIter);
+    }
+    srcRowIter = src.nextWrappedRow(srcRange, srcRowIter);
+  }
+}
+
 #endif

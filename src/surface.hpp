@@ -206,6 +206,8 @@ public:
   class Iterator {
     friend Surface;
   public:
+    // @TODO make this a full random-access iterator
+    // (except for the dereference operator)
     Row operator*() const noexcept {
       return {row, row + width};
     }
@@ -213,8 +215,17 @@ public:
       row += pitch;
       return *this;
     }
+    Iterator &operator+=(const ptrdiff_t diff) {
+      row += pitch * diff;
+      return *this;
+    }
     bool operator!=(const Sentinel sentinel) const noexcept {
       return row != sentinel.row;
+    }
+    
+    // @TODO wrapping iterator would probably be better
+    Pixel *nextWrappedPixel(Pixel *pixel) const noexcept {
+      return row + (pixel + 1 - row) % width;
     }
     
   private:
@@ -242,6 +253,13 @@ public:
   }
   Row row(const int y) const noexcept {
     return {pixelAddr({0, y}), pixelAddr({width, y})};
+  }
+  
+  // @TODO wrapping iterator would probably be better
+  Iterator nextWrappedRow(const Range &range, const Iterator &iter) {
+    Pixel *const begin = range.begin().row;
+    Pixel *const end = range.end().row;
+    return {begin + (iter.row + iter.pitch - begin) % (iter.pitch * (end - begin)), iter.pitch, iter.width};
   }
   
   #undef MODIFYING
