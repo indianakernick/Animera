@@ -15,6 +15,8 @@
 
 class ToolWidget;
 
+// @TODO this class is an absolute mess
+
 class ToolSelectWidget final : public QScrollArea {
   Q_OBJECT
 
@@ -27,6 +29,7 @@ Q_SIGNALS:
   void cellModified();
   void overlayModified();
   void updateStatusBar(std::string_view);
+  void changingAction();
 
 public Q_SLOTS:
   void mouseLeave(QImage *);
@@ -44,6 +47,7 @@ private:
   ToolWidget *currWidget = nullptr;
   ToolColors colors;
   StatusMsg status;
+  bool actionChangedCell = false;
   
   void changeTool(ToolWidget *, Tool *);
   template <typename WidgetClass>

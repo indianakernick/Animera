@@ -22,7 +22,6 @@ class UndoObject final : public QObject {
 public Q_SLOTS:
   void posChange(Cell *);
   void keyPress(Qt::Key);
-  // @TODO I think cellModified is called too often for this class
   void cellModified();
 
 Q_SIGNALS:

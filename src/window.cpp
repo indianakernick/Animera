@@ -124,7 +124,6 @@ void Window::connectSignals() {
   CONNECT(&timeline, posChange,       &undo,        posChange);
   CONNECT(&timeline, layerVisibility, &editor,      compositeVis);
   
-  CONNECT(&tools,    cellModified,    &undo,        cellModified);
   CONNECT(&tools,    cellModified,    &editor,      composite);
   CONNECT(&tools,    overlayModified, &editor,      compositeOverlay);
   CONNECT(&tools,    updateStatusBar, &statusBar,   showPerm);
@@ -136,6 +135,7 @@ void Window::connectSignals() {
   CONNECT(&editor,   keyPress,        &tools,       keyPress);
   CONNECT(&editor,   keyPress,        &clear,       keyPress);
   CONNECT(&editor,   keyPress,        &undo,        keyPress);
+  CONNECT(&tools,    changingAction,  &undo,        cellModified);
   
   CONNECT(&colors,   colorsChanged,   &tools,       changeColors);
   CONNECT(&colors,   attachColor,     &colorPicker, attach);
