@@ -45,43 +45,27 @@ class EditorScrollBar final : public QScrollBar {
 public:
   EditorScrollBar(Qt::Orientation orient, QWidget *parent)
     : QScrollBar{orient, parent} {
-    if (orient == Qt::Vertical) {
-      setStyleSheet("width: " + QString::number(edit_scroll_width));
-    } else if (orient == Qt::Horizontal) {
-      setStyleSheet("height: " + QString::number(edit_scroll_width));
-    } else {
-      Q_UNREACHABLE();
-    }
+    const QString sizeStr = QString::number(edit_scroll_width);
+    setStyleSheet("width:" + sizeStr + ";height:" + sizeStr);
   }
   
 private:
-  int pagePixels(const int length) const {
-    return (length * pageStep()) / (maximum() - minimum() + pageStep());
-  }
-  int valuePixels(const int length) const {
-    if (minimum() == maximum()) {
-      return 0;
-    } else {
-      return (length - pagePixels(length)) * value() / (maximum() - minimum());
-    }
-  }
-
   void paintEvent(QPaintEvent *) override {
     QPainter painter{this};
     painter.fillRect(rect(), edit_scroll_back);
     if (orientation() == Qt::Horizontal) {
       painter.fillRect(QRect{
-        valuePixels(width()),
+        valuePixels(this, width()),
         0,
-        pagePixels(width()),
+        pagePixels(this, width()),
         height()
       }, edit_scroll_handle);
     } else if (orientation() == Qt::Vertical) {
       painter.fillRect(QRect{
         0,
-        valuePixels(height()),
+        valuePixels(this, height()),
         width(),
-        pagePixels(height())
+        pagePixels(this, height())
       }, edit_scroll_handle);
     } else {
       Q_UNREACHABLE();
