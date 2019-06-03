@@ -17,6 +17,30 @@
 #include "surface factory.hpp"
 #include <QtWidgets/qscrollbar.h>
 
+int documentLength(const QScrollBar *bar) {
+  return bar->maximum() - bar->minimum() + bar->pageStep();
+}
+
+int scrollRange(const QScrollBar *bar) {
+  return bar->maximum() - bar->minimum();
+}
+
+int pagePixels(const QScrollBar *bar, const int pixelLength) {
+  return (pixelLength * bar->pageStep()) / documentLength(bar);
+}
+
+int scrollRangePixels(const QScrollBar *bar, const int pixelLength) {
+  return pixelLength - pagePixels(bar, pixelLength);
+}
+
+int valuePixels(const QScrollBar *bar, const int pixelLength) {
+  if (bar->minimum() == bar->maximum()) {
+    return 0;
+  } else {
+    return (scrollRangePixels(bar, pixelLength) * bar->value()) / scrollRange(bar);
+  }
+}
+
 class EditorScrollBar final : public QScrollBar {
 public:
   EditorScrollBar(Qt::Orientation orient, QWidget *parent)
@@ -123,27 +147,19 @@ private:
     const int oldScale = scale;
     scale = std::clamp(scale + dir, edit_min_scale, edit_max_scale);
     if (scale == oldScale) return;
-    setFixedSize(editor.size() * scale);
-    adjustScroll(oldScale);
+    zoomIntoCenter(oldScale);
     updateMouse();
     updateCheckers();
     repaint();
   }
 
-  void adjustScroll(const int oldScale) {
-    QScrollBar *hbar = parent->horizontalScrollBar();
-    QScrollBar *vbar = parent->verticalScrollBar();
+  void zoomIntoCenter(const int oldScale) {
+    // @TODO this could still be improved
     const QSize viewportSize = parent->viewport()->size();
-    // the scroll bars are expected to be transparent
-    if (width() >= viewportSize.width()) {
-      // this aint quite right
-      const int halfWidth = viewportSize.width() / 2;
-      hbar->setValue((hbar->value() + halfWidth) * scale / oldScale - halfWidth);
-    }
-    if (height() >= viewportSize.height()) {
-      const int halfHeight = viewportSize.height() / 2;
-      vbar->setValue((vbar->value() + halfHeight) * scale / oldScale - halfHeight);
-    }
+    const QPoint center = mapFromParent(toPoint(viewportSize / 2));
+    setFixedSize(editor.size() * scale);
+    const QPoint newCenter = (center * scale) / oldScale;
+    parent->ensureVisible(newCenter.x(), newCenter.y(), viewportSize.width() / 2, viewportSize.height() / 2);
   }
   
   void checkMouseLeave() {
@@ -308,12 +324,13 @@ public:
 };
 
 EditorWidget::EditorWidget(QWidget *parent, Animation &anim)
-  : QScrollArea{parent}, anim{anim}, view{new EditorImage{this}} {
+  : QScrollArea{parent}, anim{anim} {
   setFocusPolicy(Qt::NoFocus);
   setAlignment(Qt::AlignCenter);
   setVerticalScrollBar(new EditorScrollBar{Qt::Vertical, this});
   setHorizontalScrollBar(new EditorScrollBar{Qt::Horizontal, this});
   setCornerWidget(new EditorCorner{this});
+  view = new EditorImage{this};
   setWidget(view);
   setFrameShape(NoFrame);
   CONNECT(view, mouseLeave, this, mouseLeave);
