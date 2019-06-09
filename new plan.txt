@@ -116,8 +116,7 @@ Palette Mode
 
 RGBA Mode
   Clicking on a palette color will set the active tool color to that color
-  Clicking on a tool color will set that color to the active tool color and
-    attach the palette color to the color picker
+  Clicking on a tool color will set that color to the active tool color
     
 ColorHandle
   a handle to a color

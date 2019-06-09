@@ -17,6 +17,12 @@ RadioButtonWidget::RadioButtonWidget(QWidget *parent)
   setAutoExclusive(true);
 }
 
+void RadioButtonWidget::uncheck() {
+  setAutoExclusive(false);
+  setChecked(false);
+  setAutoExclusive(true);
+}
+
 void RadioButtonWidget::mousePressEvent(QMouseEvent *event) {
   if (event->button() == Qt::LeftButton) {
     nextCheckState();

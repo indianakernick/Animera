@@ -13,6 +13,7 @@
 #include "undo object.hpp"
 #include "clear object.hpp"
 #include "editor widget.hpp"
+#include "palette widget.hpp"
 #include "timeline widget.hpp"
 #include "status bar widget.hpp"
 #include "tool colors widget.hpp"
@@ -34,6 +35,7 @@ private:
   UndoObject undo;
   ClearObject clear;
   EditorWidget editor;
+  PaletteWidget palette;
   ToolColorsWidget colors;
   ToolSelectWidget tools;
   TimelineWidget timeline;

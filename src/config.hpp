@@ -36,7 +36,7 @@ constexpr int       glob_font_decent_px = 0_px;
 constexpr int       glob_font_px = glob_font_accent_px + glob_font_decent_px;
 constexpr int       glob_font_pt = 8_px; // 8 pt for 72 dpi. 6 pt for 96 dpi
 
-constexpr QSize     glob_min_window_size = {1280, 720};
+constexpr QSize     glob_min_window_size = {640_px, 360_px};
 
 // ------------------------ global color scheme ----------------------------- //
 
@@ -212,6 +212,10 @@ constexpr int        tool_color_tiles = 2;
 constexpr WidgetRect tool_colors_rect = {
   {}, {pick_svgraph_rect.inner().width(), 12_px}, 0_px, 3_px
 };
+
+// ------------------------------ palette colors ---------------------------- //
+
+
 
 // ---------------------------------- keys ---------------------------------- //
 

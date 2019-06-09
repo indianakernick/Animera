@@ -338,6 +338,13 @@ ToolChanges PolygonSelectTool::mouseUp(const ToolMouseEvent &event) {
   return ToolChanges::overlay;
 }
 
+// @TODO WAND SELECT BUG!!!
+// Select something
+// change to PASTE mode
+// switch to another tool
+// switch back
+// overlay is colored
+
 bool WandSelectTool::attachCell(Cell *cell) {
   if ((source = dynamic_cast<SourceCell *>(cell))) {
     selection = makeCompatible(source->image.data);
@@ -452,7 +459,7 @@ public:
     maskColor = ~maskCheckColor;
     if (maskColor == mask_off) {
       overlayColor = qRgba(0, 0, 0, 0);
-    } else if (qGray(startColor) <= 127) {
+    } else if (qGray(startColor) < 128) {
       overlayColor = qRgb(255, 255, 255);
     } else {
       overlayColor = qRgb(0, 0, 0);

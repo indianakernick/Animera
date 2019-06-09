@@ -48,6 +48,7 @@ ColorPickerWidget::ColorPickerWidget(QWidget *parent)
 }
 
 void ColorPickerWidget::attach(ColorHandle *newHandle) {
+  if (handle) handle->detach();
   handle = nullptr;
   if (newHandle) {
     setColor(newHandle->getInitialColor());

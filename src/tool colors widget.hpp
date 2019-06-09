@@ -35,8 +35,6 @@ private:
   
   void setupLayout();
   void connectSignals();
-  
-  void paintEvent(QPaintEvent *) override;
 
 private Q_SLOTS:
   void changeColors();

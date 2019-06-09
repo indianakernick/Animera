@@ -1,0 +1,448 @@
+/****************************************************************************
+** Meta object code from reading C++ file 'palette widget.hpp'
+**
+** Created by: The Qt Meta Object Compiler version 67 (Qt 5.12.3)
+**
+** WARNING! All changes made in this file will be lost!
+*****************************************************************************/
+
+#include "/Users/indikernick/Dev/Projects/C++/Pixel 2/src/palette widget.hpp"
+#include <QtCore/qbytearray.h>
+#include <QtCore/qmetatype.h>
+#if !defined(Q_MOC_OUTPUT_REVISION)
+#error "The header file 'palette widget.hpp' doesn't include <QObject>."
+#elif Q_MOC_OUTPUT_REVISION != 67
+#error "This file was generated using the moc from 5.12.3. It"
+#error "cannot be used with the include files from this version of Qt."
+#error "(The moc has changed too much.)"
+#endif
+
+QT_BEGIN_MOC_NAMESPACE
+QT_WARNING_PUSH
+QT_WARNING_DISABLE_DEPRECATED
+struct qt_meta_stringdata_PaletteWidget_t {
+    QByteArrayData data[6];
+    char stringdata0[54];
+};
+#define QT_MOC_LITERAL(idx, ofs, len) \
+    Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
+    qptrdiff(offsetof(qt_meta_stringdata_PaletteWidget_t, stringdata0) + ofs \
+        - idx * sizeof(QByteArrayData)) \
+    )
+static const qt_meta_stringdata_PaletteWidget_t qt_meta_stringdata_PaletteWidget = {
+    {
+QT_MOC_LITERAL(0, 0, 13), // "PaletteWidget"
+QT_MOC_LITERAL(1, 14, 11), // "attachColor"
+QT_MOC_LITERAL(2, 26, 0), // ""
+QT_MOC_LITERAL(3, 27, 12), // "ColorHandle*"
+QT_MOC_LITERAL(4, 40, 8), // "setColor"
+QT_MOC_LITERAL(5, 49, 4) // "QRgb"
+
+    },
+    "PaletteWidget\0attachColor\0\0ColorHandle*\0"
+    "setColor\0QRgb"
+};
+#undef QT_MOC_LITERAL
+
+static const uint qt_meta_data_PaletteWidget[] = {
+
+ // content:
+       8,       // revision
+       0,       // classname
+       0,    0, // classinfo
+       2,   14, // methods
+       0,    0, // properties
+       0,    0, // enums/sets
+       0,    0, // constructors
+       0,       // flags
+       2,       // signalCount
+
+ // signals: name, argc, parameters, tag, flags
+       1,    1,   24,    2, 0x06 /* Public */,
+       4,    1,   27,    2, 0x06 /* Public */,
+
+ // signals: parameters
+    QMetaType::Void, 0x80000000 | 3,    2,
+    QMetaType::Void, 0x80000000 | 5,    2,
+
+       0        // eod
+};
+
+void PaletteWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        auto *_t = static_cast<PaletteWidget *>(_o);
+        Q_UNUSED(_t)
+        switch (_id) {
+        case 0: _t->attachColor((*reinterpret_cast< ColorHandle*(*)>(_a[1]))); break;
+        case 1: _t->setColor((*reinterpret_cast< QRgb(*)>(_a[1]))); break;
+        default: ;
+        }
+    } else if (_c == QMetaObject::IndexOfMethod) {
+        int *result = reinterpret_cast<int *>(_a[0]);
+        {
+            using _t = void (PaletteWidget::*)(ColorHandle * );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&PaletteWidget::attachColor)) {
+                *result = 0;
+                return;
+            }
+        }
+        {
+            using _t = void (PaletteWidget::*)(QRgb );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&PaletteWidget::setColor)) {
+                *result = 1;
+                return;
+            }
+        }
+    }
+}
+
+QT_INIT_METAOBJECT const QMetaObject PaletteWidget::staticMetaObject = { {
+    &QScrollArea::staticMetaObject,
+    qt_meta_stringdata_PaletteWidget.data,
+    qt_meta_data_PaletteWidget,
+    qt_static_metacall,
+    nullptr,
+    nullptr
+} };
+
+
+const QMetaObject *PaletteWidget::metaObject() const
+{
+    return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
+}
+
+void *PaletteWidget::qt_metacast(const char *_clname)
+{
+    if (!_clname) return nullptr;
+    if (!strcmp(_clname, qt_meta_stringdata_PaletteWidget.stringdata0))
+        return static_cast<void*>(this);
+    return QScrollArea::qt_metacast(_clname);
+}
+
+int PaletteWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+{
+    _id = QScrollArea::qt_metacall(_c, _id, _a);
+    if (_id < 0)
+        return _id;
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        if (_id < 2)
+            qt_static_metacall(this, _c, _id, _a);
+        _id -= 2;
+    } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
+        if (_id < 2)
+            *reinterpret_cast<int*>(_a[0]) = -1;
+        _id -= 2;
+    }
+    return _id;
+}
+
+// SIGNAL 0
+void PaletteWidget::attachColor(ColorHandle * _t1)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 0, _a);
+}
+
+// SIGNAL 1
+void PaletteWidget::setColor(QRgb _t1)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 1, _a);
+}
+QT_WARNING_POP
+QT_END_MOC_NAMESPACE
+
+/****************************************************************************
+** Meta object code from reading C++ file 'palette widget.cpp'
+**
+** Created by: The Qt Meta Object Compiler version 67 (Qt 5.12.3)
+**
+** WARNING! All changes made in this file will be lost!
+*****************************************************************************/
+
+#include <QtCore/qbytearray.h>
+#include <QtCore/qmetatype.h>
+#if !defined(Q_MOC_OUTPUT_REVISION)
+#error "The header file 'palette widget.cpp' doesn't include <QObject>."
+#elif Q_MOC_OUTPUT_REVISION != 67
+#error "This file was generated using the moc from 5.12.3. It"
+#error "cannot be used with the include files from this version of Qt."
+#error "(The moc has changed too much.)"
+#endif
+
+QT_BEGIN_MOC_NAMESPACE
+QT_WARNING_PUSH
+QT_WARNING_DISABLE_DEPRECATED
+struct qt_meta_stringdata_PaletteColorWidget_t {
+    QByteArrayData data[7];
+    char stringdata0[65];
+};
+#define QT_MOC_LITERAL(idx, ofs, len) \
+    Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
+    qptrdiff(offsetof(qt_meta_stringdata_PaletteColorWidget_t, stringdata0) + ofs \
+        - idx * sizeof(QByteArrayData)) \
+    )
+static const qt_meta_stringdata_PaletteColorWidget_t qt_meta_stringdata_PaletteColorWidget = {
+    {
+QT_MOC_LITERAL(0, 0, 18), // "PaletteColorWidget"
+QT_MOC_LITERAL(1, 19, 11), // "attachColor"
+QT_MOC_LITERAL(2, 31, 0), // ""
+QT_MOC_LITERAL(3, 32, 12), // "ColorHandle*"
+QT_MOC_LITERAL(4, 45, 8), // "setColor"
+QT_MOC_LITERAL(5, 54, 4), // "QRgb"
+QT_MOC_LITERAL(6, 59, 5) // "click"
+
+    },
+    "PaletteColorWidget\0attachColor\0\0"
+    "ColorHandle*\0setColor\0QRgb\0click"
+};
+#undef QT_MOC_LITERAL
+
+static const uint qt_meta_data_PaletteColorWidget[] = {
+
+ // content:
+       8,       // revision
+       0,       // classname
+       0,    0, // classinfo
+       3,   14, // methods
+       0,    0, // properties
+       0,    0, // enums/sets
+       0,    0, // constructors
+       0,       // flags
+       2,       // signalCount
+
+ // signals: name, argc, parameters, tag, flags
+       1,    1,   29,    2, 0x06 /* Public */,
+       4,    1,   32,    2, 0x06 /* Public */,
+
+ // slots: name, argc, parameters, tag, flags
+       6,    0,   35,    2, 0x08 /* Private */,
+
+ // signals: parameters
+    QMetaType::Void, 0x80000000 | 3,    2,
+    QMetaType::Void, 0x80000000 | 5,    2,
+
+ // slots: parameters
+    QMetaType::Void,
+
+       0        // eod
+};
+
+void PaletteColorWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        auto *_t = static_cast<PaletteColorWidget *>(_o);
+        Q_UNUSED(_t)
+        switch (_id) {
+        case 0: _t->attachColor((*reinterpret_cast< ColorHandle*(*)>(_a[1]))); break;
+        case 1: _t->setColor((*reinterpret_cast< QRgb(*)>(_a[1]))); break;
+        case 2: _t->click(); break;
+        default: ;
+        }
+    } else if (_c == QMetaObject::IndexOfMethod) {
+        int *result = reinterpret_cast<int *>(_a[0]);
+        {
+            using _t = void (PaletteColorWidget::*)(ColorHandle * );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&PaletteColorWidget::attachColor)) {
+                *result = 0;
+                return;
+            }
+        }
+        {
+            using _t = void (PaletteColorWidget::*)(QRgb );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&PaletteColorWidget::setColor)) {
+                *result = 1;
+                return;
+            }
+        }
+    }
+}
+
+QT_INIT_METAOBJECT const QMetaObject PaletteColorWidget::staticMetaObject = { {
+    &RadioButtonWidget::staticMetaObject,
+    qt_meta_stringdata_PaletteColorWidget.data,
+    qt_meta_data_PaletteColorWidget,
+    qt_static_metacall,
+    nullptr,
+    nullptr
+} };
+
+
+const QMetaObject *PaletteColorWidget::metaObject() const
+{
+    return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
+}
+
+void *PaletteColorWidget::qt_metacast(const char *_clname)
+{
+    if (!_clname) return nullptr;
+    if (!strcmp(_clname, qt_meta_stringdata_PaletteColorWidget.stringdata0))
+        return static_cast<void*>(this);
+    if (!strcmp(_clname, "ColorHandle"))
+        return static_cast< ColorHandle*>(this);
+    return RadioButtonWidget::qt_metacast(_clname);
+}
+
+int PaletteColorWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+{
+    _id = RadioButtonWidget::qt_metacall(_c, _id, _a);
+    if (_id < 0)
+        return _id;
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        if (_id < 3)
+            qt_static_metacall(this, _c, _id, _a);
+        _id -= 3;
+    } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
+        if (_id < 3)
+            *reinterpret_cast<int*>(_a[0]) = -1;
+        _id -= 3;
+    }
+    return _id;
+}
+
+// SIGNAL 0
+void PaletteColorWidget::attachColor(ColorHandle * _t1)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 0, _a);
+}
+
+// SIGNAL 1
+void PaletteColorWidget::setColor(QRgb _t1)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 1, _a);
+}
+struct qt_meta_stringdata_PaletteTableWidget_t {
+    QByteArrayData data[6];
+    char stringdata0[59];
+};
+#define QT_MOC_LITERAL(idx, ofs, len) \
+    Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
+    qptrdiff(offsetof(qt_meta_stringdata_PaletteTableWidget_t, stringdata0) + ofs \
+        - idx * sizeof(QByteArrayData)) \
+    )
+static const qt_meta_stringdata_PaletteTableWidget_t qt_meta_stringdata_PaletteTableWidget = {
+    {
+QT_MOC_LITERAL(0, 0, 18), // "PaletteTableWidget"
+QT_MOC_LITERAL(1, 19, 11), // "attachColor"
+QT_MOC_LITERAL(2, 31, 0), // ""
+QT_MOC_LITERAL(3, 32, 12), // "ColorHandle*"
+QT_MOC_LITERAL(4, 45, 8), // "setColor"
+QT_MOC_LITERAL(5, 54, 4) // "QRgb"
+
+    },
+    "PaletteTableWidget\0attachColor\0\0"
+    "ColorHandle*\0setColor\0QRgb"
+};
+#undef QT_MOC_LITERAL
+
+static const uint qt_meta_data_PaletteTableWidget[] = {
+
+ // content:
+       8,       // revision
+       0,       // classname
+       0,    0, // classinfo
+       2,   14, // methods
+       0,    0, // properties
+       0,    0, // enums/sets
+       0,    0, // constructors
+       0,       // flags
+       2,       // signalCount
+
+ // signals: name, argc, parameters, tag, flags
+       1,    1,   24,    2, 0x06 /* Public */,
+       4,    1,   27,    2, 0x06 /* Public */,
+
+ // signals: parameters
+    QMetaType::Void, 0x80000000 | 3,    2,
+    QMetaType::Void, 0x80000000 | 5,    2,
+
+       0        // eod
+};
+
+void PaletteTableWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        auto *_t = static_cast<PaletteTableWidget *>(_o);
+        Q_UNUSED(_t)
+        switch (_id) {
+        case 0: _t->attachColor((*reinterpret_cast< ColorHandle*(*)>(_a[1]))); break;
+        case 1: _t->setColor((*reinterpret_cast< QRgb(*)>(_a[1]))); break;
+        default: ;
+        }
+    } else if (_c == QMetaObject::IndexOfMethod) {
+        int *result = reinterpret_cast<int *>(_a[0]);
+        {
+            using _t = void (PaletteTableWidget::*)(ColorHandle * );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&PaletteTableWidget::attachColor)) {
+                *result = 0;
+                return;
+            }
+        }
+        {
+            using _t = void (PaletteTableWidget::*)(QRgb );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&PaletteTableWidget::setColor)) {
+                *result = 1;
+                return;
+            }
+        }
+    }
+}
+
+QT_INIT_METAOBJECT const QMetaObject PaletteTableWidget::staticMetaObject = { {
+    &QWidget::staticMetaObject,
+    qt_meta_stringdata_PaletteTableWidget.data,
+    qt_meta_data_PaletteTableWidget,
+    qt_static_metacall,
+    nullptr,
+    nullptr
+} };
+
+
+const QMetaObject *PaletteTableWidget::metaObject() const
+{
+    return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
+}
+
+void *PaletteTableWidget::qt_metacast(const char *_clname)
+{
+    if (!_clname) return nullptr;
+    if (!strcmp(_clname, qt_meta_stringdata_PaletteTableWidget.stringdata0))
+        return static_cast<void*>(this);
+    return QWidget::qt_metacast(_clname);
+}
+
+int PaletteTableWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+{
+    _id = QWidget::qt_metacall(_c, _id, _a);
+    if (_id < 0)
+        return _id;
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        if (_id < 2)
+            qt_static_metacall(this, _c, _id, _a);
+        _id -= 2;
+    } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
+        if (_id < 2)
+            *reinterpret_cast<int*>(_a[0]) = -1;
+        _id -= 2;
+    }
+    return _id;
+}
+
+// SIGNAL 0
+void PaletteTableWidget::attachColor(ColorHandle * _t1)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 0, _a);
+}
+
+// SIGNAL 1
+void PaletteTableWidget::setColor(QRgb _t1)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 1, _a);
+}
+QT_WARNING_POP
+QT_END_MOC_NAMESPACE

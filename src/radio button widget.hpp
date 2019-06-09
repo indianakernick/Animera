@@ -17,7 +17,9 @@ class RadioButtonWidget : public QAbstractButton {
 public:
   explicit RadioButtonWidget(QWidget *);
 
-private:
+  void uncheck();
+
+protected:
   void mousePressEvent(QMouseEvent *) override;
   void mouseReleaseEvent(QMouseEvent *) override;
 };

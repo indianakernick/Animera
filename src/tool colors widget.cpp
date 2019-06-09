@@ -25,20 +25,6 @@ public:
     : RadioButtonWidget{parent}, name{name}, color{color} {
     setFixedSize(tool_color_rect.widget().size());
   }
-  
-  QRgb getInitialColor() const override {
-    return *color;
-  }
-  
-  void changeColor(const QRgb newColor) override {
-    *color = newColor;
-    repaint();
-    Q_EMIT colorChanged();
-  }
-  
-  QString getName() const override {
-    return name;
-  }
 
 Q_SIGNALS:
   void colorChanged();
@@ -58,6 +44,21 @@ private:
       painter.fillRect(tool_color_rect.inner(), QColor::fromRgba(*color));
       paintBorder(painter, tool_color_rect, glob_border_color);
     }
+  }
+  
+  QRgb getInitialColor() const override {
+    return *color;
+  }
+  void changeColor(const QRgb newColor) override {
+    *color = newColor;
+    repaint();
+    Q_EMIT colorChanged();
+  }
+  QString getName() const override {
+    return name;
+  }
+  void detach() override {
+    uncheck();
   }
 };
 
@@ -115,10 +116,6 @@ void ToolColorsWidget::connectSignals() {
       repaint();
     }
   });
-}
-
-void ToolColorsWidget::paintEvent(QPaintEvent *) {
-  
 }
 
 void ToolColorsWidget::changeColors() {

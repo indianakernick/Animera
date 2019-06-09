@@ -344,8 +344,9 @@ void EditorWidget::compositeVis(const LayerVisible &newVisibility) {
   composite();
 }
 
-void EditorWidget::resizeEvent(QResizeEvent *) {
+void EditorWidget::resizeEvent(QResizeEvent *event) {
   view->resize();
+  QScrollArea::resizeEvent(event);
 }
 
 #include "editor widget.moc"

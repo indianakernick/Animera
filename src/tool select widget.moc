@@ -22,7 +22,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_ToolSelectWidget_t {
     QByteArrayData data[19];
-    char stringdata0[206];
+    char stringdata0[211];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -37,27 +37,27 @@ QT_MOC_LITERAL(2, 30, 0), // ""
 QT_MOC_LITERAL(3, 31, 15), // "overlayModified"
 QT_MOC_LITERAL(4, 47, 15), // "updateStatusBar"
 QT_MOC_LITERAL(5, 63, 16), // "std::string_view"
-QT_MOC_LITERAL(6, 80, 9), // "changeSet"
-QT_MOC_LITERAL(7, 90, 10), // "mouseLeave"
-QT_MOC_LITERAL(8, 101, 7), // "QImage*"
-QT_MOC_LITERAL(9, 109, 9), // "mouseDown"
-QT_MOC_LITERAL(10, 119, 10), // "ButtonType"
-QT_MOC_LITERAL(11, 130, 9), // "mouseMove"
-QT_MOC_LITERAL(12, 140, 7), // "mouseUp"
-QT_MOC_LITERAL(13, 148, 8), // "keyPress"
-QT_MOC_LITERAL(14, 157, 7), // "Qt::Key"
-QT_MOC_LITERAL(15, 165, 10), // "changeCell"
-QT_MOC_LITERAL(16, 176, 5), // "Cell*"
-QT_MOC_LITERAL(17, 182, 12), // "changeColors"
-QT_MOC_LITERAL(18, 195, 10) // "ToolColors"
+QT_MOC_LITERAL(6, 80, 14), // "changingAction"
+QT_MOC_LITERAL(7, 95, 10), // "mouseLeave"
+QT_MOC_LITERAL(8, 106, 7), // "QImage*"
+QT_MOC_LITERAL(9, 114, 9), // "mouseDown"
+QT_MOC_LITERAL(10, 124, 10), // "ButtonType"
+QT_MOC_LITERAL(11, 135, 9), // "mouseMove"
+QT_MOC_LITERAL(12, 145, 7), // "mouseUp"
+QT_MOC_LITERAL(13, 153, 8), // "keyPress"
+QT_MOC_LITERAL(14, 162, 7), // "Qt::Key"
+QT_MOC_LITERAL(15, 170, 10), // "changeCell"
+QT_MOC_LITERAL(16, 181, 5), // "Cell*"
+QT_MOC_LITERAL(17, 187, 12), // "changeColors"
+QT_MOC_LITERAL(18, 200, 10) // "ToolColors"
 
     },
     "ToolSelectWidget\0cellModified\0\0"
     "overlayModified\0updateStatusBar\0"
-    "std::string_view\0changeSet\0mouseLeave\0"
-    "QImage*\0mouseDown\0ButtonType\0mouseMove\0"
-    "mouseUp\0keyPress\0Qt::Key\0changeCell\0"
-    "Cell*\0changeColors\0ToolColors"
+    "std::string_view\0changingAction\0"
+    "mouseLeave\0QImage*\0mouseDown\0ButtonType\0"
+    "mouseMove\0mouseUp\0keyPress\0Qt::Key\0"
+    "changeCell\0Cell*\0changeColors\0ToolColors"
 };
 #undef QT_MOC_LITERAL
 
@@ -116,7 +116,7 @@ void ToolSelectWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
         case 0: _t->cellModified(); break;
         case 1: _t->overlayModified(); break;
         case 2: _t->updateStatusBar((*reinterpret_cast< std::string_view(*)>(_a[1]))); break;
-        case 3: _t->changeSet(); break;
+        case 3: _t->changingAction(); break;
         case 4: _t->mouseLeave((*reinterpret_cast< QImage*(*)>(_a[1]))); break;
         case 5: _t->mouseDown((*reinterpret_cast< QPoint(*)>(_a[1])),(*reinterpret_cast< ButtonType(*)>(_a[2])),(*reinterpret_cast< QImage*(*)>(_a[3]))); break;
         case 6: _t->mouseMove((*reinterpret_cast< QPoint(*)>(_a[1])),(*reinterpret_cast< QImage*(*)>(_a[2]))); break;
@@ -151,7 +151,7 @@ void ToolSelectWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
         }
         {
             using _t = void (ToolSelectWidget::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ToolSelectWidget::changeSet)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ToolSelectWidget::changingAction)) {
                 *result = 3;
                 return;
             }
@@ -219,7 +219,7 @@ void ToolSelectWidget::updateStatusBar(std::string_view _t1)
 }
 
 // SIGNAL 3
-void ToolSelectWidget::changeSet()
+void ToolSelectWidget::changingAction()
 {
     QMetaObject::activate(this, &staticMetaObject, 3, nullptr);
 }

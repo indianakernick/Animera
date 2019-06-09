@@ -21,6 +21,7 @@ Window::Window(const QRect desktop)
     right{this},
     fps{&bottom},
     editor{this, anim},
+    palette{&right},
     colors{&right},
     tools{this},
     timeline{&bottom, anim},
@@ -61,7 +62,7 @@ void Window::setupUI() {
     "background-color: " + glob_border_color.name() + ";"
   "}");
   
-  bottom.setMinimumHeight(100);
+  bottom.setMinimumHeight(50_px);
   bottom.setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
   
   QVBoxLayout *bottomLayout = new QVBoxLayout{&bottom};
@@ -85,9 +86,10 @@ void Window::setupUI() {
   rightLayout->addWidget(new HoriSeparator{&right});
   rightLayout->addWidget(&colors);
   rightLayout->addWidget(new HoriSeparator{&right});
-  rightLayout->setAlignment(Qt::AlignTop);
+  rightLayout->addWidget(&palette);
+  rightLayout->addSpacing(1_px);
   right.setStyleSheet("background-color: " + glob_main.name());
-  right.setSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
+  right.setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
   
   makeDockWidget(Qt::LeftDockWidgetArea, &tools);
   makeDockWidget(Qt::BottomDockWidgetArea, &bottom);
@@ -145,6 +147,8 @@ void Window::connectSignals() {
   CONNECT(&undo,     cellReverted,    &editor,      composite);
   CONNECT(&undo,     showTempStatus,  &statusBar,   showTemp);
   
+  CONNECT(&palette,  attachColor,     &colorPicker, attach);
+  CONNECT(&palette,  setColor,        &colorPicker, setColor);
 }
 
 #include "window.moc"

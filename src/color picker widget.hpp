@@ -28,6 +28,7 @@ public:
 
 public Q_SLOTS:
   void attach(ColorHandle *);
+  void setColor(QRgb);
   
 private:
   ColorHandle *handle = nullptr;
@@ -63,7 +64,6 @@ private:
   void connectSignals();
 
   void updateHandle();
-  void setColor(QRgb);
 
   void changeRGB();
   void changeHSV();
