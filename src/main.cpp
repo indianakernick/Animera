@@ -1742,21 +1742,21 @@ private:
 
   void paintEvent(QPaintEvent *) override {
     QPainter painter{this};
-    painter.fillRect(rect(), QColor{255, 255, 255, 127});
+    painter.fillRect(rect(), QColor{255, 0, 255, 127});
     if (orientation() == Qt::Horizontal) {
       painter.fillRect(QRect{
         valuePixels(width()),
         0,
         pagePixels(width()),
         height()
-      }, QColor{127, 127, 127, 127});
+      }, QColor{0, 127, 127, 127});
     } else if (orientation() == Qt::Vertical) {
       painter.fillRect(QRect{
         0,
         valuePixels(height()),
         width(),
         pagePixels(height())
-      }, QColor{127, 127, 127, 127});
+      }, QColor{0, 127, 127, 127});
     } else {
       Q_UNREACHABLE();
     }
@@ -1771,17 +1771,22 @@ public:
 private:
   void paintEvent(QPaintEvent *) override {
     QPainter painter{this};
-    painter.fillRect(rect(), QColor{255, 255, 255, 127});
+    painter.fillRect(rect(), QColor{255, 0, 255, 127});
   }
 };
 
 class MyContents final : public QWidget {
+  Q_OBJECT
+  
 public:
   explicit MyContents(QWidget *parent)
     : QWidget{parent} {
     setFixedSize(100, 100);
     setFocusPolicy(Qt::StrongFocus);
   }
+
+Q_SIGNALS:
+  void resized();
 
 private:
   int scale = 1;
@@ -1806,18 +1811,47 @@ private:
     }
     setFixedSize(100 * scale, 100 * scale);
   }
+  
+  void resizeEvent(QResizeEvent *) override {
+    Q_EMIT resized();
+  }
+};
+
+class MyArea final : public QScrollArea {
+public:
+  explicit MyArea(QWidget *parent)
+    : QScrollArea{parent} {
+    setAlignment(Qt::AlignCenter);
+    setVerticalScrollBar(new MyScrollBar{Qt::Vertical, this});
+    setHorizontalScrollBar(new MyScrollBar{Qt::Horizontal, this});
+    setCornerWidget(new MyCorner{this});
+    auto *contents = new MyContents{this};
+    connect(contents, &MyContents::resized, this, &MyArea::adjustMargins);
+    setWidget(contents);
+  }
+
+private:
+  void adjustMargins() {
+    if (widget()->width() < width() && widget()->height() < height()) {
+      setViewportMargins(0, 0, 0, 0);
+    }
+    const QMargins margins = viewportMargins();
+    const int right = height() < widget()->height() + margins.bottom() ? 8 : 0;
+    const int bottom = width() < widget()->width() + margins.right() ? 8 : 0;
+    setViewportMargins(0, 0, right, bottom);
+  }
+
+  void resizeEvent(QResizeEvent *event) override {
+    adjustMargins();
+    QScrollArea::resizeEvent(event);
+  }
 };
 
 int main(int argc, char **argv) {
   QApplication app{argc, argv};
   QMainWindow window;
   window.setMinimumSize(200, 200);
-  QScrollArea area{&window};
-  area.setAlignment(Qt::AlignCenter);
-  area.setVerticalScrollBar(new MyScrollBar{Qt::Vertical, &area});
-  area.setHorizontalScrollBar(new MyScrollBar{Qt::Horizontal, &area});
-  area.setCornerWidget(new MyCorner{&area});
-  area.setWidget(new MyContents{&area});
+  MyArea area{&window};
   window.setCentralWidget(&area);
   window.show();
   return app.exec();
@@ -2341,3 +2375,6 @@ int main(int argc, char **argv) {
 }
 
 #endif
+
+// @TODO remove
+#include "main.moc"

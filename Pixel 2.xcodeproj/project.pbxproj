@@ -2045,7 +2045,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "function moc {\n  local OUTPUT=\"$PROJECT_DIR/src/$1.moc\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.hpp\" > \"$OUTPUT\"\n  echo \"\" >> \"$OUTPUT\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.cpp\" >> \"$OUTPUT\"\n}\n\nmoc \"color picker widget\"\nmoc \"color slider widget\"\nmoc \"color graph widget\"\nmoc \"tool select widget\"\nmoc \"color input widget\"\nmoc \"tool colors widget\"\nmoc \"text input widget\"\nmoc \"status bar widget\"\nmoc \"timeline widget\"\nmoc \"palette widget\"\nmoc \"editor widget\"\nmoc \"tool widgets\"\nmoc \"clear object\"\nmoc \"undo object\"\nmoc \"application\"\nmoc \"window\"\n";
+			shellScript = "function moc {\n  local OUTPUT=\"$PROJECT_DIR/src/$1.moc\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.hpp\" > \"$OUTPUT\"\n  echo \"\" >> \"$OUTPUT\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.cpp\" >> \"$OUTPUT\"\n}\n\nmoc \"color picker widget\"\nmoc \"color slider widget\"\nmoc \"color graph widget\"\nmoc \"tool select widget\"\nmoc \"color input widget\"\nmoc \"tool colors widget\"\nmoc \"text input widget\"\nmoc \"status bar widget\"\nmoc \"timeline widget\"\nmoc \"palette widget\"\nmoc \"editor widget\"\nmoc \"tool widgets\"\nmoc \"clear object\"\nmoc \"undo object\"\nmoc \"application\"\nmoc \"window\"\nmoc \"main\"\n";
 		};
 		453C787B2235D63B00818B19 /* RCC */ = {
 			isa = PBXShellScriptBuildPhase;

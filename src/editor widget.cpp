@@ -116,6 +116,7 @@ Q_SIGNALS:
   void mouseMove(QPoint, QImage *);
   void mouseUp(QPoint, ButtonType, QImage *);
   void keyPress(Qt::Key, QImage *);
+  void resized();
   
 private:
   QScrollArea *parent;
@@ -134,6 +135,7 @@ private:
     zoomIntoCenter(oldScale);
     updateMouse();
     updateCheckers();
+    Q_EMIT resized();
     repaint();
   }
 
@@ -163,6 +165,7 @@ private:
     clearImage(overlay);
     setFixedSize(newSize * scale);
     updateCheckers();
+    Q_EMIT resized();
   }
 
   void updateCheckers() {
@@ -322,6 +325,7 @@ EditorWidget::EditorWidget(QWidget *parent, Animation &anim)
   CONNECT(view, mouseMove,  this, mouseMove);
   CONNECT(view, mouseUp,    this, mouseUp);
   CONNECT(view, keyPress,   this, keyPress);
+  CONNECT(view, resized,    this, adjustMargins);
   setStyleSheet("background-color: " + glob_back_color.name());
 }
 
@@ -344,8 +348,20 @@ void EditorWidget::compositeVis(const LayerVisible &newVisibility) {
   composite();
 }
 
+void EditorWidget::adjustMargins() {
+  if (view->width() < width() && view->height() < height()) {
+    setViewportMargins(0, 0, 0, 0);
+  } else {
+    const QMargins margins = viewportMargins();
+    const int right = height() < view->height() + margins.bottom() ? edit_scroll_width : 0;
+    const int bottom = width() < view->width() + margins.right() ? edit_scroll_width : 0;
+    setViewportMargins(0, 0, right, bottom);
+  }
+}
+
 void EditorWidget::resizeEvent(QResizeEvent *event) {
   view->resize();
+  adjustMargins();
   QScrollArea::resizeEvent(event);
 }
 

@@ -45,6 +45,7 @@ private:
   LayerIdx layer = 0;
   FrameIdx frame = 0;
   
+  void adjustMargins();
   void resizeEvent(QResizeEvent *) override;
 };
 
