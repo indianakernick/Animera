@@ -290,6 +290,7 @@ public:
           buttonDown = button;
           keyButton = true;
           grabMouse(cursor());
+          grabKeyboard();
           Q_EMIT mouseDown(pos, button, &overlay);
         }
       }
@@ -302,6 +303,7 @@ public:
     if (button != ButtonType::none) {
       if (button == buttonDown && keyButton) {
         buttonDown = ButtonType::none;
+        releaseKeyboard();
         releaseMouse();
         Q_EMIT mouseUp(pos, button, &overlay);
         checkMouseLeave();
