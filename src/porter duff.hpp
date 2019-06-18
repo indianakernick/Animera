@@ -19,14 +19,16 @@ struct Factor {
 // Porter-Duff compositing with straight alpha
 // https://keithp.com/~keithp/porterduff/p253-porter.pdf
 
-inline Color porterDuff(const Color a, const Color b, const uint8_t aF, const uint8_t bF) {
-  const uint32_t cA = a.a*aF + b.a*bF;
+// Using floats makes this a tiny bit faster
+
+inline Color porterDuff(const Color a, const Color b, const Factor f) {
+  const uint32_t cA = a.a*f.a + b.a*f.b;
   if (cA == 0) {
     return {0, 0, 0, 0};
   } else {
-    const uint8_t cR = (a.a*aF*a.r + b.a*bF*b.r) / cA;
-    const uint8_t cG = (a.a*aF*a.g + b.a*bF*b.g) / cA;
-    const uint8_t cB = (a.a*aF*a.b + b.a*bF*b.b) / cA;
+    const uint8_t cR = (a.a*f.a*a.r + b.a*f.b*b.r) / cA;
+    const uint8_t cG = (a.a*f.a*a.g + b.a*f.b*b.g) / cA;
+    const uint8_t cB = (a.a*f.a*a.b + b.a*f.b*b.b) / cA;
     return {cR, cG, cB, static_cast<uint8_t>(cA / 255)};
   }
 }
@@ -65,15 +67,14 @@ MODE(      xor,                255 - b, 255 - a);
 
 template <typename Mode>
 Color porterDuff(const Color a, const Color b, const Mode mode) {
-  const Factor factors = mode(a.a, b.a);
-  return porterDuff(a, b, factors.a, factors.b);
+  return porterDuff(a, b, mode(a.a, b.a));
 }
 
 /*
 
 struct Format {
-  static Color toColor(Pixel) const;
-  static Pixel toPixel(Pixel) const;
+  static Color toColor(Pixel);
+  static Pixel toPixel(Color);
 };
 
 */
