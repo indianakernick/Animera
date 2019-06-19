@@ -2,7 +2,7 @@
 
 ## A picture is a thousand words (scroll down for GIFs!)
 
-![Screenshot](https://i.imgur.com/IrG6yZy.png)
+![Screenshot](https://i.imgur.com/q9RILMu.png)
 
 ## A story...
 
