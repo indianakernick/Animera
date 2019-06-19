@@ -7,5 +7,3 @@
 //
 
 #include "color handle.hpp"
-
-ColorHandle::~ColorHandle() = default;

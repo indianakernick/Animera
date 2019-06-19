@@ -13,10 +13,10 @@
 #include <QtCore/qstring.h>
 
 class ColorHandle {
+protected:
+  ~ColorHandle() = default;
+
 public:
-  // Doesn't need a virtual destructor but compiler warnings are annoying
-  virtual ~ColorHandle();
-  
   virtual QRgb getInitialColor() const = 0;
   virtual void changeColor(QRgb) = 0;
   virtual QString getName() const = 0;
