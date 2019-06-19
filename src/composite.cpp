@@ -110,17 +110,12 @@ QImage blitMaskImage(const QImage &src, const QImage &mask, const QPoint pos) {
 
 namespace {
 
-void colorToOverlay(QRgb &pixel) {
-  const QRgb pxval = pixel;
-  const int gray = qGray(qRed(pxval), qGreen(pxval), qBlue(pxval));
-  const int alpha = std::max(tool_overlay_alpha_min, qAlpha(pxval) * 3 / 4);
-  pixel = qRgba(gray, gray, gray, alpha);
-}
-
 void colorToOverlay(const Surface<QRgb> surface) {
   for (auto row : surface.range()) {
     for (QRgb &pixel : row) {
-      colorToOverlay(pixel);
+      const int gray = qGray(pixel);
+      const int alpha = std::max(tool_overlay_alpha_min, qAlpha(pixel) * 3 / 4);
+      pixel = qRgba(gray, gray, gray, alpha);
     }
   }
 }
@@ -137,5 +132,5 @@ void colorToOverlay(QImage &img, const QImage &mask) {
   assert(img.size() == mask.size());
   const Surface surface = makeSurface<QRgb>(img);
   colorToOverlay(surface);
-  maskClip(surface, makeSurface<uint8_t>(mask));
+  maskClip(surface, makeCSurface<uint8_t>(mask));
 }

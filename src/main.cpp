@@ -11,6 +11,7 @@
 #if !BUG_TEST
 
 #include "application.hpp"
+
 #include <iostream>
 #include <QtGui/qevent.h>
 #include <QtWidgets/qlabel.h>
@@ -2198,6 +2199,7 @@ int main(int argc, char **argv) {
   timer.start("surface source-over");
   porterDuff<ARGB_Format>(mode_src_over, makeSurface<QRgb>(image), makeCSurface<QRgb>(dup));
   timer.stop();
+  
   /*
   midpointLine(image, fillColor, {10, 10}, {20, 10});
   midpointLine(image, fillColor, {20, 20}, {10, 20});
@@ -2316,10 +2318,12 @@ int main(int argc, char **argv) {
   
   source.image.data.save("/Users/indikernick/Desktop/Test/brush.png");*/
   
-  /*QFile file{"/Users/indikernick/Desktop/project.px2"};
+  /*
+  QFile file{"/Users/indikernick/Desktop/Test/testfile.px2"};
   
   file.open(QIODevice::WriteOnly | QIODevice::Truncate);
-  Animation anim({1, 1}, Format::color);
+  Animation anim;
+  anim.initialize({1, 1}, Format::color);
   anim.appendTransform(0);
   anim.appendLayer();
   anim.appendDuplicate(1);
@@ -2340,7 +2344,8 @@ int main(int argc, char **argv) {
   file.close();
   
   file.open(QIODevice::ReadOnly);
-  Animation newAnim{&file};
+  Animation newAnim;
+  newAnim.deserialize(&file);
   file.close();
   
   assert(newAnim.size.width() == anim.size.width());
