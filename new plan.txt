@@ -117,7 +117,7 @@ Palette Mode
 RGBA Mode
   Clicking on a palette color will set the active tool color to that color
   Clicking on a tool color will set that color to the active tool color
-    
+
 ColorHandle
   a handle to a color
   used for attaching colors to the color picker
@@ -363,7 +363,6 @@ Undo
       the current source cell will be updated with the pointed image
 
 Maybe an ellipse tool
-Maybe a select tool that uses flood fill
 
 use a pattern to name sprites
 player \frame
@@ -371,18 +370,27 @@ char_\(frame + 33)
 assign names to each frame (e.g. brush, line, rotate)
 
 https://lospec.com/pixel-art-tutorials
-https://coolors.co/52525d-1b264f-274690-576ca8-b8cdd7
 https://www.cosmigo.com/
 https://lospec.com/palette-list/importing-palettes
-https://worms2d.info/Palette_file#File_format
-http://www.selapa.net/swatches/colors/fileformats.php
 
 Consider porting to SDL2 + Dear Imgui + Bgfx in the distant future
 Assess the benfits
 Overall performance will definitely improve but I will have to rewrite a
 lot of code
 I would have been better off choosing this trio at the beginning of the project
+https://stackoverflow.com/questions/25232756/sdl2-rendering-into-qwidget
+https://stackoverflow.com/questions/43335291/smooth-inertial-scrolling-with-sdl2
+https://github.com/NoAvailableAlias/nano-signal-slot
 
 @Paolo-Oliverio Suggested I look into choosing a color palette
 
 Have a look at Pro Motion NG
+
+
+
+Why do we need palette images?
+
+Grayscale and masks are worth considering
+Grayscale color picker?
+
+Should we be allowed to mix color, grayscale and masks?
