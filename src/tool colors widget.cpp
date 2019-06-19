@@ -76,7 +76,7 @@ ToolColorsWidget::ToolColorsWidget(QWidget *parent)
 }
 
 void ToolColorsWidget::attachPrimary() {
-  // @TODO should I do a QTimer::singleShot instead
+  // @TODO should I do a QTimer::singleShot instead?
   primary->click();
   Q_EMIT colorsChanged(colors);
 }

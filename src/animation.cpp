@@ -30,6 +30,12 @@ Animation::Animation() {
   initialize({0, 0}, Format::color);
 }
 
+void Animation::setPalette(Palette *newPalette) {
+  if (format == Format::palette) {
+    palette = newPalette;
+  }
+}
+
 void Animation::serialize(QIODevice *dev) const {
   assert(dev);
   dev->write(magic_number, sizeof(magic_number));
@@ -92,10 +98,6 @@ void Animation::initialize(const QSize newSize, const Format newFormat) {
   layers.clear();
   layers.reserve(32);
   layers.emplace_back();
-  palette.clear();
-  if (format == Format::palette) {
-    palette.reserve(256);
-  }
 }
 
 bool Animation::hasLayer(const LayerIdx l) const {
@@ -142,7 +144,7 @@ Frame Animation::getFrame(const FrameIdx f) const {
 }
 
 const Palette &Animation::getPallete() const {
-  return palette;
+  return *palette;
 }
 
 Layers Animation::copyRect(const CellRect rect) const {
@@ -207,7 +209,7 @@ void Animation::appendLayer() {
 
 void Animation::appendSource(const LayerIdx l) {
   assert(hasLayer(l));
-  layers[l].push_back(std::make_unique<SourceCell>(size, format));
+  layers[l].push_back(std::make_unique<SourceCell>(size, format, palette));
 }
 
 void Animation::appendDuplicate(const LayerIdx l) {

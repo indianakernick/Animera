@@ -389,8 +389,16 @@ Have a look at Pro Motion NG
 
 
 Why do we need palette images?
+  Change the color in the palette to have it changed for the whole animation
 
-Grayscale and masks are worth considering
+Color types
+  32-bit RGBA
+  8-bit Indexed
+  8-bit Gray
+  1-bit Mask
+
 Grayscale color picker?
+  Color picker should change for each color type
 
 Should we be allowed to mix color, grayscale and masks?
+  No. Color type is a project-wide setting

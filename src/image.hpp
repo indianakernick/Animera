@@ -9,11 +9,11 @@
 #ifndef image_hpp
 #define image_hpp
 
+#include <vector>
 #include <QtGui/qimage.h>
-#include <QtCore/qvector.h>
 #include <QtGui/qtransform.h>
 
-using Palette = QVector<QRgb>;
+using Palette = std::vector<QRgb>;
 
 struct Transform {
   qint16 posX = 0;
@@ -25,31 +25,34 @@ struct Transform {
 
 enum class Format : uint8_t {
   color,
-  palette
+  palette,
+  gray,
+  mask
 };
 
 struct Image {
   QImage data;
   Transform xform;
-  // @TODO maybe store a pointer to the palette?
+  Palette *palette = nullptr;
 };
 
-constexpr QImage::Format color_format = QImage::Format_ARGB32;
-constexpr QImage::Format palette_format = QImage::Format_Grayscale8;
 constexpr QImage::Format mask_format = QImage::Format_Grayscale8;
 constexpr QRgb mask_color_on = 0xFFFFFFFF;
 constexpr QRgb mask_color_off = 0;
 
 constexpr QImage::Format getImageFormat(const Format format) {
-  return format == Format::color ? color_format : palette_format;
-}
-
-inline quint8 increaseAngle(const quint8 angle) {
-  return (angle + 1) & 3;
-}
-
-inline quint8 decreaseAngle(const quint8 angle) {
-  return (angle + 3) & 3;
+  switch (format) {
+    case Format::color:
+      return QImage::Format_ARGB32;
+    case Format::palette:
+      return QImage::Format_Grayscale8;
+    case Format::gray:
+      return QImage::Format_Grayscale8;
+    case Format::mask:
+      return QImage::Format_Grayscale8;
+    default:
+      Q_UNREACHABLE();
+  }
 }
 
 inline qreal angleToDegrees(const quint8 angle) {

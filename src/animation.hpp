@@ -10,10 +10,16 @@
 #define animation_hpp
 
 #include "cell.hpp"
+#include <QtCore/qobject.h>
 
-class Animation {
+// @TODO Most of this should be in the TimelineWidget
+// The timeline should be in charge of the cells that make up the project
+
+class Animation : public QObject {
 public:
   Animation();
+  
+  void setPalette(Palette *);
   
   void serialize(QIODevice *) const;
   void deserialize(QIODevice *);
@@ -43,7 +49,7 @@ public:
 private:
   Layers layers;
   QSize size;
-  Palette palette;
+  Palette *palette = nullptr;
   Format format;
   
   const Cell *getLastCell(LayerIdx) const;

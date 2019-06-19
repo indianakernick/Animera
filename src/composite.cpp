@@ -29,8 +29,9 @@ QImage compositeFrame(const Palette &palette, const Frame &frame, const LayerVis
   }
   if (images.front().data.format() == QImage::Format_Grayscale8) {
     for (Image &image : images) {
+      // @TODO Maybe don't use QImage
       image.data.reinterpretAsFormat(QImage::Format_Indexed8);
-      image.data.setColorTable(palette);
+      image.data.setColorTable(QVector<QRgb>::fromStdVector(palette));
     }
   }
   QImage output{images.front().data.size(), QImage::Format_ARGB32};

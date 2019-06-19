@@ -60,7 +60,7 @@ void serialize(QIODevice *dev, const Palette &palette) {
   assert(dev);
   serialize(dev, static_cast<uint16_t>(palette.size()));
   dev->write(
-    reinterpret_cast<const char *>(palette.constData()),
+    reinterpret_cast<const char *>(palette.data()),
     palette.size() * sizeof(Palette::value_type)
   );
 }

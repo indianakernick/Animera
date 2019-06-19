@@ -24,7 +24,7 @@ CellPtr deserializeCell(QIODevice *);
 class SourceCell final : public Cell {
 public:
   SourceCell() = default;
-  SourceCell(QSize, Format);
+  SourceCell(QSize, Format, Palette *);
   explicit SourceCell(QIODevice *);
 
   void serialize(QIODevice *) const override;

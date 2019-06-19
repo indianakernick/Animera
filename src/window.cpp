@@ -149,6 +149,7 @@ void Window::connectSignals() {
   
   CONNECT(&palette,  attachColor,     &colorPicker, attach);
   CONNECT(&palette,  setColor,        &colorPicker, setColor);
+  CONNECT(&palette,  paletteChanged,  &anim,        setPalette);
 }
 
 #include "window.moc"

@@ -8,13 +8,12 @@
 
 #include "palette widget.hpp"
 
-#include <cmath>
+#include <array>
 #include "config.hpp"
 #include "connect.hpp"
 #include <QtGui/qevent.h>
 #include <QtGui/qpainter.h>
 #include "color handle.hpp"
-#include "color convert.hpp"
 #include "radio button widget.hpp"
 #include <QtWidgets/qgridlayout.h>
 
@@ -33,7 +32,7 @@ constexpr QRgb quantGray(const int size, const int y) {
   return qRgb(gray, gray, gray);
 }
 
-const std::vector<QRgb> default_palette = {
+constexpr std::array<QRgb, 33> default_palette = {
   quantColor(4, 4, 0, 0),
   quantColor(4, 4, 1, 0),
   quantColor(4, 4, 2, 0),
@@ -75,15 +74,13 @@ const std::vector<QRgb> default_palette = {
 
 }
 
-constexpr int tile_size = 13_px;
-
 class PaletteColorWidget final : public RadioButtonWidget, public ColorHandle {
   Q_OBJECT
   
 public:
-  PaletteColorWidget(QWidget *parent, QRgb &color, const uint32_t index)
+  PaletteColorWidget(QWidget *parent, QRgb &color, const int index)
     : RadioButtonWidget{parent}, color{color}, index{index} {
-    setFixedSize(tile_size, tile_size);
+    setFixedSize(pal_tile_size, pal_tile_size);
     CONNECT(this, toggled, this, click);
   }
 
@@ -98,11 +95,11 @@ private Q_SLOTS:
 
 private:
   QRgb &color;
-  uint32_t index;
+  int index;
 
   void paintChecker(QPainter &painter) {
     constexpr int bord = glob_border_width;
-    constexpr int half = (tile_size - bord) / 2;
+    constexpr int half = (pal_tile_size - bord) / 2;
     painter.setBrush(QColor{edit_checker_a});
     painter.drawRect(bord, bord, half, half);
     painter.drawRect(bord + half, bord + half, half, half);
@@ -115,14 +112,14 @@ private:
     painter.setBrush(QColor::fromRgba(color));
     painter.drawRect(
       glob_border_width, glob_border_width,
-      tile_size - glob_border_width, tile_size - glob_border_width
+      pal_tile_size - glob_border_width, pal_tile_size - glob_border_width
     );
   }
   
   void paintBorder(QPainter &painter) {
     painter.setBrush(glob_border_color);
-    painter.drawRect(0, 0, tile_size, glob_border_width);
-    painter.drawRect(0, glob_border_width, glob_border_width, tile_size);
+    painter.drawRect(0, 0, pal_tile_size, glob_border_width);
+    painter.drawRect(0, glob_border_width, glob_border_width, pal_tile_size);
   }
   
   void paintSelect(QPainter &painter) {
@@ -176,30 +173,29 @@ class PaletteTableWidget final : public QWidget {
   
 public:
   explicit PaletteTableWidget(QWidget *parent)
-    : QWidget{parent}, palette(256) {
+    : QWidget{parent}, palette(pal_colors) {
     setupLayout();
     std::copy(default_palette.cbegin(), default_palette.cend(), palette.begin());
+    Q_EMIT paletteChanged(&palette);
   }
 
 Q_SIGNALS:
   void attachColor(ColorHandle *);
   void setColor(QRgb);
+  void paletteChanged(Palette *);
 
 private:
   std::vector<PaletteColorWidget *> colors;
-  std::vector<QRgb> palette;
+  Palette palette;
   
   void setupLayout() {
-    const uint32_t width = 8;
-    const uint32_t height = 32;
-    
     QGridLayout *grid = new QGridLayout{this};
     grid->setSpacing(0);
     grid->setContentsMargins(0, 0, 0, 0);
     
-    for (uint32_t y = 0; y != height; ++y) {
-      for (uint32_t x = 0; x != width; ++x) {
-        const uint32_t index = y * width + x;
+    for (int y = 0; y != pal_height; ++y) {
+      for (int x = 0; x != pal_width; ++x) {
+        const int index = y * pal_width + x;
         auto *colorWidget = new PaletteColorWidget{this, palette[index], index};
         CONNECT(colorWidget, attachColor, this, attachColor);
         CONNECT(colorWidget, setColor, this, setColor);
@@ -208,7 +204,10 @@ private:
       }
     }
     
-    setFixedSize(width * tile_size + glob_border_width, height * tile_size + glob_border_width);
+    setFixedSize(
+      pal_width * pal_tile_size + glob_border_width,
+      pal_height * pal_tile_size + glob_border_width
+    );
   }
   
   void paintEvent(QPaintEvent *) override {
@@ -225,11 +224,12 @@ PaletteWidget::PaletteWidget(QWidget *parent)
   setWidget(table);
   setFrameShape(NoFrame);
   setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
-  setFixedWidth(pick_svgraph_rect.widget().width() + 2_px);
+  setFixedWidth(pick_svgraph_rect.widget().width() + 2 * glob_border_width);
   setAlignment(Qt::AlignHCenter);
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   CONNECT(table, attachColor, this, attachColor);
   CONNECT(table, setColor, this, setColor);
+  CONNECT(table, paletteChanged, this, paletteChanged);
 }
 
 #include "palette widget.moc"

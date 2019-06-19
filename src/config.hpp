@@ -215,7 +215,10 @@ constexpr WidgetRect tool_colors_rect = {
 
 // ------------------------------ palette colors ---------------------------- //
 
-
+constexpr int       pal_colors = 256;
+constexpr int       pal_width = 8;
+constexpr int       pal_height = pal_colors / pal_width;
+constexpr int       pal_tile_size = 13_px;
 
 // ---------------------------------- keys ---------------------------------- //
 

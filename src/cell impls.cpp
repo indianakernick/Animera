@@ -71,8 +71,8 @@ CellPtr deserializeCell(QIODevice *dev) {
   }
 }
 
-SourceCell::SourceCell(const QSize size, const Format format)
-  : image{{size, getImageFormat(format)}, {}} {
+SourceCell::SourceCell(const QSize size, const Format format, Palette *palette)
+  : image{{size, getImageFormat(format)}, {}, palette} {
   clearImage(image.data);
 }
 

@@ -9,6 +9,7 @@
 #ifndef palette_widget_hpp
 #define palette_widget_hpp
 
+#include "image.hpp"
 #include <QtWidgets/qscrollarea.h>
 
 class ColorHandle;
@@ -23,6 +24,7 @@ public:
 Q_SIGNALS:
   void attachColor(ColorHandle *);
   void setColor(QRgb);
+  void paletteChanged(Palette *);
 
 private:
   PaletteTableWidget *table;
