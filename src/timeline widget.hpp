@@ -12,14 +12,23 @@
 #include "animation.hpp"
 #include <QtWidgets/qscrollarea.h>
 
+class LayerWidget;
+
 class TimelineWidget final : public QScrollArea {
   Q_OBJECT
+  
+  friend LayerWidget;
 
 public:
-  TimelineWidget(QWidget *, Animation &);
+  explicit TimelineWidget(QWidget *);
+  
+  void createInitialCell();
   
 public Q_SLOTS:
-  void projectLoaded();
+  void initialize(QSize, Format);
+  void save(const QString &) const;
+  void load(const QString &);
+  void paletteChanged(Palette *);
 
 Q_SIGNALS:
   // emitted when the current layer/frame has changed
@@ -27,10 +36,13 @@ Q_SIGNALS:
   void posChange(Cell *, LayerIdx, FrameIdx);
   // emitted when any layers are shown or hidden
   void layerVisibility(const LayerVisible &);
+  void frameChanged(const Frame &);
 
 private:
-  Animation &anim;
-  LayerVisible visible;
+  std::vector<LayerWidget *> layers;
+  Palette *palette = nullptr;
+  QSize size;
+  Format format;
 };
 
 #endif

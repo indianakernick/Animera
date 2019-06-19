@@ -20,11 +20,11 @@ Window::Window(const QRect desktop)
   : bottom{this},
     right{this},
     fps{&bottom},
-    editor{this, anim},
+    editor{this},
     palette{&right},
     colors{&right},
     tools{this},
-    timeline{&bottom, anim},
+    timeline{&bottom},
     statusBar{&bottom},
     colorPicker{&right} {
   setWindowTitle("Pixel 2");
@@ -43,10 +43,9 @@ Window::Window(const QRect desktop)
   colors.attachPrimary();
   show();
   
-  // @TODO remove
-  anim.initialize(QSize{256, 256}, Format::color);
-  anim.appendSource(0);
-  timeline.projectLoaded();
+  // @TODO Call this with UI
+  timeline.initialize(QSize{256, 256}, Format::color);
+  timeline.createInitialCell();
 }
 
 void Window::setupUI() {
@@ -125,6 +124,7 @@ void Window::connectSignals() {
   CONNECT(&timeline, posChange,       &clear,       posChange);
   CONNECT(&timeline, posChange,       &undo,        posChange);
   CONNECT(&timeline, layerVisibility, &editor,      compositeVis);
+  CONNECT(&timeline, frameChanged,    &editor,      frameChanged);
   
   CONNECT(&tools,    cellModified,    &editor,      composite);
   CONNECT(&tools,    overlayModified, &editor,      compositeOverlay);
@@ -149,7 +149,7 @@ void Window::connectSignals() {
   
   CONNECT(&palette,  attachColor,     &colorPicker, attach);
   CONNECT(&palette,  setColor,        &colorPicker, setColor);
-  CONNECT(&palette,  paletteChanged,  &anim,        setPalette);
+  CONNECT(&palette,  paletteChanged,  &timeline,    paletteChanged);
 }
 
 #include "window.moc"

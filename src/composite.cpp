@@ -15,7 +15,7 @@
 #include <QtGui/qpainter.h>
 #include "surface factory.hpp"
 
-QImage compositeFrame(const Palette &palette, const Frame &frame, const LayerVisible &visible) {
+QImage compositeFrame(const Frame &frame, const LayerVisible &visible) {
   assert(!frame.empty());
   assert(frame.size() == visible.size());
   std::vector<Image> images;
@@ -31,7 +31,7 @@ QImage compositeFrame(const Palette &palette, const Frame &frame, const LayerVis
     for (Image &image : images) {
       // @TODO Maybe don't use QImage
       image.data.reinterpretAsFormat(QImage::Format_Indexed8);
-      image.data.setColorTable(QVector<QRgb>::fromStdVector(palette));
+      image.data.setColorTable(QVector<QRgb>::fromStdVector(*image.palette));
     }
   }
   QImage output{images.front().data.size(), QImage::Format_ARGB32};

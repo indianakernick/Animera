@@ -19,7 +19,7 @@ class EditorWidget final : public QScrollArea {
   Q_OBJECT
 
 public:
-  EditorWidget(QWidget *, Animation &);
+  explicit EditorWidget(QWidget *);
 
 Q_SIGNALS:
   void mouseLeave(QImage *);
@@ -34,16 +34,15 @@ public Q_SLOTS:
   void composite();
   void compositeOverlay();
   // invoked when the image needs to be composited
-  void compositePos(Cell *, LayerIdx, FrameIdx);
+  void compositePos();
   // invoked when the image needs to be composited
   void compositeVis(const LayerVisible &);
+  void frameChanged(const Frame &frame);
 
 private:
-  Animation &anim;
   EditorImage *view;
   LayerVisible visibility;
-  LayerIdx layer = 0;
-  FrameIdx frame = 0;
+  Frame frame;
   
   void adjustMargins();
   void resizeEvent(QResizeEvent *) override;

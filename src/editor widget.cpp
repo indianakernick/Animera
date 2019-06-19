@@ -312,8 +312,8 @@ public:
   }
 };
 
-EditorWidget::EditorWidget(QWidget *parent, Animation &anim)
-  : QScrollArea{parent}, anim{anim} {
+EditorWidget::EditorWidget(QWidget *parent)
+  : QScrollArea{parent} {
   setFocusPolicy(Qt::NoFocus);
   setAlignment(Qt::AlignCenter);
   setVerticalScrollBar(new EditorScrollBar{Qt::Vertical, this});
@@ -332,22 +332,24 @@ EditorWidget::EditorWidget(QWidget *parent, Animation &anim)
 }
 
 void EditorWidget::composite() {
-  view->setImage(compositeFrame(anim.getPallete(), anim.getFrame(frame), visibility));
+  view->setImage(compositeFrame(frame, visibility));
 }
 
 void EditorWidget::compositeOverlay() {
   view->repaint();
 }
 
-void EditorWidget::compositePos(Cell *, LayerIdx newLayer, FrameIdx newFrame) {
-  layer = newLayer;
-  frame = newFrame;
+void EditorWidget::compositePos() {
   composite();
 }
 
 void EditorWidget::compositeVis(const LayerVisible &newVisibility) {
   visibility = newVisibility;
   composite();
+}
+
+void EditorWidget::frameChanged(const Frame &newFrame) {
+  frame = newFrame;
 }
 
 void EditorWidget::adjustMargins() {
