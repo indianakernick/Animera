@@ -26,8 +26,7 @@ struct Transform {
 enum class Format : uint8_t {
   color,
   palette,
-  gray,
-  mask
+  gray
 };
 
 struct Image {
@@ -47,8 +46,6 @@ constexpr QImage::Format getImageFormat(const Format format) {
     case Format::palette:
       return QImage::Format_Grayscale8;
     case Format::gray:
-      return QImage::Format_Grayscale8;
-    case Format::mask:
       return QImage::Format_Grayscale8;
     default:
       Q_UNREACHABLE();

@@ -395,7 +395,6 @@ Color types
   32-bit RGBA
   8-bit Indexed
   8-bit Gray
-  1-bit Mask
 
 Grayscale color picker?
   Color picker should change for each color type
