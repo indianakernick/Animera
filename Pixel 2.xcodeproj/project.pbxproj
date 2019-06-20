@@ -67,6 +67,16 @@
 		4512636422781D7B00C66A19 /* tool colors widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "tool colors widget.cpp"; sourceTree = "<group>"; };
 		4512636522781D7B00C66A19 /* tool colors widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "tool colors widget.hpp"; sourceTree = "<group>"; };
 		452926E122BB0D6300B17E0D /* transform.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = transform.hpp; sourceTree = "<group>"; };
+		452926E222BB607E00B17E0D /* screenshot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = screenshot.png; sourceTree = "<group>"; };
+		452926E422BB607E00B17E0D /* add.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = add.pbm; sourceTree = "<group>"; };
+		452926E522BB607E00B17E0D /* end linked cell.pbm */ = {isa = PBXFileReference; lastKnownFileType = text; path = "end linked cell.pbm"; sourceTree = "<group>"; };
+		452926E622BB607E00B17E0D /* move up.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = "move up.pbm"; sourceTree = "<group>"; };
+		452926E722BB607E00B17E0D /* shown.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = shown.pbm; sourceTree = "<group>"; };
+		452926E822BB607E00B17E0D /* hidden.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = hidden.pbm; sourceTree = "<group>"; };
+		452926E922BB607E00B17E0D /* begin linked cell.pbm */ = {isa = PBXFileReference; lastKnownFileType = text; path = "begin linked cell.pbm"; sourceTree = "<group>"; };
+		452926EA22BB607E00B17E0D /* cell.pbm */ = {isa = PBXFileReference; lastKnownFileType = text; path = cell.pbm; sourceTree = "<group>"; };
+		452926EB22BB607E00B17E0D /* move down.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = "move down.pbm"; sourceTree = "<group>"; };
+		452926EC22BB607E00B17E0D /* remove.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = remove.pbm; sourceTree = "<group>"; };
 		453C0A7F227FCE760080FEF2 /* surface.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = surface.hpp; sourceTree = "<group>"; };
 		453C78172234935000818B19 /* timeline widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "timeline widget.cpp"; sourceTree = "<group>"; };
 		453C78182234935000818B19 /* timeline widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "timeline widget.hpp"; sourceTree = "<group>"; };
@@ -835,6 +845,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		452926E322BB607E00B17E0D /* Timeline */ = {
+			isa = PBXGroup;
+			children = (
+				452926E422BB607E00B17E0D /* add.pbm */,
+				452926E522BB607E00B17E0D /* end linked cell.pbm */,
+				452926E622BB607E00B17E0D /* move up.pbm */,
+				452926E722BB607E00B17E0D /* shown.pbm */,
+				452926E822BB607E00B17E0D /* hidden.pbm */,
+				452926E922BB607E00B17E0D /* begin linked cell.pbm */,
+				452926EA22BB607E00B17E0D /* cell.pbm */,
+				452926EB22BB607E00B17E0D /* move down.pbm */,
+				452926EC22BB607E00B17E0D /* remove.pbm */,
+			);
+			path = Timeline;
+			sourceTree = "<group>";
+		};
 		453B7C76227ECF62003BB799 /* Graphics */ = {
 			isa = PBXGroup;
 			children = (
@@ -856,12 +882,14 @@
 				45DC2563224A0AEA00F40116 /* title@4x.png */,
 				45DC2562224A0AEA00F40116 /* title.png */,
 				45B284972219003B00D6D055 /* icon.png */,
+				452926E222BB607E00B17E0D /* screenshot.png */,
+				453C78792235D4B500818B19 /* resources.qrc */,
+				453C787C2235D70D00818B19 /* resources.rcc */,
+				452926E322BB607E00B17E0D /* Timeline */,
 				45BE2A2822680B0900E21A85 /* Color Picker */,
 				45BAD72D22460C22000D095C /* Fonts */,
 				453C787E2236597600818B19 /* Cursors */,
 				453C787A2235D55600818B19 /* Tools */,
-				453C78792235D4B500818B19 /* resources.qrc */,
-				453C787C2235D70D00818B19 /* resources.rcc */,
 			);
 			path = Resources;
 			sourceTree = "<group>";

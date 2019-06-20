@@ -20,5 +20,16 @@
   <file>./Color Picker/sv circle s.pbm</file>
   <file>./Color Picker/slider bar p.pbm</file>
   <file>./Color Picker/slider bar s.pbm</file>
+  <file>./Timeline/add.pbm</file>
+  <file>./Timeline/begin linked cell.pbm</file>
+  <file>./Timeline/cell.pbm</file>
+  <file>./Timeline/end linked cell.pbm</file>
+  <file>./Timeline/hidden.pbm</file>
+  <file>./Timeline/move down.pbm</file>
+  <file>./Timeline/move up.pbm</file>
+  <file>./Timeline/pause.pbm</file>
+  <file>./Timeline/play.pbm</file>
+  <file>./Timeline/remove.pbm</file>
+  <file>./Timeline/shown.pbm</file>
 </qresource>
 </RCC>
