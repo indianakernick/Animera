@@ -10,14 +10,21 @@
 #define timeline_widget_hpp
 
 #include "animation.hpp"
-#include <QtWidgets/qscrollarea.h>
+#include <QtWidgets/qwidget.h>
 
-class LayerWidget;
+class LayerCellsWidget;
+class ControlsWidget;
+class LayersWidget;
+class FramesWidget;
+class CellsWidget;
+class LayerScrollWidget;
+class FrameScrollWidget;
+class CellScrollWidget;
 
-class TimelineWidget final : public QScrollArea {
+class TimelineWidget final : public QWidget {
   Q_OBJECT
   
-  friend LayerWidget;
+  friend LayerCellsWidget;
 
 public:
   explicit TimelineWidget(QWidget *);
@@ -39,7 +46,10 @@ Q_SIGNALS:
   void frameChanged(const Frame &);
 
 private:
-  std::vector<LayerWidget *> layers;
+  ControlsWidget *controls = nullptr;
+  LayersWidget *layers = nullptr;
+  FramesWidget *frames = nullptr;
+  CellsWidget *cells = nullptr;
   Palette *palette = nullptr;
   QSize size;
   Format format;

@@ -12,8 +12,12 @@
 #include "serial.hpp"
 #include "config.hpp"
 #include <QtCore/qfile.h>
+#include <QtGui/qbitmap.h>
+#include <QtGui/qpainter.h>
+#include <QtWidgets/qgridlayout.h>
+#include <QtWidgets/qscrollarea.h>
 
-class LayerWidget final : public QWidget {
+class LayerCellsWidget final : public QWidget {
 public:
   // @TODO a sparse data structure might be better
   struct LinkedSpan {
@@ -21,13 +25,16 @@ public:
     FrameIdx len = 1;
   };
 
-  explicit LayerWidget(TimelineWidget *timeline)
-    : QWidget{timeline}, timeline{*timeline} {}
+  LayerCellsWidget(QWidget *parent, TimelineWidget *timeline)
+    : QWidget{parent}, timeline{*timeline} {
+    setFixedSize(200_px, 10_px);
+  }
 
   void appendFrame() {
     frames.push_back({std::make_unique<Cell>(
       timeline.size, timeline.format, timeline.palette
     )});
+    repaint();
   }
   
   Cell *getCell(FrameIdx frame) {
@@ -78,26 +85,155 @@ private:
   const Cell *getLastCell() const {
     return frames.empty() ? nullptr : frames.back().cell.get();
   }
+  
+  void paintEvent(QPaintEvent *) override {
+    QPainter painter{this};
+    int x = 0;
+    for (const LinkedSpan &span : frames) {
+      if (span.cell) {
+        if (span.len == 1) {
+          QRegion cellRegion{QBitmap{":/Timeline/cell.pbm"}.scaled(8_px, 8_px)};
+          cellRegion.translate(x, 1_px);
+          painter.setClipRegion(cellRegion);
+          painter.fillRect(x, 1_px, 8_px, 8_px, QColor{0, 0, 0});
+        }
+      }
+      x += span.len * 10_px;
+    }
+  }
+};
+
+class ControlsWidget final : public QWidget {
+public:
+  explicit ControlsWidget(QWidget *parent)
+    : QWidget{parent} {
+    setFixedSize(100_px, 12_px);
+    setStyleSheet("background-color:" + QColor{255, 0, 0}.name());
+  }
+};
+
+class LayersWidget final : public QWidget {
+public:
+  explicit LayersWidget(QWidget *parent)
+    : QWidget{parent} {}
+};
+
+class FramesWidget final : public QWidget {
+public:
+  explicit FramesWidget(QWidget *parent)
+    : QWidget{parent} {}
+};
+
+class CellsWidget final : public QWidget {
+public:
+  CellsWidget(QWidget *parent, TimelineWidget *timeline)
+    : QWidget{parent}, timeline{timeline}, boxLayout{new QVBoxLayout{this}} {
+    setLayout(boxLayout);
+  }
+  
+  void appendLayer() {
+    auto *layer = new LayerCellsWidget{this, timeline};
+    boxLayout->addWidget(layer);
+    layers.push_back(layer);
+  }
+  
+  LayerCellsWidget *getLayer(const LayerIdx layer) {
+    assert(layer < layers.size());
+    return layers[layer];
+  }
+  
+  void serialize(QIODevice *dev) {
+    serializeBytes(dev, static_cast<uint16_t>(layers.size()));
+    for (const LayerCellsWidget *layer : layers) {
+      layer->serialize(dev);
+    }
+  }
+  void deserialize(QIODevice *dev) {
+    uint16_t layersSize;
+    deserializeBytes(dev, layersSize);
+    for (LayerCellsWidget *layer : layers) {
+      delete layer;
+    }
+    layers.clear();
+    layers.reserve(layersSize);
+    while (layersSize--) {
+      layers.emplace_back(new LayerCellsWidget{this, timeline})->deserialize(dev);
+    }
+  }
+  
+private:
+  TimelineWidget *timeline;
+  QVBoxLayout *boxLayout;
+  std::vector<LayerCellsWidget *> layers;
+};
+
+class LayerScrollWidget final : public QScrollArea {
+public:
+  explicit LayerScrollWidget(QWidget *parent)
+    : QScrollArea{parent} {
+    setFrameShape(NoFrame);
+    setFixedWidth(100_px);
+    setStyleSheet("background-color:" + QColor{0, 255, 0}.name());
+  }
+};
+
+class FrameScrollWidget final : public QScrollArea {
+public:
+  explicit FrameScrollWidget(QWidget *parent)
+    : QScrollArea{parent} {
+    setFrameShape(NoFrame);
+    setFixedHeight(12_px);
+    setStyleSheet("background-color:" + QColor{0, 0, 255}.name());
+  }
+};
+
+class CellScrollWidget final : public QScrollArea {
+public:
+  explicit CellScrollWidget(QWidget *parent)
+    : QScrollArea{parent} {
+    setFrameShape(NoFrame);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    setStyleSheet("background-color:" + QColor{255, 255, 0}.name());
+  }
 };
 
 TimelineWidget::TimelineWidget(QWidget *parent)
-  : QScrollArea{parent} {
+  : QWidget{parent} {
   setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-  setFrameShape(NoFrame);
-  setStyleSheet("background-color: " + glob_main.name());
+  setStyleSheet("background-color:" + glob_main.name());
+  
+  controls = new ControlsWidget{this};
+  auto *layerScroll = new LayerScrollWidget{this};
+  auto *frameScroll = new FrameScrollWidget{this};
+  auto cellScroll = new CellScrollWidget{this};
+  layers = new LayersWidget{layerScroll};
+  layerScroll->setWidget(layers);
+  frames = new FramesWidget{frameScroll};
+  frameScroll->setWidget(frames);
+  cells = new CellsWidget{cellScroll, this};
+  cellScroll->setWidget(cells);
+  
+  QGridLayout *grid = new QGridLayout{this};
+  setLayout(grid);
+  grid->setSpacing(0);
+  grid->setContentsMargins(0, 0, 0, 0);
+  grid->addWidget(controls, 0, 0);
+  grid->addWidget(layerScroll, 1, 0);
+  grid->addWidget(frameScroll, 0, 1);
+  grid->addWidget(cellScroll, 1, 1);
 }
 
 void TimelineWidget::createInitialCell() {
-  layers[0]->appendFrame();
-  Q_EMIT frameChanged({layers[0]->getCell(0)});
+  cells->appendLayer();
+  cells->getLayer(0)->appendFrame();
+  Q_EMIT frameChanged({cells->getLayer(0)->getCell(0)});
   Q_EMIT layerVisibility({true});
-  Q_EMIT posChange(layers[0]->getCell(0), 0, 0);
+  Q_EMIT posChange(cells->getLayer(0)->getCell(0), 0, 0);
 }
 
 void TimelineWidget::initialize(const QSize newSize, const Format newFormat) {
   size = newSize;
   format = newFormat;
-  layers.emplace_back(new LayerWidget{this});
 }
 
 namespace {
@@ -122,11 +258,7 @@ void TimelineWidget::save(const QString &path) const {
   
   serializeBytes(&file, static_cast<uint16_t>(size.width()));
   serializeBytes(&file, static_cast<uint16_t>(size.height()));
-  serializeBytes(&file, static_cast<uint16_t>(layers.size()));
-  
-  for (const LayerWidget *layer : layers) {
-    layer->serialize(&file);
-  }
+  cells->serialize(&file);
 }
 
 void TimelineWidget::load(const QString &path) {
@@ -150,18 +282,7 @@ void TimelineWidget::load(const QString &path) {
   deserializeBytes(&file, width);
   deserializeBytes(&file, height);
   size = {width, height};
-  
-  uint16_t layersSize;
-  deserializeBytes(&file, layersSize);
-  for (LayerWidget *layer : layers) {
-    delete layer;
-  }
-  layers.clear();
-  layers.reserve(layersSize);
-  
-  while (layersSize--) {
-    layers.emplace_back(new LayerWidget{this})->deserialize(&file);
-  }
+  cells->deserialize(&file);
 }
 
 void TimelineWidget::paletteChanged(Palette *newPalette) {
