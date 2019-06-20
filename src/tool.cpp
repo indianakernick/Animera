@@ -8,6 +8,14 @@
 
 #include "tool.hpp"
 
+void Tool::attachCell(Cell *newCell) {
+  cell = newCell;
+}
+
+void Tool::detachCell() {
+  cell = nullptr;
+}
+
 ToolChanges Tool::mouseLeave(const ToolLeaveEvent &event) {
   // @TODO this feels out of place
   clearImage(*event.overlay);

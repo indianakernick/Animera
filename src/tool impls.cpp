@@ -36,19 +36,7 @@ ToolChanges drawnChanges(const bool drawn) {
 
 }
 
-bool BrushTool::attachCell(Cell *newCell) {
-  assert(newCell);
-  cell = newCell;
-  return true;
-}
-
-void BrushTool::detachCell() {
-  assert(cell);
-  cell = nullptr;
-}
-
 ToolChanges BrushTool::mouseDown(const ToolMouseEvent &event) {
-  assert(cell);
   clearImage(*event.overlay);
   symPoint(*event.overlay, tool_overlay_color, event.pos);
   symPoint(*event.status, event.pos);
@@ -58,7 +46,6 @@ ToolChanges BrushTool::mouseDown(const ToolMouseEvent &event) {
 }
 
 ToolChanges BrushTool::mouseMove(const ToolMouseEvent &event) {
-  assert(cell);
   clearImage(*event.overlay);
   symPoint(*event.overlay, tool_overlay_color, event.pos);
   symPoint(*event.status, event.pos);
@@ -70,7 +57,6 @@ ToolChanges BrushTool::mouseMove(const ToolMouseEvent &event) {
 }
 
 ToolChanges BrushTool::mouseUp(const ToolMouseEvent &event) {
-  assert(cell);
   symPoint(*event.status, event.pos);
   return drawnChanges(symLine(cell->image.data, color, {lastPos, event.pos}));
 }
@@ -152,19 +138,7 @@ bool BrushTool::symLine(QImage &img, const QRgb col, const QLine line) {
   return drawn;
 }
 
-bool FloodFillTool::attachCell(Cell *newCell) {
-  assert(newCell);
-  cell = newCell;
-  return true;
-}
-
-void FloodFillTool::detachCell() {
-  assert(cell);
-  cell = nullptr;
-}
-
 ToolChanges FloodFillTool::mouseDown(const ToolMouseEvent &event) {
-  assert(cell);
   clearImage(*event.overlay);
   drawSquarePoint(*event.overlay, tool_overlay_color, event.pos);
   event.status->appendLabeled(event.pos);
@@ -173,26 +147,13 @@ ToolChanges FloodFillTool::mouseDown(const ToolMouseEvent &event) {
 }
 
 ToolChanges FloodFillTool::mouseMove(const ToolMouseEvent &event) {
-  assert(cell);
   clearImage(*event.overlay);
   drawSquarePoint(*event.overlay, tool_overlay_color, event.pos);
   event.status->appendLabeled(event.pos);
   return ToolChanges::overlay;
 }
 
-bool RectangleSelectTool::attachCell(Cell *newCell) {
-  assert(newCell);
-  cell = newCell;
-  return true;
-}
-
-void RectangleSelectTool::detachCell() {
-  assert(cell);
-  cell = nullptr;
-}
-
 ToolChanges RectangleSelectTool::mouseDown(const ToolMouseEvent &event) {
-  assert(cell);
   clearImage(*event.overlay);
   if (event.button == ButtonType::secondary && !overlay.isNull()) {
     mode = opposite(mode);
@@ -224,7 +185,6 @@ ToolChanges RectangleSelectTool::mouseDown(const ToolMouseEvent &event) {
 }
 
 ToolChanges RectangleSelectTool::mouseMove(const ToolMouseEvent &event) {
-  assert(cell);
   clearImage(*event.overlay);
   event.status->appendLabeled(mode);
   if (mode == SelectMode::copy) {
@@ -244,7 +204,6 @@ ToolChanges RectangleSelectTool::mouseMove(const ToolMouseEvent &event) {
 }
 
 ToolChanges RectangleSelectTool::mouseUp(const ToolMouseEvent &event) {
-  assert(cell);
   if (event.button != ButtonType::primary) return ToolChanges::none;
   clearImage(*event.overlay);
   if (mode == SelectMode::copy) {
@@ -262,19 +221,7 @@ ToolChanges RectangleSelectTool::mouseUp(const ToolMouseEvent &event) {
   return ToolChanges::overlay;
 }
 
-bool PolygonSelectTool::attachCell(Cell *newCell) {
-  assert(newCell);
-  cell = newCell;
-  return true;
-}
-
-void PolygonSelectTool::detachCell() {
-  assert(cell);
-  cell = nullptr;
-}
-
 ToolChanges PolygonSelectTool::mouseDown(const ToolMouseEvent &event) {
-  assert(cell);
   clearImage(*event.overlay);
   if (event.button == ButtonType::secondary && !overlay.isNull()) {
     mode = opposite(mode);
@@ -308,7 +255,6 @@ ToolChanges PolygonSelectTool::mouseDown(const ToolMouseEvent &event) {
 }
 
 ToolChanges PolygonSelectTool::mouseMove(const ToolMouseEvent &event) {
-  assert(cell);
   clearImage(*event.overlay);
   event.status->appendLabeled(mode);
   if (mode == SelectMode::copy) {
@@ -328,7 +274,6 @@ ToolChanges PolygonSelectTool::mouseMove(const ToolMouseEvent &event) {
 }
 
 ToolChanges PolygonSelectTool::mouseUp(const ToolMouseEvent &event) {
-  assert(cell);
   if (event.button != ButtonType::primary) return ToolChanges::none;
   clearImage(*event.overlay);
   QPolygon p;
@@ -357,21 +302,18 @@ ToolChanges PolygonSelectTool::mouseUp(const ToolMouseEvent &event) {
 // switch back
 // overlay is colored
 
-bool WandSelectTool::attachCell(Cell *newCell) {
-  assert(newCell);
-  cell = newCell;
+void WandSelectTool::attachCell(Cell *newCell) {
+  Tool::attachCell(newCell);
   selection = makeCompatible(cell->image.data);
   overlay = makeCompatible(selection);
   mask = makeMask(selection.size());
   clearImage(mask);
-  return true;
 }
 
 void WandSelectTool::detachCell() {
   // @TODO clear the overlay somehow
   // If we don't clear the overlay on mouseLeave then we have to clear it here
-  assert(cell);
-  cell = nullptr;
+  Tool::detachCell();
 }
 
 ToolChanges WandSelectTool::mouseLeave(const ToolLeaveEvent &event) {
@@ -385,7 +327,6 @@ ToolChanges WandSelectTool::mouseLeave(const ToolLeaveEvent &event) {
 }
 
 ToolChanges WandSelectTool::mouseDown(const ToolMouseEvent &event) {
-  assert(cell);
   if (event.button == ButtonType::secondary) {
     toggleMode(event);
   }
@@ -420,7 +361,6 @@ ToolChanges WandSelectTool::mouseDown(const ToolMouseEvent &event) {
 }
 
 ToolChanges WandSelectTool::mouseMove(const ToolMouseEvent &event) {
-  assert(cell);
   event.status->appendLabeled(mode);
   if (mode == SelectMode::copy) {
     event.status->appendLabeled(event.pos);
@@ -434,7 +374,6 @@ ToolChanges WandSelectTool::mouseMove(const ToolMouseEvent &event) {
 }
 
 ToolChanges WandSelectTool::mouseUp(const ToolMouseEvent &) {
-  assert(cell);
   return ToolChanges::none;
 }
 
@@ -518,24 +457,20 @@ DragPaintTool<Derived>::~DragPaintTool() {
 }
 
 template <typename Derived>
-bool DragPaintTool<Derived>::attachCell(Cell *newCell) {
-  assert(newCell);
-  cell = newCell;
+void DragPaintTool<Derived>::attachCell(Cell *newCell) {
+  Tool::attachCell(newCell);
   if (!compatible(cleanImage, cell->image.data)) {
     cleanImage = makeCompatible(cell->image.data);
   }
-  return true;
 }
 
 template <typename Derived>
 void DragPaintTool<Derived>::detachCell() {
-  assert(cell);
-  cell = nullptr;
+  Tool::detachCell();
 }
 
 template <typename Derived>
 ToolChanges DragPaintTool<Derived>::mouseDown(const ToolMouseEvent &event) {
-  assert(cell);
   clearImage(*event.overlay);
   that()->drawOverlay(*event.overlay, event.pos);
   that()->updateStatus(*event.status, event.pos, event.pos);
@@ -547,7 +482,6 @@ ToolChanges DragPaintTool<Derived>::mouseDown(const ToolMouseEvent &event) {
 
 template <typename Derived>
 ToolChanges DragPaintTool<Derived>::mouseMove(const ToolMouseEvent &event) {
-  assert(cell);
   clearImage(*event.overlay);
   that()->drawOverlay(*event.overlay, event.pos);
   if (event.button == ButtonType::none) {
@@ -561,7 +495,6 @@ ToolChanges DragPaintTool<Derived>::mouseMove(const ToolMouseEvent &event) {
 
 template <typename Derived>
 ToolChanges DragPaintTool<Derived>::mouseUp(const ToolMouseEvent &event) {
-  assert(cell);
   clearImage(*event.overlay);
   that()->drawOverlay(*event.overlay, event.pos);
   copyImage(cell->image.data, cleanImage);
@@ -720,24 +653,16 @@ void FilledRectangleTool::updateStatus(StatusMsg &status, const QPoint start, co
   status.appendLabeled(QRect{start, end}.normalized());
 }
 
-bool TranslateTool::attachCell(Cell *newCell) {
-  assert(newCell);
-  cell = newCell;
+void TranslateTool::attachCell(Cell *newCell) {
+  Tool::attachCell(newCell);
   if (!compatible(cleanImage, cell->image.data)) {
     cleanImage = makeCompatible(cell->image.data);
   }
   copyImage(cleanImage, cell->image.data);
   pos = {0, 0};
-  return true;
-}
-
-void TranslateTool::detachCell() {
-  assert(cell);
-  cell = nullptr;
 }
 
 ToolChanges TranslateTool::mouseDown(const ToolMouseEvent &event) {
-  assert(cell);
   if (event.button != ButtonType::primary) return ToolChanges::none;
   lastPos = event.pos;
   drag = true;
@@ -745,7 +670,6 @@ ToolChanges TranslateTool::mouseDown(const ToolMouseEvent &event) {
 }
 
 ToolChanges TranslateTool::mouseMove(const ToolMouseEvent &event) {
-  assert(cell);
   if (event.button != ButtonType::primary || !drag) {
     updateStatus(*event.status);
     return ToolChanges::none;
@@ -757,7 +681,6 @@ ToolChanges TranslateTool::mouseMove(const ToolMouseEvent &event) {
 }
 
 ToolChanges TranslateTool::mouseUp(const ToolMouseEvent &event) {
-  assert(cell);
   if (event.button != ButtonType::primary || !drag) return ToolChanges::none;
   translate(event.pos - lastPos, event.colors.erase);
   updateStatus(*event.status);
@@ -781,7 +704,6 @@ QPoint arrowToDir(const Qt::Key key) {
 }
 
 ToolChanges TranslateTool::keyPress(const ToolKeyEvent &event) {
-  assert(cell);
   QPoint move = arrowToDir(event.key);
   if (move == QPoint{0, 0}) return ToolChanges::none;
   translate(move, event.colors.erase);
@@ -808,16 +730,9 @@ void TranslateTool::updateStatus(StatusMsg &status) {
   status.appendLabeled(pos);
 }
 
-bool FlipTool::attachCell(Cell *newCell) {
-  assert(newCell);
-  cell = newCell;
+void FlipTool::attachCell(Cell *newCell) {
+  Tool::attachCell(newCell);
   flipX = flipY = false;
-  return true;
-}
-
-void FlipTool::detachCell() {
-  assert(cell);
-  cell = nullptr;
 }
 
 namespace {
@@ -841,13 +756,11 @@ bool flipYChanged(const Qt::Key key, bool &flipY) {
 }
 
 ToolChanges FlipTool::mouseMove(const ToolMouseEvent &event) {
-  assert(cell);
   updateStatus(*event.status);
   return ToolChanges::none;
 }
 
 ToolChanges FlipTool::keyPress(const ToolKeyEvent &event) {
-  assert(cell);
   if (flipXChanged(event.key, flipX)) {
     QImage &src = cell->image.data;
     QImage flipped{src.size(), src.format()};
@@ -880,18 +793,11 @@ void FlipTool::updateStatus(StatusMsg &status) {
   status.append(flipY);
 }
 
-bool RotateTool::attachCell(Cell *newCell) {
-  assert(newCell);
-  cell = newCell;
+void RotateTool::attachCell(Cell *newCell) {
+  Tool::attachCell(newCell);
   const QSize size = cell->image.data.size();
   square = size.width() == size.height();
   angle = 0;
-  return true;
-}
-
-void RotateTool::detachCell() {
-  assert(cell);
-  cell = nullptr;
 }
 
 namespace {
@@ -909,13 +815,11 @@ quint8 arrowToRot(const Qt::Key key) {
 }
 
 ToolChanges RotateTool::mouseMove(const ToolMouseEvent &event) {
-  assert(cell);
   updateStatus(*event.status);
   return ToolChanges::none;
 }
 
 ToolChanges RotateTool::keyPress(const ToolKeyEvent &event) {
-  assert(cell);
   const quint8 rot = arrowToRot(event.key);
   if (square && rot) {
     angle = (angle + rot) & 3;
@@ -940,7 +844,7 @@ void RotateTool::updateStatus(StatusMsg &status) {
   } else {
     // I think this is a sensible limitation
     // Sprites for games are square 99% time
-    status.append("ONLY SQUARE SPRITES CAN BE ROTATED");
+    status.append("Only square sprites can be rotated");
   }
 }
 

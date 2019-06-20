@@ -15,8 +15,6 @@
 
 class BrushTool final : public Tool {
 public:
-  bool attachCell(Cell *) override;
-  void detachCell() override;
   ToolChanges mouseDown(const ToolMouseEvent &) override;
   ToolChanges mouseMove(const ToolMouseEvent &) override;
   ToolChanges mouseUp(const ToolMouseEvent &) override;
@@ -26,7 +24,6 @@ public:
 
 private:
   QPoint lastPos = no_point;
-  Cell *cell = nullptr;
   // @TODO restore these to 1 and none
   int width = 1;
   SymmetryMode mode = SymmetryMode::none;
@@ -39,26 +36,18 @@ private:
 
 class FloodFillTool final : public Tool {
 public:
-  bool attachCell(Cell *) override;
-  void detachCell() override;
   ToolChanges mouseDown(const ToolMouseEvent &) override;
   ToolChanges mouseMove(const ToolMouseEvent &) override;
-
-private:
-  Cell *cell = nullptr;
 };
 
 class RectangleSelectTool final : public Tool {
 public:
-  bool attachCell(Cell *) override;
-  void detachCell() override;
   ToolChanges mouseDown(const ToolMouseEvent &) override;
   ToolChanges mouseMove(const ToolMouseEvent &) override;
   ToolChanges mouseUp(const ToolMouseEvent &) override;
   
 private:
   QPoint startPos = no_point;
-  Cell *cell = nullptr;
   QImage selection;
   QImage overlay;
   QPoint offset;
@@ -67,15 +56,12 @@ private:
 
 class PolygonSelectTool final : public Tool {
 public:
-  bool attachCell(Cell *) override;
-  void detachCell() override;
   ToolChanges mouseDown(const ToolMouseEvent &) override;
   ToolChanges mouseMove(const ToolMouseEvent &) override;
   ToolChanges mouseUp(const ToolMouseEvent &) override;
   
 private:
   Polygon polygon;
-  Cell *cell = nullptr;
   QImage selection;
   QImage mask;
   QImage overlay;
@@ -87,7 +73,7 @@ private:
 
 class WandSelectTool final : public Tool {
 public:
-  bool attachCell(Cell *) override;
+  void attachCell(Cell *) override;
   void detachCell() override;
   ToolChanges mouseLeave(const ToolLeaveEvent &) override;
   ToolChanges mouseDown(const ToolMouseEvent &) override;
@@ -95,7 +81,6 @@ public:
   ToolChanges mouseUp(const ToolMouseEvent &) override;
 
 private:
-  Cell *cell = nullptr;
   QImage selection;
   QImage mask;
   QImage overlay;
@@ -111,7 +96,7 @@ class DragPaintTool : public Tool {
 public:
   ~DragPaintTool();
   
-  bool attachCell(Cell *) override final;
+  void attachCell(Cell *) override final;
   void detachCell() override final;
   ToolChanges mouseDown(const ToolMouseEvent &) override final;
   ToolChanges mouseMove(const ToolMouseEvent &) override final;
@@ -123,7 +108,6 @@ protected:
 
 private:
   QPoint startPos = no_point;
-  Cell *cell = nullptr;
   QImage cleanImage;
   QRgb color = 0;
   
@@ -218,15 +202,13 @@ private:
 
 class TranslateTool final : public Tool {
 public:
-  bool attachCell(Cell *) override;
-  void detachCell() override;
+  void attachCell(Cell *) override;
   ToolChanges mouseDown(const ToolMouseEvent &) override;
   ToolChanges mouseMove(const ToolMouseEvent &) override;
   ToolChanges mouseUp(const ToolMouseEvent &) override;
   ToolChanges keyPress(const ToolKeyEvent &) override;
 
 private:
-  Cell *cell = nullptr;
   QImage cleanImage;
   QPoint lastPos = no_point;
   QPoint pos = no_point;
@@ -239,13 +221,11 @@ private:
 
 class FlipTool final : public Tool {
 public:
-  bool attachCell(Cell *) override;
-  void detachCell() override;
+  void attachCell(Cell *) override;
   ToolChanges mouseMove(const ToolMouseEvent &) override;
   ToolChanges keyPress(const ToolKeyEvent &) override;
   
 private:
-  Cell *cell = nullptr;
   bool flipX = false;
   bool flipY = false;
   
@@ -254,13 +234,11 @@ private:
 
 class RotateTool final : public Tool {
 public:
-  bool attachCell(Cell *) override;
-  void detachCell() override;
+  void attachCell(Cell *) override;
   ToolChanges mouseMove(const ToolMouseEvent &) override;
   ToolChanges keyPress(const ToolKeyEvent &) override;
 
 private:
-  Cell *cell = nullptr;
   int angle = 0;
   bool square;
   

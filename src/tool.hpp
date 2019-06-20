@@ -59,13 +59,16 @@ class Tool {
 public:
   virtual ~Tool() = default;
   
-  virtual bool attachCell(Cell *) = 0;
-  virtual void detachCell() = 0;
+  virtual void attachCell(Cell *);
+  virtual void detachCell();
   virtual ToolChanges mouseLeave(const ToolLeaveEvent &);
   virtual ToolChanges mouseDown(const ToolMouseEvent &);
   virtual ToolChanges mouseMove(const ToolMouseEvent &);
   virtual ToolChanges mouseUp(const ToolMouseEvent &);
   virtual ToolChanges keyPress(const ToolKeyEvent &);
+
+protected:
+  Cell *cell = nullptr;
 };
 
 #endif
