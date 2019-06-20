@@ -17,23 +17,11 @@ class Cell;
 
 using CellPtr = std::unique_ptr<Cell>;
 
-/*
-enum class CellType : uint8_t {
-  null,
-  source
-};
-
-void serializeCell(QIODevice *, const Cell *);
-CellPtr deserializeCell(QIODevice *);
-*/
-
 class Cell {
 public:
   Cell() = default;
   Cell(QSize, Format, Palette *);
-  explicit Cell(QIODevice *);
-
-  void serialize(QIODevice *) const;
+  
   CellPtr clone() const;
   
   Image image;

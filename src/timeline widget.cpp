@@ -15,7 +15,7 @@
 
 class LayerWidget final : public QWidget {
 public:
-  // I hate to say it but I think an array of std::shared_ptr would be better
+  // @TODO a sparse data structure might be better
   struct LinkedSpan {
     CellPtr cell;
     FrameIdx len = 1;
@@ -24,7 +24,7 @@ public:
   explicit LayerWidget(TimelineWidget *timeline)
     : QWidget{timeline}, timeline{*timeline} {}
 
-  void appendSource() {
+  void appendFrame() {
     frames.push_back({std::make_unique<Cell>(
       timeline.size, timeline.format, timeline.palette
     )});
@@ -46,7 +46,10 @@ public:
     serializeBytes(dev, static_cast<uint16_t>(frames.size()));
     for (const LinkedSpan &span : frames) {
       serializeBytes(dev, static_cast<uint16_t>(span.len));
-      //serializeCell(dev, span.cell.get());
+      serializeBytes(dev, static_cast<bool>(span.cell));
+      if (span.cell) {
+        ::serialize(dev, span.cell->image);
+      }
     }
   }
   void deserialize(QIODevice *dev) {
@@ -57,7 +60,14 @@ public:
     while (framesSize--) {
       uint16_t len;
       deserializeBytes(dev, len);
-      //frames.push_back({deserializeCell(dev), len});
+      bool notNull;
+      deserializeBytes(dev, notNull);
+      CellPtr cell = nullptr;
+      if (notNull) {
+        cell = std::make_unique<Cell>();
+        ::deserialize(dev, cell->image);
+      }
+      frames.push_back({std::move(cell), len});
     }
   }
 
@@ -78,7 +88,7 @@ TimelineWidget::TimelineWidget(QWidget *parent)
 }
 
 void TimelineWidget::createInitialCell() {
-  layers[0]->appendSource();
+  layers[0]->appendFrame();
   Q_EMIT frameChanged({layers[0]->getCell(0)});
   Q_EMIT layerVisibility({true});
   Q_EMIT posChange(layers[0]->getCell(0), 0, 0);
