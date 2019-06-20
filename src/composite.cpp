@@ -12,7 +12,6 @@
 #include "masking.hpp"
 #include "formats.hpp"
 #include "porter duff.hpp"
-#include <QtGui/qpainter.h>
 #include "surface factory.hpp"
 
 QImage compositeFrame(const Frame &frame, const LayerVisible &visible) {
@@ -28,22 +27,23 @@ QImage compositeFrame(const Frame &frame, const LayerVisible &visible) {
     }
   }
   if (images.front().data.format() == QImage::Format_Grayscale8) {
+    // @TODO Support grayscale and paletted images properly
     for (Image &image : images) {
-      // @TODO Maybe don't use QImage
       image.data.reinterpretAsFormat(QImage::Format_Indexed8);
       image.data.setColorTable(QVector<QRgb>::fromStdVector(*image.palette));
     }
   }
   QImage output{images.front().data.size(), QImage::Format_ARGB32};
   clearImage(output);
+  Surface<QRgb> outputSurface = makeSurface<QRgb>(output);
   
-  // @TODO avoid using QPainter
-  QPainter painter{&output};
-  painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
   for (size_t i = 0; i != frame.size(); ++i) {
     if (visible[i] && !images[i].data.isNull()) {
-      painter.setTransform(getTransform(images[i]));
-      painter.drawImage(0, 0, images[i].data);
+      porterDuff<ARGB_Format>(
+        mode_src_over,
+        outputSurface,
+        makeCSurface<QRgb>(images[i].data)
+      );
     }
   }
   
@@ -75,14 +75,6 @@ QImage blitImage(const QImage &src, const QRect rect) {
     -rect.topLeft()
   );
   return dst;
-}
-
-void blitTransformedImage(QImage &dst, const Image &src) {
-  // @TODO avoid using QPainter
-  QPainter painter{&dst};
-  painter.setCompositionMode(QPainter::CompositionMode_Source);
-  painter.setTransform(getTransform(src));
-  painter.drawImage(0, 0, src.data);
 }
 
 void blitMaskImage(QImage &dst, const QImage &mask, const QImage &src, const QPoint pos) {

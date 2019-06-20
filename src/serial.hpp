@@ -12,14 +12,14 @@
 #include <QtCore/qiodevice.h>
 
 template <typename T>
-void serialize(QIODevice *dev, const T &data) {
+void serializeBytes(QIODevice *dev, const T &data) {
   assert(dev);
   assert(dev->isWritable());
   dev->write(reinterpret_cast<const char *>(&data), sizeof(T));
 }
 
 template <typename T>
-void deserialize(QIODevice *dev, T &data) {
+void deserializeBytes(QIODevice *dev, T &data) {
   assert(dev);
   assert(dev->isReadable());
   dev->read(reinterpret_cast<char *>(&data), sizeof(T));

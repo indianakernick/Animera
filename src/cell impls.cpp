@@ -32,17 +32,6 @@ const Cell *findSrc(const Cell *cell) {
   return cell;
 }
 
-Transform findTransform(const Cell *cell) {
-  cell = findNonDup(cell);
-  if (auto *src = dynamic_cast<const SourceCell *>(cell)) {
-    return src->image.xform;
-  } else if (auto *trans = dynamic_cast<const TransformCell *>(cell)) {
-    return trans->xform;
-  } else {
-    return {};
-  }
-}
-
 }
 
 void serializeCell(QIODevice *dev, const Cell *cell) {
@@ -50,14 +39,14 @@ void serializeCell(QIODevice *dev, const Cell *cell) {
   if (cell) {
     cell->serialize(dev);
   } else {
-    serialize(dev, CellType::null);
+    serializeBytes(dev, CellType::null);
   }
 }
 
 CellPtr deserializeCell(QIODevice *dev) {
   assert(dev);
   CellType type;
-  deserialize(dev, type);
+  deserializeBytes(dev, type);
   switch (type) {
     case CellType::null:
       return nullptr;
@@ -72,7 +61,7 @@ CellPtr deserializeCell(QIODevice *dev) {
 }
 
 SourceCell::SourceCell(const QSize size, const Format format, Palette *palette)
-  : image{{size, getImageFormat(format)}, {}, palette} {
+  : image{{size, getImageFormat(format)}, palette} {
   clearImage(image.data);
 }
 
@@ -83,7 +72,7 @@ SourceCell::SourceCell(QIODevice *dev) {
 
 void SourceCell::serialize(QIODevice *dev) const {
   assert(dev);
-  ::serialize(dev, CellType::source);
+  serializeBytes(dev, CellType::source);
   ::serialize(dev, image);
 }
 
@@ -109,7 +98,7 @@ DuplicateCell::DuplicateCell(QIODevice *) {
 
 void DuplicateCell::serialize(QIODevice *dev) const {
   assert(dev);
-  ::serialize(dev, CellType::duplicate);
+  serializeBytes(dev, CellType::duplicate);
 }
 
 Image DuplicateCell::outputImage() const {
@@ -126,22 +115,19 @@ CellPtr DuplicateCell::clone() const {
 
 TransformCell::TransformCell(const Cell *input) {
   updateInput(input);
-  xform = findTransform(input);
 }
 
 TransformCell::TransformCell(QIODevice *dev) {
   assert(dev);
-  ::deserialize(dev, xform);
 }
 
 void TransformCell::serialize(QIODevice *dev) const {
   assert(dev);
-  ::serialize(dev, CellType::transform);
-  ::serialize(dev, xform);
+  serializeBytes(dev, CellType::transform);
 }
 
 Image TransformCell::outputImage() const {
-  return source ? Image{source->outputImage().data, xform} : Image{};
+  return source ? Image{source->outputImage().data} : Image{};
 }
 
 void TransformCell::updateInput(const Cell *input) {
@@ -149,7 +135,5 @@ void TransformCell::updateInput(const Cell *input) {
 }
 
 CellPtr TransformCell::clone() const {
-  auto copy = std::make_unique<TransformCell>();
-  copy->xform = xform;
-  return copy;
+  return std::make_unique<TransformCell>();
 }

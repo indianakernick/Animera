@@ -12,6 +12,7 @@
 #include "config.hpp"
 #include "masking.hpp"
 #include "painting.hpp"
+#include "transform.hpp"
 #include "composite.hpp"
 #include "cell impls.hpp"
 #include "flood fill.hpp"
@@ -721,28 +722,16 @@ bool TranslateTool::attachCell(Cell *cell) {
     copyImage(cleanImage, source->image.data);
     pos = {0, 0};
     return true;
-  } else if ((transform = dynamic_cast<TransformCell *>(cell))) {
-    return true;
+  } else {
+    return false;
   }
-  return false;
-}
-
-namespace {
-
-template <typename A, typename B>
-bool oneNotNull(A *a, B *b) {
-  return !!a + !!b == 1;
-}
-
 }
 
 void TranslateTool::detachCell() {
   source = nullptr;
-  transform = nullptr;
 }
 
 ToolChanges TranslateTool::mouseDown(const ToolMouseEvent &event) {
-  assert(oneNotNull(source, transform));
   if (event.button != ButtonType::primary) return ToolChanges::none;
   lastPos = event.pos;
   drag = true;
@@ -750,7 +739,6 @@ ToolChanges TranslateTool::mouseDown(const ToolMouseEvent &event) {
 }
 
 ToolChanges TranslateTool::mouseMove(const ToolMouseEvent &event) {
-  assert(oneNotNull(source, transform));
   if (event.button != ButtonType::primary || !drag) {
     updateStatus(*event.status);
     return ToolChanges::none;
@@ -762,7 +750,6 @@ ToolChanges TranslateTool::mouseMove(const ToolMouseEvent &event) {
 }
 
 ToolChanges TranslateTool::mouseUp(const ToolMouseEvent &event) {
-  assert(oneNotNull(source, transform));
   if (event.button != ButtonType::primary || !drag) return ToolChanges::none;
   translate(event.pos - lastPos, event.colors.erase);
   updateStatus(*event.status);
@@ -786,7 +773,6 @@ QPoint arrowToDir(const Qt::Key key) {
 }
 
 ToolChanges TranslateTool::keyPress(const ToolKeyEvent &event) {
-  assert(oneNotNull(source, transform));
   QPoint move = arrowToDir(event.key);
   if (move == QPoint{0, 0}) return ToolChanges::none;
   translate(move, event.colors.erase);
@@ -794,81 +780,53 @@ ToolChanges TranslateTool::keyPress(const ToolKeyEvent &event) {
   return ToolChanges::cell;
 }
 
-namespace {
-
-Transform xformFromPos(const QPoint pos) {
-  Transform xform;
-  xform.posX = pos.x();
-  xform.posY = pos.y();
-  return xform;
-}
-
-}
-
 void TranslateTool::translate(const QPoint move, const QRgb eraseColor) {
-  assert(oneNotNull(source, transform));
-  if (source) {
-    pos += move;
-    updateSourceImage(eraseColor);
-  } else if (transform) {
-    Transform &xform = transform->xform;
-    xform.posX += move.x();
-    xform.posY += move.y();
-  } else Q_UNREACHABLE();
+  pos += move;
+  updateSourceImage(eraseColor);
 }
 
 void TranslateTool::updateSourceImage(const QRgb eraseColor) {
   assert(source);
-  assert(!transform);
-  clearImage(source->image.data, eraseColor);
-  Image src{cleanImage, xformFromPos(pos)};
-  blitTransformedImage(source->image.data, src);
+  QImage &src = source->image.data;
+  clearImage(src, eraseColor);
+  if (src.depth() == 32) {
+    copyRegion(makeSurface<uint32_t>(src), makeCSurface<uint32_t>(cleanImage), pos);
+  } else if (src.depth() == 8) {
+    copyRegion(makeSurface<uint8_t>(src), makeCSurface<uint8_t>(cleanImage), pos);
+  } else Q_UNREACHABLE();
 }
 
 void TranslateTool::updateStatus(StatusMsg &status) {
   if (source) {
     status.appendLabeled(pos);
-  } else if (transform) {
-    Transform &xform = transform->xform;
-    status.appendLabeled({xform.posX, xform.posY});
-  } else Q_UNREACHABLE();
+  }
 }
 
 bool FlipTool::attachCell(Cell *cell) {
-  if ((source = dynamic_cast<SourceCell *>(cell))) {
-    return true;
-  } else if ((transform = dynamic_cast<TransformCell *>(cell))) {
-    return true;
-  }
-  return false;
+  flipX = flipY = false;
+  return source = dynamic_cast<SourceCell *>(cell);
 }
 
 void FlipTool::detachCell() {
-  if (source) {
-    updateSourceImage();
-  }
+  source = nullptr;
 }
 
 namespace {
 
-bool arrowToFlip(const Qt::Key key, Transform &xform) {
+bool flipXChanged(const Qt::Key key, bool &flipX) {
   switch (key) {
-    // return true if changed
-    case key_flp_on_x: return !std::exchange(xform.flipX, true);
-    case key_flp_on_y: return !std::exchange(xform.flipY, true);
-    case key_flp_off_y: return std::exchange(xform.flipY, false);
-    case key_flp_off_x: return std::exchange(xform.flipX, false);
+    case key_flp_on_x: return !std::exchange(flipX, true);
+    case key_flp_off_x: return std::exchange(flipX, false);
     default: return false;
   }
 }
 
-Transform &getTransform(SourceCell *source, TransformCell *transform) {
-  assert(oneNotNull(source, transform));
-  if (source) {
-    return source->image.xform;
-  } else if (transform) {
-    return transform->xform;
-  } else Q_UNREACHABLE();
+bool flipYChanged(const Qt::Key key, bool &flipY) {
+  switch (key) {
+    case key_flp_on_y: return !std::exchange(flipY, true);
+    case key_flp_off_y: return std::exchange(flipY, false);
+    default: return false;
+  }
 }
 
 }
@@ -879,54 +837,51 @@ ToolChanges FlipTool::mouseMove(const ToolMouseEvent &event) {
 }
 
 ToolChanges FlipTool::keyPress(const ToolKeyEvent &event) {
-  assert(oneNotNull(source, transform));
-  Transform &xform = getTransform(source, transform);
-  if (arrowToFlip(event.key, xform)) {
-    updateStatus(*event.status);
-    return ToolChanges::cell;
+  if (flipXChanged(event.key, flipX)) {
+    QImage &src = source->image.data;
+    QImage flipped{src.size(), src.format()};
+    if (src.depth() == 32) {
+      flipHori(makeSurface<uint32_t>(flipped), makeCSurface<uint32_t>(src));
+    } else if (src.depth() == 8) {
+      flipHori(makeSurface<uint8_t>(flipped), makeCSurface<uint8_t>(src));
+    } else Q_UNREACHABLE();
+    src = flipped;
+  } else if (flipYChanged(event.key, flipY)) {
+    QImage &src = source->image.data;
+    QImage flipped{src.size(), src.format()};
+    if (src.depth() == 32) {
+      flipVert(makeSurface<uint32_t>(flipped), makeCSurface<uint32_t>(src));
+    } else if (src.depth() == 8) {
+      flipVert(makeSurface<uint8_t>(flipped), makeCSurface<uint8_t>(src));
+    } else Q_UNREACHABLE();
+    src = flipped;
+  } else {
+    return ToolChanges::none;
   }
-  return ToolChanges::none;
-}
-
-namespace {
-
-void applyTransform(Image &image) {
-  QImage temp = makeCompatible(image.data);
-  blitTransformedImage(temp, image);
-  copyImage(image.data, temp);
-}
-
-}
-
-void FlipTool::updateSourceImage() {
-  assert(source);
-  assert(!transform);
-  applyTransform(source->image);
-  source->image.xform.flipX = false;
-  source->image.xform.flipY = false;
+  updateStatus(*event.status);
+  return ToolChanges::cell;
 }
 
 void FlipTool::updateStatus(StatusMsg &status) {
-  Transform &xform = getTransform(source, transform);
   status.append("X: ");
-  status.append(xform.flipX);
+  status.append(flipX);
   status.append(" Y: ");
-  status.append(xform.flipY);
+  status.append(flipY);
 }
 
 bool RotateTool::attachCell(Cell *cell) {
   if ((source = dynamic_cast<SourceCell *>(cell))) {
+    const QSize size = source->image.data.size();
+    square = size.width() == size.height();
+    angle = 0;
     return true;
-  } else if ((transform = dynamic_cast<TransformCell *>(cell))) {
-    return true;
+  } else {
+    return false;
   }
-  return false;
 }
 
 void RotateTool::detachCell() {
-  if (source) {
-    updateSourceImage();
-  }
+  source = nullptr;
 }
 
 namespace {
@@ -944,30 +899,37 @@ quint8 arrowToRot(const Qt::Key key) {
 }
 
 ToolChanges RotateTool::mouseMove(const ToolMouseEvent &event) {
-  updateStatus(*event.status);
+  if (source) {
+    updateStatus(*event.status);
+  }
   return ToolChanges::none;
 }
 
 ToolChanges RotateTool::keyPress(const ToolKeyEvent &event) {
-  assert(oneNotNull(source, transform));
   const quint8 rot = arrowToRot(event.key);
-  if (rot) {
-    quint8 &angle = getTransform(source, transform).angle;
+  if (square && rot) {
     angle = (angle + rot) & 3;
+    QImage &src = source->image.data;
+    QImage rotated{src.size(), src.format()};
+    if (src.depth() == 32) {
+      rotate(makeSurface<uint32_t>(rotated), makeCSurface<uint32_t>(src), rot);
+    } else if (src.depth() == 8) {
+      rotate(makeSurface<uint8_t>(rotated), makeCSurface<uint8_t>(src), rot);
+    } else Q_UNREACHABLE();
+    src = rotated;
     updateStatus(*event.status);
     return ToolChanges::cell;
   }
   return ToolChanges::none;
 }
 
-void RotateTool::updateSourceImage() {
-  assert(source);
-  assert(!transform);
-  applyTransform(source->image);
-  source->image.xform.angle = 0;
-}
-
 void RotateTool::updateStatus(StatusMsg &status) {
-  status.append("ANGLE: ");
-  status.append(getTransform(source, transform).angle * 90);
+  if (square) {
+    status.append("ANGLE: ");
+    status.append(angle * 90);
+  } else {
+    // I think this is a sensible limitation
+    // Sprites for games are square 99% time
+    status.append("ONLY SQUARE SPRITES CAN BE ROTATED");
+  }
 }

@@ -21,8 +21,6 @@ void compositeOverlay(QImage &, const QImage &);
 void blitImage(QImage &, const QImage &, QPoint);
 /// Copy part of an image into a new image
 QImage blitImage(const QImage &, QRect);
-/// Copy a transformed image onto another image
-void blitTransformedImage(QImage &, const Image &);
 
 /// Copy all pixels of src that are on the mask (shifted to the position) onto
 /// onto an image

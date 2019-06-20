@@ -15,14 +15,6 @@
 
 using Palette = std::vector<QRgb>;
 
-struct Transform {
-  qint16 posX = 0;
-  qint16 posY = 0;
-  quint8 angle = 0;
-  bool flipX = false;
-  bool flipY = false;
-};
-
 enum class Format : uint8_t {
   color,
   palette,
@@ -31,7 +23,6 @@ enum class Format : uint8_t {
 
 struct Image {
   QImage data;
-  Transform xform;
   Palette *palette = nullptr;
 };
 
@@ -51,20 +42,6 @@ constexpr QImage::Format getImageFormat(const Format format) {
       Q_UNREACHABLE();
   }
 }
-
-inline qreal angleToDegrees(const quint8 angle) {
-  return angle * 90.0;
-}
-
-inline qreal flipToScale(const bool flip) {
-  return static_cast<qreal>(flip) * -2.0 + 1.0;
-}
-
-QTransform getTransform(const Image &);
-QTransform getInvTransform(const Image &);
-
-void serialize(QIODevice *, const Transform &);
-void deserialize(QIODevice *, Transform &);
 
 void serialize(QIODevice *, const Image &);
 void deserialize(QIODevice *, Image &);

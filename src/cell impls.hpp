@@ -61,7 +61,6 @@ public:
   CellPtr clone() const override;
   
   const Cell *source = nullptr;
-  Transform xform;
 };
 
 #endif

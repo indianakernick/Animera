@@ -230,7 +230,6 @@ public:
 
 private:
   SourceCell *source = nullptr;
-  TransformCell *transform = nullptr;
   QImage cleanImage;
   QPoint lastPos = no_point;
   QPoint pos = no_point;
@@ -250,9 +249,9 @@ public:
   
 private:
   SourceCell *source = nullptr;
-  TransformCell *transform = nullptr;
+  bool flipX = false;
+  bool flipY = false;
   
-  void updateSourceImage();
   void updateStatus(StatusMsg &);
 };
 
@@ -265,9 +264,9 @@ public:
 
 private:
   SourceCell *source = nullptr;
-  TransformCell *transform = nullptr;
+  int angle = 0;
+  bool square;
   
-  void updateSourceImage();
   void updateStatus(StatusMsg &);
 };
 

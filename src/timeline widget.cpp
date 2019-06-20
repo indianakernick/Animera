@@ -36,7 +36,7 @@ public:
   
   void serialize(QIODevice *dev) const {
     assert(dev);
-    ::serialize(dev, static_cast<uint16_t>(frames.size()));
+    serializeBytes(dev, static_cast<uint16_t>(frames.size()));
     for (const CellPtr &cell : frames) {
       serializeCell(dev, cell.get());
     }
@@ -44,7 +44,7 @@ public:
   void deserialize(QIODevice *dev) {
     assert(dev);
     uint16_t framesSize;
-    ::deserialize(dev, framesSize);
+    deserializeBytes(dev, framesSize);
     frames.reserve(framesSize);
     while (framesSize--) {
       frames.push_back(deserializeCell(dev));
@@ -95,14 +95,14 @@ void TimelineWidget::save(const QString &path) const {
     throw std::exception{};
   }
   file.write(magic_number, sizeof(magic_number));
-  serialize(&file, format);
+  serializeBytes(&file, format);
   if (format == Format::palette) {
     serialize(&file, *palette);
   }
   
-  serialize(&file, static_cast<uint16_t>(size.width()));
-  serialize(&file, static_cast<uint16_t>(size.height()));
-  serialize(&file, static_cast<uint16_t>(layers.size()));
+  serializeBytes(&file, static_cast<uint16_t>(size.width()));
+  serializeBytes(&file, static_cast<uint16_t>(size.height()));
+  serializeBytes(&file, static_cast<uint16_t>(layers.size()));
   
   for (const LayerWidget *layer : layers) {
     layer->serialize(&file);
@@ -120,19 +120,19 @@ void TimelineWidget::load(const QString &path) {
   if (std::memcmp(header, magic_number, sizeof(magic_number)) != 0) {
     throw std::exception{};
   }
-  deserialize(&file, format);
+  deserializeBytes(&file, format);
   if (format == Format::palette) {
     deserialize(&file, *palette);
   }
   
   uint16_t width;
   uint16_t height;
-  deserialize(&file, width);
-  deserialize(&file, height);
+  deserializeBytes(&file, width);
+  deserializeBytes(&file, height);
   size = {width, height};
   
   uint16_t layersSize;
-  deserialize(&file, layersSize);
+  deserializeBytes(&file, layersSize);
   for (LayerWidget *layer : layers) {
     delete layer;
   }

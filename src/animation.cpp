@@ -39,17 +39,17 @@ void Animation::setPalette(Palette *newPalette) {
 void Animation::serialize(QIODevice *dev) const {
   assert(dev);
   dev->write(magic_number, sizeof(magic_number));
-  ::serialize(dev, format);
+  serializeBytes(dev, format);
   if (format == Format::palette) {
-    ::serialize(dev, palette);
+    serializeBytes(dev, palette);
   }
   
-  ::serialize(dev, static_cast<uint16_t>(size.width()));
-  ::serialize(dev, static_cast<uint16_t>(size.height()));
-  ::serialize(dev, static_cast<uint16_t>(layers.size()));
+  serializeBytes(dev, static_cast<uint16_t>(size.width()));
+  serializeBytes(dev, static_cast<uint16_t>(size.height()));
+  serializeBytes(dev, static_cast<uint16_t>(layers.size()));
   
   for (const Frames &frames : layers) {
-    ::serialize(dev, static_cast<uint16_t>(frames.size()));
+    serializeBytes(dev, static_cast<uint16_t>(frames.size()));
     for (const CellPtr &cell : frames) {
       serializeCell(dev, cell.get());
     }
@@ -61,25 +61,25 @@ void Animation::deserialize(QIODevice *dev) {
   char header[sizeof(magic_number)];
   dev->read(header, sizeof(magic_number));
   assert(std::memcmp(header, magic_number, sizeof(magic_number)) == 0);
-  ::deserialize(dev, format);
+  deserializeBytes(dev, format);
   if (format == Format::palette) {
-    ::deserialize(dev, palette);
+    deserializeBytes(dev, palette);
   }
   
   uint16_t width;
   uint16_t height;
-  ::deserialize(dev, width);
-  ::deserialize(dev, height);
+  deserializeBytes(dev, width);
+  deserializeBytes(dev, height);
   size = {width, height};
   
   uint16_t layersSize;
-  ::deserialize(dev, layersSize);
+  deserializeBytes(dev, layersSize);
   layers.clear();
   layers.reserve(layersSize);
   
   while (layersSize--) {
     uint16_t framesSize;
-    ::deserialize(dev, framesSize);
+    deserializeBytes(dev, framesSize);
     Frames &frames = layers.emplace_back();
     frames.reserve(framesSize);
     while (framesSize--) {
