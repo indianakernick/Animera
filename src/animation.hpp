@@ -17,13 +17,7 @@
 
 class Animation : public QObject {
 public:
-  Animation();
-  
   void setPalette(Palette *);
-  
-  void serialize(QIODevice *) const;
-  void deserialize(QIODevice *);
-  void initialize(QSize, Format);
 
   bool hasLayer(LayerIdx) const;
   bool hasFrame(CellPos) const;
@@ -42,9 +36,6 @@ public:
   void pasteRect(CellRect, const Layers &);
 
   void appendLayer();
-  void appendSource(LayerIdx);
-  void appendDuplicate(LayerIdx);
-  void appendTransform(LayerIdx);
 
 private:
   Layers layers;
@@ -53,7 +44,6 @@ private:
   Format format;
   
   const Cell *getLastCell(LayerIdx) const;
-  void updateLayerInputs(LayerIdx);
   void removeTrailingNull(LayerIdx);
   void updateLayer(LayerIdx);
   bool validRect(CellRect) const;

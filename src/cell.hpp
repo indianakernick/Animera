@@ -17,14 +17,26 @@ class Cell;
 
 using CellPtr = std::unique_ptr<Cell>;
 
+/*
+enum class CellType : uint8_t {
+  null,
+  source
+};
+
+void serializeCell(QIODevice *, const Cell *);
+CellPtr deserializeCell(QIODevice *);
+*/
+
 class Cell {
 public:
-  virtual ~Cell();
+  Cell() = default;
+  Cell(QSize, Format, Palette *);
+  explicit Cell(QIODevice *);
+
+  void serialize(QIODevice *) const;
+  CellPtr clone() const;
   
-  virtual void serialize(QIODevice *) const = 0;
-  virtual Image outputImage() const = 0;
-  virtual void updateInput(const Cell *) = 0;
-  virtual CellPtr clone() const = 0;
+  Image image;
 };
 
 using LayerIdx = uint32_t;

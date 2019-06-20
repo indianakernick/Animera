@@ -13,9 +13,6 @@
 #include "polygon.hpp"
 #include "paint params.hpp"
 
-class SourceCell;
-class TransformCell;
-
 class BrushTool final : public Tool {
 public:
   bool attachCell(Cell *) override;
@@ -29,7 +26,7 @@ public:
 
 private:
   QPoint lastPos = no_point;
-  SourceCell *source = nullptr;
+  Cell *cell = nullptr;
   // @TODO restore these to 1 and none
   int width = 1;
   SymmetryMode mode = SymmetryMode::none;
@@ -48,7 +45,7 @@ public:
   ToolChanges mouseMove(const ToolMouseEvent &) override;
 
 private:
-  SourceCell *source = nullptr;
+  Cell *cell = nullptr;
 };
 
 class RectangleSelectTool final : public Tool {
@@ -61,7 +58,7 @@ public:
   
 private:
   QPoint startPos = no_point;
-  SourceCell *source = nullptr;
+  Cell *cell = nullptr;
   QImage selection;
   QImage overlay;
   QPoint offset;
@@ -78,7 +75,7 @@ public:
   
 private:
   Polygon polygon;
-  SourceCell *source = nullptr;
+  Cell *cell = nullptr;
   QImage selection;
   QImage mask;
   QImage overlay;
@@ -98,7 +95,7 @@ public:
   ToolChanges mouseUp(const ToolMouseEvent &) override;
 
 private:
-  SourceCell *source = nullptr;
+  Cell *cell = nullptr;
   QImage selection;
   QImage mask;
   QImage overlay;
@@ -126,7 +123,7 @@ protected:
 
 private:
   QPoint startPos = no_point;
-  SourceCell *source = nullptr;
+  Cell *cell = nullptr;
   QImage cleanImage;
   QRgb color = 0;
   
@@ -229,7 +226,7 @@ public:
   ToolChanges keyPress(const ToolKeyEvent &) override;
 
 private:
-  SourceCell *source = nullptr;
+  Cell *cell = nullptr;
   QImage cleanImage;
   QPoint lastPos = no_point;
   QPoint pos = no_point;
@@ -248,7 +245,7 @@ public:
   ToolChanges keyPress(const ToolKeyEvent &) override;
   
 private:
-  SourceCell *source = nullptr;
+  Cell *cell = nullptr;
   bool flipX = false;
   bool flipY = false;
   
@@ -263,7 +260,7 @@ public:
   ToolChanges keyPress(const ToolKeyEvent &) override;
 
 private:
-  SourceCell *source = nullptr;
+  Cell *cell = nullptr;
   int angle = 0;
   bool square;
   

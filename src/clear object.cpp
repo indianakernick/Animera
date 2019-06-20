@@ -8,19 +8,22 @@
 
 #include "clear object.hpp"
 
+#include "cell.hpp"
 #include "config.hpp"
-#include "cell impls.hpp"
 
-void ClearObject::posChange(Cell *cell) {
-  source = dynamic_cast<SourceCell *>(cell);
+void ClearObject::posChange(Cell *newCell) {
+  cell = newCell;
 }
 
 void ClearObject::keyPress(const Qt::Key key) {
-  if (source && key == key_clear) {
-    // @TODO clear with erase color
-    clearImage(source->image.data);
+  if (cell && key == key_clear) {
+    clearImage(cell->image.data, color);
     Q_EMIT cellModified();
   }
+}
+
+void ClearObject::changeColors(const ToolColors colors) {
+  color = colors.erase;
 }
 
 #include "clear object.moc"

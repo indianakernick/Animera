@@ -705,18 +705,6 @@ private:
   }
 };*/
 
-#include "animation.hpp"
-#include "cell impls.hpp"
-
-template <typename CellClass>
-auto getCell(const Animation &anim, const LayerIdx l, const FrameIdx f) {
-  Cell *cell = anim.getCell(l, f);
-  assert(cell);
-  auto *derived = dynamic_cast<CellClass *>(cell);
-  assert(derived);
-  return derived;
-};
-
 QImage dupImage(const QImage &img) {
   QImage dup = makeCompatible(img);
   std::memcpy(dup.bits(), img.constBits(), img.sizeInBytes());
@@ -2317,63 +2305,6 @@ int main(int argc, char **argv) {
   drawing.save("/Users/indikernick/Desktop/Test/overlay_7.png");
   
   source.image.data.save("/Users/indikernick/Desktop/Test/brush.png");*/
-  
-  /*
-  QFile file{"/Users/indikernick/Desktop/Test/testfile.px2"};
-  
-  file.open(QIODevice::WriteOnly | QIODevice::Truncate);
-  Animation anim;
-  anim.initialize({1, 1}, Format::color);
-  anim.appendTransform(0);
-  anim.appendLayer();
-  anim.appendDuplicate(1);
-  anim.appendDuplicate(1);
-  anim.appendLayer();
-  anim.appendSource(2);
-  auto *src = getCell<SourceCell>(anim, 2, 0);
-  src->image.xform.posX = 123;
-  src->image.xform.posY = 456;
-  src->image.xform.angle = 1;
-  src->image.xform.flipY = true;
-  src->image.data.bits()[0] = 191;
-  src->image.data.bits()[1] = 160;
-  src->image.data.bits()[2] = 63;
-  src->image.data.bits()[3] = 2;
-  
-  anim.serialize(&file);
-  file.close();
-  
-  file.open(QIODevice::ReadOnly);
-  Animation newAnim;
-  newAnim.deserialize(&file);
-  file.close();
-  
-  assert(newAnim.size.width() == anim.size.width());
-  assert(newAnim.size.height() == anim.size.height());
-  assert(newAnim.format == anim.format);
-  assert(newAnim.layers.size() == anim.layers.size());
-  for (LayerIdx l = 0; l != newAnim.layers.size(); ++l) {
-    assert(newAnim.layers[l].size() == anim.layers[l].size());
-  }
-  if (newAnim.format == Format::palette) {
-    assert(newAnim.palette.size() == anim.palette.size());
-    assert(newAnim.palette == anim.palette);
-  }
-  
-  auto *trans_0_0 = getCell<TransformCell>(newAnim, 0, 0);
-  auto *dup_1_0 = getCell<DuplicateCell>(newAnim, 1, 0);
-  auto *dup_1_1 = getCell<DuplicateCell>(newAnim, 1, 1);
-  auto *src_2_0 = getCell<SourceCell>(newAnim, 2, 0);
-  assert(src_2_0->image.xform.posX == src->image.xform.posX);
-  assert(src_2_0->image.xform.posY == src->image.xform.posY);
-  assert(src_2_0->image.xform.angle == src->image.xform.angle);
-  assert(src_2_0->image.xform.flipX == src->image.xform.flipX);
-  assert(src_2_0->image.xform.flipY == src->image.xform.flipY);
-  assert(src_2_0->image.data.bits()[0] == src->image.data.bits()[0]);
-  assert(src_2_0->image.data.bits()[1] == src->image.data.bits()[1]);
-  assert(src_2_0->image.data.bits()[2] == src->image.data.bits()[2]);
-  assert(src_2_0->image.data.bits()[3] == src->image.data.bits()[3]);
-  */
   
   Application app{argc, argv};
   return app.exec();

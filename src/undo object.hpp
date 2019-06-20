@@ -14,7 +14,6 @@
 #include <QtCore/qobject.h>
 
 class Cell;
-class SourceCell;
 
 class UndoObject final : public QObject {
   Q_OBJECT
@@ -29,7 +28,7 @@ Q_SIGNALS:
   void showTempStatus(std::string_view);
 
 private:
-  SourceCell *source = nullptr;
+  Cell *cell = nullptr;
   UndoStack stack;
   
   void undo();

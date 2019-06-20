@@ -14,11 +14,10 @@
 #include "painting.hpp"
 #include "transform.hpp"
 #include "composite.hpp"
-#include "cell impls.hpp"
 #include "flood fill.hpp"
 #include "surface factory.hpp"
 
-// @TODO this file is starting to get out of hand
+// @TODO this file is starting to get out of hand!
 
 namespace {
 
@@ -37,37 +36,43 @@ ToolChanges drawnChanges(const bool drawn) {
 
 }
 
-bool BrushTool::attachCell(Cell *cell) {
-  return source = dynamic_cast<SourceCell *>(cell);
+bool BrushTool::attachCell(Cell *newCell) {
+  assert(newCell);
+  cell = newCell;
+  return true;
 }
 
 void BrushTool::detachCell() {
-  source = nullptr;
+  assert(cell);
+  cell = nullptr;
 }
 
 ToolChanges BrushTool::mouseDown(const ToolMouseEvent &event) {
+  assert(cell);
   clearImage(*event.overlay);
   symPoint(*event.overlay, tool_overlay_color, event.pos);
   symPoint(*event.status, event.pos);
   lastPos = event.pos;
   color = selectColor(event.colors, event.button);
-  return drawnChanges(symPoint(source->image.data, color, lastPos));
+  return drawnChanges(symPoint(cell->image.data, color, lastPos));
 }
 
 ToolChanges BrushTool::mouseMove(const ToolMouseEvent &event) {
+  assert(cell);
   clearImage(*event.overlay);
   symPoint(*event.overlay, tool_overlay_color, event.pos);
   symPoint(*event.status, event.pos);
   if (event.button == ButtonType::none) return ToolChanges::overlay;
-  Image &img = source->image;
+  Image &img = cell->image;
   const bool drawn = symLine(img.data, color, {lastPos, event.pos});
   lastPos = event.pos;
   return drawnChanges(drawn);
 }
 
 ToolChanges BrushTool::mouseUp(const ToolMouseEvent &event) {
+  assert(cell);
   symPoint(*event.status, event.pos);
-  return drawnChanges(symLine(source->image.data, color, {lastPos, event.pos}));
+  return drawnChanges(symLine(cell->image.data, color, {lastPos, event.pos}));
 }
 
 void BrushTool::setWidth(const int newWidth) {
@@ -80,7 +85,7 @@ void BrushTool::setMode(const SymmetryMode newMode) {
 }
 
 void BrushTool::symPoint(StatusMsg &status, const QPoint point) {
-  const QSize size = source->image.data.size();
+  const QSize size = cell->image.data.size();
   const QPoint refl = {size.width() - point.x() - 1, size.height() - point.y() - 1};
   status.appendLabeled(point);
   if (mode & SymmetryMode::hori) {
@@ -147,43 +152,47 @@ bool BrushTool::symLine(QImage &img, const QRgb col, const QLine line) {
   return drawn;
 }
 
-bool FloodFillTool::attachCell(Cell *cell) {
-  return source = dynamic_cast<SourceCell *>(cell);
+bool FloodFillTool::attachCell(Cell *newCell) {
+  assert(newCell);
+  cell = newCell;
+  return true;
 }
 
 void FloodFillTool::detachCell() {
-  assert(source);
-  source = nullptr;
+  assert(cell);
+  cell = nullptr;
 }
 
 ToolChanges FloodFillTool::mouseDown(const ToolMouseEvent &event) {
-  assert(source);
+  assert(cell);
   clearImage(*event.overlay);
   drawSquarePoint(*event.overlay, tool_overlay_color, event.pos);
   event.status->appendLabeled(event.pos);
   const QRgb color = selectColor(event.colors, event.button);
-  return drawnChanges(drawFloodFill(source->image.data, color, event.pos));
+  return drawnChanges(drawFloodFill(cell->image.data, color, event.pos));
 }
 
 ToolChanges FloodFillTool::mouseMove(const ToolMouseEvent &event) {
-  assert(source);
+  assert(cell);
   clearImage(*event.overlay);
   drawSquarePoint(*event.overlay, tool_overlay_color, event.pos);
   event.status->appendLabeled(event.pos);
   return ToolChanges::overlay;
 }
 
-bool RectangleSelectTool::attachCell(Cell *cell) {
-  return source = dynamic_cast<SourceCell *>(cell);
+bool RectangleSelectTool::attachCell(Cell *newCell) {
+  assert(newCell);
+  cell = newCell;
+  return true;
 }
 
 void RectangleSelectTool::detachCell() {
-  assert(source);
-  source = nullptr;
+  assert(cell);
+  cell = nullptr;
 }
 
 ToolChanges RectangleSelectTool::mouseDown(const ToolMouseEvent &event) {
-  assert(source);
+  assert(cell);
   clearImage(*event.overlay);
   if (event.button == ButtonType::secondary && !overlay.isNull()) {
     mode = opposite(mode);
@@ -203,10 +212,10 @@ ToolChanges RectangleSelectTool::mouseDown(const ToolMouseEvent &event) {
     return ToolChanges::overlay;
   } else if (mode == SelectMode::paste) {
     if (event.button == ButtonType::primary) {
-      blitImage(source->image.data, selection, event.pos + offset);
+      blitImage(cell->image.data, selection, event.pos + offset);
     } else if (event.button == ButtonType::erase) {
       const QRect rect{event.pos + offset, selection.size()};
-      drawFilledRect(source->image.data, event.colors.erase, rect);
+      drawFilledRect(cell->image.data, event.colors.erase, rect);
     } else {
       return ToolChanges::overlay;
     }
@@ -215,7 +224,7 @@ ToolChanges RectangleSelectTool::mouseDown(const ToolMouseEvent &event) {
 }
 
 ToolChanges RectangleSelectTool::mouseMove(const ToolMouseEvent &event) {
-  assert(source);
+  assert(cell);
   clearImage(*event.overlay);
   event.status->appendLabeled(mode);
   if (mode == SelectMode::copy) {
@@ -235,13 +244,13 @@ ToolChanges RectangleSelectTool::mouseMove(const ToolMouseEvent &event) {
 }
 
 ToolChanges RectangleSelectTool::mouseUp(const ToolMouseEvent &event) {
-  assert(source);
+  assert(cell);
   if (event.button != ButtonType::primary) return ToolChanges::none;
   clearImage(*event.overlay);
   if (mode == SelectMode::copy) {
     drawSquarePoint(*event.overlay, tool_overlay_color, event.pos);
     const QRect rect = QRect{startPos, event.pos}.normalized();
-    selection = blitImage(source->image.data, rect);
+    selection = blitImage(cell->image.data, rect);
     overlay = selection;
     colorToOverlay(overlay);
     offset = rect.topLeft() - event.pos;
@@ -253,17 +262,19 @@ ToolChanges RectangleSelectTool::mouseUp(const ToolMouseEvent &event) {
   return ToolChanges::overlay;
 }
 
-bool PolygonSelectTool::attachCell(Cell *cell) {
-  return source = dynamic_cast<SourceCell *>(cell);
+bool PolygonSelectTool::attachCell(Cell *newCell) {
+  assert(newCell);
+  cell = newCell;
+  return true;
 }
 
 void PolygonSelectTool::detachCell() {
-  assert(source);
-  source = nullptr;
+  assert(cell);
+  cell = nullptr;
 }
 
 ToolChanges PolygonSelectTool::mouseDown(const ToolMouseEvent &event) {
-  assert(source);
+  assert(cell);
   clearImage(*event.overlay);
   if (event.button == ButtonType::secondary && !overlay.isNull()) {
     mode = opposite(mode);
@@ -283,10 +294,10 @@ ToolChanges PolygonSelectTool::mouseDown(const ToolMouseEvent &event) {
     return ToolChanges::overlay;
   } else if (mode == SelectMode::paste) {
     if (event.button == ButtonType::primary) {
-      blitMaskImage(source->image.data, mask, selection, event.pos + offset);
+      blitMaskImage(cell->image.data, mask, selection, event.pos + offset);
     } else if (event.button == ButtonType::erase) {
       // @TODO should this be encapsulated in another file?
-      makeSurface(source->image.data, event.colors.erase, [this, &event](auto surface, auto color) {
+      makeSurface(cell->image.data, event.colors.erase, [this, &event](auto surface, auto color) {
         maskFillRegion(surface, makeCSurface<uint8_t>(mask), color, event.pos + offset);
       });
     } else {
@@ -297,7 +308,7 @@ ToolChanges PolygonSelectTool::mouseDown(const ToolMouseEvent &event) {
 }
 
 ToolChanges PolygonSelectTool::mouseMove(const ToolMouseEvent &event) {
-  assert(source);
+  assert(cell);
   clearImage(*event.overlay);
   event.status->appendLabeled(mode);
   if (mode == SelectMode::copy) {
@@ -317,17 +328,17 @@ ToolChanges PolygonSelectTool::mouseMove(const ToolMouseEvent &event) {
 }
 
 ToolChanges PolygonSelectTool::mouseUp(const ToolMouseEvent &event) {
-  assert(source);
+  assert(cell);
   if (event.button != ButtonType::primary) return ToolChanges::none;
   clearImage(*event.overlay);
   QPolygon p;
   if (mode == SelectMode::copy) {
     polygon.push(event.pos);
-    const QRect clippedBounds = polygon.bounds().intersected(source->image.data.rect());
+    const QRect clippedBounds = polygon.bounds().intersected(cell->image.data.rect());
     mask = QImage{clippedBounds.size(), mask_format};
     clearImage(mask);
     drawFilledPolygon(mask, mask_color_on, polygon, -clippedBounds.topLeft());
-    selection = blitMaskImage(source->image.data, mask, clippedBounds.topLeft());
+    selection = blitMaskImage(cell->image.data, mask, clippedBounds.topLeft());
     overlay = selection;
     colorToOverlay(overlay, mask);
     offset = clippedBounds.topLeft() - event.pos;
@@ -346,23 +357,21 @@ ToolChanges PolygonSelectTool::mouseUp(const ToolMouseEvent &event) {
 // switch back
 // overlay is colored
 
-bool WandSelectTool::attachCell(Cell *cell) {
-  if ((source = dynamic_cast<SourceCell *>(cell))) {
-    selection = makeCompatible(source->image.data);
-    overlay = makeCompatible(selection);
-    mask = makeMask(selection.size());
-    clearImage(mask);
-    return true;
-  } else {
-    return false;
-  }
+bool WandSelectTool::attachCell(Cell *newCell) {
+  assert(newCell);
+  cell = newCell;
+  selection = makeCompatible(cell->image.data);
+  overlay = makeCompatible(selection);
+  mask = makeMask(selection.size());
+  clearImage(mask);
+  return true;
 }
 
 void WandSelectTool::detachCell() {
   // @TODO clear the overlay somehow
   // If we don't clear the overlay on mouseLeave then we have to clear it here
-  assert(source);
-  source = nullptr;
+  assert(cell);
+  cell = nullptr;
 }
 
 ToolChanges WandSelectTool::mouseLeave(const ToolLeaveEvent &event) {
@@ -376,7 +385,7 @@ ToolChanges WandSelectTool::mouseLeave(const ToolLeaveEvent &event) {
 }
 
 ToolChanges WandSelectTool::mouseDown(const ToolMouseEvent &event) {
-  assert(source);
+  assert(cell);
   if (event.button == ButtonType::secondary) {
     toggleMode(event);
   }
@@ -398,9 +407,9 @@ ToolChanges WandSelectTool::mouseDown(const ToolMouseEvent &event) {
   } else if (mode == SelectMode::paste) {
     // @TODO this is very similar to PolygonSelectTool
     if (event.button == ButtonType::primary) {
-      blitMaskImage(source->image.data, mask, selection, event.pos + offset);
+      blitMaskImage(cell->image.data, mask, selection, event.pos + offset);
     } else if (event.button == ButtonType::erase) {
-      makeSurface(source->image.data, event.colors.erase, [this, &event](auto surface, auto color) {
+      makeSurface(cell->image.data, event.colors.erase, [this, &event](auto surface, auto color) {
         maskFillRegion(surface, makeCSurface<uint8_t>(mask), color, event.pos + offset);
       });
     } else {
@@ -411,7 +420,7 @@ ToolChanges WandSelectTool::mouseDown(const ToolMouseEvent &event) {
 }
 
 ToolChanges WandSelectTool::mouseMove(const ToolMouseEvent &event) {
-  assert(source);
+  assert(cell);
   event.status->appendLabeled(mode);
   if (mode == SelectMode::copy) {
     event.status->appendLabeled(event.pos);
@@ -425,7 +434,7 @@ ToolChanges WandSelectTool::mouseMove(const ToolMouseEvent &event) {
 }
 
 ToolChanges WandSelectTool::mouseUp(const ToolMouseEvent &) {
-  assert(source);
+  assert(cell);
   return ToolChanges::none;
 }
 
@@ -437,7 +446,7 @@ void WandSelectTool::toggleMode(const ToolMouseEvent &event) {
     clearImage(selection);
     clearImage(mask);
   } else if (mode == SelectMode::paste) {
-    selection = blitMaskImage(source->image.data, mask, {0, 0});
+    selection = blitMaskImage(cell->image.data, mask, {0, 0});
     copyImage(overlay, selection);
     colorToOverlay(overlay, mask);
     offset = -event.pos;
@@ -498,7 +507,7 @@ void WandSelectTool::addToSelection(const ToolMouseEvent &event) {
   WandManip manip{
     makeSurface<QRgb>(*event.overlay),
     makeSurface<uint8_t>(mask),
-    makeCSurface<QRgb>(source->image.data)
+    makeCSurface<QRgb>(cell->image.data)
   };
   floodFill(manip, event.pos);
 }
@@ -509,39 +518,36 @@ DragPaintTool<Derived>::~DragPaintTool() {
 }
 
 template <typename Derived>
-bool DragPaintTool<Derived>::attachCell(Cell *cell) {
-  source = dynamic_cast<SourceCell *>(cell);
-  if (source) {
-    if (!compatible(cleanImage, source->image.data)) {
-      cleanImage = makeCompatible(source->image.data);
-    }
-    return true;
-  } else {
-    return false;
+bool DragPaintTool<Derived>::attachCell(Cell *newCell) {
+  assert(newCell);
+  cell = newCell;
+  if (!compatible(cleanImage, cell->image.data)) {
+    cleanImage = makeCompatible(cell->image.data);
   }
+  return true;
 }
 
 template <typename Derived>
 void DragPaintTool<Derived>::detachCell() {
-  assert(source);
-  source = nullptr;
+  assert(cell);
+  cell = nullptr;
 }
 
 template <typename Derived>
 ToolChanges DragPaintTool<Derived>::mouseDown(const ToolMouseEvent &event) {
-  assert(source);
+  assert(cell);
   clearImage(*event.overlay);
   that()->drawOverlay(*event.overlay, event.pos);
   that()->updateStatus(*event.status, event.pos, event.pos);
   startPos = event.pos;
-  copyImage(cleanImage, source->image.data);
+  copyImage(cleanImage, cell->image.data);
   color = selectColor(event.colors, event.button);
-  return drawnChanges(that()->drawPoint(source->image, startPos));
+  return drawnChanges(that()->drawPoint(cell->image, startPos));
 }
 
 template <typename Derived>
 ToolChanges DragPaintTool<Derived>::mouseMove(const ToolMouseEvent &event) {
-  assert(source);
+  assert(cell);
   clearImage(*event.overlay);
   that()->drawOverlay(*event.overlay, event.pos);
   if (event.button == ButtonType::none) {
@@ -549,17 +555,17 @@ ToolChanges DragPaintTool<Derived>::mouseMove(const ToolMouseEvent &event) {
     return ToolChanges::overlay;
   }
   that()->updateStatus(*event.status, startPos, event.pos);
-  copyImage(source->image.data, cleanImage);
-  return drawnChanges(that()->drawDrag(source->image, startPos, event.pos));
+  copyImage(cell->image.data, cleanImage);
+  return drawnChanges(that()->drawDrag(cell->image, startPos, event.pos));
 }
 
 template <typename Derived>
 ToolChanges DragPaintTool<Derived>::mouseUp(const ToolMouseEvent &event) {
-  assert(source);
+  assert(cell);
   clearImage(*event.overlay);
   that()->drawOverlay(*event.overlay, event.pos);
-  copyImage(source->image.data, cleanImage);
-  const bool drawn = that()->drawDrag(source->image, startPos, event.pos);
+  copyImage(cell->image.data, cleanImage);
+  const bool drawn = that()->drawDrag(cell->image, startPos, event.pos);
   startPos = no_point;
   return drawnChanges(drawn);
 }
@@ -714,24 +720,24 @@ void FilledRectangleTool::updateStatus(StatusMsg &status, const QPoint start, co
   status.appendLabeled(QRect{start, end}.normalized());
 }
 
-bool TranslateTool::attachCell(Cell *cell) {
-  if ((source = dynamic_cast<SourceCell *>(cell))) {
-    if (!compatible(cleanImage, source->image.data)) {
-      cleanImage = makeCompatible(source->image.data);
-    }
-    copyImage(cleanImage, source->image.data);
-    pos = {0, 0};
-    return true;
-  } else {
-    return false;
+bool TranslateTool::attachCell(Cell *newCell) {
+  assert(newCell);
+  cell = newCell;
+  if (!compatible(cleanImage, cell->image.data)) {
+    cleanImage = makeCompatible(cell->image.data);
   }
+  copyImage(cleanImage, cell->image.data);
+  pos = {0, 0};
+  return true;
 }
 
 void TranslateTool::detachCell() {
-  source = nullptr;
+  assert(cell);
+  cell = nullptr;
 }
 
 ToolChanges TranslateTool::mouseDown(const ToolMouseEvent &event) {
+  assert(cell);
   if (event.button != ButtonType::primary) return ToolChanges::none;
   lastPos = event.pos;
   drag = true;
@@ -739,6 +745,7 @@ ToolChanges TranslateTool::mouseDown(const ToolMouseEvent &event) {
 }
 
 ToolChanges TranslateTool::mouseMove(const ToolMouseEvent &event) {
+  assert(cell);
   if (event.button != ButtonType::primary || !drag) {
     updateStatus(*event.status);
     return ToolChanges::none;
@@ -750,6 +757,7 @@ ToolChanges TranslateTool::mouseMove(const ToolMouseEvent &event) {
 }
 
 ToolChanges TranslateTool::mouseUp(const ToolMouseEvent &event) {
+  assert(cell);
   if (event.button != ButtonType::primary || !drag) return ToolChanges::none;
   translate(event.pos - lastPos, event.colors.erase);
   updateStatus(*event.status);
@@ -773,6 +781,7 @@ QPoint arrowToDir(const Qt::Key key) {
 }
 
 ToolChanges TranslateTool::keyPress(const ToolKeyEvent &event) {
+  assert(cell);
   QPoint move = arrowToDir(event.key);
   if (move == QPoint{0, 0}) return ToolChanges::none;
   translate(move, event.colors.erase);
@@ -786,8 +795,7 @@ void TranslateTool::translate(const QPoint move, const QRgb eraseColor) {
 }
 
 void TranslateTool::updateSourceImage(const QRgb eraseColor) {
-  assert(source);
-  QImage &src = source->image.data;
+  QImage &src = cell->image.data;
   clearImage(src, eraseColor);
   if (src.depth() == 32) {
     copyRegion(makeSurface<uint32_t>(src), makeCSurface<uint32_t>(cleanImage), pos);
@@ -797,18 +805,19 @@ void TranslateTool::updateSourceImage(const QRgb eraseColor) {
 }
 
 void TranslateTool::updateStatus(StatusMsg &status) {
-  if (source) {
-    status.appendLabeled(pos);
-  }
+  status.appendLabeled(pos);
 }
 
-bool FlipTool::attachCell(Cell *cell) {
+bool FlipTool::attachCell(Cell *newCell) {
+  assert(newCell);
+  cell = newCell;
   flipX = flipY = false;
-  return source = dynamic_cast<SourceCell *>(cell);
+  return true;
 }
 
 void FlipTool::detachCell() {
-  source = nullptr;
+  assert(cell);
+  cell = nullptr;
 }
 
 namespace {
@@ -832,13 +841,15 @@ bool flipYChanged(const Qt::Key key, bool &flipY) {
 }
 
 ToolChanges FlipTool::mouseMove(const ToolMouseEvent &event) {
+  assert(cell);
   updateStatus(*event.status);
   return ToolChanges::none;
 }
 
 ToolChanges FlipTool::keyPress(const ToolKeyEvent &event) {
+  assert(cell);
   if (flipXChanged(event.key, flipX)) {
-    QImage &src = source->image.data;
+    QImage &src = cell->image.data;
     QImage flipped{src.size(), src.format()};
     if (src.depth() == 32) {
       flipHori(makeSurface<uint32_t>(flipped), makeCSurface<uint32_t>(src));
@@ -847,7 +858,7 @@ ToolChanges FlipTool::keyPress(const ToolKeyEvent &event) {
     } else Q_UNREACHABLE();
     src = flipped;
   } else if (flipYChanged(event.key, flipY)) {
-    QImage &src = source->image.data;
+    QImage &src = cell->image.data;
     QImage flipped{src.size(), src.format()};
     if (src.depth() == 32) {
       flipVert(makeSurface<uint32_t>(flipped), makeCSurface<uint32_t>(src));
@@ -869,19 +880,18 @@ void FlipTool::updateStatus(StatusMsg &status) {
   status.append(flipY);
 }
 
-bool RotateTool::attachCell(Cell *cell) {
-  if ((source = dynamic_cast<SourceCell *>(cell))) {
-    const QSize size = source->image.data.size();
-    square = size.width() == size.height();
-    angle = 0;
-    return true;
-  } else {
-    return false;
-  }
+bool RotateTool::attachCell(Cell *newCell) {
+  assert(newCell);
+  cell = newCell;
+  const QSize size = cell->image.data.size();
+  square = size.width() == size.height();
+  angle = 0;
+  return true;
 }
 
 void RotateTool::detachCell() {
-  source = nullptr;
+  assert(cell);
+  cell = nullptr;
 }
 
 namespace {
@@ -899,17 +909,17 @@ quint8 arrowToRot(const Qt::Key key) {
 }
 
 ToolChanges RotateTool::mouseMove(const ToolMouseEvent &event) {
-  if (source) {
-    updateStatus(*event.status);
-  }
+  assert(cell);
+  updateStatus(*event.status);
   return ToolChanges::none;
 }
 
 ToolChanges RotateTool::keyPress(const ToolKeyEvent &event) {
+  assert(cell);
   const quint8 rot = arrowToRot(event.key);
   if (square && rot) {
     angle = (angle + rot) & 3;
-    QImage &src = source->image.data;
+    QImage &src = cell->image.data;
     QImage rotated{src.size(), src.format()};
     if (src.depth() == 32) {
       rotate(makeSurface<uint32_t>(rotated), makeCSurface<uint32_t>(src), rot);
@@ -933,3 +943,5 @@ void RotateTool::updateStatus(StatusMsg &status) {
     status.append("ONLY SQUARE SPRITES CAN BE ROTATED");
   }
 }
+
+// @TODO This file is almost 1000 lines

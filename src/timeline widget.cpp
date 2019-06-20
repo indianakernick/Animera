@@ -8,37 +8,45 @@
 
 #include "timeline widget.hpp"
 
+#include "cell.hpp"
 #include "serial.hpp"
 #include "config.hpp"
-#include "cell impls.hpp"
 #include <QtCore/qfile.h>
 
 class LayerWidget final : public QWidget {
 public:
+  // I hate to say it but I think an array of std::shared_ptr would be better
+  struct LinkedSpan {
+    CellPtr cell;
+    FrameIdx len = 1;
+  };
+
   explicit LayerWidget(TimelineWidget *timeline)
     : QWidget{timeline}, timeline{*timeline} {}
 
   void appendSource() {
-    frames.push_back(std::make_unique<SourceCell>(
+    frames.push_back({std::make_unique<Cell>(
       timeline.size, timeline.format, timeline.palette
-    ));
-  }
-  void appendDuplicate() {
-    frames.push_back(std::make_unique<DuplicateCell>(getLastCell()));
-  }
-  void appendTransform() {
-    frames.push_back(std::make_unique<TransformCell>(getLastCell()));
+    )});
   }
   
   Cell *getCell(FrameIdx frame) {
-    return frame < frames.size() ? frames[frame].get() : nullptr;
+    for (const LinkedSpan &span : frames) {
+      if (frame < span.len) {
+        return span.cell.get();
+      } else {
+        frame -= span.len;
+      }
+    }
+    return nullptr;
   }
   
   void serialize(QIODevice *dev) const {
     assert(dev);
     serializeBytes(dev, static_cast<uint16_t>(frames.size()));
-    for (const CellPtr &cell : frames) {
-      serializeCell(dev, cell.get());
+    for (const LinkedSpan &span : frames) {
+      serializeBytes(dev, static_cast<uint16_t>(span.len));
+      //serializeCell(dev, span.cell.get());
     }
   }
   void deserialize(QIODevice *dev) {
@@ -47,16 +55,18 @@ public:
     deserializeBytes(dev, framesSize);
     frames.reserve(framesSize);
     while (framesSize--) {
-      frames.push_back(deserializeCell(dev));
+      uint16_t len;
+      deserializeBytes(dev, len);
+      //frames.push_back({deserializeCell(dev), len});
     }
   }
 
 private:
   TimelineWidget &timeline;
-  Frames frames;
+  std::vector<LinkedSpan> frames;
   
   const Cell *getLastCell() const {
-    return frames.empty() ? nullptr : frames.back().get();
+    return frames.empty() ? nullptr : frames.back().cell.get();
   }
 };
 

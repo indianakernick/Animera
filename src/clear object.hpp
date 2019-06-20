@@ -9,10 +9,10 @@
 #ifndef clear_object_hpp
 #define clear_object_hpp
 
+#include "tool.hpp"
 #include <QtCore/qobject.h>
 
 class Cell;
-class SourceCell;
 
 // @TODO is this class really the right way to go about the problem?
 class ClearObject final : public QObject {
@@ -21,12 +21,14 @@ class ClearObject final : public QObject {
 public Q_SLOTS:
   void posChange(Cell *);
   void keyPress(Qt::Key);
+  void changeColors(ToolColors);
   
 Q_SIGNALS:
   void cellModified();
 
 private:
-  SourceCell *source = nullptr;
+  Cell *cell = nullptr;
+  QRgb color = qRgba(0, 0, 0, 0);
 };
 
 #endif

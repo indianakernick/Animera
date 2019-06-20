@@ -141,6 +141,7 @@ void Window::connectSignals() {
   
   CONNECT(&colors,   colorsChanged,   &tools,       changeColors);
   CONNECT(&colors,   attachColor,     &colorPicker, attach);
+  CONNECT(&colors,   colorsChanged,   &clear,       changeColors);
   
   CONNECT(&clear,    cellModified,    &tools,       cellModified);
   

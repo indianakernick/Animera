@@ -9,7 +9,6 @@
 #include "animation.hpp"
 
 #include "serial.hpp"
-#include "cell impls.hpp"
 
 namespace {
 
@@ -18,86 +17,17 @@ CellPtr cloneOrNull(const CellPtr &cell) {
 }
 
 void insertNull(Frames &frames, const Frames::iterator begin, const size_t count) {
+  // Iterator invalidation
   frames.resize(frames.size() + count);
   std::rotate(begin, frames.end() - count, frames.end());
 }
 
-constexpr char const magic_number[] = {'P', 'I', 'X', '2'};
-
-}
-
-Animation::Animation() {
-  initialize({0, 0}, Format::color);
 }
 
 void Animation::setPalette(Palette *newPalette) {
   if (format == Format::palette) {
     palette = newPalette;
   }
-}
-
-void Animation::serialize(QIODevice *dev) const {
-  assert(dev);
-  dev->write(magic_number, sizeof(magic_number));
-  serializeBytes(dev, format);
-  if (format == Format::palette) {
-    serializeBytes(dev, palette);
-  }
-  
-  serializeBytes(dev, static_cast<uint16_t>(size.width()));
-  serializeBytes(dev, static_cast<uint16_t>(size.height()));
-  serializeBytes(dev, static_cast<uint16_t>(layers.size()));
-  
-  for (const Frames &frames : layers) {
-    serializeBytes(dev, static_cast<uint16_t>(frames.size()));
-    for (const CellPtr &cell : frames) {
-      serializeCell(dev, cell.get());
-    }
-  }
-}
-
-void Animation::deserialize(QIODevice *dev) {
-  assert(dev);
-  char header[sizeof(magic_number)];
-  dev->read(header, sizeof(magic_number));
-  assert(std::memcmp(header, magic_number, sizeof(magic_number)) == 0);
-  deserializeBytes(dev, format);
-  if (format == Format::palette) {
-    deserializeBytes(dev, palette);
-  }
-  
-  uint16_t width;
-  uint16_t height;
-  deserializeBytes(dev, width);
-  deserializeBytes(dev, height);
-  size = {width, height};
-  
-  uint16_t layersSize;
-  deserializeBytes(dev, layersSize);
-  layers.clear();
-  layers.reserve(layersSize);
-  
-  while (layersSize--) {
-    uint16_t framesSize;
-    deserializeBytes(dev, framesSize);
-    Frames &frames = layers.emplace_back();
-    frames.reserve(framesSize);
-    while (framesSize--) {
-      frames.push_back(deserializeCell(dev));
-    }
-  }
-  
-  for (LayerIdx l = 0; l != layers.size(); ++l) {
-    updateLayer(l);
-  }
-}
-
-void Animation::initialize(const QSize newSize, const Format newFormat) {
-  size = newSize;
-  format = newFormat;
-  layers.clear();
-  layers.reserve(32);
-  layers.emplace_back();
 }
 
 bool Animation::hasLayer(const LayerIdx l) const {
@@ -207,37 +137,9 @@ void Animation::appendLayer() {
   layers.emplace_back();
 }
 
-void Animation::appendSource(const LayerIdx l) {
-  assert(hasLayer(l));
-  layers[l].push_back(std::make_unique<SourceCell>(size, format, palette));
-}
-
-void Animation::appendDuplicate(const LayerIdx l) {
-  assert(hasLayer(l));
-  layers[l].push_back(std::make_unique<DuplicateCell>(getLastCell(l)));
-}
-
-void Animation::appendTransform(const LayerIdx l) {
-  assert(hasLayer(l));
-  layers[l].push_back(std::make_unique<TransformCell>(getLastCell(l)));
-}
-
 const Cell *Animation::getLastCell(const LayerIdx l) const {
   assert(hasLayer(l));
   return layers[l].empty() ? nullptr : layers[l].back().get();
-}
-
-void Animation::updateLayerInputs(const LayerIdx l) {
-  assert(hasLayer(l));
-  if (layers[l].empty()) return;
-  const Cell *input = nullptr;
-  const Frames &frames = layers[l];
-  for (const CellPtr &cell : frames) {
-    if (cell) {
-      cell->updateInput(input);
-    }
-    input = cell.get();
-  }
 }
 
 void Animation::removeTrailingNull(const LayerIdx l) {
@@ -251,7 +153,6 @@ void Animation::removeTrailingNull(const LayerIdx l) {
 
 void Animation::updateLayer(const LayerIdx l) {
   removeTrailingNull(l);
-  updateLayerInputs(l);
 }
 
 bool Animation::validRect(const CellRect rect) const {

@@ -21,7 +21,7 @@ QImage compositeFrame(const Frame &frame, const LayerVisible &visible) {
   images.reserve(frame.size());
   for (size_t i = 0; i != frame.size(); ++i) {
     if (frame[i]) {
-      images.push_back(frame[i]->outputImage());
+      images.push_back(frame[i]->image);
     } else {
       images.push_back({});
     }
