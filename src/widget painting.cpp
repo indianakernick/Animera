@@ -12,6 +12,22 @@
 #include <QtGui/qbitmap.h>
 #include <QtGui/qpainter.h>
 
+QPixmap bakeColoredBitmap(const QString &path, const QColor color) {
+  QBitmap bitmap{path};
+  return bakeColoredBitmap(bitmap.scaled(bitmap.size() * glob_scale), color);
+}
+
+QPixmap bakeColoredBitmap(const QBitmap &bitmap, const QColor color) {
+  assert(bitmap);
+  QPixmap pixmap{bitmap.size()};
+  pixmap.fill(QColor{0, 0, 0, 0});
+  QPainter painter{&pixmap};
+  painter.setCompositionMode(QPainter::CompositionMode_Source);
+  painter.setClipRegion(bitmap);
+  painter.fillRect(QRect{{}, pixmap.size()}, color);
+  return pixmap;
+}
+
 QPixmap bakeColoredBitmaps(
   const QString &pathP,
   const QString &pathS,

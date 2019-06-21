@@ -14,26 +14,60 @@
 #include <QtCore/qfile.h>
 #include <QtGui/qbitmap.h>
 #include <QtGui/qpainter.h>
+#include "widget painting.hpp"
 #include <QtWidgets/qgridlayout.h>
 #include <QtWidgets/qscrollarea.h>
+
+inline const QColor cell_icon_color = glob_light_2;
+constexpr int cell_icon_pad = 1_px;
+constexpr int cell_icon_size = 8_px;
+constexpr int cell_icon_step = 2 * cell_icon_pad + cell_icon_size + glob_border_width;
+constexpr int layer_height = cell_icon_step;
+constexpr int cell_border_offset = cell_icon_pad + glob_border_width;
 
 class LayerCellsWidget final : public QWidget {
 public:
   // @TODO a sparse data structure might be better
   struct LinkedSpan {
+    // Does this need to be a std::unique_ptr?
     CellPtr cell;
     FrameIdx len = 1;
   };
 
   LayerCellsWidget(QWidget *parent, TimelineWidget *timeline)
     : QWidget{parent}, timeline{*timeline} {
-    setFixedSize(200_px, 10_px);
+    setFixedSize(0, layer_height);
+    loadIcons();
   }
 
+  Cell *appendCell(FrameIdx len = 1) {
+    assert(len > 0);
+    auto cell = std::make_unique<Cell>(timeline.size, timeline.format, timeline.palette);
+    Cell *cellPtr = cell.get();
+    frames.push_back({std::move(cell), len});
+    addSize(len);
+    repaint();
+    return cellPtr;
+  }
+  
+  void appendNull(FrameIdx len = 1) {
+    assert(len > 0);
+    frames.push_back({nullptr, len});
+    addSize(len);
+    repaint();
+  }
+  
   void appendFrame() {
-    frames.push_back({std::make_unique<Cell>(
-      timeline.size, timeline.format, timeline.palette
-    )});
+    if (frames.empty()) {
+      frames.push_back({std::make_unique<Cell>(timeline.size, timeline.format, timeline.palette)});
+    } else if (frames.back().cell) {
+      CellPtr cell = std::make_unique<Cell>();
+      cell->image = frames.back().cell->image;
+      frames.push_back({std::move(cell)});
+    } else {
+      ++frames.back().len;
+    }
+    addSize(1);
     repaint();
   }
   
@@ -81,25 +115,67 @@ public:
 private:
   TimelineWidget &timeline;
   std::vector<LinkedSpan> frames;
+  QPixmap cellPix;
+  QPixmap beginLinkPix;
+  QPixmap endLinkPix;
+  
+  void loadIcons() {
+    cellPix = bakeColoredBitmap(":/Timeline/cell.pbm", cell_icon_color);
+    beginLinkPix = bakeColoredBitmap(":/Timeline/begin linked cell.pbm", cell_icon_color);
+    endLinkPix = bakeColoredBitmap(":/Timeline/end linked cell.pbm", cell_icon_color);
+  }
+  
+  void addSize(const FrameIdx cells) {
+    setFixedWidth(width() + cells * cell_icon_step);
+  }
   
   const Cell *getLastCell() const {
     return frames.empty() ? nullptr : frames.back().cell.get();
   }
   
+  void paintBorder(QPainter &painter, const int x) {
+    painter.fillRect(
+      x - cell_border_offset, 0,
+      glob_border_width, layer_height,
+      glob_border_color
+    );
+  }
+  
   void paintEvent(QPaintEvent *) override {
     QPainter painter{this};
-    int x = 0;
+    int x = cell_icon_pad;
     for (const LinkedSpan &span : frames) {
       if (span.cell) {
         if (span.len == 1) {
-          QRegion cellRegion{QBitmap{":/Timeline/cell.pbm"}.scaled(8_px, 8_px)};
-          cellRegion.translate(x, 1_px);
-          painter.setClipRegion(cellRegion);
-          painter.fillRect(x, 1_px, 8_px, 8_px, QColor{0, 0, 0});
+          painter.drawPixmap(x, cell_icon_pad, cellPix);
+          x += cell_icon_step;
+          paintBorder(painter, x);
+        } else if (span.len > 1) {
+          const int between = (span.len - 2) * cell_icon_step;
+          painter.drawPixmap(x, cell_icon_pad, beginLinkPix);
+          x += cell_icon_step;
+          painter.fillRect(
+            x - cell_icon_pad - cell_border_offset, cell_icon_pad,
+            between + cell_icon_pad + cell_border_offset, cell_icon_size,
+            cell_icon_color
+          );
+          x += between;
+          painter.drawPixmap(x, cell_icon_pad, endLinkPix);
+          x += cell_icon_step;
+          paintBorder(painter, x);
+        } else Q_UNREACHABLE();
+      } else {
+        for (FrameIdx f = 0; f != span.len; ++f) {
+          x += cell_icon_step;
+          paintBorder(painter, x);
         }
       }
-      x += span.len * 10_px;
     }
+    painter.fillRect(
+      0, layer_height - glob_border_width,
+      x - cell_icon_pad, glob_border_width,
+      glob_border_color
+    );
   }
 };
 
@@ -129,17 +205,28 @@ public:
   CellsWidget(QWidget *parent, TimelineWidget *timeline)
     : QWidget{parent}, timeline{timeline}, boxLayout{new QVBoxLayout{this}} {
     setLayout(boxLayout);
+    boxLayout->setSpacing(0);
+    boxLayout->setContentsMargins(0, 0, 0, 0);
+    boxLayout->setAlignment(Qt::AlignTop);
+    boxLayout->setSizeConstraint(QLayout::SetFixedSize);
   }
   
-  void appendLayer() {
+  LayerCellsWidget *appendLayer() {
     auto *layer = new LayerCellsWidget{this, timeline};
     boxLayout->addWidget(layer);
     layers.push_back(layer);
+    return layer;
   }
   
   LayerCellsWidget *getLayer(const LayerIdx layer) {
     assert(layer < layers.size());
     return layers[layer];
+  }
+  
+  void appendFrame() {
+    for (LayerCellsWidget *layer : layers) {
+      layer->appendFrame();
+    }
   }
   
   void serialize(QIODevice *dev) {
@@ -193,7 +280,7 @@ public:
     : QScrollArea{parent} {
     setFrameShape(NoFrame);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    setStyleSheet("background-color:" + QColor{255, 255, 0}.name());
+    setStyleSheet("background-color:" + glob_main.name());
   }
 };
 
@@ -224,11 +311,47 @@ TimelineWidget::TimelineWidget(QWidget *parent)
 }
 
 void TimelineWidget::createInitialCell() {
-  cells->appendLayer();
-  cells->getLayer(0)->appendFrame();
-  Q_EMIT frameChanged({cells->getLayer(0)->getCell(0)});
+  LayerCellsWidget *layer = cells->appendLayer();
+  assert(layer);
+  Cell *cell = layer->appendCell();
+  assert(cell);
+  
+  {
+    // @TODO remove
+    layer->appendCell();
+    layer->appendCell();
+    layer->appendNull(2);
+    layer->appendCell(8);
+    
+    LayerCellsWidget *layer1 = cells->appendLayer();
+    layer1->appendNull();
+    layer1->appendCell(2);
+    layer1->appendCell();
+    layer1->appendCell(3);
+    layer1->appendNull(5);
+    layer1->appendCell();
+    
+    LayerCellsWidget *layer2 = cells->appendLayer();
+    layer2->appendNull(13);
+    
+    LayerCellsWidget *layer3 = cells->appendLayer();
+    layer3->appendCell();
+    layer3->appendCell();
+    layer3->appendCell();
+    layer3->appendCell();
+    layer3->appendCell();
+    layer3->appendCell();
+    layer3->appendCell();
+    layer3->appendCell();
+    layer3->appendNull(5);
+    
+    cells->appendFrame();
+    cells->appendFrame();
+  }
+  
+  Q_EMIT frameChanged({cell});
   Q_EMIT layerVisibility({true});
-  Q_EMIT posChange(cells->getLayer(0)->getCell(0), 0, 0);
+  Q_EMIT posChange(cell, 0, 0);
 }
 
 void TimelineWidget::initialize(const QSize newSize, const Format newFormat) {
