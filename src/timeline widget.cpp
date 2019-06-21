@@ -13,6 +13,7 @@
 #include "config.hpp"
 #include "connect.hpp"
 #include <QtCore/qfile.h>
+#include "global font.hpp"
 #include <QtGui/qbitmap.h>
 #include <QtGui/qpainter.h>
 #include "widget painting.hpp"
@@ -188,7 +189,7 @@ class ControlsWidget final : public QWidget {
 public:
   explicit ControlsWidget(QWidget *parent)
     : QWidget{parent} {
-    setFixedSize(100_px, 12_px);
+    setFixedSize(100_px, layer_height);
     setStyleSheet("background-color:" + QColor{255, 0, 0}.name());
   }
 };
@@ -284,10 +285,49 @@ private:
   QVBoxLayout *layout = nullptr;
 };
 
+constexpr int frame_incr = 5;
+
 class FramesWidget final : public QWidget {
 public:
   explicit FramesWidget(QWidget *parent)
-    : QWidget{parent} {}
+    : QWidget{parent} {
+    setFixedSize(0, layer_height);
+  }
+ 
+  void appendFrame() {
+    ++frames;
+    setFixedWidth((roundUpFrames() + frame_incr) * cell_icon_step);
+    repaint();
+  }
+ 
+private:
+  int frames = 0;
+  
+  int roundUpFrames() const {
+    return ((frames + 1) / frame_incr) * frame_incr;
+  }
+  
+  void paintEvent(QPaintEvent *) {
+    QPainter painter{this};
+    painter.setFont(getGlobalFont());
+    painter.setBrush(Qt::NoBrush);
+    painter.setPen(glob_text_color);
+    int x = 0;
+    for (int f = 0; f <= roundUpFrames(); f += frame_incr) {
+      painter.drawText(x + 1_px, 2_px + glob_font_accent_px, QString::number(f));
+      painter.fillRect(
+        x - glob_border_width, 0,
+        glob_border_width, height(),
+        glob_border_color
+      );
+      x += frame_incr * cell_icon_step;
+    }
+    painter.fillRect(
+      0, height() - glob_border_width,
+      width(), glob_border_width,
+      glob_border_color
+    );
+  }
 };
 
 class CellsWidget final : public QWidget {
@@ -374,8 +414,19 @@ public:
   explicit FrameScrollWidget(QWidget *parent)
     : QScrollArea{parent} {
     setFrameShape(NoFrame);
-    setFixedHeight(12_px);
-    setStyleSheet("background-color:" + QColor{0, 0, 255}.name());
+    setFixedHeight(layer_height);
+    setStyleSheet("background-color:" + glob_dark_2.name());
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  }
+
+private:
+  void paintEvent(QPaintEvent *) override {
+    QPainter painter{viewport()};
+    painter.fillRect(
+      0, height() - glob_border_width,
+      width(), glob_border_width,
+      glob_border_color
+    );
   }
 };
 
@@ -407,6 +458,9 @@ TimelineWidget::TimelineWidget(QWidget *parent)
   
   CONNECT(layerScroll->verticalScrollBar(), valueChanged, cellScroll->verticalScrollBar(), setValue);
   CONNECT(cellScroll->verticalScrollBar(), valueChanged, layerScroll->verticalScrollBar(), setValue);
+  
+  CONNECT(frameScroll->horizontalScrollBar(), valueChanged, cellScroll->horizontalScrollBar(), setValue);
+  CONNECT(cellScroll->horizontalScrollBar(), valueChanged, frameScroll->horizontalScrollBar(), setValue);
   
   QGridLayout *grid = new QGridLayout{this};
   setLayout(grid);
@@ -457,8 +511,24 @@ void TimelineWidget::createInitialCell() {
     layer3->appendCell();
     layer3->appendNull(5);
     
+    layers->appendLayer(cells->layerCount());
+    cells->appendLayer();
+    layers->appendLayer(cells->layerCount());
+    cells->appendLayer();
+    layers->appendLayer(cells->layerCount());
+    cells->appendLayer();
+    
     cells->appendFrame();
     cells->appendFrame();
+    
+    for (int f = 0; f != 15; ++f) {
+      frames->appendFrame();
+    }
+    
+    for (int f = 0; f != 50; ++f) {
+      cells->appendFrame();
+      frames->appendFrame();
+    }
   }
   
   Q_EMIT frameChanged({cell});
