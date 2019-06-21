@@ -101,7 +101,8 @@ void Window::setupUI() {
 void Window::setupMenubar() {
   menubar = new QMenuBar{this};
   QMenu *file = menubar->addMenu("File");
-  file->addAction("Open");
+  QAction *open = file->addAction("Open");
+  open->setShortcut(QKeySequence::Open);
   file->addAction("Save");
   file->addSeparator();
   file->addAction("Export");
