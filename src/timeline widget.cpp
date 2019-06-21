@@ -15,8 +15,10 @@
 #include <QtGui/qbitmap.h>
 #include <QtGui/qpainter.h>
 #include "widget painting.hpp"
+#include "text input widget.hpp"
 #include <QtWidgets/qgridlayout.h>
 #include <QtWidgets/qscrollarea.h>
+#include <QtWidgets/qabstractbutton.h>
 
 inline const QColor cell_icon_color = glob_light_2;
 constexpr int cell_icon_pad = 1_px;
@@ -120,6 +122,7 @@ private:
   QPixmap endLinkPix;
   
   void loadIcons() {
+    // @TODO cache
     cellPix = bakeColoredBitmap(":/Timeline/cell.pbm", cell_icon_color);
     beginLinkPix = bakeColoredBitmap(":/Timeline/begin linked cell.pbm", cell_icon_color);
     endLinkPix = bakeColoredBitmap(":/Timeline/end linked cell.pbm", cell_icon_color);
@@ -188,10 +191,93 @@ public:
   }
 };
 
+class VisibleWidget final : public QAbstractButton {
+public:
+  explicit VisibleWidget(QWidget *parent)
+    : QAbstractButton{parent} {
+    setCheckable(true);
+    setChecked(true);
+    setFixedSize(cell_icon_step, cell_icon_step);
+    loadIcons();
+  }
+
+private:
+  QPixmap shownPix;
+  QPixmap hiddenPix;
+
+  void loadIcons() {
+    shownPix = bakeColoredBitmap(":/Timeline/shown.pbm", cell_icon_color);
+    hiddenPix = bakeColoredBitmap(":/Timeline/hidden.pbm", cell_icon_color);
+  }
+
+  void paintEvent(QPaintEvent *) override {
+    QPainter painter{this};
+    painter.fillRect(0, 0, width() - glob_border_width, height() - glob_border_width, glob_main);
+    QPixmap pixmap = isChecked() ? shownPix : hiddenPix;
+    painter.drawPixmap(cell_icon_pad, cell_icon_pad, pixmap);
+    painter.fillRect(
+      width() - glob_border_width, 0,
+      glob_border_width, height(),
+      glob_border_color
+    );
+  }
+};
+
+class LayerNameWidget final : public QWidget {
+public:
+  LayerNameWidget(QWidget *parent, const LayerIdx layer)
+    : QWidget{parent} {
+    setFixedSize(100_px, layer_height);
+    QHBoxLayout *layout = new QHBoxLayout{this};
+    setLayout(layout);
+    layout->setSpacing(0);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setAlignment(Qt::AlignLeft);
+    visible = new VisibleWidget{this};
+    layout->addWidget(visible);
+    constexpr int text_width = 100_px - cell_icon_step - glob_border_width;
+    constexpr int text_height = layer_height - glob_border_width;
+    name = new TextInputWidget{this, {{1_px, 2_px}, {text_width, text_height}, 0, 0}};
+    layout->addWidget(name, 0, Qt::AlignTop);
+    name->setText("Layer " + QString::number(layer));
+  }
+
+private:
+  VisibleWidget *visible = nullptr;
+  TextInputWidget *name = nullptr;
+  
+  void paintEvent(QPaintEvent *) override {
+    QPainter painter{this};
+    painter.fillRect(
+      0, layer_height - glob_border_width,
+      width(), glob_border_width,
+      glob_border_color
+    );
+    painter.fillRect(
+      width() - glob_border_width, 0,
+      glob_border_width, height(),
+      glob_border_color
+    );
+  }
+};
+
 class LayersWidget final : public QWidget {
 public:
   explicit LayersWidget(QWidget *parent)
-    : QWidget{parent} {}
+    : QWidget{parent}, layout{new QVBoxLayout{this}} {
+    setLayout(layout);
+    layout->setSpacing(0);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setAlignment(Qt::AlignTop);
+    layout->setSizeConstraint(QLayout::SetFixedSize);
+  }
+  
+  void appendLayer(const LayerIdx layer) {
+    layout->addWidget(new LayerNameWidget{this, layer});
+  }
+
+private:
+  QVBoxLayout *layout = nullptr;
 };
 
 class FramesWidget final : public QWidget {
@@ -203,17 +289,17 @@ public:
 class CellsWidget final : public QWidget {
 public:
   CellsWidget(QWidget *parent, TimelineWidget *timeline)
-    : QWidget{parent}, timeline{timeline}, boxLayout{new QVBoxLayout{this}} {
-    setLayout(boxLayout);
-    boxLayout->setSpacing(0);
-    boxLayout->setContentsMargins(0, 0, 0, 0);
-    boxLayout->setAlignment(Qt::AlignTop);
-    boxLayout->setSizeConstraint(QLayout::SetFixedSize);
+    : QWidget{parent}, timeline{timeline}, layout{new QVBoxLayout{this}} {
+    setLayout(layout);
+    layout->setSpacing(0);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setAlignment(Qt::AlignTop);
+    layout->setSizeConstraint(QLayout::SetFixedSize);
   }
   
   LayerCellsWidget *appendLayer() {
     auto *layer = new LayerCellsWidget{this, timeline};
-    boxLayout->addWidget(layer);
+    layout->addWidget(layer);
     layers.push_back(layer);
     return layer;
   }
@@ -227,6 +313,10 @@ public:
     for (LayerCellsWidget *layer : layers) {
       layer->appendFrame();
     }
+  }
+  
+  LayerIdx layerCount() const {
+    return static_cast<LayerIdx>(layers.size());
   }
   
   void serialize(QIODevice *dev) {
@@ -250,7 +340,7 @@ public:
   
 private:
   TimelineWidget *timeline;
-  QVBoxLayout *boxLayout;
+  QVBoxLayout *layout;
   std::vector<LayerCellsWidget *> layers;
 };
 
@@ -260,7 +350,18 @@ public:
     : QScrollArea{parent} {
     setFrameShape(NoFrame);
     setFixedWidth(100_px);
-    setStyleSheet("background-color:" + QColor{0, 255, 0}.name());
+    setStyleSheet("background-color:" + glob_main.name());
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  }
+
+private:
+  void paintEvent(QPaintEvent *) override {
+    QPainter painter{viewport()};
+    painter.fillRect(
+      width() - glob_border_width, 0,
+      glob_border_width, height(),
+      glob_border_color
+    );
   }
 };
 
@@ -311,6 +412,7 @@ TimelineWidget::TimelineWidget(QWidget *parent)
 }
 
 void TimelineWidget::createInitialCell() {
+  layers->appendLayer(cells->layerCount());
   LayerCellsWidget *layer = cells->appendLayer();
   assert(layer);
   Cell *cell = layer->appendCell();
@@ -323,6 +425,7 @@ void TimelineWidget::createInitialCell() {
     layer->appendNull(2);
     layer->appendCell(8);
     
+    layers->appendLayer(cells->layerCount());
     LayerCellsWidget *layer1 = cells->appendLayer();
     layer1->appendNull();
     layer1->appendCell(2);
@@ -331,9 +434,11 @@ void TimelineWidget::createInitialCell() {
     layer1->appendNull(5);
     layer1->appendCell();
     
+    layers->appendLayer(cells->layerCount());
     LayerCellsWidget *layer2 = cells->appendLayer();
     layer2->appendNull(13);
     
+    layers->appendLayer(cells->layerCount());
     LayerCellsWidget *layer3 = cells->appendLayer();
     layer3->appendCell();
     layer3->appendCell();
