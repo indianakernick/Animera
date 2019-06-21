@@ -17,74 +17,6 @@
 #include "surface factory.hpp"
 #include <QtWidgets/qscrollbar.h>
 
-int documentLength(const QScrollBar *bar) {
-  return bar->maximum() - bar->minimum() + bar->pageStep();
-}
-
-int scrollRange(const QScrollBar *bar) {
-  return bar->maximum() - bar->minimum();
-}
-
-int pagePixels(const QScrollBar *bar, const int pixelLength) {
-  return (pixelLength * bar->pageStep()) / documentLength(bar);
-}
-
-int scrollRangePixels(const QScrollBar *bar, const int pixelLength) {
-  return pixelLength - pagePixels(bar, pixelLength);
-}
-
-int valuePixels(const QScrollBar *bar, const int pixelLength) {
-  if (bar->minimum() == bar->maximum()) {
-    return 0;
-  } else {
-    return (scrollRangePixels(bar, pixelLength) * bar->value()) / scrollRange(bar);
-  }
-}
-
-class EditorScrollBar final : public QScrollBar {
-public:
-  EditorScrollBar(Qt::Orientation orient, QWidget *parent)
-    : QScrollBar{orient, parent} {
-    const QString sizeStr = QString::number(edit_scroll_width);
-    setStyleSheet("width:" + sizeStr + ";height:" + sizeStr);
-  }
-  
-private:
-  void paintEvent(QPaintEvent *) override {
-    QPainter painter{this};
-    painter.fillRect(rect(), edit_scroll_back);
-    if (orientation() == Qt::Horizontal) {
-      painter.fillRect(QRect{
-        valuePixels(this, width()),
-        0,
-        pagePixels(this, width()),
-        height()
-      }, edit_scroll_handle);
-    } else if (orientation() == Qt::Vertical) {
-      painter.fillRect(QRect{
-        0,
-        valuePixels(this, height()),
-        width(),
-        pagePixels(this, height())
-      }, edit_scroll_handle);
-    } else {
-      Q_UNREACHABLE();
-    }
-  }
-};
-
-class EditorCorner final : public QWidget {
-public:
-  explicit EditorCorner(QWidget *parent)
-    : QWidget{parent} {}
-  
-private:
-  void paintEvent(QPaintEvent *) override {
-    QPainter painter{this};
-    painter.fillRect(rect(), edit_scroll_corner);
-  }
-};
-
 class EditorImage final : public QWidget {
   Q_OBJECT
   
@@ -313,15 +245,12 @@ public:
 };
 
 EditorWidget::EditorWidget(QWidget *parent)
-  : QScrollArea{parent} {
+  : ScrollAreaWidget{parent} {
   setFocusPolicy(Qt::NoFocus);
+  setFrameShape(NoFrame);
   setAlignment(Qt::AlignCenter);
-  setVerticalScrollBar(new EditorScrollBar{Qt::Vertical, this});
-  setHorizontalScrollBar(new EditorScrollBar{Qt::Horizontal, this});
-  setCornerWidget(new EditorCorner{this});
   view = new EditorImage{this};
   setWidget(view);
-  setFrameShape(NoFrame);
   CONNECT(view, mouseLeave, this, mouseLeave);
   CONNECT(view, mouseDown,  this, mouseDown);
   CONNECT(view, mouseMove,  this, mouseMove);
@@ -350,17 +279,6 @@ void EditorWidget::compositeVis(const LayerVisible &newVisibility) {
 
 void EditorWidget::frameChanged(const Frame &newFrame) {
   frame = newFrame;
-}
-
-void EditorWidget::adjustMargins() {
-  if (view->width() < width() && view->height() < height()) {
-    setViewportMargins(0, 0, 0, 0);
-  } else {
-    const QMargins margins = viewportMargins();
-    const int right = height() < view->height() + margins.bottom() ? edit_scroll_width : 0;
-    const int bottom = width() < view->width() + margins.right() ? edit_scroll_width : 0;
-    setViewportMargins(0, 0, right, bottom);
-  }
 }
 
 void EditorWidget::resizeEvent(QResizeEvent *event) {

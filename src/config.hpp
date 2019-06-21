@@ -51,8 +51,13 @@ inline const QColor glob_text_color = glob_light_2;
 inline const QColor glob_border_color = glob_light_2;
 inline const QColor glob_back_color = glob_dark_2;
 
+inline const QColor glob_scroll_corner = glob_dark_1;
+inline const QColor glob_scroll_back = glob_dark_1;
+inline const QColor glob_scroll_handle = glob_light_1;
+
 // ----------------------------- global dimensions -------------------------- //
 
+constexpr int       glob_scroll_width = 4_px;
 constexpr int       glob_padding      = 1_px;
 constexpr int       glob_text_padding = 1_px;
 constexpr int       glob_border_width = 1_px;
@@ -145,13 +150,9 @@ constexpr int       edit_min_scale = 1;
 constexpr int       edit_max_scale = 64;
 constexpr int       edit_default_scale = 1_px;
 constexpr int       edit_undo_stack = 128;
-constexpr int       edit_scroll_width = 4_px;
 
 inline const QRgb edit_checker_a = qRgb(191, 191, 191);
 inline const QRgb edit_checker_b = qRgb(255, 255, 255);
-inline const QColor edit_scroll_corner = glob_dark_1;
-inline const QColor edit_scroll_back = glob_dark_1;
-inline const QColor edit_scroll_handle = glob_light_1;
 
 // ------------------------------ color picker ------------------------------ //
 

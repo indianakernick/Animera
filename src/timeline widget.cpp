@@ -17,6 +17,7 @@
 #include <QtGui/qbitmap.h>
 #include <QtGui/qpainter.h>
 #include "widget painting.hpp"
+#include "scroll bar widget.hpp"
 #include "text input widget.hpp"
 #include <QtWidgets/qscrollbar.h>
 #include <QtWidgets/qgridlayout.h>
@@ -288,6 +289,8 @@ private:
 constexpr int frame_incr = 5;
 
 class FramesWidget final : public QWidget {
+  Q_OBJECT
+
 public:
   explicit FramesWidget(QWidget *parent)
     : QWidget{parent} {
@@ -297,8 +300,12 @@ public:
   void appendFrame() {
     ++frames;
     setFixedWidth((roundUpFrames() + frame_incr) * cell_icon_step);
+    Q_EMIT widthChanged(width());
     repaint();
   }
+
+Q_SIGNALS:
+  void widthChanged(int);
  
 private:
   int frames = 0;
@@ -331,6 +338,8 @@ private:
 };
 
 class CellsWidget final : public QWidget {
+  Q_OBJECT
+  
 public:
   CellsWidget(QWidget *parent, TimelineWidget *timeline)
     : QWidget{parent}, timeline{timeline}, layout{new QVBoxLayout{this}} {
@@ -340,7 +349,18 @@ public:
     layout->setAlignment(Qt::AlignTop);
     layout->setSizeConstraint(QLayout::SetFixedSize);
   }
-  
+
+Q_SIGNALS:
+  void resized();
+
+public Q_SLOTS:
+  void changeWidth(const int newWidth) {
+    for (LayerCellsWidget *layer : layers) {
+      layer->setFixedWidth(newWidth);
+    }
+  }
+
+public:
   LayerCellsWidget *appendLayer() {
     auto *layer = new LayerCellsWidget{this, timeline};
     layout->addWidget(layer);
@@ -386,9 +406,20 @@ private:
   TimelineWidget *timeline;
   QVBoxLayout *layout;
   std::vector<LayerCellsWidget *> layers;
+  
+  void resizeEvent(QResizeEvent *) override {
+    Q_EMIT resized();
+  }
 };
 
 class LayerScrollWidget final : public QScrollArea {
+  Q_OBJECT
+
+public Q_SLOTS:
+  void changeBottomMargin(const int value) {
+    setViewportMargins(0, 0, 0, value);
+  }
+  
 public:
   explicit LayerScrollWidget(QWidget *parent)
     : QScrollArea{parent} {
@@ -410,6 +441,8 @@ private:
 };
 
 class FrameScrollWidget final : public QScrollArea {
+  Q_OBJECT
+  
 public:
   explicit FrameScrollWidget(QWidget *parent)
     : QScrollArea{parent} {
@@ -417,6 +450,11 @@ public:
     setFixedHeight(layer_height);
     setStyleSheet("background-color:" + glob_dark_2.name());
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  }
+
+public Q_SLOTS:
+  void changeRightMargin(const int value) {
+    setViewportMargins(0, 0, value, 0);
   }
 
 private:
@@ -430,13 +468,38 @@ private:
   }
 };
 
-class CellScrollWidget final : public QScrollArea {
+class CellScrollWidget final : public ScrollAreaWidget {
+  Q_OBJECT
+  
 public:
   explicit CellScrollWidget(QWidget *parent)
-    : QScrollArea{parent} {
+    : ScrollAreaWidget{parent} {
     setFrameShape(NoFrame);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setStyleSheet("background-color:" + glob_main.name());
+  }
+
+Q_SIGNALS:
+  void rightMarginChanged(int);
+  void bottomMarginChanged(int);
+
+public Q_SLOTS:
+  void contentResized() {
+    const QMargins before = viewportMargins();
+    adjustMargins();
+    const QMargins after = viewportMargins();
+    if (before.right() != after.right()) {
+      Q_EMIT rightMarginChanged(after.right());
+    }
+    if (before.bottom() != after.bottom()) {
+      Q_EMIT bottomMarginChanged(after.bottom());
+    }
+  }
+
+private:
+  void resizeEvent(QResizeEvent *event) override {
+    contentResized();
+    ScrollAreaWidget::resizeEvent(event);
   }
 };
 
@@ -461,6 +524,11 @@ TimelineWidget::TimelineWidget(QWidget *parent)
   
   CONNECT(frameScroll->horizontalScrollBar(), valueChanged, cellScroll->horizontalScrollBar(), setValue);
   CONNECT(cellScroll->horizontalScrollBar(), valueChanged, frameScroll->horizontalScrollBar(), setValue);
+  
+  CONNECT(frames, widthChanged, cells, changeWidth);
+  CONNECT(cells, resized, cellScroll, contentResized);
+  CONNECT(cellScroll, rightMarginChanged, frameScroll, changeRightMargin);
+  CONNECT(cellScroll, bottomMarginChanged, layerScroll, changeBottomMargin);
   
   QGridLayout *grid = new QGridLayout{this};
   setLayout(grid);

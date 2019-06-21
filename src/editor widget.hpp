@@ -11,11 +11,11 @@
 
 #include "tool.hpp"
 #include "animation.hpp"
-#include <QtWidgets/qscrollarea.h>
+#include "scroll bar widget.hpp"
 
 class EditorImage;
 
-class EditorWidget final : public QScrollArea {
+class EditorWidget final : public ScrollAreaWidget {
   Q_OBJECT
 
 public:
@@ -44,7 +44,6 @@ private:
   LayerVisible visibility;
   Frame frame;
   
-  void adjustMargins();
   void resizeEvent(QResizeEvent *) override;
 };
 

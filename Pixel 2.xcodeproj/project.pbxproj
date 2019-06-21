@@ -39,6 +39,7 @@
 		4571C132227C383A00479006 /* radio button widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4571C130227C383A00479006 /* radio button widget.cpp */; };
 		4576DFE82298DB2D00FDECA3 /* separator widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4576DFE62298DB2D00FDECA3 /* separator widget.cpp */; };
 		458F84082249DFC8005F91D0 /* polygon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 458F84062249DFC8005F91D0 /* polygon.cpp */; };
+		4595D48622BCA0E000607D64 /* scroll bar widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4595D48422BCA0E000607D64 /* scroll bar widget.cpp */; };
 		45B284932218E38800D6D055 /* image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45B284912218E38800D6D055 /* image.cpp */; };
 		45B284962218E39300D6D055 /* cell.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45B284942218E39300D6D055 /* cell.cpp */; };
 		45B284A72219079B00D6D055 /* animation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45B284A52219079B00D6D055 /* animation.cpp */; };
@@ -150,6 +151,8 @@
 		458F84032249CB7C005F91D0 /* config.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = config.hpp; sourceTree = "<group>"; };
 		458F84062249DFC8005F91D0 /* polygon.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = polygon.cpp; sourceTree = "<group>"; };
 		458F84072249DFC8005F91D0 /* polygon.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = polygon.hpp; sourceTree = "<group>"; };
+		4595D48422BCA0E000607D64 /* scroll bar widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "scroll bar widget.cpp"; sourceTree = "<group>"; };
+		4595D48522BCA0E000607D64 /* scroll bar widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "scroll bar widget.hpp"; sourceTree = "<group>"; };
 		45B284912218E38800D6D055 /* image.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = image.cpp; sourceTree = "<group>"; };
 		45B284922218E38800D6D055 /* image.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = image.hpp; sourceTree = "<group>"; };
 		45B284942218E39300D6D055 /* cell.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = cell.cpp; sourceTree = "<group>"; };
@@ -1052,6 +1055,8 @@
 				454FDE982280024800928068 /* fps widget.hpp */,
 				4576DFE62298DB2D00FDECA3 /* separator widget.cpp */,
 				4576DFE72298DB2D00FDECA3 /* separator widget.hpp */,
+				4595D48422BCA0E000607D64 /* scroll bar widget.cpp */,
+				4595D48522BCA0E000607D64 /* scroll bar widget.hpp */,
 			);
 			name = General;
 			sourceTree = "<group>";
@@ -2126,6 +2131,7 @@
 				45B284B3221A919000D6D055 /* tool.cpp in Sources */,
 				453C78402234DF3200818B19 /* application.cpp in Sources */,
 				455F2868220690A600C73F39 /* main.cpp in Sources */,
+				4595D48622BCA0E000607D64 /* scroll bar widget.cpp in Sources */,
 				453C781C22349BBD00818B19 /* editor widget.cpp in Sources */,
 				45BADA1D2247007F000D095C /* glm.cpp in Sources */,
 				453D28BD22768D9900D0E5F9 /* text input widget.cpp in Sources */,

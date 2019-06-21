@@ -162,7 +162,7 @@ void EditorWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
 }
 
 QT_INIT_METAOBJECT const QMetaObject EditorWidget::staticMetaObject = { {
-    &QScrollArea::staticMetaObject,
+    &ScrollAreaWidget::staticMetaObject,
     qt_meta_stringdata_EditorWidget.data,
     qt_meta_data_EditorWidget,
     qt_static_metacall,
@@ -181,12 +181,12 @@ void *EditorWidget::qt_metacast(const char *_clname)
     if (!_clname) return nullptr;
     if (!strcmp(_clname, qt_meta_stringdata_EditorWidget.stringdata0))
         return static_cast<void*>(this);
-    return QScrollArea::qt_metacast(_clname);
+    return ScrollAreaWidget::qt_metacast(_clname);
 }
 
 int EditorWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
-    _id = QScrollArea::qt_metacall(_c, _id, _a);
+    _id = ScrollAreaWidget::qt_metacall(_c, _id, _a);
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
