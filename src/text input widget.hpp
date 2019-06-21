@@ -22,6 +22,7 @@ public:
 private Q_SLOTS:
   void blinkSlot();
   void showCursor();
+  void hideCursor();
 
 private:
   QTimer cursorBlinkTimer;

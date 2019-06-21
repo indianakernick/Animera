@@ -49,8 +49,16 @@ void TextInputWidget::showCursor() {
   repaint();
 }
 
+void TextInputWidget::hideCursor() {
+  cursorBlinkStatus = false;
+  cursorBlinkTimer.stop();
+  cursorBlinkTimer.start();
+  repaint();
+}
+
 void TextInputWidget::focusInEvent(QFocusEvent *event) {
   QLineEdit::focusInEvent(event);
+  hideCursor();
   QTimer::singleShot(0, this, &QLineEdit::selectAll);
 }
 

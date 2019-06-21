@@ -11,11 +11,13 @@
 #include "cell.hpp"
 #include "serial.hpp"
 #include "config.hpp"
+#include "connect.hpp"
 #include <QtCore/qfile.h>
 #include <QtGui/qbitmap.h>
 #include <QtGui/qpainter.h>
 #include "widget painting.hpp"
 #include "text input widget.hpp"
+#include <QtWidgets/qscrollbar.h>
 #include <QtWidgets/qgridlayout.h>
 #include <QtWidgets/qscrollarea.h>
 #include <QtWidgets/qabstractbutton.h>
@@ -225,6 +227,8 @@ private:
 
 class LayerNameWidget final : public QWidget {
 public:
+  // @TODO serialize name and visibility
+
   LayerNameWidget(QWidget *parent, const LayerIdx layer)
     : QWidget{parent} {
     setFixedSize(100_px, layer_height);
@@ -400,6 +404,9 @@ TimelineWidget::TimelineWidget(QWidget *parent)
   frameScroll->setWidget(frames);
   cells = new CellsWidget{cellScroll, this};
   cellScroll->setWidget(cells);
+  
+  CONNECT(layerScroll->verticalScrollBar(), valueChanged, cellScroll->verticalScrollBar(), setValue);
+  CONNECT(cellScroll->verticalScrollBar(), valueChanged, layerScroll->verticalScrollBar(), setValue);
   
   QGridLayout *grid = new QGridLayout{this};
   setLayout(grid);
