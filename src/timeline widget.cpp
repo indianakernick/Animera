@@ -69,7 +69,7 @@ TimelineWidget::TimelineWidget(QWidget *parent)
 
 void TimelineWidget::createInitialCell() {
   LayerCellsWidget *layer = cells->appendLayer();
-  layers->appendLayer(cells->layerCount());
+  layers->appendLayer(cells->layerCount() - 1);
   assert(layer);
   Cell *cell = layer->appendCell();
   assert(cell);
@@ -82,7 +82,7 @@ void TimelineWidget::createInitialCell() {
     layer->appendCell(8);
     
     LayerCellsWidget *layer1 = cells->appendLayer();
-    layers->appendLayer(cells->layerCount());
+    layers->appendLayer(cells->layerCount() - 1);
     layer1->appendNull();
     layer1->appendCell(2);
     layer1->appendCell();
@@ -91,11 +91,11 @@ void TimelineWidget::createInitialCell() {
     layer1->appendCell();
     
     LayerCellsWidget *layer2 = cells->appendLayer();
-    layers->appendLayer(cells->layerCount());
+    layers->appendLayer(cells->layerCount() - 1);
     layer2->appendNull(13);
     
     LayerCellsWidget *layer3 = cells->appendLayer();
-    layers->appendLayer(cells->layerCount());
+    layers->appendLayer(cells->layerCount() - 1);
     layer3->appendCell();
     layer3->appendCell();
     layer3->appendCell();
@@ -107,11 +107,11 @@ void TimelineWidget::createInitialCell() {
     layer3->appendNull(5);
     
     cells->appendLayer();
-    layers->appendLayer(cells->layerCount());
+    layers->appendLayer(cells->layerCount() - 1);
     cells->appendLayer();
-    layers->appendLayer(cells->layerCount());
+    layers->appendLayer(cells->layerCount() - 1);
     cells->appendLayer();
-    layers->appendLayer(cells->layerCount());
+    layers->appendLayer(cells->layerCount() - 1);
     
     cells->appendFrame();
     cells->appendFrame();
