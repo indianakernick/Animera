@@ -25,11 +25,14 @@
   <file>./Timeline/cell.pbm</file>
   <file>./Timeline/end linked cell.pbm</file>
   <file>./Timeline/hidden.pbm</file>
+  <file>./Timeline/link.pbm</file>
   <file>./Timeline/move down.pbm</file>
   <file>./Timeline/move up.pbm</file>
+  <file>./Timeline/move.pbm</file>
   <file>./Timeline/pause.pbm</file>
   <file>./Timeline/play.pbm</file>
   <file>./Timeline/remove.pbm</file>
   <file>./Timeline/shown.pbm</file>
+  <file>./Timeline/unlink.pbm</file>
 </qresource>
 </RCC>
