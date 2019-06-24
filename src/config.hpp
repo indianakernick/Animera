@@ -40,11 +40,11 @@ constexpr QSize     glob_min_window_size = {640_px, 360_px};
 
 // ------------------------ global color scheme ----------------------------- //
 
-// https://coolors.co/49495b-2f395f-274690-445b99-b8cdd7
+// https://coolors.co/49495b-2f395f-274690-5569a2-b8cdd7
 inline const QColor glob_dark_2  = {73, 73, 91};
 inline const QColor glob_dark_1  = {47, 57, 95};
 inline const QColor glob_main    = {39, 70, 144};
-inline const QColor glob_light_1 = {68, 91, 153};
+inline const QColor glob_light_1 = {85, 105, 162};
 inline const QColor glob_light_2 = {184, 205, 215};
 
 inline const QColor glob_text_color = glob_light_2;
@@ -190,6 +190,7 @@ constexpr WidgetRect pick_name_rect = {
 inline const QColor pick_primary_color = {0, 0, 0};
 inline const QColor pick_secondary_color = {255, 255, 255};
 inline const QColor pick_default_color = {255, 0, 0, 255};
+
 constexpr int       pick_alpha_tiles = 2;
 
 // -------------------------------- text box -------------------------------- //
@@ -224,6 +225,7 @@ constexpr int       pal_tile_size = 13_px;
 // --------------------------------- timeline ------------------------------- //
 
 inline const QColor cell_icon_color = glob_light_2;
+inline const QColor cell_curr_color = glob_light_1;
 
 constexpr int       cell_icon_pad = 1_px;
 constexpr int       cell_icon_size = 8_px;
