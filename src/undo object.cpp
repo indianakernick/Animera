@@ -13,7 +13,11 @@
 
 void UndoObject::posChange(Cell *newCell) {
   cell = newCell;
-  stack.reset(cell->image);
+  if (cell) {
+    stack.reset(cell->image);
+  } else {
+    stack.clear();
+  }
 }
 
 void UndoObject::keyPress(const Qt::Key key) {

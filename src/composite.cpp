@@ -35,12 +35,13 @@ QImage compositeFrame(const Frame &frame) {
   clearImage(output);
   Surface<QRgb> outputSurface = makeSurface<QRgb>(output);
   
-  for (size_t i = 0; i != frame.size(); ++i) {
-    if (!images[i].data.isNull()) {
+  // Layer 0 is on top of layer 1
+  for (auto i = images.rbegin(); i != images.rend(); ++i) {
+    if (!i->data.isNull()) {
       porterDuff<ARGB_Format>(
         mode_src_over,
         outputSurface,
-        makeCSurface<QRgb>(images[i].data)
+        makeCSurface<QRgb>(i->data)
       );
     }
   }

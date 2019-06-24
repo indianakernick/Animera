@@ -17,6 +17,8 @@ class TimelineWidget;
 class QVBoxLayout;
 
 class LayerCellsWidget final : public QWidget {
+  Q_OBJECT
+  
 public:
   // @TODO a sparse data structure might be better
   struct LinkedSpan {
@@ -58,9 +60,15 @@ public:
 
 Q_SIGNALS:
   void resized();
+  void posChanged(Cell *, LayerIdx, FrameIdx);
+  void frameChanged(const Frame &);
 
 public Q_SLOTS:
   void changeWidth(int);
+  void nextFrame();
+  void prevFrame();
+  void layerBelow();
+  void layerAbove();
 
 public:
   LayerCellsWidget *appendLayer();
@@ -75,8 +83,14 @@ private:
   TimelineWidget *timeline;
   QVBoxLayout *layout;
   std::vector<LayerCellsWidget *> layers;
+  CellPos pos;
+  FrameIdx frameCount = 0;
+  
+  Cell *getCurr();
+  Frame getFrame();
   
   void resizeEvent(QResizeEvent *) override;
+  void paintEvent(QPaintEvent *) override;
 };
 
 class CellScrollWidget final : public ScrollAreaWidget {

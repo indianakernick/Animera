@@ -48,7 +48,7 @@ public Q_SLOTS:
 Q_SIGNALS:
   // emitted when the current layer/frame has changed
   // or the current cell has changed
-  void posChange(Cell *, LayerIdx, FrameIdx);
+  void posChanged(Cell *, LayerIdx, FrameIdx);
   // @TODO frame changes when visibility changes
   void frameChanged(const Frame &);
 
@@ -60,6 +60,8 @@ private:
   Palette *palette = nullptr;
   QSize size;
   Format format;
+  
+  void keyPressEvent(QKeyEvent *) override;
 };
 
 #endif

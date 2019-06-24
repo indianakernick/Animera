@@ -27,8 +27,8 @@ public:
   Image image;
 };
 
-using LayerIdx = uint32_t;
-using FrameIdx = uint32_t;
+using LayerIdx = int;
+using FrameIdx = int;
 
 struct CellPos {
   LayerIdx l;

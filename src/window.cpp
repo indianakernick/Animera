@@ -114,10 +114,10 @@ void Window::makeDockWidget(Qt::DockWidgetArea area, QWidget *widget) {
 }
 
 void Window::connectSignals() {
-  CONNECT(&timeline, posChange,       &editor,      compositePos);
-  CONNECT(&timeline, posChange,       &tools,       changeCell);
-  CONNECT(&timeline, posChange,       &clear,       posChange);
-  CONNECT(&timeline, posChange,       &undo,        posChange);
+  CONNECT(&timeline, posChanged,      &editor,      compositePos);
+  CONNECT(&timeline, posChanged,      &tools,       changeCell);
+  CONNECT(&timeline, posChanged,      &clear,       posChange);
+  CONNECT(&timeline, posChanged,      &undo,        posChange);
   CONNECT(&timeline, frameChanged,    &editor,      frameChanged);
   
   CONNECT(&tools,    cellModified,    &editor,      composite);

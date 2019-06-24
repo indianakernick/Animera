@@ -117,6 +117,19 @@ void LayerCellsWidget::paintBorder(QPainter &painter, const int x) {
   );
 }
 
+namespace {
+
+QRect cellBackRect(const int x) {
+  const int size = 2 * cell_icon_pad + cell_icon_size;
+  return QRect{x - cell_icon_pad, 0, size, size};
+}
+
+QRect cellBackRect(const int x, const FrameIdx frame) {
+  return cellBackRect(x + cell_icon_step * frame);
+}
+
+}
+
 void LayerCellsWidget::paintEvent(QPaintEvent *) {
   QPainter painter{this};
   int x = cell_icon_pad;
@@ -169,6 +182,32 @@ void CellsWidget::changeWidth(const int newWidth) {
   }
 }
 
+void CellsWidget::nextFrame() {
+  pos.f = std::min(pos.f + 1, frameCount - 1);
+  repaint();
+  Q_EMIT posChanged(getCurr(), pos.l, pos.f);
+  Q_EMIT frameChanged(getFrame());
+}
+
+void CellsWidget::prevFrame() {
+  pos.f = std::max(pos.f - 1, 0);
+  repaint();
+  Q_EMIT posChanged(getCurr(), pos.l, pos.f);
+  Q_EMIT frameChanged(getFrame());
+}
+
+void CellsWidget::layerBelow() {
+  pos.l = std::min(pos.l + 1, layerCount() - 1);
+  repaint();
+  Q_EMIT posChanged(getCurr(), pos.l, pos.f);
+}
+
+void CellsWidget::layerAbove() {
+  pos.l = std::max(pos.l - 1, 0);
+  repaint();
+  Q_EMIT posChanged(getCurr(), pos.l, pos.f);
+}
+
 LayerCellsWidget *CellsWidget::appendLayer() {
   auto *layer = new LayerCellsWidget{this, timeline};
   layout->addWidget(layer);
@@ -177,7 +216,7 @@ LayerCellsWidget *CellsWidget::appendLayer() {
 }
 
 LayerCellsWidget *CellsWidget::getLayer(const LayerIdx layer) {
-  assert(layer < layers.size());
+  assert(layer < static_cast<int>(layers.size()));
   return layers[layer];
 }
 
@@ -185,6 +224,7 @@ void CellsWidget::appendFrame() {
   for (LayerCellsWidget *layer : layers) {
     layer->appendFrame();
   }
+  ++frameCount;
 }
 
 LayerIdx CellsWidget::layerCount() const {
@@ -211,8 +251,30 @@ void CellsWidget::deserialize(QIODevice *dev) {
   }
 }
 
+Cell *CellsWidget::getCurr() {
+  return layers[pos.l]->getCell(pos.f);
+}
+
+Frame CellsWidget::getFrame() {
+  Frame frame;
+  frame.reserve(layers.size());
+  for (LayerCellsWidget *layer : layers) {
+    frame.push_back(layer->getCell(pos.f));
+  }
+  return frame;
+}
+
 void CellsWidget::resizeEvent(QResizeEvent *) {
   Q_EMIT resized();
+}
+
+void CellsWidget::paintEvent(QPaintEvent *) {
+  constexpr int size = 2 * cell_icon_pad + cell_icon_size;
+  QPainter painter{this};
+  painter.setPen(Qt::NoPen);
+  painter.setBrush(cell_curr_color);
+  painter.drawRect(0, pos.l * cell_height, width(), size);
+  painter.drawRect(pos.f * cell_icon_step, 0, size, height());
 }
 
 CellScrollWidget::CellScrollWidget(QWidget *parent)

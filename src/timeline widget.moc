@@ -22,7 +22,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_TimelineWidget_t {
     QByteArrayData data[14];
-    char stringdata0[121];
+    char stringdata0[122];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -32,22 +32,22 @@ struct qt_meta_stringdata_TimelineWidget_t {
 static const qt_meta_stringdata_TimelineWidget_t qt_meta_stringdata_TimelineWidget = {
     {
 QT_MOC_LITERAL(0, 0, 14), // "TimelineWidget"
-QT_MOC_LITERAL(1, 15, 9), // "posChange"
-QT_MOC_LITERAL(2, 25, 0), // ""
-QT_MOC_LITERAL(3, 26, 5), // "Cell*"
-QT_MOC_LITERAL(4, 32, 8), // "LayerIdx"
-QT_MOC_LITERAL(5, 41, 8), // "FrameIdx"
-QT_MOC_LITERAL(6, 50, 12), // "frameChanged"
-QT_MOC_LITERAL(7, 63, 5), // "Frame"
-QT_MOC_LITERAL(8, 69, 10), // "initialize"
-QT_MOC_LITERAL(9, 80, 6), // "Format"
-QT_MOC_LITERAL(10, 87, 4), // "save"
-QT_MOC_LITERAL(11, 92, 4), // "load"
-QT_MOC_LITERAL(12, 97, 14), // "paletteChanged"
-QT_MOC_LITERAL(13, 112, 8) // "Palette*"
+QT_MOC_LITERAL(1, 15, 10), // "posChanged"
+QT_MOC_LITERAL(2, 26, 0), // ""
+QT_MOC_LITERAL(3, 27, 5), // "Cell*"
+QT_MOC_LITERAL(4, 33, 8), // "LayerIdx"
+QT_MOC_LITERAL(5, 42, 8), // "FrameIdx"
+QT_MOC_LITERAL(6, 51, 12), // "frameChanged"
+QT_MOC_LITERAL(7, 64, 5), // "Frame"
+QT_MOC_LITERAL(8, 70, 10), // "initialize"
+QT_MOC_LITERAL(9, 81, 6), // "Format"
+QT_MOC_LITERAL(10, 88, 4), // "save"
+QT_MOC_LITERAL(11, 93, 4), // "load"
+QT_MOC_LITERAL(12, 98, 14), // "paletteChanged"
+QT_MOC_LITERAL(13, 113, 8) // "Palette*"
 
     },
-    "TimelineWidget\0posChange\0\0Cell*\0"
+    "TimelineWidget\0posChanged\0\0Cell*\0"
     "LayerIdx\0FrameIdx\0frameChanged\0Frame\0"
     "initialize\0Format\0save\0load\0paletteChanged\0"
     "Palette*"
@@ -96,7 +96,7 @@ void TimelineWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
         auto *_t = static_cast<TimelineWidget *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->posChange((*reinterpret_cast< Cell*(*)>(_a[1])),(*reinterpret_cast< LayerIdx(*)>(_a[2])),(*reinterpret_cast< FrameIdx(*)>(_a[3]))); break;
+        case 0: _t->posChanged((*reinterpret_cast< Cell*(*)>(_a[1])),(*reinterpret_cast< LayerIdx(*)>(_a[2])),(*reinterpret_cast< FrameIdx(*)>(_a[3]))); break;
         case 1: _t->frameChanged((*reinterpret_cast< const Frame(*)>(_a[1]))); break;
         case 2: _t->initialize((*reinterpret_cast< QSize(*)>(_a[1])),(*reinterpret_cast< Format(*)>(_a[2]))); break;
         case 3: _t->save((*reinterpret_cast< const QString(*)>(_a[1]))); break;
@@ -108,7 +108,7 @@ void TimelineWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
         int *result = reinterpret_cast<int *>(_a[0]);
         {
             using _t = void (TimelineWidget::*)(Cell * , LayerIdx , FrameIdx );
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::posChange)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::posChanged)) {
                 *result = 0;
                 return;
             }
@@ -164,7 +164,7 @@ int TimelineWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void TimelineWidget::posChange(Cell * _t1, LayerIdx _t2, FrameIdx _t3)
+void TimelineWidget::posChanged(Cell * _t1, LayerIdx _t2, FrameIdx _t3)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)), const_cast<void*>(reinterpret_cast<const void*>(&_t3)) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);

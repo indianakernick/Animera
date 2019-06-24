@@ -11,6 +11,7 @@
 #include "config.hpp"
 #include "serial.hpp"
 #include "connect.hpp"
+#include <QtGui/qevent.h>
 #include <QtCore/qfile.h>
 #include <QtWidgets/qgridlayout.h>
 #include "timeline cells widget.hpp"
@@ -30,6 +31,7 @@ TimelineWidget::TimelineWidget(QWidget *parent)
   : QWidget{parent} {
   setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
   setStyleSheet("background-color:" + glob_main.name());
+  setFocusPolicy(Qt::ClickFocus);
   
   controls = new ControlsWidget{this};
   auto *layerScroll = new LayerScrollWidget{this};
@@ -50,6 +52,9 @@ TimelineWidget::TimelineWidget(QWidget *parent)
   CONNECT(cells, resized, cellScroll, contentResized);
   CONNECT(cellScroll, rightMarginChanged, frameScroll, changeRightMargin);
   CONNECT(cellScroll, bottomMarginChanged, layerScroll, changeBottomMargin);
+  
+  CONNECT(cells, posChanged, this, posChanged);
+  CONNECT(cells, frameChanged, this, frameChanged);
   
   QGridLayout *grid = new QGridLayout{this};
   setLayout(grid);
@@ -121,7 +126,7 @@ void TimelineWidget::createInitialCell() {
   }
   
   Q_EMIT frameChanged({cell});
-  Q_EMIT posChange(cell, 0, 0);
+  Q_EMIT posChanged(cell, 0, 0);
 }
 
 void TimelineWidget::initialize(const QSize newSize, const Format newFormat) {
@@ -180,6 +185,27 @@ void TimelineWidget::load(const QString &path) {
 
 void TimelineWidget::paletteChanged(Palette *newPalette) {
   palette = newPalette;
+}
+
+void TimelineWidget::keyPressEvent(QKeyEvent *event) {
+  switch (event->key()) {
+    case Qt::Key_Up:
+    case Qt::Key_W:
+      cells->layerAbove();
+      break;
+    case Qt::Key_Right:
+    case Qt::Key_D:
+      cells->nextFrame();
+      break;
+    case Qt::Key_Down:
+    case Qt::Key_S:
+      cells->layerBelow();
+      break;
+    case Qt::Key_Left:
+    case Qt::Key_A:
+      cells->prevFrame();
+      break;
+  }
 }
 
 #include "timeline widget.moc"
