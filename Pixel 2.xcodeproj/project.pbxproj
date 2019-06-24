@@ -159,6 +159,9 @@
 		4595D48E22C061DF00607D64 /* timeline layers widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "timeline layers widget.hpp"; sourceTree = "<group>"; };
 		4595D49022C0644B00607D64 /* timeline frames widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "timeline frames widget.cpp"; sourceTree = "<group>"; };
 		4595D49122C0644B00607D64 /* timeline frames widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "timeline frames widget.hpp"; sourceTree = "<group>"; };
+		4595D49322C0B05000607D64 /* move.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = move.pbm; sourceTree = "<group>"; };
+		4595D49422C0B05000607D64 /* unlink.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = unlink.pbm; sourceTree = "<group>"; };
+		4595D49522C0B05000607D64 /* link.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = link.pbm; sourceTree = "<group>"; };
 		45B284912218E38800D6D055 /* image.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = image.cpp; sourceTree = "<group>"; };
 		45B284922218E38800D6D055 /* image.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = image.hpp; sourceTree = "<group>"; };
 		45B284942218E39300D6D055 /* cell.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = cell.cpp; sourceTree = "<group>"; };
@@ -858,14 +861,17 @@
 			isa = PBXGroup;
 			children = (
 				452926E422BB607E00B17E0D /* add.pbm */,
-				452926E522BB607E00B17E0D /* end linked cell.pbm */,
-				452926E622BB607E00B17E0D /* move up.pbm */,
-				452926E722BB607E00B17E0D /* shown.pbm */,
-				452926E822BB607E00B17E0D /* hidden.pbm */,
 				452926E922BB607E00B17E0D /* begin linked cell.pbm */,
 				452926EA22BB607E00B17E0D /* cell.pbm */,
+				452926E522BB607E00B17E0D /* end linked cell.pbm */,
+				452926E822BB607E00B17E0D /* hidden.pbm */,
+				4595D49522C0B05000607D64 /* link.pbm */,
 				452926EB22BB607E00B17E0D /* move down.pbm */,
+				452926E622BB607E00B17E0D /* move up.pbm */,
+				4595D49322C0B05000607D64 /* move.pbm */,
 				452926EC22BB607E00B17E0D /* remove.pbm */,
+				452926E722BB607E00B17E0D /* shown.pbm */,
+				4595D49422C0B05000607D64 /* unlink.pbm */,
 			);
 			path = Timeline;
 			sourceTree = "<group>";
