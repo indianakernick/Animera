@@ -9,6 +9,7 @@
 #include "timeline layers widget.hpp"
 
 #include "config.hpp"
+#include "connect.hpp"
 #include <QtGui/qpainter.h>
 #include "widget painting.hpp"
 #include "text input widget.hpp"
@@ -96,6 +97,10 @@ void LayersWidget::appendLayer(const LayerIdx layer) {
   layout->addWidget(new LayerNameWidget{this, layer});
 }
 
+void LayersWidget::setMargin(const int margin) {
+  layout->setContentsMargins(0, 0, 0, margin);
+}
+
 LayerScrollWidget::LayerScrollWidget(QWidget *parent)
   : QScrollArea{parent} {
   setFrameShape(NoFrame);
@@ -104,8 +109,11 @@ LayerScrollWidget::LayerScrollWidget(QWidget *parent)
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }
 
-void LayerScrollWidget::changeBottomMargin(const int value) {
-  setViewportMargins(0, 0, 0, value);
+LayersWidget *LayerScrollWidget::setChild(LayersWidget *layers) {
+  // We cannot simply call setViewportMargins
+  CONNECT(this, changeBottomMargin, layers, setMargin);
+  setWidget(layers);
+  return layers;
 }
 
 void LayerScrollWidget::paintEvent(QPaintEvent *) {

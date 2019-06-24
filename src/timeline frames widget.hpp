@@ -19,11 +19,15 @@ public:
  
   void appendFrame();
 
+public Q_SLOTS:
+  void setMargin(int);
+
 Q_SIGNALS:
   void widthChanged(int);
  
 private:
   int frames = 0;
+  int margin = 0;
   
   int roundUpFrames() const;
   
@@ -36,7 +40,9 @@ class FrameScrollWidget final : public QScrollArea {
 public:
   explicit FrameScrollWidget(QWidget *);
 
-public Q_SLOTS:
+  FramesWidget *setChild(FramesWidget *);
+
+Q_SIGNALS:
   void changeRightMargin(int);
 
 private:

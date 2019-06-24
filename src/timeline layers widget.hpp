@@ -48,10 +48,15 @@ private:
 };
 
 class LayersWidget final : public QWidget {
+  Q_OBJECT
+
 public:
   explicit LayersWidget(QWidget *);
   
   void appendLayer(LayerIdx);
+
+public Q_SLOTS:
+  void setMargin(int);
   
 private:
   QVBoxLayout *layout = nullptr;
@@ -63,7 +68,9 @@ class LayerScrollWidget final : public QScrollArea {
 public:
   explicit LayerScrollWidget(QWidget *);
 
-public Q_SLOTS:
+  LayersWidget *setChild(LayersWidget *);
+
+Q_SIGNALS:
   void changeBottomMargin(int);
 
 private:

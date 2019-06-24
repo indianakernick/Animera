@@ -9,6 +9,7 @@
 #include "timeline frames widget.hpp"
 
 #include "config.hpp"
+#include "connect.hpp"
 #include "global font.hpp"
 #include <QtGui/qpainter.h>
 
@@ -19,8 +20,14 @@ FramesWidget::FramesWidget(QWidget *parent)
 
 void FramesWidget::appendFrame() {
   ++frames;
-  setFixedWidth((roundUpFrames() + frame_incr) * cell_icon_step);
+  setFixedWidth((roundUpFrames() + frame_incr) * cell_icon_step + margin);
   Q_EMIT widthChanged(width());
+  repaint();
+}
+
+void FramesWidget::setMargin(const int newMargin) {
+  margin = newMargin;
+  setFixedWidth((roundUpFrames() + frame_incr) * cell_icon_step + margin);
   repaint();
 }
 
@@ -58,8 +65,11 @@ FrameScrollWidget::FrameScrollWidget(QWidget *parent)
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }
 
-void FrameScrollWidget::changeRightMargin(const int value) {
-  setViewportMargins(0, 0, value, 0);
+FramesWidget *FrameScrollWidget::setChild(FramesWidget *frames) {
+  // We cannot simply call setViewportMargins
+  CONNECT(this, changeRightMargin, frames, setMargin);
+  setWidget(frames);
+  return frames;
 }
 
 void FrameScrollWidget::paintEvent(QPaintEvent *) {

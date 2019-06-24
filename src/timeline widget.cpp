@@ -35,10 +35,8 @@ TimelineWidget::TimelineWidget(QWidget *parent)
   auto *layerScroll = new LayerScrollWidget{this};
   auto *frameScroll = new FrameScrollWidget{this};
   auto cellScroll = new CellScrollWidget{this};
-  layers = new LayersWidget{layerScroll};
-  layerScroll->setWidget(layers);
-  frames = new FramesWidget{frameScroll};
-  frameScroll->setWidget(frames);
+  layers = layerScroll->setChild(new LayersWidget{layerScroll});
+  frames = frameScroll->setChild(new FramesWidget{frameScroll});
   cells = new CellsWidget{cellScroll, this};
   cellScroll->setWidget(cells);
   

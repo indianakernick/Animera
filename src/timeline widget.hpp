@@ -12,19 +12,15 @@
 #include "animation.hpp"
 #include <QtWidgets/qwidget.h>
 
-class LayerCellsWidget;
 class ControlsWidget;
 class LayersWidget;
 class FramesWidget;
 class CellsWidget;
-class LayerScrollWidget;
-class FrameScrollWidget;
-class CellScrollWidget;
 
 class TimelineWidget final : public QWidget {
   Q_OBJECT
   
-  friend LayerCellsWidget;
+  friend class LayerCellsWidget;
 
 public:
   explicit TimelineWidget(QWidget *);
