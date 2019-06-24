@@ -140,7 +140,7 @@ constexpr QRgb      tool_overlay_color = qRgba(
 
 constexpr int       stat_temp_duration_ms = 4000;
 constexpr int       stat_min_width = 200_px;
-constexpr int       stat_height = glob_font_px + 2 * glob_text_padding + glob_padding;
+constexpr int       stat_height = glob_font_px + 2 * (glob_text_padding + glob_padding);
 
 inline const QColor stat_background = glob_main;
 

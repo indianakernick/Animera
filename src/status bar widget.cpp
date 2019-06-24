@@ -49,7 +49,7 @@ void StatusBarWidget::paintEvent(QPaintEvent *) {
   painter.setPen(glob_text_color);
   const QPoint pos = {
     glob_padding + glob_text_padding,
-    glob_text_padding + glob_font_accent_px
+    glob_padding + glob_text_padding + glob_font_accent_px
   };
   if (tempText.isEmpty()) {
     painter.drawText(pos, permText);

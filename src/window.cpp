@@ -75,15 +75,14 @@ void Window::setupUI() {
   
   QVBoxLayout *rightLayout = new QVBoxLayout{&right};
   right.setLayout(rightLayout);
-  right.setContentsMargins(0, 0, 0, 0);
   rightLayout->setContentsMargins(0, 0, 0, 0);
-  rightLayout->setSpacing(0);
+  rightLayout->setSpacing(glob_padding);
   rightLayout->addWidget(&colorPicker);
   rightLayout->addWidget(new HoriSeparator{&right});
   rightLayout->addWidget(&colors);
   rightLayout->addWidget(new HoriSeparator{&right});
   rightLayout->addWidget(&palette);
-  rightLayout->addSpacing(1_px);
+  rightLayout->addSpacing(glob_padding);
   right.setStyleSheet("background-color: " + glob_main.name());
   right.setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
   
