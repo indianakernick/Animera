@@ -10,6 +10,7 @@
 
 #include "config.hpp"
 #include "connect.hpp"
+#include "global font.hpp"
 #include <QtWidgets/qstyle.h>
 #include "separator widget.hpp"
 #include <QtWidgets/qmenubar.h>
@@ -47,6 +48,8 @@ Window::Window(const QRect desktop)
   timeline.createInitialCell();
 }
 
+#include <iostream>
+
 void Window::setupUI() {
   setStyleSheet("QMainWindow::separator {"
     "width: " + QString::number(glob_border_width) + "px;"
@@ -58,7 +61,20 @@ void Window::setupUI() {
   // https://bugreports.qt.io/browse/QTBUG-75783
   "QMainWindow {"
     "background-color: " + glob_border_color.name() + ";"
+  "}"
+  
+  // @TODO Maybe use the status bar instead of tooltips
+  // This is too difficult to customize
+  "QToolTip {"
+    "background-color: " + glob_main.name() + ";"
+    "color: " + glob_light_2.name() + ";"
+    "font-family: \"" + getGlobalFont().family() + "\";"
+    "font-size: " + QString::number(getGlobalFont().pointSize()) + "pt;"
+    "border-width: " + QString::number(glob_border_width) + "px;"
+    "border-color: " + glob_border_color.name() + ";"
+    "border-style: solid;"
   "}");
+  std::cout << styleSheet().toStdString() << '\n';
   
   bottom.setMinimumHeight(50_px);
   bottom.setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
