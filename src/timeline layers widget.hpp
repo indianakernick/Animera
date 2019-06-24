@@ -30,6 +30,8 @@ private:
 };
 
 class LayerNameWidget final : public QWidget {
+  Q_OBJECT
+
 public:
   // @TODO serialize name and visibility
 
@@ -37,6 +39,9 @@ public:
   
   bool getVisible() const;
   QString getName() const;
+
+Q_SIGNALS:
+  void visibleToggled();
 
 private:
   VisibleWidget *visible = nullptr;
@@ -55,11 +60,18 @@ public:
   
   void appendLayer(LayerIdx);
 
+Q_SIGNALS:
+  void visibleChanged(const LayerVisible &);
+
+private Q_SLOTS:
+  void toggleVisible();
+
 public Q_SLOTS:
   void setMargin(int);
   
 private:
   QVBoxLayout *layout = nullptr;
+  std::vector<LayerNameWidget *> layers;
 };
 
 class LayerScrollWidget final : public QScrollArea {

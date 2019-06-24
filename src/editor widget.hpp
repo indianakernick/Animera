@@ -35,12 +35,16 @@ public Q_SLOTS:
   void compositeOverlay();
   // invoked when the image needs to be composited
   void compositePos();
-  void frameChanged(const Frame &frame);
+  void compositeVis(const LayerVisible &);
+  void frameChanged(const Frame &, QSize, Format);
 
 private:
   EditorImage *view;
+  LayerVisible visibility;
   Frame frame;
-  
+  QSize size;
+  Format format;
+
   void resizeEvent(QResizeEvent *) override;
 };
 

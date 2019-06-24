@@ -185,15 +185,15 @@ void CellsWidget::changeWidth(const int newWidth) {
 void CellsWidget::nextFrame() {
   pos.f = std::min(pos.f + 1, frameCount - 1);
   repaint();
-  Q_EMIT posChanged(getCurr(), pos.l, pos.f);
   Q_EMIT frameChanged(getFrame());
+  Q_EMIT posChanged(getCurr(), pos.l, pos.f);
 }
 
 void CellsWidget::prevFrame() {
   pos.f = std::max(pos.f - 1, 0);
   repaint();
-  Q_EMIT posChanged(getCurr(), pos.l, pos.f);
   Q_EMIT frameChanged(getFrame());
+  Q_EMIT posChanged(getCurr(), pos.l, pos.f);
 }
 
 void CellsWidget::layerBelow() {
@@ -212,6 +212,7 @@ LayerCellsWidget *CellsWidget::appendLayer() {
   auto *layer = new LayerCellsWidget{this, timeline};
   layout->addWidget(layer);
   layers.push_back(layer);
+  Q_EMIT frameChanged(getFrame());
   return layer;
 }
 

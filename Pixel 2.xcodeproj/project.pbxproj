@@ -1046,10 +1046,10 @@
 		453D28CD2276A81B00D0E5F9 /* Timeline */ = {
 			isa = PBXGroup;
 			children = (
-				453C78172234935000818B19 /* timeline widget.cpp */,
-				453C78182234935000818B19 /* timeline widget.hpp */,
 				453C78442234F3C600818B19 /* status bar widget.cpp */,
 				453C78452234F3C600818B19 /* status bar widget.hpp */,
+				453C78172234935000818B19 /* timeline widget.cpp */,
+				453C78182234935000818B19 /* timeline widget.hpp */,
 				4595D48A22C05E5400607D64 /* timeline cells widget.cpp */,
 				4595D48B22C05E5400607D64 /* timeline cells widget.hpp */,
 				4595D48D22C061DF00607D64 /* timeline layers widget.cpp */,

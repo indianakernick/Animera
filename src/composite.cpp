@@ -14,24 +14,20 @@
 #include "porter duff.hpp"
 #include "surface factory.hpp"
 
-QImage compositeFrame(const Frame &frame) {
+QImage compositeFrame(const Frame &frame, const LayerVisible &visible, QSize size, Format) {
+  assert(frame.size() == visible.size());
   std::vector<Image> images;
   images.reserve(frame.size());
   for (size_t i = 0; i != frame.size(); ++i) {
-    if (frame[i]) {
+    if (frame[i] && visible[i]) {
       images.push_back(frame[i]->image);
     } else {
       images.push_back({});
     }
   }
-  if (images.front().data.format() == QImage::Format_Grayscale8) {
-    // @TODO Support grayscale and paletted images properly
-    for (Image &image : images) {
-      image.data.reinterpretAsFormat(QImage::Format_Indexed8);
-      image.data.setColorTable(QVector<QRgb>::fromStdVector(*image.palette));
-    }
-  }
-  QImage output{images.front().data.size(), QImage::Format_ARGB32};
+  
+  // @TODO Support grayscale and paletted images properly
+  QImage output{size, QImage::Format_ARGB32};
   clearImage(output);
   Surface<QRgb> outputSurface = makeSurface<QRgb>(output);
   

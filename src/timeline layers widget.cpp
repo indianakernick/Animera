@@ -46,6 +46,7 @@ LayerNameWidget::LayerNameWidget(QWidget *parent, const LayerIdx layer)
   setFixedSize(100_px, cell_height);
   setupLayout();
   name->setText("Layer " + QString::number(layer));
+  CONNECT(visible, toggled, this, visibleToggled);
 }
 
 bool LayerNameWidget::getVisible() const {
@@ -94,7 +95,20 @@ LayersWidget::LayersWidget(QWidget *parent)
 }
 
 void LayersWidget::appendLayer(const LayerIdx layer) {
-  layout->addWidget(new LayerNameWidget{this, layer});
+  auto *layerName = new LayerNameWidget{this, layer};
+  CONNECT(layerName, visibleToggled, this, toggleVisible);
+  layers.push_back(layerName);
+  layout->addWidget(layerName);
+  toggleVisible();
+}
+
+void LayersWidget::toggleVisible() {
+  LayerVisible visible;
+  visible.reserve(layers.size());
+  for (LayerNameWidget *layer : layers) {
+    visible.push_back(layer->getVisible());
+  }
+  Q_EMIT visibleChanged(visible);
 }
 
 void LayersWidget::setMargin(const int margin) {

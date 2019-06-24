@@ -49,8 +49,11 @@ Q_SIGNALS:
   // emitted when the current layer/frame has changed
   // or the current cell has changed
   void posChanged(Cell *, LayerIdx, FrameIdx);
-  // @TODO frame changes when visibility changes
-  void frameChanged(const Frame &);
+  void visibleChanged(const LayerVisible &);
+  void frameChanged(const Frame &, QSize, Format);
+
+private Q_SLOTS:
+  void changeFrame(const Frame &);
 
 private:
   ControlsWidget *controls = nullptr;

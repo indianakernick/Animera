@@ -54,7 +54,8 @@ TimelineWidget::TimelineWidget(QWidget *parent)
   CONNECT(cellScroll, bottomMarginChanged, layerScroll, changeBottomMargin);
   
   CONNECT(cells, posChanged, this, posChanged);
-  CONNECT(cells, frameChanged, this, frameChanged);
+  CONNECT(cells, frameChanged, this, changeFrame);
+  CONNECT(layers, visibleChanged, this, visibleChanged);
   
   QGridLayout *grid = new QGridLayout{this};
   setLayout(grid);
@@ -67,8 +68,8 @@ TimelineWidget::TimelineWidget(QWidget *parent)
 }
 
 void TimelineWidget::createInitialCell() {
-  layers->appendLayer(cells->layerCount());
   LayerCellsWidget *layer = cells->appendLayer();
+  layers->appendLayer(cells->layerCount());
   assert(layer);
   Cell *cell = layer->appendCell();
   assert(cell);
@@ -80,8 +81,8 @@ void TimelineWidget::createInitialCell() {
     layer->appendNull(2);
     layer->appendCell(8);
     
-    layers->appendLayer(cells->layerCount());
     LayerCellsWidget *layer1 = cells->appendLayer();
+    layers->appendLayer(cells->layerCount());
     layer1->appendNull();
     layer1->appendCell(2);
     layer1->appendCell();
@@ -89,12 +90,12 @@ void TimelineWidget::createInitialCell() {
     layer1->appendNull(5);
     layer1->appendCell();
     
-    layers->appendLayer(cells->layerCount());
     LayerCellsWidget *layer2 = cells->appendLayer();
+    layers->appendLayer(cells->layerCount());
     layer2->appendNull(13);
     
-    layers->appendLayer(cells->layerCount());
     LayerCellsWidget *layer3 = cells->appendLayer();
+    layers->appendLayer(cells->layerCount());
     layer3->appendCell();
     layer3->appendCell();
     layer3->appendCell();
@@ -105,12 +106,12 @@ void TimelineWidget::createInitialCell() {
     layer3->appendCell();
     layer3->appendNull(5);
     
-    layers->appendLayer(cells->layerCount());
     cells->appendLayer();
     layers->appendLayer(cells->layerCount());
     cells->appendLayer();
     layers->appendLayer(cells->layerCount());
     cells->appendLayer();
+    layers->appendLayer(cells->layerCount());
     
     cells->appendFrame();
     cells->appendFrame();
@@ -125,7 +126,7 @@ void TimelineWidget::createInitialCell() {
     }
   }
   
-  Q_EMIT frameChanged({cell});
+  // @TODO Might need to remove this
   Q_EMIT posChanged(cell, 0, 0);
 }
 
@@ -185,6 +186,10 @@ void TimelineWidget::load(const QString &path) {
 
 void TimelineWidget::paletteChanged(Palette *newPalette) {
   palette = newPalette;
+}
+
+void TimelineWidget::changeFrame(const Frame &frame) {
+  Q_EMIT frameChanged(frame, size, format);
 }
 
 void TimelineWidget::keyPressEvent(QKeyEvent *event) {

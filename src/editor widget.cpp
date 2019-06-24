@@ -261,7 +261,7 @@ EditorWidget::EditorWidget(QWidget *parent)
 }
 
 void EditorWidget::composite() {
-  view->setImage(compositeFrame(frame));
+  view->setImage(compositeFrame(frame, visibility, size, format));
 }
 
 void EditorWidget::compositeOverlay() {
@@ -272,9 +272,15 @@ void EditorWidget::compositePos() {
   composite();
 }
 
-void EditorWidget::frameChanged(const Frame &newFrame) {
-  frame = newFrame;
+void EditorWidget::compositeVis(const LayerVisible &newVisibility) {
+  visibility = newVisibility;
   composite();
+}
+
+void EditorWidget::frameChanged(const Frame &newFrame, QSize newSize, Format newFormat) {
+  frame = newFrame;
+  size = newSize;
+  format = newFormat;
 }
 
 void EditorWidget::resizeEvent(QResizeEvent *event) {
