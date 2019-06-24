@@ -221,6 +221,17 @@ constexpr int       pal_width = 8;
 constexpr int       pal_height = pal_colors / pal_width;
 constexpr int       pal_tile_size = 13_px;
 
+// --------------------------------- timeline ------------------------------- //
+
+inline const QColor cell_icon_color = glob_light_2;
+
+constexpr int       cell_icon_pad = 1_px;
+constexpr int       cell_icon_size = 8_px;
+constexpr int       cell_icon_step = 2 * cell_icon_pad + cell_icon_size + glob_border_width;
+constexpr int       cell_height = cell_icon_step;
+constexpr int       cell_border_offset = cell_icon_pad + glob_border_width;
+constexpr int       frame_incr = 5;
+
 // ---------------------------------- keys ---------------------------------- //
 
 // all tools

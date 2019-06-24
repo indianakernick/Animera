@@ -39,6 +39,9 @@
 		4576DFE82298DB2D00FDECA3 /* separator widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4576DFE62298DB2D00FDECA3 /* separator widget.cpp */; };
 		458F84082249DFC8005F91D0 /* polygon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 458F84062249DFC8005F91D0 /* polygon.cpp */; };
 		4595D48622BCA0E000607D64 /* scroll bar widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4595D48422BCA0E000607D64 /* scroll bar widget.cpp */; };
+		4595D48C22C05E5400607D64 /* timeline cells widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4595D48A22C05E5400607D64 /* timeline cells widget.cpp */; };
+		4595D48F22C061DF00607D64 /* timeline layers widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4595D48D22C061DF00607D64 /* timeline layers widget.cpp */; };
+		4595D49222C0644B00607D64 /* timeline frames widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4595D49022C0644B00607D64 /* timeline frames widget.cpp */; };
 		45B284932218E38800D6D055 /* image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45B284912218E38800D6D055 /* image.cpp */; };
 		45B284962218E39300D6D055 /* cell.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45B284942218E39300D6D055 /* cell.cpp */; };
 		45B284A72219079B00D6D055 /* animation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45B284A52219079B00D6D055 /* animation.cpp */; };
@@ -150,6 +153,12 @@
 		458F84072249DFC8005F91D0 /* polygon.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = polygon.hpp; sourceTree = "<group>"; };
 		4595D48422BCA0E000607D64 /* scroll bar widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "scroll bar widget.cpp"; sourceTree = "<group>"; };
 		4595D48522BCA0E000607D64 /* scroll bar widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "scroll bar widget.hpp"; sourceTree = "<group>"; };
+		4595D48A22C05E5400607D64 /* timeline cells widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "timeline cells widget.cpp"; sourceTree = "<group>"; };
+		4595D48B22C05E5400607D64 /* timeline cells widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "timeline cells widget.hpp"; sourceTree = "<group>"; };
+		4595D48D22C061DF00607D64 /* timeline layers widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "timeline layers widget.cpp"; sourceTree = "<group>"; };
+		4595D48E22C061DF00607D64 /* timeline layers widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "timeline layers widget.hpp"; sourceTree = "<group>"; };
+		4595D49022C0644B00607D64 /* timeline frames widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "timeline frames widget.cpp"; sourceTree = "<group>"; };
+		4595D49122C0644B00607D64 /* timeline frames widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "timeline frames widget.hpp"; sourceTree = "<group>"; };
 		45B284912218E38800D6D055 /* image.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = image.cpp; sourceTree = "<group>"; };
 		45B284922218E38800D6D055 /* image.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = image.hpp; sourceTree = "<group>"; };
 		45B284942218E39300D6D055 /* cell.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = cell.cpp; sourceTree = "<group>"; };
@@ -1041,6 +1050,12 @@
 				453C78182234935000818B19 /* timeline widget.hpp */,
 				453C78442234F3C600818B19 /* status bar widget.cpp */,
 				453C78452234F3C600818B19 /* status bar widget.hpp */,
+				4595D48A22C05E5400607D64 /* timeline cells widget.cpp */,
+				4595D48B22C05E5400607D64 /* timeline cells widget.hpp */,
+				4595D48D22C061DF00607D64 /* timeline layers widget.cpp */,
+				4595D48E22C061DF00607D64 /* timeline layers widget.hpp */,
+				4595D49022C0644B00607D64 /* timeline frames widget.cpp */,
+				4595D49122C0644B00607D64 /* timeline frames widget.hpp */,
 			);
 			name = Timeline;
 			sourceTree = "<group>";
@@ -2070,7 +2085,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "function moc {\n  local OUTPUT=\"$PROJECT_DIR/src/$1.moc\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.hpp\" > \"$OUTPUT\"\n  echo \"\" >> \"$OUTPUT\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.cpp\" >> \"$OUTPUT\"\n}\n\nmoc \"color picker widget\"\nmoc \"color slider widget\"\nmoc \"color graph widget\"\nmoc \"tool select widget\"\nmoc \"color input widget\"\nmoc \"tool colors widget\"\nmoc \"text input widget\"\nmoc \"status bar widget\"\nmoc \"timeline widget\"\nmoc \"palette widget\"\nmoc \"editor widget\"\nmoc \"tool widgets\"\nmoc \"clear object\"\nmoc \"undo object\"\nmoc \"application\"\nmoc \"window\"\nmoc \"main\"\n";
+			shellScript = "function moc {\n  local OUTPUT=\"$PROJECT_DIR/src/$1.moc\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.hpp\" > \"$OUTPUT\"\n  echo \"\" >> \"$OUTPUT\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.cpp\" >> \"$OUTPUT\"\n}\n\nmoc \"timeline frames widget\"\nmoc \"timeline layers widget\"\nmoc \"timeline cells widget\"\nmoc \"color picker widget\"\nmoc \"color slider widget\"\nmoc \"color graph widget\"\nmoc \"tool select widget\"\nmoc \"color input widget\"\nmoc \"tool colors widget\"\nmoc \"text input widget\"\nmoc \"status bar widget\"\nmoc \"timeline widget\"\nmoc \"palette widget\"\nmoc \"editor widget\"\nmoc \"tool widgets\"\nmoc \"clear object\"\nmoc \"undo object\"\nmoc \"application\"\nmoc \"window\"\nmoc \"main\"\n";
 		};
 		453C787B2235D63B00818B19 /* RCC */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2138,6 +2153,7 @@
 				458F84082249DFC8005F91D0 /* polygon.cpp in Sources */,
 				45DC2566224B137C00F40116 /* status msg.cpp in Sources */,
 				45F065F22222998300BCE863 /* current tool.cpp in Sources */,
+				4595D48C22C05E5400607D64 /* timeline cells widget.cpp in Sources */,
 				453C78432234E13E00818B19 /* window.cpp in Sources */,
 				4512636622781D7B00C66A19 /* tool colors widget.cpp in Sources */,
 				4571C132227C383A00479006 /* radio button widget.cpp in Sources */,
@@ -2145,9 +2161,11 @@
 				45B284A72219079B00D6D055 /* animation.cpp in Sources */,
 				45B284932218E38800D6D055 /* image.cpp in Sources */,
 				45054F732259C9AB0078350B /* color picker widget.cpp in Sources */,
+				4595D48F22C061DF00607D64 /* timeline layers widget.cpp in Sources */,
 				45B284962218E39300D6D055 /* cell.cpp in Sources */,
 				45054F70225970150078350B /* undo object.cpp in Sources */,
 				453D28C92276A7DD00D0E5F9 /* color graph widget.cpp in Sources */,
+				4595D49222C0644B00607D64 /* timeline frames widget.cpp in Sources */,
 				45BADA77224714A3000D095C /* tool widgets.cpp in Sources */,
 				45CFA7CF22A4C1C40059DB41 /* palette widget.cpp in Sources */,
 				453C78462234F3C600818B19 /* status bar widget.cpp in Sources */,
