@@ -37,12 +37,23 @@ public Q_SLOTS:
   void load(const QString &);
   void paletteChanged(Palette *);
 
+  /*
+  create layer above current
+  remove current layer
+  move current layer up
+  move current layer down
+  create frame after current
+  remove current frame
+  toggle playing animation
+  
+  set position to newly created layers and frames
+  */
+
 Q_SIGNALS:
   // emitted when the current layer/frame has changed
   // or the current cell has changed
   void posChange(Cell *, LayerIdx, FrameIdx);
-  // emitted when any layers are shown or hidden
-  void layerVisibility(const LayerVisible &);
+  // @TODO frame changes when visibility changes
   void frameChanged(const Frame &);
 
 private:

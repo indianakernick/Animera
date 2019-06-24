@@ -20,6 +20,14 @@
     &std::remove_cv_t<std::remove_pointer_t<decltype(RECEIVER)>>::SLOT          \
   )
 
+#define DISCONNECT(SENDER, SIGNAL, RECEIVER, SLOT)                              \
+  QObject::disconnect(                                                          \
+    SENDER,                                                                     \
+    &std::remove_cv_t<std::remove_pointer_t<decltype(SENDER)>>::SIGNAL,         \
+    RECEIVER,                                                                   \
+    &std::remove_cv_t<std::remove_pointer_t<decltype(RECEIVER)>>::SLOT          \
+  )
+
 // connect\((.+),\s+&\w+::(\w+),\s+(.+),\s+&\w+::(\w+)\);
 // CONNECT($1, $2, $3, $4);
 

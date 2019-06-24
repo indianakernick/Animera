@@ -14,9 +14,7 @@
 #include "porter duff.hpp"
 #include "surface factory.hpp"
 
-QImage compositeFrame(const Frame &frame, const LayerVisible &visible) {
-  assert(!frame.empty());
-  assert(frame.size() == visible.size());
+QImage compositeFrame(const Frame &frame) {
   std::vector<Image> images;
   images.reserve(frame.size());
   for (size_t i = 0; i != frame.size(); ++i) {
@@ -38,7 +36,7 @@ QImage compositeFrame(const Frame &frame, const LayerVisible &visible) {
   Surface<QRgb> outputSurface = makeSurface<QRgb>(output);
   
   for (size_t i = 0; i != frame.size(); ++i) {
-    if (visible[i] && !images[i].data.isNull()) {
+    if (!images[i].data.isNull()) {
       porterDuff<ARGB_Format>(
         mode_src_over,
         outputSurface,

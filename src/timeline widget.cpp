@@ -234,18 +234,15 @@ public:
   LayerNameWidget(QWidget *parent, const LayerIdx layer)
     : QWidget{parent} {
     setFixedSize(100_px, layer_height);
-    QHBoxLayout *layout = new QHBoxLayout{this};
-    setLayout(layout);
-    layout->setSpacing(0);
-    layout->setContentsMargins(0, 0, 0, 0);
-    layout->setAlignment(Qt::AlignLeft);
-    visible = new VisibleWidget{this};
-    layout->addWidget(visible);
-    constexpr int text_width = 100_px - cell_icon_step - glob_border_width;
-    constexpr int text_height = layer_height - glob_border_width;
-    name = new TextInputWidget{this, {{1_px, 2_px}, {text_width, text_height}, 0, 0}};
-    layout->addWidget(name, 0, Qt::AlignTop);
+    setupLayout();
     name->setText("Layer " + QString::number(layer));
+  }
+  
+  bool getVisible() const {
+    return visible->isChecked();
+  }
+  QString getName() const {
+    return name->text();
   }
 
 private:
@@ -265,6 +262,20 @@ private:
       glob_border_color
     );
   }
+  
+  void setupLayout() {
+    QHBoxLayout *layout = new QHBoxLayout{this};
+    setLayout(layout);
+    layout->setSpacing(0);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setAlignment(Qt::AlignLeft);
+    visible = new VisibleWidget{this};
+    layout->addWidget(visible);
+    constexpr int text_width = 100_px - cell_icon_step - glob_border_width;
+    constexpr int text_height = layer_height - glob_border_width;
+    name = new TextInputWidget{this, {{1_px, 2_px}, {text_width, text_height}, 0, 0}};
+    layout->addWidget(name, 0, Qt::AlignTop);
+  }
 };
 
 class LayersWidget final : public QWidget {
@@ -281,7 +292,6 @@ public:
   void appendLayer(const LayerIdx layer) {
     layout->addWidget(new LayerNameWidget{this, layer});
   }
-
 private:
   QVBoxLayout *layout = nullptr;
 };
@@ -600,7 +610,6 @@ void TimelineWidget::createInitialCell() {
   }
   
   Q_EMIT frameChanged({cell});
-  Q_EMIT layerVisibility({true});
   Q_EMIT posChange(cell, 0, 0);
 }
 

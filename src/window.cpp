@@ -119,7 +119,6 @@ void Window::connectSignals() {
   CONNECT(&timeline, posChange,       &tools,       changeCell);
   CONNECT(&timeline, posChange,       &clear,       posChange);
   CONNECT(&timeline, posChange,       &undo,        posChange);
-  CONNECT(&timeline, layerVisibility, &editor,      compositeVis);
   CONNECT(&timeline, frameChanged,    &editor,      frameChanged);
   
   CONNECT(&tools,    cellModified,    &editor,      composite);
