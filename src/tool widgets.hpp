@@ -22,7 +22,7 @@ class BrushToolWidget final : public QWidget {
 public:
   using impl = BrushTool;
   static constexpr const char icon_name[] = "brush";
-  static constexpr const char tooltip[] = "Brush Tool\n\nPress V to clear the frame";
+  static constexpr const char tooltip[] = "Brush Tool";
 };
 
 class FloodFillToolWidget final : public QWidget {
@@ -36,14 +36,14 @@ class RectangleSelectToolWidget final : public QWidget {
 public:
   using impl = RectangleSelectTool;
   static constexpr const char icon_name[] = "rectangle select";
-  static constexpr const char tooltip[] = "Rectangle Select Tool\n\nPress P to toggle between COPY and PASTE modes";
+  static constexpr const char tooltip[] = "Rectangle Select Tool";
 };
 
 class PolygonSelectToolWidget final : public QWidget {
 public:
   using impl = PolygonSelectTool;
   static constexpr const char icon_name[] = "polygon select";
-  static constexpr const char tooltip[] = "Polygon Select Tool\n\nPress P to toggle between COPY and PASTE modes";
+  static constexpr const char tooltip[] = "Polygon Select Tool";
 };
 
 class WandSelectToolWidget final : public QWidget {
@@ -92,21 +92,21 @@ class TranslateToolWidget final : public QWidget {
 public:
   using impl = TranslateTool;
   static constexpr const char icon_name[] = "translate";
-  static constexpr const char tooltip[] = "Translate Tool\n\nUse arrow keys or drag";
+  static constexpr const char tooltip[] = "Translate Tool";
 };
 
 class FlipToolWidget final : public QWidget {
 public:
   using impl = FlipTool;
   static constexpr const char icon_name[] = "flip";
-  static constexpr const char tooltip[] = "Flip Tool\n\nUse arrow keys";
+  static constexpr const char tooltip[] = "Flip Tool";
 };
 
 class RotateToolWidget final : public QWidget {
 public:
   using impl = RotateTool;
   static constexpr const char icon_name[] = "rotate";
-  static constexpr const char tooltip[] = "Rotate Tool\n\nUse arrow keys";
+  static constexpr const char tooltip[] = "Rotate Tool";
 };
 
 #endif

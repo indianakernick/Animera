@@ -48,8 +48,6 @@ Window::Window(const QRect desktop)
   timeline.createInitialCell();
 }
 
-#include <iostream>
-
 void Window::setupUI() {
   setStyleSheet("QMainWindow::separator {"
     "width: " + QString::number(glob_border_width) + "px;"
@@ -74,7 +72,6 @@ void Window::setupUI() {
     "border-color: " + glob_border_color.name() + ";"
     "border-style: solid;"
   "}");
-  std::cout << styleSheet().toStdString() << '\n';
   
   bottom.setMinimumHeight(50_px);
   bottom.setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
