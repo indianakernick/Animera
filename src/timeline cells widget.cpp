@@ -254,14 +254,14 @@ void CellsWidget::changeWidth(const int newWidth) {
 }
 
 void CellsWidget::nextFrame() {
-  pos.f = std::min(pos.f + 1, frameCount - 1);
+  pos.f = (pos.f + 1) % frameCount;
   repaint();
   Q_EMIT frameChanged(getFrame());
   Q_EMIT posChanged(getCurr(), pos.l, pos.f);
 }
 
 void CellsWidget::prevFrame() {
-  pos.f = std::max(pos.f - 1, 0);
+  pos.f = (pos.f - 1 + frameCount) % frameCount;
   repaint();
   Q_EMIT frameChanged(getFrame());
   Q_EMIT posChanged(getCurr(), pos.l, pos.f);

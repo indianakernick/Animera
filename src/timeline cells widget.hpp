@@ -101,7 +101,7 @@ private:
   QVBoxLayout *layout;
   std::vector<LayerCellsWidget *> layers;
   CellPos pos = {0, 0};
-  FrameIdx frameCount = 1;
+  FrameIdx frameCount = 0;
   
   Cell *getCurr();
   Frame getFrame();
