@@ -62,6 +62,15 @@ void LayerNameWidget::clearInfo() {
   name->setText("Layer 0");
 }
 
+void LayerNameWidget::swapWith(LayerNameWidget &other) {
+  bool tempChecked = visible->isChecked();
+  QString tempName = name->text();
+  visible->setChecked(other.visible->isChecked());
+  name->setText(other.name->text());
+  other.visible->setChecked(tempChecked);
+  other.name->setText(tempName);
+}
+
 void LayerNameWidget::paintEvent(QPaintEvent *) {
   QPainter painter{this};
   painter.fillRect(
@@ -129,13 +138,15 @@ void LayersWidget::insertLayer(const LayerIdx idx) {
 }
 
 void LayersWidget::removeLayer(const LayerIdx idx) {
-  LayerNameWidget *layer = layers[idx];
   if (layers.size() == 1) {
-    layer->clearInfo();
+    layers[idx]->clearInfo();
   } else {
-    layout->removeWidget(layer);
-    layers.erase(layers.begin() + idx);
-    delete layer;
+    for (size_t l = idx; l < layers.size() - 1; ++l) {
+      layers[l]->swapWith(*layers[l + 1]);
+    }
+    layout->removeWidget(layers.back());
+    delete layers.back();
+    layers.pop_back();
   }
   toggleVisible();
 }

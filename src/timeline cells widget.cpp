@@ -66,6 +66,10 @@ void LayerCellsWidget::clearFrames(const FrameIdx frameCount) {
   repaint();
 }
 
+void LayerCellsWidget::swapWith(LayerCellsWidget &other) {
+  std::swap(frames, other.frames);
+}
+
 Cell *LayerCellsWidget::appendCell(FrameIdx len) {
   assert(len > 0);
   auto cell = std::make_unique<Cell>(timeline.size, timeline.format, timeline.palette);
@@ -250,16 +254,18 @@ void CellsWidget::insertLayer(const LayerIdx idx) {
 }
 
 void CellsWidget::removeLayer(const LayerIdx idx) {
-  LayerCellsWidget *layer = layers[idx];
   if (layerCount() == 1) {
-    layer->clearFrames(frameCount);
+    layers[idx]->clearFrames(frameCount);
   } else {
-    layout->removeWidget(layer);
-    layers.erase(layers.begin() + idx);
-    delete layer;
+    for (size_t l = idx; l < layers.size() - 1; ++l) {
+      layers[l]->swapWith(*layers[l + 1]);
+    }
+    layout->removeWidget(layers.back());
+    delete layers.back();
+    layers.pop_back();
     --pos.l;
-    Q_EMIT frameChanged(getFrame());
   }
+  Q_EMIT frameChanged(getFrame());
 }
 
 void CellsWidget::moveLayerUp(const LayerIdx idx) {

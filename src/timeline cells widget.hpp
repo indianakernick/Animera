@@ -32,6 +32,8 @@ public:
   void insertFrame(FrameIdx);
   void removeFrame(FrameIdx);
   void clearFrames(FrameIdx);
+  void swapWith(LayerCellsWidget &);
+  
   Cell *appendCell(FrameIdx = 1);
   void appendNull(FrameIdx = 1);
   void appendFrame();

@@ -40,6 +40,7 @@ public:
   bool getVisible() const;
   QString getName() const;
   void clearInfo();
+  void swapWith(LayerNameWidget &);
 
 Q_SIGNALS:
   void visibleToggled();
