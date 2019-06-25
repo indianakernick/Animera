@@ -115,6 +115,22 @@ void LayersWidget::setMargin(const int margin) {
   layout->setContentsMargins(0, 0, 0, margin);
 }
 
+void LayersWidget::insertLayer(const LayerIdx idx) {
+  auto *layer = new LayerNameWidget{this, static_cast<LayerIdx>(layers.size())};
+  CONNECT(layer, visibleToggled, this, toggleVisible);
+  layers.insert(layers.begin() + idx, layer);
+  layout->insertWidget(idx, layer);
+  toggleVisible();
+}
+
+void LayersWidget::removeLayer(const LayerIdx idx) {
+  LayerNameWidget *layer = layers[idx];
+  layout->removeWidget(layer);
+  layers.erase(layers.begin() + idx);
+  delete layer;
+  toggleVisible();
+}
+
 LayerScrollWidget::LayerScrollWidget(QWidget *parent)
   : QScrollArea{parent} {
   setFrameShape(NoFrame);

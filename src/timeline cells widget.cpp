@@ -208,6 +208,24 @@ void CellsWidget::layerAbove() {
   Q_EMIT posChanged(getCurr(), pos.l, pos.f);
 }
 
+void CellsWidget::insertLayer(const LayerIdx idx) {
+  auto *layer = new LayerCellsWidget{this, timeline};
+  layer->appendNull(frameCount);
+  layers.insert(layers.begin() + idx, layer);
+  layout->insertWidget(idx, layer);
+  Q_EMIT frameChanged(getFrame());
+  ++pos.l;
+}
+
+void CellsWidget::removeLayer(const LayerIdx idx) {
+  LayerCellsWidget *layer = layers[idx];
+  layout->removeWidget(layer);
+  layers.erase(layers.begin() + idx);
+  delete layer;
+  Q_EMIT frameChanged(getFrame());
+  --pos.l;
+}
+
 LayerCellsWidget *CellsWidget::appendLayer() {
   auto *layer = new LayerCellsWidget{this, timeline};
   layout->addWidget(layer);
@@ -230,6 +248,10 @@ void CellsWidget::appendFrame() {
 
 LayerIdx CellsWidget::layerCount() const {
   return static_cast<LayerIdx>(layers.size());
+}
+
+LayerIdx CellsWidget::currLayer() const {
+  return pos.l;
 }
 
 void CellsWidget::serialize(QIODevice *dev) const {

@@ -68,6 +68,8 @@ private Q_SLOTS:
 
 public Q_SLOTS:
   void setMargin(int);
+  void insertLayer(LayerIdx);
+  void removeLayer(LayerIdx);
   
 private:
   QVBoxLayout *layout = nullptr;

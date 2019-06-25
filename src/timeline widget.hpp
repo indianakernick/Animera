@@ -31,7 +31,9 @@ public Q_SLOTS:
   void initialize(QSize, Format);
   void save(const QString &) const;
   void load(const QString &);
-  void paletteChanged(Palette *);
+  void changePalette(Palette *);
+  void addLayer();
+  void removeLayer();
 
   /*
   create layer above current

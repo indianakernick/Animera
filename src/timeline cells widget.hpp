@@ -69,12 +69,15 @@ public Q_SLOTS:
   void prevFrame();
   void layerBelow();
   void layerAbove();
+  void insertLayer(LayerIdx);
+  void removeLayer(LayerIdx);
 
 public:
   LayerCellsWidget *appendLayer();
   LayerCellsWidget *getLayer(LayerIdx);
   void appendFrame();
   LayerIdx layerCount() const;
+  LayerIdx currLayer() const;
   
   void serialize(QIODevice *) const;
   void deserialize(QIODevice *);

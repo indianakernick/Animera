@@ -184,8 +184,22 @@ void TimelineWidget::load(const QString &path) {
   cells->deserialize(&file);
 }
 
-void TimelineWidget::paletteChanged(Palette *newPalette) {
+void TimelineWidget::changePalette(Palette *newPalette) {
   palette = newPalette;
+}
+
+void TimelineWidget::addLayer() {
+  const LayerIdx layer = cells->currLayer();
+  cells->insertLayer(layer);
+  layers->insertLayer(layer);
+  cells->layerAbove();
+}
+
+void TimelineWidget::removeLayer() {
+  const LayerIdx layer = cells->currLayer();
+  cells->removeLayer(layer);
+  layers->removeLayer(layer);
+  cells->layerBelow();
 }
 
 void TimelineWidget::changeFrame(const Frame &frame) {
@@ -209,6 +223,14 @@ void TimelineWidget::keyPressEvent(QKeyEvent *event) {
     case Qt::Key_Left:
     case Qt::Key_A:
       cells->prevFrame();
+      break;
+    
+    // @TODO Buttons, menubar, global key bindings
+    case Qt::Key_L:
+      addLayer();
+      break;
+    case Qt::Key_R:
+      removeLayer();
       break;
   }
 }
