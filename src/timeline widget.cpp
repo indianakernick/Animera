@@ -68,14 +68,9 @@ TimelineWidget::TimelineWidget(QWidget *parent)
 }
 
 void TimelineWidget::createInitialCell() {
-  LayerCellsWidget *layer = cells->appendLayer();
-  layers->appendLayer(cells->layerCount() - 1);
-  assert(layer);
-  Cell *cell = layer->appendCell();
-  assert(cell);
   frames->addFrame();
-  // @TODO Might need to remove this
-  Q_EMIT posChanged(cell, 0, 0);
+  cells->initCell();
+  layers->insertLayer(0);
   
   /*{
     // @TODO remove
@@ -224,6 +219,10 @@ void TimelineWidget::addFrame() {
 void TimelineWidget::removeFrame() {
   cells->removeFrame();
   frames->removeFrame();
+}
+
+void TimelineWidget::requestCell() {
+  cells->requestCell();
 }
 
 void TimelineWidget::changeFrame(const Frame &frame) {

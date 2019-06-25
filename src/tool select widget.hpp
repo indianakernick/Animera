@@ -30,6 +30,7 @@ Q_SIGNALS:
   void overlayModified();
   void updateStatusBar(std::string_view);
   void changingAction();
+  void cellRequested();
 
 public Q_SLOTS:
   void mouseLeave(QImage *);

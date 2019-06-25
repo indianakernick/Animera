@@ -70,6 +70,37 @@ void LayerCellsWidget::swapWith(LayerCellsWidget &other) {
   std::swap(frames, other.frames);
 }
 
+void LayerCellsWidget::cellFromNull(const FrameIdx idx) {
+  // Create a new cell and place it in the middle of a null span
+  FrameIdx currFrame = 0;
+  for (auto f = frames.begin(); f != frames.end(); ++f) {
+    LinkedSpan &span = *f;
+    currFrame += span.len;
+    if (idx < currFrame) {
+      assert(!span.cell);
+      if (span.len == 1) {
+        span.cell = makeCell();
+        break;
+      }
+      const FrameIdx rightSize = currFrame - idx - 1;
+      const FrameIdx leftSize = span.len - (currFrame - idx);
+      if (rightSize == 0) {
+        span.len = leftSize;
+        frames.insert(++f, {makeCell()});
+        break;
+      } else if (leftSize == 0) {
+        span.len = rightSize;
+        frames.insert(f, {makeCell()});
+        break;
+      }
+      span.len = leftSize;
+      f = frames.insert(++f, {makeCell()});
+      frames.insert(++f, {nullptr, rightSize});
+    }
+  }
+  repaint();
+}
+
 Cell *LayerCellsWidget::appendCell(FrameIdx len) {
   assert(len > 0);
   auto cell = std::make_unique<Cell>(timeline.size, timeline.format, timeline.palette);
@@ -89,7 +120,7 @@ void LayerCellsWidget::appendNull(FrameIdx len) {
 
 void LayerCellsWidget::appendFrame() {
   if (frames.empty()) {
-    frames.push_back({std::make_unique<Cell>(timeline.size, timeline.format, timeline.palette)});
+    frames.push_back({makeCell()});
   } else if (frames.back().cell) {
     CellPtr cell = std::make_unique<Cell>();
     cell->image = frames.back().cell->image;
@@ -156,6 +187,10 @@ void LayerCellsWidget::addSize(const FrameIdx cells) {
 
 const Cell *LayerCellsWidget::getLastCell() const {
   return frames.empty() ? nullptr : frames.back().cell.get();
+}
+
+CellPtr LayerCellsWidget::makeCell() const {
+  return std::make_unique<Cell>(timeline.size, timeline.format, timeline.palette);
 }
 
 void LayerCellsWidget::paintBorder(QPainter &painter, const int x) {
@@ -307,6 +342,21 @@ void CellsWidget::removeFrame() {
   }
   --pos.f;
   nextFrame();
+}
+
+void CellsWidget::requestCell() {
+  layers[pos.l]->cellFromNull(pos.f);
+  Q_EMIT frameChanged(getFrame());
+  Q_EMIT posChanged(getCurr(), pos.l, pos.f);
+}
+
+void CellsWidget::initCell() {
+  frameCount = 1;
+  auto *layer = new LayerCellsWidget{this, timeline};
+  layer->appendNull(1);
+  layers.push_back(layer);
+  layout->addWidget(layer);
+  Q_EMIT frameChanged({nullptr});
 }
 
 LayerCellsWidget *CellsWidget::appendLayer() {

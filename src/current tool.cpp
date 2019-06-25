@@ -75,6 +75,10 @@ ToolChanges CurrentTool::keyPress(const ToolKeyEvent &event) {
   return enabled ? tool->keyPress(event) : ToolChanges::none;
 }
 
+bool CurrentTool::nullCell() const {
+  return cell == nullptr;
+}
+
 void CurrentTool::attach() {
   if (cell) tool->attachCell(cell);
   enabled = cell;

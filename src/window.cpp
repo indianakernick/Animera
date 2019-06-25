@@ -137,6 +137,7 @@ void Window::connectSignals() {
   CONNECT(&tools,    cellModified,    &editor,      composite);
   CONNECT(&tools,    overlayModified, &editor,      compositeOverlay);
   CONNECT(&tools,    updateStatusBar, &statusBar,   showPerm);
+  CONNECT(&tools,    cellRequested,   &timeline,    requestCell);
   
   CONNECT(&editor,   mouseLeave,      &tools,       mouseLeave);
   CONNECT(&editor,   mouseDown,       &tools,       mouseDown);

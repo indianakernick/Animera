@@ -33,6 +33,7 @@ public:
   void removeFrame(FrameIdx);
   void clearFrames(FrameIdx);
   void swapWith(LayerCellsWidget &);
+  void cellFromNull(FrameIdx);
   
   Cell *appendCell(FrameIdx = 1);
   void appendNull(FrameIdx = 1);
@@ -52,6 +53,7 @@ private:
   void loadIcons();
   void addSize(FrameIdx);
   const Cell *getLastCell() const;
+  CellPtr makeCell() const;
   
   void paintBorder(QPainter &, int);
   void paintEvent(QPaintEvent *) override;
@@ -80,8 +82,11 @@ public Q_SLOTS:
   void moveLayerDown(LayerIdx);
   void addFrame();
   void removeFrame();
+  void requestCell();
 
 public:
+  void initCell();
+
   LayerCellsWidget *appendLayer();
   LayerCellsWidget *getLayer(LayerIdx);
   void appendFrame();
@@ -95,7 +100,7 @@ private:
   TimelineWidget *timeline;
   QVBoxLayout *layout;
   std::vector<LayerCellsWidget *> layers;
-  CellPos pos;
+  CellPos pos = {0, 0};
   FrameIdx frameCount = 1;
   
   Cell *getCurr();
