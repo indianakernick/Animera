@@ -216,6 +216,14 @@ void TimelineWidget::moveLayerDown() {
   cells->layerBelow();
 }
 
+void TimelineWidget::addFrame() {
+  cells->addFrame();
+}
+
+void TimelineWidget::removeFrame() {
+  cells->removeFrame();
+}
+
 void TimelineWidget::changeFrame(const Frame &frame) {
   Q_EMIT frameChanged(frame, size, format);
 }
@@ -251,6 +259,12 @@ void TimelineWidget::keyPressEvent(QKeyEvent *event) {
       break;
     case Qt::Key_K:
       moveLayerDown();
+      break;
+    case Qt::Key_F:
+      addFrame();
+      break;
+    case Qt::Key_G:
+      removeFrame();
       break;
   }
 }

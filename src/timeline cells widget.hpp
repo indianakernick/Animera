@@ -28,7 +28,9 @@ public:
   };
 
   LayerCellsWidget(QWidget *, TimelineWidget *);
-
+  
+  void insertFrame(FrameIdx);
+  void removeFrame(FrameIdx);
   Cell *appendCell(FrameIdx = 1);
   void appendNull(FrameIdx = 1);
   void appendFrame();
@@ -73,6 +75,8 @@ public Q_SLOTS:
   void removeLayer(LayerIdx);
   void moveLayerUp(LayerIdx);
   void moveLayerDown(LayerIdx);
+  void addFrame();
+  void removeFrame();
 
 public:
   LayerCellsWidget *appendLayer();

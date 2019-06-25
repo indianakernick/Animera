@@ -21,6 +21,42 @@ LayerCellsWidget::LayerCellsWidget(QWidget *parent, TimelineWidget *timeline)
   loadIcons();
 }
 
+void LayerCellsWidget::insertFrame(const FrameIdx idx) {
+  // Insert after the idx
+  FrameIdx currFrame = 0;
+  for (auto f = frames.begin(); f != frames.end(); ++f) {
+    LinkedSpan &span = *f;
+    currFrame += span.len;
+    if (idx < currFrame - 1) {
+      ++span.len;
+      break;
+    } else if (idx == currFrame - 1) {
+      if (span.cell) {
+        CellPtr cell = std::make_unique<Cell>();
+        cell->image = span.cell->image;
+        frames.insert(++f, {std::move(cell)});
+      } else {
+        ++span.len;
+      }
+      break;
+    }
+  }
+}
+
+void LayerCellsWidget::removeFrame(const FrameIdx idx) {
+  FrameIdx currFrame = 0;
+  for (auto f = frames.begin(); f != frames.end(); ++f) {
+    LinkedSpan &span = *f;
+    currFrame += span.len;
+    if (idx < currFrame) {
+      if (--span.len <= 0) {
+        frames.erase(f);
+      }
+      break;
+    }
+  }
+}
+
 Cell *LayerCellsWidget::appendCell(FrameIdx len) {
   assert(len > 0);
   auto cell = std::make_unique<Cell>(timeline.size, timeline.format, timeline.palette);
@@ -115,19 +151,6 @@ void LayerCellsWidget::paintBorder(QPainter &painter, const int x) {
     glob_border_width, cell_height,
     glob_border_color
   );
-}
-
-namespace {
-
-QRect cellBackRect(const int x) {
-  const int size = 2 * cell_icon_pad + cell_icon_size;
-  return QRect{x - cell_icon_pad, 0, size, size};
-}
-
-QRect cellBackRect(const int x, const FrameIdx frame) {
-  return cellBackRect(x + cell_icon_step * frame);
-}
-
 }
 
 void LayerCellsWidget::paintEvent(QPaintEvent *) {
@@ -242,6 +265,23 @@ void CellsWidget::moveLayerDown(const LayerIdx idx) {
   layout->removeWidget(layer);
   layout->insertWidget(idx + 1, layer);
   Q_EMIT frameChanged(getFrame());
+}
+
+void CellsWidget::addFrame() {
+  for (LayerCellsWidget *layer : layers) {
+    layer->insertFrame(pos.f);
+  }
+  ++frameCount;
+  nextFrame();
+}
+
+void CellsWidget::removeFrame() {
+  for (LayerCellsWidget *layer : layers) {
+    layer->removeFrame(pos.f);
+  }
+  --frameCount;
+  --pos.f;
+  nextFrame();
 }
 
 LayerCellsWidget *CellsWidget::appendLayer() {

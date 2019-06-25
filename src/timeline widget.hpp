@@ -36,6 +36,8 @@ public Q_SLOTS:
   void removeLayer();
   void moveLayerUp();
   void moveLayerDown();
+  void addFrame();
+  void removeFrame();
 
   /*
   create layer above current

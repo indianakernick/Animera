@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_TimelineWidget_t {
-    QByteArrayData data[21];
-    char stringdata0[208];
+    QByteArrayData data[23];
+    char stringdata0[229];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -51,7 +51,9 @@ QT_MOC_LITERAL(16, 149, 8), // "addLayer"
 QT_MOC_LITERAL(17, 158, 11), // "removeLayer"
 QT_MOC_LITERAL(18, 170, 11), // "moveLayerUp"
 QT_MOC_LITERAL(19, 182, 13), // "moveLayerDown"
-QT_MOC_LITERAL(20, 196, 11) // "changeFrame"
+QT_MOC_LITERAL(20, 196, 8), // "addFrame"
+QT_MOC_LITERAL(21, 205, 11), // "removeFrame"
+QT_MOC_LITERAL(22, 217, 11) // "changeFrame"
 
     },
     "TimelineWidget\0posChanged\0\0Cell*\0"
@@ -59,7 +61,8 @@ QT_MOC_LITERAL(20, 196, 11) // "changeFrame"
     "LayerVisible\0frameChanged\0Frame\0Format\0"
     "initialize\0save\0load\0changePalette\0"
     "Palette*\0addLayer\0removeLayer\0moveLayerUp\0"
-    "moveLayerDown\0changeFrame"
+    "moveLayerDown\0addFrame\0removeFrame\0"
+    "changeFrame"
 };
 #undef QT_MOC_LITERAL
 
@@ -69,7 +72,7 @@ static const uint qt_meta_data_TimelineWidget[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-      12,   14, // methods
+      14,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -77,20 +80,22 @@ static const uint qt_meta_data_TimelineWidget[] = {
        3,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    3,   74,    2, 0x06 /* Public */,
-       6,    1,   81,    2, 0x06 /* Public */,
-       8,    3,   84,    2, 0x06 /* Public */,
+       1,    3,   84,    2, 0x06 /* Public */,
+       6,    1,   91,    2, 0x06 /* Public */,
+       8,    3,   94,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      11,    2,   91,    2, 0x0a /* Public */,
-      12,    1,   96,    2, 0x0a /* Public */,
-      13,    1,   99,    2, 0x0a /* Public */,
-      14,    1,  102,    2, 0x0a /* Public */,
-      16,    0,  105,    2, 0x0a /* Public */,
-      17,    0,  106,    2, 0x0a /* Public */,
-      18,    0,  107,    2, 0x0a /* Public */,
-      19,    0,  108,    2, 0x0a /* Public */,
-      20,    1,  109,    2, 0x08 /* Private */,
+      11,    2,  101,    2, 0x0a /* Public */,
+      12,    1,  106,    2, 0x0a /* Public */,
+      13,    1,  109,    2, 0x0a /* Public */,
+      14,    1,  112,    2, 0x0a /* Public */,
+      16,    0,  115,    2, 0x0a /* Public */,
+      17,    0,  116,    2, 0x0a /* Public */,
+      18,    0,  117,    2, 0x0a /* Public */,
+      19,    0,  118,    2, 0x0a /* Public */,
+      20,    0,  119,    2, 0x0a /* Public */,
+      21,    0,  120,    2, 0x0a /* Public */,
+      22,    1,  121,    2, 0x08 /* Private */,
 
  // signals: parameters
     QMetaType::Void, 0x80000000 | 3, 0x80000000 | 4, 0x80000000 | 5,    2,    2,    2,
@@ -102,6 +107,8 @@ static const uint qt_meta_data_TimelineWidget[] = {
     QMetaType::Void, QMetaType::QString,    2,
     QMetaType::Void, QMetaType::QString,    2,
     QMetaType::Void, 0x80000000 | 15,    2,
+    QMetaType::Void,
+    QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -128,7 +135,9 @@ void TimelineWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
         case 8: _t->removeLayer(); break;
         case 9: _t->moveLayerUp(); break;
         case 10: _t->moveLayerDown(); break;
-        case 11: _t->changeFrame((*reinterpret_cast< const Frame(*)>(_a[1]))); break;
+        case 11: _t->addFrame(); break;
+        case 12: _t->removeFrame(); break;
+        case 13: _t->changeFrame((*reinterpret_cast< const Frame(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -186,13 +195,13 @@ int TimelineWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 12)
+        if (_id < 14)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 12;
+        _id -= 14;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 12)
+        if (_id < 14)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 12;
+        _id -= 14;
     }
     return _id;
 }
