@@ -85,8 +85,10 @@ public Q_SLOTS:
   void removeFrame();
   void requestCell();
   void toggleAnimation();
+  void setAnimDelay(int);
 
 public:
+  void initLayer();
   void initCell();
 
   LayerCellsWidget *appendLayer();

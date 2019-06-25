@@ -69,8 +69,9 @@ TimelineWidget::TimelineWidget(QWidget *parent)
 
 void TimelineWidget::createInitialCell() {
   frames->addFrame();
-  cells->initCell();
+  cells->initLayer();
   layers->insertLayer(0);
+  cells->initCell();
   
   /*{
     // @TODO remove

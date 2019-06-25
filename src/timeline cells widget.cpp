@@ -366,13 +366,22 @@ void CellsWidget::toggleAnimation() {
   }
 }
 
-void CellsWidget::initCell() {
+void CellsWidget::setAnimDelay(const int delay) {
+  animTimer.setInterval(delay);
+}
+
+void CellsWidget::initLayer() {
   frameCount = 1;
   auto *layer = new LayerCellsWidget{this, timeline};
-  layer->appendNull(1);
   layers.push_back(layer);
   layout->addWidget(layer);
   Q_EMIT frameChanged({nullptr});
+}
+
+void CellsWidget::initCell() {
+  layers.back()->appendCell();
+  Q_EMIT frameChanged(getFrame());
+  Q_EMIT posChanged(getCurr(), pos.l, pos.f);
 }
 
 LayerCellsWidget *CellsWidget::appendLayer() {
