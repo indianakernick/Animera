@@ -39,6 +39,7 @@ public Q_SLOTS:
   void addFrame();
   void removeFrame();
   void requestCell();
+  void toggleAnimation();
 
   /*
   create layer above current

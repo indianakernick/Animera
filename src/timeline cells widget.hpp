@@ -10,6 +10,7 @@
 #define timeline_cells_widget_hpp
 
 #include "cell.hpp"
+#include <QtCore/qtimer.h>
 #include <QtWidgets/qwidget.h>
 #include "scroll bar widget.hpp"
 
@@ -83,6 +84,7 @@ public Q_SLOTS:
   void addFrame();
   void removeFrame();
   void requestCell();
+  void toggleAnimation();
 
 public:
   void initCell();
@@ -102,6 +104,7 @@ private:
   std::vector<LayerCellsWidget *> layers;
   CellPos pos = {0, 0};
   FrameIdx frameCount = 0;
+  QTimer animTimer;
   
   Cell *getCurr();
   Frame getFrame();

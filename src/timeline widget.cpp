@@ -225,6 +225,10 @@ void TimelineWidget::requestCell() {
   cells->requestCell();
 }
 
+void TimelineWidget::toggleAnimation() {
+  cells->toggleAnimation();
+}
+
 void TimelineWidget::changeFrame(const Frame &frame) {
   Q_EMIT frameChanged(frame, size, format);
 }
@@ -266,6 +270,9 @@ void TimelineWidget::keyPressEvent(QKeyEvent *event) {
       break;
     case Qt::Key_G:
       removeFrame();
+      break;
+    case Qt::Key_Space:
+      toggleAnimation();
       break;
   }
 }

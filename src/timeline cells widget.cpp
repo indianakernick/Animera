@@ -10,6 +10,7 @@
 
 #include "serial.hpp"
 #include "config.hpp"
+#include "connect.hpp"
 #include <QtGui/qpainter.h>
 #include "timeline widget.hpp"
 #include "widget painting.hpp"
@@ -96,6 +97,7 @@ void LayerCellsWidget::cellFromNull(const FrameIdx idx) {
       span.len = leftSize;
       f = frames.insert(++f, {makeCell()});
       frames.insert(++f, {nullptr, rightSize});
+      break;
     }
   }
   repaint();
@@ -245,6 +247,9 @@ CellsWidget::CellsWidget(QWidget *parent, TimelineWidget *timeline)
   layout->setContentsMargins(0, 0, 0, 0);
   layout->setAlignment(Qt::AlignTop);
   layout->setSizeConstraint(QLayout::SetFixedSize);
+  animTimer.setTimerType(Qt::PreciseTimer);
+  animTimer.setInterval(100);
+  CONNECT(&animTimer, timeout, this, nextFrame);
 }
 
 void CellsWidget::changeWidth(const int newWidth) {
@@ -340,6 +345,9 @@ void CellsWidget::removeFrame() {
     }
     --frameCount;
   }
+  if (pos.f == frameCount) {
+    --pos.f;
+  }
   --pos.f;
   nextFrame();
 }
@@ -348,6 +356,14 @@ void CellsWidget::requestCell() {
   layers[pos.l]->cellFromNull(pos.f);
   Q_EMIT frameChanged(getFrame());
   Q_EMIT posChanged(getCurr(), pos.l, pos.f);
+}
+
+void CellsWidget::toggleAnimation() {
+  if (animTimer.isActive()) {
+    animTimer.stop();
+  } else {
+    animTimer.start();
+  }
 }
 
 void CellsWidget::initCell() {
