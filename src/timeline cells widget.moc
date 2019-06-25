@@ -91,8 +91,8 @@ int LayerCellsWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     return _id;
 }
 struct qt_meta_stringdata_CellsWidget_t {
-    QByteArrayData data[16];
-    char stringdata0[153];
+    QByteArrayData data[18];
+    char stringdata0[179];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -116,14 +116,16 @@ QT_MOC_LITERAL(11, 97, 9), // "prevFrame"
 QT_MOC_LITERAL(12, 107, 10), // "layerBelow"
 QT_MOC_LITERAL(13, 118, 10), // "layerAbove"
 QT_MOC_LITERAL(14, 129, 11), // "insertLayer"
-QT_MOC_LITERAL(15, 141, 11) // "removeLayer"
+QT_MOC_LITERAL(15, 141, 11), // "removeLayer"
+QT_MOC_LITERAL(16, 153, 11), // "moveLayerUp"
+QT_MOC_LITERAL(17, 165, 13) // "moveLayerDown"
 
     },
     "CellsWidget\0resized\0\0posChanged\0Cell*\0"
     "LayerIdx\0FrameIdx\0frameChanged\0Frame\0"
     "changeWidth\0nextFrame\0prevFrame\0"
     "layerBelow\0layerAbove\0insertLayer\0"
-    "removeLayer"
+    "removeLayer\0moveLayerUp\0moveLayerDown"
 };
 #undef QT_MOC_LITERAL
 
@@ -133,7 +135,7 @@ static const uint qt_meta_data_CellsWidget[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-      10,   14, // methods
+      12,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -141,18 +143,20 @@ static const uint qt_meta_data_CellsWidget[] = {
        3,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    0,   64,    2, 0x06 /* Public */,
-       3,    3,   65,    2, 0x06 /* Public */,
-       7,    1,   72,    2, 0x06 /* Public */,
+       1,    0,   74,    2, 0x06 /* Public */,
+       3,    3,   75,    2, 0x06 /* Public */,
+       7,    1,   82,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       9,    1,   75,    2, 0x0a /* Public */,
-      10,    0,   78,    2, 0x0a /* Public */,
-      11,    0,   79,    2, 0x0a /* Public */,
-      12,    0,   80,    2, 0x0a /* Public */,
-      13,    0,   81,    2, 0x0a /* Public */,
-      14,    1,   82,    2, 0x0a /* Public */,
-      15,    1,   85,    2, 0x0a /* Public */,
+       9,    1,   85,    2, 0x0a /* Public */,
+      10,    0,   88,    2, 0x0a /* Public */,
+      11,    0,   89,    2, 0x0a /* Public */,
+      12,    0,   90,    2, 0x0a /* Public */,
+      13,    0,   91,    2, 0x0a /* Public */,
+      14,    1,   92,    2, 0x0a /* Public */,
+      15,    1,   95,    2, 0x0a /* Public */,
+      16,    1,   98,    2, 0x0a /* Public */,
+      17,    1,  101,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void,
@@ -165,6 +169,8 @@ static const uint qt_meta_data_CellsWidget[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
+    QMetaType::Void, 0x80000000 | 5,    2,
+    QMetaType::Void, 0x80000000 | 5,    2,
     QMetaType::Void, 0x80000000 | 5,    2,
     QMetaType::Void, 0x80000000 | 5,    2,
 
@@ -187,6 +193,8 @@ void CellsWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         case 7: _t->layerAbove(); break;
         case 8: _t->insertLayer((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;
         case 9: _t->removeLayer((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;
+        case 10: _t->moveLayerUp((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;
+        case 11: _t->moveLayerDown((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -244,13 +252,13 @@ int CellsWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 10)
+        if (_id < 12)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 10;
+        _id -= 12;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 10)
+        if (_id < 12)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 10;
+        _id -= 12;
     }
     return _id;
 }

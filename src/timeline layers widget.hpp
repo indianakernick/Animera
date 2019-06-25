@@ -70,6 +70,8 @@ public Q_SLOTS:
   void setMargin(int);
   void insertLayer(LayerIdx);
   void removeLayer(LayerIdx);
+  void moveLayerUp(LayerIdx);
+  void moveLayerDown(LayerIdx);
   
 private:
   QVBoxLayout *layout = nullptr;

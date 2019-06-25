@@ -71,6 +71,8 @@ public Q_SLOTS:
   void layerAbove();
   void insertLayer(LayerIdx);
   void removeLayer(LayerIdx);
+  void moveLayerUp(LayerIdx);
+  void moveLayerDown(LayerIdx);
 
 public:
   LayerCellsWidget *appendLayer();

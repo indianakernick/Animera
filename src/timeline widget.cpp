@@ -202,6 +202,20 @@ void TimelineWidget::removeLayer() {
   cells->layerBelow();
 }
 
+void TimelineWidget::moveLayerUp() {
+  const LayerIdx layer = cells->currLayer();
+  cells->moveLayerUp(layer);
+  layers->moveLayerUp(layer);
+  cells->layerAbove();
+}
+
+void TimelineWidget::moveLayerDown() {
+  const LayerIdx layer = cells->currLayer();
+  cells->moveLayerDown(layer);
+  layers->moveLayerDown(layer);
+  cells->layerBelow();
+}
+
 void TimelineWidget::changeFrame(const Frame &frame) {
   Q_EMIT frameChanged(frame, size, format);
 }
@@ -231,6 +245,12 @@ void TimelineWidget::keyPressEvent(QKeyEvent *event) {
       break;
     case Qt::Key_R:
       removeLayer();
+      break;
+    case Qt::Key_I:
+      moveLayerUp();
+      break;
+    case Qt::Key_K:
+      moveLayerDown();
       break;
   }
 }

@@ -226,6 +226,24 @@ void CellsWidget::removeLayer(const LayerIdx idx) {
   --pos.l;
 }
 
+void CellsWidget::moveLayerUp(const LayerIdx idx) {
+  if (idx == 0) return;
+  LayerCellsWidget *layer = layers[idx];
+  std::swap(layers[idx - 1], layers[idx]);
+  layout->removeWidget(layer);
+  layout->insertWidget(idx - 1, layer);
+  Q_EMIT frameChanged(getFrame());
+}
+
+void CellsWidget::moveLayerDown(const LayerIdx idx) {
+  if (idx == layerCount() - 1) return;
+  LayerCellsWidget *layer = layers[idx];
+  std::swap(layers[idx], layers[idx + 1]);
+  layout->removeWidget(layer);
+  layout->insertWidget(idx + 1, layer);
+  Q_EMIT frameChanged(getFrame());
+}
+
 LayerCellsWidget *CellsWidget::appendLayer() {
   auto *layer = new LayerCellsWidget{this, timeline};
   layout->addWidget(layer);

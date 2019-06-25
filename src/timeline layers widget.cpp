@@ -131,6 +131,24 @@ void LayersWidget::removeLayer(const LayerIdx idx) {
   toggleVisible();
 }
 
+void LayersWidget::moveLayerUp(const LayerIdx idx) {
+  if (idx == 0) return;
+  LayerNameWidget *layer = layers[idx];
+  std::swap(layers[idx - 1], layers[idx]);
+  layout->removeWidget(layer);
+  layout->insertWidget(idx - 1, layer);
+  toggleVisible();
+}
+
+void LayersWidget::moveLayerDown(const LayerIdx idx) {
+  if (idx == static_cast<LayerIdx>(layers.size()) - 1) return;
+  LayerNameWidget *layer = layers[idx];
+  std::swap(layers[idx], layers[idx + 1]);
+  layout->removeWidget(layer);
+  layout->insertWidget(idx + 1, layer);
+  toggleVisible();
+}
+
 LayerScrollWidget::LayerScrollWidget(QWidget *parent)
   : QScrollArea{parent} {
   setFrameShape(NoFrame);
