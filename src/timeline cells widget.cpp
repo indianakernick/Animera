@@ -29,6 +29,7 @@ void LayerCellsWidget::insertFrame(const FrameIdx idx) {
     currFrame += span.len;
     if (idx < currFrame - 1) {
       ++span.len;
+      addSize(1);
       break;
     } else if (idx == currFrame - 1) {
       if (span.cell) {
@@ -38,6 +39,7 @@ void LayerCellsWidget::insertFrame(const FrameIdx idx) {
       } else {
         ++span.len;
       }
+      addSize(1);
       break;
     }
   }
@@ -52,9 +54,16 @@ void LayerCellsWidget::removeFrame(const FrameIdx idx) {
       if (--span.len <= 0) {
         frames.erase(f);
       }
+      addSize(-1);
       break;
     }
   }
+}
+
+void LayerCellsWidget::clearFrames(const FrameIdx frameCount) {
+  frames.clear();
+  frames.push_back({nullptr, frameCount});
+  repaint();
 }
 
 Cell *LayerCellsWidget::appendCell(FrameIdx len) {
@@ -242,11 +251,15 @@ void CellsWidget::insertLayer(const LayerIdx idx) {
 
 void CellsWidget::removeLayer(const LayerIdx idx) {
   LayerCellsWidget *layer = layers[idx];
-  layout->removeWidget(layer);
-  layers.erase(layers.begin() + idx);
-  delete layer;
-  Q_EMIT frameChanged(getFrame());
-  --pos.l;
+  if (layerCount() == 1) {
+    layer->clearFrames(frameCount);
+  } else {
+    layout->removeWidget(layer);
+    layers.erase(layers.begin() + idx);
+    delete layer;
+    --pos.l;
+    Q_EMIT frameChanged(getFrame());
+  }
 }
 
 void CellsWidget::moveLayerUp(const LayerIdx idx) {
@@ -276,10 +289,16 @@ void CellsWidget::addFrame() {
 }
 
 void CellsWidget::removeFrame() {
-  for (LayerCellsWidget *layer : layers) {
-    layer->removeFrame(pos.f);
+  if (frameCount == 1) {
+    for (LayerCellsWidget *layer : layers) {
+      layer->clearFrames(1);
+    }
+  } else {
+    for (LayerCellsWidget *layer : layers) {
+      layer->removeFrame(pos.f);
+    }
+    --frameCount;
   }
-  --frameCount;
   --pos.f;
   nextFrame();
 }
@@ -354,8 +373,12 @@ void CellsWidget::paintEvent(QPaintEvent *) {
   QPainter painter{this};
   painter.setPen(Qt::NoPen);
   painter.setBrush(cell_curr_color);
-  painter.drawRect(0, pos.l * cell_height, width(), size);
-  painter.drawRect(pos.f * cell_icon_step, 0, size, height());
+  if (layerCount() > 1 || frameCount == 1) {
+    painter.drawRect(0, pos.l * cell_height, frameCount * cell_icon_step, size);
+  }
+  if (frameCount > 1) {
+    painter.drawRect(pos.f * cell_icon_step, 0, size, layerCount() * cell_height);
+  }
 }
 
 CellScrollWidget::CellScrollWidget(QWidget *parent)

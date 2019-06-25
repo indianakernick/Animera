@@ -73,8 +73,11 @@ void TimelineWidget::createInitialCell() {
   assert(layer);
   Cell *cell = layer->appendCell();
   assert(cell);
+  frames->addFrame();
+  // @TODO Might need to remove this
+  Q_EMIT posChanged(cell, 0, 0);
   
-  {
+  /*{
     // @TODO remove
     layer->appendCell();
     layer->appendCell();
@@ -124,10 +127,7 @@ void TimelineWidget::createInitialCell() {
       cells->appendFrame();
       frames->appendFrame();
     }
-  }
-  
-  // @TODO Might need to remove this
-  Q_EMIT posChanged(cell, 0, 0);
+  }*/
 }
 
 void TimelineWidget::initialize(const QSize newSize, const Format newFormat) {
@@ -218,10 +218,12 @@ void TimelineWidget::moveLayerDown() {
 
 void TimelineWidget::addFrame() {
   cells->addFrame();
+  frames->addFrame();
 }
 
 void TimelineWidget::removeFrame() {
   cells->removeFrame();
+  frames->removeFrame();
 }
 
 void TimelineWidget::changeFrame(const Frame &frame) {

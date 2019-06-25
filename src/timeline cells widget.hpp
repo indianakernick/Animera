@@ -31,6 +31,7 @@ public:
   
   void insertFrame(FrameIdx);
   void removeFrame(FrameIdx);
+  void clearFrames(FrameIdx);
   Cell *appendCell(FrameIdx = 1);
   void appendNull(FrameIdx = 1);
   void appendFrame();
@@ -93,7 +94,7 @@ private:
   QVBoxLayout *layout;
   std::vector<LayerCellsWidget *> layers;
   CellPos pos;
-  FrameIdx frameCount = 0;
+  FrameIdx frameCount = 1;
   
   Cell *getCurr();
   Frame getFrame();

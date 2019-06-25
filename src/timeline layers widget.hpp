@@ -39,6 +39,7 @@ public:
   
   bool getVisible() const;
   QString getName() const;
+  void clearInfo();
 
 Q_SIGNALS:
   void visibleToggled();

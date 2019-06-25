@@ -17,7 +17,8 @@ class FramesWidget final : public QWidget {
 public:
   explicit FramesWidget(QWidget *);
  
-  void appendFrame();
+  void addFrame();
+  void removeFrame();
 
 public Q_SLOTS:
   void setMargin(int);
@@ -30,6 +31,7 @@ private:
   int margin = 0;
   
   int roundUpFrames() const;
+  void setWidth();
   
   void paintEvent(QPaintEvent *);
 };

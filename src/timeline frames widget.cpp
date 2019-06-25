@@ -18,21 +18,32 @@ FramesWidget::FramesWidget(QWidget *parent)
   setFixedSize(0, cell_height);
 }
 
-void FramesWidget::appendFrame() {
+void FramesWidget::addFrame() {
   ++frames;
-  setFixedWidth((roundUpFrames() + frame_incr) * cell_icon_step + margin);
+  setWidth();
+  Q_EMIT widthChanged(width());
+  repaint();
+}
+
+void FramesWidget::removeFrame() {
+  frames = std::max(frames - 1, 1);
+  setWidth();
   Q_EMIT widthChanged(width());
   repaint();
 }
 
 void FramesWidget::setMargin(const int newMargin) {
   margin = newMargin;
-  setFixedWidth((roundUpFrames() + frame_incr) * cell_icon_step + margin);
+  setWidth();
   repaint();
 }
 
 int FramesWidget::roundUpFrames() const {
-  return ((frames + 1) / frame_incr) * frame_incr;
+  return ((frames + frame_incr - 1) / frame_incr) * frame_incr;
+}
+
+void FramesWidget::setWidth() {
+  setFixedWidth((roundUpFrames() + frame_incr) * cell_icon_step + margin);
 }
 
 void FramesWidget::paintEvent(QPaintEvent *) {

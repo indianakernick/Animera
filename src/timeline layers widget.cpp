@@ -57,6 +57,11 @@ QString LayerNameWidget::getName() const {
   return name->text();
 }
 
+void LayerNameWidget::clearInfo() {
+  visible->setChecked(true);
+  name->setText("Layer 0");
+}
+
 void LayerNameWidget::paintEvent(QPaintEvent *) {
   QPainter painter{this};
   painter.fillRect(
@@ -125,9 +130,13 @@ void LayersWidget::insertLayer(const LayerIdx idx) {
 
 void LayersWidget::removeLayer(const LayerIdx idx) {
   LayerNameWidget *layer = layers[idx];
-  layout->removeWidget(layer);
-  layers.erase(layers.begin() + idx);
-  delete layer;
+  if (layers.size() == 1) {
+    layer->clearInfo();
+  } else {
+    layout->removeWidget(layer);
+    layers.erase(layers.begin() + idx);
+    delete layer;
+  }
   toggleVisible();
 }
 
