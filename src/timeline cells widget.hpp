@@ -31,6 +31,7 @@ public:
   LayerCellsWidget(QWidget *, TimelineWidget *);
   
   void insertFrame(FrameIdx);
+  void insertNullFrame(FrameIdx);
   void removeFrame(FrameIdx);
   void clearFrames(FrameIdx);
   void swapWith(LayerCellsWidget &);
@@ -73,16 +74,21 @@ Q_SIGNALS:
 
 public Q_SLOTS:
   void changeWidth(int);
+  
   void nextFrame();
   void prevFrame();
   void layerBelow();
   void layerAbove();
+  
   void insertLayer(LayerIdx);
   void removeLayer(LayerIdx);
   void moveLayerUp(LayerIdx);
   void moveLayerDown(LayerIdx);
+  
   void addFrame();
+  void addNullFrame();
   void removeFrame();
+  
   void requestCell();
   void toggleAnimation();
   void setAnimDelay(int);

@@ -22,6 +22,19 @@ LayerCellsWidget::LayerCellsWidget(QWidget *parent, TimelineWidget *timeline)
   loadIcons();
 }
 
+namespace {
+
+// @TODO Why are we storing cells in std::unique_ptr?
+CellPtr copyCell(CellPtr &other) {
+  CellPtr cell = std::make_unique<Cell>();
+  cell->image = other->image;
+  return cell;
+}
+
+}
+
+// @TODO implement these functions in terms of a set of generic operations
+
 void LayerCellsWidget::insertFrame(const FrameIdx idx) {
   // Insert after the idx
   FrameIdx currFrame = 0;
@@ -34,13 +47,46 @@ void LayerCellsWidget::insertFrame(const FrameIdx idx) {
       break;
     } else if (idx == currFrame - 1) {
       if (span.cell) {
-        CellPtr cell = std::make_unique<Cell>();
-        cell->image = span.cell->image;
-        frames.insert(++f, {std::move(cell)});
+        frames.insert(++f, {copyCell(span.cell)});
       } else {
         ++span.len;
       }
       addSize(1);
+      break;
+    }
+  }
+}
+
+void LayerCellsWidget::insertNullFrame(const FrameIdx idx) {
+  // Insert after the idx
+  FrameIdx currFrame = 0;
+  for (auto f = frames.begin(); f != frames.end(); ++f) {
+    LinkedSpan &span = *f;
+    currFrame += span.len;
+    if (idx < currFrame) {
+      if (!span.cell) {
+        ++span.len;
+        addSize(1);
+        break;
+      } else if (span.len == 1) {
+        frames.insert(++f, {nullptr});
+        addSize(1);
+        break;
+      }
+      const FrameIdx rightSize = currFrame - idx - 1;
+      const FrameIdx leftSize = span.len - (currFrame - idx);
+      if (rightSize == 0) {
+        span.len = leftSize;
+        frames.insert(++f, {nullptr});
+        break;
+      } else if (leftSize == 0) {
+        span.len = rightSize;
+        frames.insert(f, {nullptr});
+        break;
+      }
+      span.len = leftSize;
+      f = frames.insert(++f, {nullptr});
+      frames.insert(++f, {copyCell(span.cell), rightSize});
       break;
     }
   }
@@ -329,6 +375,14 @@ void CellsWidget::moveLayerDown(const LayerIdx idx) {
 void CellsWidget::addFrame() {
   for (LayerCellsWidget *layer : layers) {
     layer->insertFrame(pos.f);
+  }
+  ++frameCount;
+  nextFrame();
+}
+
+void CellsWidget::addNullFrame() {
+  for (LayerCellsWidget *layer : layers) {
+    layer->insertNullFrame(pos.f);
   }
   ++frameCount;
   nextFrame();

@@ -41,6 +41,7 @@ public:
   QString getName() const;
   void clearInfo();
   void swapWith(LayerNameWidget &);
+  void toggleVisible();
 
 Q_SIGNALS:
   void visibleToggled();
@@ -66,7 +67,7 @@ Q_SIGNALS:
   void visibleChanged(const LayerVisible &);
 
 private Q_SLOTS:
-  void toggleVisible();
+  void changeVisible();
 
 public Q_SLOTS:
   void setMargin(int);
@@ -74,6 +75,7 @@ public Q_SLOTS:
   void removeLayer(LayerIdx);
   void moveLayerUp(LayerIdx);
   void moveLayerDown(LayerIdx);
+  void toggleVisible(LayerIdx);
   
 private:
   QVBoxLayout *layout = nullptr;

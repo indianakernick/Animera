@@ -212,8 +212,17 @@ void TimelineWidget::moveLayerDown() {
   cells->layerBelow();
 }
 
+void TimelineWidget::toggleLayerVisible() {
+  layers->toggleVisible(cells->currLayer());
+}
+
 void TimelineWidget::addFrame() {
   cells->addFrame();
+  frames->addFrame();
+}
+
+void TimelineWidget::addNullFrame() {
+  cells->addNullFrame();
   frames->addFrame();
 }
 
@@ -230,52 +239,24 @@ void TimelineWidget::toggleAnimation() {
   cells->toggleAnimation();
 }
 
-void TimelineWidget::changeFrame(const Frame &frame) {
-  Q_EMIT frameChanged(frame, size, format);
+void TimelineWidget::layerAbove() {
+  cells->layerAbove();
 }
 
-void TimelineWidget::keyPressEvent(QKeyEvent *event) {
-  switch (event->key()) {
-    case Qt::Key_Up:
-    case Qt::Key_W:
-      cells->layerAbove();
-      break;
-    case Qt::Key_Right:
-    case Qt::Key_D:
-      cells->nextFrame();
-      break;
-    case Qt::Key_Down:
-    case Qt::Key_S:
-      cells->layerBelow();
-      break;
-    case Qt::Key_Left:
-    case Qt::Key_A:
-      cells->prevFrame();
-      break;
-    
-    // @TODO Buttons, menubar, global key bindings
-    case Qt::Key_L:
-      addLayer();
-      break;
-    case Qt::Key_R:
-      removeLayer();
-      break;
-    case Qt::Key_I:
-      moveLayerUp();
-      break;
-    case Qt::Key_K:
-      moveLayerDown();
-      break;
-    case Qt::Key_F:
-      addFrame();
-      break;
-    case Qt::Key_G:
-      removeFrame();
-      break;
-    case Qt::Key_Space:
-      toggleAnimation();
-      break;
-  }
+void TimelineWidget::layerBelow() {
+  cells->layerBelow();
+}
+
+void TimelineWidget::nextFrame() {
+  cells->nextFrame();
+}
+
+void TimelineWidget::prevFrame() {
+  cells->prevFrame();
+}
+
+void TimelineWidget::changeFrame(const Frame &frame) {
+  Q_EMIT frameChanged(frame, size, format);
 }
 
 #include "timeline widget.moc"

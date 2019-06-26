@@ -111,6 +111,7 @@ void ToolSelectWidget::mouseLeave(QImage *overlay) {
 }
 
 void ToolSelectWidget::mouseDown(const QPoint pos, const ButtonType button, QImage *overlay) {
+  // @TODO give the null cell to the tool and then let it request a cell
   if (currTool.nullCell()) Q_EMIT cellRequested();
   // @TODO I think we need to move the status.clear() call somewhere else
   status.clear();
@@ -144,6 +145,7 @@ void ToolSelectWidget::mouseUp(const QPoint pos, const ButtonType button, QImage
 }
 
 void ToolSelectWidget::keyPress(const Qt::Key key, QImage *overlay) {
+  // @TODO give the null cell to the tool and then let it request a cell
   if (currTool.nullCell()) Q_EMIT cellRequested();
   status.clear();
   emitModified(currTool.keyPress({key, colors, overlay, &status}));

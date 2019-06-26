@@ -71,6 +71,10 @@ void LayerNameWidget::swapWith(LayerNameWidget &other) {
   other.name->setText(tempName);
 }
 
+void LayerNameWidget::toggleVisible() {
+  visible->toggle();
+}
+
 void LayerNameWidget::paintEvent(QPaintEvent *) {
   QPainter painter{this};
   painter.fillRect(
@@ -110,13 +114,13 @@ LayersWidget::LayersWidget(QWidget *parent)
 
 void LayersWidget::appendLayer(const LayerIdx layer) {
   auto *layerName = new LayerNameWidget{this, layer};
-  CONNECT(layerName, visibleToggled, this, toggleVisible);
+  CONNECT(layerName, visibleToggled, this, changeVisible);
   layers.push_back(layerName);
   layout->addWidget(layerName);
-  toggleVisible();
+  changeVisible();
 }
 
-void LayersWidget::toggleVisible() {
+void LayersWidget::changeVisible() {
   LayerVisible visible;
   visible.reserve(layers.size());
   for (LayerNameWidget *layer : layers) {
@@ -131,10 +135,10 @@ void LayersWidget::setMargin(const int margin) {
 
 void LayersWidget::insertLayer(const LayerIdx idx) {
   auto *layer = new LayerNameWidget{this, static_cast<LayerIdx>(layers.size())};
-  CONNECT(layer, visibleToggled, this, toggleVisible);
+  CONNECT(layer, visibleToggled, this, changeVisible);
   layers.insert(layers.begin() + idx, layer);
   layout->insertWidget(idx, layer);
-  toggleVisible();
+  changeVisible();
 }
 
 void LayersWidget::removeLayer(const LayerIdx idx) {
@@ -148,7 +152,7 @@ void LayersWidget::removeLayer(const LayerIdx idx) {
     delete layers.back();
     layers.pop_back();
   }
-  toggleVisible();
+  changeVisible();
 }
 
 void LayersWidget::moveLayerUp(const LayerIdx idx) {
@@ -157,7 +161,7 @@ void LayersWidget::moveLayerUp(const LayerIdx idx) {
   std::swap(layers[idx - 1], layers[idx]);
   layout->removeWidget(layer);
   layout->insertWidget(idx - 1, layer);
-  toggleVisible();
+  changeVisible();
 }
 
 void LayersWidget::moveLayerDown(const LayerIdx idx) {
@@ -166,7 +170,11 @@ void LayersWidget::moveLayerDown(const LayerIdx idx) {
   std::swap(layers[idx], layers[idx + 1]);
   layout->removeWidget(layer);
   layout->insertWidget(idx + 1, layer);
-  toggleVisible();
+  changeVisible();
+}
+
+void LayersWidget::toggleVisible(const LayerIdx idx) {
+  layers[idx]->toggleVisible();
 }
 
 LayerScrollWidget::LayerScrollWidget(QWidget *parent)

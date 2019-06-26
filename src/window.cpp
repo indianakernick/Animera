@@ -105,8 +105,19 @@ void Window::setupUI() {
   setCentralWidget(&editor);
 }
 
+#define ADD_ACTION(MENU, NAME, SHORTCUT, WIDGET, MEMFN) do {                    \
+  QAction *action = MENU->addAction(NAME);                                      \
+  action->setShortcut(SHORTCUT);                                                \
+  CONNECT(action, triggered, &WIDGET, MEMFN);                                   \
+} while (0)
+
 void Window::setupMenubar() {
   menubar = new QMenuBar{this};
+  // menubar->setNativeMenuBar(false);
+  if (!menubar->isNativeMenuBar()) {
+    makeDockWidget(Qt::TopDockWidgetArea, menubar);
+  }
+  
   QMenu *file = menubar->addMenu("File");
   QAction *open = file->addAction("Open");
   open->setShortcut(QKeySequence::Open);
@@ -115,7 +126,37 @@ void Window::setupMenubar() {
   file->addAction("Export");
   // CONNECT(open, triggered, this, openDoc);
   // CONNECT(save, triggered, this, saveDoc);
+  
+  QMenu *layer = menubar->addMenu("Layer");
+  ADD_ACTION(layer, "New Layer", Qt::SHIFT + Qt::Key_N, timeline, addLayer);
+  ADD_ACTION(layer, "Delete Layer", Qt::SHIFT + Qt::Key_Backspace, timeline, removeLayer);
+  ADD_ACTION(layer, "Move Layer Up", Qt::SHIFT + Qt::Key_Up, timeline, moveLayerUp);
+  ADD_ACTION(layer, "Move Layer Down", Qt::SHIFT + Qt::Key_Down, timeline, moveLayerDown);
+  ADD_ACTION(layer, "Toggle Visibility", Qt::SHIFT + Qt::Key_V, timeline, toggleLayerVisible);
+  // @TODO Maybe consider this
+  // We have to keep the action in sync with the timeline
+  /*{
+    QAction *action = layer->addAction("Visible");
+    action->setShortcut(Qt::SHIFT + Qt::Key_V);
+    action->setCheckable(true);
+    action->setChecked(true);
+    CONNECT(action, triggered, &timeline, toggleLayerVisible);
+  }*/
+  layer->addSeparator();
+  ADD_ACTION(layer, "Layer Above", Qt::Key_W, timeline, layerAbove);
+  ADD_ACTION(layer, "Layer Below", Qt::Key_S, timeline, layerBelow);
+  
+  QMenu *frame = menubar->addMenu("Frame");
+  ADD_ACTION(frame, "New Frame", Qt::ALT + Qt::Key_N, timeline, addFrame);
+  ADD_ACTION(frame, "New Empty Frame", Qt::ALT + Qt::Key_E, timeline, addNullFrame);
+  ADD_ACTION(frame, "Delete Frame", Qt::ALT + Qt::Key_Backspace, timeline, removeFrame);
+  frame->addSeparator();
+  ADD_ACTION(frame, "Next Frame", Qt::Key_D, timeline, nextFrame);
+  ADD_ACTION(frame, "Previous Frame", Qt::Key_A, timeline, prevFrame);
+  ADD_ACTION(frame, "Play Animation", Qt::Key_Space, timeline, toggleAnimation);
 }
+
+#undef ADD_ACTION
 
 void Window::makeDockWidget(Qt::DockWidgetArea area, QWidget *widget) {
   QDockWidget *dock = new QDockWidget{this};

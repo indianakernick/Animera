@@ -130,8 +130,8 @@ void LayerNameWidget::visibleToggled()
     QMetaObject::activate(this, &staticMetaObject, 0, nullptr);
 }
 struct qt_meta_stringdata_LayersWidget_t {
-    QByteArrayData data[11];
-    char stringdata0[125];
+    QByteArrayData data[12];
+    char stringdata0[139];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -144,19 +144,20 @@ QT_MOC_LITERAL(0, 0, 12), // "LayersWidget"
 QT_MOC_LITERAL(1, 13, 14), // "visibleChanged"
 QT_MOC_LITERAL(2, 28, 0), // ""
 QT_MOC_LITERAL(3, 29, 12), // "LayerVisible"
-QT_MOC_LITERAL(4, 42, 13), // "toggleVisible"
+QT_MOC_LITERAL(4, 42, 13), // "changeVisible"
 QT_MOC_LITERAL(5, 56, 9), // "setMargin"
 QT_MOC_LITERAL(6, 66, 11), // "insertLayer"
 QT_MOC_LITERAL(7, 78, 8), // "LayerIdx"
 QT_MOC_LITERAL(8, 87, 11), // "removeLayer"
 QT_MOC_LITERAL(9, 99, 11), // "moveLayerUp"
-QT_MOC_LITERAL(10, 111, 13) // "moveLayerDown"
+QT_MOC_LITERAL(10, 111, 13), // "moveLayerDown"
+QT_MOC_LITERAL(11, 125, 13) // "toggleVisible"
 
     },
     "LayersWidget\0visibleChanged\0\0LayerVisible\0"
-    "toggleVisible\0setMargin\0insertLayer\0"
+    "changeVisible\0setMargin\0insertLayer\0"
     "LayerIdx\0removeLayer\0moveLayerUp\0"
-    "moveLayerDown"
+    "moveLayerDown\0toggleVisible"
 };
 #undef QT_MOC_LITERAL
 
@@ -166,7 +167,7 @@ static const uint qt_meta_data_LayersWidget[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-       7,   14, // methods
+       8,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -174,15 +175,16 @@ static const uint qt_meta_data_LayersWidget[] = {
        1,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    1,   49,    2, 0x06 /* Public */,
+       1,    1,   54,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       4,    0,   52,    2, 0x08 /* Private */,
-       5,    1,   53,    2, 0x0a /* Public */,
-       6,    1,   56,    2, 0x0a /* Public */,
-       8,    1,   59,    2, 0x0a /* Public */,
-       9,    1,   62,    2, 0x0a /* Public */,
-      10,    1,   65,    2, 0x0a /* Public */,
+       4,    0,   57,    2, 0x08 /* Private */,
+       5,    1,   58,    2, 0x0a /* Public */,
+       6,    1,   61,    2, 0x0a /* Public */,
+       8,    1,   64,    2, 0x0a /* Public */,
+       9,    1,   67,    2, 0x0a /* Public */,
+      10,    1,   70,    2, 0x0a /* Public */,
+      11,    1,   73,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, 0x80000000 | 3,    2,
@@ -190,6 +192,7 @@ static const uint qt_meta_data_LayersWidget[] = {
  // slots: parameters
     QMetaType::Void,
     QMetaType::Void, QMetaType::Int,    2,
+    QMetaType::Void, 0x80000000 | 7,    2,
     QMetaType::Void, 0x80000000 | 7,    2,
     QMetaType::Void, 0x80000000 | 7,    2,
     QMetaType::Void, 0x80000000 | 7,    2,
@@ -205,12 +208,13 @@ void LayersWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->visibleChanged((*reinterpret_cast< const LayerVisible(*)>(_a[1]))); break;
-        case 1: _t->toggleVisible(); break;
+        case 1: _t->changeVisible(); break;
         case 2: _t->setMargin((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 3: _t->insertLayer((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;
         case 4: _t->removeLayer((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;
         case 5: _t->moveLayerUp((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;
         case 6: _t->moveLayerDown((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;
+        case 7: _t->toggleVisible((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -254,13 +258,13 @@ int LayersWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 7)
+        if (_id < 8)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 7;
+        _id -= 8;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 7)
+        if (_id < 8)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 7;
+        _id -= 8;
     }
     return _id;
 }

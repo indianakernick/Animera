@@ -32,26 +32,24 @@ public Q_SLOTS:
   void save(const QString &) const;
   void load(const QString &);
   void changePalette(Palette *);
+  
   void addLayer();
   void removeLayer();
   void moveLayerUp();
   void moveLayerDown();
+  void toggleLayerVisible();
+  
   void addFrame();
+  void addNullFrame();
   void removeFrame();
+  
   void requestCell();
   void toggleAnimation();
-
-  /*
-  create layer above current
-  remove current layer
-  move current layer up
-  move current layer down
-  create frame after current
-  remove current frame
-  toggle playing animation
   
-  set position to newly created layers and frames
-  */
+  void layerAbove();
+  void layerBelow();
+  void nextFrame();
+  void prevFrame();
 
 Q_SIGNALS:
   // emitted when the current layer/frame has changed
@@ -71,8 +69,6 @@ private:
   Palette *palette = nullptr;
   QSize size;
   Format format;
-  
-  void keyPressEvent(QKeyEvent *) override;
 };
 
 #endif
