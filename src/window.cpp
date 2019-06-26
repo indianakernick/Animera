@@ -28,7 +28,7 @@ Window::Window(const QRect desktop)
     statusBar{&bottom},
     colorPicker{&right} {
   setWindowTitle("Pixel 2");
-  setMinimumSize(glob_min_window_size);
+  resize(glob_window_size);
   setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
   setFocusPolicy(Qt::StrongFocus);
   setGeometry(QStyle::alignedRect(
@@ -44,6 +44,8 @@ Window::Window(const QRect desktop)
   show();
   
   // @TODO Call this with UI
+  // Maybe use a signal to send this information to other widgets
+  // EditorWidget might like the size
   timeline.initialize(QSize{256, 256}, Format::color);
   timeline.createInitialCell();
 }
@@ -72,9 +74,6 @@ void Window::setupUI() {
     "border-color: " + glob_border_color.name() + ";"
     "border-style: solid;"
   "}");
-  
-  bottom.setMinimumHeight(50_px);
-  bottom.setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
   
   QVBoxLayout *bottomLayout = new QVBoxLayout{&bottom};
   bottom.setLayout(bottomLayout);

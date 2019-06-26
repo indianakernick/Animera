@@ -36,7 +36,7 @@ constexpr int       glob_font_decent_px = 0_px;
 constexpr int       glob_font_px = glob_font_accent_px + glob_font_decent_px;
 constexpr int       glob_font_pt = 8_px; // 8 pt for 72 dpi. 6 pt for 96 dpi
 
-constexpr QSize     glob_min_window_size = {640_px, 360_px};
+constexpr QSize     glob_window_size = {640_px, 360_px};
 
 // ------------------------ global color scheme ----------------------------- //
 
@@ -138,7 +138,7 @@ constexpr QRgb      tool_overlay_color = qRgba(
 
 // ------------------------------- status bar ------------------------------- //
 
-constexpr int       stat_temp_duration_ms = 4000;
+constexpr int       stat_temp_duration_ms = 2500;
 constexpr int       stat_min_width = 200_px;
 constexpr int       stat_height = glob_font_px + 2 * (glob_text_padding + glob_padding);
 

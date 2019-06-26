@@ -27,6 +27,8 @@ public:
   }
 };
 
+#include <iostream>
+
 TimelineWidget::TimelineWidget(QWidget *parent)
   : QWidget{parent} {
   setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);

@@ -183,6 +183,7 @@ LayerScrollWidget::LayerScrollWidget(QWidget *parent)
   setFixedWidth(101_px);
   setStyleSheet("background-color:" + glob_main.name());
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  setMinimumHeight(cell_height + glob_scroll_width);
 }
 
 LayersWidget *LayerScrollWidget::setChild(LayersWidget *layers) {

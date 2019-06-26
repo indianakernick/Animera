@@ -516,6 +516,7 @@ CellScrollWidget::CellScrollWidget(QWidget *parent)
   setFrameShape(NoFrame);
   setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
   setStyleSheet("background-color:" + glob_main.name());
+  setMinimumSize(cell_icon_step + glob_scroll_width, cell_height + glob_scroll_width);
 }
 
 CellsWidget *CellScrollWidget::setChild(CellsWidget *cells) {
