@@ -71,58 +71,6 @@ void TimelineWidget::createInitialCell() {
   cells->initLayer();
   layers->insertLayer(0);
   cells->initCell();
-  
-  /*{
-    // @TODO remove
-    layer->appendCell();
-    layer->appendCell();
-    layer->appendNull(2);
-    layer->appendCell(8);
-    
-    LayerCellsWidget *layer1 = cells->appendLayer();
-    layers->appendLayer(cells->layerCount() - 1);
-    layer1->appendNull();
-    layer1->appendCell(2);
-    layer1->appendCell();
-    layer1->appendCell(3);
-    layer1->appendNull(5);
-    layer1->appendCell();
-    
-    LayerCellsWidget *layer2 = cells->appendLayer();
-    layers->appendLayer(cells->layerCount() - 1);
-    layer2->appendNull(13);
-    
-    LayerCellsWidget *layer3 = cells->appendLayer();
-    layers->appendLayer(cells->layerCount() - 1);
-    layer3->appendCell();
-    layer3->appendCell();
-    layer3->appendCell();
-    layer3->appendCell();
-    layer3->appendCell();
-    layer3->appendCell();
-    layer3->appendCell();
-    layer3->appendCell();
-    layer3->appendNull(5);
-    
-    cells->appendLayer();
-    layers->appendLayer(cells->layerCount() - 1);
-    cells->appendLayer();
-    layers->appendLayer(cells->layerCount() - 1);
-    cells->appendLayer();
-    layers->appendLayer(cells->layerCount() - 1);
-    
-    cells->appendFrame();
-    cells->appendFrame();
-    
-    for (int f = 0; f != 15; ++f) {
-      frames->appendFrame();
-    }
-    
-    for (int f = 0; f != 50; ++f) {
-      cells->appendFrame();
-      frames->appendFrame();
-    }
-  }*/
 }
 
 void TimelineWidget::initialize(const QSize newSize, const Format newFormat) {

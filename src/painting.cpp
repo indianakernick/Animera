@@ -32,59 +32,6 @@ bool drawRoundPoint(QImage &img, const QRgb color, const QPoint pos, const int r
 
 namespace {
 
-/*
-
-// @TODO do we need this?
-
-template <typename Pixel>
-uint32_t distance2(const Pixel a, const Pixel b) {
-  union Components {
-    Pixel p;
-    uint8_t c[sizeof(Pixel)];
-  };
-  Components compA{a};
-  Components compB{b};
-  uint32_t dist = 0;
-  for (size_t i = 0; i != sizeof(Pixel); ++i) {
-    const uint32_t diff = compA.c[i] - compB.c[i];
-    dist += diff * diff;
-  }
-  return dist;
-}
-
-template <typename Pixel>
-class ThresholdFillManip {
-public:
-  ThresholdFillManip(const Surface<Pixel> surface, const Pixel toolColor, const uint32_t threshold)
-    : surface{surface},
-      threshold2{threshold * threshold},
-      toolColor{toolColor} {
-    assert(threshold != 0);
-  }
-  
-  bool start(const QPoint pos) {
-    startColor = surface.getPixel(pos);
-    return startColor != toolColor;
-  }
-  QSize size() const {
-    return surface.size();
-  }
-  bool shouldSet(const QPoint pos) const {
-    return distance2(surface.getPixel(pos), startColor) <= threshold2;
-  }
-  void set(const QPoint pos) {
-    surface.setPixel(toolColor, pos);
-  }
-  
-private:
-  Surface<Pixel> surface;
-  uint32_t threshold2;
-  Pixel toolColor;
-  Pixel startColor;
-};
-
-*/
-
 template <typename Pixel>
 class FillManip {
 public:

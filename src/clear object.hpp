@@ -14,7 +14,6 @@
 
 class Cell;
 
-// @TODO is this class really the right way to go about the problem?
 class ClearObject final : public QObject {
   Q_OBJECT
   

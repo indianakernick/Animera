@@ -418,5 +418,3 @@ If I want to see a project through to completion, I should start small.
 I should limit the scope of features.
 I could develop a minimal set of features while ensuring that the application is simple
 and intuitive to use.
-
-Alternatively, I could move on and make a game.
