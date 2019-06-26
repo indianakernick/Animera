@@ -21,12 +21,12 @@ bool drawSquarePoint(QImage &img, const QRgb color, const QPoint pos, const Circ
   });
 }
 
-bool drawRoundPoint(QImage &img, const QRgb color, const QPoint pos, const int thickness, const CircleShape shape) {
-  assert(thickness > 0);
-  if (thickness == 1) {
+bool drawRoundPoint(QImage &img, const QRgb color, const QPoint pos, const int radius, const CircleShape shape) {
+  assert(radius >= 0);
+  if (radius == 0) {
     return drawSquarePoint(img, color, pos, shape);
   } else {
-    return drawFilledCircle(img, color, pos, thickness, shape);
+    return drawFilledCircle(img, color, pos, radius, shape);
   }
 }
 
@@ -368,22 +368,22 @@ bool midpointLine(const Surface<Pixel> surface, const Pixel col, const QPoint p1
 
 // @TODO this is suboptimial but seems to be fast enough
 template <typename Pixel>
-bool midpointThickLine(const Surface<Pixel> surface, const Pixel col, const QPoint p1, const QPoint p2, const int thickness) {
-  midpointFilledCircle(surface, col, p1, thickness, CircleShape::c1x1);
-  return midpointLine(p1, p2, [surface, col, thickness](const QPoint pos) {
-    return midpointThickCircle(surface, col, pos, thickness - 1, thickness, CircleShape::c1x1);
+bool midpointThickLine(const Surface<Pixel> surface, const Pixel col, const QPoint p1, const QPoint p2, const int radius) {
+  midpointFilledCircle(surface, col, p1, radius, CircleShape::c1x1);
+  return midpointLine(p1, p2, [surface, col, radius](const QPoint pos) {
+    return midpointThickCircle(surface, col, pos, radius - 1, radius, CircleShape::c1x1);
   });
 }
 
 }
 
-bool drawLine(QImage &img, const QRgb color, const QLine line, const int thickness) {
-  assert(thickness > 0);
-  return makeSurface(img, color, [line, thickness](auto surface, auto color) {
-    if (thickness == 1) {
+bool drawLine(QImage &img, const QRgb color, const QLine line, const int radius) {
+  assert(radius >= 0);
+  return makeSurface(img, color, [line, radius](auto surface, auto color) {
+    if (radius == 0) {
       return midpointLine(surface, color, line.p1(), line.p2());
     } else {
-      return midpointThickLine(surface, color, line.p1(), line.p2(), thickness);
+      return midpointThickLine(surface, color, line.p1(), line.p2(), radius);
     }
   });
 }

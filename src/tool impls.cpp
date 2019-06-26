@@ -61,9 +61,9 @@ ToolChanges BrushTool::mouseUp(const ToolMouseEvent &event) {
   return drawnChanges(symLine(cell->image.data, color, {lastPos, event.pos}));
 }
 
-void BrushTool::setWidth(const int newWidth) {
-  assert(brsh_min_thick <= newWidth && newWidth <= brsh_max_thick);
-  width = newWidth;
+void BrushTool::setRadius(const int newRadius) {
+  assert(brsh_min_radius <= newRadius && newRadius <= brsh_max_radius);
+  radius = newRadius;
 }
 
 void BrushTool::setMode(const SymmetryMode newMode) {
@@ -89,17 +89,16 @@ void BrushTool::symPoint(StatusMsg &status, const QPoint point) {
 }
 
 bool BrushTool::symPoint(QImage &img, const QRgb col, const QPoint point) {
-  // @TODO symmetry isn't quite right when brush size isn't 1
   const QPoint refl = {img.width() - point.x() - 1, img.height() - point.y() - 1};
-  bool drawn = drawRoundPoint(img, col, point, width);
+  bool drawn = drawRoundPoint(img, col, point, radius);
   if (mode & SymmetryMode::hori) {
-    drawn |= drawRoundPoint(img, col, {refl.x(), point.y()}, width);
+    drawn |= drawRoundPoint(img, col, {refl.x(), point.y()}, radius);
   }
   if (mode & SymmetryMode::vert) {
-    drawn |= drawRoundPoint(img, col, {point.x(), refl.y()}, width);
+    drawn |= drawRoundPoint(img, col, {point.x(), refl.y()}, radius);
   }
   if (mode & SymmetryMode::both) {
-    drawn |= drawRoundPoint(img, col, refl, width);
+    drawn |= drawRoundPoint(img, col, refl, radius);
   }
   return drawn;
 }
@@ -122,18 +121,18 @@ QPoint reflectXY(const QSize size, const QPoint point) {
 
 bool BrushTool::symLine(QImage &img, const QRgb col, const QLine line) {
   const QSize size = img.size();
-  bool drawn = drawLine(img, col, line, width);
+  bool drawn = drawLine(img, col, line, radius);
   if (mode & SymmetryMode::hori) {
     const QLine refl = {reflectX(size, line.p1()), reflectX(size, line.p2())};
-    drawn |= drawLine(img, col, refl, width);
+    drawn |= drawLine(img, col, refl, radius);
   }
   if (mode & SymmetryMode::vert) {
     const QLine refl = {reflectY(size, line.p1()), reflectY(size, line.p2())};
-    drawn |= drawLine(img, col, refl, width);
+    drawn |= drawLine(img, col, refl, radius);
   }
   if (mode & SymmetryMode::both) {
     const QLine refl = {reflectXY(size, line.p1()), reflectXY(size, line.p2())};
-    drawn |= drawLine(img, col, refl, width);
+    drawn |= drawLine(img, col, refl, radius);
   }
   return drawn;
 }
@@ -516,20 +515,20 @@ Derived *DragPaintTool<Derived>::that() {
 
 LineTool::~LineTool() = default;
 
-void LineTool::setThick(const int newThick) {
-  thickness = newThick;
+void LineTool::setRadius(const int newRadius) {
+  radius = newRadius;
 }
 
 bool LineTool::drawPoint(Image &image, const QPoint pos) {
-  return drawRoundPoint(image.data, getColor(), pos, thickness);
+  return drawRoundPoint(image.data, getColor(), pos, radius);
 }
 
 bool LineTool::drawDrag(Image &image, const QPoint start, const QPoint end) {
-  return drawLine(image.data, getColor(), {start, end}, thickness);
+  return drawLine(image.data, getColor(), {start, end}, radius);
 }
 
 void LineTool::drawOverlay(QImage &overlay, const QPoint pos) {
-  drawRoundPoint(overlay, tool_overlay_color, pos, thickness);
+  drawRoundPoint(overlay, tool_overlay_color, pos, radius);
 }
 
 void LineTool::updateStatus(StatusMsg &status, const QPoint start, const QPoint end) {

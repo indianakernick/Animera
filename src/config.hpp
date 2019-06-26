@@ -252,8 +252,8 @@ constexpr Qt::Key   key_undo = Qt::Key_N;
 constexpr Qt::Key   key_redo = Qt::Key_M;
 
 // brush
-constexpr int       brsh_min_thick = 1;
-constexpr int       brsh_max_thick = 64;
+constexpr int       brsh_min_radius = 0;
+constexpr int       brsh_max_radius = 64;
 
 // translate
 constexpr Qt::Key   key_mov_up = Qt::Key_Up;

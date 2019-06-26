@@ -2233,7 +2233,7 @@ int main(int argc, char **argv) {
   
   RotateTool tool;
   //tool.setMode(SymmetryMode::both);
-  //tool.setWidth(2);
+  //tool.setRadius(2);
   //tool.setShape(CircleShape::c1x1);
   [[maybe_unused]] const bool ok = tool.attachCell(&source);
   assert(ok);

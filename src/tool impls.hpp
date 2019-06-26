@@ -19,13 +19,13 @@ public:
   ToolChanges mouseMove(const ToolMouseEvent &) override;
   ToolChanges mouseUp(const ToolMouseEvent &) override;
 
-  void setWidth(int);
+  void setRadius(int);
   void setMode(SymmetryMode);
 
 private:
   QPoint lastPos = no_point;
-  // @TODO restore these to 1 and none
-  int width = 1;
+  // @TODO restore these to 0 and none
+  int radius = 0;
   SymmetryMode mode = SymmetryMode::none;
   QRgb color = 0;
   
@@ -120,11 +120,11 @@ public:
 
   ~LineTool();
   
-  void setThick(int);
+  void setRadius(int);
 
 private:
-  // @TODO restore this to 1
-  int thickness = 4;
+  // @TODO restore this to 0
+  int radius = 2;
  
   bool drawPoint(Image &, QPoint);
   bool drawDrag(Image &, QPoint, QPoint);
