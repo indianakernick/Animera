@@ -295,18 +295,14 @@ ToolChanges PolygonSelectTool::mouseUp(const ToolMouseEvent &event) {
   return ToolChanges::overlay;
 }
 
-// @TODO WAND SELECT BUG!!!
-// Select something
-// change to PASTE mode
-// switch to another tool
-// switch back
-// overlay is colored
-
 void WandSelectTool::attachCell(Cell *newCell) {
   Tool::attachCell(newCell);
-  selection = makeCompatible(cell->image.data);
-  overlay = makeCompatible(selection);
-  mask = makeMask(selection.size());
+  mode = SelectMode::copy;
+  if (!compatible(newCell->image.data, selection)) {
+    selection = makeCompatible(cell->image.data);
+    overlay = makeCompatible(selection);
+    mask = makeMask(selection.size());
+  }
   clearImage(mask);
 }
 
