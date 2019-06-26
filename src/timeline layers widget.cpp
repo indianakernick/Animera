@@ -43,7 +43,7 @@ void VisibleWidget::paintEvent(QPaintEvent *) {
 
 LayerNameWidget::LayerNameWidget(QWidget *parent, const LayerIdx layer)
   : QWidget{parent} {
-  setFixedSize(100_px, cell_height);
+  setFixedSize(101_px, cell_height);
   setupLayout();
   name->setText("Layer " + QString::number(layer));
   CONNECT(visible, toggled, this, visibleToggled);
@@ -97,7 +97,7 @@ void LayerNameWidget::setupLayout() {
   layout->setAlignment(Qt::AlignLeft);
   visible = new VisibleWidget{this};
   layout->addWidget(visible);
-  constexpr int text_width = 100_px - cell_icon_step - glob_border_width;
+  constexpr int text_width = 101_px - cell_icon_step - glob_border_width;
   constexpr int text_height = cell_height - glob_border_width;
   name = new TextInputWidget{this, {{1_px, 2_px}, {text_width, text_height}, 0, 0}};
   layout->addWidget(name, 0, Qt::AlignTop);
@@ -180,7 +180,7 @@ void LayersWidget::toggleVisible(const LayerIdx idx) {
 LayerScrollWidget::LayerScrollWidget(QWidget *parent)
   : QScrollArea{parent} {
   setFrameShape(NoFrame);
-  setFixedWidth(100_px);
+  setFixedWidth(101_px);
   setStyleSheet("background-color:" + glob_main.name());
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }

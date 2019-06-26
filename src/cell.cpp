@@ -8,6 +8,11 @@
 
 #include "cell.hpp"
 
+Cell::Cell(Image image)
+  : image{image} {
+  image.data.detach();
+}
+
 Cell::Cell(const QSize size, const Format format, Palette *palette)
   : image{{size, getImageFormat(format)}, palette} {
   clearImage(image.data);

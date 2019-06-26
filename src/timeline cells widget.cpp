@@ -22,17 +22,6 @@ LayerCellsWidget::LayerCellsWidget(QWidget *parent, TimelineWidget *timeline)
   loadIcons();
 }
 
-namespace {
-
-// @TODO Why are we storing cells in std::unique_ptr?
-CellPtr copyCell(CellPtr &other) {
-  CellPtr cell = std::make_unique<Cell>();
-  cell->image = other->image;
-  return cell;
-}
-
-}
-
 // @TODO implement these functions in terms of a set of generic operations
 
 void LayerCellsWidget::insertFrame(const FrameIdx idx) {
@@ -47,7 +36,7 @@ void LayerCellsWidget::insertFrame(const FrameIdx idx) {
       break;
     } else if (idx == currFrame - 1) {
       if (span.cell) {
-        frames.insert(++f, {copyCell(span.cell)});
+        frames.insert(++f, {std::make_unique<Cell>(*span.cell)});
       } else {
         ++span.len;
       }
@@ -86,7 +75,7 @@ void LayerCellsWidget::insertNullFrame(const FrameIdx idx) {
       }
       span.len = leftSize;
       f = frames.insert(++f, {nullptr});
-      frames.insert(++f, {copyCell(span.cell), rightSize});
+      frames.insert(++f, {std::make_unique<Cell>(*span.cell), rightSize});
       break;
     }
   }
@@ -151,7 +140,7 @@ void LayerCellsWidget::cellFromNull(const FrameIdx idx) {
 
 Cell *LayerCellsWidget::appendCell(FrameIdx len) {
   assert(len > 0);
-  auto cell = std::make_unique<Cell>(timeline.size, timeline.format, timeline.palette);
+  auto cell = makeCell();
   Cell *cellPtr = cell.get();
   frames.push_back({std::move(cell), len});
   addSize(len);
@@ -170,9 +159,7 @@ void LayerCellsWidget::appendFrame() {
   if (frames.empty()) {
     frames.push_back({makeCell()});
   } else if (frames.back().cell) {
-    CellPtr cell = std::make_unique<Cell>();
-    cell->image = frames.back().cell->image;
-    frames.push_back({std::move(cell)});
+    frames.push_back({std::make_unique<Cell>(frames.back().cell->image)});
   } else {
     ++frames.back().len;
   }
@@ -307,6 +294,7 @@ void CellsWidget::changeWidth(const int newWidth) {
 void CellsWidget::nextFrame() {
   pos.f = (pos.f + 1) % frameCount;
   repaint();
+  Q_EMIT ensureVisible(getPixelPos());
   Q_EMIT frameChanged(getFrame());
   Q_EMIT posChanged(getCurr(), pos.l, pos.f);
 }
@@ -314,6 +302,7 @@ void CellsWidget::nextFrame() {
 void CellsWidget::prevFrame() {
   pos.f = (pos.f - 1 + frameCount) % frameCount;
   repaint();
+  Q_EMIT ensureVisible(getPixelPos());
   Q_EMIT frameChanged(getFrame());
   Q_EMIT posChanged(getCurr(), pos.l, pos.f);
 }
@@ -321,12 +310,14 @@ void CellsWidget::prevFrame() {
 void CellsWidget::layerBelow() {
   pos.l = std::min(pos.l + 1, layerCount() - 1);
   repaint();
+  Q_EMIT ensureVisible(getPixelPos());
   Q_EMIT posChanged(getCurr(), pos.l, pos.f);
 }
 
 void CellsWidget::layerAbove() {
   pos.l = std::max(pos.l - 1, 0);
   repaint();
+  Q_EMIT ensureVisible(getPixelPos());
   Q_EMIT posChanged(getCurr(), pos.l, pos.f);
 }
 
@@ -499,6 +490,10 @@ Frame CellsWidget::getFrame() {
   return frame;
 }
 
+QPoint CellsWidget::getPixelPos() {
+  return {pos.f * cell_icon_step, pos.l * cell_height};
+}
+
 void CellsWidget::resizeEvent(QResizeEvent *) {
   Q_EMIT resized();
 }
@@ -523,6 +518,14 @@ CellScrollWidget::CellScrollWidget(QWidget *parent)
   setStyleSheet("background-color:" + glob_main.name());
 }
 
+CellsWidget *CellScrollWidget::setChild(CellsWidget *cells) {
+  rect = new QWidget{cells};
+  rect->setVisible(false);
+  CONNECT(cells, ensureVisible, this, ensureVisible);
+  setWidget(cells);
+  return cells;
+}
+
 void CellScrollWidget::contentResized() {
   const QMargins before = viewportMargins();
   adjustMargins();
@@ -533,6 +536,12 @@ void CellScrollWidget::contentResized() {
   if (before.bottom() != after.bottom()) {
     Q_EMIT bottomMarginChanged(after.bottom());
   }
+}
+
+void CellScrollWidget::ensureVisible(const QPoint pos) {
+  // @TODO Why do I have to add 1 here? Bug?
+  rect->setGeometry(pos.x(), pos.y(), cell_icon_step + 1, cell_height + 1);
+  QScrollArea::ensureWidgetVisible(rect, 0, 0);
 }
 
 void CellScrollWidget::resizeEvent(QResizeEvent *event) {

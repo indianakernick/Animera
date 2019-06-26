@@ -24,6 +24,7 @@ public:
   // @TODO a sparse data structure might be better
   struct LinkedSpan {
     // Does this need to be a std::unique_ptr?
+    // We need stable pointers to cells
     CellPtr cell;
     FrameIdx len = 1;
   };
@@ -71,6 +72,7 @@ Q_SIGNALS:
   void resized();
   void posChanged(Cell *, LayerIdx, FrameIdx);
   void frameChanged(const Frame &);
+  void ensureVisible(QPoint);
 
 public Q_SLOTS:
   void changeWidth(int);
@@ -116,6 +118,7 @@ private:
   
   Cell *getCurr();
   Frame getFrame();
+  QPoint getPixelPos();
   
   void resizeEvent(QResizeEvent *) override;
   void paintEvent(QPaintEvent *) override;
@@ -127,14 +130,19 @@ class CellScrollWidget final : public ScrollAreaWidget {
 public:
   explicit CellScrollWidget(QWidget *);
 
+  CellsWidget *setChild(CellsWidget *);
+
 Q_SIGNALS:
   void rightMarginChanged(int);
   void bottomMarginChanged(int);
 
 public Q_SLOTS:
   void contentResized();
+  void ensureVisible(QPoint);
 
 private:
+  QWidget *rect = nullptr;
+
   void resizeEvent(QResizeEvent *) override;
 };
 

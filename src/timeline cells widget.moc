@@ -91,8 +91,8 @@ int LayerCellsWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     return _id;
 }
 struct qt_meta_stringdata_CellsWidget_t {
-    QByteArrayData data[24];
-    char stringdata0[254];
+    QByteArrayData data[25];
+    char stringdata0[268];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -110,30 +110,32 @@ QT_MOC_LITERAL(5, 38, 8), // "LayerIdx"
 QT_MOC_LITERAL(6, 47, 8), // "FrameIdx"
 QT_MOC_LITERAL(7, 56, 12), // "frameChanged"
 QT_MOC_LITERAL(8, 69, 5), // "Frame"
-QT_MOC_LITERAL(9, 75, 11), // "changeWidth"
-QT_MOC_LITERAL(10, 87, 9), // "nextFrame"
-QT_MOC_LITERAL(11, 97, 9), // "prevFrame"
-QT_MOC_LITERAL(12, 107, 10), // "layerBelow"
-QT_MOC_LITERAL(13, 118, 10), // "layerAbove"
-QT_MOC_LITERAL(14, 129, 11), // "insertLayer"
-QT_MOC_LITERAL(15, 141, 11), // "removeLayer"
-QT_MOC_LITERAL(16, 153, 11), // "moveLayerUp"
-QT_MOC_LITERAL(17, 165, 13), // "moveLayerDown"
-QT_MOC_LITERAL(18, 179, 8), // "addFrame"
-QT_MOC_LITERAL(19, 188, 12), // "addNullFrame"
-QT_MOC_LITERAL(20, 201, 11), // "removeFrame"
-QT_MOC_LITERAL(21, 213, 11), // "requestCell"
-QT_MOC_LITERAL(22, 225, 15), // "toggleAnimation"
-QT_MOC_LITERAL(23, 241, 12) // "setAnimDelay"
+QT_MOC_LITERAL(9, 75, 13), // "ensureVisible"
+QT_MOC_LITERAL(10, 89, 11), // "changeWidth"
+QT_MOC_LITERAL(11, 101, 9), // "nextFrame"
+QT_MOC_LITERAL(12, 111, 9), // "prevFrame"
+QT_MOC_LITERAL(13, 121, 10), // "layerBelow"
+QT_MOC_LITERAL(14, 132, 10), // "layerAbove"
+QT_MOC_LITERAL(15, 143, 11), // "insertLayer"
+QT_MOC_LITERAL(16, 155, 11), // "removeLayer"
+QT_MOC_LITERAL(17, 167, 11), // "moveLayerUp"
+QT_MOC_LITERAL(18, 179, 13), // "moveLayerDown"
+QT_MOC_LITERAL(19, 193, 8), // "addFrame"
+QT_MOC_LITERAL(20, 202, 12), // "addNullFrame"
+QT_MOC_LITERAL(21, 215, 11), // "removeFrame"
+QT_MOC_LITERAL(22, 227, 11), // "requestCell"
+QT_MOC_LITERAL(23, 239, 15), // "toggleAnimation"
+QT_MOC_LITERAL(24, 255, 12) // "setAnimDelay"
 
     },
     "CellsWidget\0resized\0\0posChanged\0Cell*\0"
     "LayerIdx\0FrameIdx\0frameChanged\0Frame\0"
-    "changeWidth\0nextFrame\0prevFrame\0"
-    "layerBelow\0layerAbove\0insertLayer\0"
-    "removeLayer\0moveLayerUp\0moveLayerDown\0"
-    "addFrame\0addNullFrame\0removeFrame\0"
-    "requestCell\0toggleAnimation\0setAnimDelay"
+    "ensureVisible\0changeWidth\0nextFrame\0"
+    "prevFrame\0layerBelow\0layerAbove\0"
+    "insertLayer\0removeLayer\0moveLayerUp\0"
+    "moveLayerDown\0addFrame\0addNullFrame\0"
+    "removeFrame\0requestCell\0toggleAnimation\0"
+    "setAnimDelay"
 };
 #undef QT_MOC_LITERAL
 
@@ -143,39 +145,41 @@ static const uint qt_meta_data_CellsWidget[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-      18,   14, // methods
+      19,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       3,       // signalCount
+       4,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    0,  104,    2, 0x06 /* Public */,
-       3,    3,  105,    2, 0x06 /* Public */,
-       7,    1,  112,    2, 0x06 /* Public */,
+       1,    0,  109,    2, 0x06 /* Public */,
+       3,    3,  110,    2, 0x06 /* Public */,
+       7,    1,  117,    2, 0x06 /* Public */,
+       9,    1,  120,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       9,    1,  115,    2, 0x0a /* Public */,
-      10,    0,  118,    2, 0x0a /* Public */,
-      11,    0,  119,    2, 0x0a /* Public */,
-      12,    0,  120,    2, 0x0a /* Public */,
-      13,    0,  121,    2, 0x0a /* Public */,
-      14,    1,  122,    2, 0x0a /* Public */,
-      15,    1,  125,    2, 0x0a /* Public */,
-      16,    1,  128,    2, 0x0a /* Public */,
-      17,    1,  131,    2, 0x0a /* Public */,
-      18,    0,  134,    2, 0x0a /* Public */,
-      19,    0,  135,    2, 0x0a /* Public */,
-      20,    0,  136,    2, 0x0a /* Public */,
-      21,    0,  137,    2, 0x0a /* Public */,
-      22,    0,  138,    2, 0x0a /* Public */,
-      23,    1,  139,    2, 0x0a /* Public */,
+      10,    1,  123,    2, 0x0a /* Public */,
+      11,    0,  126,    2, 0x0a /* Public */,
+      12,    0,  127,    2, 0x0a /* Public */,
+      13,    0,  128,    2, 0x0a /* Public */,
+      14,    0,  129,    2, 0x0a /* Public */,
+      15,    1,  130,    2, 0x0a /* Public */,
+      16,    1,  133,    2, 0x0a /* Public */,
+      17,    1,  136,    2, 0x0a /* Public */,
+      18,    1,  139,    2, 0x0a /* Public */,
+      19,    0,  142,    2, 0x0a /* Public */,
+      20,    0,  143,    2, 0x0a /* Public */,
+      21,    0,  144,    2, 0x0a /* Public */,
+      22,    0,  145,    2, 0x0a /* Public */,
+      23,    0,  146,    2, 0x0a /* Public */,
+      24,    1,  147,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void,
     QMetaType::Void, 0x80000000 | 4, 0x80000000 | 5, 0x80000000 | 6,    2,    2,    2,
     QMetaType::Void, 0x80000000 | 8,    2,
+    QMetaType::Void, QMetaType::QPoint,    2,
 
  // slots: parameters
     QMetaType::Void, QMetaType::Int,    2,
@@ -206,21 +210,22 @@ void CellsWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         case 0: _t->resized(); break;
         case 1: _t->posChanged((*reinterpret_cast< Cell*(*)>(_a[1])),(*reinterpret_cast< LayerIdx(*)>(_a[2])),(*reinterpret_cast< FrameIdx(*)>(_a[3]))); break;
         case 2: _t->frameChanged((*reinterpret_cast< const Frame(*)>(_a[1]))); break;
-        case 3: _t->changeWidth((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 4: _t->nextFrame(); break;
-        case 5: _t->prevFrame(); break;
-        case 6: _t->layerBelow(); break;
-        case 7: _t->layerAbove(); break;
-        case 8: _t->insertLayer((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;
-        case 9: _t->removeLayer((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;
-        case 10: _t->moveLayerUp((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;
-        case 11: _t->moveLayerDown((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;
-        case 12: _t->addFrame(); break;
-        case 13: _t->addNullFrame(); break;
-        case 14: _t->removeFrame(); break;
-        case 15: _t->requestCell(); break;
-        case 16: _t->toggleAnimation(); break;
-        case 17: _t->setAnimDelay((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 3: _t->ensureVisible((*reinterpret_cast< QPoint(*)>(_a[1]))); break;
+        case 4: _t->changeWidth((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 5: _t->nextFrame(); break;
+        case 6: _t->prevFrame(); break;
+        case 7: _t->layerBelow(); break;
+        case 8: _t->layerAbove(); break;
+        case 9: _t->insertLayer((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;
+        case 10: _t->removeLayer((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;
+        case 11: _t->moveLayerUp((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;
+        case 12: _t->moveLayerDown((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;
+        case 13: _t->addFrame(); break;
+        case 14: _t->addNullFrame(); break;
+        case 15: _t->removeFrame(); break;
+        case 16: _t->requestCell(); break;
+        case 17: _t->toggleAnimation(); break;
+        case 18: _t->setAnimDelay((*reinterpret_cast< int(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -243,6 +248,13 @@ void CellsWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
             using _t = void (CellsWidget::*)(const Frame & );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&CellsWidget::frameChanged)) {
                 *result = 2;
+                return;
+            }
+        }
+        {
+            using _t = void (CellsWidget::*)(QPoint );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&CellsWidget::ensureVisible)) {
+                *result = 3;
                 return;
             }
         }
@@ -278,13 +290,13 @@ int CellsWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 18)
+        if (_id < 19)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 18;
+        _id -= 19;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 18)
+        if (_id < 19)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 18;
+        _id -= 19;
     }
     return _id;
 }
@@ -308,9 +320,16 @@ void CellsWidget::frameChanged(const Frame & _t1)
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
     QMetaObject::activate(this, &staticMetaObject, 2, _a);
 }
+
+// SIGNAL 3
+void CellsWidget::ensureVisible(QPoint _t1)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 3, _a);
+}
 struct qt_meta_stringdata_CellScrollWidget_t {
-    QByteArrayData data[5];
-    char stringdata0[72];
+    QByteArrayData data[6];
+    char stringdata0[86];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -323,11 +342,13 @@ QT_MOC_LITERAL(0, 0, 16), // "CellScrollWidget"
 QT_MOC_LITERAL(1, 17, 18), // "rightMarginChanged"
 QT_MOC_LITERAL(2, 36, 0), // ""
 QT_MOC_LITERAL(3, 37, 19), // "bottomMarginChanged"
-QT_MOC_LITERAL(4, 57, 14) // "contentResized"
+QT_MOC_LITERAL(4, 57, 14), // "contentResized"
+QT_MOC_LITERAL(5, 72, 13) // "ensureVisible"
 
     },
     "CellScrollWidget\0rightMarginChanged\0"
-    "\0bottomMarginChanged\0contentResized"
+    "\0bottomMarginChanged\0contentResized\0"
+    "ensureVisible"
 };
 #undef QT_MOC_LITERAL
 
@@ -337,7 +358,7 @@ static const uint qt_meta_data_CellScrollWidget[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-       3,   14, // methods
+       4,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -345,11 +366,12 @@ static const uint qt_meta_data_CellScrollWidget[] = {
        2,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    1,   29,    2, 0x06 /* Public */,
-       3,    1,   32,    2, 0x06 /* Public */,
+       1,    1,   34,    2, 0x06 /* Public */,
+       3,    1,   37,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       4,    0,   35,    2, 0x0a /* Public */,
+       4,    0,   40,    2, 0x0a /* Public */,
+       5,    1,   41,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::Int,    2,
@@ -357,6 +379,7 @@ static const uint qt_meta_data_CellScrollWidget[] = {
 
  // slots: parameters
     QMetaType::Void,
+    QMetaType::Void, QMetaType::QPoint,    2,
 
        0        // eod
 };
@@ -370,6 +393,7 @@ void CellScrollWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
         case 0: _t->rightMarginChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 1: _t->bottomMarginChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 2: _t->contentResized(); break;
+        case 3: _t->ensureVisible((*reinterpret_cast< QPoint(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -420,13 +444,13 @@ int CellScrollWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 3)
+        if (_id < 4)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 3;
+        _id -= 4;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 3)
+        if (_id < 4)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 3;
+        _id -= 4;
     }
     return _id;
 }

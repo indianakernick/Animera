@@ -22,7 +22,7 @@ class ControlsWidget final : public QWidget {
 public:
   explicit ControlsWidget(QWidget *parent)
     : QWidget{parent} {
-    setFixedSize(100_px, cell_height);
+    setFixedSize(101_px, cell_height);
     setStyleSheet("background-color:" + QColor{255, 0, 0}.name());
   }
 };
@@ -39,8 +39,7 @@ TimelineWidget::TimelineWidget(QWidget *parent)
   auto cellScroll = new CellScrollWidget{this};
   layers = layerScroll->setChild(new LayersWidget{layerScroll});
   frames = frameScroll->setChild(new FramesWidget{frameScroll});
-  cells = new CellsWidget{cellScroll, this};
-  cellScroll->setWidget(cells);
+  cells = cellScroll->setChild(new CellsWidget{cellScroll, this});
   
   CONNECT(layerScroll->verticalScrollBar(), valueChanged, cellScroll->verticalScrollBar(), setValue);
   CONNECT(cellScroll->verticalScrollBar(), valueChanged, layerScroll->verticalScrollBar(), setValue);

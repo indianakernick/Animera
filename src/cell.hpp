@@ -20,6 +20,7 @@ using CellPtr = std::unique_ptr<Cell>;
 class Cell {
 public:
   Cell() = default;
+  explicit Cell(Image);
   Cell(QSize, Format, Palette *);
   
   CellPtr clone() const;
