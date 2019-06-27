@@ -2,7 +2,7 @@
 
 ## A picture is a thousand words (scroll down for GIFs!)
 
-![Screenshot](https://i.imgur.com/q9RILMu.png)
+![Screenshot](https://i.imgur.com/lS1NJ2L.png)
 
 ## A story...
 
@@ -19,21 +19,13 @@ My experience using the old tool for drawing sprites and performing the tedious 
 should influence the design of this application. I aim to build something that I'll be able
 to use for future projects. I'll certainly use this tool if no-one else does!
 
-## Progress
-
-Most of the business logic of the application is complete. The majority of the time spent on
-this project is building the UI with Qt.
-
-The tools are fully implemented but there's no UI to configure them (e.g. change the brush size 
-or symmetry mode) and you can't switch layers or frames (no timeline).
-I plan on putting a timeline in the big rectangle down the bottom and the tool settings will
-go on the right side of the status bar (under the timeline).
-
 ## Demos
 
 Here's a few quick gifs that demostrate some of the features I have implemented so far.
 
 ![Magic Wand](https://i.imgur.com/kmQziuq.gif)
+
+![Color Picker](https://i.imgur.com/UCoMrYK.gif)
 
 ![Brush](https://i.imgur.com/awJ8cOf.gif)
 
@@ -58,5 +50,3 @@ Here's a few quick gifs that demostrate some of the features I have implemented 
 ![Flip](https://i.imgur.com/HJnQuiK.gif)
 
 ![Rotate](https://i.imgur.com/Xj1AG30.gif)
-
-![Color Picker](https://i.imgur.com/UCoMrYK.gif)
