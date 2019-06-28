@@ -73,7 +73,35 @@ void Window::setupUI() {
     "border-width: " + QString::number(glob_border_width) + "px;"
     "border-color: " + glob_border_color.name() + ";"
     "border-style: solid;"
-  "}");
+  "}"
+  
+  "QMenuBar {"
+    "font-family: " + getGlobalFont().family() + ";"
+    "font-size: " + QString::number(getGlobalFont().pointSize()) + "pt;"
+    "background-color: " + glob_main.name() + ";"
+    "color: " + glob_light_2.name() + ";"
+  "}"
+  
+  "QMenu {"
+    "background-color: " + glob_main.name() + ";"
+  "}"
+  
+  "QMenu::separator {"
+    "background-color: " + glob_light_2.name() + ";"
+    "height: " + QString::number(glob_border_width) + "px;"
+  "}"
+  
+  "QMenu::item {"
+    "font-family: " + getGlobalFont().family() + ";"
+    "font-size: " + QString::number(getGlobalFont().pointSize()) + "pt;"
+    "background-color: " + glob_main.name() + ";"
+    "color: " + glob_light_2.name() + ";"
+  "}"
+  
+  "QMenu::item:selected {"
+    "background-color: " + glob_light_1.name() + ";"
+  "}"
+  );
   
   QVBoxLayout *bottomLayout = new QVBoxLayout{&bottom};
   bottom.setLayout(bottomLayout);
@@ -112,7 +140,7 @@ void Window::setupUI() {
 
 void Window::setupMenubar() {
   menubar = new QMenuBar{this};
-  // menubar->setNativeMenuBar(false);
+  menubar->setNativeMenuBar(false);
   if (!menubar->isNativeMenuBar()) {
     makeDockWidget(Qt::TopDockWidgetArea, menubar);
   }
