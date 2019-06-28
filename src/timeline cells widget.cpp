@@ -33,26 +33,29 @@ CellPtr copyCell(const CellPtr &cell) {
 // Insert a copy of the previous cell after the index
 // Spans are extended instead of copied
 void insertCopy(std::vector<LinkedSpan> &frames, const FrameIdx idx) {
+  assert(idx >= 0);
   FrameIdx currFrame = 0;
   for (auto f = frames.begin(); f != frames.end(); ++f) {
     LinkedSpan &span = *f;
     currFrame += span.len;
     if (idx < currFrame - 1) {
       ++span.len;
-      break;
+      return;
     } else if (idx == currFrame - 1) {
       if (span.cell) {
         frames.insert(++f, {std::make_unique<Cell>(*span.cell)});
       } else {
         ++span.len;
       }
-      break;
+      return;
     }
   }
+  frames.insert(frames.end(), {nullptr});
 }
 
 // Insert a new cell after the index
 void insertNew(std::vector<LinkedSpan> &frames, const FrameIdx idx, CellPtr cell) {
+  assert(idx >= 0);
   FrameIdx currFrame = 0;
   for (auto f = frames.begin(); f != frames.end(); ++f) {
     LinkedSpan &span = *f;
@@ -60,65 +63,69 @@ void insertNew(std::vector<LinkedSpan> &frames, const FrameIdx idx, CellPtr cell
     if (idx < currFrame) {
       if (span.cell == cell) {
         ++span.len;
-        break;
+        return;
       } else if (span.len == 1) {
         frames.insert(++f, {std::move(cell)});
-        break;
+        return;
       }
       const FrameIdx rightSize = currFrame - idx;
       const FrameIdx leftSize = span.len - (currFrame - idx);
       if (rightSize == 0) {
         span.len = leftSize;
         frames.insert(++f, {std::move(cell)});
-        break;
+        return;
       } else if (leftSize == 0) {
         span.len = rightSize;
         frames.insert(f, {std::move(cell)});
-        break;
+        return;
       }
       span.len = leftSize;
       f = frames.insert(++f, {std::move(cell)});
       frames.insert(++f, {std::make_unique<Cell>(*span.cell), rightSize});
-      break;
+      return;
     }
   }
+  frames.insert(frames.end(), {std::move(cell)});
 }
 
 // Replace a cell with a new cell
 void replaceNew(std::vector<LinkedSpan> &frames, const FrameIdx idx, CellPtr cell) {
+  assert(idx >= 0);
   FrameIdx currFrame = 0;
   for (auto f = frames.begin(); f != frames.end(); ++f) {
     LinkedSpan &span = *f;
     currFrame += span.len;
     if (idx < currFrame) {
       if (span.cell == cell) {
-        break;
+        return;
       }
       if (span.len == 1) {
         span.cell = std::move(cell);
-        break;
+        return;
       }
       const FrameIdx rightSize = currFrame - idx - 1;
       const FrameIdx leftSize = span.len - (currFrame - idx);
       if (rightSize == 0) {
         span.len = leftSize;
         frames.insert(++f, {std::move(cell)});
-        break;
+        return;
       } else if (leftSize == 0) {
         span.len = rightSize;
         frames.insert(f, {std::move(cell)});
-        break;
+        return;
       }
       span.len = leftSize;
       f = frames.insert(++f, {std::move(cell)});
       frames.insert(++f, {copyCell(span.cell), rightSize});
-      break;
+      return;
     }
   }
+  assert(false);
 }
 
 // Remove a frame
 void remove(std::vector<LinkedSpan> &frames, const FrameIdx idx) {
+  assert(idx >= 0);
   FrameIdx currFrame = 0;
   for (auto f = frames.begin(); f != frames.end(); ++f) {
     LinkedSpan &span = *f;
@@ -127,9 +134,23 @@ void remove(std::vector<LinkedSpan> &frames, const FrameIdx idx) {
       if (--span.len <= 0) {
         frames.erase(f);
       }
-      break;
+      return;
     }
   }
+  assert(false);
+}
+
+// Get a frame
+// Returns null if index is out of range
+Cell *get(std::vector<LinkedSpan> &frames, FrameIdx idx) {
+  for (const LinkedSpan &span : frames) {
+    if (idx < span.len) {
+      return span.cell.get();
+    } else {
+      idx -= span.len;
+    }
+  }
+  return nullptr;
 }
 
 }
@@ -150,7 +171,12 @@ void LayerCellsWidget::removeFrame(const FrameIdx idx) {
   addSize(-1);
 }
 
-void LayerCellsWidget::clearFrames(const FrameIdx frameCount) {
+void LayerCellsWidget::clearFrame(const FrameIdx idx) {
+  replaceNew(frames, idx, nullptr);
+  repaint();
+}
+
+void LayerCellsWidget::clearAllFrames(const FrameIdx frameCount) {
   frames.clear();
   frames.push_back({nullptr, frameCount});
   repaint();
@@ -191,15 +217,8 @@ void LayerCellsWidget::appendFrame() {
   repaint();
 }
 
-Cell *LayerCellsWidget::getCell(FrameIdx frame) {
-  for (const LinkedSpan &span : frames) {
-    if (frame < span.len) {
-      return span.cell.get();
-    } else {
-      frame -= span.len;
-    }
-  }
-  return nullptr;
+Cell *LayerCellsWidget::getCell(FrameIdx idx) {
+  return get(frames, idx);
 }
 
 void LayerCellsWidget::serialize(QIODevice *dev) const {
@@ -351,7 +370,7 @@ void CellsWidget::insertLayer(const LayerIdx idx) {
 
 void CellsWidget::removeLayer(const LayerIdx idx) {
   if (layerCount() == 1) {
-    layers[idx]->clearFrames(frameCount);
+    layers[idx]->clearAllFrames(frameCount);
   } else {
     for (size_t l = idx; l < layers.size() - 1; ++l) {
       layers[l]->swapWith(*layers[l + 1]);
@@ -404,7 +423,7 @@ void CellsWidget::addNullFrame() {
 void CellsWidget::removeFrame() {
   if (frameCount == 1) {
     for (LayerCellsWidget *layer : layers) {
-      layer->clearFrames(1);
+      layer->clearAllFrames(1);
     }
   } else {
     for (LayerCellsWidget *layer : layers) {
@@ -418,6 +437,14 @@ void CellsWidget::removeFrame() {
   }
   --pos.f;
   nextFrame();
+}
+
+void CellsWidget::clearFrame() {
+  for (LayerCellsWidget *layer : layers) {
+    layer->clearFrame(pos.f);
+  }
+  Q_EMIT frameChanged(getFrame());
+  Q_EMIT posChanged(getCurr(), pos.l, pos.f);
 }
 
 void CellsWidget::requestCell() {

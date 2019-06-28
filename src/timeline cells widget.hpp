@@ -34,7 +34,8 @@ public:
   void insertFrame(FrameIdx);
   void insertNullFrame(FrameIdx);
   void removeFrame(FrameIdx);
-  void clearFrames(FrameIdx);
+  void clearFrame(FrameIdx);
+  void clearAllFrames(FrameIdx);
   void swapWith(LayerCellsWidget &);
   void cellFromNull(FrameIdx);
   
@@ -88,6 +89,7 @@ public Q_SLOTS:
   void addFrame();
   void addNullFrame();
   void removeFrame();
+  void clearFrame();
   
   void requestCell();
   void toggleAnimation();

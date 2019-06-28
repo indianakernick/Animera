@@ -269,6 +269,7 @@ void EditorWidget::compositeOverlay() {
 }
 
 void EditorWidget::compositePos() {
+  // @TODO Why?
   composite();
 }
 

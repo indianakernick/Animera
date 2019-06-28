@@ -40,6 +40,7 @@ public Q_SLOTS:
   void addFrame();
   void addNullFrame();
   void removeFrame();
+  void clearFrame();
   
   void requestCell();
   void toggleAnimation();

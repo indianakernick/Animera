@@ -149,6 +149,7 @@ void Window::setupMenubar() {
   ADD_ACTION(frame, "New Frame", Qt::ALT + Qt::Key_N, timeline, addFrame);
   ADD_ACTION(frame, "New Empty Frame", Qt::ALT + Qt::Key_E, timeline, addNullFrame);
   ADD_ACTION(frame, "Delete Frame", Qt::ALT + Qt::Key_Backspace, timeline, removeFrame);
+  ADD_ACTION(frame, "Clear Frame", Qt::ALT + Qt::Key_C, timeline, clearFrame);
   frame->addSeparator();
   ADD_ACTION(frame, "Next Frame", Qt::Key_D, timeline, nextFrame);
   ADD_ACTION(frame, "Previous Frame", Qt::Key_A, timeline, prevFrame);

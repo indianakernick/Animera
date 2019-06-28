@@ -176,6 +176,10 @@ void TimelineWidget::removeFrame() {
   frames->removeFrame();
 }
 
+void TimelineWidget::clearFrame() {
+  cells->clearFrame();
+}
+
 void TimelineWidget::requestCell() {
   cells->requestCell();
 }
