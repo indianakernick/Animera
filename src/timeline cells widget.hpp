@@ -38,7 +38,7 @@ public:
   void swapWith(LayerCellsWidget &);
   void cellFromNull(FrameIdx);
   
-  Cell *appendCell(FrameIdx = 1);
+  void appendCell(FrameIdx = 1);
   void appendNull(FrameIdx = 1);
   void appendFrame();
   Cell *getCell(FrameIdx);
