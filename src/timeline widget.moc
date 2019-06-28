@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_TimelineWidget_t {
-    QByteArrayData data[31];
-    char stringdata0[331];
+    QByteArrayData data[30];
+    char stringdata0[319];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -41,8 +41,8 @@ QT_MOC_LITERAL(6, 51, 14), // "visibleChanged"
 QT_MOC_LITERAL(7, 66, 12), // "LayerVisible"
 QT_MOC_LITERAL(8, 79, 12), // "frameChanged"
 QT_MOC_LITERAL(9, 92, 5), // "Frame"
-QT_MOC_LITERAL(10, 98, 6), // "Format"
-QT_MOC_LITERAL(11, 105, 10), // "initialize"
+QT_MOC_LITERAL(10, 98, 10), // "initCanvas"
+QT_MOC_LITERAL(11, 109, 6), // "Format"
 QT_MOC_LITERAL(12, 116, 4), // "save"
 QT_MOC_LITERAL(13, 121, 4), // "load"
 QT_MOC_LITERAL(14, 126, 13), // "changePalette"
@@ -60,20 +60,18 @@ QT_MOC_LITERAL(25, 261, 15), // "toggleAnimation"
 QT_MOC_LITERAL(26, 277, 10), // "layerAbove"
 QT_MOC_LITERAL(27, 288, 10), // "layerBelow"
 QT_MOC_LITERAL(28, 299, 9), // "nextFrame"
-QT_MOC_LITERAL(29, 309, 9), // "prevFrame"
-QT_MOC_LITERAL(30, 319, 11) // "changeFrame"
+QT_MOC_LITERAL(29, 309, 9) // "prevFrame"
 
     },
     "TimelineWidget\0posChanged\0\0Cell*\0"
     "LayerIdx\0FrameIdx\0visibleChanged\0"
-    "LayerVisible\0frameChanged\0Frame\0Format\0"
-    "initialize\0save\0load\0changePalette\0"
+    "LayerVisible\0frameChanged\0Frame\0"
+    "initCanvas\0Format\0save\0load\0changePalette\0"
     "Palette*\0addLayer\0removeLayer\0moveLayerUp\0"
     "moveLayerDown\0toggleLayerVisible\0"
     "addFrame\0addNullFrame\0removeFrame\0"
     "requestCell\0toggleAnimation\0layerAbove\0"
-    "layerBelow\0nextFrame\0prevFrame\0"
-    "changeFrame"
+    "layerBelow\0nextFrame\0prevFrame"
 };
 #undef QT_MOC_LITERAL
 
@@ -83,7 +81,7 @@ static const uint qt_meta_data_TimelineWidget[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-      22,   14, // methods
+      21,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -91,38 +89,37 @@ static const uint qt_meta_data_TimelineWidget[] = {
        3,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    3,  124,    2, 0x06 /* Public */,
-       6,    1,  131,    2, 0x06 /* Public */,
-       8,    3,  134,    2, 0x06 /* Public */,
+       1,    3,  119,    2, 0x06 /* Public */,
+       6,    1,  126,    2, 0x06 /* Public */,
+       8,    1,  129,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      11,    2,  141,    2, 0x0a /* Public */,
-      12,    1,  146,    2, 0x0a /* Public */,
-      13,    1,  149,    2, 0x0a /* Public */,
-      14,    1,  152,    2, 0x0a /* Public */,
-      16,    0,  155,    2, 0x0a /* Public */,
-      17,    0,  156,    2, 0x0a /* Public */,
-      18,    0,  157,    2, 0x0a /* Public */,
-      19,    0,  158,    2, 0x0a /* Public */,
-      20,    0,  159,    2, 0x0a /* Public */,
-      21,    0,  160,    2, 0x0a /* Public */,
-      22,    0,  161,    2, 0x0a /* Public */,
-      23,    0,  162,    2, 0x0a /* Public */,
-      24,    0,  163,    2, 0x0a /* Public */,
-      25,    0,  164,    2, 0x0a /* Public */,
-      26,    0,  165,    2, 0x0a /* Public */,
-      27,    0,  166,    2, 0x0a /* Public */,
-      28,    0,  167,    2, 0x0a /* Public */,
-      29,    0,  168,    2, 0x0a /* Public */,
-      30,    1,  169,    2, 0x08 /* Private */,
+      10,    2,  132,    2, 0x0a /* Public */,
+      12,    1,  137,    2, 0x0a /* Public */,
+      13,    1,  140,    2, 0x0a /* Public */,
+      14,    1,  143,    2, 0x0a /* Public */,
+      16,    0,  146,    2, 0x0a /* Public */,
+      17,    0,  147,    2, 0x0a /* Public */,
+      18,    0,  148,    2, 0x0a /* Public */,
+      19,    0,  149,    2, 0x0a /* Public */,
+      20,    0,  150,    2, 0x0a /* Public */,
+      21,    0,  151,    2, 0x0a /* Public */,
+      22,    0,  152,    2, 0x0a /* Public */,
+      23,    0,  153,    2, 0x0a /* Public */,
+      24,    0,  154,    2, 0x0a /* Public */,
+      25,    0,  155,    2, 0x0a /* Public */,
+      26,    0,  156,    2, 0x0a /* Public */,
+      27,    0,  157,    2, 0x0a /* Public */,
+      28,    0,  158,    2, 0x0a /* Public */,
+      29,    0,  159,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, 0x80000000 | 3, 0x80000000 | 4, 0x80000000 | 5,    2,    2,    2,
     QMetaType::Void, 0x80000000 | 7,    2,
-    QMetaType::Void, 0x80000000 | 9, QMetaType::QSize, 0x80000000 | 10,    2,    2,    2,
+    QMetaType::Void, 0x80000000 | 9,    2,
 
  // slots: parameters
-    QMetaType::Void, QMetaType::QSize, 0x80000000 | 10,    2,    2,
+    QMetaType::Void, QMetaType::QSize, 0x80000000 | 11,    2,    2,
     QMetaType::Void, QMetaType::QString,    2,
     QMetaType::Void, QMetaType::QString,    2,
     QMetaType::Void, 0x80000000 | 15,    2,
@@ -140,7 +137,6 @@ static const uint qt_meta_data_TimelineWidget[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void, 0x80000000 | 9,    2,
 
        0        // eod
 };
@@ -153,8 +149,8 @@ void TimelineWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
         switch (_id) {
         case 0: _t->posChanged((*reinterpret_cast< Cell*(*)>(_a[1])),(*reinterpret_cast< LayerIdx(*)>(_a[2])),(*reinterpret_cast< FrameIdx(*)>(_a[3]))); break;
         case 1: _t->visibleChanged((*reinterpret_cast< const LayerVisible(*)>(_a[1]))); break;
-        case 2: _t->frameChanged((*reinterpret_cast< const Frame(*)>(_a[1])),(*reinterpret_cast< QSize(*)>(_a[2])),(*reinterpret_cast< Format(*)>(_a[3]))); break;
-        case 3: _t->initialize((*reinterpret_cast< QSize(*)>(_a[1])),(*reinterpret_cast< Format(*)>(_a[2]))); break;
+        case 2: _t->frameChanged((*reinterpret_cast< const Frame(*)>(_a[1]))); break;
+        case 3: _t->initCanvas((*reinterpret_cast< QSize(*)>(_a[1])),(*reinterpret_cast< Format(*)>(_a[2]))); break;
         case 4: _t->save((*reinterpret_cast< const QString(*)>(_a[1]))); break;
         case 5: _t->load((*reinterpret_cast< const QString(*)>(_a[1]))); break;
         case 6: _t->changePalette((*reinterpret_cast< Palette*(*)>(_a[1]))); break;
@@ -172,7 +168,6 @@ void TimelineWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
         case 18: _t->layerBelow(); break;
         case 19: _t->nextFrame(); break;
         case 20: _t->prevFrame(); break;
-        case 21: _t->changeFrame((*reinterpret_cast< const Frame(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -192,7 +187,7 @@ void TimelineWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
             }
         }
         {
-            using _t = void (TimelineWidget::*)(const Frame & , QSize , Format );
+            using _t = void (TimelineWidget::*)(const Frame & );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::frameChanged)) {
                 *result = 2;
                 return;
@@ -230,13 +225,13 @@ int TimelineWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 22)
+        if (_id < 21)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 22;
+        _id -= 21;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 22)
+        if (_id < 21)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 22;
+        _id -= 21;
     }
     return _id;
 }
@@ -256,9 +251,9 @@ void TimelineWidget::visibleChanged(const LayerVisible & _t1)
 }
 
 // SIGNAL 2
-void TimelineWidget::frameChanged(const Frame & _t1, QSize _t2, Format _t3)
+void TimelineWidget::frameChanged(const Frame & _t1)
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)), const_cast<void*>(reinterpret_cast<const void*>(&_t3)) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
     QMetaObject::activate(this, &staticMetaObject, 2, _a);
 }
 QT_WARNING_POP

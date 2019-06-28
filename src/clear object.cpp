@@ -11,7 +11,7 @@
 #include "cell.hpp"
 #include "config.hpp"
 
-void ClearObject::posChange(Cell *newCell) {
+void ClearObject::changePos(Cell *newCell) {
   cell = newCell;
 }
 

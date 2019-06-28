@@ -40,14 +40,15 @@ Window::Window(const QRect desktop)
   setupUI();
   setupMenubar();
   connectSignals();
-  colors.attachPrimary();
   show();
   
-  // @TODO Call this with UI
-  // Maybe use a signal to send this information to other widgets
-  // EditorWidget might like the size
-  timeline.initialize(QSize{256, 256}, Format::color);
-  timeline.createInitialCell();
+  // @TODO Call this from UI
+  const QSize size = {2000, 11};
+  const Format format = Format::color;
+  colors.initCanvas();
+  editor.initCanvas(size, format);
+  timeline.initCanvas(size, format);
+  colorPicker.initCanvas(size, format);
 }
 
 void Window::setupUI() {
@@ -169,10 +170,10 @@ void Window::makeDockWidget(Qt::DockWidgetArea area, QWidget *widget) {
 void Window::connectSignals() {
   CONNECT(&timeline, posChanged,      &editor,      compositePos);
   CONNECT(&timeline, posChanged,      &tools,       changeCell);
-  CONNECT(&timeline, posChanged,      &clear,       posChange);
-  CONNECT(&timeline, posChanged,      &undo,        posChange);
+  CONNECT(&timeline, posChanged,      &clear,       changePos);
+  CONNECT(&timeline, posChanged,      &undo,        changePos);
   CONNECT(&timeline, visibleChanged,  &editor,      compositeVis);
-  CONNECT(&timeline, frameChanged,    &editor,      frameChanged);
+  CONNECT(&timeline, frameChanged,    &editor,      changeFrame);
   
   CONNECT(&tools,    cellModified,    &editor,      composite);
   CONNECT(&tools,    overlayModified, &editor,      compositeOverlay);

@@ -9,6 +9,7 @@
 #ifndef color_picker_widget_hpp
 #define color_picker_widget_hpp
 
+#include "image.hpp"
 #include "color handle.hpp"
 #include "color convert.hpp"
 #include <QtWidgets/qwidget.h>
@@ -27,6 +28,7 @@ public:
   explicit ColorPickerWidget(QWidget *);
 
 public Q_SLOTS:
+  void initCanvas(QSize, Format);
   void attach(ColorHandle *);
   void setColor(QRgb);
   

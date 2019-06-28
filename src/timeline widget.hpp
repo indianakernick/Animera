@@ -25,10 +25,8 @@ class TimelineWidget final : public QWidget {
 public:
   explicit TimelineWidget(QWidget *);
   
-  void createInitialCell();
-  
 public Q_SLOTS:
-  void initialize(QSize, Format);
+  void initCanvas(QSize, Format);
   void save(const QString &) const;
   void load(const QString &);
   void changePalette(Palette *);
@@ -56,10 +54,7 @@ Q_SIGNALS:
   // or the current cell has changed
   void posChanged(Cell *, LayerIdx, FrameIdx);
   void visibleChanged(const LayerVisible &);
-  void frameChanged(const Frame &, QSize, Format);
-
-private Q_SLOTS:
-  void changeFrame(const Frame &);
+  void frameChanged(const Frame &);
 
 private:
   ControlsWidget *controls = nullptr;

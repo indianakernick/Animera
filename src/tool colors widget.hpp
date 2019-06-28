@@ -21,7 +21,8 @@ class ToolColorsWidget final : public QWidget {
 public:
   explicit ToolColorsWidget(QWidget *);
 
-  void attachPrimary();
+public Q_SLOTS:
+  void initCanvas();
 
 Q_SIGNALS:
   void colorsChanged(ToolColors);
@@ -34,6 +35,8 @@ private:
   ActiveColorWidget *erase;
   
   void setupLayout();
+  template <auto>
+  auto toggleColor(bool);
   void connectSignals();
 
 private Q_SLOTS:

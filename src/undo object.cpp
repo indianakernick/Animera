@@ -11,7 +11,7 @@
 #include "cell.hpp"
 #include "config.hpp"
 
-void UndoObject::posChange(Cell *newCell) {
+void UndoObject::changePos(Cell *newCell) {
   cell = newCell;
   if (cell) {
     stack.reset(cell->image);

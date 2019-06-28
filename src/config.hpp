@@ -148,7 +148,6 @@ inline const QColor stat_background = glob_main;
 
 constexpr int       edit_min_scale = 1;
 constexpr int       edit_max_scale = 64;
-constexpr int       edit_default_scale = 1_px;
 constexpr int       edit_undo_stack = 128;
 
 inline const QRgb edit_checker_a = qRgb(191, 191, 191);

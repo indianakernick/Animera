@@ -75,8 +75,7 @@ ToolColorsWidget::ToolColorsWidget(QWidget *parent)
   connectSignals();
 }
 
-void ToolColorsWidget::attachPrimary() {
-  // @TODO should I do a QTimer::singleShot instead?
+void ToolColorsWidget::initCanvas() {
   primary->click();
   Q_EMIT colorsChanged(colors);
 }
@@ -93,29 +92,22 @@ void ToolColorsWidget::setupLayout() {
   setLayout(layout);
 }
 
+template <auto Color>
+auto ToolColorsWidget::toggleColor(const bool checked) {
+  if (checked) {
+    Q_EMIT attachColor(this->*Color);
+    repaint();
+  }
+}
+
 void ToolColorsWidget::connectSignals() {
   CONNECT(primary, colorChanged, this, changeColors);
   CONNECT(secondary, colorChanged, this, changeColors);
   CONNECT(erase, colorChanged, this, changeColors);
   
-  connect(primary, &QAbstractButton::toggled, [this](const bool checked) {
-    if (checked) {
-      Q_EMIT attachColor(primary);
-      repaint();
-    }
-  });
-  connect(secondary, &QAbstractButton::toggled, [this](const bool checked) {
-    if (checked) {
-      Q_EMIT attachColor(secondary);
-      repaint();
-    }
-  });
-  connect(erase, &QAbstractButton::toggled, [this](const bool checked) {
-    if (checked) {
-      Q_EMIT attachColor(erase);
-      repaint();
-    }
-  });
+  CONNECT(primary, toggled, this, toggleColor<&ToolColorsWidget::primary>);
+  CONNECT(secondary, toggled, this, toggleColor<&ToolColorsWidget::secondary>);
+  CONNECT(erase, toggled, this, toggleColor<&ToolColorsWidget::erase>);
 }
 
 void ToolColorsWidget::changeColors() {

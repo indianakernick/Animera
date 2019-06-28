@@ -36,7 +36,7 @@ QT_MOC_LITERAL(1, 11, 12), // "cellReverted"
 QT_MOC_LITERAL(2, 24, 0), // ""
 QT_MOC_LITERAL(3, 25, 14), // "showTempStatus"
 QT_MOC_LITERAL(4, 40, 16), // "std::string_view"
-QT_MOC_LITERAL(5, 57, 9), // "posChange"
+QT_MOC_LITERAL(5, 57, 9), // "changePos"
 QT_MOC_LITERAL(6, 67, 5), // "Cell*"
 QT_MOC_LITERAL(7, 73, 8), // "keyPress"
 QT_MOC_LITERAL(8, 82, 7), // "Qt::Key"
@@ -44,7 +44,7 @@ QT_MOC_LITERAL(9, 90, 12) // "cellModified"
 
     },
     "UndoObject\0cellReverted\0\0showTempStatus\0"
-    "std::string_view\0posChange\0Cell*\0"
+    "std::string_view\0changePos\0Cell*\0"
     "keyPress\0Qt::Key\0cellModified"
 };
 #undef QT_MOC_LITERAL
@@ -91,7 +91,7 @@ void UndoObject::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         switch (_id) {
         case 0: _t->cellReverted(); break;
         case 1: _t->showTempStatus((*reinterpret_cast< std::string_view(*)>(_a[1]))); break;
-        case 2: _t->posChange((*reinterpret_cast< Cell*(*)>(_a[1]))); break;
+        case 2: _t->changePos((*reinterpret_cast< Cell*(*)>(_a[1]))); break;
         case 3: _t->keyPress((*reinterpret_cast< Qt::Key(*)>(_a[1]))); break;
         case 4: _t->cellModified(); break;
         default: ;

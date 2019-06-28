@@ -18,6 +18,8 @@
 #include "timeline layers widget.hpp"
 #include "timeline frames widget.hpp"
 
+// @TODO QSpitter between LayersWidget and CellsWidget?
+
 class ControlsWidget final : public QWidget {
 public:
   explicit ControlsWidget(QWidget *parent)
@@ -53,7 +55,7 @@ TimelineWidget::TimelineWidget(QWidget *parent)
   CONNECT(cellScroll, bottomMarginChanged, layerScroll, changeBottomMargin);
   
   CONNECT(cells, posChanged, this, posChanged);
-  CONNECT(cells, frameChanged, this, changeFrame);
+  CONNECT(cells, frameChanged, this, frameChanged);
   CONNECT(layers, visibleChanged, this, visibleChanged);
   
   QGridLayout *grid = new QGridLayout{this};
@@ -66,16 +68,13 @@ TimelineWidget::TimelineWidget(QWidget *parent)
   grid->addWidget(cellScroll, 1, 1);
 }
 
-void TimelineWidget::createInitialCell() {
+void TimelineWidget::initCanvas(const QSize newSize, const Format newFormat) {
+  size = newSize;
+  format = newFormat;
   frames->addFrame();
   cells->initLayer();
   layers->insertLayer(0);
   cells->initCell();
-}
-
-void TimelineWidget::initialize(const QSize newSize, const Format newFormat) {
-  size = newSize;
-  format = newFormat;
 }
 
 namespace {
@@ -200,10 +199,6 @@ void TimelineWidget::nextFrame() {
 
 void TimelineWidget::prevFrame() {
   cells->prevFrame();
-}
-
-void TimelineWidget::changeFrame(const Frame &frame) {
-  Q_EMIT frameChanged(frame, size, format);
 }
 
 #include "timeline widget.moc"

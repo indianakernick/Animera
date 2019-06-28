@@ -31,11 +31,19 @@ public:
   }
   
   void setImage(const QImage &img) {
-    if (editor.size() != img.size()) {
-      resize(img.size());
-    }
     editor = img;
     repaint();
+  }
+  
+  void setSize(const QSize size) {
+    overlay = QImage{size, QImage::Format_ARGB32};
+    clearImage(overlay);
+    const QSize viewSize = parent->viewport()->rect().size();
+    scale = std::min(viewSize.width() / size.width(), viewSize.height() / size.height());
+    scale = std::clamp(scale, edit_min_scale, edit_max_scale);
+    setFixedSize(size * scale);
+    updateCheckers();
+    Q_EMIT resized();
   }
   
   void resize() {
@@ -56,7 +64,7 @@ private:
   QImage overlay;
   QImage editor;
   QPoint pos;
-  int scale = edit_default_scale;
+  int scale = edit_min_scale;
   ButtonType buttonDown = ButtonType::none;
   bool keyButton = false;
 
@@ -91,15 +99,7 @@ private:
     Q_EMIT mouseMove(pos, &overlay);
     checkMouseLeave();
   }
-
-  void resize(const QSize newSize) {
-    overlay = QImage{newSize, QImage::Format_ARGB32};
-    clearImage(overlay);
-    setFixedSize(newSize * scale);
-    updateCheckers();
-    Q_EMIT resized();
-  }
-
+  
   void updateCheckers() {
     QSize size = rect().intersected(parent->viewport()->rect()).size();
     size.setWidth(size.width() - size.width() % scale + 4 * scale);
@@ -273,14 +273,19 @@ void EditorWidget::compositePos() {
 }
 
 void EditorWidget::compositeVis(const LayerVisible &newVisibility) {
+  // @TODO I don't think this should call composite
   visibility = newVisibility;
   composite();
 }
 
-void EditorWidget::frameChanged(const Frame &newFrame, QSize newSize, Format newFormat) {
+void EditorWidget::changeFrame(const Frame &newFrame) {
   frame = newFrame;
+}
+
+void EditorWidget::initCanvas(const QSize newSize, const Format newFormat) {
   size = newSize;
   format = newFormat;
+  view->setSize(newSize);
 }
 
 void EditorWidget::resizeEvent(QResizeEvent *event) {
