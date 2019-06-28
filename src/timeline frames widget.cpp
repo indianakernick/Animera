@@ -21,14 +21,12 @@ FramesWidget::FramesWidget(QWidget *parent)
 void FramesWidget::addFrame() {
   ++frames;
   setWidth();
-  Q_EMIT widthChanged(width());
   repaint();
 }
 
 void FramesWidget::removeFrame() {
   frames = std::max(frames - 1, 1);
   setWidth();
-  Q_EMIT widthChanged(width());
   repaint();
 }
 

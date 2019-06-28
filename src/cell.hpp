@@ -38,8 +38,8 @@ struct CellPos {
 
 struct CellRect {
   LayerIdx minL;
-  LayerIdx maxL;
   FrameIdx minF;
+  LayerIdx maxL;
   FrameIdx maxF;
 };
 

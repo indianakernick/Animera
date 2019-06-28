@@ -285,12 +285,6 @@ CellsWidget::CellsWidget(QWidget *parent, TimelineWidget *timeline)
   CONNECT(&animTimer, timeout, this, nextFrame);
 }
 
-void CellsWidget::changeWidth(const int newWidth) {
-  for (LayerCellsWidget *layer : layers) {
-    layer->setFixedWidth(newWidth);
-  }
-}
-
 void CellsWidget::nextFrame() {
   pos.f = (pos.f + 1) % frameCount;
   repaint();
@@ -328,6 +322,7 @@ void CellsWidget::insertLayer(const LayerIdx idx) {
   layout->insertWidget(idx, layer);
   Q_EMIT frameChanged(getFrame());
   ++pos.l;
+  setSize();
 }
 
 void CellsWidget::removeLayer(const LayerIdx idx) {
@@ -341,6 +336,7 @@ void CellsWidget::removeLayer(const LayerIdx idx) {
     delete layers.back();
     layers.pop_back();
     --pos.l;
+    setSize();
   }
   Q_EMIT frameChanged(getFrame());
 }
@@ -369,6 +365,7 @@ void CellsWidget::addFrame() {
   }
   ++frameCount;
   nextFrame();
+  setSize();
 }
 
 void CellsWidget::addNullFrame() {
@@ -377,6 +374,7 @@ void CellsWidget::addNullFrame() {
   }
   ++frameCount;
   nextFrame();
+  setSize();
 }
 
 void CellsWidget::removeFrame() {
@@ -389,6 +387,7 @@ void CellsWidget::removeFrame() {
       layer->removeFrame(pos.f);
     }
     --frameCount;
+    setSize();
   }
   if (pos.f == frameCount) {
     --pos.f;
@@ -494,7 +493,8 @@ QPoint CellsWidget::getPixelPos() {
   return {pos.f * cell_icon_step, pos.l * cell_height};
 }
 
-void CellsWidget::resizeEvent(QResizeEvent *) {
+void CellsWidget::setSize() {
+  setFixedSize(frameCount * cell_icon_step, layerCount() * cell_height);
   Q_EMIT resized();
 }
 
@@ -509,6 +509,34 @@ void CellsWidget::paintEvent(QPaintEvent *) {
   if (frameCount > 1) {
     painter.drawRect(pos.f * cell_icon_step, 0, size, layerCount() * cell_height);
   }
+  /*
+  if (select.minL <= select.maxL && select.minF <= select.maxF) {
+    const int border2 = 2 * glob_border_width;
+    const int width = (select.maxF - select.minF) * cell_icon_step + size;
+    const int height = (select.maxL - select.minL) * cell_icon_step + size;
+    painter.setBrush(cell_select_color);
+    painter.drawRect( // top
+      select.minF * cell_icon_step, select.minL * cell_height,
+      width, glob_border_width
+    );
+    painter.drawRect( // bottom
+      select.minF * cell_icon_step, select.maxL * cell_height + size - glob_border_width,
+      width, glob_border_width
+    );
+    painter.drawRect( // left
+      select.minF * cell_icon_step, select.minL * cell_height + glob_border_width,
+      glob_border_width, height - border2
+    );
+    painter.drawRect( // right
+      select.maxF * cell_icon_step + size - glob_border_width, select.minL * cell_height + glob_border_width,
+      glob_border_width, height - border2
+    );
+  }
+  */
+}
+
+void CellsWidget::focusOutEvent(QFocusEvent *) {
+  //select = {-1, -1, -1, -1};
 }
 
 CellScrollWidget::CellScrollWidget(QWidget *parent)
@@ -523,6 +551,7 @@ CellsWidget *CellScrollWidget::setChild(CellsWidget *cells) {
   rect = new QWidget{cells};
   rect->setVisible(false);
   CONNECT(cells, ensureVisible, this, ensureVisible);
+  CONNECT(cells, resized, this, contentResized);
   setWidget(cells);
   return cells;
 }

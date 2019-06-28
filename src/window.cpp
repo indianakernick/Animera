@@ -30,7 +30,6 @@ Window::Window(const QRect desktop)
   setWindowTitle("Pixel 2");
   resize(glob_window_size);
   setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-  setFocusPolicy(Qt::StrongFocus);
   setGeometry(QStyle::alignedRect(
     Qt::LeftToRight,
     Qt::AlignCenter,
@@ -43,7 +42,7 @@ Window::Window(const QRect desktop)
   show();
   
   // @TODO Call this from UI
-  const QSize size = {2000, 11};
+  const QSize size = {128, 128};
   const Format format = Format::color;
   colors.initCanvas();
   editor.initCanvas(size, format);

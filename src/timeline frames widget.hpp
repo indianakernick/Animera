@@ -23,9 +23,6 @@ public:
 public Q_SLOTS:
   void setMargin(int);
 
-Q_SIGNALS:
-  void widthChanged(int);
- 
 private:
   int frames = 0;
   int margin = 0;

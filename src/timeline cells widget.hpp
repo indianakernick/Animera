@@ -75,8 +75,6 @@ Q_SIGNALS:
   void ensureVisible(QPoint);
 
 public Q_SLOTS:
-  void changeWidth(int);
-  
   void nextFrame();
   void prevFrame();
   void layerBelow();
@@ -113,6 +111,7 @@ private:
   QVBoxLayout *layout;
   std::vector<LayerCellsWidget *> layers;
   CellPos pos = {0, 0};
+  CellRect select = {1, 1, 1, 1};
   FrameIdx frameCount = 0;
   QTimer animTimer;
   
@@ -120,8 +119,10 @@ private:
   Frame getFrame();
   QPoint getPixelPos();
   
-  void resizeEvent(QResizeEvent *) override;
+  void setSize();
+  
   void paintEvent(QPaintEvent *) override;
+  void focusOutEvent(QFocusEvent *) override;
 };
 
 class CellScrollWidget final : public ScrollAreaWidget {
