@@ -180,6 +180,10 @@ void TimelineWidget::clearFrame() {
   cells->clearFrame();
 }
 
+void TimelineWidget::extendFrame() {
+  cells->extendFrame();
+}
+
 void TimelineWidget::requestCell() {
   cells->requestCell();
 }
