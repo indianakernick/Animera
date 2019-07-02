@@ -21,10 +21,14 @@ class PaletteWidget final : public QScrollArea {
 public:
   explicit PaletteWidget(QWidget *);
   
+public Q_SLOTS:
+  void initCanvas();
+  
 Q_SIGNALS:
   void attachColor(ColorHandle *);
   void setColor(QRgb);
   void paletteChanged(Palette *);
+  void paletteColorChanged();
 
 private:
   PaletteTableWidget *table;

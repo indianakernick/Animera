@@ -87,6 +87,7 @@ public:
 Q_SIGNALS:
   void attachColor(ColorHandle *);
   void setColor(QRgb);
+  void paletteColorChanged();
 
 private Q_SLOTS:
   void click() {
@@ -159,6 +160,7 @@ private:
   void changeColor(const QRgb newColor) override {
     color = newColor;
     repaint();
+    Q_EMIT paletteColorChanged();
   }
   QString getName() const override {
     return "Palette " + QString::number(index);
@@ -176,6 +178,10 @@ public:
     : QWidget{parent}, palette(pal_colors) {
     setupLayout();
     std::copy(default_palette.cbegin(), default_palette.cend(), palette.begin());
+  }
+
+public Q_SLOT:
+  void changePalette() {
     Q_EMIT paletteChanged(&palette);
   }
 
@@ -183,6 +189,7 @@ Q_SIGNALS:
   void attachColor(ColorHandle *);
   void setColor(QRgb);
   void paletteChanged(Palette *);
+  void paletteColorChanged();
 
 private:
   std::vector<PaletteColorWidget *> colors;
@@ -199,6 +206,7 @@ private:
         auto *colorWidget = new PaletteColorWidget{this, palette[index], index};
         CONNECT(colorWidget, attachColor, this, attachColor);
         CONNECT(colorWidget, setColor, this, setColor);
+        CONNECT(colorWidget, paletteColorChanged, this, paletteColorChanged);
         colors.push_back(colorWidget);
         grid->addWidget(colorWidget, y, x);
       }
@@ -231,6 +239,11 @@ PaletteWidget::PaletteWidget(QWidget *parent)
   CONNECT(table, attachColor, this, attachColor);
   CONNECT(table, setColor, this, setColor);
   CONNECT(table, paletteChanged, this, paletteChanged);
+  CONNECT(table, paletteColorChanged, this, paletteColorChanged);
+}
+
+void PaletteWidget::initCanvas() {
+  table->changePalette();
 }
 
 #include "palette widget.moc"

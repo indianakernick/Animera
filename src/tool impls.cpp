@@ -299,7 +299,7 @@ void WandSelectTool::attachCell(Cell *newCell) {
   mode = SelectMode::copy;
   if (!compatible(newCell->image.data, selection)) {
     selection = makeCompatible(cell->image.data);
-    overlay = makeCompatible(selection);
+    overlay = QImage{selection.size(), qimageFormat(Format::color)};
     mask = makeMask(selection.size());
   }
   clearImage(mask);

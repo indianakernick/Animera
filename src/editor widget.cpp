@@ -279,6 +279,12 @@ void EditorWidget::compositeVis(const LayerVisible &newVisibility) {
   composite();
 }
 
+void EditorWidget::compositePalette() {
+  if (format == Format::palette) {
+    composite();
+  }
+}
+
 void EditorWidget::changeFrame(const Frame &newFrame) {
   frame = newFrame;
 }

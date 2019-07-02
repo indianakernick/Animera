@@ -46,6 +46,7 @@ Window::Window(const QRect desktop)
   const Format format = Format::color;
   colors.initCanvas();
   editor.initCanvas(format, size);
+  palette.initCanvas();
   timeline.initCanvas(format, size);
   colorPicker.initCanvas(format);
   tools.initCanvas(format);
@@ -233,6 +234,7 @@ void Window::connectSignals() {
   CONNECT(&palette,  paletteChanged,  &timeline,    changePalette);
   CONNECT(&palette,  paletteChanged,  &editor,      changePalette);
   CONNECT(&palette,  paletteChanged,  &tools,       changePalette);
+  CONNECT(&palette,  paletteColorChanged, &editor,  composite);
 }
 
 #include "window.moc"

@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_EditorWidget_t {
-    QByteArrayData data[21];
-    char stringdata0[220];
+    QByteArrayData data[22];
+    char stringdata0[237];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -46,20 +46,22 @@ QT_MOC_LITERAL(11, 99, 16), // "compositeOverlay"
 QT_MOC_LITERAL(12, 116, 12), // "compositePos"
 QT_MOC_LITERAL(13, 129, 12), // "compositeVis"
 QT_MOC_LITERAL(14, 142, 12), // "LayerVisible"
-QT_MOC_LITERAL(15, 155, 11), // "changeFrame"
-QT_MOC_LITERAL(16, 167, 5), // "Frame"
-QT_MOC_LITERAL(17, 173, 13), // "changePalette"
-QT_MOC_LITERAL(18, 187, 14), // "const Palette*"
-QT_MOC_LITERAL(19, 202, 10), // "initCanvas"
-QT_MOC_LITERAL(20, 213, 6) // "Format"
+QT_MOC_LITERAL(15, 155, 16), // "compositePalette"
+QT_MOC_LITERAL(16, 172, 11), // "changeFrame"
+QT_MOC_LITERAL(17, 184, 5), // "Frame"
+QT_MOC_LITERAL(18, 190, 13), // "changePalette"
+QT_MOC_LITERAL(19, 204, 14), // "const Palette*"
+QT_MOC_LITERAL(20, 219, 10), // "initCanvas"
+QT_MOC_LITERAL(21, 230, 6) // "Format"
 
     },
     "EditorWidget\0mouseLeave\0\0QImage*\0"
     "mouseDown\0ButtonType\0mouseMove\0mouseUp\0"
     "keyPress\0Qt::Key\0composite\0compositeOverlay\0"
     "compositePos\0compositeVis\0LayerVisible\0"
-    "changeFrame\0Frame\0changePalette\0"
-    "const Palette*\0initCanvas\0Format"
+    "compositePalette\0changeFrame\0Frame\0"
+    "changePalette\0const Palette*\0initCanvas\0"
+    "Format"
 };
 #undef QT_MOC_LITERAL
 
@@ -69,7 +71,7 @@ static const uint qt_meta_data_EditorWidget[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-      12,   14, // methods
+      13,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -77,20 +79,21 @@ static const uint qt_meta_data_EditorWidget[] = {
        5,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    1,   74,    2, 0x06 /* Public */,
-       4,    3,   77,    2, 0x06 /* Public */,
-       6,    2,   84,    2, 0x06 /* Public */,
-       7,    3,   89,    2, 0x06 /* Public */,
-       8,    2,   96,    2, 0x06 /* Public */,
+       1,    1,   79,    2, 0x06 /* Public */,
+       4,    3,   82,    2, 0x06 /* Public */,
+       6,    2,   89,    2, 0x06 /* Public */,
+       7,    3,   94,    2, 0x06 /* Public */,
+       8,    2,  101,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      10,    0,  101,    2, 0x0a /* Public */,
-      11,    0,  102,    2, 0x0a /* Public */,
-      12,    0,  103,    2, 0x0a /* Public */,
-      13,    1,  104,    2, 0x0a /* Public */,
-      15,    1,  107,    2, 0x0a /* Public */,
-      17,    1,  110,    2, 0x0a /* Public */,
-      19,    2,  113,    2, 0x0a /* Public */,
+      10,    0,  106,    2, 0x0a /* Public */,
+      11,    0,  107,    2, 0x0a /* Public */,
+      12,    0,  108,    2, 0x0a /* Public */,
+      13,    1,  109,    2, 0x0a /* Public */,
+      15,    0,  112,    2, 0x0a /* Public */,
+      16,    1,  113,    2, 0x0a /* Public */,
+      18,    1,  116,    2, 0x0a /* Public */,
+      20,    2,  119,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, 0x80000000 | 3,    2,
@@ -104,9 +107,10 @@ static const uint qt_meta_data_EditorWidget[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void, 0x80000000 | 14,    2,
-    QMetaType::Void, 0x80000000 | 16,    2,
-    QMetaType::Void, 0x80000000 | 18,    2,
-    QMetaType::Void, 0x80000000 | 20, QMetaType::QSize,    2,    2,
+    QMetaType::Void,
+    QMetaType::Void, 0x80000000 | 17,    2,
+    QMetaType::Void, 0x80000000 | 19,    2,
+    QMetaType::Void, 0x80000000 | 21, QMetaType::QSize,    2,    2,
 
        0        // eod
 };
@@ -126,9 +130,10 @@ void EditorWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         case 6: _t->compositeOverlay(); break;
         case 7: _t->compositePos(); break;
         case 8: _t->compositeVis((*reinterpret_cast< const LayerVisible(*)>(_a[1]))); break;
-        case 9: _t->changeFrame((*reinterpret_cast< const Frame(*)>(_a[1]))); break;
-        case 10: _t->changePalette((*reinterpret_cast< const Palette*(*)>(_a[1]))); break;
-        case 11: _t->initCanvas((*reinterpret_cast< Format(*)>(_a[1])),(*reinterpret_cast< QSize(*)>(_a[2]))); break;
+        case 9: _t->compositePalette(); break;
+        case 10: _t->changeFrame((*reinterpret_cast< const Frame(*)>(_a[1]))); break;
+        case 11: _t->changePalette((*reinterpret_cast< const Palette*(*)>(_a[1]))); break;
+        case 12: _t->initCanvas((*reinterpret_cast< Format(*)>(_a[1])),(*reinterpret_cast< QSize(*)>(_a[2]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -200,13 +205,13 @@ int EditorWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 12)
+        if (_id < 13)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 12;
+        _id -= 13;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 12)
+        if (_id < 13)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 12;
+        _id -= 13;
     }
     return _id;
 }

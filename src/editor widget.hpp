@@ -36,6 +36,7 @@ public Q_SLOTS:
   // invoked when the image needs to be composited
   void compositePos();
   void compositeVis(const LayerVisible &);
+  void compositePalette();
   void changeFrame(const Frame &);
   void changePalette(const Palette *);
   void initCanvas(Format, QSize);
