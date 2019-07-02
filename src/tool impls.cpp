@@ -389,12 +389,19 @@ void WandSelectTool::toggleMode(const ToolMouseEvent &event) {
 
 namespace {
 
-// @TODO support palette images
+QRgb contrastColor(const QRgb color) {
+  return qGray(color) < 128 ? qRgb(255, 255, 255) : qRgb(0, 0, 0);
+}
 
+QRgb contrastGray(const int gray) {
+  return gray < 128 ? qRgb(255, 255, 255) : qRgb(0, 0, 0);
+}
+
+template <typename Pixel>
 class WandManip {
 public:
-  WandManip(Surface<QRgb> overlay, Surface<uint8_t> mask, CSurface<QRgb> source)
-    : overlay{overlay}, mask{mask}, source{source} {}
+  WandManip(Surface<PixelColor> overlay, Surface<PixelMask> mask, CSurface<Pixel> source, const PixelColor constrastColor)
+    : overlay{overlay}, mask{mask}, source{source}, constrastColor{constrastColor} {}
 
   bool start(const QPoint pos) {
     startColor = source.getPixel(pos);
@@ -402,10 +409,8 @@ public:
     maskColor = ~maskCheckColor;
     if (maskColor == mask_off) {
       overlayColor = qRgba(0, 0, 0, 0);
-    } else if (qGray(startColor) < 128) {
-      overlayColor = qRgb(255, 255, 255);
     } else {
-      overlayColor = qRgb(0, 0, 0);
+      overlayColor = constrastColor;
     }
     return true;
   }
@@ -425,24 +430,54 @@ public:
   }
 
 private:
-  Surface<QRgb> overlay;
-  Surface<uint8_t> mask;
-  CSurface<QRgb> source;
-  QRgb startColor;
-  QRgb overlayColor;
-  uint8_t maskColor;
-  uint8_t maskCheckColor;
+  Surface<PixelColor> overlay;
+  Surface<PixelMask> mask;
+  CSurface<Pixel> source;
+  Pixel startColor;
+  PixelColor constrastColor;
+  PixelColor overlayColor;
+  PixelMask maskColor;
+  PixelMask maskCheckColor;
 };
 
 }
 
 void WandSelectTool::addToSelection(const ToolMouseEvent &event) {
-  WandManip manip{
-    makeSurface<QRgb>(*event.overlay),
-    makeSurface<uint8_t>(mask),
-    makeCSurface<QRgb>(cell->image.data)
-  };
-  floodFill(manip, event.pos);
+  switch (format) {
+    case Format::color: {
+      Surface surface = makeCSurface<PixelColor>(cell->image.data);
+      WandManip manip{
+        makeSurface<PixelColor>(*event.overlay),
+        makeSurface<PixelMask>(mask),
+        surface,
+        contrastColor(surface.getPixel(event.pos))
+      };
+      floodFill(manip, event.pos);
+      break;
+    }
+    case Format::palette: {
+      Surface surface = makeCSurface<PixelPalette>(cell->image.data);
+      WandManip manip{
+        makeSurface<PixelColor>(*event.overlay),
+        makeSurface<PixelMask>(mask),
+        surface,
+        contrastColor((*palette)[surface.getPixel(event.pos)])
+      };
+      floodFill(manip, event.pos);
+      break;
+    }
+    case Format::gray: {
+      Surface surface = makeCSurface<PixelGray>(cell->image.data);
+      WandManip manip{
+        makeSurface<PixelColor>(*event.overlay),
+        makeSurface<PixelMask>(mask),
+        surface,
+        contrastGray(surface.getPixel(event.pos))
+      };
+      floodFill(manip, event.pos);
+      break;
+    }
+  }
 }
 
 template <typename Derived>
