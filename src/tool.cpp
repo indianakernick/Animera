@@ -37,3 +37,11 @@ ToolChanges Tool::mouseUp(const ToolMouseEvent &) {
 ToolChanges Tool::keyPress(const ToolKeyEvent &) {
   return ToolChanges::none;
 }
+
+void Tool::setPalette(const Palette *newPalette) {
+  palette = newPalette;
+}
+
+void Tool::setFormat(const Format newFormat) {
+  format = newFormat;
+}

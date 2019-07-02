@@ -40,6 +40,8 @@ public Q_SLOTS:
   void keyPress(Qt::Key, QImage *);
   void changeCell(Cell *);
   void changeColors(ToolColors);
+  void changePalette(const Palette *);
+  void initCanvas(Format);
   
 private:
   QWidget *box;

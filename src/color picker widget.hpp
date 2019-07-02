@@ -28,7 +28,7 @@ public:
   explicit ColorPickerWidget(QWidget *);
 
 public Q_SLOTS:
-  void initCanvas(QSize, Format);
+  void initCanvas(Format);
   void attach(ColorHandle *);
   void setColor(QRgb);
   

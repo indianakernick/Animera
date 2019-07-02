@@ -67,8 +67,13 @@ public:
   virtual ToolChanges mouseUp(const ToolMouseEvent &);
   virtual ToolChanges keyPress(const ToolKeyEvent &);
 
+  void setPalette(const Palette *);
+  void setFormat(Format);
+
 protected:
   Cell *cell = nullptr;
+  const Palette *palette = nullptr;
+  Format format;
 };
 
 #endif

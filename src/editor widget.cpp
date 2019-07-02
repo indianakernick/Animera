@@ -287,9 +287,9 @@ void EditorWidget::changePalette(const Palette *newPalette) {
   palette = newPalette;
 }
 
-void EditorWidget::initCanvas(const QSize newSize, const Format newFormat) {
-  size = newSize;
+void EditorWidget::initCanvas(const Format newFormat, const QSize newSize) {
   format = newFormat;
+  size = newSize;
   view->setSize(newSize);
 }
 

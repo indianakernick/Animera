@@ -31,9 +31,9 @@ QImage blitMaskImage(const QImage &, const QImage &, QPoint);
 
 /// Convert a color RGBA image to an RGBA overlay image. Colors are converted
 /// to grayscale
-void colorToOverlay(QImage &);
+void writeOverlay(const Palette *, Format, QImage &, const QImage &);
 /// Convert a color RGBA image to an RGBA overlay image using a mask.
 /// Colors are converted to grayscale
-void colorToOverlay(QImage &, const QImage &);
+void writeOverlay(const Palette *, Format, QImage &, const QImage &, const QImage &);
 
 #endif

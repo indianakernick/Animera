@@ -45,9 +45,10 @@ Window::Window(const QRect desktop)
   const QSize size = {128, 128};
   const Format format = Format::color;
   colors.initCanvas();
-  editor.initCanvas(size, format);
-  timeline.initCanvas(size, format);
-  colorPicker.initCanvas(size, format);
+  editor.initCanvas(format, size);
+  timeline.initCanvas(format, size);
+  colorPicker.initCanvas(format);
+  tools.initCanvas(format);
 }
 
 void Window::setupUI() {
@@ -231,6 +232,7 @@ void Window::connectSignals() {
   CONNECT(&palette,  setColor,        &colorPicker, setColor);
   CONNECT(&palette,  paletteChanged,  &timeline,    changePalette);
   CONNECT(&palette,  paletteChanged,  &editor,      changePalette);
+  CONNECT(&palette,  paletteChanged,  &tools,       changePalette);
 }
 
 #include "window.moc"

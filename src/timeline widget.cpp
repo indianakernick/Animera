@@ -67,9 +67,9 @@ TimelineWidget::TimelineWidget(QWidget *parent)
   grid->addWidget(cellScroll, 1, 1);
 }
 
-void TimelineWidget::initCanvas(const QSize newSize, const Format newFormat) {
-  size = newSize;
+void TimelineWidget::initCanvas(const Format newFormat, const QSize newSize) {
   format = newFormat;
+  size = newSize;
   frames->addFrame();
   cells->initLayer();
   layers->insertLayer(0);

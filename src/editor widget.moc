@@ -106,7 +106,7 @@ static const uint qt_meta_data_EditorWidget[] = {
     QMetaType::Void, 0x80000000 | 14,    2,
     QMetaType::Void, 0x80000000 | 16,    2,
     QMetaType::Void, 0x80000000 | 18,    2,
-    QMetaType::Void, QMetaType::QSize, 0x80000000 | 20,    2,    2,
+    QMetaType::Void, 0x80000000 | 20, QMetaType::QSize,    2,    2,
 
        0        // eod
 };
@@ -128,7 +128,7 @@ void EditorWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         case 8: _t->compositeVis((*reinterpret_cast< const LayerVisible(*)>(_a[1]))); break;
         case 9: _t->changeFrame((*reinterpret_cast< const Frame(*)>(_a[1]))); break;
         case 10: _t->changePalette((*reinterpret_cast< const Palette*(*)>(_a[1]))); break;
-        case 11: _t->initCanvas((*reinterpret_cast< QSize(*)>(_a[1])),(*reinterpret_cast< Format(*)>(_a[2]))); break;
+        case 11: _t->initCanvas((*reinterpret_cast< Format(*)>(_a[1])),(*reinterpret_cast< QSize(*)>(_a[2]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {

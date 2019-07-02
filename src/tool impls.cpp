@@ -209,8 +209,8 @@ ToolChanges RectangleSelectTool::mouseUp(const ToolMouseEvent &event) {
     drawSquarePoint(*event.overlay, tool_overlay_color, event.pos);
     const QRect rect = QRect{startPos, event.pos}.normalized();
     selection = blitImage(cell->image.data, rect);
-    overlay = selection;
-    colorToOverlay(overlay);
+    overlay = QImage{selection.size(), qimageFormat(Format::color)};
+    writeOverlay(palette, format, overlay, selection);
     offset = rect.topLeft() - event.pos;
     mode = SelectMode::paste;
   }
@@ -283,8 +283,8 @@ ToolChanges PolygonSelectTool::mouseUp(const ToolMouseEvent &event) {
     clearImage(mask);
     drawFilledPolygon(mask, mask_color_on, polygon, -clippedBounds.topLeft());
     selection = blitMaskImage(cell->image.data, mask, clippedBounds.topLeft());
-    overlay = selection;
-    colorToOverlay(overlay, mask);
+    overlay = QImage{selection.size(), qimageFormat(Format::color)};
+    writeOverlay(palette, format, overlay, selection, mask);
     offset = clippedBounds.topLeft() - event.pos;
     mode = SelectMode::paste;
   }
@@ -381,8 +381,7 @@ void WandSelectTool::toggleMode(const ToolMouseEvent &event) {
     clearImage(mask);
   } else if (mode == SelectMode::paste) {
     selection = blitMaskImage(cell->image.data, mask, {0, 0});
-    copyImage(overlay, selection);
-    colorToOverlay(overlay, mask);
+    writeOverlay(palette, format, overlay, selection, mask);
     offset = -event.pos;
     mode = SelectMode::paste;
   } else Q_UNREACHABLE();

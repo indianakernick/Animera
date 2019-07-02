@@ -38,7 +38,7 @@ public Q_SLOTS:
   void compositeVis(const LayerVisible &);
   void changeFrame(const Frame &);
   void changePalette(const Palette *);
-  void initCanvas(QSize, Format);
+  void initCanvas(Format, QSize);
 
 private:
   EditorImage *view;

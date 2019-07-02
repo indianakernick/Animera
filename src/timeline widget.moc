@@ -124,7 +124,7 @@ static const uint qt_meta_data_TimelineWidget[] = {
     QMetaType::Void, 0x80000000 | 9,    2,
 
  // slots: parameters
-    QMetaType::Void, QMetaType::QSize, 0x80000000 | 11,    2,    2,
+    QMetaType::Void, 0x80000000 | 11, QMetaType::QSize,    2,    2,
     QMetaType::Void, QMetaType::QString,    2,
     QMetaType::Void, QMetaType::QString,    2,
     QMetaType::Void, 0x80000000 | 15,    2,
@@ -157,7 +157,7 @@ void TimelineWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
         case 0: _t->posChanged((*reinterpret_cast< Cell*(*)>(_a[1])),(*reinterpret_cast< LayerIdx(*)>(_a[2])),(*reinterpret_cast< FrameIdx(*)>(_a[3]))); break;
         case 1: _t->visibleChanged((*reinterpret_cast< const LayerVisible(*)>(_a[1]))); break;
         case 2: _t->frameChanged((*reinterpret_cast< const Frame(*)>(_a[1]))); break;
-        case 3: _t->initCanvas((*reinterpret_cast< QSize(*)>(_a[1])),(*reinterpret_cast< Format(*)>(_a[2]))); break;
+        case 3: _t->initCanvas((*reinterpret_cast< Format(*)>(_a[1])),(*reinterpret_cast< QSize(*)>(_a[2]))); break;
         case 4: _t->save((*reinterpret_cast< const QString(*)>(_a[1]))); break;
         case 5: _t->load((*reinterpret_cast< const QString(*)>(_a[1]))); break;
         case 6: _t->changePalette((*reinterpret_cast< Palette*(*)>(_a[1]))); break;

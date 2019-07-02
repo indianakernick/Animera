@@ -42,6 +42,14 @@ public:
     CONNECT(this, toggled, this, toolChanged);
   }
   
+  void setPalette(const Palette *newPalette) {
+    tool->setPalette(newPalette);
+  }
+  
+  void setFormat(const Format format) {
+    tool->setFormat(format);
+  }
+  
 public Q_SLOTS:
   void toolChanged(const bool checked) {
     if (checked) tools->changeTool(this, tool.get());
@@ -158,6 +166,18 @@ void ToolSelectWidget::changeCell(Cell *cell) {
 
 void ToolSelectWidget::changeColors(const ToolColors newColors) {
   colors = newColors;
+}
+
+void ToolSelectWidget::changePalette(const Palette *newPalette) {
+  for (ToolWidget *tool : tools) {
+    tool->setPalette(newPalette);
+  }
+}
+
+void ToolSelectWidget::initCanvas(const Format newFormat) {
+  for (ToolWidget *tool : tools) {
+    tool->setFormat(newFormat);
+  }
 }
 
 void ToolSelectWidget::changeTool(ToolWidget *widget, Tool *tool) {

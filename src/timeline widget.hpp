@@ -26,7 +26,7 @@ public:
   explicit TimelineWidget(QWidget *);
   
 public Q_SLOTS:
-  void initCanvas(QSize, Format);
+  void initCanvas(Format, QSize);
   void save(const QString &) const;
   void load(const QString &);
   void changePalette(Palette *);

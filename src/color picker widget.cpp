@@ -47,7 +47,7 @@ ColorPickerWidget::ColorPickerWidget(QWidget *parent)
   show();
 }
 
-void ColorPickerWidget::initCanvas(QSize, const Format format) {
+void ColorPickerWidget::initCanvas(const Format format) {
   // @TODO grayscale color picker
 }
 

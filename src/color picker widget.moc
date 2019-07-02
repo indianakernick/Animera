@@ -74,21 +74,21 @@ static const uint qt_meta_data_ColorPickerWidget[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    2,   74,    2, 0x0a /* Public */,
-       4,    1,   79,    2, 0x0a /* Public */,
-       6,    1,   82,    2, 0x0a /* Public */,
-       8,    2,   85,    2, 0x08 /* Private */,
-       9,    1,   90,    2, 0x08 /* Private */,
-      10,    1,   93,    2, 0x08 /* Private */,
-      11,    1,   96,    2, 0x08 /* Private */,
-      12,    1,   99,    2, 0x08 /* Private */,
-      13,    2,  102,    2, 0x08 /* Private */,
-      15,    1,  107,    2, 0x08 /* Private */,
-      16,    1,  110,    2, 0x08 /* Private */,
-      17,    1,  113,    2, 0x08 /* Private */,
+       1,    1,   74,    2, 0x0a /* Public */,
+       4,    1,   77,    2, 0x0a /* Public */,
+       6,    1,   80,    2, 0x0a /* Public */,
+       8,    2,   83,    2, 0x08 /* Private */,
+       9,    1,   88,    2, 0x08 /* Private */,
+      10,    1,   91,    2, 0x08 /* Private */,
+      11,    1,   94,    2, 0x08 /* Private */,
+      12,    1,   97,    2, 0x08 /* Private */,
+      13,    2,  100,    2, 0x08 /* Private */,
+      15,    1,  105,    2, 0x08 /* Private */,
+      16,    1,  108,    2, 0x08 /* Private */,
+      17,    1,  111,    2, 0x08 /* Private */,
 
  // slots: parameters
-    QMetaType::Void, QMetaType::QSize, 0x80000000 | 3,    2,    2,
+    QMetaType::Void, 0x80000000 | 3,    2,
     QMetaType::Void, 0x80000000 | 5,    2,
     QMetaType::Void, 0x80000000 | 7,    2,
     QMetaType::Void, QMetaType::Int, QMetaType::Int,    2,    2,
@@ -110,7 +110,7 @@ void ColorPickerWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, in
         auto *_t = static_cast<ColorPickerWidget *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->initCanvas((*reinterpret_cast< QSize(*)>(_a[1])),(*reinterpret_cast< Format(*)>(_a[2]))); break;
+        case 0: _t->initCanvas((*reinterpret_cast< Format(*)>(_a[1]))); break;
         case 1: _t->attach((*reinterpret_cast< ColorHandle*(*)>(_a[1]))); break;
         case 2: _t->setColor((*reinterpret_cast< QRgb(*)>(_a[1]))); break;
         case 3: _t->changeSVfromGraph((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
