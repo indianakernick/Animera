@@ -73,17 +73,20 @@ Color porterDuff(const Color a, const Color b, const Mode mode) {
 /*
 
 struct Format {
-  static Color toColor(Pixel);
-  static Pixel toPixel(Color);
+  Format(const Format &);
+  Color toColor(Pixel) const;
+  Pixel toPixel(Color) const;
 };
 
 */
 
-template <typename Format, typename Pixel, typename Mode>
+template <typename Mode, typename DstPixel, typename SrcPixel, typename DstFormat, typename SrcFormat>
 void porterDuffRegion(
   const Mode mode,
-  const Surface<Pixel> dst,
-  const CSurface<Pixel> src,
+  const Surface<DstPixel> dst,
+  const CSurface<SrcPixel> src,
+  const DstFormat dstFmt,
+  const SrcFormat srcFmt,
   const QPoint srcPos
 ) {
   const QRect srcRect = {srcPos, src.size()};
@@ -92,11 +95,11 @@ void porterDuffRegion(
   
   auto srcRowIter = src.range({dstRect.topLeft() - srcPos, dstRect.size()}).begin();
   for (auto row : dst.range(dstRect)) {
-    const Pixel *srcPixelIter = (*srcRowIter).begin();
-    for (Pixel &pixel : row) {
-      pixel = Format::toPixel(porterDuff(
-        Format::toColor(*srcPixelIter),
-        Format::toColor(pixel),
+    const SrcPixel *srcPixelIter = (*srcRowIter).begin();
+    for (DstPixel &pixel : row) {
+      pixel = dstFmt.toPixel(porterDuff(
+        srcFmt.toColor(*srcPixelIter),
+        dstFmt.toColor(pixel),
         mode
       ));
       ++srcPixelIter;
@@ -105,14 +108,16 @@ void porterDuffRegion(
   }
 }
 
-template <typename Format, typename Pixel, typename Mode>
+template <typename Mode, typename DstPixel, typename SrcPixel, typename DstFormat, typename SrcFormat>
 void porterDuff(
   const Mode mode,
-  const Surface<Pixel> dst,
-  const CSurface<Pixel> src
+  const Surface<DstPixel> dst,
+  const CSurface<SrcPixel> src,
+  const DstFormat dstFmt,
+  const SrcFormat srcFmt
 ) {
   Q_ASSUME(dst.size() == src.size());
-  porterDuffRegion<Format>(mode, dst, src, {0, 0});
+  porterDuffRegion(mode, dst, src, dstFmt, srcFmt, {0, 0});
 }
 
 #endif

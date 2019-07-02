@@ -2185,7 +2185,7 @@ int main(int argc, char **argv) {
   timer.stop();
   
   timer.start("surface source-over");
-  porterDuff<ARGB_Format>(mode_src_over, makeSurface<QRgb>(image), makeCSurface<QRgb>(dup));
+  porterDuff(mode_src_over, makeSurface<QRgb>(image), makeCSurface<QRgb>(dup), FormatARGB{}, FormatARGB{});
   timer.stop();
   
   /*

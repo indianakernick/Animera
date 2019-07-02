@@ -12,10 +12,8 @@
 #include "color.hpp"
 #include <QtGui/qrgb.h>
 
-// @TODO Need a PaletteFormat that stores the palette
-
-struct ARGB_Format {
-  static Color toColor(const QRgb pixel) {
+struct FormatARGB {
+  Color toColor(const QRgb pixel) const {
     return {
       static_cast<uint8_t>(qRed(pixel)),
       static_cast<uint8_t>(qGreen(pixel)),
@@ -23,8 +21,26 @@ struct ARGB_Format {
       static_cast<uint8_t>(qAlpha(pixel))
     };
   }
-  static QRgb toPixel(const Color color) {
+  
+  QRgb toPixel(const Color color) const {
     return qRgba(color.r, color.g, color.b, color.a);
+  }
+};
+
+struct FormatPalette {
+  const QRgb *data;
+  size_t size;
+  
+  Color toColor(const uint8_t pixel) const {
+    assert(data);
+    assert(pixel < size);
+    return FormatARGB{}.toColor(data[pixel]);
+  }
+};
+
+struct FormatGray {
+  Color toColor(const uint8_t pixel) const {
+    return {pixel, pixel, pixel, 255};
   }
 };
 

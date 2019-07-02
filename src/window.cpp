@@ -105,7 +105,6 @@ void Window::setupUI() {
   
   QVBoxLayout *bottomLayout = new QVBoxLayout{&bottom};
   bottom.setLayout(bottomLayout);
-  bottom.setContentsMargins(0, 0, 0, 0);
   bottomLayout->setContentsMargins(0, 0, 0, 0);
   bottomLayout->setSpacing(0);
   bottomLayout->addWidget(&timeline);
@@ -140,7 +139,7 @@ void Window::setupUI() {
 
 void Window::setupMenubar() {
   menubar = new QMenuBar{this};
-  menubar->setNativeMenuBar(false);
+  // menubar->setNativeMenuBar(false);
   if (!menubar->isNativeMenuBar()) {
     makeDockWidget(Qt::TopDockWidgetArea, menubar);
   }
@@ -231,6 +230,7 @@ void Window::connectSignals() {
   CONNECT(&palette,  attachColor,     &colorPicker, attach);
   CONNECT(&palette,  setColor,        &colorPicker, setColor);
   CONNECT(&palette,  paletteChanged,  &timeline,    changePalette);
+  CONNECT(&palette,  paletteChanged,  &editor,      changePalette);
 }
 
 #include "window.moc"

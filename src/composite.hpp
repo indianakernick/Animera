@@ -13,7 +13,7 @@
 
 /// Take all of the images that make up a frame and composite them together into
 /// a single image
-QImage compositeFrame(const Frame &, const LayerVisible &, QSize, Format);
+QImage compositeFrame(const Palette *, const Frame &, const LayerVisible &, QSize, Format);
 /// Composite the overlay on top of the frame
 void compositeOverlay(QImage &, const QImage &);
 
