@@ -243,7 +243,7 @@ ToolChanges PolygonSelectTool::mouseDown(const ToolMouseEvent &event) {
       blitMaskImage(cell->image.data, mask, selection, event.pos + offset);
     } else if (event.button == ButtonType::erase) {
       // @TODO should this be encapsulated in another file?
-      makeSurface(cell->image.data, event.colors.erase, [this, &event](auto surface, auto color) {
+      visitSurface(cell->image.data, event.colors.erase, [this, &event](auto surface, auto color) {
         maskFillRegion(surface, makeCSurface<uint8_t>(mask), color, event.pos + offset);
       });
     } else {
@@ -345,7 +345,7 @@ ToolChanges WandSelectTool::mouseDown(const ToolMouseEvent &event) {
     if (event.button == ButtonType::primary) {
       blitMaskImage(cell->image.data, mask, selection, event.pos + offset);
     } else if (event.button == ButtonType::erase) {
-      makeSurface(cell->image.data, event.colors.erase, [this, &event](auto surface, auto color) {
+      visitSurface(cell->image.data, event.colors.erase, [this, &event](auto surface, auto color) {
         maskFillRegion(surface, makeCSurface<uint8_t>(mask), color, event.pos + offset);
       });
     } else {

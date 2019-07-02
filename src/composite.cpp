@@ -28,39 +28,39 @@ std::vector<Image> getImages(const Frame &frame, const LayerVisible &visible) {
   return images;
 }
 
-void compositeColor(Surface<QRgb> output, const std::vector<Image> &images) {
+void compositeColor(Surface<PixelColor> output, const std::vector<Image> &images) {
   // Layer 0 is on top of layer 1
   for (auto i = images.rbegin(); i != images.rend(); ++i) {
     porterDuff(
       mode_src_over,
       output,
-      makeCSurface<QRgb>(i->data),
+      makeCSurface<PixelColor>(i->data),
       FormatARGB{},
       FormatARGB{}
     );
   }
 }
 
-void compositePalette(Surface<QRgb> output, const std::vector<Image> &images, const Palette *palette) {
+void compositePalette(Surface<PixelColor> output, const std::vector<Image> &images, const Palette *palette) {
   assert(palette);
   FormatPalette format{palette->data(), palette->size()};
   for (auto i = images.rbegin(); i != images.rend(); ++i) {
     porterDuff(
       mode_src_over,
       output,
-      makeCSurface<uint8_t>(i->data),
+      makeCSurface<PixelPalette>(i->data),
       FormatARGB{},
       format
     );
   }
 }
 
-void compositeGray(Surface<QRgb> output, const std::vector<Image> &images) {
+void compositeGray(Surface<PixelColor> output, const std::vector<Image> &images) {
   for (auto i = images.rbegin(); i != images.rend(); ++i) {
     porterDuff(
       mode_src_over,
       output,
-      makeCSurface<uint8_t>(i->data),
+      makeCSurface<PixelGray>(i->data),
       FormatARGB{},
       FormatGray{}
     );
@@ -77,9 +77,9 @@ QImage compositeFrame(
   const Format format
 ) {
   std::vector<Image> images = getImages(frame, visible);
-  QImage output{size, QImage::Format_ARGB32};
+  QImage output{size, qimageFormat(Format::color)};
   clearImage(output);
-  Surface<QRgb> outputSurface = makeSurface<QRgb>(output);
+  Surface<PixelColor> outputSurface = makeSurface<PixelColor>(output);
   
   switch (format) {
     case Format::color:
@@ -99,53 +99,61 @@ QImage compositeFrame(
 void compositeOverlay(QImage &drawing, const QImage &overlay) {
   porterDuff(
     mode_src_over,
-    makeSurface<QRgb>(drawing),
-    makeSurface<QRgb>(overlay),
+    makeSurface<PixelColor>(drawing),
+    makeSurface<PixelColor>(overlay),
     FormatARGB{},
     FormatARGB{}
   );
 }
 
 void blitImage(QImage &dst, const QImage &src, const QPoint pos) {
-  copyRegion(
-    makeSurface<QRgb>(dst),
-    makeSurface<QRgb>(src),
-    pos
-  );
+  visitSurfaces(dst, src, [pos](auto dstSurface, auto srcSurface) {
+    copyRegion(
+      dstSurface,
+      srcSurface,
+      pos
+    );
+  });
 }
 
 QImage blitImage(const QImage &src, const QRect rect) {
   // @TODO does it really make sense allocate a new QImage?
   QImage dst{rect.size(), src.format()};
-  copyRegion(
-    makeSurface<QRgb>(dst),
-    makeSurface<QRgb>(src),
-    -rect.topLeft()
-  );
+  visitSurfaces(dst, src, [pos = rect.topLeft()](auto dstSurface, auto srcSurface) {
+    copyRegion(
+      dstSurface,
+      srcSurface,
+      -pos
+    );
+  });
   return dst;
 }
 
 void blitMaskImage(QImage &dst, const QImage &mask, const QImage &src, const QPoint pos) {
   assert(mask.size() == src.size());
-  maskCopyRegion(
-    makeSurface<QRgb>(dst),
-    makeSurface<QRgb>(src),
-    makeSurface<uint8_t>(mask),
-    pos,
-    pos
-  );
+  visitSurfaces(dst, src, [&mask, pos](auto dstSurface, auto srcSurface) {
+    maskCopyRegion(
+      dstSurface,
+      srcSurface,
+      makeSurface<PixelMask>(mask),
+      pos,
+      pos
+    );
+  });
 }
 
 QImage blitMaskImage(const QImage &src, const QImage &mask, const QPoint pos) {
   // @TODO does it really make sense allocate a new QImage?
   QImage dst{mask.size(), src.format()};
-  maskCopyRegion(
-    makeSurface<QRgb>(dst),
-    makeSurface<QRgb>(src),
-    makeSurface<uint8_t>(mask),
-    -pos,
-    {0, 0}
-  );
+  visitSurfaces(dst, src, [&mask, pos](auto dstSurface, auto srcSurface) {
+    maskCopyRegion(
+      dstSurface,
+      srcSurface,
+      makeSurface<PixelMask>(mask),
+      -pos,
+      {0, 0}
+    );
+  });
   return dst;
 }
 
@@ -164,14 +172,14 @@ void colorToOverlay(const Surface<QRgb> surface) {
 }
 
 void colorToOverlay(QImage &img) {
-  assert(img.format() == getImageFormat(Format::color));
-  colorToOverlay(makeSurface<QRgb>(img));
+  assert(img.format() == qimageFormat(Format::color));
+  colorToOverlay(makeSurface<PixelColor>(img));
 }
 
 void colorToOverlay(QImage &img, const QImage &mask) {
-  assert(img.format() == getImageFormat(Format::color));
+  assert(img.format() == qimageFormat(Format::color));
   assert(img.size() == mask.size());
-  const Surface surface = makeSurface<QRgb>(img);
+  const Surface surface = makeSurface<PixelColor>(img);
   colorToOverlay(surface);
-  maskClip(surface, makeCSurface<uint8_t>(mask));
+  maskClip(surface, makeCSurface<PixelMask>(mask));
 }

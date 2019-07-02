@@ -48,8 +48,8 @@ CSurface<Pixel> makeCSurface(const QImage &image) {
   return makeSurface<const Pixel>(image);
 }
 
-template <typename Func>
-[[nodiscard]] decltype(auto) makeSurface(QImage &image, Func &&func) {
+template <typename Image, typename Func>
+[[nodiscard]] decltype(auto) visitSurface(Image &image, Func &&func) {
   if (image.depth() == 32) {
     return func(makeSurface<uint32_t>(image));
   } else if (image.depth() == 8) {
@@ -59,25 +59,24 @@ template <typename Func>
   }
 }
 
-template <typename Func>
-[[nodiscard]] decltype(auto) makeSurface(const QImage &image, Func &&func) {
-  return makeSurface(const_cast<QImage &>(image), [&func](auto surface) {
-    return func(CSurface<typename decltype(surface)::pixel_type>{surface});
-  });
-}
-
-template <typename Func>
-[[nodiscard]] decltype(auto) makeSurface(QImage &image, const QRgb color, Func &&func) {
-  return makeSurface(image, [color, &func](auto surface) {
+template <typename Image, typename Func>
+[[nodiscard]] decltype(auto) visitSurface(Image &image, const QRgb color, Func &&func) {
+  return visitSurface(image, [color, &func](auto surface) {
     return func(surface, static_cast<typename decltype(surface)::pixel_type>(color));
   });
 }
 
-template <typename Func>
-[[nodiscard]] decltype(auto) makeSurface(const QImage &image, const QRgb color, Func &&func) {
-  return makeSurface(const_cast<QImage &>(image), color, [&func](auto surface, auto color) {
-    return func(CSurface<typename decltype(surface)::pixel_type>{surface}, color);
-  });
+// If we ever need more than two, use a tuple
+template <typename ImageA, typename ImageB, typename Func>
+[[nodiscard]] decltype(auto) visitSurfaces(ImageA &a, ImageB &b, Func &&func) {
+  assert(a.depth() == b.depth());
+  if (a.depth() == 32) {
+    return func(makeSurface<uint32_t>(a), makeSurface<uint32_t>(b));
+  } else if (a.depth() == 8) {
+    return func(makeSurface<uint8_t>(a), makeSurface<uint8_t>(b));
+  } else {
+    Q_UNREACHABLE();
+  }
 }
 
 #endif

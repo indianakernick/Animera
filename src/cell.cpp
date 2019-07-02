@@ -14,7 +14,7 @@ Cell::Cell(Image image)
 }
 
 Cell::Cell(const QSize size, const Format format, Palette *palette)
-  : image{{size, getImageFormat(format)}, palette} {
+  : image{{size, qimageFormat(format)}, palette} {
   clearImage(image.data);
 }
 

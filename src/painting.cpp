@@ -16,7 +16,7 @@
 // @TODO naming and parameter order are not very consistent in this file
 
 bool drawSquarePoint(QImage &img, const QRgb color, const QPoint pos, const CircleShape shape) {
-  return makeSurface(img, [color, pos, shape](auto surface) {
+  return visitSurface(img, [color, pos, shape](auto surface) {
     return surface.fillRectClip(color, centerRect(pos, shape));
   });
 }
@@ -63,7 +63,7 @@ private:
 
 bool drawFloodFill(QImage &img, const QRgb color, const QPoint pos) {
   if (!img.rect().contains(pos)) return false;
-  return makeSurface(img, color, [pos](auto surface, auto color) {
+  return visitSurface(img, color, [pos](auto surface, auto color) {
     return floodFill(FillManip{surface, color}, pos);
   });
 }
@@ -108,7 +108,7 @@ bool midpointFilledCircle(
 }
 
 bool drawFilledCircle(QImage &img, const QRgb color, const QPoint center, const int radius, const CircleShape shape) {
-  return makeSurface(img, color, [center, radius, shape](auto surface, auto color) {
+  return visitSurface(img, color, [center, radius, shape](auto surface, auto color) {
     return midpointFilledCircle(surface, color, center, radius, shape);
   });
 }
@@ -213,7 +213,7 @@ bool midpointThickCircle(
 
 bool drawStrokedCircle(QImage &img, const QRgb color, const QPoint center, const int radius, const int thickness, const CircleShape shape) {
   assert(thickness > 0);
-  return makeSurface(img, color, [center, radius, thickness, shape](auto surface, auto color) {
+  return visitSurface(img, color, [center, radius, thickness, shape](auto surface, auto color) {
     if (thickness == 1) {
       return midpointCircle(surface, color, center, radius, shape);
     } else {
@@ -223,7 +223,7 @@ bool drawStrokedCircle(QImage &img, const QRgb color, const QPoint center, const
 }
 
 bool drawFilledRect(QImage &img, const QRgb color, const QRect rect) {
-  return makeSurface(img, color, [rect](auto surface, auto color) {
+  return visitSurface(img, color, [rect](auto surface, auto color) {
     return surface.fillRectClip(color, rect);
   });
 }
@@ -265,7 +265,7 @@ bool strokedRect(const Surface<Pixel> surface, const Pixel color, const QRect re
 bool drawStrokedRect(QImage &img, const QRgb color, const QRect rect, const int thickness) {
   assert(thickness > 0);
   if (!img.rect().intersects(rect)) return false;
-  return makeSurface(img, color, [rect, thickness](auto surface, auto color) {
+  return visitSurface(img, color, [rect, thickness](auto surface, auto color) {
     return strokedRect(surface, color, rect, thickness);
   });
 }
@@ -326,7 +326,7 @@ bool midpointThickLine(const Surface<Pixel> surface, const Pixel col, const QPoi
 
 bool drawLine(QImage &img, const QRgb color, const QLine line, const int radius) {
   assert(radius >= 0);
-  return makeSurface(img, color, [line, radius](auto surface, auto color) {
+  return visitSurface(img, color, [line, radius](auto surface, auto color) {
     if (radius == 0) {
       return midpointLine(surface, color, line.p1(), line.p2());
     } else {

@@ -66,7 +66,7 @@ void clearImage(QImage &dst) {
 }
 
 void clearImage(QImage &dst, const QRgb color) {
-  makeSurface(dst, color, [](auto surface, auto color) {
+  visitSurface(dst, color, [](auto surface, auto color) {
     surface.overFill(color);
   });
 }
