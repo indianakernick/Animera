@@ -24,7 +24,7 @@
 		453D28C622769EC000D0E5F9 /* color slider widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453D28C422769EC000D0E5F9 /* color slider widget.cpp */; };
 		453D28C92276A7DD00D0E5F9 /* color graph widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453D28C72276A7DD00D0E5F9 /* color graph widget.cpp */; };
 		453D28D02276A9DF00D0E5F9 /* color convert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453D28CE2276A9DF00D0E5F9 /* color convert.cpp */; };
-		453D28D32276F0FE00D0E5F9 /* color label widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453D28D12276F0FD00D0E5F9 /* color label widget.cpp */; };
+		453D28D32276F0FE00D0E5F9 /* label widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453D28D12276F0FD00D0E5F9 /* label widget.cpp */; };
 		453D28D72278134200D0E5F9 /* color handle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453D28D52278134200D0E5F9 /* color handle.cpp */; };
 		455F285C2206890300C73F39 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 455F285B2206890300C73F39 /* Assets.xcassets */; };
 		455F2868220690A600C73F39 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 455F2867220690A600C73F39 /* main.cpp */; };
@@ -58,6 +58,7 @@
 		45DC2566224B137C00F40116 /* status msg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45DC2564224B137C00F40116 /* status msg.cpp */; };
 		45DFE499224DE89E00EA40C5 /* global font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45DFE497224DE89E00EA40C5 /* global font.cpp */; };
 		45F065F22222998300BCE863 /* current tool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45F065F02222998300BCE863 /* current tool.cpp */; };
+		45F3EB6E22CC430F00F9F93E /* init canvas dialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45F3EB6C22CC430F00F9F93E /* init canvas dialog.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -98,7 +99,6 @@
 		453C788122365ADC00818B19 /* circle b.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = "circle b.pbm"; sourceTree = "<group>"; };
 		453C788222365ADC00818B19 /* circle m.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = "circle m.pbm"; sourceTree = "<group>"; };
 		453C78842236626C00818B19 /* tool icons.anim */ = {isa = PBXFileReference; lastKnownFileType = file; path = "tool icons.anim"; sourceTree = "<group>"; };
-		453C78852236626C00818B19 /* cursors.anim */ = {isa = PBXFileReference; lastKnownFileType = file; path = cursors.anim; sourceTree = "<group>"; };
 		453C78862236626C00818B19 /* icon.anim */ = {isa = PBXFileReference; lastKnownFileType = file; path = icon.anim; sourceTree = "<group>"; };
 		453D28BA22768B2B00D0E5F9 /* geometry.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = geometry.hpp; sourceTree = "<group>"; };
 		453D28BB22768D9900D0E5F9 /* text input widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "text input widget.cpp"; sourceTree = "<group>"; };
@@ -113,8 +113,8 @@
 		453D28C82276A7DD00D0E5F9 /* color graph widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "color graph widget.hpp"; sourceTree = "<group>"; };
 		453D28CE2276A9DF00D0E5F9 /* color convert.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "color convert.cpp"; sourceTree = "<group>"; };
 		453D28CF2276A9DF00D0E5F9 /* color convert.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "color convert.hpp"; sourceTree = "<group>"; };
-		453D28D12276F0FD00D0E5F9 /* color label widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "color label widget.cpp"; sourceTree = "<group>"; };
-		453D28D22276F0FD00D0E5F9 /* color label widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "color label widget.hpp"; sourceTree = "<group>"; };
+		453D28D12276F0FD00D0E5F9 /* label widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "label widget.cpp"; sourceTree = "<group>"; };
+		453D28D22276F0FD00D0E5F9 /* label widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "label widget.hpp"; sourceTree = "<group>"; };
 		453D28D42277129800D0E5F9 /* connect.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = connect.hpp; sourceTree = "<group>"; };
 		453D28D52278134200D0E5F9 /* color handle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "color handle.cpp"; sourceTree = "<group>"; };
 		453D28D62278134200D0E5F9 /* color handle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "color handle.hpp"; sourceTree = "<group>"; };
@@ -837,6 +837,15 @@
 		45F065F02222998300BCE863 /* current tool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "current tool.cpp"; sourceTree = "<group>"; };
 		45F065F12222998300BCE863 /* current tool.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "current tool.hpp"; sourceTree = "<group>"; };
 		45F3EB6922C5F44700F9F93E /* 5x7ascii.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = 5x7ascii.ttf; sourceTree = "<group>"; };
+		45F3EB6C22CC430F00F9F93E /* init canvas dialog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "init canvas dialog.cpp"; sourceTree = "<group>"; };
+		45F3EB6D22CC430F00F9F93E /* init canvas dialog.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "init canvas dialog.hpp"; sourceTree = "<group>"; };
+		45F3EB7022CC5D4F00F9F93E /* gray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gray.png; sourceTree = "<group>"; };
+		45F3EB7122CC5D4F00F9F93E /* index.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = index.png; sourceTree = "<group>"; };
+		45F3EB7222CC5D4F00F9F93E /* rgba.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rgba.png; sourceTree = "<group>"; };
+		45F3EB7322CC5D9100F9F93E /* color formats.anim */ = {isa = PBXFileReference; lastKnownFileType = file; path = "color formats.anim"; sourceTree = "<group>"; };
+		45F3EB7422CC5D9100F9F93E /* timeline.anim */ = {isa = PBXFileReference; lastKnownFileType = file; path = timeline.anim; sourceTree = "<group>"; };
+		45F3EB7522CC5D9100F9F93E /* sv graph circle.anim */ = {isa = PBXFileReference; lastKnownFileType = file; path = "sv graph circle.anim"; sourceTree = "<group>"; };
+		45F3EB7622CC5D9100F9F93E /* slider bar.anim */ = {isa = PBXFileReference; lastKnownFileType = file; path = "slider bar.anim"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -900,6 +909,7 @@
 				452926E222BB607E00B17E0D /* screenshot.png */,
 				453C78792235D4B500818B19 /* resources.qrc */,
 				453C787C2235D70D00818B19 /* resources.rcc */,
+				45F3EB6F22CC5D4F00F9F93E /* Formats */,
 				452926E322BB607E00B17E0D /* Timeline */,
 				45BE2A2822680B0900E21A85 /* Color Picker */,
 				45BAD72D22460C22000D095C /* Fonts */,
@@ -950,6 +960,7 @@
 				453C78412234E13E00818B19 /* window.cpp */,
 				453C78422234E13E00818B19 /* window.hpp */,
 				454FDE962280020900928068 /* General */,
+				45F3EB6B22CC42ED00F9F93E /* Dialogs */,
 				453D28CD2276A81B00D0E5F9 /* Timeline */,
 				453D28CB2276A80800D0E5F9 /* Editor */,
 				453D28CC2276A81100D0E5F9 /* Tool select */,
@@ -991,9 +1002,12 @@
 			isa = PBXGroup;
 			children = (
 				45DC2561224A0AC000F40116 /* title.anim */,
-				453C78852236626C00818B19 /* cursors.anim */,
 				453C78862236626C00818B19 /* icon.anim */,
 				453C78842236626C00818B19 /* tool icons.anim */,
+				45F3EB7322CC5D9100F9F93E /* color formats.anim */,
+				45F3EB7622CC5D9100F9F93E /* slider bar.anim */,
+				45F3EB7522CC5D9100F9F93E /* sv graph circle.anim */,
+				45F3EB7422CC5D9100F9F93E /* timeline.anim */,
 			);
 			path = Anims;
 			sourceTree = "<group>";
@@ -1003,20 +1017,14 @@
 			children = (
 				45054F712259C9AA0078350B /* color picker widget.cpp */,
 				45054F722259C9AA0078350B /* color picker widget.hpp */,
-				453D28BB22768D9900D0E5F9 /* text input widget.cpp */,
-				453D28BC22768D9900D0E5F9 /* text input widget.hpp */,
 				453D28BE2276956A00D0E5F9 /* color input widget.cpp */,
 				453D28BF2276956A00D0E5F9 /* color input widget.hpp */,
 				453D28C422769EC000D0E5F9 /* color slider widget.cpp */,
 				453D28C522769EC000D0E5F9 /* color slider widget.hpp */,
 				453D28C72276A7DD00D0E5F9 /* color graph widget.cpp */,
 				453D28C82276A7DD00D0E5F9 /* color graph widget.hpp */,
-				453D28D12276F0FD00D0E5F9 /* color label widget.cpp */,
-				453D28D22276F0FD00D0E5F9 /* color label widget.hpp */,
 				453D28D52278134200D0E5F9 /* color handle.cpp */,
 				453D28D62278134200D0E5F9 /* color handle.hpp */,
-				4571C130227C383A00479006 /* radio button widget.cpp */,
-				4571C131227C383A00479006 /* radio button widget.hpp */,
 			);
 			name = "Color picker";
 			sourceTree = "<group>";
@@ -1073,6 +1081,12 @@
 				4576DFE72298DB2D00FDECA3 /* separator widget.hpp */,
 				4595D48422BCA0E000607D64 /* scroll bar widget.cpp */,
 				4595D48522BCA0E000607D64 /* scroll bar widget.hpp */,
+				4571C130227C383A00479006 /* radio button widget.cpp */,
+				4571C131227C383A00479006 /* radio button widget.hpp */,
+				453D28BB22768D9900D0E5F9 /* text input widget.cpp */,
+				453D28BC22768D9900D0E5F9 /* text input widget.hpp */,
+				453D28D12276F0FD00D0E5F9 /* label widget.cpp */,
+				453D28D22276F0FD00D0E5F9 /* label widget.hpp */,
 			);
 			name = General;
 			sourceTree = "<group>";
@@ -1999,6 +2013,25 @@
 			path = "Color Picker";
 			sourceTree = "<group>";
 		};
+		45F3EB6B22CC42ED00F9F93E /* Dialogs */ = {
+			isa = PBXGroup;
+			children = (
+				45F3EB6C22CC430F00F9F93E /* init canvas dialog.cpp */,
+				45F3EB6D22CC430F00F9F93E /* init canvas dialog.hpp */,
+			);
+			name = Dialogs;
+			sourceTree = "<group>";
+		};
+		45F3EB6F22CC5D4F00F9F93E /* Formats */ = {
+			isa = PBXGroup;
+			children = (
+				45F3EB7022CC5D4F00F9F93E /* gray.png */,
+				45F3EB7122CC5D4F00F9F93E /* index.png */,
+				45F3EB7222CC5D4F00F9F93E /* rgba.png */,
+			);
+			path = Formats;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -2091,7 +2124,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "function moc {\n  local OUTPUT=\"$PROJECT_DIR/src/$1.moc\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.hpp\" > \"$OUTPUT\"\n  echo \"\" >> \"$OUTPUT\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.cpp\" >> \"$OUTPUT\"\n}\n\nmoc \"timeline frames widget\"\nmoc \"timeline layers widget\"\nmoc \"timeline cells widget\"\nmoc \"color picker widget\"\nmoc \"color slider widget\"\nmoc \"color graph widget\"\nmoc \"tool select widget\"\nmoc \"color input widget\"\nmoc \"tool colors widget\"\nmoc \"text input widget\"\nmoc \"status bar widget\"\nmoc \"timeline widget\"\nmoc \"palette widget\"\nmoc \"editor widget\"\nmoc \"tool widgets\"\nmoc \"clear object\"\nmoc \"undo object\"\nmoc \"application\"\nmoc \"window\"\nmoc \"main\"\n";
+			shellScript = "function moc {\n  local OUTPUT=\"$PROJECT_DIR/src/$1.moc\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.hpp\" > \"$OUTPUT\"\n  echo \"\" >> \"$OUTPUT\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.cpp\" >> \"$OUTPUT\"\n}\n\nmoc \"timeline frames widget\"\nmoc \"timeline layers widget\"\nmoc \"timeline cells widget\"\nmoc \"color picker widget\"\nmoc \"color slider widget\"\nmoc \"color graph widget\"\nmoc \"tool select widget\"\nmoc \"color input widget\"\nmoc \"tool colors widget\"\nmoc \"init canvas dialog\"\nmoc \"text input widget\"\nmoc \"status bar widget\"\nmoc \"timeline widget\"\nmoc \"palette widget\"\nmoc \"editor widget\"\nmoc \"tool widgets\"\nmoc \"clear object\"\nmoc \"undo object\"\nmoc \"application\"\nmoc \"window\"\nmoc \"main\"\n";
 		};
 		453C787B2235D63B00818B19 /* RCC */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2176,8 +2209,9 @@
 				45CFA7CF22A4C1C40059DB41 /* palette widget.cpp in Sources */,
 				453C78462234F3C600818B19 /* status bar widget.cpp in Sources */,
 				4576DFE82298DB2D00FDECA3 /* separator widget.cpp in Sources */,
-				453D28D32276F0FE00D0E5F9 /* color label widget.cpp in Sources */,
+				453D28D32276F0FE00D0E5F9 /* label widget.cpp in Sources */,
 				45B284AA221A331500D6D055 /* serial.cpp in Sources */,
+				45F3EB6E22CC430F00F9F93E /* init canvas dialog.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

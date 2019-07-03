@@ -10,8 +10,8 @@
 
 #include "config.hpp"
 #include "connect.hpp"
+#include "label widget.hpp"
 #include "color input widget.hpp"
-#include "color label widget.hpp"
 #include "color graph widget.hpp"
 #include "color slider widget.hpp"
 #include <QtWidgets/qgridlayout.h>
@@ -21,26 +21,26 @@ ColorPickerWidget::ColorPickerWidget(QWidget *parent)
     colorHsv{color2hsv(pick_default_color)},
     colorRgb{color2rgb(pick_default_color)},
     alpha{pick_default_color.alpha()},
-    nameLabel{new LabelWidget{this, "PALETTE 42", pick_name_rect}},
+    nameLabel{new LabelWidget{this, pick_name_rect, "PALETTE 42"}},
     svGraph{new SVGraphWidget{this}},
     hueSlider{new HueSliderWidget{this}},
     alphaSlider{new AlphaSliderWidget{this}},
-    boxR{new NumberInputWidget{this, colorRgb.r, 255}},
-    boxG{new NumberInputWidget{this, colorRgb.g, 255}},
-    boxB{new NumberInputWidget{this, colorRgb.b, 255}},
-    boxH{new NumberInputWidget{this, colorHsv.h, 359}},
-    boxS{new NumberInputWidget{this, colorHsv.s, 100}},
-    boxV{new NumberInputWidget{this, colorHsv.v, 100}},
-    boxA{new NumberInputWidget{this, alpha, 255}},
-    boxHex{new HexInputWidget{this, colorRgb, alpha}},
-    labelR{new LabelWidget{this, "R", pick_label_rect}},
-    labelG{new LabelWidget{this, "G", pick_label_rect}},
-    labelB{new LabelWidget{this, "B", pick_label_rect}},
-    labelH{new LabelWidget{this, "H", pick_label_rect}},
-    labelS{new LabelWidget{this, "S", pick_label_rect}},
-    labelV{new LabelWidget{this, "V", pick_label_rect}},
-    labelA{new LabelWidget{this, "A", pick_label_rect}},
-    labelHex{new LabelWidget{this, "#", pick_label_rect}} {
+    boxR{new NumberInputWidget{this, pick_number_rect, colorRgb.r, 255}},
+    boxG{new NumberInputWidget{this, pick_number_rect, colorRgb.g, 255}},
+    boxB{new NumberInputWidget{this, pick_number_rect, colorRgb.b, 255}},
+    boxH{new NumberInputWidget{this, pick_number_rect, colorHsv.h, 359}},
+    boxS{new NumberInputWidget{this, pick_number_rect, colorHsv.s, 100}},
+    boxV{new NumberInputWidget{this, pick_number_rect, colorHsv.v, 100}},
+    boxA{new NumberInputWidget{this, pick_number_rect, alpha, 255}},
+    boxHex{new HexInputWidget{this, pick_hex_rect, colorRgb, alpha}},
+    labelR{new LabelWidget{this, pick_label_rect, "R"}},
+    labelG{new LabelWidget{this, pick_label_rect, "G"}},
+    labelB{new LabelWidget{this, pick_label_rect, "B"}},
+    labelH{new LabelWidget{this, pick_label_rect, "H"}},
+    labelS{new LabelWidget{this, pick_label_rect, "S"}},
+    labelV{new LabelWidget{this, pick_label_rect, "V"}},
+    labelA{new LabelWidget{this, pick_label_rect, "A"}},
+    labelHex{new LabelWidget{this, pick_label_rect, "#"}} {
   setFixedWidth(pick_svgraph_rect.widget().width() + 2 * glob_padding);
   setupLayout();
   connectSignals();

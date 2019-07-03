@@ -34,5 +34,8 @@
   <file>./Timeline/remove.pbm</file>
   <file>./Timeline/shown.pbm</file>
   <file>./Timeline/unlink.pbm</file>
+  <file>./Formats/rgba.png</file>
+  <file>./Formats/gray.png</file>
+  <file>./Formats/index.png</file>
 </qresource>
 </RCC>

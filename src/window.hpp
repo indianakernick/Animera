@@ -15,6 +15,7 @@
 #include "palette widget.hpp"
 #include "timeline widget.hpp"
 #include "status bar widget.hpp"
+#include "init canvas dialog.hpp"
 #include "tool colors widget.hpp"
 #include "tool select widget.hpp"
 #include "color picker widget.hpp"
@@ -40,6 +41,7 @@ private:
   StatusBarWidget statusBar;
   ColorPickerWidget colorPicker;
   QMenuBar *menubar = nullptr;
+  InitCanvasDialog initDialog;
   
   void setupUI();
   void setupMenubar();

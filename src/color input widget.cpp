@@ -74,8 +74,9 @@ void HexValidator::updateValidValue(const QString &value) {
   lastValidValue = value;
 }
 
-NumberInputWidget::NumberInputWidget(QWidget *parent, const int defaultValue, const int max)
-  : TextInputWidget{parent, pick_number_rect}, boxValidator{parent, max} {
+NumberInputWidget::NumberInputWidget(
+  QWidget *parent, const WidgetRect rect, const int defaultValue, const int max
+) : TextInputWidget{parent, rect}, boxValidator{parent, max} {
   setValidator(&boxValidator);
   changeValue(defaultValue);
   CONNECT(this, textEdited,      this, textChanged);
@@ -116,8 +117,9 @@ void NumberInputWidget::keyPressEvent(QKeyEvent *event) {
   }
 }
 
-HexInputWidget::HexInputWidget(QWidget *parent, const RGB rgb, const int a)
-  : TextInputWidget{parent, pick_hex_rect}, boxValidator{parent} {
+HexInputWidget::HexInputWidget(
+  QWidget *parent, const WidgetRect rect, const RGB rgb, const int a
+) : TextInputWidget{parent, rect}, boxValidator{parent} {
   setValidator(&boxValidator);
   changeRgba(rgb, a);
   CONNECT(this, textEdited, this, textChanged);

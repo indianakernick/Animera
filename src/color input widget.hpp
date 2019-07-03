@@ -39,7 +39,7 @@ private:
 class NumberInputWidget final : public TextInputWidget {
   Q_OBJECT
 public:
-  NumberInputWidget(QWidget *, int, int);
+  NumberInputWidget(QWidget *, WidgetRect, int, int);
 
 Q_SIGNALS:
   void valueChanged(int);
@@ -61,7 +61,7 @@ private:
 class HexInputWidget final : public TextInputWidget {
   Q_OBJECT
 public:
-  HexInputWidget(QWidget *, RGB, int);
+  HexInputWidget(QWidget *, WidgetRect, RGB, int);
 
 Q_SIGNALS:
   void rgbaChanged(RGB, int);

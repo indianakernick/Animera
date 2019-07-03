@@ -9,6 +9,7 @@
 #ifndef surface_hpp
 #define surface_hpp
 
+#include <cassert>
 #include <cstring>
 #include <algorithm>
 #include <type_traits>
@@ -108,9 +109,13 @@ public:
   }
   
   MODIFYING(void) fillRow(const Pixel color, Pixel *firstPixel, const ptrdiff_t count) const noexcept {
-    Pixel *const afterLastPixel = firstPixel + count;
-    while (firstPixel != afterLastPixel) {
-      *firstPixel++ = color;
+    if constexpr (sizeof(Pixel) == 1) {
+      std::memset(firstPixel, color, count);
+    } else {
+      Pixel *const afterLastPixel = firstPixel + count;
+      while (firstPixel != afterLastPixel) {
+        *firstPixel++ = color;
+      }
     }
   }
   MODIFYING(void) fillCol(const Pixel color, Pixel *firstPixel, const ptrdiff_t count) const noexcept {
@@ -156,9 +161,7 @@ public:
     assert(insideImage(rect.topLeft()));
     assert(insideImage(rect.bottomRight()));
     for (auto row : range(rect)) {
-      for (Pixel &pixel : row) {
-        pixel = color;
-      }
+      fillRow(color, row.begin(), rect.width());
     }
   }
   
@@ -174,21 +177,23 @@ public:
   
   MODIFYING(void) fill(const Pixel color) const noexcept {
     for (auto row : range()) {
-      for (Pixel &pixel : row) {
-        pixel = color;
-      }
+      fillRow(color, (*row).begin(), width);
     }
   }
   MODIFYING(void) fill() const noexcept {
     fill(0);
   }
   MODIFYING(void) overFill(const Pixel color) const noexcept {
-    for (Pixel &pixel : Row{data, pixelAddr({width, height - 1})}) {
-      pixel = color;
+    if constexpr (sizeof(Pixel) == 1) {
+      std::memset(data, color, pitch * height);
+    } else {
+      for (Pixel &pixel : Row{data, pixelAddr({width, height - 1})}) {
+        pixel = color;
+      }
     }
   }
   MODIFYING(void) overFill() const noexcept {
-    std::memset(data, 0, pitch * height);
+    std::memset(data, 0, pitch * height * sizeof(Pixel));
   }
   
   using Row = Range<Pixel *>;

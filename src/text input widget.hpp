@@ -34,7 +34,7 @@ private:
   void renderBackground(QPainter &);
   void renderText(QPainter &);
   void renderCursor(QPainter &);
-  void renderSelection(QPainter &painter);
+  void renderSelection(QPainter &);
 
   void paintEvent(QPaintEvent *) override;
 };
