@@ -193,6 +193,7 @@ void Window::connectSignals() {
   CONNECT(&timeline, posChanged,      &editor,      compositePos);
   CONNECT(&timeline, posChanged,      &tools,       changeCell);
   CONNECT(&timeline, posChanged,      &clear,       changePos);
+  CONNECT(&timeline, posChanged,      &sample,      changePos);
   CONNECT(&timeline, posChanged,      &undo,        changePos);
   CONNECT(&timeline, visibleChanged,  &editor,      compositeVis);
   CONNECT(&timeline, frameChanged,    &editor,      changeFrame);
@@ -208,6 +209,8 @@ void Window::connectSignals() {
   CONNECT(&editor,   mouseUp,         &tools,       mouseUp);
   CONNECT(&editor,   keyPress,        &tools,       keyPress);
   CONNECT(&editor,   keyPress,        &clear,       keyPress);
+  CONNECT(&editor,   mouseMove,       &sample,      mouseMove);
+  CONNECT(&editor,   keyPress,        &sample,      keyPress);
   CONNECT(&editor,   keyPress,        &undo,        keyPress);
   CONNECT(&tools,    changingAction,  &undo,        cellModified);
   
@@ -216,6 +219,8 @@ void Window::connectSignals() {
   CONNECT(&colors,   colorsChanged,   &clear,       changeColors);
   
   CONNECT(&clear,    cellModified,    &tools,       cellModified);
+  
+  CONNECT(&sample,   colorChanged,    &colorPicker, setColor);
   
   CONNECT(&undo,     cellReverted,    &editor,      composite);
   CONNECT(&undo,     showTempStatus,  &statusBar,   showTemp);

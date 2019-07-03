@@ -59,6 +59,7 @@ public:
   TextButton(QWidget *parent, const WidgetRect rect, const QString &text)
     : QAbstractButton{parent}, rect{rect}, text{text} {
     setFixedSize(rect.widget().size());
+    setCursor(Qt::PointingHandCursor);
   }
 
 private:

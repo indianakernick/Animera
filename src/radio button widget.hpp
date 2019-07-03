@@ -9,7 +9,7 @@
 #ifndef radio_button_widget_hpp
 #define radio_button_widget_hpp
 
-#include <QtWidgets/qabstractbutton>
+#include <QtWidgets/qabstractbutton.h>
 
 // @TODO do we really need to derived from QAbstractButton if we're just going
 // to override the default behaviour?

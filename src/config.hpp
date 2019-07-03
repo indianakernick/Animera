@@ -247,6 +247,7 @@ constexpr Qt::Key   key_tertiary = Qt::Key_C;
 constexpr Qt::Key   key_zoom_out = Qt::Key_Q;
 constexpr Qt::Key   key_zoom_in = Qt::Key_E;
 constexpr Qt::Key   key_clear = Qt::Key_V;
+constexpr Qt::Key   key_sample = Qt::Key_B;
 constexpr Qt::Key   key_undo = Qt::Key_N;
 constexpr Qt::Key   key_redo = Qt::Key_M;
 

@@ -11,6 +11,7 @@
 
 #include "undo object.hpp"
 #include "clear object.hpp"
+#include "sample object.hpp"
 #include "editor widget.hpp"
 #include "palette widget.hpp"
 #include "timeline widget.hpp"
@@ -33,6 +34,7 @@ private:
   Animation anim;
   UndoObject undo;
   ClearObject clear;
+  SampleObject sample;
   EditorWidget editor;
   PaletteWidget palette;
   ToolColorsWidget colors;
