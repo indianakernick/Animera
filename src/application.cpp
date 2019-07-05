@@ -15,8 +15,8 @@
 Application::Application(int &argc, char **argv)
   : QApplication{argc, argv} {
   loadResources();
-  initDialog.emplace(nullptr);
-  CONNECT(&*initDialog, canvasInitialized, this, initCanvas);
+  initDialog = new InitCanvasDialog{desktop()};
+  CONNECT(initDialog, canvasInitialized, this, initCanvas);
   initDialog->show();
 }
 
@@ -34,7 +34,7 @@ void Application::loadResources() {
 }
 
 void Application::initCanvas(const Format format, const QSize size) {
-  window.emplace(desktop()->availableGeometry());
+  window = new Window{desktop(), desktop()->availableGeometry()};
   Q_EMIT window->initCanvas(format, size);
 }
 

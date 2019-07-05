@@ -26,7 +26,7 @@ class Window final : public QMainWindow {
   Q_OBJECT
 
 public:
-  explicit Window(QRect);
+  Window(QWidget *, QRect);
 
 Q_SIGNALS:
   void initCanvas(Format, QSize);

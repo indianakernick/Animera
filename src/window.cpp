@@ -17,8 +17,9 @@
 #include <QtWidgets/qboxlayout.h>
 #include <QtWidgets/qdockwidget.h>
 
-Window::Window(const QRect desktop)
-  : bottom{this},
+Window::Window(QWidget *parent, const QRect desktop)
+  : QMainWindow{parent},
+    bottom{this},
     right{this},
     editor{this},
     palette{&right},

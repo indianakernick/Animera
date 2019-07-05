@@ -9,7 +9,6 @@
 #ifndef application_hpp
 #define application_hpp
 
-#include <optional>
 #include "image.hpp"
 #include "window.hpp"
 #include "init canvas dialog.hpp"
@@ -22,8 +21,8 @@ public:
   Application(int &, char **);
 
 private:
-  std::optional<Window> window;
-  std::optional<InitCanvasDialog> initDialog;
+  Window *window = nullptr;
+  InitCanvasDialog *initDialog = nullptr;
   
   void loadResources();
 
