@@ -31,9 +31,9 @@ Q_SIGNALS:
 public Q_SLOTS:
   void composite();
   void compositeOverlay();
-  void compositeVis(const LayerVisible &);
   void compositePalette();
   void changeFrame(const Frame &);
+  void changeVisible(const LayerVisible &);
   void changePalette(const Palette *);
   void initCanvas(Format, QSize);
 

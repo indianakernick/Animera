@@ -16,6 +16,8 @@
 class TextInputWidget;
 class QVBoxLayout;
 
+// @TODO PushButtonWidget
+// This button doesn't seem to work reliably
 class VisibleWidget final : public QAbstractButton {
 public:
   explicit VisibleWidget(QWidget *);
@@ -70,6 +72,7 @@ public:
 
 Q_SIGNALS:
   void visibleChanged(const LayerVisible &);
+  void composite();
 
 private Q_SLOTS:
   void changeVisible();

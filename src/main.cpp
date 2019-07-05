@@ -1896,6 +1896,8 @@ int main(int argc, char **argv) {
 
 #if !BUG_TEST
 
+#include <fstream>
+
 int main(int argc, char **argv) {
 
 #if BENCHMARK

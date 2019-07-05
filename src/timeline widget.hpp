@@ -53,12 +53,11 @@ public Q_SLOTS:
   void prevFrame();
 
 Q_SIGNALS:
-  // emitted when the current layer/frame has changed
-  // or the current cell has changed
   void posChanged(Cell *, LayerIdx, FrameIdx);
   void visibleChanged(const LayerVisible &);
   void frameChanged(const Frame &);
   void canvasInitialized(Format, QSize);
+  void composite();
 
 private:
   ControlsWidget *controls = nullptr;

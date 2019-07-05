@@ -139,6 +139,7 @@ LayersWidget::LayersWidget(QWidget *parent)
 void LayersWidget::appendLayer(const LayerIdx layer) {
   auto *layerName = new LayerNameWidget{this, layer};
   CONNECT(layerName, visibleToggled, this, changeVisible);
+  CONNECT(layerName, visibleToggled, this, composite);
   layers.push_back(layerName);
   layout->addWidget(layerName);
   changeVisible();
@@ -165,6 +166,7 @@ void LayersWidget::deserialize(QIODevice *dev) {
     auto *layer = new LayerNameWidget{this, l};
     layer->deserialize(dev);
     CONNECT(layer, visibleToggled, this, changeVisible);
+    CONNECT(layer, visibleToggled, this, composite);
     layers.push_back(layer);
     layout->addWidget(layer);
   }
@@ -187,6 +189,7 @@ void LayersWidget::setMargin(const int margin) {
 void LayersWidget::insertLayer(const LayerIdx idx) {
   auto *layer = new LayerNameWidget{this, static_cast<LayerIdx>(layers.size())};
   CONNECT(layer, visibleToggled, this, changeVisible);
+  CONNECT(layer, visibleToggled, this, composite);
   layers.insert(layers.begin() + idx, layer);
   layout->insertWidget(idx, layer);
   changeVisible();

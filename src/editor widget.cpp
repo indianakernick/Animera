@@ -268,12 +268,6 @@ void EditorWidget::compositeOverlay() {
   view->repaint();
 }
 
-void EditorWidget::compositeVis(const LayerVisible &newVisibility) {
-  // @TODO I don't think this should call composite
-  visibility = newVisibility;
-  composite();
-}
-
 void EditorWidget::compositePalette() {
   if (format == Format::palette) {
     composite();
@@ -282,6 +276,10 @@ void EditorWidget::compositePalette() {
 
 void EditorWidget::changeFrame(const Frame &newFrame) {
   frame = newFrame;
+}
+
+void EditorWidget::changeVisible(const LayerVisible &newVisibility) {
+  visibility = newVisibility;
 }
 
 void EditorWidget::changePalette(const Palette *newPalette) {

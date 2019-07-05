@@ -101,8 +101,7 @@ public Q_SLOTS:
   void setAnimDelay(int);
 
 public:
-  void initLayer();
-  void initCell();
+  void init();
 
   LayerCellsWidget *appendLayer();
   LayerCellsWidget *getLayer(LayerIdx);

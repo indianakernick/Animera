@@ -22,7 +22,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_EditorWidget_t {
     QByteArrayData data[21];
-    char stringdata0[224];
+    char stringdata0[225];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -43,22 +43,22 @@ QT_MOC_LITERAL(8, 72, 8), // "keyPress"
 QT_MOC_LITERAL(9, 81, 7), // "Qt::Key"
 QT_MOC_LITERAL(10, 89, 9), // "composite"
 QT_MOC_LITERAL(11, 99, 16), // "compositeOverlay"
-QT_MOC_LITERAL(12, 116, 12), // "compositeVis"
-QT_MOC_LITERAL(13, 129, 12), // "LayerVisible"
-QT_MOC_LITERAL(14, 142, 16), // "compositePalette"
-QT_MOC_LITERAL(15, 159, 11), // "changeFrame"
-QT_MOC_LITERAL(16, 171, 5), // "Frame"
-QT_MOC_LITERAL(17, 177, 13), // "changePalette"
-QT_MOC_LITERAL(18, 191, 14), // "const Palette*"
-QT_MOC_LITERAL(19, 206, 10), // "initCanvas"
-QT_MOC_LITERAL(20, 217, 6) // "Format"
+QT_MOC_LITERAL(12, 116, 16), // "compositePalette"
+QT_MOC_LITERAL(13, 133, 11), // "changeFrame"
+QT_MOC_LITERAL(14, 145, 5), // "Frame"
+QT_MOC_LITERAL(15, 151, 13), // "changeVisible"
+QT_MOC_LITERAL(16, 165, 12), // "LayerVisible"
+QT_MOC_LITERAL(17, 178, 13), // "changePalette"
+QT_MOC_LITERAL(18, 192, 14), // "const Palette*"
+QT_MOC_LITERAL(19, 207, 10), // "initCanvas"
+QT_MOC_LITERAL(20, 218, 6) // "Format"
 
     },
     "EditorWidget\0mouseLeave\0\0QImage*\0"
     "mouseDown\0ButtonType\0mouseMove\0mouseUp\0"
     "keyPress\0Qt::Key\0composite\0compositeOverlay\0"
-    "compositeVis\0LayerVisible\0compositePalette\0"
-    "changeFrame\0Frame\0changePalette\0"
+    "compositePalette\0changeFrame\0Frame\0"
+    "changeVisible\0LayerVisible\0changePalette\0"
     "const Palette*\0initCanvas\0Format"
 };
 #undef QT_MOC_LITERAL
@@ -86,8 +86,8 @@ static const uint qt_meta_data_EditorWidget[] = {
  // slots: name, argc, parameters, tag, flags
       10,    0,  101,    2, 0x0a /* Public */,
       11,    0,  102,    2, 0x0a /* Public */,
-      12,    1,  103,    2, 0x0a /* Public */,
-      14,    0,  106,    2, 0x0a /* Public */,
+      12,    0,  103,    2, 0x0a /* Public */,
+      13,    1,  104,    2, 0x0a /* Public */,
       15,    1,  107,    2, 0x0a /* Public */,
       17,    1,  110,    2, 0x0a /* Public */,
       19,    2,  113,    2, 0x0a /* Public */,
@@ -102,8 +102,8 @@ static const uint qt_meta_data_EditorWidget[] = {
  // slots: parameters
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void, 0x80000000 | 13,    2,
     QMetaType::Void,
+    QMetaType::Void, 0x80000000 | 14,    2,
     QMetaType::Void, 0x80000000 | 16,    2,
     QMetaType::Void, 0x80000000 | 18,    2,
     QMetaType::Void, 0x80000000 | 20, QMetaType::QSize,    2,    2,
@@ -124,9 +124,9 @@ void EditorWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         case 4: _t->keyPress((*reinterpret_cast< Qt::Key(*)>(_a[1])),(*reinterpret_cast< QImage*(*)>(_a[2]))); break;
         case 5: _t->composite(); break;
         case 6: _t->compositeOverlay(); break;
-        case 7: _t->compositeVis((*reinterpret_cast< const LayerVisible(*)>(_a[1]))); break;
-        case 8: _t->compositePalette(); break;
-        case 9: _t->changeFrame((*reinterpret_cast< const Frame(*)>(_a[1]))); break;
+        case 7: _t->compositePalette(); break;
+        case 8: _t->changeFrame((*reinterpret_cast< const Frame(*)>(_a[1]))); break;
+        case 9: _t->changeVisible((*reinterpret_cast< const LayerVisible(*)>(_a[1]))); break;
         case 10: _t->changePalette((*reinterpret_cast< const Palette*(*)>(_a[1]))); break;
         case 11: _t->initCanvas((*reinterpret_cast< Format(*)>(_a[1])),(*reinterpret_cast< QSize(*)>(_a[2]))); break;
         default: ;

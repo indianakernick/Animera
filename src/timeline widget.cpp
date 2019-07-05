@@ -56,6 +56,7 @@ TimelineWidget::TimelineWidget(QWidget *parent)
   CONNECT(cells, posChanged, this, posChanged);
   CONNECT(cells, frameChanged, this, frameChanged);
   CONNECT(layers, visibleChanged, this, visibleChanged);
+  CONNECT(layers, composite, this, composite);
   
   QGridLayout *grid = new QGridLayout{this};
   setLayout(grid);
@@ -71,9 +72,8 @@ void TimelineWidget::initCanvas(const Format newFormat, const QSize newSize) {
   format = newFormat;
   size = newSize;
   frames->addFrame();
-  cells->initLayer();
+  cells->init();
   layers->insertLayer(0);
-  cells->initCell();
 }
 
 namespace {
@@ -127,6 +127,7 @@ void TimelineWidget::openFile(const QString &path) {
   cells->deserialize(&file);
   frames->setFrames(cells->getFrameCount());
   layers->deserialize(&file);
+  Q_EMIT composite();
 }
 
 void TimelineWidget::changePalette(Palette *newPalette) {
@@ -137,28 +138,28 @@ void TimelineWidget::addLayer() {
   const LayerIdx layer = cells->currLayer();
   cells->insertLayer(layer);
   layers->insertLayer(layer);
-  cells->layerAbove();
+  Q_EMIT composite();
 }
 
 void TimelineWidget::removeLayer() {
   const LayerIdx layer = cells->currLayer();
   cells->removeLayer(layer);
   layers->removeLayer(layer);
-  cells->layerBelow();
+  Q_EMIT composite();
 }
 
 void TimelineWidget::moveLayerUp() {
   const LayerIdx layer = cells->currLayer();
   cells->moveLayerUp(layer);
   layers->moveLayerUp(layer);
-  cells->layerAbove();
+  Q_EMIT composite();
 }
 
 void TimelineWidget::moveLayerDown() {
   const LayerIdx layer = cells->currLayer();
   cells->moveLayerDown(layer);
   layers->moveLayerDown(layer);
-  cells->layerBelow();
+  Q_EMIT composite();
 }
 
 void TimelineWidget::toggleLayerVisible() {
@@ -168,24 +169,29 @@ void TimelineWidget::toggleLayerVisible() {
 void TimelineWidget::addFrame() {
   cells->addFrame();
   frames->addFrame();
+  Q_EMIT composite();
 }
 
 void TimelineWidget::addNullFrame() {
   cells->addNullFrame();
   frames->addFrame();
+  Q_EMIT composite();
 }
 
 void TimelineWidget::removeFrame() {
   cells->removeFrame();
   frames->removeFrame();
+  Q_EMIT composite();
 }
 
 void TimelineWidget::clearFrame() {
   cells->clearFrame();
+  Q_EMIT composite();
 }
 
 void TimelineWidget::extendFrame() {
   cells->extendFrame();
+  Q_EMIT composite();
 }
 
 void TimelineWidget::requestCell() {
@@ -206,10 +212,12 @@ void TimelineWidget::layerBelow() {
 
 void TimelineWidget::nextFrame() {
   cells->nextFrame();
+  Q_EMIT composite();
 }
 
 void TimelineWidget::prevFrame() {
   cells->prevFrame();
+  Q_EMIT composite();
 }
 
 #include "timeline widget.moc"

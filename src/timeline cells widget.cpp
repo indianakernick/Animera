@@ -391,6 +391,7 @@ void CellsWidget::insertLayer(const LayerIdx idx) {
   Q_EMIT frameChanged(getFrame());
   ++pos.l;
   setSize();
+  layerAbove();
 }
 
 void CellsWidget::removeLayer(const LayerIdx idx) {
@@ -407,6 +408,7 @@ void CellsWidget::removeLayer(const LayerIdx idx) {
     setSize();
   }
   Q_EMIT frameChanged(getFrame());
+  layerBelow();
 }
 
 void CellsWidget::moveLayerUp(const LayerIdx idx) {
@@ -416,6 +418,7 @@ void CellsWidget::moveLayerUp(const LayerIdx idx) {
   layout->removeWidget(layer);
   layout->insertWidget(idx - 1, layer);
   Q_EMIT frameChanged(getFrame());
+  layerAbove();
 }
 
 void CellsWidget::moveLayerDown(const LayerIdx idx) {
@@ -425,6 +428,7 @@ void CellsWidget::moveLayerDown(const LayerIdx idx) {
   layout->removeWidget(layer);
   layout->insertWidget(idx + 1, layer);
   Q_EMIT frameChanged(getFrame());
+  layerBelow();
 }
 
 void CellsWidget::addFrame() {
@@ -492,16 +496,12 @@ void CellsWidget::setAnimDelay(const int delay) {
   animTimer.setInterval(delay);
 }
 
-void CellsWidget::initLayer() {
+void CellsWidget::init() {
   frameCount = 1;
   auto *layer = new LayerCellsWidget{this, timeline};
   layers.push_back(layer);
   layout->addWidget(layer);
-  Q_EMIT frameChanged({nullptr});
-}
-
-void CellsWidget::initCell() {
-  layers.back()->appendCell();
+  layer->appendCell();
   Q_EMIT frameChanged(getFrame());
   Q_EMIT posChanged(getCurr(), pos.l, pos.f);
 }

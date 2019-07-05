@@ -189,17 +189,13 @@ void Window::makeDockWidget(Qt::DockWidgetArea area, QWidget *widget) {
 }
 
 void Window::connectSignals() {
-  // @TODO
-  // deal with frameChanged, posChanged and visibleChanged properly
-  // maybe create a composite signal
-  // or create layer added and removed signals
-  
   CONNECT(&timeline, posChanged,      &tools,       changeCell);
   CONNECT(&timeline, posChanged,      &clear,       changePos);
   CONNECT(&timeline, posChanged,      &sample,      changePos);
   CONNECT(&timeline, posChanged,      &undo,        changePos);
-  CONNECT(&timeline, visibleChanged,  &editor,      compositeVis);
+  CONNECT(&timeline, visibleChanged,  &editor,      changeVisible);
   CONNECT(&timeline, frameChanged,    &editor,      changeFrame);
+  CONNECT(&timeline, composite,       &editor,      composite);
   CONNECT(&timeline, canvasInitialized, &colors,    initCanvas);
   CONNECT(&timeline, canvasInitialized, &editor,    initCanvas);
   CONNECT(&timeline, canvasInitialized, &palette,   initCanvas);
