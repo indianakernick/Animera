@@ -27,7 +27,10 @@ class Window final : public QMainWindow {
 
 public:
   explicit Window(QRect);
-  
+
+Q_SIGNALS:
+  void initCanvas(Format, QSize);
+
 private:
   QWidget bottom;
   QWidget right;
@@ -43,7 +46,6 @@ private:
   StatusBarWidget statusBar;
   ColorPickerWidget colorPicker;
   QMenuBar *menubar = nullptr;
-  InitCanvasDialog initDialog;
   
   void setupUI();
   void setupMenubar();

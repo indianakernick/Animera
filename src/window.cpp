@@ -26,9 +26,7 @@ Window::Window(const QRect desktop)
     tools{this},
     timeline{&bottom},
     statusBar{&bottom},
-    colorPicker{&right},
-    initDialog{this} {
-  initDialog.show();
+    colorPicker{&right} {
   setWindowTitle("Pixel 2");
   resize(glob_window_size);
   setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
@@ -232,13 +230,13 @@ void Window::connectSignals() {
   CONNECT(&palette,  paletteChanged,  &tools,       changePalette);
   CONNECT(&palette,  paletteColorChanged, &editor,  composite);
   
-  CONNECT(&initDialog, canvasInitialized, this,     show);
-  CONNECT(&initDialog, canvasInitialized, &colors,  initCanvas);
-  CONNECT(&initDialog, canvasInitialized, &editor,  initCanvas);
-  CONNECT(&initDialog, canvasInitialized, &palette, initCanvas);
-  CONNECT(&initDialog, canvasInitialized, &timeline, initCanvas);
-  CONNECT(&initDialog, canvasInitialized, &colorPicker, initCanvas);
-  CONNECT(&initDialog, canvasInitialized, &tools,   initCanvas);
+  CONNECT(this,      initCanvas,      this,         show);
+  CONNECT(this,      initCanvas,      &colors,      initCanvas);
+  CONNECT(this,      initCanvas,      &editor,      initCanvas);
+  CONNECT(this,      initCanvas,      &palette,     initCanvas);
+  CONNECT(this,      initCanvas,      &timeline,    initCanvas);
+  CONNECT(this,      initCanvas,      &colorPicker, initCanvas);
+  CONNECT(this,      initCanvas,      &tools,       initCanvas);
 }
 
 #include "window.moc"

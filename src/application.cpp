@@ -8,11 +8,19 @@
 
 #include "application.hpp"
 
+#include "connect.hpp"
 #include <QtCore/qresource.h>
 #include <QtWidgets/qdesktopwidget.h>
 
 Application::Application(int &argc, char **argv)
   : QApplication{argc, argv} {
+  loadResources();
+  initDialog.emplace(nullptr);
+  CONNECT(&*initDialog, canvasInitialized, this, initCanvas);
+  initDialog->show();
+}
+
+void Application::loadResources() {
   QString resPath = applicationDirPath();
   #if defined(Q_OS_MACOS)
   resPath += "/../Resources/";
@@ -23,7 +31,11 @@ Application::Application(int &argc, char **argv)
   #endif
   [[maybe_unused]] bool registered = QResource::registerResource(resPath + "resources.rcc");
   assert(registered);
+}
+
+void Application::initCanvas(const Format format, const QSize size) {
   window.emplace(desktop()->availableGeometry());
+  Q_EMIT window->initCanvas(format, size);
 }
 
 bool Application::event(QEvent *event) {
