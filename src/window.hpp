@@ -29,7 +29,8 @@ public:
   Window(QWidget *, QRect);
 
 Q_SIGNALS:
-  void initCanvas(Format, QSize);
+  void newFile(Format, QSize);
+  void openFile(const QString &);
 
 private:
   QWidget bottom;

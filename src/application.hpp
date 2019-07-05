@@ -10,9 +10,9 @@
 #define application_hpp
 
 #include "image.hpp"
-#include "window.hpp"
-#include "init canvas dialog.hpp"
 #include <QtWidgets/qapplication.h>
+
+class Window;
 
 class Application : public QApplication {
   Q_OBJECT
@@ -20,14 +20,16 @@ class Application : public QApplication {
 public:
   Application(int &, char **);
 
+  void newFileDialog();
+  void openFileDialog();
+
 private:
-  Window *window = nullptr;
-  InitCanvasDialog *initDialog = nullptr;
-  
   void loadResources();
+  Window *makeWindow();
 
 private Q_SLOTS:
-  void initCanvas(Format, QSize);
+  void newFile(Format, QSize);
+  void openFile(const QString &);
   
   bool event(QEvent *) override;
 };

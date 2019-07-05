@@ -188,6 +188,8 @@ void Window::makeDockWidget(Qt::DockWidgetArea area, QWidget *widget) {
   addDockWidget(area, dock);
 }
 
+#include <iostream>
+
 void Window::connectSignals() {
   CONNECT(&timeline, posChanged,      &editor,      compositePos);
   CONNECT(&timeline, posChanged,      &tools,       changeCell);
@@ -231,13 +233,17 @@ void Window::connectSignals() {
   CONNECT(&palette,  paletteChanged,  &tools,       changePalette);
   CONNECT(&palette,  paletteColorChanged, &editor,  composite);
   
-  CONNECT(this,      initCanvas,      this,         show);
-  CONNECT(this,      initCanvas,      &colors,      initCanvas);
-  CONNECT(this,      initCanvas,      &editor,      initCanvas);
-  CONNECT(this,      initCanvas,      &palette,     initCanvas);
-  CONNECT(this,      initCanvas,      &timeline,    initCanvas);
-  CONNECT(this,      initCanvas,      &colorPicker, initCanvas);
-  CONNECT(this,      initCanvas,      &tools,       initCanvas);
+  CONNECT(this,      newFile,         this,         show);
+  CONNECT(this,      newFile,         &colors,      initCanvas);
+  CONNECT(this,      newFile,         &editor,      initCanvas);
+  CONNECT(this,      newFile,         &palette,     initCanvas);
+  CONNECT(this,      newFile,         &timeline,    initCanvas);
+  CONNECT(this,      newFile,         &colorPicker, initCanvas);
+  CONNECT(this,      newFile,         &tools,       initCanvas);
+  
+  connect(this, &Window::openFile, [](const QString &fileName) {
+    std::cout << fileName.toStdString() << '\n';
+  });
 }
 
 #include "window.moc"
