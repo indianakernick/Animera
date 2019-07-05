@@ -10,6 +10,7 @@
 #define application_hpp
 
 #include "image.hpp"
+#include <QtCore/qtimer.h>
 #include <QtWidgets/qapplication.h>
 
 class Window;
@@ -23,15 +24,17 @@ public:
   void newFileDialog();
   void openFileDialog();
 
-private:
-  void loadResources();
-  Window *makeWindow();
-
 private Q_SLOTS:
   void newFile(Format, QSize);
   void openFile(const QString &);
   
   bool event(QEvent *) override;
+
+private:
+  QTimer noFileTimer;
+
+  void loadResources();
+  Window *makeWindow();
 };
 
 #endif

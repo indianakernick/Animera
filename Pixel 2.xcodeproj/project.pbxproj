@@ -55,7 +55,6 @@
 		45BADA77224714A3000D095C /* tool widgets.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45BADA75224714A3000D095C /* tool widgets.cpp */; };
 		45CAC92922CC7B5800F945BF /* sample object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45CAC92722CC7B5800F945BF /* sample object.cpp */; };
 		45CFA7CF22A4C1C40059DB41 /* palette widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45CFA7CD22A4C1C40059DB41 /* palette widget.cpp */; };
-		45DC2560224A034200F40116 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 45DC255F224A034200F40116 /* README.md */; };
 		45DC2566224B137C00F40116 /* status msg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45DC2564224B137C00F40116 /* status msg.cpp */; };
 		45DFE499224DE89E00EA40C5 /* global font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45DFE497224DE89E00EA40C5 /* global font.cpp */; };
 		45F065F22222998300BCE863 /* current tool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45F065F02222998300BCE863 /* current tool.cpp */; };
@@ -2104,7 +2103,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				45DC2560224A034200F40116 /* README.md in Resources */,
 				453C787D2235D70D00818B19 /* resources.rcc in Resources */,
 				455F285C2206890300C73F39 /* Assets.xcassets in Resources */,
 			);

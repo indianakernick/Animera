@@ -109,6 +109,7 @@ public:
   void appendFrame();
   LayerIdx layerCount() const;
   LayerIdx currLayer() const;
+  FrameIdx getFrameCount() const;
   
   void serialize(QIODevice *) const;
   void deserialize(QIODevice *);
@@ -118,7 +119,7 @@ private:
   QVBoxLayout *layout;
   std::vector<LayerCellsWidget *> layers;
   CellPos pos = {0, 0};
-  CellRect select = {1, 1, 1, 1};
+  // CellRect select = {1, 1, 1, 1};
   FrameIdx frameCount = 0;
   QTimer animTimer;
   

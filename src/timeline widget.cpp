@@ -84,7 +84,7 @@ constexpr char const magic_number[] = {'P', 'I', 'X', '2'};
 
 }
 
-void TimelineWidget::save(const QString &path) const {
+void TimelineWidget::saveFile(const QString &path) const {
   QFile file{path};
   if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
     // @TODO handle this properly
@@ -99,9 +99,10 @@ void TimelineWidget::save(const QString &path) const {
   serializeBytes(&file, static_cast<uint16_t>(size.width()));
   serializeBytes(&file, static_cast<uint16_t>(size.height()));
   cells->serialize(&file);
+  layers->serialize(&file);
 }
 
-void TimelineWidget::load(const QString &path) {
+void TimelineWidget::openFile(const QString &path) {
   // @TODO handle corrupted or invalid files properly
   QFile file{path};
   if (!file.open(QIODevice::ReadOnly)) {
@@ -122,7 +123,10 @@ void TimelineWidget::load(const QString &path) {
   deserializeBytes(&file, width);
   deserializeBytes(&file, height);
   size = {width, height};
+  Q_EMIT canvasInitialized(format, size);
   cells->deserialize(&file);
+  frames->setFrames(cells->getFrameCount());
+  layers->deserialize(&file);
 }
 
 void TimelineWidget::changePalette(Palette *newPalette) {

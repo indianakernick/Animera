@@ -42,6 +42,9 @@ public:
   void clearInfo();
   void swapWith(LayerNameWidget &);
   void toggleVisible();
+  
+  void serialize(QIODevice *) const;
+  void deserialize(QIODevice *);
 
 Q_SIGNALS:
   void visibleToggled();
@@ -62,6 +65,8 @@ public:
   explicit LayersWidget(QWidget *);
   
   void appendLayer(LayerIdx);
+  void serialize(QIODevice *) const;
+  void deserialize(QIODevice *);
 
 Q_SIGNALS:
   void visibleChanged(const LayerVisible &);

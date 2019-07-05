@@ -47,11 +47,16 @@ private:
   StatusBarWidget statusBar;
   ColorPickerWidget colorPicker;
   QMenuBar *menubar = nullptr;
+  QString fileName;
   
   void setupUI();
   void setupMenubar();
   void makeDockWidget(Qt::DockWidgetArea, QWidget *);
   void connectSignals();
+  
+  void setFileName(const QString &);
+  void saveFile();
+  void saveFileDialog();
 };
 
 #endif

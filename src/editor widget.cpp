@@ -268,11 +268,6 @@ void EditorWidget::compositeOverlay() {
   view->repaint();
 }
 
-void EditorWidget::compositePos() {
-  // @TODO Why?
-  composite();
-}
-
 void EditorWidget::compositeVis(const LayerVisible &newVisibility) {
   // @TODO I don't think this should call composite
   visibility = newVisibility;

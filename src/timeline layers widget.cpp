@@ -8,6 +8,7 @@
 
 #include "timeline layers widget.hpp"
 
+#include "serial.hpp"
 #include "config.hpp"
 #include "connect.hpp"
 #include <QtGui/qpainter.h>
@@ -75,6 +76,29 @@ void LayerNameWidget::toggleVisible() {
   visible->toggle();
 }
 
+void LayerNameWidget::serialize(QIODevice *dev) const {
+  assert(dev);
+  serializeBytes(dev, visible->isChecked());
+  const QString text = name->text();
+  assert(text.size() < 0xFFFF);
+  serializeBytes(dev, static_cast<uint16_t>(text.size()));
+  dev->write(reinterpret_cast<const char *>(text.data()), text.size() * sizeof(QChar));
+}
+
+void LayerNameWidget::deserialize(QIODevice *dev) {
+  assert(dev);
+  bool isVisible;
+  deserializeBytes(dev, isVisible);
+  visible->setChecked(isVisible);
+  uint16_t nameSize;
+  deserializeBytes(dev, nameSize);
+  QString text;
+  text.resize(nameSize);
+  dev->read(reinterpret_cast<char *>(text.data()), nameSize * sizeof(QChar));
+  name->setText(text);
+  repaint();
+}
+
 void LayerNameWidget::paintEvent(QPaintEvent *) {
   QPainter painter{this};
   painter.fillRect(
@@ -117,6 +141,33 @@ void LayersWidget::appendLayer(const LayerIdx layer) {
   CONNECT(layerName, visibleToggled, this, changeVisible);
   layers.push_back(layerName);
   layout->addWidget(layerName);
+  changeVisible();
+}
+
+void LayersWidget::serialize(QIODevice *dev) const {
+  assert(dev);
+  serializeBytes(dev, static_cast<uint16_t>(layers.size()));
+  for (const LayerNameWidget *layer : layers) {
+    layer->serialize(dev);
+  }
+}
+
+void LayersWidget::deserialize(QIODevice *dev) {
+  assert(dev);
+  uint16_t layersSize;
+  deserializeBytes(dev, layersSize);
+  for (LayerNameWidget *layer : layers) {
+    delete layer;
+  }
+  layers.clear();
+  layers.reserve(layersSize);
+  for (LayerIdx l = 0; l != layersSize; ++l) {
+    auto *layer = new LayerNameWidget{this, l};
+    layer->deserialize(dev);
+    CONNECT(layer, visibleToggled, this, changeVisible);
+    layers.push_back(layer);
+    layout->addWidget(layer);
+  }
   changeVisible();
 }
 

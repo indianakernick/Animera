@@ -29,12 +29,8 @@ Q_SIGNALS:
   void keyPress(Qt::Key, QImage *);
 
 public Q_SLOTS:
-  // invoked when the current frame has changed
-  // (from a paint tool or a timeline operation)
   void composite();
   void compositeOverlay();
-  // invoked when the image needs to be composited
-  void compositePos();
   void compositeVis(const LayerVisible &);
   void compositePalette();
   void changeFrame(const Frame &);

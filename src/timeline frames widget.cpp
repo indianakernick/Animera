@@ -30,6 +30,12 @@ void FramesWidget::removeFrame() {
   repaint();
 }
 
+void FramesWidget::setFrames(const int newFrames) {
+  frames = newFrames;
+  setWidth();
+  repaint();
+}
+
 void FramesWidget::setMargin(const int newMargin) {
   margin = newMargin;
   setWidth();

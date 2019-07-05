@@ -258,10 +258,13 @@ void LayerCellsWidget::deserialize(QIODevice *dev) {
   assert(dev);
   uint16_t framesSize;
   deserializeBytes(dev, framesSize);
+  setFixedWidth(0);
+  frames.clear();
   frames.reserve(framesSize);
   while (framesSize--) {
     uint16_t len;
     deserializeBytes(dev, len);
+    addSize(len);
     bool notNull;
     deserializeBytes(dev, notNull);
     CellPtr cell = nullptr;
@@ -271,6 +274,7 @@ void LayerCellsWidget::deserialize(QIODevice *dev) {
     }
     frames.push_back({std::move(cell), len});
   }
+  repaint();
 }
 
 void LayerCellsWidget::loadIcons() {
@@ -530,7 +534,13 @@ LayerIdx CellsWidget::currLayer() const {
   return pos.l;
 }
 
+FrameIdx CellsWidget::getFrameCount() const {
+  return frameCount;
+}
+
 void CellsWidget::serialize(QIODevice *dev) const {
+  assert(dev);
+  serializeBytes(dev, static_cast<uint16_t>(frameCount));
   serializeBytes(dev, static_cast<uint16_t>(layers.size()));
   for (const LayerCellsWidget *layer : layers) {
     layer->serialize(dev);
@@ -538,6 +548,10 @@ void CellsWidget::serialize(QIODevice *dev) const {
 }
 
 void CellsWidget::deserialize(QIODevice *dev) {
+  assert(dev);
+  uint16_t framesSize;
+  deserializeBytes(dev, framesSize);
+  frameCount = framesSize;
   uint16_t layersSize;
   deserializeBytes(dev, layersSize);
   for (LayerCellsWidget *layer : layers) {
@@ -546,8 +560,14 @@ void CellsWidget::deserialize(QIODevice *dev) {
   layers.clear();
   layers.reserve(layersSize);
   while (layersSize--) {
-    layers.emplace_back(new LayerCellsWidget{this, timeline})->deserialize(dev);
+    auto *layer = new LayerCellsWidget{this, timeline};
+    layer->deserialize(dev);
+    layout->addWidget(layer);
+    layers.push_back(layer);
   }
+  setSize();
+  Q_EMIT frameChanged(getFrame());
+  Q_EMIT posChanged(getCurr(), pos.l, pos.f);
 }
 
 Cell *CellsWidget::getCurr() {

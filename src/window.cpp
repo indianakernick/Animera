@@ -10,12 +10,14 @@
 
 #include "config.hpp"
 #include "connect.hpp"
+#include "application.hpp"
 #include "global font.hpp"
 #include <QtWidgets/qstyle.h>
 #include "separator widget.hpp"
 #include <QtWidgets/qmenubar.h>
 #include <QtWidgets/qboxlayout.h>
 #include <QtWidgets/qdockwidget.h>
+#include <QtWidgets/qfiledialog.h>
 
 Window::Window(QWidget *parent, const QRect desktop)
   : QMainWindow{parent},
@@ -136,14 +138,12 @@ void Window::setupMenubar() {
     makeDockWidget(Qt::TopDockWidgetArea, menubar);
   }
   
+  auto *app = static_cast<Application *>(QApplication::instance());
   QMenu *file = menubar->addMenu("File");
-  QAction *open = file->addAction("Open");
-  open->setShortcut(QKeySequence::Open);
-  file->addAction("Save");
-  file->addSeparator();
-  file->addAction("Export");
-  // CONNECT(open, triggered, this, openDoc);
-  // CONNECT(save, triggered, this, saveDoc);
+  ADD_ACTION(file, "New", QKeySequence::New, *app, newFileDialog);
+  ADD_ACTION(file, "Open", QKeySequence::Open, *app, openFileDialog);
+  ADD_ACTION(file, "Save", QKeySequence::Save, *this, saveFile);
+  ADD_ACTION(file, "Save As", QKeySequence::SaveAs, *this, saveFileDialog);
   
   QMenu *layer = menubar->addMenu("Layer");
   ADD_ACTION(layer, "New Layer", Qt::SHIFT + Qt::Key_N, timeline, addLayer);
@@ -188,16 +188,23 @@ void Window::makeDockWidget(Qt::DockWidgetArea area, QWidget *widget) {
   addDockWidget(area, dock);
 }
 
-#include <iostream>
-
 void Window::connectSignals() {
-  CONNECT(&timeline, posChanged,      &editor,      compositePos);
+  // @TODO
+  // deal with frameChanged, posChanged and visibleChanged properly
+  // maybe create a composite signal
+  // or create layer added and removed signals
+  
   CONNECT(&timeline, posChanged,      &tools,       changeCell);
   CONNECT(&timeline, posChanged,      &clear,       changePos);
   CONNECT(&timeline, posChanged,      &sample,      changePos);
   CONNECT(&timeline, posChanged,      &undo,        changePos);
   CONNECT(&timeline, visibleChanged,  &editor,      compositeVis);
   CONNECT(&timeline, frameChanged,    &editor,      changeFrame);
+  CONNECT(&timeline, canvasInitialized, &colors,    initCanvas);
+  CONNECT(&timeline, canvasInitialized, &editor,    initCanvas);
+  CONNECT(&timeline, canvasInitialized, &palette,   initCanvas);
+  CONNECT(&timeline, canvasInitialized, &colorPicker, initCanvas);
+  CONNECT(&timeline, canvasInitialized, &tools,     initCanvas);
   
   CONNECT(&tools,    cellModified,    &editor,      composite);
   CONNECT(&tools,    overlayModified, &editor,      compositeOverlay);
@@ -241,9 +248,37 @@ void Window::connectSignals() {
   CONNECT(this,      newFile,         &colorPicker, initCanvas);
   CONNECT(this,      newFile,         &tools,       initCanvas);
   
-  connect(this, &Window::openFile, [](const QString &fileName) {
-    std::cout << fileName.toStdString() << '\n';
-  });
+  CONNECT(this,      openFile,        this,         show);
+  CONNECT(this,      openFile,        this,         setFileName);
+  CONNECT(this,      openFile,        &timeline,    openFile);
+}
+
+void Window::setFileName(const QString &name) {
+  fileName = name;
+}
+
+void Window::saveFile() {
+  if (fileName.isEmpty()) {
+    saveFileDialog();
+  } else {
+    timeline.saveFile(fileName);
+    statusBar.showTemp("Saved!");
+  }
+}
+
+void Window::saveFileDialog() {
+  /*auto *dialog = new QFileDialog{this, "Save File"};
+  CONNECT(dialog, fileSelected, this, setFileName);
+  CONNECT(dialog, fileSelected, &timeline, saveFile);
+  dialog->setNameFilter("Pixel 2 File (*.px2)");
+  dialog->setDefaultSuffix("px2");
+  dialog->setAcceptMode(QFileDialog::AcceptSave);
+  dialog->show();*/
+  const QString saveFileName = QFileDialog::getSaveFileName(this, "Save File", "", "Pixel 2 File (*.px2)");
+  if (!saveFileName.isEmpty()) {
+    setFileName(saveFileName);
+    timeline.saveFile(saveFileName);
+  }
 }
 
 #include "window.moc"

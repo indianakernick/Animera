@@ -19,6 +19,7 @@ public:
  
   void addFrame();
   void removeFrame();
+  void setFrames(int);
 
 public Q_SLOTS:
   void setMargin(int);

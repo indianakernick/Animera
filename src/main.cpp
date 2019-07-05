@@ -7,6 +7,7 @@
 //
 
 #define BUG_TEST 0
+#define BENCHMARK 0
 
 #if !BUG_TEST
 
@@ -1896,6 +1897,9 @@ int main(int argc, char **argv) {
 #if !BUG_TEST
 
 int main(int argc, char **argv) {
+
+#if BENCHMARK
+
   /*Image img;
   img.data.load("/Users/indikernick/Library/Developer/Xcode/DerivedData/Pixel_2-gqoblrlhvynmicgniivandqktune/Build/Products/Debug/Pixel 2.app/Contents/Resources/icon.png");
   img.xform.angle = 1;
@@ -2305,6 +2309,8 @@ int main(int argc, char **argv) {
   drawing.save("/Users/indikernick/Desktop/Test/overlay_7.png");
   
   source.image.data.save("/Users/indikernick/Desktop/Test/brush.png");*/
+
+#endif
   
   Application app{argc, argv};
   return app.exec();

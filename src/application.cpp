@@ -8,6 +8,7 @@
 
 #include "application.hpp"
 
+#include <fstream>
 #include "window.hpp"
 #include "connect.hpp"
 #include <QtGui/qevent.h>
@@ -19,7 +20,9 @@
 Application::Application(int &argc, char **argv)
   : QApplication{argc, argv} {
   loadResources();
-  newFileDialog();
+  CONNECT(&noFileTimer, timeout, this, newFileDialog);
+  noFileTimer.setSingleShot(true);
+  noFileTimer.start(glob_launch_file_timeout_ms);
 }
 
 void Application::newFileDialog() {
@@ -33,7 +36,6 @@ void Application::openFileDialog() {
   CONNECT(dialog, fileSelected, this, openFile);
   dialog->setFileMode(QFileDialog::ExistingFile);
   dialog->setNameFilter("Pixel 2 File (*.px2)");
-  dialog->show();
 }
 
 void Application::loadResources() {
@@ -65,6 +67,10 @@ void Application::openFile(const QString &path) {
 
 bool Application::event(QEvent *event) {
   if (event->type() == QEvent::FileOpen) {
+    const int remaining = noFileTimer.remainingTime();
+    noFileTimer.stop();
+    std::ofstream log{"/Users/indikernick/Desktop/Test/log.txt"};
+    log << "No file timeout: " << remaining << "ms" << std::endl;
     openFile(static_cast<QFileOpenEvent *>(event)->file());
     return true;
   } else {

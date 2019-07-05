@@ -27,8 +27,8 @@ public:
   
 public Q_SLOTS:
   void initCanvas(Format, QSize);
-  void save(const QString &) const;
-  void load(const QString &);
+  void saveFile(const QString &) const;
+  void openFile(const QString &);
   void changePalette(Palette *);
   
   void addLayer();
@@ -58,6 +58,7 @@ Q_SIGNALS:
   void posChanged(Cell *, LayerIdx, FrameIdx);
   void visibleChanged(const LayerVisible &);
   void frameChanged(const Frame &);
+  void canvasInitialized(Format, QSize);
 
 private:
   ControlsWidget *controls = nullptr;
