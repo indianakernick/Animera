@@ -20,6 +20,8 @@
 Application::Application(int &argc, char **argv)
   : QApplication{argc, argv} {
   loadResources();
+  // @TODO this timer is an ugly hack
+  // find a better way
   CONNECT(&noFileTimer, timeout, this, newFileDialog);
   noFileTimer.setSingleShot(true);
   noFileTimer.start(glob_launch_file_timeout_ms);
@@ -36,6 +38,11 @@ void Application::openFileDialog() {
   CONNECT(dialog, fileSelected, this, openFile);
   dialog->setFileMode(QFileDialog::ExistingFile);
   dialog->setNameFilter("Pixel 2 File (*.px2)");
+  dialog->show();
+}
+
+void Application::windowClosed(Window *window) {
+  windows.erase(std::remove(windows.begin(), windows.end(), window), windows.end());
 }
 
 void Application::loadResources() {
@@ -52,17 +59,33 @@ void Application::loadResources() {
 }
 
 Window *Application::makeWindow() {
-  return new Window{desktop(), desktop()->availableGeometry()};
+  return windows.emplace_back(
+    new Window{desktop(), desktop()->availableGeometry()}
+  );
 }
 
 void Application::newFile(const Format format, const QSize size) {
-  Window *window = makeWindow();
-  Q_EMIT window->newFile(format, size);
+  Q_EMIT makeWindow()->newFile(format, size);
+}
+
+namespace {
+
+void raiseWindow(QMainWindow *window) {
+  const Qt::WindowStates state = window->windowState();
+  window->setWindowState((state & ~Qt::WindowMinimized) | Qt::WindowActive);
+  window->activateWindow();
+  window->raise();
+}
+
 }
 
 void Application::openFile(const QString &path) {
-  Window *window = makeWindow();
-  Q_EMIT window->openFile(path);
+  for (Window *window : windows) {
+    if (window->hasOpen(path)) {
+      return raiseWindow(window);
+    }
+  }
+  Q_EMIT makeWindow()->openFile(path);
 }
 
 bool Application::event(QEvent *event) {

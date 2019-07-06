@@ -27,6 +27,8 @@ class Window final : public QMainWindow {
 
 public:
   Window(QWidget *, QRect);
+  
+  bool hasOpen(const QString &) const;
 
 Q_SIGNALS:
   void newFile(Format, QSize);
@@ -57,6 +59,8 @@ private:
   void setFileName(const QString &);
   void saveFile();
   void saveFileDialog();
+  
+  void closeEvent(QCloseEvent *) override;
 };
 
 #endif

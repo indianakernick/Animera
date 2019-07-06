@@ -24,7 +24,6 @@ class ControlsWidget final : public QWidget {
 public:
   explicit ControlsWidget(QWidget *parent)
     : QWidget{parent} {
-    // @TODO put this into config.hpp
     setFixedSize(layer_width, cell_height);
     setStyleSheet("background-color:" + QColor{255, 0, 0}.name());
   }

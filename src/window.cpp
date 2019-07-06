@@ -30,9 +30,9 @@ Window::Window(QWidget *parent, const QRect desktop)
     timeline{&bottom},
     statusBar{&bottom},
     colorPicker{&right} {
-  setWindowTitle("Pixel 2");
   resize(glob_window_size);
   setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+  setFocusPolicy(Qt::StrongFocus);
   setGeometry(QStyle::alignedRect(
     Qt::LeftToRight,
     Qt::AlignCenter,
@@ -42,6 +42,10 @@ Window::Window(QWidget *parent, const QRect desktop)
   setupUI();
   setupMenubar();
   connectSignals();
+}
+
+bool Window::hasOpen(const QString &file) const {
+  return fileName == file;
 }
 
 void Window::setupUI() {
@@ -251,6 +255,7 @@ void Window::connectSignals() {
 
 void Window::setFileName(const QString &name) {
   fileName = name;
+  setWindowTitle(name);
 }
 
 void Window::saveFile() {
@@ -270,11 +275,20 @@ void Window::saveFileDialog() {
   dialog->setDefaultSuffix("px2");
   dialog->setAcceptMode(QFileDialog::AcceptSave);
   dialog->show();*/
-  const QString saveFileName = QFileDialog::getSaveFileName(this, "Save File", "", "Pixel 2 File (*.px2)");
+  const QString saveFileName = QFileDialog::getSaveFileName(
+    this,
+    "Save File",
+    QDir::homePath(),
+    "Pixel 2 File (*.px2)"
+  );
   if (!saveFileName.isEmpty()) {
     setFileName(saveFileName);
     timeline.saveFile(saveFileName);
   }
+}
+
+void Window::closeEvent(QCloseEvent *) {
+  static_cast<Application *>(QApplication::instance())->windowClosed(this);
 }
 
 #include "window.moc"

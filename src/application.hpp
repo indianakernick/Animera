@@ -23,6 +23,7 @@ public:
 
   void newFileDialog();
   void openFileDialog();
+  void windowClosed(Window *);
 
 private Q_SLOTS:
   void newFile(Format, QSize);
@@ -31,6 +32,7 @@ private Q_SLOTS:
   bool event(QEvent *) override;
 
 private:
+  std::vector<Window *> windows;
   QTimer noFileTimer;
 
   void loadResources();
