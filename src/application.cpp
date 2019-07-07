@@ -8,7 +8,6 @@
 
 #include "application.hpp"
 
-#include <fstream>
 #include "window.hpp"
 #include "connect.hpp"
 #include <QtGui/qevent.h>
@@ -20,11 +19,9 @@
 Application::Application(int &argc, char **argv)
   : QApplication{argc, argv} {
   loadResources();
-  // @TODO this timer is an ugly hack
-  // find a better way
   CONNECT(noFileTimer, timeout, this, newFileDialog);
   noFileTimer.setSingleShot(true);
-  noFileTimer.start(glob_launch_file_timeout_ms);
+  noFileTimer.start(0);
 }
 
 void Application::newFileDialog() {
@@ -90,10 +87,7 @@ void Application::openFile(const QString &path) {
 
 bool Application::event(QEvent *event) {
   if (event->type() == QEvent::FileOpen) {
-    const int remaining = noFileTimer.remainingTime();
     noFileTimer.stop();
-    std::ofstream log{"/Users/indikernick/Desktop/Test/log.txt"};
-    log << "No file timeout: " << remaining << "ms" << std::endl;
     openFile(static_cast<QFileOpenEvent *>(event)->file());
     return true;
   } else {

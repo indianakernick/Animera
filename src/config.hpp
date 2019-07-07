@@ -37,7 +37,6 @@ constexpr int       glob_font_px = glob_font_accent_px + glob_font_decent_px;
 constexpr int       glob_font_pt = 8_px; // 8 pt for 72 dpi. 6 pt for 96 dpi
 
 constexpr QSize     glob_window_size = {640_px, 360_px};
-constexpr int       glob_launch_file_timeout_ms = 100;
 
 // ------------------------ global color scheme ----------------------------- //
 
