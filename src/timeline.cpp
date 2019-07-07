@@ -171,10 +171,16 @@ void Timeline::deserialize(QIODevice *dev) {
     for (CellSpan &span : layer.spans) {
       span.len = deserializeBytesAs<uint16_t>(dev);
       if (deserializeBytesAs<bool>(dev)) {
+        span.cell = makeCell();
         ::deserialize(dev, span.cell->image);
       }
     }
   }
+  changeFrameCount();
+  changeLayerCount();
+  changeFrame();
+  changePos();
+  changeLayers(0, layerCount());
 }
 
 void Timeline::initCanvas(const Format format, const QSize size) {
