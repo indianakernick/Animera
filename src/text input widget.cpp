@@ -28,9 +28,9 @@ TextInputWidget::TextInputWidget(QWidget *parent, const WidgetRect rect)
   setFrame(false);
   setAttribute(Qt::WA_MacShowFocusRect, 0);
   
-  CONNECT(&cursorBlinkTimer, timeout,               this, blinkSlot);
-  CONNECT(this,              selectionChanged,      this, showCursor);
-  CONNECT(this,              cursorPositionChanged, this, showCursor);
+  CONNECT(cursorBlinkTimer, timeout,               this, blinkSlot);
+  CONNECT(this,             selectionChanged,      this, showCursor);
+  CONNECT(this,             cursorPositionChanged, this, showCursor);
   
   cursorBlinkTimer.setInterval(box_cursor_blink_interval_ms);
   cursorBlinkTimer.setTimerType(Qt::CoarseTimer);

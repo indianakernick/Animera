@@ -22,7 +22,7 @@ Application::Application(int &argc, char **argv)
   loadResources();
   // @TODO this timer is an ugly hack
   // find a better way
-  CONNECT(&noFileTimer, timeout, this, newFileDialog);
+  CONNECT(noFileTimer, timeout, this, newFileDialog);
   noFileTimer.setSingleShot(true);
   noFileTimer.start(glob_launch_file_timeout_ms);
 }

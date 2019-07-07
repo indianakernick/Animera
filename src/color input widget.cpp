@@ -122,7 +122,7 @@ HexInputWidget::HexInputWidget(
 ) : TextInputWidget{parent, rect}, boxValidator{parent} {
   setValidator(&boxValidator);
   changeRgba(rgb, a);
-  CONNECT(this, textEdited, this, textChanged);
+  CONNECT(this, textEdited,      this, textChanged);
   CONNECT(this, editingFinished, this, newValidValue);
 }
 

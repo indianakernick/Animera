@@ -16,7 +16,7 @@ ControlsWidget::ControlsWidget(QWidget *parent)
   : QWidget{parent} {
   setFixedSize(layer_width, cell_height);
   animTimer.setInterval(100);
-  CONNECT(&animTimer, timeout, this, nextFrame);
+  CONNECT(animTimer, timeout, this, nextFrame);
 }
 
 void ControlsWidget::toggleAnimation() {

@@ -17,7 +17,7 @@ StatusBarWidget::StatusBarWidget(QWidget *parent)
   : QWidget{parent} {
   timer.setInterval(stat_temp_duration_ms);
   timer.setSingleShot(true);
-  CONNECT(&timer, timeout, this, hideTemp);
+  CONNECT(timer, timeout, this, hideTemp);
   setMinimumWidth(stat_min_width);
   setFixedHeight(stat_height);
   setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);

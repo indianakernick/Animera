@@ -140,8 +140,8 @@ void InitCanvasDialog::setupLayout() {
 }
 
 void InitCanvasDialog::connectSignals() {
-  CONNECT(&widthWidget, valueChanged, this, widthChanged);
-  CONNECT(&heightWidget, valueChanged, this, heightChanged);
+  CONNECT(widthWidget, valueChanged, this, widthChanged);
+  CONNECT(heightWidget, valueChanged, this, heightChanged);
   for (FormatWidget *format : formatWidgets) {
     CONNECT(format, checked, this, formatChanged);
   }

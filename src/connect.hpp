@@ -12,20 +12,36 @@
 #include <type_traits>
 #include <QtCore/qobject.h>
 
+namespace detail {
+
+template <typename T>
+using remove_cvptr_t = std::remove_cv_t<std::remove_pointer_t<T>>;
+
+template <typename T>
+auto address(T &&obj) {
+  if constexpr (std::is_pointer_v<std::remove_reference_t<T>>) {
+    return obj;
+  } else {
+    return &obj;
+  }
+}
+
+}
+
 #define CONNECT(SENDER, SIGNAL, RECEIVER, SLOT)                                 \
   QObject::connect(                                                             \
-    SENDER,                                                                     \
-    &std::remove_cv_t<std::remove_pointer_t<decltype(SENDER)>>::SIGNAL,         \
-    RECEIVER,                                                                   \
-    &std::remove_cv_t<std::remove_pointer_t<decltype(RECEIVER)>>::SLOT          \
+    detail::address(SENDER),                                                    \
+    &detail::remove_cvptr_t<decltype(SENDER)>::SIGNAL,                          \
+    detail::address(RECEIVER),                                                  \
+    &detail::remove_cvptr_t<decltype(RECEIVER)>::SLOT                           \
   )
 
 #define DISCONNECT(SENDER, SIGNAL, RECEIVER, SLOT)                              \
   QObject::disconnect(                                                          \
-    SENDER,                                                                     \
-    &std::remove_cv_t<std::remove_pointer_t<decltype(SENDER)>>::SIGNAL,         \
-    RECEIVER,                                                                   \
-    &std::remove_cv_t<std::remove_pointer_t<decltype(RECEIVER)>>::SLOT          \
+    detail::address(SENDER),                                                    \
+    &detail::remove_cvptr_t<decltype(SENDER)>::SIGNAL,                          \
+    detail::address(RECEIVER),                                                  \
+    &detail::remove_cvptr_t<decltype(RECEIVER)>::SLOT                           \
   )
 
 // connect\((.+),\s+&\w+::(\w+),\s+(.+),\s+&\w+::(\w+)\);

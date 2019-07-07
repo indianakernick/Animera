@@ -204,60 +204,60 @@ void Window::makeDockWidget(Qt::DockWidgetArea area, QWidget *widget) {
 }
 
 void Window::connectSignals() {
-  CONNECT(&sprite.timeline, currCellChanged,     &tools,           setCell);
-  CONNECT(&sprite.timeline, currCellChanged,     &clear,           setCell);
-  CONNECT(&sprite.timeline, currCellChanged,     &sample,          setCell);
-  CONNECT(&sprite.timeline, currCellChanged,     &undo,            setCell);
-  CONNECT(&sprite.timeline, frameChanged,        &editor,          setFrame);
-  CONNECT(&sprite.timeline, currPosChanged,      &timeline,        setCurrPos);
-  CONNECT(&sprite.timeline, visibilityChanged,   &timeline,        setVisibility);
-  CONNECT(&sprite.timeline, nameChanged,         &timeline,        setName);
-  CONNECT(&sprite.timeline, layerChanged,        &timeline,        setLayer);
-  CONNECT(&sprite.timeline, frameCountChanged,   &timeline,        setFrameCount);
-  CONNECT(&sprite.timeline, layerCountChanged,   &timeline,        setLayerCount);
+  CONNECT(sprite.timeline, currCellChanged,     tools,           setCell);
+  CONNECT(sprite.timeline, currCellChanged,     clear,           setCell);
+  CONNECT(sprite.timeline, currCellChanged,     sample,          setCell);
+  CONNECT(sprite.timeline, currCellChanged,     undo,            setCell);
+  CONNECT(sprite.timeline, frameChanged,        editor,          setFrame);
+  CONNECT(sprite.timeline, currPosChanged,      timeline,        setCurrPos);
+  CONNECT(sprite.timeline, visibilityChanged,   timeline,        setVisibility);
+  CONNECT(sprite.timeline, nameChanged,         timeline,        setName);
+  CONNECT(sprite.timeline, layerChanged,        timeline,        setLayer);
+  CONNECT(sprite.timeline, frameCountChanged,   timeline,        setFrameCount);
+  CONNECT(sprite.timeline, layerCountChanged,   timeline,        setLayerCount);
   
-  CONNECT(&timeline,        visibilityChanged,   &sprite.timeline, setVisibility);
-  CONNECT(&timeline,        nameChanged,         &sprite.timeline, setName);
-  CONNECT(&timeline,        nextFrame,           &sprite.timeline, nextFrame);
+  CONNECT(timeline,        visibilityChanged,   sprite.timeline, setVisibility);
+  CONNECT(timeline,        nameChanged,         sprite.timeline, setName);
+  CONNECT(timeline,        nextFrame,           sprite.timeline, nextFrame);
   
-  CONNECT(&sprite,          canvasInitialized,   &colors,          initCanvas);
-  CONNECT(&sprite,          canvasInitialized,   &editor,          initCanvas);
-  CONNECT(&sprite,          canvasInitialized,   &palette,         initCanvas);
-  CONNECT(&sprite,          canvasInitialized,   &colorPicker,     initCanvas);
-  CONNECT(&sprite,          canvasInitialized,   &tools,           initCanvas);
+  CONNECT(sprite,          canvasInitialized,   colors,          initCanvas);
+  CONNECT(sprite,          canvasInitialized,   editor,          initCanvas);
+  CONNECT(sprite,          canvasInitialized,   palette,         initCanvas);
+  CONNECT(sprite,          canvasInitialized,   colorPicker,     initCanvas);
+  CONNECT(sprite,          canvasInitialized,   tools,           initCanvas);
   
-  CONNECT(&tools,           cellModified,        &editor,          composite);
-  CONNECT(&tools,           overlayModified,     &editor,          compositeOverlay);
-  CONNECT(&tools,           updateStatusBar,     &statusBar,       showPerm);
-  CONNECT(&tools,           cellRequested,       &sprite.timeline, requestCell);
+  CONNECT(tools,           cellModified,        editor,          composite);
+  CONNECT(tools,           overlayModified,     editor,          compositeOverlay);
+  CONNECT(tools,           updateStatusBar,     statusBar,       showPerm);
+  CONNECT(tools,           cellRequested,       sprite.timeline, requestCell);
   
-  CONNECT(&editor,          mouseLeave,          &tools,           mouseLeave);
-  CONNECT(&editor,          mouseDown,           &tools,           mouseDown);
-  CONNECT(&editor,          mouseMove,           &tools,           mouseMove);
-  CONNECT(&editor,          mouseUp,             &tools,           mouseUp);
-  CONNECT(&editor,          keyPress,            &tools,           keyPress);
-  CONNECT(&editor,          keyPress,            &clear,           keyPress);
-  CONNECT(&editor,          mouseMove,           &sample,          mouseMove);
-  CONNECT(&editor,          keyPress,            &sample,          keyPress);
-  CONNECT(&editor,          keyPress,            &undo,            keyPress);
-  CONNECT(&tools,           changingAction,      &undo,            cellModified);
+  CONNECT(editor,          mouseLeave,          tools,           mouseLeave);
+  CONNECT(editor,          mouseDown,           tools,           mouseDown);
+  CONNECT(editor,          mouseMove,           tools,           mouseMove);
+  CONNECT(editor,          mouseUp,             tools,           mouseUp);
+  CONNECT(editor,          keyPress,            tools,           keyPress);
+  CONNECT(editor,          keyPress,            clear,           keyPress);
+  CONNECT(editor,          mouseMove,           sample,          mouseMove);
+  CONNECT(editor,          keyPress,            sample,          keyPress);
+  CONNECT(editor,          keyPress,            undo,            keyPress);
+  CONNECT(tools,           changingAction,      undo,            cellModified);
   
-  CONNECT(&colors,          colorsChanged,       &tools,           setColors);
-  CONNECT(&colors,          attachColor,         &colorPicker,     attach);
-  CONNECT(&colors,          colorsChanged,       &clear,           setColors);
+  CONNECT(colors,          colorsChanged,       tools,           setColors);
+  CONNECT(colors,          attachColor,         colorPicker,     attach);
+  CONNECT(colors,          colorsChanged,       clear,           setColors);
   
-  CONNECT(&clear,           cellModified,        &tools,           cellModified);
+  CONNECT(clear,           cellModified,        tools,           cellModified);
   
-  CONNECT(&sample,          colorChanged,        &colorPicker,     setColor);
+  CONNECT(sample,          colorChanged,        colorPicker,     setColor);
   
-  CONNECT(&undo,            cellReverted,        &editor,          composite);
-  CONNECT(&undo,            showTempStatus,      &statusBar,       showTemp);
+  CONNECT(undo,            cellReverted,        editor,          composite);
+  CONNECT(undo,            showTempStatus,      statusBar,       showTemp);
   
-  CONNECT(&palette,         attachColor,         &colorPicker,     attach);
-  CONNECT(&palette,         setColor,            &colorPicker,     setColor);
-  CONNECT(&palette,         paletteChanged,      &editor,          setPalette);
-  CONNECT(&palette,         paletteChanged,      &tools,           setPalette);
-  CONNECT(&palette,         paletteColorChanged, &editor,          composite);
+  CONNECT(palette,         attachColor,         colorPicker,     attach);
+  CONNECT(palette,         setColor,            colorPicker,     setColor);
+  CONNECT(palette,         paletteChanged,      editor,          setPalette);
+  CONNECT(palette,         paletteChanged,      tools,           setPalette);
+  CONNECT(palette,         paletteColorChanged, editor,          composite);
 }
 
 void Window::setFileName(const QString &name) {

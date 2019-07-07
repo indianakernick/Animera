@@ -204,8 +204,8 @@ private:
       for (int x = 0; x != pal_width; ++x) {
         const int index = y * pal_width + x;
         auto *colorWidget = new PaletteColorWidget{this, palette[index], index};
-        CONNECT(colorWidget, attachColor, this, attachColor);
-        CONNECT(colorWidget, setColor, this, setColor);
+        CONNECT(colorWidget, attachColor,         this, attachColor);
+        CONNECT(colorWidget, setColor,            this, setColor);
         CONNECT(colorWidget, paletteColorChanged, this, paletteColorChanged);
         colors.push_back(colorWidget);
         grid->addWidget(colorWidget, y, x);
@@ -236,9 +236,9 @@ PaletteWidget::PaletteWidget(QWidget *parent)
   setMinimumHeight(pal_tile_size + glob_border_width);
   setAlignment(Qt::AlignHCenter);
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  CONNECT(table, attachColor, this, attachColor);
-  CONNECT(table, setColor, this, setColor);
-  CONNECT(table, paletteChanged, this, paletteChanged);
+  CONNECT(table, attachColor,         this, attachColor);
+  CONNECT(table, setColor,            this, setColor);
+  CONNECT(table, paletteChanged,      this, paletteChanged);
   CONNECT(table, paletteColorChanged, this, paletteColorChanged);
 }
 
