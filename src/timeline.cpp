@@ -226,15 +226,15 @@ void Timeline::removeLayer() {
     changeLayerCount();
     currPos.l = std::min(currPos.l, layerCount() - 1);
     changeLayers(currPos.l, layerCount());
-    changePos();
   }
   changeFrame();
+  changePos();
 }
 
 void Timeline::moveLayerUp() {
   if (currPos.l == 0) return;
   std::swap(layers[currPos.l - 1], layers[currPos.l]);
-  changeLayers(currPos.l - 1, currPos.l);
+  changeLayers(currPos.l - 1, currPos.l + 1);
   changeFrame();
   layerAbove();
 }
@@ -242,7 +242,7 @@ void Timeline::moveLayerUp() {
 void Timeline::moveLayerDown() {
   if (currPos.l == layerCount() - 1) return;
   std::swap(layers[currPos.l], layers[currPos.l + 1]);
-  changeLayers(currPos.l, currPos.l + 1);
+  changeLayers(currPos.l, currPos.l + 2);
   changeFrame();
   layerBelow();
 }
