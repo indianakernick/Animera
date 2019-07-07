@@ -8,6 +8,7 @@
 
 #include "sprite.hpp"
 
+#include "config.hpp"
 #include "serial.hpp"
 #include <QtCore/qfile.h>
 
@@ -24,7 +25,9 @@ void Sprite::newFile(const Format newFormat, const QSize newSize) {
   size = newSize;
   Q_EMIT canvasInitialized(format, size);
   timeline.initCanvas(format, size);
+  palette.initCanvas();
   timeline.initDefault();
+  palette.initDefault();
 }
 
 void Sprite::saveFile(const QString &path) const {
@@ -35,9 +38,7 @@ void Sprite::saveFile(const QString &path) const {
   }
   file.write(magic_number, sizeof(magic_number));
   serializeBytes(&file, format);
-  //if (format == Format::palette) {
-  //  serialize(&file, *palette);
-  //}
+  palette.serialize(&file);
  
   serializeBytes(&file, static_cast<uint16_t>(size.width()));
   serializeBytes(&file, static_cast<uint16_t>(size.height()));
@@ -56,9 +57,7 @@ void Sprite::openFile(const QString &path) {
     throw std::exception{};
   }
   deserializeBytes(&file, format);
-  //if (format == Format::palette) {
-  //  deserialize(&file, *palette);
-  //}
+  palette.deserialize(&file);
  
   uint16_t width;
   uint16_t height;
@@ -67,6 +66,7 @@ void Sprite::openFile(const QString &path) {
   size = {width, height};
   Q_EMIT canvasInitialized(format, size);
   timeline.initCanvas(format, size);
+  palette.initCanvas();
   timeline.deserialize(&file);
 }
 

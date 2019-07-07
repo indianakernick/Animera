@@ -460,7 +460,7 @@ void WandSelectTool::addToSelection(const ToolMouseEvent &event) {
         makeSurface<PixelColor>(*event.overlay),
         makeSurface<PixelMask>(mask),
         surface,
-        contrastColor((*palette)[surface.getPixel(event.pos)])
+        contrastColor(palette[surface.getPixel(event.pos)])
       };
       floodFill(manip, event.pos);
       break;

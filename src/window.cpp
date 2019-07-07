@@ -226,6 +226,10 @@ void Window::connectSignals() {
   CONNECT(sprite,          canvasInitialized,   colorPicker,     initCanvas);
   CONNECT(sprite,          canvasInitialized,   tools,           initCanvas);
   
+  CONNECT(sprite.palette,  paletteChanged,      palette,         setPalette);
+  CONNECT(sprite.palette,  paletteChanged,      editor,          setPalette);
+  CONNECT(sprite.palette,  paletteChanged,      tools,           setPalette);
+  
   CONNECT(tools,           cellModified,        editor,          composite);
   CONNECT(tools,           overlayModified,     editor,          compositeOverlay);
   CONNECT(tools,           updateStatusBar,     statusBar,       showPerm);
@@ -255,8 +259,6 @@ void Window::connectSignals() {
   
   CONNECT(palette,         attachColor,         colorPicker,     attach);
   CONNECT(palette,         setColor,            colorPicker,     setColor);
-  CONNECT(palette,         paletteChanged,      editor,          setPalette);
-  CONNECT(palette,         paletteChanged,      tools,           setPalette);
   CONNECT(palette,         paletteColorChanged, editor,          composite);
 }
 

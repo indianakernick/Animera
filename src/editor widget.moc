@@ -22,7 +22,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_EditorWidget_t {
     QByteArrayData data[19];
-    char stringdata0[192];
+    char stringdata0[190];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -47,16 +47,16 @@ QT_MOC_LITERAL(12, 116, 16), // "compositePalette"
 QT_MOC_LITERAL(13, 133, 8), // "setFrame"
 QT_MOC_LITERAL(14, 142, 5), // "Frame"
 QT_MOC_LITERAL(15, 148, 10), // "setPalette"
-QT_MOC_LITERAL(16, 159, 14), // "const Palette*"
-QT_MOC_LITERAL(17, 174, 10), // "initCanvas"
-QT_MOC_LITERAL(18, 185, 6) // "Format"
+QT_MOC_LITERAL(16, 159, 12), // "PaletteCSpan"
+QT_MOC_LITERAL(17, 172, 10), // "initCanvas"
+QT_MOC_LITERAL(18, 183, 6) // "Format"
 
     },
     "EditorWidget\0mouseLeave\0\0QImage*\0"
     "mouseDown\0ButtonType\0mouseMove\0mouseUp\0"
     "keyPress\0Qt::Key\0composite\0compositeOverlay\0"
     "compositePalette\0setFrame\0Frame\0"
-    "setPalette\0const Palette*\0initCanvas\0"
+    "setPalette\0PaletteCSpan\0initCanvas\0"
     "Format"
 };
 #undef QT_MOC_LITERAL
@@ -122,7 +122,7 @@ void EditorWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         case 6: _t->compositeOverlay(); break;
         case 7: _t->compositePalette(); break;
         case 8: _t->setFrame((*reinterpret_cast< const Frame(*)>(_a[1]))); break;
-        case 9: _t->setPalette((*reinterpret_cast< const Palette*(*)>(_a[1]))); break;
+        case 9: _t->setPalette((*reinterpret_cast< PaletteCSpan(*)>(_a[1]))); break;
         case 10: _t->initCanvas((*reinterpret_cast< Format(*)>(_a[1])),(*reinterpret_cast< QSize(*)>(_a[2]))); break;
         default: ;
         }

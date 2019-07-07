@@ -8,39 +8,7 @@
 
 #include "image.hpp"
 
-#include "serial.hpp"
 #include "surface factory.hpp"
-
-void serialize(QIODevice *dev, const QImage &image) {
-  assert(dev);
-  assert(!image.isNull());
-  image.save(dev, "png");
-}
-
-void deserialize(QIODevice *dev, QImage &image) {
-  assert(dev);
-  image.load(dev, "png");
-}
-
-void serialize(QIODevice *dev, const Palette &palette) {
-  assert(dev);
-  serializeBytes(dev, static_cast<uint16_t>(palette.size()));
-  dev->write(
-    reinterpret_cast<const char *>(palette.data()),
-    palette.size() * sizeof(Palette::value_type)
-  );
-}
-
-void deserialize(QIODevice *dev, Palette &palette) {
-  assert(dev);
-  uint16_t size;
-  deserializeBytes(dev, size);
-  palette.resize(size);
-  dev->read(
-    reinterpret_cast<char *>(palette.data()),
-    palette.size() * sizeof(Palette::value_type)
-  );
-}
 
 bool compatible(const QImage &a, const QImage &b) {
   return a.size() == b.size() && a.format() == b.format();

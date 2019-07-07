@@ -42,7 +42,7 @@ public:
     CONNECT(this, toggled, this, toolChanged);
   }
   
-  void setPalette(const Palette *newPalette) {
+  void setPalette(const PaletteCSpan newPalette) {
     tool->setPalette(newPalette);
   }
   
@@ -168,7 +168,7 @@ void ToolSelectWidget::setColors(const ToolColors newColors) {
   colors = newColors;
 }
 
-void ToolSelectWidget::setPalette(const Palette *newPalette) {
+void ToolSelectWidget::setPalette(const PaletteCSpan newPalette) {
   for (ToolWidget *tool : tools) {
     tool->setPalette(newPalette);
   }

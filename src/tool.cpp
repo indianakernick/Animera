@@ -38,7 +38,7 @@ ToolChanges Tool::keyPress(const ToolKeyEvent &) {
   return ToolChanges::none;
 }
 
-void Tool::setPalette(const Palette *newPalette) {
+void Tool::setPalette(const PaletteCSpan newPalette) {
   palette = newPalette;
 }
 

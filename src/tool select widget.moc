@@ -22,7 +22,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_ToolSelectWidget_t {
     QByteArrayData data[24];
-    char stringdata0[263];
+    char stringdata0[261];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -52,9 +52,9 @@ QT_MOC_LITERAL(17, 192, 5), // "Cell*"
 QT_MOC_LITERAL(18, 198, 9), // "setColors"
 QT_MOC_LITERAL(19, 208, 10), // "ToolColors"
 QT_MOC_LITERAL(20, 219, 10), // "setPalette"
-QT_MOC_LITERAL(21, 230, 14), // "const Palette*"
-QT_MOC_LITERAL(22, 245, 10), // "initCanvas"
-QT_MOC_LITERAL(23, 256, 6) // "Format"
+QT_MOC_LITERAL(21, 230, 12), // "PaletteCSpan"
+QT_MOC_LITERAL(22, 243, 10), // "initCanvas"
+QT_MOC_LITERAL(23, 254, 6) // "Format"
 
     },
     "ToolSelectWidget\0cellModified\0\0"
@@ -63,7 +63,7 @@ QT_MOC_LITERAL(23, 256, 6) // "Format"
     "cellRequested\0mouseLeave\0QImage*\0"
     "mouseDown\0ButtonType\0mouseMove\0mouseUp\0"
     "keyPress\0Qt::Key\0setCell\0Cell*\0setColors\0"
-    "ToolColors\0setPalette\0const Palette*\0"
+    "ToolColors\0setPalette\0PaletteCSpan\0"
     "initCanvas\0Format"
 };
 #undef QT_MOC_LITERAL
@@ -138,7 +138,7 @@ void ToolSelectWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
         case 9: _t->keyPress((*reinterpret_cast< Qt::Key(*)>(_a[1])),(*reinterpret_cast< QImage*(*)>(_a[2]))); break;
         case 10: _t->setCell((*reinterpret_cast< Cell*(*)>(_a[1]))); break;
         case 11: _t->setColors((*reinterpret_cast< ToolColors(*)>(_a[1]))); break;
-        case 12: _t->setPalette((*reinterpret_cast< const Palette*(*)>(_a[1]))); break;
+        case 12: _t->setPalette((*reinterpret_cast< PaletteCSpan(*)>(_a[1]))); break;
         case 13: _t->initCanvas((*reinterpret_cast< Format(*)>(_a[1]))); break;
         default: ;
         }

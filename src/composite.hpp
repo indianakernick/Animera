@@ -10,10 +10,11 @@
 #define composite_hpp
 
 #include "cell.hpp"
+#include "palette.hpp"
 
 /// Take all of the images that make up a frame and composite them together into
 /// a single image
-QImage compositeFrame(const Palette *, const Frame &, QSize, Format);
+QImage compositeFrame(PaletteCSpan, const Frame &, QSize, Format);
 /// Composite the overlay on top of the frame
 void compositeOverlay(QImage &, const QImage &);
 
@@ -31,9 +32,9 @@ QImage blitMaskImage(const QImage &, const QImage &, QPoint);
 
 /// Convert a color RGBA image to an RGBA overlay image. Colors are converted
 /// to grayscale
-void writeOverlay(const Palette *, Format, QImage &, const QImage &);
+void writeOverlay(PaletteCSpan, Format, QImage &, const QImage &);
 /// Convert a color RGBA image to an RGBA overlay image using a mask.
 /// Colors are converted to grayscale
-void writeOverlay(const Palette *, Format, QImage &, const QImage &, const QImage &);
+void writeOverlay(PaletteCSpan, Format, QImage &, const QImage &, const QImage &);
 
 #endif

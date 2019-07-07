@@ -10,6 +10,7 @@
 #define tool_hpp
 
 #include "image.hpp"
+#include "palette.hpp"
 #include "status msg.hpp"
 
 class Cell;
@@ -67,12 +68,12 @@ public:
   virtual ToolChanges mouseUp(const ToolMouseEvent &);
   virtual ToolChanges keyPress(const ToolKeyEvent &);
 
-  void setPalette(const Palette *);
+  void setPalette(PaletteCSpan);
   void setFormat(Format);
 
 protected:
   Cell *cell = nullptr;
-  const Palette *palette = nullptr;
+  PaletteCSpan palette;
   Format format;
 };
 

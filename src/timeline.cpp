@@ -135,9 +135,22 @@ void Timeline::initDefault() {
   changeLayerCount();
   changeFrame();
   changePos();
-  Q_EMIT layerChanged(0, layers.front().spans);
-  Q_EMIT visibilityChanged(0, layers.front().visible);
-  Q_EMIT nameChanged(0, layers.front().name);
+  changeLayers(0, 1);
+}
+
+namespace {
+
+void serializeImage(QIODevice *dev, const QImage &image) {
+  assert(dev);
+  assert(!image.isNull());
+  image.save(dev, "png");
+}
+
+void deserializeImage(QIODevice *dev, QImage &image) {
+  assert(dev);
+  image.load(dev, "png");
+}
+
 }
 
 void Timeline::serialize(QIODevice *dev) const {
@@ -153,7 +166,7 @@ void Timeline::serialize(QIODevice *dev) const {
       serializeBytes(dev, static_cast<uint16_t>(span.len));
       serializeBytes(dev, static_cast<bool>(span.cell));
       if (span.cell) {
-        ::serialize(dev, span.cell->image);
+        serializeImage(dev, span.cell->image);
       }
     }
   }
@@ -172,7 +185,7 @@ void Timeline::deserialize(QIODevice *dev) {
       span.len = deserializeBytesAs<uint16_t>(dev);
       if (deserializeBytesAs<bool>(dev)) {
         span.cell = makeCell();
-        ::deserialize(dev, span.cell->image);
+        deserializeImage(dev, span.cell->image);
       }
     }
   }

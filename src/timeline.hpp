@@ -11,7 +11,7 @@
 
 #include "cell.hpp"
 
-class Timeline : public QObject {
+class Timeline final : public QObject {
   Q_OBJECT
 
 public:

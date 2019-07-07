@@ -279,7 +279,7 @@ void EditorWidget::setFrame(const Frame &newFrame) {
   composite();
 }
 
-void EditorWidget::setPalette(const Palette *newPalette) {
+void EditorWidget::setPalette(const PaletteCSpan newPalette) {
   palette = newPalette;
 }
 

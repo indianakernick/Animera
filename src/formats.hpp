@@ -29,11 +29,9 @@ struct FormatARGB {
 
 struct FormatPalette {
   const QRgb *data;
-  size_t size;
   
   Color toColor(const uint8_t pixel) const {
     assert(data);
-    assert(pixel < size);
     return FormatARGB{}.toColor(data[pixel]);
   }
 };

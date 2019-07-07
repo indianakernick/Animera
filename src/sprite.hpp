@@ -9,10 +9,11 @@
 #ifndef sprite_hpp
 #define sprite_hpp
 
+#include "palette.hpp"
 #include "timeline.hpp"
 #include <QtCore/qobject.h>
 
-class Sprite : public QObject {
+class Sprite final : public QObject {
   Q_OBJECT
 
 public Q_SLOTS:
@@ -25,8 +26,7 @@ Q_SIGNALS:
 
 public:
   Timeline timeline;
-  // Palette palette;
-  // ToolColors colors;
+  Palette palette;
 
 private:
   Format format;

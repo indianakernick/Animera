@@ -9,11 +9,7 @@
 #ifndef image_hpp
 #define image_hpp
 
-#include <vector>
 #include <QtGui/qimage.h>
-#include <QtGui/qtransform.h>
-
-using Palette = std::vector<QRgb>;
 
 enum class Format : uint8_t {
   color,
@@ -42,12 +38,6 @@ using PixelColor = QRgb;
 using PixelPalette = uint8_t;
 using PixelGray = uint8_t;
 using PixelMask = uint8_t;
-
-void serialize(QIODevice *, const QImage &);
-void deserialize(QIODevice *, QImage &);
-
-void serialize(QIODevice *, const Palette &);
-void deserialize(QIODevice *, Palette &);
 
 bool compatible(const QImage &, const QImage &);
 QImage makeCompatible(const QImage &);

@@ -40,7 +40,7 @@ public Q_SLOTS:
   void keyPress(Qt::Key, QImage *);
   void setCell(Cell *);
   void setColors(ToolColors);
-  void setPalette(const Palette *);
+  void setPalette(PaletteCSpan);
   void initCanvas(Format);
   
 private:

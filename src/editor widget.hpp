@@ -10,7 +10,8 @@
 #define editor_widget_hpp
 
 #include "tool.hpp"
-#include "animation.hpp"
+#include "cell.hpp"
+#include "palette.hpp"
 #include "scroll bar widget.hpp"
 
 class EditorImage;
@@ -33,13 +34,13 @@ public Q_SLOTS:
   void compositeOverlay();
   void compositePalette();
   void setFrame(const Frame &);
-  void setPalette(const Palette *);
+  void setPalette(PaletteCSpan);
   void initCanvas(Format, QSize);
 
 private:
   EditorImage *view;
   Frame frame;
-  const Palette *palette = nullptr;
+  PaletteCSpan palette;
   QSize size;
   Format format;
 

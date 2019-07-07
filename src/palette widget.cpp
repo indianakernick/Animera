@@ -8,7 +8,6 @@
 
 #include "palette widget.hpp"
 
-#include <array>
 #include "config.hpp"
 #include "connect.hpp"
 #include <QtGui/qevent.h>
@@ -16,63 +15,6 @@
 #include "color handle.hpp"
 #include "radio button widget.hpp"
 #include <QtWidgets/qgridlayout.h>
-
-namespace {
-
-constexpr int quantColor(const double size, const int color) {
-  return 255 * color / size + 0.5;
-}
-
-constexpr QRgb quantColor(const int size, const int r, const int g, const int b) {
-  return qRgb(quantColor(size, r), quantColor(size, g), quantColor(size, b));
-}
-
-constexpr QRgb quantGray(const int size, const int y) {
-  const int gray = quantColor(size, y);
-  return qRgb(gray, gray, gray);
-}
-
-constexpr std::array<QRgb, 33> default_palette = {
-  quantColor(4, 4, 0, 0),
-  quantColor(4, 4, 1, 0),
-  quantColor(4, 4, 2, 0),
-  quantColor(4, 4, 3, 0),
-  quantColor(4, 4, 4, 0),
-  quantColor(4, 3, 4, 0),
-  quantColor(4, 2, 4, 0),
-  quantColor(4, 1, 4, 0),
-  
-  quantColor(4, 0, 4, 0),
-  quantColor(4, 0, 4, 1),
-  quantColor(4, 0, 4, 2),
-  quantColor(4, 0, 4, 3),
-  quantColor(4, 0, 4, 4),
-  quantColor(4, 0, 3, 4),
-  quantColor(4, 0, 2, 4),
-  quantColor(4, 0, 1, 4),
-  
-  quantColor(4, 0, 0, 4),
-  quantColor(4, 1, 0, 4),
-  quantColor(4, 2, 0, 4),
-  quantColor(4, 3, 0, 4),
-  quantColor(4, 4, 0, 4),
-  quantColor(4, 4, 0, 3),
-  quantColor(4, 4, 0, 2),
-  quantColor(4, 4, 0, 1),
-  
-  quantGray(8, 0),
-  quantGray(8, 1),
-  quantGray(8, 2),
-  quantGray(8, 3),
-  quantGray(8, 4),
-  quantGray(8, 5),
-  quantGray(8, 6),
-  quantGray(8, 7),
-  
-  quantGray(8, 8),
-};
-
-}
 
 class PaletteColorWidget final : public RadioButtonWidget, public ColorHandle {
   Q_OBJECT
@@ -175,25 +117,23 @@ class PaletteTableWidget final : public QWidget {
   
 public:
   explicit PaletteTableWidget(QWidget *parent)
-    : QWidget{parent}, palette(pal_colors) {
-    setupLayout();
-    std::copy(default_palette.cbegin(), default_palette.cend(), palette.begin());
-  }
+    : QWidget{parent} {}
 
-public Q_SLOT:
-  void changePalette() {
-    Q_EMIT paletteChanged(&palette);
+public Q_SLOTS:
+  void setPalette(const PaletteSpan newPalette) {
+    palette = newPalette;
+    setupLayout();
   }
 
 Q_SIGNALS:
   void attachColor(ColorHandle *);
   void setColor(QRgb);
-  void paletteChanged(Palette *);
+  void paletteChanged(PaletteSpan);
   void paletteColorChanged();
 
 private:
   std::vector<PaletteColorWidget *> colors;
-  Palette palette;
+  PaletteSpan palette;
   
   void setupLayout() {
     QGridLayout *grid = new QGridLayout{this};
@@ -238,12 +178,15 @@ PaletteWidget::PaletteWidget(QWidget *parent)
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   CONNECT(table, attachColor,         this, attachColor);
   CONNECT(table, setColor,            this, setColor);
-  CONNECT(table, paletteChanged,      this, paletteChanged);
   CONNECT(table, paletteColorChanged, this, paletteColorChanged);
 }
 
 void PaletteWidget::initCanvas() {
-  table->changePalette();
+  
+}
+
+void PaletteWidget::setPalette(PaletteSpan palette) {
+  table->setPalette(palette);
 }
 
 #include "palette widget.moc"

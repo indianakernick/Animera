@@ -36,9 +36,8 @@ void compositeColor(Surface<PixelColor> output, const Frame &frame) {
   });
 }
 
-void compositePalette(Surface<PixelColor> output, const Frame &frame, const Palette *palette) {
-  assert(palette);
-  FormatPalette format{palette->data(), palette->size()};
+void compositePalette(Surface<PixelColor> output, const Frame &frame, PaletteCSpan palette) {
+  FormatPalette format{palette.data()};
   eachImage(frame, [output, format](const QImage &image) {
     porterDuff(
       mode_src_over,
@@ -65,7 +64,7 @@ void compositeGray(Surface<PixelColor> output, const Frame &frame) {
 }
 
 QImage compositeFrame(
-  const Palette *palette,
+  PaletteCSpan palette,
   const Frame &frame,
   const QSize size,
   const Format format
@@ -171,15 +170,12 @@ void colorToOverlay(Surface<PixelColor> overlay, CSurface<PixelColor> source) {
   }
 }
 
-void paletteToOverlay(Surface<PixelColor> overlay, CSurface<PixelPalette> source, const Palette *palette) {
-  assert(palette);
-  const QRgb *data = palette->data();
-  assert(data);
+void paletteToOverlay(Surface<PixelColor> overlay, CSurface<PixelPalette> source, PaletteCSpan palette) {
   auto sourceRowIter = source.range().begin();
   for (auto row : overlay.range()) {
     const PixelPalette *sourcePixel = (*sourceRowIter).begin();
     for (PixelColor &pixel : row) {
-      const QRgb color = data[*sourcePixel];
+      const QRgb color = palette[*sourcePixel];
       const int gray = qGray(color);
       pixel = qRgba(gray, gray, gray, convertAlpha(qAlpha(color)));
       ++sourcePixel;
@@ -204,7 +200,7 @@ void grayToOverlay(Surface<PixelColor> overlay, CSurface<PixelGray> source) {
 }
 
 void writeOverlay(
-  const Palette *palette,
+  PaletteCSpan palette,
   const Format format,
   QImage &overlay,
   const QImage &source
@@ -226,7 +222,7 @@ void writeOverlay(
 }
 
 void writeOverlay(
-  const Palette *palette,
+  PaletteCSpan palette,
   const Format format,
   QImage &overlay,
   const QImage &source,
