@@ -19,7 +19,7 @@ class SampleObject final : public QObject {
   Q_OBJECT
 
 public Q_SLOTS:
-  void changePos(Cell *);
+  void setCell(Cell *);
   void mouseMove(QPoint);
   void keyPress(Qt::Key);
 

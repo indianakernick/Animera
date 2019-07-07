@@ -2310,7 +2310,7 @@ int main(int argc, char **argv) {
   compositeOverlay(drawing, overlay);
   drawing.save("/Users/indikernick/Desktop/Test/overlay_7.png");
   
-  source.image.data.save("/Users/indikernick/Desktop/Test/brush.png");*/
+  source.image.save("/Users/indikernick/Desktop/Test/brush.png");*/
 
 #endif
   

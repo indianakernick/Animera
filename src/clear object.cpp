@@ -11,18 +11,18 @@
 #include "cell.hpp"
 #include "config.hpp"
 
-void ClearObject::changePos(Cell *newCell) {
+void ClearObject::setCell(Cell *newCell) {
   cell = newCell;
 }
 
 void ClearObject::keyPress(const Qt::Key key) {
   if (cell && key == key_clear) {
-    clearImage(cell->image.data, color);
+    clearImage(cell->image, color);
     Q_EMIT cellModified();
   }
 }
 
-void ClearObject::changeColors(const ToolColors colors) {
+void ClearObject::setColors(const ToolColors colors) {
   color = colors.erase;
 }
 

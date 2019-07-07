@@ -8,14 +8,14 @@
 
 #include "cell.hpp"
 
-Cell::Cell(Image image)
+Cell::Cell(QImage image)
   : image{image} {
-  image.data.detach();
+  image.detach();
 }
 
-Cell::Cell(const QSize size, const Format format, Palette *palette)
-  : image{{size, qimageFormat(format)}, palette} {
-  clearImage(image.data);
+Cell::Cell(const QSize size, const Format format)
+  : image{size, qimageFormat(format)} {
+  clearImage(image);
 }
 
 CellPtr Cell::clone() const {

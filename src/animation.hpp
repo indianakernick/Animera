@@ -15,6 +15,7 @@
 // @TODO Most of this should be in the TimelineWidget
 // The timeline should be in charge of the cells that make up the project
 
+/*
 class Animation : public QObject {
 public:
   void setPalette(Palette *);
@@ -48,5 +49,7 @@ private:
   void updateLayer(LayerIdx);
   bool validRect(CellRect) const;
 };
+
+*/
 
 #endif

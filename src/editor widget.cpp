@@ -261,7 +261,7 @@ EditorWidget::EditorWidget(QWidget *parent)
 }
 
 void EditorWidget::composite() {
-  view->setImage(compositeFrame(palette, frame, visibility, size, format));
+  view->setImage(compositeFrame(palette, frame, size, format));
 }
 
 void EditorWidget::compositeOverlay() {
@@ -274,15 +274,12 @@ void EditorWidget::compositePalette() {
   }
 }
 
-void EditorWidget::changeFrame(const Frame &newFrame) {
+void EditorWidget::setFrame(const Frame &newFrame) {
   frame = newFrame;
+  composite();
 }
 
-void EditorWidget::changeVisible(const LayerVisible &newVisibility) {
-  visibility = newVisibility;
-}
-
-void EditorWidget::changePalette(const Palette *newPalette) {
+void EditorWidget::setPalette(const Palette *newPalette) {
   palette = newPalette;
 }
 

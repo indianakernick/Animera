@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_LayerNameWidget_t {
-    QByteArrayData data[3];
-    char stringdata0[32];
+    QByteArrayData data[8];
+    char stringdata0[95];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -32,11 +32,18 @@ struct qt_meta_stringdata_LayerNameWidget_t {
 static const qt_meta_stringdata_LayerNameWidget_t qt_meta_stringdata_LayerNameWidget = {
     {
 QT_MOC_LITERAL(0, 0, 15), // "LayerNameWidget"
-QT_MOC_LITERAL(1, 16, 14), // "visibleToggled"
-QT_MOC_LITERAL(2, 31, 0) // ""
+QT_MOC_LITERAL(1, 16, 17), // "visibilityChanged"
+QT_MOC_LITERAL(2, 34, 0), // ""
+QT_MOC_LITERAL(3, 35, 8), // "LayerIdx"
+QT_MOC_LITERAL(4, 44, 11), // "nameChanged"
+QT_MOC_LITERAL(5, 56, 16), // "std::string_view"
+QT_MOC_LITERAL(6, 73, 13), // "setVisibility"
+QT_MOC_LITERAL(7, 87, 7) // "setName"
 
     },
-    "LayerNameWidget\0visibleToggled\0"
+    "LayerNameWidget\0visibilityChanged\0\0"
+    "LayerIdx\0nameChanged\0std::string_view\0"
+    "setVisibility\0setName"
 };
 #undef QT_MOC_LITERAL
 
@@ -46,18 +53,28 @@ static const uint qt_meta_data_LayerNameWidget[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-       1,   14, // methods
+       4,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       1,       // signalCount
+       2,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    0,   19,    2, 0x06 /* Public */,
+       1,    2,   34,    2, 0x06 /* Public */,
+       4,    2,   39,    2, 0x06 /* Public */,
+
+ // slots: name, argc, parameters, tag, flags
+       6,    1,   44,    2, 0x0a /* Public */,
+       7,    1,   47,    2, 0x0a /* Public */,
 
  // signals: parameters
-    QMetaType::Void,
+    QMetaType::Void, 0x80000000 | 3, QMetaType::Bool,    2,    2,
+    QMetaType::Void, 0x80000000 | 3, 0x80000000 | 5,    2,    2,
+
+ // slots: parameters
+    QMetaType::Void, QMetaType::Bool,    2,
+    QMetaType::Void, 0x80000000 | 5,    2,
 
        0        // eod
 };
@@ -68,20 +85,29 @@ void LayerNameWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int 
         auto *_t = static_cast<LayerNameWidget *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->visibleToggled(); break;
+        case 0: _t->visibilityChanged((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
+        case 1: _t->nameChanged((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< std::string_view(*)>(_a[2]))); break;
+        case 2: _t->setVisibility((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 3: _t->setName((*reinterpret_cast< std::string_view(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
         int *result = reinterpret_cast<int *>(_a[0]);
         {
-            using _t = void (LayerNameWidget::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&LayerNameWidget::visibleToggled)) {
+            using _t = void (LayerNameWidget::*)(LayerIdx , bool );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&LayerNameWidget::visibilityChanged)) {
                 *result = 0;
                 return;
             }
         }
+        {
+            using _t = void (LayerNameWidget::*)(LayerIdx , std::string_view );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&LayerNameWidget::nameChanged)) {
+                *result = 1;
+                return;
+            }
+        }
     }
-    Q_UNUSED(_a);
 }
 
 QT_INIT_METAOBJECT const QMetaObject LayerNameWidget::staticMetaObject = { {
@@ -113,25 +139,33 @@ int LayerNameWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 1)
+        if (_id < 4)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 1;
+        _id -= 4;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 1)
+        if (_id < 4)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 1;
+        _id -= 4;
     }
     return _id;
 }
 
 // SIGNAL 0
-void LayerNameWidget::visibleToggled()
+void LayerNameWidget::visibilityChanged(LayerIdx _t1, bool _t2)
 {
-    QMetaObject::activate(this, &staticMetaObject, 0, nullptr);
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)) };
+    QMetaObject::activate(this, &staticMetaObject, 0, _a);
+}
+
+// SIGNAL 1
+void LayerNameWidget::nameChanged(LayerIdx _t1, std::string_view _t2)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)) };
+    QMetaObject::activate(this, &staticMetaObject, 1, _a);
 }
 struct qt_meta_stringdata_LayersWidget_t {
-    QByteArrayData data[13];
-    char stringdata0[149];
+    QByteArrayData data[10];
+    char stringdata0[116];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -141,24 +175,21 @@ struct qt_meta_stringdata_LayersWidget_t {
 static const qt_meta_stringdata_LayersWidget_t qt_meta_stringdata_LayersWidget = {
     {
 QT_MOC_LITERAL(0, 0, 12), // "LayersWidget"
-QT_MOC_LITERAL(1, 13, 14), // "visibleChanged"
-QT_MOC_LITERAL(2, 28, 0), // ""
-QT_MOC_LITERAL(3, 29, 12), // "LayerVisible"
-QT_MOC_LITERAL(4, 42, 9), // "composite"
-QT_MOC_LITERAL(5, 52, 13), // "changeVisible"
-QT_MOC_LITERAL(6, 66, 9), // "setMargin"
-QT_MOC_LITERAL(7, 76, 11), // "insertLayer"
-QT_MOC_LITERAL(8, 88, 8), // "LayerIdx"
-QT_MOC_LITERAL(9, 97, 11), // "removeLayer"
-QT_MOC_LITERAL(10, 109, 11), // "moveLayerUp"
-QT_MOC_LITERAL(11, 121, 13), // "moveLayerDown"
-QT_MOC_LITERAL(12, 135, 13) // "toggleVisible"
+QT_MOC_LITERAL(1, 13, 17), // "visibilityChanged"
+QT_MOC_LITERAL(2, 31, 0), // ""
+QT_MOC_LITERAL(3, 32, 8), // "LayerIdx"
+QT_MOC_LITERAL(4, 41, 11), // "nameChanged"
+QT_MOC_LITERAL(5, 53, 16), // "std::string_view"
+QT_MOC_LITERAL(6, 70, 9), // "setMargin"
+QT_MOC_LITERAL(7, 80, 13), // "setVisibility"
+QT_MOC_LITERAL(8, 94, 7), // "setName"
+QT_MOC_LITERAL(9, 102, 13) // "setLayerCount"
 
     },
-    "LayersWidget\0visibleChanged\0\0LayerVisible\0"
-    "composite\0changeVisible\0setMargin\0"
-    "insertLayer\0LayerIdx\0removeLayer\0"
-    "moveLayerUp\0moveLayerDown\0toggleVisible"
+    "LayersWidget\0visibilityChanged\0\0"
+    "LayerIdx\0nameChanged\0std::string_view\0"
+    "setMargin\0setVisibility\0setName\0"
+    "setLayerCount"
 };
 #undef QT_MOC_LITERAL
 
@@ -168,7 +199,7 @@ static const uint qt_meta_data_LayersWidget[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-       9,   14, // methods
+       6,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -176,30 +207,24 @@ static const uint qt_meta_data_LayersWidget[] = {
        2,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    1,   59,    2, 0x06 /* Public */,
-       4,    0,   62,    2, 0x06 /* Public */,
+       1,    2,   44,    2, 0x06 /* Public */,
+       4,    2,   49,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       5,    0,   63,    2, 0x08 /* Private */,
-       6,    1,   64,    2, 0x0a /* Public */,
-       7,    1,   67,    2, 0x0a /* Public */,
-       9,    1,   70,    2, 0x0a /* Public */,
-      10,    1,   73,    2, 0x0a /* Public */,
-      11,    1,   76,    2, 0x0a /* Public */,
-      12,    1,   79,    2, 0x0a /* Public */,
+       6,    1,   54,    2, 0x0a /* Public */,
+       7,    2,   57,    2, 0x0a /* Public */,
+       8,    2,   62,    2, 0x0a /* Public */,
+       9,    1,   67,    2, 0x0a /* Public */,
 
  // signals: parameters
-    QMetaType::Void, 0x80000000 | 3,    2,
-    QMetaType::Void,
+    QMetaType::Void, 0x80000000 | 3, QMetaType::Bool,    2,    2,
+    QMetaType::Void, 0x80000000 | 3, 0x80000000 | 5,    2,    2,
 
  // slots: parameters
-    QMetaType::Void,
     QMetaType::Void, QMetaType::Int,    2,
-    QMetaType::Void, 0x80000000 | 8,    2,
-    QMetaType::Void, 0x80000000 | 8,    2,
-    QMetaType::Void, 0x80000000 | 8,    2,
-    QMetaType::Void, 0x80000000 | 8,    2,
-    QMetaType::Void, 0x80000000 | 8,    2,
+    QMetaType::Void, 0x80000000 | 3, QMetaType::Bool,    2,    2,
+    QMetaType::Void, 0x80000000 | 3, 0x80000000 | 5,    2,    2,
+    QMetaType::Void, 0x80000000 | 3,    2,
 
        0        // eod
 };
@@ -210,29 +235,26 @@ void LayersWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         auto *_t = static_cast<LayersWidget *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->visibleChanged((*reinterpret_cast< const LayerVisible(*)>(_a[1]))); break;
-        case 1: _t->composite(); break;
-        case 2: _t->changeVisible(); break;
-        case 3: _t->setMargin((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 4: _t->insertLayer((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;
-        case 5: _t->removeLayer((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;
-        case 6: _t->moveLayerUp((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;
-        case 7: _t->moveLayerDown((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;
-        case 8: _t->toggleVisible((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;
+        case 0: _t->visibilityChanged((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
+        case 1: _t->nameChanged((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< std::string_view(*)>(_a[2]))); break;
+        case 2: _t->setMargin((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 3: _t->setVisibility((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
+        case 4: _t->setName((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< std::string_view(*)>(_a[2]))); break;
+        case 5: _t->setLayerCount((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
         int *result = reinterpret_cast<int *>(_a[0]);
         {
-            using _t = void (LayersWidget::*)(const LayerVisible & );
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&LayersWidget::visibleChanged)) {
+            using _t = void (LayersWidget::*)(LayerIdx , bool );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&LayersWidget::visibilityChanged)) {
                 *result = 0;
                 return;
             }
         }
         {
-            using _t = void (LayersWidget::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&LayersWidget::composite)) {
+            using _t = void (LayersWidget::*)(LayerIdx , std::string_view );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&LayersWidget::nameChanged)) {
                 *result = 1;
                 return;
             }
@@ -269,28 +291,29 @@ int LayersWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 9)
+        if (_id < 6)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 9;
+        _id -= 6;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 9)
+        if (_id < 6)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 9;
+        _id -= 6;
     }
     return _id;
 }
 
 // SIGNAL 0
-void LayersWidget::visibleChanged(const LayerVisible & _t1)
+void LayersWidget::visibilityChanged(LayerIdx _t1, bool _t2)
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);
 }
 
 // SIGNAL 1
-void LayersWidget::composite()
+void LayersWidget::nameChanged(LayerIdx _t1, std::string_view _t2)
 {
-    QMetaObject::activate(this, &staticMetaObject, 1, nullptr);
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)) };
+    QMetaObject::activate(this, &staticMetaObject, 1, _a);
 }
 struct qt_meta_stringdata_LayerScrollWidget_t {
     QByteArrayData data[3];

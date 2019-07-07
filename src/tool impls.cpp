@@ -42,7 +42,7 @@ ToolChanges BrushTool::mouseDown(const ToolMouseEvent &event) {
   symPoint(*event.status, event.pos);
   lastPos = event.pos;
   color = selectColor(event.colors, event.button);
-  return drawnChanges(symPoint(cell->image.data, color, lastPos));
+  return drawnChanges(symPoint(cell->image, color, lastPos));
 }
 
 ToolChanges BrushTool::mouseMove(const ToolMouseEvent &event) {
@@ -50,15 +50,14 @@ ToolChanges BrushTool::mouseMove(const ToolMouseEvent &event) {
   symPoint(*event.overlay, tool_overlay_color, event.pos);
   symPoint(*event.status, event.pos);
   if (event.button == ButtonType::none) return ToolChanges::overlay;
-  Image &img = cell->image;
-  const bool drawn = symLine(img.data, color, {lastPos, event.pos});
+  const bool drawn = symLine(cell->image, color, {lastPos, event.pos});
   lastPos = event.pos;
   return drawnChanges(drawn);
 }
 
 ToolChanges BrushTool::mouseUp(const ToolMouseEvent &event) {
   symPoint(*event.status, event.pos);
-  return drawnChanges(symLine(cell->image.data, color, {lastPos, event.pos}));
+  return drawnChanges(symLine(cell->image, color, {lastPos, event.pos}));
 }
 
 void BrushTool::setRadius(const int newRadius) {
@@ -71,7 +70,7 @@ void BrushTool::setMode(const SymmetryMode newMode) {
 }
 
 void BrushTool::symPoint(StatusMsg &status, const QPoint point) {
-  const QSize size = cell->image.data.size();
+  const QSize size = cell->image.size();
   const QPoint refl = {size.width() - point.x() - 1, size.height() - point.y() - 1};
   status.appendLabeled(point);
   if (mode & SymmetryMode::hori) {
@@ -142,7 +141,7 @@ ToolChanges FloodFillTool::mouseDown(const ToolMouseEvent &event) {
   drawSquarePoint(*event.overlay, tool_overlay_color, event.pos);
   event.status->appendLabeled(event.pos);
   const QRgb color = selectColor(event.colors, event.button);
-  return drawnChanges(drawFloodFill(cell->image.data, color, event.pos));
+  return drawnChanges(drawFloodFill(cell->image, color, event.pos));
 }
 
 ToolChanges FloodFillTool::mouseMove(const ToolMouseEvent &event) {
@@ -172,10 +171,10 @@ ToolChanges RectangleSelectTool::mouseDown(const ToolMouseEvent &event) {
     return ToolChanges::overlay;
   } else if (mode == SelectMode::paste) {
     if (event.button == ButtonType::primary) {
-      blitImage(cell->image.data, selection, event.pos + offset);
+      blitImage(cell->image, selection, event.pos + offset);
     } else if (event.button == ButtonType::erase) {
       const QRect rect{event.pos + offset, selection.size()};
-      drawFilledRect(cell->image.data, event.colors.erase, rect);
+      drawFilledRect(cell->image, event.colors.erase, rect);
     } else {
       return ToolChanges::overlay;
     }
@@ -208,7 +207,7 @@ ToolChanges RectangleSelectTool::mouseUp(const ToolMouseEvent &event) {
   if (mode == SelectMode::copy) {
     drawSquarePoint(*event.overlay, tool_overlay_color, event.pos);
     const QRect rect = QRect{startPos, event.pos}.normalized();
-    selection = blitImage(cell->image.data, rect);
+    selection = blitImage(cell->image, rect);
     overlay = QImage{selection.size(), qimageFormat(Format::color)};
     writeOverlay(palette, format, overlay, selection);
     offset = rect.topLeft() - event.pos;
@@ -240,10 +239,10 @@ ToolChanges PolygonSelectTool::mouseDown(const ToolMouseEvent &event) {
     return ToolChanges::overlay;
   } else if (mode == SelectMode::paste) {
     if (event.button == ButtonType::primary) {
-      blitMaskImage(cell->image.data, mask, selection, event.pos + offset);
+      blitMaskImage(cell->image, mask, selection, event.pos + offset);
     } else if (event.button == ButtonType::erase) {
       // @TODO should this be encapsulated in another file?
-      visitSurface(cell->image.data, event.colors.erase, [this, &event](auto surface, auto color) {
+      visitSurface(cell->image, event.colors.erase, [this, &event](auto surface, auto color) {
         maskFillRegion(surface, makeCSurface<uint8_t>(mask), color, event.pos + offset);
       });
     } else {
@@ -278,11 +277,11 @@ ToolChanges PolygonSelectTool::mouseUp(const ToolMouseEvent &event) {
   QPolygon p;
   if (mode == SelectMode::copy) {
     polygon.push(event.pos);
-    const QRect clippedBounds = polygon.bounds().intersected(cell->image.data.rect());
+    const QRect clippedBounds = polygon.bounds().intersected(cell->image.rect());
     mask = QImage{clippedBounds.size(), mask_format};
     clearImage(mask);
     drawFilledPolygon(mask, mask_color_on, polygon, -clippedBounds.topLeft());
-    selection = blitMaskImage(cell->image.data, mask, clippedBounds.topLeft());
+    selection = blitMaskImage(cell->image, mask, clippedBounds.topLeft());
     overlay = QImage{selection.size(), qimageFormat(Format::color)};
     writeOverlay(palette, format, overlay, selection, mask);
     offset = clippedBounds.topLeft() - event.pos;
@@ -297,8 +296,8 @@ ToolChanges PolygonSelectTool::mouseUp(const ToolMouseEvent &event) {
 void WandSelectTool::attachCell(Cell *newCell) {
   Tool::attachCell(newCell);
   mode = SelectMode::copy;
-  if (!compatible(newCell->image.data, selection)) {
-    selection = makeCompatible(cell->image.data);
+  if (!compatible(newCell->image, selection)) {
+    selection = makeCompatible(cell->image);
     overlay = QImage{selection.size(), qimageFormat(Format::color)};
     mask = makeMask(selection.size());
   }
@@ -343,9 +342,9 @@ ToolChanges WandSelectTool::mouseDown(const ToolMouseEvent &event) {
   } else if (mode == SelectMode::paste) {
     // @TODO this is very similar to PolygonSelectTool
     if (event.button == ButtonType::primary) {
-      blitMaskImage(cell->image.data, mask, selection, event.pos + offset);
+      blitMaskImage(cell->image, mask, selection, event.pos + offset);
     } else if (event.button == ButtonType::erase) {
-      visitSurface(cell->image.data, event.colors.erase, [this, &event](auto surface, auto color) {
+      visitSurface(cell->image, event.colors.erase, [this, &event](auto surface, auto color) {
         maskFillRegion(surface, makeCSurface<uint8_t>(mask), color, event.pos + offset);
       });
     } else {
@@ -380,7 +379,7 @@ void WandSelectTool::toggleMode(const ToolMouseEvent &event) {
     clearImage(selection);
     clearImage(mask);
   } else if (mode == SelectMode::paste) {
-    selection = blitMaskImage(cell->image.data, mask, {0, 0});
+    selection = blitMaskImage(cell->image, mask, {0, 0});
     writeOverlay(palette, format, overlay, selection, mask);
     offset = -event.pos;
     mode = SelectMode::paste;
@@ -445,7 +444,7 @@ private:
 void WandSelectTool::addToSelection(const ToolMouseEvent &event) {
   switch (format) {
     case Format::color: {
-      Surface surface = makeCSurface<PixelColor>(cell->image.data);
+      Surface surface = makeCSurface<PixelColor>(cell->image);
       WandManip manip{
         makeSurface<PixelColor>(*event.overlay),
         makeSurface<PixelMask>(mask),
@@ -456,7 +455,7 @@ void WandSelectTool::addToSelection(const ToolMouseEvent &event) {
       break;
     }
     case Format::palette: {
-      Surface surface = makeCSurface<PixelPalette>(cell->image.data);
+      Surface surface = makeCSurface<PixelPalette>(cell->image);
       WandManip manip{
         makeSurface<PixelColor>(*event.overlay),
         makeSurface<PixelMask>(mask),
@@ -467,7 +466,7 @@ void WandSelectTool::addToSelection(const ToolMouseEvent &event) {
       break;
     }
     case Format::gray: {
-      Surface surface = makeCSurface<PixelGray>(cell->image.data);
+      Surface surface = makeCSurface<PixelGray>(cell->image);
       WandManip manip{
         makeSurface<PixelColor>(*event.overlay),
         makeSurface<PixelMask>(mask),
@@ -488,8 +487,8 @@ DragPaintTool<Derived>::~DragPaintTool() {
 template <typename Derived>
 void DragPaintTool<Derived>::attachCell(Cell *newCell) {
   Tool::attachCell(newCell);
-  if (!compatible(cleanImage, cell->image.data)) {
-    cleanImage = makeCompatible(cell->image.data);
+  if (!compatible(cleanImage, cell->image)) {
+    cleanImage = makeCompatible(cell->image);
   }
 }
 
@@ -504,7 +503,7 @@ ToolChanges DragPaintTool<Derived>::mouseDown(const ToolMouseEvent &event) {
   that()->drawOverlay(*event.overlay, event.pos);
   that()->updateStatus(*event.status, event.pos, event.pos);
   startPos = event.pos;
-  copyImage(cleanImage, cell->image.data);
+  copyImage(cleanImage, cell->image);
   color = selectColor(event.colors, event.button);
   return drawnChanges(that()->drawPoint(cell->image, startPos));
 }
@@ -518,7 +517,7 @@ ToolChanges DragPaintTool<Derived>::mouseMove(const ToolMouseEvent &event) {
     return ToolChanges::overlay;
   }
   that()->updateStatus(*event.status, startPos, event.pos);
-  copyImage(cell->image.data, cleanImage);
+  copyImage(cell->image, cleanImage);
   return drawnChanges(that()->drawDrag(cell->image, startPos, event.pos));
 }
 
@@ -526,7 +525,7 @@ template <typename Derived>
 ToolChanges DragPaintTool<Derived>::mouseUp(const ToolMouseEvent &event) {
   clearImage(*event.overlay);
   that()->drawOverlay(*event.overlay, event.pos);
-  copyImage(cell->image.data, cleanImage);
+  copyImage(cell->image, cleanImage);
   const bool drawn = that()->drawDrag(cell->image, startPos, event.pos);
   startPos = no_point;
   return drawnChanges(drawn);
@@ -553,12 +552,12 @@ void LineTool::setRadius(const int newRadius) {
   radius = newRadius;
 }
 
-bool LineTool::drawPoint(Image &image, const QPoint pos) {
-  return drawRoundPoint(image.data, getColor(), pos, radius);
+bool LineTool::drawPoint(QImage &image, const QPoint pos) {
+  return drawRoundPoint(image, getColor(), pos, radius);
 }
 
-bool LineTool::drawDrag(Image &image, const QPoint start, const QPoint end) {
-  return drawLine(image.data, getColor(), {start, end}, radius);
+bool LineTool::drawDrag(QImage &image, const QPoint start, const QPoint end) {
+  return drawLine(image, getColor(), {start, end}, radius);
 }
 
 void LineTool::drawOverlay(QImage &overlay, const QPoint pos) {
@@ -582,8 +581,8 @@ void StrokedCircleTool::setThick(const int newThick) {
   thickness = newThick;
 }
 
-bool StrokedCircleTool::drawPoint(Image &image, const QPoint pos) {
-  return drawSquarePoint(image.data, getColor(), pos, shape);
+bool StrokedCircleTool::drawPoint(QImage &image, const QPoint pos) {
+  return drawSquarePoint(image, getColor(), pos, shape);
 }
 
 namespace {
@@ -600,8 +599,8 @@ int calcRadius(const QPoint start, const QPoint end) {
 
 }
 
-bool StrokedCircleTool::drawDrag(Image &image, const QPoint start, const QPoint end) {
-  return drawStrokedCircle(image.data, getColor(), start, calcRadius(start, end), thickness, shape);
+bool StrokedCircleTool::drawDrag(QImage &image, const QPoint start, const QPoint end) {
+  return drawStrokedCircle(image, getColor(), start, calcRadius(start, end), thickness, shape);
 }
 
 void StrokedCircleTool::drawOverlay(QImage &overlay, const QPoint pos) {
@@ -621,12 +620,12 @@ void FilledCircleTool::setShape(const CircleShape newShape) {
   shape = newShape;
 }
 
-bool FilledCircleTool::drawPoint(Image &image, const QPoint pos) {
-  return drawSquarePoint(image.data, getColor(), pos, shape);
+bool FilledCircleTool::drawPoint(QImage &image, const QPoint pos) {
+  return drawSquarePoint(image, getColor(), pos, shape);
 }
 
-bool FilledCircleTool::drawDrag(Image &image, const QPoint start, const QPoint end) {
-  return drawFilledCircle(image.data, getColor(), start, calcRadius(start, end), shape);
+bool FilledCircleTool::drawDrag(QImage &image, const QPoint start, const QPoint end) {
+  return drawFilledCircle(image, getColor(), start, calcRadius(start, end), shape);
 }
 
 void FilledCircleTool::drawOverlay(QImage &overlay, const QPoint pos) {
@@ -646,13 +645,13 @@ void StrokedRectangleTool::setThick(const int newThick) {
   thickness = newThick;
 }
 
-bool StrokedRectangleTool::drawPoint(Image &image, const QPoint pos) {
-  return drawSquarePoint(image.data, getColor(), pos);
+bool StrokedRectangleTool::drawPoint(QImage &image, const QPoint pos) {
+  return drawSquarePoint(image, getColor(), pos);
 }
 
-bool StrokedRectangleTool::drawDrag(Image &image, const QPoint start, const QPoint end) {
+bool StrokedRectangleTool::drawDrag(QImage &image, const QPoint start, const QPoint end) {
   const QRect rect = QRect{start, end}.normalized();
-  return drawStrokedRect(image.data, getColor(), rect, thickness);
+  return drawStrokedRect(image, getColor(), rect, thickness);
 }
 
 void StrokedRectangleTool::drawOverlay(QImage &overlay, const QPoint pos) {
@@ -665,13 +664,13 @@ void StrokedRectangleTool::updateStatus(StatusMsg &status, const QPoint start, c
 
 FilledRectangleTool::~FilledRectangleTool() = default;
 
-bool FilledRectangleTool::drawPoint(Image &image, const QPoint pos) {
-  return drawSquarePoint(image.data, getColor(), pos);
+bool FilledRectangleTool::drawPoint(QImage &image, const QPoint pos) {
+  return drawSquarePoint(image, getColor(), pos);
 }
 
-bool FilledRectangleTool::drawDrag(Image &image, const QPoint start, const QPoint end) {
+bool FilledRectangleTool::drawDrag(QImage &image, const QPoint start, const QPoint end) {
   const QRect rect = QRect{start, end}.normalized();
-  return drawFilledRect(image.data, getColor(), rect);
+  return drawFilledRect(image, getColor(), rect);
 }
 
 void FilledRectangleTool::drawOverlay(QImage &overlay, const QPoint pos) {
@@ -684,10 +683,10 @@ void FilledRectangleTool::updateStatus(StatusMsg &status, const QPoint start, co
 
 void TranslateTool::attachCell(Cell *newCell) {
   Tool::attachCell(newCell);
-  if (!compatible(cleanImage, cell->image.data)) {
-    cleanImage = makeCompatible(cell->image.data);
+  if (!compatible(cleanImage, cell->image)) {
+    cleanImage = makeCompatible(cell->image);
   }
-  copyImage(cleanImage, cell->image.data);
+  copyImage(cleanImage, cell->image);
   pos = {0, 0};
 }
 
@@ -746,7 +745,7 @@ void TranslateTool::translate(const QPoint move, const QRgb eraseColor) {
 }
 
 void TranslateTool::updateSourceImage(const QRgb eraseColor) {
-  QImage &src = cell->image.data;
+  QImage &src = cell->image;
   clearImage(src, eraseColor);
   if (src.depth() == 32) {
     copyRegion(makeSurface<uint32_t>(src), makeCSurface<uint32_t>(cleanImage), pos);
@@ -791,7 +790,7 @@ ToolChanges FlipTool::mouseMove(const ToolMouseEvent &event) {
 
 ToolChanges FlipTool::keyPress(const ToolKeyEvent &event) {
   if (flipXChanged(event.key, flipX)) {
-    QImage &src = cell->image.data;
+    QImage &src = cell->image;
     QImage flipped{src.size(), src.format()};
     if (src.depth() == 32) {
       flipHori(makeSurface<uint32_t>(flipped), makeCSurface<uint32_t>(src));
@@ -800,7 +799,7 @@ ToolChanges FlipTool::keyPress(const ToolKeyEvent &event) {
     } else Q_UNREACHABLE();
     src = flipped;
   } else if (flipYChanged(event.key, flipY)) {
-    QImage &src = cell->image.data;
+    QImage &src = cell->image;
     QImage flipped{src.size(), src.format()};
     if (src.depth() == 32) {
       flipVert(makeSurface<uint32_t>(flipped), makeCSurface<uint32_t>(src));
@@ -824,7 +823,7 @@ void FlipTool::updateStatus(StatusMsg &status) {
 
 void RotateTool::attachCell(Cell *newCell) {
   Tool::attachCell(newCell);
-  const QSize size = cell->image.data.size();
+  const QSize size = cell->image.size();
   square = size.width() == size.height();
   angle = 0;
 }
@@ -852,7 +851,7 @@ ToolChanges RotateTool::keyPress(const ToolKeyEvent &event) {
   const quint8 rot = arrowToRot(event.key);
   if (square && rot) {
     angle = (angle + rot) & 3;
-    QImage &src = cell->image.data;
+    QImage &src = cell->image;
     QImage rotated{src.size(), src.format()};
     if (src.depth() == 32) {
       rotate(makeSurface<uint32_t>(rotated), makeCSurface<uint32_t>(src), rot);

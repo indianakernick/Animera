@@ -160,15 +160,15 @@ void ToolSelectWidget::keyPress(const Qt::Key key, QImage *overlay) {
   if (!status.empty()) Q_EMIT updateStatusBar(status.get());
 }
 
-void ToolSelectWidget::changeCell(Cell *cell) {
+void ToolSelectWidget::setCell(Cell *cell) {
   currTool.changeCell(cell);
 }
 
-void ToolSelectWidget::changeColors(const ToolColors newColors) {
+void ToolSelectWidget::setColors(const ToolColors newColors) {
   colors = newColors;
 }
 
-void ToolSelectWidget::changePalette(const Palette *newPalette) {
+void ToolSelectWidget::setPalette(const Palette *newPalette) {
   for (ToolWidget *tool : tools) {
     tool->setPalette(newPalette);
   }

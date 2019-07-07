@@ -65,7 +65,7 @@ Window *Application::makeWindow() {
 }
 
 void Application::newFile(const Format format, const QSize size) {
-  Q_EMIT makeWindow()->newFile(format, size);
+  makeWindow()->newFile(format, size);
 }
 
 namespace {
@@ -85,7 +85,7 @@ void Application::openFile(const QString &path) {
       return raiseWindow(window);
     }
   }
-  Q_EMIT makeWindow()->openFile(path);
+  makeWindow()->openFile(path);
 }
 
 bool Application::event(QEvent *event) {

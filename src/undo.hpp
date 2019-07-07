@@ -13,7 +13,7 @@
 #include "image.hpp"
 
 struct UndoState {
-  Image img;
+  QImage img;
   bool undid;
 };
 
@@ -23,13 +23,13 @@ public:
 
   bool empty() const;
   void clear();
-  void reset(Image);
-  void modify(Image);
+  void reset(QImage);
+  void modify(QImage);
   UndoState undo();
   UndoState redo();
   
 private:
-  std::vector<Image> stack;
+  std::vector<QImage> stack;
   size_t top;
 };
 

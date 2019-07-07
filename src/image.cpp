@@ -11,15 +11,15 @@
 #include "serial.hpp"
 #include "surface factory.hpp"
 
-void serialize(QIODevice *dev, const Image &image) {
+void serialize(QIODevice *dev, const QImage &image) {
   assert(dev);
-  assert(!image.data.isNull());
-  image.data.save(dev, "png");
+  assert(!image.isNull());
+  image.save(dev, "png");
 }
 
-void deserialize(QIODevice *dev, Image &image) {
+void deserialize(QIODevice *dev, QImage &image) {
   assert(dev);
-  image.data.load(dev, "png");
+  image.load(dev, "png");
 }
 
 void serialize(QIODevice *dev, const Palette &palette) {

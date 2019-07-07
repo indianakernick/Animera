@@ -21,11 +21,6 @@ enum class Format : uint8_t {
   gray
 };
 
-struct Image {
-  QImage data;
-  Palette *palette = nullptr;
-};
-
 constexpr QImage::Format mask_format = QImage::Format_Grayscale8;
 constexpr QRgb mask_color_on = 0xFFFFFFFF;
 constexpr QRgb mask_color_off = 0;
@@ -48,8 +43,8 @@ using PixelPalette = uint8_t;
 using PixelGray = uint8_t;
 using PixelMask = uint8_t;
 
-void serialize(QIODevice *, const Image &);
-void deserialize(QIODevice *, Image &);
+void serialize(QIODevice *, const QImage &);
+void deserialize(QIODevice *, QImage &);
 
 void serialize(QIODevice *, const Palette &);
 void deserialize(QIODevice *, Palette &);

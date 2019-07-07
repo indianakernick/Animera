@@ -16,55 +16,50 @@
 
 namespace {
 
-std::vector<Image> getImages(const Frame &frame, const LayerVisible &visible) {
-  assert(frame.size() == visible.size());
-  std::vector<Image> images;
-  images.reserve(frame.size());
-  for (size_t i = 0; i != frame.size(); ++i) {
-    if (frame[i] && !frame[i]->image.data.isNull() && visible[i]) {
-      images.push_back(frame[i]->image);
-    }
+template <typename Func>
+void eachImage(const Frame &frame, Func func) {
+  // Layer 0 is on top of layer 1
+  for (auto c = frame.crbegin(); c != frame.crend(); ++c) {
+    func((*c)->image);
   }
-  return images;
 }
 
-void compositeColor(Surface<PixelColor> output, const std::vector<Image> &images) {
-  // Layer 0 is on top of layer 1
-  for (auto i = images.rbegin(); i != images.rend(); ++i) {
+void compositeColor(Surface<PixelColor> output, const Frame &frame) {
+  eachImage(frame, [output](const QImage &image) {
     porterDuff(
       mode_src_over,
       output,
-      makeCSurface<PixelColor>(i->data),
+      makeCSurface<PixelColor>(image),
       FormatARGB{},
       FormatARGB{}
     );
-  }
+  });
 }
 
-void compositePalette(Surface<PixelColor> output, const std::vector<Image> &images, const Palette *palette) {
+void compositePalette(Surface<PixelColor> output, const Frame &frame, const Palette *palette) {
   assert(palette);
   FormatPalette format{palette->data(), palette->size()};
-  for (auto i = images.rbegin(); i != images.rend(); ++i) {
+  eachImage(frame, [output, format](const QImage &image) {
     porterDuff(
       mode_src_over,
       output,
-      makeCSurface<PixelPalette>(i->data),
+      makeCSurface<PixelPalette>(image),
       FormatARGB{},
       format
     );
-  }
+  });
 }
 
-void compositeGray(Surface<PixelColor> output, const std::vector<Image> &images) {
-  for (auto i = images.rbegin(); i != images.rend(); ++i) {
+void compositeGray(Surface<PixelColor> output, const Frame &frame) {
+  eachImage(frame, [output](const QImage &image) {
     porterDuff(
       mode_src_over,
       output,
-      makeCSurface<PixelGray>(i->data),
+      makeCSurface<PixelGray>(image),
       FormatARGB{},
       FormatGray{}
     );
-  }
+  });
 }
 
 }
@@ -72,24 +67,22 @@ void compositeGray(Surface<PixelColor> output, const std::vector<Image> &images)
 QImage compositeFrame(
   const Palette *palette,
   const Frame &frame,
-  const LayerVisible &visible,
   const QSize size,
   const Format format
 ) {
-  std::vector<Image> images = getImages(frame, visible);
   QImage output{size, qimageFormat(Format::color)};
   clearImage(output);
   Surface<PixelColor> outputSurface = makeSurface<PixelColor>(output);
   
   switch (format) {
     case Format::color:
-      compositeColor(outputSurface, images);
+      compositeColor(outputSurface, frame);
       break;
     case Format::palette:
-      compositePalette(outputSurface, images, palette);
+      compositePalette(outputSurface, frame, palette);
       break;
     case Format::gray:
-      compositeGray(outputSurface, images);
+      compositeGray(outputSurface, frame);
       break;
     default: Q_UNREACHABLE();
   }

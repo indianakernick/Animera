@@ -26,8 +26,6 @@ private:
   QPixmap shownPix;
   QPixmap hiddenPix;
 
-  void loadIcons();
-
   void paintEvent(QPaintEvent *) override;
 };
 
@@ -35,29 +33,24 @@ class LayerNameWidget final : public QWidget {
   Q_OBJECT
 
 public:
-  // @TODO serialize name and visibility
-
   LayerNameWidget(QWidget *, LayerIdx);
   
-  bool getVisible() const;
-  QString getName() const;
-  void clearInfo();
-  void swapWith(LayerNameWidget &);
-  void toggleVisible();
-  
-  void serialize(QIODevice *) const;
-  void deserialize(QIODevice *);
-
 Q_SIGNALS:
-  void visibleToggled();
+  void visibilityChanged(LayerIdx, bool);
+  void nameChanged(LayerIdx, std::string_view);
+
+public Q_SLOTS:
+  void setVisibility(bool);
+  void setName(std::string_view);
 
 private:
   VisibleWidget *visible = nullptr;
   TextInputWidget *name = nullptr;
-  
-  void paintEvent(QPaintEvent *) override;
+  LayerIdx idx;
   
   void setupLayout();
+  
+  void paintEvent(QPaintEvent *) override;
 };
 
 class LayersWidget final : public QWidget {
@@ -66,28 +59,21 @@ class LayersWidget final : public QWidget {
 public:
   explicit LayersWidget(QWidget *);
   
-  void appendLayer(LayerIdx);
-  void serialize(QIODevice *) const;
-  void deserialize(QIODevice *);
-
 Q_SIGNALS:
-  void visibleChanged(const LayerVisible &);
-  void composite();
-
-private Q_SLOTS:
-  void changeVisible();
+  void visibilityChanged(LayerIdx, bool);
+  void nameChanged(LayerIdx, std::string_view);
 
 public Q_SLOTS:
   void setMargin(int);
-  void insertLayer(LayerIdx);
-  void removeLayer(LayerIdx);
-  void moveLayerUp(LayerIdx);
-  void moveLayerDown(LayerIdx);
-  void toggleVisible(LayerIdx);
+  void setVisibility(LayerIdx, bool);
+  void setName(LayerIdx, std::string_view);
+  void setLayerCount(LayerIdx);
   
 private:
   QVBoxLayout *layout = nullptr;
   std::vector<LayerNameWidget *> layers;
+  
+  LayerIdx layerCount() const;
 };
 
 class LayerScrollWidget final : public QScrollArea {
@@ -96,7 +82,7 @@ class LayerScrollWidget final : public QScrollArea {
 public:
   explicit LayerScrollWidget(QWidget *);
 
-  LayersWidget *setChild(LayersWidget *);
+  LayersWidget *getChild();
 
 Q_SIGNALS:
   void changeBottomMargin(int);

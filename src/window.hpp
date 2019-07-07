@@ -9,6 +9,7 @@
 #ifndef window_hpp
 #define window_hpp
 
+#include "sprite.hpp"
 #include "undo object.hpp"
 #include "clear object.hpp"
 #include "sample object.hpp"
@@ -29,15 +30,13 @@ public:
   Window(QWidget *, QRect);
   
   bool hasOpen(const QString &) const;
-
-Q_SIGNALS:
   void newFile(Format, QSize);
   void openFile(const QString &);
 
 private:
   QWidget bottom;
   QWidget right;
-  Animation anim;
+  Sprite sprite;
   UndoObject undo;
   ClearObject clear;
   SampleObject sample;

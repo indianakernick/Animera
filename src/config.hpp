@@ -229,8 +229,8 @@ inline const QColor cell_curr_color = glob_light_1;
 
 constexpr int       cell_icon_pad = 1_px;
 constexpr int       cell_icon_size = 8_px;
-constexpr int       cell_icon_step = 2 * cell_icon_pad + cell_icon_size + glob_border_width;
-constexpr int       cell_height = cell_icon_step;
+constexpr int       cell_width = 2 * cell_icon_pad + cell_icon_size + glob_border_width;
+constexpr int       cell_height = cell_width;
 constexpr int       cell_border_offset = cell_icon_pad + glob_border_width;
 
 constexpr int       frame_incr = 5;
@@ -238,7 +238,7 @@ constexpr int       frame_incr = 5;
 constexpr int       layer_width = 101_px;
 constexpr WidgetRect layer_text_rect = {
   {1_px, 2_px},
-  {layer_width - cell_icon_step - glob_border_width, cell_height - glob_border_width},
+  {layer_width - cell_width - glob_border_width, cell_height - glob_border_width},
   0, 0
 };
 

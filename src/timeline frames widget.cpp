@@ -18,20 +18,8 @@ FramesWidget::FramesWidget(QWidget *parent)
   setFixedSize(0, cell_height);
 }
 
-void FramesWidget::addFrame() {
-  ++frames;
-  setWidth();
-  repaint();
-}
-
-void FramesWidget::removeFrame() {
-  frames = std::max(frames - 1, 1);
-  setWidth();
-  repaint();
-}
-
-void FramesWidget::setFrames(const int newFrames) {
-  frames = newFrames;
+void FramesWidget::setFrameCount(const FrameIdx count) {
+  frames = count;
   setWidth();
   repaint();
 }
@@ -47,7 +35,7 @@ int FramesWidget::roundUpFrames() const {
 }
 
 void FramesWidget::setWidth() {
-  setFixedWidth((roundUpFrames() + frame_incr) * cell_icon_step + margin);
+  setFixedWidth((roundUpFrames() + frame_incr) * cell_width + margin);
 }
 
 void FramesWidget::paintEvent(QPaintEvent *) {
@@ -67,7 +55,7 @@ void FramesWidget::paintEvent(QPaintEvent *) {
       glob_border_width, height(),
       glob_border_color
     );
-    x += frame_incr * cell_icon_step;
+    x += frame_incr * cell_width;
   }
   painter.fillRect(
     0, height() - glob_border_width,
@@ -84,7 +72,8 @@ FrameScrollWidget::FrameScrollWidget(QWidget *parent)
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }
 
-FramesWidget *FrameScrollWidget::setChild(FramesWidget *frames) {
+FramesWidget *FrameScrollWidget::getChild() {
+  auto frames = new FramesWidget{this};
   // We cannot simply call setViewportMargins
   CONNECT(this, changeRightMargin, frames, setMargin);
   setWidget(frames);

@@ -25,4 +25,11 @@ void deserializeBytes(QIODevice *dev, T &data) {
   dev->read(reinterpret_cast<char *>(&data), sizeof(T));
 }
 
+template <typename T>
+T deserializeBytesAs(QIODevice *dev) {
+  T data;
+  deserializeBytes(dev, data);
+  return data;
+}
+
 #endif

@@ -8,7 +8,7 @@
 
 #include "animation.hpp"
 
-#include "serial.hpp"
+/*#include "serial.hpp"
 
 namespace {
 
@@ -162,3 +162,5 @@ bool Animation::validRect(const CellRect rect) const {
     hasLayer(rect.minL) &&
     hasLayer(rect.maxL);
 }
+
+*/

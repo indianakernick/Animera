@@ -38,9 +38,9 @@ public Q_SLOTS:
   void mouseMove(QPoint, QImage *);
   void mouseUp(QPoint, ButtonType, QImage *);
   void keyPress(Qt::Key, QImage *);
-  void changeCell(Cell *);
-  void changeColors(ToolColors);
-  void changePalette(const Palette *);
+  void setCell(Cell *);
+  void setColors(ToolColors);
+  void setPalette(const Palette *);
   void initCanvas(Format);
   
 private:

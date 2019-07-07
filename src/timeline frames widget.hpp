@@ -9,6 +9,7 @@
 #ifndef timeline_frames_widget_hpp
 #define timeline_frames_widget_hpp
 
+#include "cell.hpp"
 #include <QtWidgets/qscrollarea.h>
 
 class FramesWidget final : public QWidget {
@@ -16,16 +17,13 @@ class FramesWidget final : public QWidget {
 
 public:
   explicit FramesWidget(QWidget *);
- 
-  void addFrame();
-  void removeFrame();
-  void setFrames(int);
 
 public Q_SLOTS:
+  void setFrameCount(FrameIdx);
   void setMargin(int);
 
 private:
-  int frames = 0;
+  FrameIdx frames = 0;
   int margin = 0;
   
   int roundUpFrames() const;
@@ -40,7 +38,7 @@ class FrameScrollWidget final : public QScrollArea {
 public:
   explicit FrameScrollWidget(QWidget *);
 
-  FramesWidget *setChild(FramesWidget *);
+  FramesWidget *getChild();
 
 Q_SIGNALS:
   void changeRightMargin(int);

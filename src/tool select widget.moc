@@ -22,7 +22,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_ToolSelectWidget_t {
     QByteArrayData data[24];
-    char stringdata0[272];
+    char stringdata0[263];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -47,14 +47,14 @@ QT_MOC_LITERAL(12, 149, 9), // "mouseMove"
 QT_MOC_LITERAL(13, 159, 7), // "mouseUp"
 QT_MOC_LITERAL(14, 167, 8), // "keyPress"
 QT_MOC_LITERAL(15, 176, 7), // "Qt::Key"
-QT_MOC_LITERAL(16, 184, 10), // "changeCell"
-QT_MOC_LITERAL(17, 195, 5), // "Cell*"
-QT_MOC_LITERAL(18, 201, 12), // "changeColors"
-QT_MOC_LITERAL(19, 214, 10), // "ToolColors"
-QT_MOC_LITERAL(20, 225, 13), // "changePalette"
-QT_MOC_LITERAL(21, 239, 14), // "const Palette*"
-QT_MOC_LITERAL(22, 254, 10), // "initCanvas"
-QT_MOC_LITERAL(23, 265, 6) // "Format"
+QT_MOC_LITERAL(16, 184, 7), // "setCell"
+QT_MOC_LITERAL(17, 192, 5), // "Cell*"
+QT_MOC_LITERAL(18, 198, 9), // "setColors"
+QT_MOC_LITERAL(19, 208, 10), // "ToolColors"
+QT_MOC_LITERAL(20, 219, 10), // "setPalette"
+QT_MOC_LITERAL(21, 230, 14), // "const Palette*"
+QT_MOC_LITERAL(22, 245, 10), // "initCanvas"
+QT_MOC_LITERAL(23, 256, 6) // "Format"
 
     },
     "ToolSelectWidget\0cellModified\0\0"
@@ -62,9 +62,9 @@ QT_MOC_LITERAL(23, 265, 6) // "Format"
     "std::string_view\0changingAction\0"
     "cellRequested\0mouseLeave\0QImage*\0"
     "mouseDown\0ButtonType\0mouseMove\0mouseUp\0"
-    "keyPress\0Qt::Key\0changeCell\0Cell*\0"
-    "changeColors\0ToolColors\0changePalette\0"
-    "const Palette*\0initCanvas\0Format"
+    "keyPress\0Qt::Key\0setCell\0Cell*\0setColors\0"
+    "ToolColors\0setPalette\0const Palette*\0"
+    "initCanvas\0Format"
 };
 #undef QT_MOC_LITERAL
 
@@ -136,9 +136,9 @@ void ToolSelectWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
         case 7: _t->mouseMove((*reinterpret_cast< QPoint(*)>(_a[1])),(*reinterpret_cast< QImage*(*)>(_a[2]))); break;
         case 8: _t->mouseUp((*reinterpret_cast< QPoint(*)>(_a[1])),(*reinterpret_cast< ButtonType(*)>(_a[2])),(*reinterpret_cast< QImage*(*)>(_a[3]))); break;
         case 9: _t->keyPress((*reinterpret_cast< Qt::Key(*)>(_a[1])),(*reinterpret_cast< QImage*(*)>(_a[2]))); break;
-        case 10: _t->changeCell((*reinterpret_cast< Cell*(*)>(_a[1]))); break;
-        case 11: _t->changeColors((*reinterpret_cast< ToolColors(*)>(_a[1]))); break;
-        case 12: _t->changePalette((*reinterpret_cast< const Palette*(*)>(_a[1]))); break;
+        case 10: _t->setCell((*reinterpret_cast< Cell*(*)>(_a[1]))); break;
+        case 11: _t->setColors((*reinterpret_cast< ToolColors(*)>(_a[1]))); break;
+        case 12: _t->setPalette((*reinterpret_cast< const Palette*(*)>(_a[1]))); break;
         case 13: _t->initCanvas((*reinterpret_cast< Format(*)>(_a[1]))); break;
         default: ;
         }

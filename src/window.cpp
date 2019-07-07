@@ -48,6 +48,17 @@ bool Window::hasOpen(const QString &file) const {
   return fileName == file;
 }
 
+void Window::newFile(const Format format, const QSize size) {
+  show();
+  sprite.newFile(format, size);
+}
+
+void Window::openFile(const QString &path) {
+  show();
+  setFileName(path);
+  sprite.openFile(path);
+}
+
 void Window::setupUI() {
   setStyleSheet("QMainWindow::separator {"
     "width: " + QString::number(glob_border_width) + "px;"
@@ -150,11 +161,11 @@ void Window::setupMenubar() {
   ADD_ACTION(file, "Save As", QKeySequence::SaveAs, *this, saveFileDialog);
   
   QMenu *layer = menubar->addMenu("Layer");
-  ADD_ACTION(layer, "New Layer", Qt::SHIFT + Qt::Key_N, timeline, addLayer);
-  ADD_ACTION(layer, "Delete Layer", Qt::SHIFT + Qt::Key_Backspace, timeline, removeLayer);
-  ADD_ACTION(layer, "Move Layer Up", Qt::SHIFT + Qt::Key_Up, timeline, moveLayerUp);
-  ADD_ACTION(layer, "Move Layer Down", Qt::SHIFT + Qt::Key_Down, timeline, moveLayerDown);
-  ADD_ACTION(layer, "Toggle Visibility", Qt::SHIFT + Qt::Key_V, timeline, toggleLayerVisible);
+  ADD_ACTION(layer, "New Layer", Qt::SHIFT + Qt::Key_N, sprite.timeline, insertLayer);
+  ADD_ACTION(layer, "Delete Layer", Qt::SHIFT + Qt::Key_Backspace, sprite.timeline, removeLayer);
+  ADD_ACTION(layer, "Move Layer Up", Qt::SHIFT + Qt::Key_Up, sprite.timeline, moveLayerUp);
+  ADD_ACTION(layer, "Move Layer Down", Qt::SHIFT + Qt::Key_Down, sprite.timeline, moveLayerDown);
+  //ADD_ACTION(layer, "Toggle Visibility", Qt::SHIFT + Qt::Key_V, sprite.timeline, toggleLayerVisible);
   // @TODO Maybe consider this
   // We have to keep the action in sync with the timeline
   /*{
@@ -165,19 +176,19 @@ void Window::setupMenubar() {
     CONNECT(action, triggered, &timeline, toggleLayerVisible);
   }*/
   layer->addSeparator();
-  ADD_ACTION(layer, "Layer Above", Qt::Key_W, timeline, layerAbove);
-  ADD_ACTION(layer, "Layer Below", Qt::Key_S, timeline, layerBelow);
+  ADD_ACTION(layer, "Layer Above", Qt::Key_W, sprite.timeline, layerAbove);
+  ADD_ACTION(layer, "Layer Below", Qt::Key_S, sprite.timeline, layerBelow);
   
   QMenu *frame = menubar->addMenu("Frame");
-  ADD_ACTION(frame, "New Frame", Qt::ALT + Qt::Key_N, timeline, addFrame);
-  ADD_ACTION(frame, "New Empty Frame", Qt::ALT + Qt::Key_E, timeline, addNullFrame);
-  ADD_ACTION(frame, "Delete Frame", Qt::ALT + Qt::Key_Backspace, timeline, removeFrame);
+  ADD_ACTION(frame, "New Frame", Qt::ALT + Qt::Key_N, sprite.timeline, insertFrame);
+  ADD_ACTION(frame, "New Empty Frame", Qt::ALT + Qt::Key_E, sprite.timeline, insertNullFrame);
+  ADD_ACTION(frame, "Delete Frame", Qt::ALT + Qt::Key_Backspace, sprite.timeline, removeFrame);
   frame->addSeparator();
-  ADD_ACTION(frame, "Clear Frame", Qt::ALT + Qt::Key_C, timeline, clearFrame);
-  ADD_ACTION(frame, "Extend Linked Frame", Qt::ALT + Qt::Key_L, timeline, extendFrame);
+  ADD_ACTION(frame, "Clear Cell", Qt::ALT + Qt::Key_C, sprite.timeline, clearCell);
+  ADD_ACTION(frame, "Extend Linked Cell", Qt::ALT + Qt::Key_L, sprite.timeline, extendCell);
   frame->addSeparator();
-  ADD_ACTION(frame, "Next Frame", Qt::Key_D, timeline, nextFrame);
-  ADD_ACTION(frame, "Previous Frame", Qt::Key_A, timeline, prevFrame);
+  ADD_ACTION(frame, "Next Frame", Qt::Key_D, sprite.timeline, nextFrame);
+  ADD_ACTION(frame, "Previous Frame", Qt::Key_A, sprite.timeline, prevFrame);
   ADD_ACTION(frame, "Play Animation", Qt::Key_Space, timeline, toggleAnimation);
 }
 
@@ -193,64 +204,60 @@ void Window::makeDockWidget(Qt::DockWidgetArea area, QWidget *widget) {
 }
 
 void Window::connectSignals() {
-  CONNECT(&timeline, posChanged,      &tools,       changeCell);
-  CONNECT(&timeline, posChanged,      &clear,       changePos);
-  CONNECT(&timeline, posChanged,      &sample,      changePos);
-  CONNECT(&timeline, posChanged,      &undo,        changePos);
-  CONNECT(&timeline, visibleChanged,  &editor,      changeVisible);
-  CONNECT(&timeline, frameChanged,    &editor,      changeFrame);
-  CONNECT(&timeline, composite,       &editor,      composite);
-  CONNECT(&timeline, canvasInitialized, &colors,    initCanvas);
-  CONNECT(&timeline, canvasInitialized, &editor,    initCanvas);
-  CONNECT(&timeline, canvasInitialized, &palette,   initCanvas);
-  CONNECT(&timeline, canvasInitialized, &colorPicker, initCanvas);
-  CONNECT(&timeline, canvasInitialized, &tools,     initCanvas);
+  CONNECT(&sprite.timeline, currCellChanged,     &tools,           setCell);
+  CONNECT(&sprite.timeline, currCellChanged,     &clear,           setCell);
+  CONNECT(&sprite.timeline, currCellChanged,     &sample,          setCell);
+  CONNECT(&sprite.timeline, currCellChanged,     &undo,            setCell);
+  CONNECT(&sprite.timeline, frameChanged,        &editor,          setFrame);
+  CONNECT(&sprite.timeline, currPosChanged,      &timeline,        setCurrPos);
+  CONNECT(&sprite.timeline, visibilityChanged,   &timeline,        setVisibility);
+  CONNECT(&sprite.timeline, nameChanged,         &timeline,        setName);
+  CONNECT(&sprite.timeline, layerChanged,        &timeline,        setLayer);
+  CONNECT(&sprite.timeline, frameCountChanged,   &timeline,        setFrameCount);
+  CONNECT(&sprite.timeline, layerCountChanged,   &timeline,        setLayerCount);
   
-  CONNECT(&tools,    cellModified,    &editor,      composite);
-  CONNECT(&tools,    overlayModified, &editor,      compositeOverlay);
-  CONNECT(&tools,    updateStatusBar, &statusBar,   showPerm);
-  CONNECT(&tools,    cellRequested,   &timeline,    requestCell);
+  CONNECT(&timeline,        visibilityChanged,   &sprite.timeline, setVisibility);
+  CONNECT(&timeline,        nameChanged,         &sprite.timeline, setName);
+  CONNECT(&timeline,        nextFrame,           &sprite.timeline, nextFrame);
   
-  CONNECT(&editor,   mouseLeave,      &tools,       mouseLeave);
-  CONNECT(&editor,   mouseDown,       &tools,       mouseDown);
-  CONNECT(&editor,   mouseMove,       &tools,       mouseMove);
-  CONNECT(&editor,   mouseUp,         &tools,       mouseUp);
-  CONNECT(&editor,   keyPress,        &tools,       keyPress);
-  CONNECT(&editor,   keyPress,        &clear,       keyPress);
-  CONNECT(&editor,   mouseMove,       &sample,      mouseMove);
-  CONNECT(&editor,   keyPress,        &sample,      keyPress);
-  CONNECT(&editor,   keyPress,        &undo,        keyPress);
-  CONNECT(&tools,    changingAction,  &undo,        cellModified);
+  CONNECT(&sprite,          canvasInitialized,   &colors,          initCanvas);
+  CONNECT(&sprite,          canvasInitialized,   &editor,          initCanvas);
+  CONNECT(&sprite,          canvasInitialized,   &palette,         initCanvas);
+  CONNECT(&sprite,          canvasInitialized,   &colorPicker,     initCanvas);
+  CONNECT(&sprite,          canvasInitialized,   &tools,           initCanvas);
   
-  CONNECT(&colors,   colorsChanged,   &tools,       changeColors);
-  CONNECT(&colors,   attachColor,     &colorPicker, attach);
-  CONNECT(&colors,   colorsChanged,   &clear,       changeColors);
+  CONNECT(&tools,           cellModified,        &editor,          composite);
+  CONNECT(&tools,           overlayModified,     &editor,          compositeOverlay);
+  CONNECT(&tools,           updateStatusBar,     &statusBar,       showPerm);
+  CONNECT(&tools,           cellRequested,       &sprite.timeline, requestCell);
   
-  CONNECT(&clear,    cellModified,    &tools,       cellModified);
+  CONNECT(&editor,          mouseLeave,          &tools,           mouseLeave);
+  CONNECT(&editor,          mouseDown,           &tools,           mouseDown);
+  CONNECT(&editor,          mouseMove,           &tools,           mouseMove);
+  CONNECT(&editor,          mouseUp,             &tools,           mouseUp);
+  CONNECT(&editor,          keyPress,            &tools,           keyPress);
+  CONNECT(&editor,          keyPress,            &clear,           keyPress);
+  CONNECT(&editor,          mouseMove,           &sample,          mouseMove);
+  CONNECT(&editor,          keyPress,            &sample,          keyPress);
+  CONNECT(&editor,          keyPress,            &undo,            keyPress);
+  CONNECT(&tools,           changingAction,      &undo,            cellModified);
   
-  CONNECT(&sample,   colorChanged,    &colorPicker, setColor);
+  CONNECT(&colors,          colorsChanged,       &tools,           setColors);
+  CONNECT(&colors,          attachColor,         &colorPicker,     attach);
+  CONNECT(&colors,          colorsChanged,       &clear,           setColors);
   
-  CONNECT(&undo,     cellReverted,    &editor,      composite);
-  CONNECT(&undo,     showTempStatus,  &statusBar,   showTemp);
+  CONNECT(&clear,           cellModified,        &tools,           cellModified);
   
-  CONNECT(&palette,  attachColor,     &colorPicker, attach);
-  CONNECT(&palette,  setColor,        &colorPicker, setColor);
-  CONNECT(&palette,  paletteChanged,  &timeline,    changePalette);
-  CONNECT(&palette,  paletteChanged,  &editor,      changePalette);
-  CONNECT(&palette,  paletteChanged,  &tools,       changePalette);
-  CONNECT(&palette,  paletteColorChanged, &editor,  composite);
+  CONNECT(&sample,          colorChanged,        &colorPicker,     setColor);
   
-  CONNECT(this,      newFile,         this,         show);
-  CONNECT(this,      newFile,         &colors,      initCanvas);
-  CONNECT(this,      newFile,         &editor,      initCanvas);
-  CONNECT(this,      newFile,         &palette,     initCanvas);
-  CONNECT(this,      newFile,         &timeline,    initCanvas);
-  CONNECT(this,      newFile,         &colorPicker, initCanvas);
-  CONNECT(this,      newFile,         &tools,       initCanvas);
+  CONNECT(&undo,            cellReverted,        &editor,          composite);
+  CONNECT(&undo,            showTempStatus,      &statusBar,       showTemp);
   
-  CONNECT(this,      openFile,        this,         show);
-  CONNECT(this,      openFile,        this,         setFileName);
-  CONNECT(this,      openFile,        &timeline,    openFile);
+  CONNECT(&palette,         attachColor,         &colorPicker,     attach);
+  CONNECT(&palette,         setColor,            &colorPicker,     setColor);
+  CONNECT(&palette,         paletteChanged,      &editor,          setPalette);
+  CONNECT(&palette,         paletteChanged,      &tools,           setPalette);
+  CONNECT(&palette,         paletteColorChanged, &editor,          composite);
 }
 
 void Window::setFileName(const QString &name) {
@@ -262,7 +269,7 @@ void Window::saveFile() {
   if (fileName.isEmpty()) {
     saveFileDialog();
   } else {
-    timeline.saveFile(fileName);
+    sprite.saveFile(fileName);
     statusBar.showTemp("Saved!");
   }
 }
@@ -283,7 +290,7 @@ void Window::saveFileDialog() {
   );
   if (!saveFileName.isEmpty()) {
     setFileName(saveFileName);
-    timeline.saveFile(saveFileName);
+    sprite.saveFile(saveFileName);
   }
 }
 

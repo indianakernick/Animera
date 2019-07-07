@@ -126,8 +126,8 @@ private:
   // @TODO restore this to 0
   int radius = 2;
  
-  bool drawPoint(Image &, QPoint);
-  bool drawDrag(Image &, QPoint, QPoint);
+  bool drawPoint(QImage &, QPoint);
+  bool drawDrag(QImage &, QPoint, QPoint);
   void drawOverlay(QImage &, QPoint);
   void updateStatus(StatusMsg &, QPoint, QPoint);
 };
@@ -146,8 +146,8 @@ private:
   // @TODO restore this to 1
   int thickness = 8;
 
-  bool drawPoint(Image &, QPoint);
-  bool drawDrag(Image &, QPoint, QPoint);
+  bool drawPoint(QImage &, QPoint);
+  bool drawDrag(QImage &, QPoint, QPoint);
   void drawOverlay(QImage &, QPoint);
   void updateStatus(StatusMsg &, QPoint, QPoint);
 };
@@ -163,8 +163,8 @@ public:
 private:
   CircleShape shape = CircleShape::c1x1;
   
-  bool drawPoint(Image &, QPoint);
-  bool drawDrag(Image &, QPoint, QPoint);
+  bool drawPoint(QImage &, QPoint);
+  bool drawDrag(QImage &, QPoint, QPoint);
   void drawOverlay(QImage &, QPoint);
   void updateStatus(StatusMsg &, QPoint, QPoint);
 };
@@ -181,8 +181,8 @@ private:
   // @TODO restore this to 1
   int thickness = 4;
 
-  bool drawPoint(Image &, QPoint);
-  bool drawDrag(Image &, QPoint, QPoint);
+  bool drawPoint(QImage &, QPoint);
+  bool drawDrag(QImage &, QPoint, QPoint);
   void drawOverlay(QImage &, QPoint);
   void updateStatus(StatusMsg &, QPoint, QPoint);
 };
@@ -194,8 +194,8 @@ public:
   ~FilledRectangleTool();
 
 private:
-  bool drawPoint(Image &, QPoint);
-  bool drawDrag(Image &, QPoint, QPoint);
+  bool drawPoint(QImage &, QPoint);
+  bool drawDrag(QImage &, QPoint, QPoint);
   void drawOverlay(QImage &, QPoint);
   void updateStatus(StatusMsg &, QPoint, QPoint);
 };

@@ -19,7 +19,7 @@ class UndoObject final : public QObject {
   Q_OBJECT
 
 public Q_SLOTS:
-  void changePos(Cell *);
+  void setCell(Cell *);
   void keyPress(Qt::Key);
   void cellModified();
 

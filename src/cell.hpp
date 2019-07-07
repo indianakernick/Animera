@@ -20,12 +20,12 @@ using CellPtr = std::unique_ptr<Cell>;
 class Cell {
 public:
   Cell() = default;
-  explicit Cell(Image);
-  Cell(QSize, Format, Palette *);
+  explicit Cell(QImage);
+  Cell(QSize, Format);
   
   CellPtr clone() const;
   
-  Image image;
+  QImage image;
 };
 
 using LayerIdx = int;
@@ -43,9 +43,20 @@ struct CellRect {
   FrameIdx maxF;
 };
 
-using Frames = std::vector<CellPtr>;
-using Layers = std::vector<Frames>;
-using Frame = std::vector<Cell *>;
-using LayerVisible = std::vector<bool>;
+struct CellSpan {
+  CellPtr cell;
+  FrameIdx len = 1;
+};
+
+using Spans = std::vector<CellSpan>;
+
+struct Layer {
+  Spans spans;
+  std::string name;
+  bool visible = true;
+};
+
+using Layers = std::vector<Layer>;
+using Frame = std::vector<const Cell *>;
 
 #endif

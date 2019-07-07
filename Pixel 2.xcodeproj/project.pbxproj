@@ -11,6 +11,9 @@
 		45054F70225970150078350B /* undo object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45054F6E225970150078350B /* undo object.cpp */; };
 		45054F732259C9AB0078350B /* color picker widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45054F712259C9AA0078350B /* color picker widget.cpp */; };
 		4512636622781D7B00C66A19 /* tool colors widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4512636422781D7B00C66A19 /* tool colors widget.cpp */; };
+		4513144722D0503700D66262 /* timeline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4513144522D0503700D66262 /* timeline.cpp */; };
+		4513144A22D1828D00D66262 /* sprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4513144822D1828D00D66262 /* sprite.cpp */; };
+		4513144D22D1B06F00D66262 /* timeline controls widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4513144B22D1B06F00D66262 /* timeline controls widget.cpp */; };
 		453C78192234935000818B19 /* timeline widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C78172234935000818B19 /* timeline widget.cpp */; };
 		453C781C22349BBD00818B19 /* editor widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C781A22349BBD00818B19 /* editor widget.cpp */; };
 		453C781F22349F0100818B19 /* tool select widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C781D22349F0100818B19 /* tool select widget.cpp */; };
@@ -70,6 +73,12 @@
 		45054F722259C9AA0078350B /* color picker widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "color picker widget.hpp"; sourceTree = "<group>"; };
 		4512636422781D7B00C66A19 /* tool colors widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "tool colors widget.cpp"; sourceTree = "<group>"; };
 		4512636522781D7B00C66A19 /* tool colors widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "tool colors widget.hpp"; sourceTree = "<group>"; };
+		4513144522D0503700D66262 /* timeline.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = timeline.cpp; sourceTree = "<group>"; };
+		4513144622D0503700D66262 /* timeline.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = timeline.hpp; sourceTree = "<group>"; };
+		4513144822D1828D00D66262 /* sprite.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = sprite.cpp; sourceTree = "<group>"; };
+		4513144922D1828D00D66262 /* sprite.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = sprite.hpp; sourceTree = "<group>"; };
+		4513144B22D1B06F00D66262 /* timeline controls widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "timeline controls widget.cpp"; sourceTree = "<group>"; };
+		4513144C22D1B06F00D66262 /* timeline controls widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "timeline controls widget.hpp"; sourceTree = "<group>"; };
 		452926E122BB0D6300B17E0D /* transform.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = transform.hpp; sourceTree = "<group>"; };
 		452926E222BB607E00B17E0D /* screenshot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = screenshot.png; sourceTree = "<group>"; };
 		452926E422BB607E00B17E0D /* add.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = add.pbm; sourceTree = "<group>"; };
@@ -950,6 +959,10 @@
 				45B284A62219079B00D6D055 /* animation.hpp */,
 				45B284A8221A331500D6D055 /* serial.cpp */,
 				45B284A9221A331500D6D055 /* serial.hpp */,
+				4513144522D0503700D66262 /* timeline.cpp */,
+				4513144622D0503700D66262 /* timeline.hpp */,
+				4513144822D1828D00D66262 /* sprite.cpp */,
+				4513144922D1828D00D66262 /* sprite.hpp */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -1074,6 +1087,8 @@
 				4595D48E22C061DF00607D64 /* timeline layers widget.hpp */,
 				4595D49022C0644B00607D64 /* timeline frames widget.cpp */,
 				4595D49122C0644B00607D64 /* timeline frames widget.hpp */,
+				4513144B22D1B06F00D66262 /* timeline controls widget.cpp */,
+				4513144C22D1B06F00D66262 /* timeline controls widget.hpp */,
 			);
 			name = Timeline;
 			sourceTree = "<group>";
@@ -2127,7 +2142,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "function moc {\n  local OUTPUT=\"$PROJECT_DIR/src/$1.moc\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.hpp\" > \"$OUTPUT\"\n  echo \"\" >> \"$OUTPUT\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.cpp\" >> \"$OUTPUT\"\n}\n\nmoc \"timeline frames widget\"\nmoc \"timeline layers widget\"\nmoc \"timeline cells widget\"\nmoc \"color picker widget\"\nmoc \"color slider widget\"\nmoc \"color graph widget\"\nmoc \"tool select widget\"\nmoc \"color input widget\"\nmoc \"tool colors widget\"\nmoc \"init canvas dialog\"\nmoc \"text input widget\"\nmoc \"status bar widget\"\nmoc \"timeline widget\"\nmoc \"palette widget\"\nmoc \"sample object\"\nmoc \"editor widget\"\nmoc \"tool widgets\"\nmoc \"clear object\"\nmoc \"undo object\"\nmoc \"application\"\nmoc \"window\"\nmoc \"main\"\n";
+			shellScript = "function moc {\n  local OUTPUT=\"$PROJECT_DIR/src/$1.moc\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.hpp\" > \"$OUTPUT\"\n  echo \"\" >> \"$OUTPUT\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.cpp\" >> \"$OUTPUT\"\n}\n\nmoc \"timeline controls widget\"\nmoc \"timeline frames widget\"\nmoc \"timeline layers widget\"\nmoc \"timeline cells widget\"\nmoc \"color picker widget\"\nmoc \"color slider widget\"\nmoc \"color graph widget\"\nmoc \"tool select widget\"\nmoc \"color input widget\"\nmoc \"tool colors widget\"\nmoc \"init canvas dialog\"\nmoc \"text input widget\"\nmoc \"status bar widget\"\nmoc \"timeline widget\"\nmoc \"palette widget\"\nmoc \"sample object\"\nmoc \"editor widget\"\nmoc \"tool widgets\"\nmoc \"clear object\"\nmoc \"undo object\"\nmoc \"application\"\nmoc \"timeline\"\nmoc \"sprite\"\nmoc \"window\"\nmoc \"main\"\n";
 		};
 		453C787B2235D63B00818B19 /* RCC */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2177,6 +2192,8 @@
 				453D28D02276A9DF00D0E5F9 /* color convert.cpp in Sources */,
 				45B284B0221A83C300D6D055 /* composite.cpp in Sources */,
 				453D28C3227698F200D0E5F9 /* widget painting.cpp in Sources */,
+				4513144D22D1B06F00D66262 /* timeline controls widget.cpp in Sources */,
+				4513144722D0503700D66262 /* timeline.cpp in Sources */,
 				453D28C622769EC000D0E5F9 /* color slider widget.cpp in Sources */,
 				45DFE499224DE89E00EA40C5 /* global font.cpp in Sources */,
 				45B284B9221E110F00D6D055 /* painting.cpp in Sources */,
@@ -2216,6 +2233,7 @@
 				453D28D32276F0FE00D0E5F9 /* label widget.cpp in Sources */,
 				45B284AA221A331500D6D055 /* serial.cpp in Sources */,
 				45F3EB6E22CC430F00F9F93E /* init canvas dialog.cpp in Sources */,
+				4513144A22D1828D00D66262 /* sprite.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

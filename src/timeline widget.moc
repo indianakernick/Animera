@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_TimelineWidget_t {
-    QByteArrayData data[34];
-    char stringdata0[378];
+    QByteArrayData data[17];
+    char stringdata0[191];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -32,52 +32,29 @@ struct qt_meta_stringdata_TimelineWidget_t {
 static const qt_meta_stringdata_TimelineWidget_t qt_meta_stringdata_TimelineWidget = {
     {
 QT_MOC_LITERAL(0, 0, 14), // "TimelineWidget"
-QT_MOC_LITERAL(1, 15, 10), // "posChanged"
-QT_MOC_LITERAL(2, 26, 0), // ""
-QT_MOC_LITERAL(3, 27, 5), // "Cell*"
-QT_MOC_LITERAL(4, 33, 8), // "LayerIdx"
-QT_MOC_LITERAL(5, 42, 8), // "FrameIdx"
-QT_MOC_LITERAL(6, 51, 14), // "visibleChanged"
-QT_MOC_LITERAL(7, 66, 12), // "LayerVisible"
-QT_MOC_LITERAL(8, 79, 12), // "frameChanged"
-QT_MOC_LITERAL(9, 92, 5), // "Frame"
-QT_MOC_LITERAL(10, 98, 17), // "canvasInitialized"
-QT_MOC_LITERAL(11, 116, 6), // "Format"
-QT_MOC_LITERAL(12, 123, 9), // "composite"
-QT_MOC_LITERAL(13, 133, 10), // "initCanvas"
-QT_MOC_LITERAL(14, 144, 8), // "saveFile"
-QT_MOC_LITERAL(15, 153, 8), // "openFile"
-QT_MOC_LITERAL(16, 162, 13), // "changePalette"
-QT_MOC_LITERAL(17, 176, 8), // "Palette*"
-QT_MOC_LITERAL(18, 185, 8), // "addLayer"
-QT_MOC_LITERAL(19, 194, 11), // "removeLayer"
-QT_MOC_LITERAL(20, 206, 11), // "moveLayerUp"
-QT_MOC_LITERAL(21, 218, 13), // "moveLayerDown"
-QT_MOC_LITERAL(22, 232, 18), // "toggleLayerVisible"
-QT_MOC_LITERAL(23, 251, 8), // "addFrame"
-QT_MOC_LITERAL(24, 260, 12), // "addNullFrame"
-QT_MOC_LITERAL(25, 273, 11), // "removeFrame"
-QT_MOC_LITERAL(26, 285, 10), // "clearFrame"
-QT_MOC_LITERAL(27, 296, 11), // "extendFrame"
-QT_MOC_LITERAL(28, 308, 11), // "requestCell"
-QT_MOC_LITERAL(29, 320, 15), // "toggleAnimation"
-QT_MOC_LITERAL(30, 336, 10), // "layerAbove"
-QT_MOC_LITERAL(31, 347, 10), // "layerBelow"
-QT_MOC_LITERAL(32, 358, 9), // "nextFrame"
-QT_MOC_LITERAL(33, 368, 9) // "prevFrame"
+QT_MOC_LITERAL(1, 15, 17), // "visibilityChanged"
+QT_MOC_LITERAL(2, 33, 0), // ""
+QT_MOC_LITERAL(3, 34, 8), // "LayerIdx"
+QT_MOC_LITERAL(4, 43, 11), // "nameChanged"
+QT_MOC_LITERAL(5, 55, 16), // "std::string_view"
+QT_MOC_LITERAL(6, 72, 9), // "nextFrame"
+QT_MOC_LITERAL(7, 82, 10), // "setCurrPos"
+QT_MOC_LITERAL(8, 93, 7), // "CellPos"
+QT_MOC_LITERAL(9, 101, 13), // "setVisibility"
+QT_MOC_LITERAL(10, 115, 7), // "setName"
+QT_MOC_LITERAL(11, 123, 8), // "setLayer"
+QT_MOC_LITERAL(12, 132, 5), // "Spans"
+QT_MOC_LITERAL(13, 138, 13), // "setFrameCount"
+QT_MOC_LITERAL(14, 152, 8), // "FrameIdx"
+QT_MOC_LITERAL(15, 161, 13), // "setLayerCount"
+QT_MOC_LITERAL(16, 175, 15) // "toggleAnimation"
 
     },
-    "TimelineWidget\0posChanged\0\0Cell*\0"
-    "LayerIdx\0FrameIdx\0visibleChanged\0"
-    "LayerVisible\0frameChanged\0Frame\0"
-    "canvasInitialized\0Format\0composite\0"
-    "initCanvas\0saveFile\0openFile\0changePalette\0"
-    "Palette*\0addLayer\0removeLayer\0moveLayerUp\0"
-    "moveLayerDown\0toggleLayerVisible\0"
-    "addFrame\0addNullFrame\0removeFrame\0"
-    "clearFrame\0extendFrame\0requestCell\0"
-    "toggleAnimation\0layerAbove\0layerBelow\0"
-    "nextFrame\0prevFrame"
+    "TimelineWidget\0visibilityChanged\0\0"
+    "LayerIdx\0nameChanged\0std::string_view\0"
+    "nextFrame\0setCurrPos\0CellPos\0setVisibility\0"
+    "setName\0setLayer\0Spans\0setFrameCount\0"
+    "FrameIdx\0setLayerCount\0toggleAnimation"
 };
 #undef QT_MOC_LITERAL
 
@@ -87,69 +64,39 @@ static const uint qt_meta_data_TimelineWidget[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-      25,   14, // methods
+      10,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       5,       // signalCount
+       3,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    3,  139,    2, 0x06 /* Public */,
-       6,    1,  146,    2, 0x06 /* Public */,
-       8,    1,  149,    2, 0x06 /* Public */,
-      10,    2,  152,    2, 0x06 /* Public */,
-      12,    0,  157,    2, 0x06 /* Public */,
+       1,    2,   64,    2, 0x06 /* Public */,
+       4,    2,   69,    2, 0x06 /* Public */,
+       6,    0,   74,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      13,    2,  158,    2, 0x0a /* Public */,
-      14,    1,  163,    2, 0x0a /* Public */,
-      15,    1,  166,    2, 0x0a /* Public */,
-      16,    1,  169,    2, 0x0a /* Public */,
-      18,    0,  172,    2, 0x0a /* Public */,
-      19,    0,  173,    2, 0x0a /* Public */,
-      20,    0,  174,    2, 0x0a /* Public */,
-      21,    0,  175,    2, 0x0a /* Public */,
-      22,    0,  176,    2, 0x0a /* Public */,
-      23,    0,  177,    2, 0x0a /* Public */,
-      24,    0,  178,    2, 0x0a /* Public */,
-      25,    0,  179,    2, 0x0a /* Public */,
-      26,    0,  180,    2, 0x0a /* Public */,
-      27,    0,  181,    2, 0x0a /* Public */,
-      28,    0,  182,    2, 0x0a /* Public */,
-      29,    0,  183,    2, 0x0a /* Public */,
-      30,    0,  184,    2, 0x0a /* Public */,
-      31,    0,  185,    2, 0x0a /* Public */,
-      32,    0,  186,    2, 0x0a /* Public */,
-      33,    0,  187,    2, 0x0a /* Public */,
+       7,    1,   75,    2, 0x0a /* Public */,
+       9,    2,   78,    2, 0x0a /* Public */,
+      10,    2,   83,    2, 0x0a /* Public */,
+      11,    2,   88,    2, 0x0a /* Public */,
+      13,    1,   93,    2, 0x0a /* Public */,
+      15,    1,   96,    2, 0x0a /* Public */,
+      16,    0,   99,    2, 0x0a /* Public */,
 
  // signals: parameters
-    QMetaType::Void, 0x80000000 | 3, 0x80000000 | 4, 0x80000000 | 5,    2,    2,    2,
-    QMetaType::Void, 0x80000000 | 7,    2,
-    QMetaType::Void, 0x80000000 | 9,    2,
-    QMetaType::Void, 0x80000000 | 11, QMetaType::QSize,    2,    2,
+    QMetaType::Void, 0x80000000 | 3, QMetaType::Bool,    2,    2,
+    QMetaType::Void, 0x80000000 | 3, 0x80000000 | 5,    2,    2,
     QMetaType::Void,
 
  // slots: parameters
-    QMetaType::Void, 0x80000000 | 11, QMetaType::QSize,    2,    2,
-    QMetaType::Void, QMetaType::QString,    2,
-    QMetaType::Void, QMetaType::QString,    2,
-    QMetaType::Void, 0x80000000 | 17,    2,
-    QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void,
+    QMetaType::Void, 0x80000000 | 8,    2,
+    QMetaType::Void, 0x80000000 | 3, QMetaType::Bool,    2,    2,
+    QMetaType::Void, 0x80000000 | 3, 0x80000000 | 5,    2,    2,
+    QMetaType::Void, 0x80000000 | 3, 0x80000000 | 12,    2,    2,
+    QMetaType::Void, 0x80000000 | 14,    2,
+    QMetaType::Void, 0x80000000 | 3,    2,
     QMetaType::Void,
 
        0        // eod
@@ -161,67 +108,38 @@ void TimelineWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
         auto *_t = static_cast<TimelineWidget *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->posChanged((*reinterpret_cast< Cell*(*)>(_a[1])),(*reinterpret_cast< LayerIdx(*)>(_a[2])),(*reinterpret_cast< FrameIdx(*)>(_a[3]))); break;
-        case 1: _t->visibleChanged((*reinterpret_cast< const LayerVisible(*)>(_a[1]))); break;
-        case 2: _t->frameChanged((*reinterpret_cast< const Frame(*)>(_a[1]))); break;
-        case 3: _t->canvasInitialized((*reinterpret_cast< Format(*)>(_a[1])),(*reinterpret_cast< QSize(*)>(_a[2]))); break;
-        case 4: _t->composite(); break;
-        case 5: _t->initCanvas((*reinterpret_cast< Format(*)>(_a[1])),(*reinterpret_cast< QSize(*)>(_a[2]))); break;
-        case 6: _t->saveFile((*reinterpret_cast< const QString(*)>(_a[1]))); break;
-        case 7: _t->openFile((*reinterpret_cast< const QString(*)>(_a[1]))); break;
-        case 8: _t->changePalette((*reinterpret_cast< Palette*(*)>(_a[1]))); break;
-        case 9: _t->addLayer(); break;
-        case 10: _t->removeLayer(); break;
-        case 11: _t->moveLayerUp(); break;
-        case 12: _t->moveLayerDown(); break;
-        case 13: _t->toggleLayerVisible(); break;
-        case 14: _t->addFrame(); break;
-        case 15: _t->addNullFrame(); break;
-        case 16: _t->removeFrame(); break;
-        case 17: _t->clearFrame(); break;
-        case 18: _t->extendFrame(); break;
-        case 19: _t->requestCell(); break;
-        case 20: _t->toggleAnimation(); break;
-        case 21: _t->layerAbove(); break;
-        case 22: _t->layerBelow(); break;
-        case 23: _t->nextFrame(); break;
-        case 24: _t->prevFrame(); break;
+        case 0: _t->visibilityChanged((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
+        case 1: _t->nameChanged((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< std::string_view(*)>(_a[2]))); break;
+        case 2: _t->nextFrame(); break;
+        case 3: _t->setCurrPos((*reinterpret_cast< CellPos(*)>(_a[1]))); break;
+        case 4: _t->setVisibility((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
+        case 5: _t->setName((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< std::string_view(*)>(_a[2]))); break;
+        case 6: _t->setLayer((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< const Spans(*)>(_a[2]))); break;
+        case 7: _t->setFrameCount((*reinterpret_cast< FrameIdx(*)>(_a[1]))); break;
+        case 8: _t->setLayerCount((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;
+        case 9: _t->toggleAnimation(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
         int *result = reinterpret_cast<int *>(_a[0]);
         {
-            using _t = void (TimelineWidget::*)(Cell * , LayerIdx , FrameIdx );
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::posChanged)) {
+            using _t = void (TimelineWidget::*)(LayerIdx , bool );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::visibilityChanged)) {
                 *result = 0;
                 return;
             }
         }
         {
-            using _t = void (TimelineWidget::*)(const LayerVisible & );
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::visibleChanged)) {
+            using _t = void (TimelineWidget::*)(LayerIdx , std::string_view );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::nameChanged)) {
                 *result = 1;
                 return;
             }
         }
         {
-            using _t = void (TimelineWidget::*)(const Frame & );
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::frameChanged)) {
-                *result = 2;
-                return;
-            }
-        }
-        {
-            using _t = void (TimelineWidget::*)(Format , QSize );
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::canvasInitialized)) {
-                *result = 3;
-                return;
-            }
-        }
-        {
             using _t = void (TimelineWidget::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::composite)) {
-                *result = 4;
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::nextFrame)) {
+                *result = 2;
                 return;
             }
         }
@@ -257,49 +175,35 @@ int TimelineWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 25)
+        if (_id < 10)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 25;
+        _id -= 10;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 25)
+        if (_id < 10)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 25;
+        _id -= 10;
     }
     return _id;
 }
 
 // SIGNAL 0
-void TimelineWidget::posChanged(Cell * _t1, LayerIdx _t2, FrameIdx _t3)
+void TimelineWidget::visibilityChanged(LayerIdx _t1, bool _t2)
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)), const_cast<void*>(reinterpret_cast<const void*>(&_t3)) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);
 }
 
 // SIGNAL 1
-void TimelineWidget::visibleChanged(const LayerVisible & _t1)
+void TimelineWidget::nameChanged(LayerIdx _t1, std::string_view _t2)
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)) };
     QMetaObject::activate(this, &staticMetaObject, 1, _a);
 }
 
 // SIGNAL 2
-void TimelineWidget::frameChanged(const Frame & _t1)
+void TimelineWidget::nextFrame()
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
-    QMetaObject::activate(this, &staticMetaObject, 2, _a);
-}
-
-// SIGNAL 3
-void TimelineWidget::canvasInitialized(Format _t1, QSize _t2)
-{
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)) };
-    QMetaObject::activate(this, &staticMetaObject, 3, _a);
-}
-
-// SIGNAL 4
-void TimelineWidget::composite()
-{
-    QMetaObject::activate(this, &staticMetaObject, 4, nullptr);
+    QMetaObject::activate(this, &staticMetaObject, 2, nullptr);
 }
 QT_WARNING_POP
 QT_END_MOC_NAMESPACE

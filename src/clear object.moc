@@ -22,7 +22,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_ClearObject_t {
     QByteArrayData data[9];
-    char stringdata0[83];
+    char stringdata0[78];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -34,16 +34,16 @@ static const qt_meta_stringdata_ClearObject_t qt_meta_stringdata_ClearObject = {
 QT_MOC_LITERAL(0, 0, 11), // "ClearObject"
 QT_MOC_LITERAL(1, 12, 12), // "cellModified"
 QT_MOC_LITERAL(2, 25, 0), // ""
-QT_MOC_LITERAL(3, 26, 9), // "changePos"
-QT_MOC_LITERAL(4, 36, 5), // "Cell*"
-QT_MOC_LITERAL(5, 42, 8), // "keyPress"
-QT_MOC_LITERAL(6, 51, 7), // "Qt::Key"
-QT_MOC_LITERAL(7, 59, 12), // "changeColors"
-QT_MOC_LITERAL(8, 72, 10) // "ToolColors"
+QT_MOC_LITERAL(3, 26, 7), // "setCell"
+QT_MOC_LITERAL(4, 34, 5), // "Cell*"
+QT_MOC_LITERAL(5, 40, 8), // "keyPress"
+QT_MOC_LITERAL(6, 49, 7), // "Qt::Key"
+QT_MOC_LITERAL(7, 57, 9), // "setColors"
+QT_MOC_LITERAL(8, 67, 10) // "ToolColors"
 
     },
-    "ClearObject\0cellModified\0\0changePos\0"
-    "Cell*\0keyPress\0Qt::Key\0changeColors\0"
+    "ClearObject\0cellModified\0\0setCell\0"
+    "Cell*\0keyPress\0Qt::Key\0setColors\0"
     "ToolColors"
 };
 #undef QT_MOC_LITERAL
@@ -87,9 +87,9 @@ void ClearObject::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->cellModified(); break;
-        case 1: _t->changePos((*reinterpret_cast< Cell*(*)>(_a[1]))); break;
+        case 1: _t->setCell((*reinterpret_cast< Cell*(*)>(_a[1]))); break;
         case 2: _t->keyPress((*reinterpret_cast< Qt::Key(*)>(_a[1]))); break;
-        case 3: _t->changeColors((*reinterpret_cast< ToolColors(*)>(_a[1]))); break;
+        case 3: _t->setColors((*reinterpret_cast< ToolColors(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {

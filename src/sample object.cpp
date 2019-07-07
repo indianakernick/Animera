@@ -11,7 +11,7 @@
 #include "cell.hpp"
 #include "config.hpp"
 
-void SampleObject::changePos(Cell *newCell) {
+void SampleObject::setCell(Cell *newCell) {
   cell = newCell;
 }
 
@@ -21,7 +21,7 @@ void SampleObject::mouseMove(const QPoint newPos) {
 
 void SampleObject::keyPress(const Qt::Key key) {
   if (cell && key == key_sample) {
-    Q_EMIT colorChanged(cell->image.data.pixel(pos));
+    Q_EMIT colorChanged(cell->image.pixel(pos));
   }
 }
 
