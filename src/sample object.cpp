@@ -11,7 +11,7 @@
 #include "cell.hpp"
 #include "config.hpp"
 
-void SampleObject::setCell(Cell *newCell) {
+void SampleObject::setCell(const Cell *newCell) {
   cell = newCell;
 }
 

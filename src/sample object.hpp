@@ -19,7 +19,7 @@ class SampleObject final : public QObject {
   Q_OBJECT
 
 public Q_SLOTS:
-  void setCell(Cell *);
+  void setCell(const Cell *);
   void mouseMove(QPoint);
   void keyPress(Qt::Key);
 
@@ -27,7 +27,7 @@ Q_SIGNALS:
   void colorChanged(QRgb);
   
 private:
-  Cell *cell = nullptr;
+  const Cell *cell = nullptr;
   QPoint pos;
 };
 
