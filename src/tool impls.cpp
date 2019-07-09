@@ -392,10 +392,6 @@ QRgb contrastColor(const QRgb color) {
   return qGray(color) < 128 ? qRgb(255, 255, 255) : qRgb(0, 0, 0);
 }
 
-QRgb contrastGray(const int gray) {
-  return gray < 128 ? qRgb(255, 255, 255) : qRgb(0, 0, 0);
-}
-
 template <typename Pixel>
 class WandManip {
 public:
@@ -471,7 +467,7 @@ void WandSelectTool::addToSelection(const ToolMouseEvent &event) {
         makeSurface<PixelColor>(*event.overlay),
         makeSurface<PixelMask>(mask),
         surface,
-        contrastGray(surface.getPixel(event.pos))
+        qRgba(0, 0, scaleOverlayGray(surface.getPixel(event.pos)), scaleOverlayAlpha(255))
       };
       floodFill(manip, event.pos);
       break;

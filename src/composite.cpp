@@ -152,17 +152,13 @@ QImage blitMaskImage(const QImage &src, const QImage &mask, const QPoint pos) {
 
 namespace {
 
-constexpr int convertAlpha(const int alpha) {
-  return std::max(tool_overlay_alpha_min, alpha * 3 / 4);
-}
-
 void colorToOverlay(Surface<PixelColor> overlay, CSurface<PixelColor> source) {
   auto sourceRowIter = source.range().begin();
   for (auto row : overlay.range()) {
     const PixelColor *sourcePixel = (*sourceRowIter).begin();
     for (PixelColor &pixel : row) {
       const int gray = qGray(*sourcePixel);
-      const int alpha = convertAlpha(qAlpha(*sourcePixel));
+      const int alpha = scaleOverlayAlpha(qAlpha(*sourcePixel));
       pixel = qRgba(gray, gray, gray, alpha);
       ++sourcePixel;
     }
@@ -177,7 +173,7 @@ void paletteToOverlay(Surface<PixelColor> overlay, CSurface<PixelPalette> source
     for (PixelColor &pixel : row) {
       const QRgb color = palette[*sourcePixel];
       const int gray = qGray(color);
-      pixel = qRgba(gray, gray, gray, convertAlpha(qAlpha(color)));
+      pixel = qRgba(gray, gray, gray, scaleOverlayAlpha(qAlpha(color)));
       ++sourcePixel;
     }
     ++sourceRowIter;
@@ -190,7 +186,7 @@ void grayToOverlay(Surface<PixelColor> overlay, CSurface<PixelGray> source) {
     const PixelGray *sourcePixel = (*sourceRowIter).begin();
     for (PixelColor &pixel : row) {
       const int gray = *sourcePixel;
-      pixel = qRgba(gray, gray, gray, convertAlpha(255));
+      pixel = qRgba(0, 0, scaleOverlayGray(gray), scaleOverlayAlpha(255));
       ++sourcePixel;
     }
     ++sourceRowIter;

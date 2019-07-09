@@ -21,7 +21,7 @@ struct Factor {
 
 // Using floats makes this a tiny bit faster
 
-inline Color porterDuff(const Color a, const Color b, const Factor f) {
+inline Color porterDuff(const Factor f, const Color a, const Color b) {
   const uint32_t cA = a.a*f.a + b.a*f.b;
   if (cA == 0) {
     return {0, 0, 0, 0};
@@ -66,8 +66,8 @@ MODE(      xor,                255 - b, 255 - a);
 #undef MODE
 
 template <typename Mode>
-Color porterDuff(const Color a, const Color b, const Mode mode) {
-  return porterDuff(a, b, mode(a.a, b.a));
+Color porterDuff(const Mode mode, const Color a, const Color b) {
+  return porterDuff(mode(a.a, b.a), a, b);
 }
 
 /*
@@ -98,9 +98,9 @@ void porterDuffRegion(
     const SrcPixel *srcPixelIter = (*srcRowIter).begin();
     for (DstPixel &pixel : row) {
       pixel = dstFmt.toPixel(porterDuff(
+        mode,
         srcFmt.toColor(*srcPixelIter),
-        dstFmt.toColor(pixel),
-        mode
+        dstFmt.toColor(pixel)
       ));
       ++srcPixelIter;
     }

@@ -41,7 +41,7 @@ void TextInputWidget::blinkSlot() {
   cursorBlinkStatus = !cursorBlinkStatus;
   repaint();
 }
-  
+
 void TextInputWidget::showCursor() {
   cursorBlinkStatus = true;
   cursorBlinkTimer.stop();

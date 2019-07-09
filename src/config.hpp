@@ -129,12 +129,22 @@ inline const QColor tool_base_enabled = glob_light_2;
 inline const QColor tool_shape_disabled = glob_light_2;
 inline const QColor tool_shape_enabled = glob_light_1;
 
-constexpr int       tool_overlay_alpha_min = 31;
+constexpr int       tool_overlay_alpha_min = 32;
+constexpr int       tool_overlay_alpha_max = 191;
+constexpr int       tool_overlay_gray_min = 32;
+constexpr int       tool_overlay_gray_max = 223;
 constexpr int       tool_overlay_alpha = 127;
 constexpr int       tool_overlay_gray = 127;
 constexpr QRgb      tool_overlay_color = qRgba(
   tool_overlay_gray, tool_overlay_gray, tool_overlay_gray, tool_overlay_alpha
 );
+
+constexpr int scaleOverlayAlpha(const int alpha) {
+  return alpha * (tool_overlay_alpha_max - tool_overlay_alpha_min) / 255 + tool_overlay_alpha_min;
+}
+constexpr int scaleOverlayGray(const int gray) {
+  return gray * (tool_overlay_gray_max - tool_overlay_gray_min) / 255 + tool_overlay_gray_min;
+}
 
 // ------------------------------- status bar ------------------------------- //
 
@@ -150,8 +160,8 @@ constexpr int       edit_min_scale = 1;
 constexpr int       edit_max_scale = 64;
 constexpr int       edit_undo_stack = 128;
 
-inline const QRgb edit_checker_a = qRgb(191, 191, 191);
-inline const QRgb edit_checker_b = qRgb(255, 255, 255);
+inline const QRgb   edit_checker_a = qRgb(191, 191, 191);
+inline const QRgb   edit_checker_b = qRgb(255, 255, 255);
 
 // ------------------------------ color picker ------------------------------ //
 
