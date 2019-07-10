@@ -30,9 +30,9 @@ Q_SIGNALS:
 
 private:
   ToolColors colors;
-  ActiveColorWidget *primary;
-  ActiveColorWidget *secondary;
-  ActiveColorWidget *erase;
+  ActiveColorWidget *primary = nullptr;
+  ActiveColorWidget *secondary = nullptr;
+  ActiveColorWidget *erase = nullptr;
   
   void setupLayout();
   template <auto>

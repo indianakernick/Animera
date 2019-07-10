@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_PaletteWidget_t {
-    QByteArrayData data[10];
-    char stringdata0[108];
+    QByteArrayData data[11];
+    char stringdata0[115];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -39,13 +39,14 @@ QT_MOC_LITERAL(4, 40, 8), // "setColor"
 QT_MOC_LITERAL(5, 49, 4), // "QRgb"
 QT_MOC_LITERAL(6, 54, 19), // "paletteColorChanged"
 QT_MOC_LITERAL(7, 74, 10), // "initCanvas"
-QT_MOC_LITERAL(8, 85, 10), // "setPalette"
-QT_MOC_LITERAL(9, 96, 11) // "PaletteSpan"
+QT_MOC_LITERAL(8, 85, 6), // "Format"
+QT_MOC_LITERAL(9, 92, 10), // "setPalette"
+QT_MOC_LITERAL(10, 103, 11) // "PaletteSpan"
 
     },
     "PaletteWidget\0attachColor\0\0ColorHandle*\0"
     "setColor\0QRgb\0paletteColorChanged\0"
-    "initCanvas\0setPalette\0PaletteSpan"
+    "initCanvas\0Format\0setPalette\0PaletteSpan"
 };
 #undef QT_MOC_LITERAL
 
@@ -68,8 +69,8 @@ static const uint qt_meta_data_PaletteWidget[] = {
        6,    0,   45,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       7,    0,   46,    2, 0x0a /* Public */,
-       8,    1,   47,    2, 0x0a /* Public */,
+       7,    1,   46,    2, 0x0a /* Public */,
+       9,    1,   49,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, 0x80000000 | 3,    2,
@@ -77,8 +78,8 @@ static const uint qt_meta_data_PaletteWidget[] = {
     QMetaType::Void,
 
  // slots: parameters
-    QMetaType::Void,
-    QMetaType::Void, 0x80000000 | 9,    2,
+    QMetaType::Void, 0x80000000 | 8,    2,
+    QMetaType::Void, 0x80000000 | 10,    2,
 
        0        // eod
 };
@@ -92,7 +93,7 @@ void PaletteWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _i
         case 0: _t->attachColor((*reinterpret_cast< ColorHandle*(*)>(_a[1]))); break;
         case 1: _t->setColor((*reinterpret_cast< QRgb(*)>(_a[1]))); break;
         case 2: _t->paletteColorChanged(); break;
-        case 3: _t->initCanvas(); break;
+        case 3: _t->initCanvas((*reinterpret_cast< Format(*)>(_a[1]))); break;
         case 4: _t->setPalette((*reinterpret_cast< PaletteSpan(*)>(_a[1]))); break;
         default: ;
         }

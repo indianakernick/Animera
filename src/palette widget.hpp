@@ -23,7 +23,7 @@ public:
   explicit PaletteWidget(QWidget *);
   
 public Q_SLOTS:
-  void initCanvas();
+  void initCanvas(Format);
   void setPalette(PaletteSpan);
   
 Q_SIGNALS:
@@ -32,7 +32,7 @@ Q_SIGNALS:
   void paletteColorChanged();
 
 private:
-  PaletteTableWidget *table;
+  PaletteTableWidget *table = nullptr;
 };
 
 #endif

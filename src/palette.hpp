@@ -10,6 +10,7 @@
 #define palette_hpp
 
 #include <array>
+#include "image.hpp"
 #include "config.hpp"
 #include <QtGui/qrgb.h>
 #include <QtCore/qobject.h>
@@ -71,13 +72,14 @@ public:
   void deserialize(QIODevice *);
 
 public Q_SLOTS:
-  void initCanvas();
+  void initCanvas(Format);
 
 Q_SIGNALS:
   void paletteChanged(PaletteSpan);
   
 private:
   PaletteColors colors;
+  Format canvasFormat;
 };
 
 #endif

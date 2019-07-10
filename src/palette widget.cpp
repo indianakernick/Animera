@@ -20,8 +20,8 @@ class PaletteColorWidget final : public RadioButtonWidget, public ColorHandle {
   Q_OBJECT
   
 public:
-  PaletteColorWidget(QWidget *parent, QRgb &color, const int index)
-    : RadioButtonWidget{parent}, color{color}, index{index} {
+  PaletteColorWidget(QWidget *parent, QRgb &color, const int index, const Format format)
+    : RadioButtonWidget{parent}, color{color}, index{index}, format{format} {
     setFixedSize(pal_tile_size, pal_tile_size);
     CONNECT(this, toggled, this, click);
   }
@@ -39,6 +39,7 @@ private Q_SLOTS:
 private:
   QRgb &color;
   int index;
+  Format format;
 
   void paintChecker(QPainter &painter) {
     constexpr int bord = glob_border_width;
@@ -51,8 +52,20 @@ private:
     painter.drawRect(bord, bord + half, half, half);
   }
   
+  QColor getQColor() const {
+    switch (format) {
+      case Format::palette:
+        // @TODO
+      case Format::rgba:
+        return QColor::fromRgba(color);
+      case Format::gray:
+        const int gray = color & 255;
+        return QColor{gray, gray, gray};
+    }
+  }
+  
   void paintColor(QPainter &painter) {
-    painter.setBrush(QColor::fromRgba(color));
+    painter.setBrush(getQColor());
     painter.drawRect(
       glob_border_width, glob_border_width,
       pal_tile_size - glob_border_width, pal_tile_size - glob_border_width
@@ -116,8 +129,8 @@ class PaletteTableWidget final : public QWidget {
   Q_OBJECT
   
 public:
-  explicit PaletteTableWidget(QWidget *parent)
-    : QWidget{parent} {}
+  PaletteTableWidget(QWidget *parent, const Format format)
+    : QWidget{parent}, format{format} {}
 
 public Q_SLOTS:
   void setPalette(const PaletteSpan newPalette) {
@@ -134,6 +147,7 @@ Q_SIGNALS:
 private:
   std::vector<PaletteColorWidget *> colors;
   PaletteSpan palette;
+  Format format;
   
   void setupLayout() {
     QGridLayout *grid = new QGridLayout{this};
@@ -143,7 +157,7 @@ private:
     for (int y = 0; y != pal_height; ++y) {
       for (int x = 0; x != pal_width; ++x) {
         const int index = y * pal_width + x;
-        auto *colorWidget = new PaletteColorWidget{this, palette[index], index};
+        auto *colorWidget = new PaletteColorWidget{this, palette[index], index, format};
         CONNECT(colorWidget, attachColor,         this, attachColor);
         CONNECT(colorWidget, setColor,            this, setColor);
         CONNECT(colorWidget, paletteColorChanged, this, paletteColorChanged);
@@ -168,21 +182,21 @@ private:
 };
 
 PaletteWidget::PaletteWidget(QWidget *parent)
-  : QScrollArea{parent}, table{new PaletteTableWidget{this}} {
-  setWidget(table);
+  : QScrollArea{parent} {
   setFrameShape(NoFrame);
   setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
   setFixedWidth(pick_svgraph_rect.widget().width() + 2 * glob_border_width);
   setMinimumHeight(pal_tile_size + glob_border_width);
   setAlignment(Qt::AlignHCenter);
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+}
+
+void PaletteWidget::initCanvas(const Format format) {
+  table = new PaletteTableWidget{this, format};
+  setWidget(table);
   CONNECT(table, attachColor,         this, attachColor);
   CONNECT(table, setColor,            this, setColor);
   CONNECT(table, paletteColorChanged, this, paletteColorChanged);
-}
-
-void PaletteWidget::initCanvas() {
-  
 }
 
 void PaletteWidget::setPalette(PaletteSpan palette) {

@@ -25,7 +25,7 @@ constexpr QRgb quantGray(const int size, const int y) {
   return qRgb(gray, gray, gray);
 }
 
-constexpr std::array<QRgb, 33> default_palette = {
+constexpr std::array<QRgb, 24> hue_palette = {
   quantColor(4, 4, 0, 0),
   quantColor(4, 4, 1, 0),
   quantColor(4, 4, 2, 0),
@@ -52,7 +52,9 @@ constexpr std::array<QRgb, 33> default_palette = {
   quantColor(4, 4, 0, 3),
   quantColor(4, 4, 0, 2),
   quantColor(4, 4, 0, 1),
-  
+};
+
+constexpr std::array<QRgb, 9> gray_palette = {
   quantGray(8, 0),
   quantGray(8, 1),
   quantGray(8, 2),
@@ -68,8 +70,16 @@ constexpr std::array<QRgb, 33> default_palette = {
 }
 
 void Palette::initDefault() {
-  auto end = std::copy(default_palette.cbegin(), default_palette.cend(), colors.begin());
-  std::fill(end, colors.end(), 0);
+  auto iter = colors.begin();
+  switch (canvasFormat) {
+    case Format::palette:
+      *iter++ = 0;
+    case Format::rgba:
+      iter = std::copy(hue_palette.cbegin(), hue_palette.cend(), iter);
+    case Format::gray:
+      iter = std::copy(gray_palette.cbegin(), gray_palette.cend(), iter);
+  }
+  std::fill(iter, colors.end(), 0);
 }
 
 void Palette::serialize(QIODevice *dev) const {
@@ -88,7 +98,8 @@ void Palette::deserialize(QIODevice *dev) {
   );
 }
 
-void Palette::initCanvas() {
+void Palette::initCanvas(const Format format) {
+  canvasFormat = format;
   Q_EMIT paletteChanged(PaletteSpan{colors.data()});
 }
 

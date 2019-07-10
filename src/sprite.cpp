@@ -25,7 +25,7 @@ void Sprite::newFile(const Format newFormat, const QSize newSize) {
   size = newSize;
   Q_EMIT canvasInitialized(format, size);
   timeline.initCanvas(format, size);
-  palette.initCanvas();
+  palette.initCanvas(format);
   timeline.initDefault();
   palette.initDefault();
 }
@@ -66,7 +66,7 @@ void Sprite::openFile(const QString &path) {
   size = {width, height};
   Q_EMIT canvasInitialized(format, size);
   timeline.initCanvas(format, size);
-  palette.initCanvas();
+  palette.initCanvas(format);
   timeline.deserialize(&file);
 }
 

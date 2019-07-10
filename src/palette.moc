@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_Palette_t {
-    QByteArrayData data[5];
-    char stringdata0[47];
+    QByteArrayData data[6];
+    char stringdata0[54];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -35,11 +35,12 @@ QT_MOC_LITERAL(0, 0, 7), // "Palette"
 QT_MOC_LITERAL(1, 8, 14), // "paletteChanged"
 QT_MOC_LITERAL(2, 23, 0), // ""
 QT_MOC_LITERAL(3, 24, 11), // "PaletteSpan"
-QT_MOC_LITERAL(4, 36, 10) // "initCanvas"
+QT_MOC_LITERAL(4, 36, 10), // "initCanvas"
+QT_MOC_LITERAL(5, 47, 6) // "Format"
 
     },
     "Palette\0paletteChanged\0\0PaletteSpan\0"
-    "initCanvas"
+    "initCanvas\0Format"
 };
 #undef QT_MOC_LITERAL
 
@@ -60,13 +61,13 @@ static const uint qt_meta_data_Palette[] = {
        1,    1,   24,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       4,    0,   27,    2, 0x0a /* Public */,
+       4,    1,   27,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, 0x80000000 | 3,    2,
 
  // slots: parameters
-    QMetaType::Void,
+    QMetaType::Void, 0x80000000 | 5,    2,
 
        0        // eod
 };
@@ -78,7 +79,7 @@ void Palette::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, voi
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->paletteChanged((*reinterpret_cast< PaletteSpan(*)>(_a[1]))); break;
-        case 1: _t->initCanvas(); break;
+        case 1: _t->initCanvas((*reinterpret_cast< Format(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {

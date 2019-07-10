@@ -21,8 +21,8 @@ class ActiveColorWidget final : public RadioButtonWidget, public ColorHandle {
   Q_OBJECT
   
 public:
-  ActiveColorWidget(QWidget *parent, const QString &name, QRgb *color)
-    : RadioButtonWidget{parent}, name{name}, color{color} {
+  ActiveColorWidget(QWidget *parent, const QString &name, QRgb &color, const Format format)
+    : RadioButtonWidget{parent}, name{name}, color{color}, format{format} {
     setFixedSize(tool_color_rect.widget().size());
   }
 
@@ -31,26 +31,40 @@ Q_SIGNALS:
   
 private:
   QString name;
-  QRgb *color;
+  QRgb &color;
+  Format format;
+  
+  // @TODO this function is duplicated in palette widget
+  QColor getQColor() const {
+    switch (format) {
+      case Format::rgba:
+        return QColor::fromRgba(color);
+      case Format::palette:
+        // @TODO
+      case Format::gray:
+        const int gray = color;
+        return QColor{gray, gray, gray};
+    }
+  }
   
   void paintEvent(QPaintEvent *) override {
     // @TODO consider baking checkerboard and border
     QPainter painter{this};
     paintChecker(painter, tool_color_rect, tool_color_tiles);
     if (isChecked()) {
-      painter.fillRect(active_color_rect.inner(), QColor::fromRgba(*color));
+      painter.fillRect(active_color_rect.inner(), getQColor());
       paintBorder(painter, active_color_rect, glob_border_color);
     } else {
-      painter.fillRect(tool_color_rect.inner(), QColor::fromRgba(*color));
+      painter.fillRect(tool_color_rect.inner(), getQColor());
       paintBorder(painter, tool_color_rect, glob_border_color);
     }
   }
   
   QRgb getInitialColor() const override {
-    return *color;
+    return color;
   }
   void changeColor(const QRgb newColor) override {
-    *color = newColor;
+    color = newColor;
     repaint();
     Q_EMIT colorChanged();
   }
@@ -63,13 +77,8 @@ private:
 };
 
 ToolColorsWidget::ToolColorsWidget(QWidget *parent)
-  : QWidget{parent},
-    primary{new ActiveColorWidget{this, "Primary", &colors.primary}},
-    secondary{new ActiveColorWidget{this, "Secondary", &colors.secondary}},
-    erase{new ActiveColorWidget{this, "Erase", &colors.erase}} {
+  : QWidget{parent} {
   setFixedSize(tool_colors_rect.widget().size());
-  setupLayout();
-  connectSignals();
 }
 
 void ToolColorsWidget::initCanvas(const Format format) {
@@ -80,8 +89,8 @@ void ToolColorsWidget::initCanvas(const Format format) {
       colors.erase = qRgba(0, 0, 0, 0);
       break;
     case Format::palette:
-      colors.primary = 2;
-      colors.secondary = 1;
+      colors.primary = 1;
+      colors.secondary = 17;
       colors.erase = 0;
       break;
     case Format::gray:
@@ -90,20 +99,24 @@ void ToolColorsWidget::initCanvas(const Format format) {
       colors.erase = 0;
       break;
   }
+  primary = new ActiveColorWidget{this, "Primary", colors.primary, format};
+  secondary = new ActiveColorWidget{this, "Secondary", colors.secondary, format};
+  erase = new ActiveColorWidget{this, "Erase", colors.erase, format};
+  setupLayout();
+  connectSignals();
   primary->click();
   Q_EMIT colorsChanged(colors);
 }
 
 void ToolColorsWidget::setupLayout() {
   QHBoxLayout *layout = new QHBoxLayout{this};
+  setLayout(layout);
   layout->setSpacing(0);
   layout->setContentsMargins(0, 0, 0, 0);
   
   layout->addWidget(primary);
   layout->addWidget(secondary);
   layout->addWidget(erase);
-  
-  setLayout(layout);
 }
 
 template <auto Color>
