@@ -24,19 +24,19 @@ void eachImage(const Frame &frame, Func func) {
   }
 }
 
-void compositeColor(Surface<PixelColor> output, const Frame &frame) {
+void compositeColor(Surface<PixelRgba> output, const Frame &frame) {
   eachImage(frame, [output](const QImage &image) {
     porterDuff(
       mode_src_over,
       output,
-      makeCSurface<PixelColor>(image),
+      makeCSurface<PixelRgba>(image),
       FormatARGB{},
       FormatARGB{}
     );
   });
 }
 
-void compositePalette(Surface<PixelColor> output, const Frame &frame, PaletteCSpan palette) {
+void compositePalette(Surface<PixelRgba> output, const Frame &frame, PaletteCSpan palette) {
   FormatPalette format{palette.data()};
   eachImage(frame, [output, format](const QImage &image) {
     porterDuff(
@@ -49,7 +49,7 @@ void compositePalette(Surface<PixelColor> output, const Frame &frame, PaletteCSp
   });
 }
 
-void compositeGray(Surface<PixelColor> output, const Frame &frame) {
+void compositeGray(Surface<PixelRgba> output, const Frame &frame) {
   eachImage(frame, [output](const QImage &image) {
     porterDuff(
       mode_src_over,
@@ -69,12 +69,12 @@ QImage compositeFrame(
   const QSize size,
   const Format format
 ) {
-  QImage output{size, qimageFormat(Format::color)};
+  QImage output{size, qimageFormat(Format::rgba)};
   clearImage(output);
-  Surface<PixelColor> outputSurface = makeSurface<PixelColor>(output);
+  Surface<PixelRgba> outputSurface = makeSurface<PixelRgba>(output);
   
   switch (format) {
-    case Format::color:
+    case Format::rgba:
       compositeColor(outputSurface, frame);
       break;
     case Format::palette:
@@ -92,8 +92,8 @@ QImage compositeFrame(
 void compositeOverlay(QImage &drawing, const QImage &overlay) {
   porterDuff(
     mode_src_over,
-    makeSurface<PixelColor>(drawing),
-    makeSurface<PixelColor>(overlay),
+    makeSurface<PixelRgba>(drawing),
+    makeSurface<PixelRgba>(overlay),
     FormatARGB{},
     FormatARGB{}
   );
@@ -152,11 +152,11 @@ QImage blitMaskImage(const QImage &src, const QImage &mask, const QPoint pos) {
 
 namespace {
 
-void colorToOverlay(Surface<PixelColor> overlay, CSurface<PixelColor> source) {
+void rgbaToOverlay(Surface<PixelRgba> overlay, CSurface<PixelRgba> source) {
   auto sourceRowIter = source.range().begin();
   for (auto row : overlay.range()) {
-    const PixelColor *sourcePixel = (*sourceRowIter).begin();
-    for (PixelColor &pixel : row) {
+    const PixelRgba *sourcePixel = (*sourceRowIter).begin();
+    for (PixelRgba &pixel : row) {
       const int gray = qGray(*sourcePixel);
       const int alpha = scaleOverlayAlpha(qAlpha(*sourcePixel));
       pixel = qRgba(gray, gray, gray, alpha);
@@ -166,11 +166,11 @@ void colorToOverlay(Surface<PixelColor> overlay, CSurface<PixelColor> source) {
   }
 }
 
-void paletteToOverlay(Surface<PixelColor> overlay, CSurface<PixelPalette> source, PaletteCSpan palette) {
+void paletteToOverlay(Surface<PixelRgba> overlay, CSurface<PixelPalette> source, PaletteCSpan palette) {
   auto sourceRowIter = source.range().begin();
   for (auto row : overlay.range()) {
     const PixelPalette *sourcePixel = (*sourceRowIter).begin();
-    for (PixelColor &pixel : row) {
+    for (PixelRgba &pixel : row) {
       const QRgb color = palette[*sourcePixel];
       const int gray = qGray(color);
       pixel = qRgba(gray, gray, gray, scaleOverlayAlpha(qAlpha(color)));
@@ -180,11 +180,11 @@ void paletteToOverlay(Surface<PixelColor> overlay, CSurface<PixelPalette> source
   }
 }
 
-void grayToOverlay(Surface<PixelColor> overlay, CSurface<PixelGray> source) {
+void grayToOverlay(Surface<PixelRgba> overlay, CSurface<PixelGray> source) {
   auto sourceRowIter = source.range().begin();
   for (auto row : overlay.range()) {
     const PixelGray *sourcePixel = (*sourceRowIter).begin();
-    for (PixelColor &pixel : row) {
+    for (PixelRgba &pixel : row) {
       const int gray = *sourcePixel;
       pixel = qRgba(0, 0, scaleOverlayGray(gray), scaleOverlayAlpha(255));
       ++sourcePixel;
@@ -202,10 +202,10 @@ void writeOverlay(
   const QImage &source
 ) {
   assert(overlay.size() == source.size());
-  Surface overlaySurface = makeSurface<PixelColor>(overlay);
+  Surface overlaySurface = makeSurface<PixelRgba>(overlay);
   switch (format) {
-    case Format::color:
-      colorToOverlay(overlaySurface, makeSurface<PixelColor>(source));
+    case Format::rgba:
+      rgbaToOverlay(overlaySurface, makeSurface<PixelRgba>(source));
       break;
     case Format::palette:
       paletteToOverlay(overlaySurface, makeSurface<PixelPalette>(source), palette);
@@ -227,5 +227,5 @@ void writeOverlay(
   assert(overlay.size() == source.size());
   assert(overlay.size() == mask.size());
   writeOverlay(palette, format, overlay, source);
-  maskClip(makeSurface<PixelColor>(overlay), makeCSurface<PixelMask>(mask));
+  maskClip(makeSurface<PixelRgba>(overlay), makeCSurface<PixelMask>(mask));
 }

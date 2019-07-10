@@ -82,7 +82,7 @@ InitCanvasDialog::InitCanvasDialog(QWidget *widget)
     heightWidget{this, textBoxRect(5, 0), 128, 65536} {
   setWindowTitle("New File");
   setStyleSheet("background-color:" + glob_main.name());
-  formatWidgets.push_back(new FormatWidget{this, ":/Formats/rgba.png", Format::color});
+  formatWidgets.push_back(new FormatWidget{this, ":/Formats/rgba.png", Format::rgba});
   formatWidgets.push_back(new FormatWidget{this, ":/Formats/gray.png", Format::gray});
   formatWidgets.push_back(new FormatWidget{this, ":/Formats/index.png", Format::palette});
   formatWidgets[0]->setToolTip("32-bit RGBA");

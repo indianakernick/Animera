@@ -38,7 +38,7 @@ private:
   TextButton *okButton = nullptr;
   TextButton *cancelButton = nullptr;
   QSize size = {128, 128};
-  Format colorFormat = Format::color;
+  Format colorFormat = Format::rgba;
   
   void setupLayout();
   void connectSignals();

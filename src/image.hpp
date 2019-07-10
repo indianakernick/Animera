@@ -12,7 +12,7 @@
 #include <QtGui/qimage.h>
 
 enum class Format : uint8_t {
-  color,
+  rgba,
   palette,
   gray
 };
@@ -23,7 +23,7 @@ constexpr QRgb mask_color_off = 0;
 
 constexpr QImage::Format qimageFormat(const Format format) {
   switch (format) {
-    case Format::color:
+    case Format::rgba:
       return QImage::Format_ARGB32;
     case Format::palette:
       return QImage::Format_Grayscale8;
@@ -34,7 +34,7 @@ constexpr QImage::Format qimageFormat(const Format format) {
   }
 }
 
-using PixelColor = QRgb;
+using PixelRgba = QRgb;
 using PixelPalette = uint8_t;
 using PixelGray = uint8_t;
 using PixelMask = uint8_t;

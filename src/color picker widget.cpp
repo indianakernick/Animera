@@ -21,7 +21,7 @@ ColorPickerWidget::ColorPickerWidget(QWidget *parent)
 
 void ColorPickerWidget::initCanvas(const Format newFormat) {
   format = newFormat;
-  if (format == Format::color || format == Format::palette) {
+  if (format == Format::rgba || format == Format::palette) {
     colorHsv = color2hsv(pick_default_color);
     colorRgb = color2rgb(pick_default_color);
     alpha = pick_default_color.alpha();
@@ -78,7 +78,7 @@ void ColorPickerWidget::setupLayout() {
   layout->setSpacing(0);
   layout->setContentsMargins(glob_padding, glob_padding, glob_padding, glob_padding);
   
-  if (format == Format::color || format == Format::palette) {
+  if (format == Format::rgba || format == Format::palette) {
     layout->addWidget(nameLabel, 0, 0, 1, 6);
     layout->addWidget(svGraph, 1, 0, 1, 6);
     layout->addWidget(hueSlider, 2, 0, 1, 6);
@@ -118,7 +118,7 @@ void ColorPickerWidget::setupLayout() {
 // @TODO there has to be a better way
 
 void ColorPickerWidget::connectSignals() {
-  if (format == Format::color || format == Format::palette) {
+  if (format == Format::rgba || format == Format::palette) {
     CONNECT(svGraph,     svChanged,    hueSlider,   changeSV);
     CONNECT(hueSlider,   hueChanged,   svGraph,     changeHue);
     CONNECT(boxH,        valueChanged, svGraph,     changeHue);
@@ -167,7 +167,7 @@ void ColorPickerWidget::updateHandle() {
 }
 
 void ColorPickerWidget::setColor(const QRgb color) {
-  if (format == Format::color || format == Format::palette) {
+  if (format == Format::rgba || format == Format::palette) {
     colorRgb.r = qRed(color);
     colorRgb.g = qGreen(color);
     colorRgb.b = qBlue(color);

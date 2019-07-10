@@ -2211,9 +2211,9 @@ int main(int argc, char **argv) {
   
   //testComposite();
   
-  /*SourceCell source({32, 32}, Format::color);
+  /*SourceCell source({32, 32}, Format::rgba);
   source.image.xform.angle = 0;
-  QImage overlay({32, 32}, getImageFormat(Format::color));
+  QImage overlay({32, 32}, getImageFormat(Format::rgba));
   overlay.fill(0);
   
   ToolMouseEvent event;

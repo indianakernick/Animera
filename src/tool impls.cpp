@@ -208,7 +208,7 @@ ToolChanges RectangleSelectTool::mouseUp(const ToolMouseEvent &event) {
     drawSquarePoint(*event.overlay, tool_overlay_color, event.pos);
     const QRect rect = QRect{startPos, event.pos}.normalized();
     selection = blitImage(cell->image, rect);
-    overlay = QImage{selection.size(), qimageFormat(Format::color)};
+    overlay = QImage{selection.size(), qimageFormat(Format::rgba)};
     writeOverlay(palette, format, overlay, selection);
     offset = rect.topLeft() - event.pos;
     mode = SelectMode::paste;
@@ -282,7 +282,7 @@ ToolChanges PolygonSelectTool::mouseUp(const ToolMouseEvent &event) {
     clearImage(mask);
     drawFilledPolygon(mask, mask_color_on, polygon, -clippedBounds.topLeft());
     selection = blitMaskImage(cell->image, mask, clippedBounds.topLeft());
-    overlay = QImage{selection.size(), qimageFormat(Format::color)};
+    overlay = QImage{selection.size(), qimageFormat(Format::rgba)};
     writeOverlay(palette, format, overlay, selection, mask);
     offset = clippedBounds.topLeft() - event.pos;
     mode = SelectMode::paste;
@@ -298,7 +298,7 @@ void WandSelectTool::attachCell(Cell *newCell) {
   mode = SelectMode::copy;
   if (!compatible(newCell->image, selection)) {
     selection = makeCompatible(cell->image);
-    overlay = QImage{selection.size(), qimageFormat(Format::color)};
+    overlay = QImage{selection.size(), qimageFormat(Format::rgba)};
     mask = makeMask(selection.size());
   }
   clearImage(mask);
@@ -395,7 +395,7 @@ QRgb contrastColor(const QRgb color) {
 template <typename Pixel>
 class WandManip {
 public:
-  WandManip(Surface<PixelColor> overlay, Surface<PixelMask> mask, CSurface<Pixel> source, const PixelColor constrastColor)
+  WandManip(Surface<PixelRgba> overlay, Surface<PixelMask> mask, CSurface<Pixel> source, const PixelRgba constrastColor)
     : overlay{overlay}, mask{mask}, source{source}, constrastColor{constrastColor} {}
 
   bool start(const QPoint pos) {
@@ -425,12 +425,12 @@ public:
   }
 
 private:
-  Surface<PixelColor> overlay;
+  Surface<PixelRgba> overlay;
   Surface<PixelMask> mask;
   CSurface<Pixel> source;
   Pixel startColor;
-  PixelColor constrastColor;
-  PixelColor overlayColor;
+  PixelRgba constrastColor;
+  PixelRgba overlayColor;
   PixelMask maskColor;
   PixelMask maskCheckColor;
 };
@@ -439,10 +439,10 @@ private:
 
 void WandSelectTool::addToSelection(const ToolMouseEvent &event) {
   switch (format) {
-    case Format::color: {
-      Surface surface = makeCSurface<PixelColor>(cell->image);
+    case Format::rgba: {
+      Surface surface = makeCSurface<PixelRgba>(cell->image);
       WandManip manip{
-        makeSurface<PixelColor>(*event.overlay),
+        makeSurface<PixelRgba>(*event.overlay),
         makeSurface<PixelMask>(mask),
         surface,
         contrastColor(surface.getPixel(event.pos))
@@ -453,7 +453,7 @@ void WandSelectTool::addToSelection(const ToolMouseEvent &event) {
     case Format::palette: {
       Surface surface = makeCSurface<PixelPalette>(cell->image);
       WandManip manip{
-        makeSurface<PixelColor>(*event.overlay),
+        makeSurface<PixelRgba>(*event.overlay),
         makeSurface<PixelMask>(mask),
         surface,
         contrastColor(palette[surface.getPixel(event.pos)])
@@ -464,7 +464,7 @@ void WandSelectTool::addToSelection(const ToolMouseEvent &event) {
     case Format::gray: {
       Surface surface = makeCSurface<PixelGray>(cell->image);
       WandManip manip{
-        makeSurface<PixelColor>(*event.overlay),
+        makeSurface<PixelRgba>(*event.overlay),
         makeSurface<PixelMask>(mask),
         surface,
         qRgba(0, 0, scaleOverlayGray(surface.getPixel(event.pos)), scaleOverlayAlpha(255))

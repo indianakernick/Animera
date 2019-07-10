@@ -74,7 +74,7 @@ ToolColorsWidget::ToolColorsWidget(QWidget *parent)
 
 void ToolColorsWidget::initCanvas(const Format format) {
   switch (format) {
-    case Format::color:
+    case Format::rgba:
       colors.primary = qRgba(255, 0, 0, 255);
       colors.secondary = qRgba(0, 0, 255, 255);
       colors.erase = qRgba(0, 0, 0, 0);
