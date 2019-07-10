@@ -16,6 +16,9 @@
 		4513144D22D1B06F00D66262 /* timeline controls widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4513144B22D1B06F00D66262 /* timeline controls widget.cpp */; };
 		4513145022D1BF8700D66262 /* palette.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4513144E22D1BF8700D66262 /* palette.cpp */; };
 		4513145222D4B61100D66262 /* Document.icns in Resources */ = {isa = PBXBuildFile; fileRef = 4513145122D4B61100D66262 /* Document.icns */; };
+		4513145522D59EA300D66262 /* color picker impl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4513145322D59EA300D66262 /* color picker impl.cpp */; };
+		4513145822D5A29800D66262 /* picker impl rgba.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4513145622D5A29800D66262 /* picker impl rgba.cpp */; };
+		4513145B22D5A2A500D66262 /* picker impl gray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4513145922D5A2A500D66262 /* picker impl gray.cpp */; };
 		453C78192234935000818B19 /* timeline widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C78172234935000818B19 /* timeline widget.cpp */; };
 		453C781C22349BBD00818B19 /* editor widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C781A22349BBD00818B19 /* editor widget.cpp */; };
 		453C781F22349F0100818B19 /* tool select widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C781D22349F0100818B19 /* tool select widget.cpp */; };
@@ -84,6 +87,12 @@
 		4513144E22D1BF8700D66262 /* palette.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = palette.cpp; sourceTree = "<group>"; };
 		4513144F22D1BF8700D66262 /* palette.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = palette.hpp; sourceTree = "<group>"; };
 		4513145122D4B61100D66262 /* Document.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = Document.icns; path = Assets.xcassets/Document.icns; sourceTree = "<group>"; };
+		4513145322D59EA300D66262 /* color picker impl.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "color picker impl.cpp"; sourceTree = "<group>"; };
+		4513145422D59EA300D66262 /* color picker impl.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "color picker impl.hpp"; sourceTree = "<group>"; };
+		4513145622D5A29800D66262 /* picker impl rgba.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "picker impl rgba.cpp"; sourceTree = "<group>"; };
+		4513145722D5A29800D66262 /* picker impl rgba.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "picker impl rgba.hpp"; sourceTree = "<group>"; };
+		4513145922D5A2A500D66262 /* picker impl gray.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "picker impl gray.cpp"; sourceTree = "<group>"; };
+		4513145A22D5A2A500D66262 /* picker impl gray.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "picker impl gray.hpp"; sourceTree = "<group>"; };
 		452926E122BB0D6300B17E0D /* transform.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = transform.hpp; sourceTree = "<group>"; };
 		452926E222BB607E00B17E0D /* screenshot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = screenshot.png; sourceTree = "<group>"; };
 		452926E422BB607E00B17E0D /* add.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = add.pbm; sourceTree = "<group>"; };
@@ -1039,6 +1048,12 @@
 			children = (
 				45054F712259C9AA0078350B /* color picker widget.cpp */,
 				45054F722259C9AA0078350B /* color picker widget.hpp */,
+				4513145322D59EA300D66262 /* color picker impl.cpp */,
+				4513145422D59EA300D66262 /* color picker impl.hpp */,
+				4513145622D5A29800D66262 /* picker impl rgba.cpp */,
+				4513145722D5A29800D66262 /* picker impl rgba.hpp */,
+				4513145922D5A2A500D66262 /* picker impl gray.cpp */,
+				4513145A22D5A2A500D66262 /* picker impl gray.hpp */,
 				453D28BE2276956A00D0E5F9 /* color input widget.cpp */,
 				453D28BF2276956A00D0E5F9 /* color input widget.hpp */,
 				453D28C422769EC000D0E5F9 /* color slider widget.cpp */,
@@ -2151,7 +2166,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "function moc {\n  local OUTPUT=\"$PROJECT_DIR/src/$1.moc\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.hpp\" > \"$OUTPUT\"\n  echo \"\" >> \"$OUTPUT\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.cpp\" >> \"$OUTPUT\"\n}\n\nmoc \"timeline controls widget\"\nmoc \"timeline frames widget\"\nmoc \"timeline layers widget\"\nmoc \"timeline cells widget\"\nmoc \"color picker widget\"\nmoc \"color slider widget\"\nmoc \"color graph widget\"\nmoc \"tool select widget\"\nmoc \"color input widget\"\nmoc \"tool colors widget\"\nmoc \"init canvas dialog\"\nmoc \"text input widget\"\nmoc \"status bar widget\"\nmoc \"timeline widget\"\nmoc \"palette widget\"\nmoc \"sample object\"\nmoc \"editor widget\"\nmoc \"tool widgets\"\nmoc \"clear object\"\nmoc \"undo object\"\nmoc \"application\"\nmoc \"timeline\"\nmoc \"palette\"\nmoc \"sprite\"\nmoc \"window\"\nmoc \"main\"\n";
+			shellScript = "function moc {\n  local OUTPUT=\"$PROJECT_DIR/src/$1.moc\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.hpp\" > \"$OUTPUT\"\n  echo \"\" >> \"$OUTPUT\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.cpp\" >> \"$OUTPUT\"\n}\n\nmoc \"timeline controls widget\"\nmoc \"timeline frames widget\"\nmoc \"timeline layers widget\"\nmoc \"timeline cells widget\"\nmoc \"color picker widget\"\nmoc \"color slider widget\"\nmoc \"color graph widget\"\nmoc \"tool select widget\"\nmoc \"color input widget\"\nmoc \"tool colors widget\"\nmoc \"init canvas dialog\"\nmoc \"color picker impl\"\nmoc \"text input widget\"\nmoc \"status bar widget\"\nmoc \"timeline widget\"\nmoc \"palette widget\"\nmoc \"sample object\"\nmoc \"editor widget\"\nmoc \"tool widgets\"\nmoc \"clear object\"\nmoc \"undo object\"\nmoc \"application\"\nmoc \"timeline\"\nmoc \"palette\"\nmoc \"sprite\"\nmoc \"window\"\nmoc \"main\"\n";
 		};
 		453C787B2235D63B00818B19 /* RCC */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2212,8 +2227,10 @@
 				455F2868220690A600C73F39 /* main.cpp in Sources */,
 				4595D48622BCA0E000607D64 /* scroll bar widget.cpp in Sources */,
 				453C781C22349BBD00818B19 /* editor widget.cpp in Sources */,
+				4513145822D5A29800D66262 /* picker impl rgba.cpp in Sources */,
 				45BADA1D2247007F000D095C /* glm.cpp in Sources */,
 				453D28BD22768D9900D0E5F9 /* text input widget.cpp in Sources */,
+				4513145B22D5A2A500D66262 /* picker impl gray.cpp in Sources */,
 				45B284B6221B726200D6D055 /* tool impls.cpp in Sources */,
 				453C781F22349F0100818B19 /* tool select widget.cpp in Sources */,
 				45054F6D22596BC10078350B /* clear object.cpp in Sources */,
@@ -2234,6 +2251,7 @@
 				45B284962218E39300D6D055 /* cell.cpp in Sources */,
 				45054F70225970150078350B /* undo object.cpp in Sources */,
 				453D28C92276A7DD00D0E5F9 /* color graph widget.cpp in Sources */,
+				4513145522D59EA300D66262 /* color picker impl.cpp in Sources */,
 				4595D49222C0644B00607D64 /* timeline frames widget.cpp in Sources */,
 				4513145022D1BF8700D66262 /* palette.cpp in Sources */,
 				45BADA77224714A3000D095C /* tool widgets.cpp in Sources */,
