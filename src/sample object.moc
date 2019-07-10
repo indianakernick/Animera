@@ -22,7 +22,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_SampleObject_t {
     QByteArrayData data[9];
-    char stringdata0[73];
+    char stringdata0[79];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -36,14 +36,14 @@ QT_MOC_LITERAL(1, 13, 12), // "colorChanged"
 QT_MOC_LITERAL(2, 26, 0), // ""
 QT_MOC_LITERAL(3, 27, 4), // "QRgb"
 QT_MOC_LITERAL(4, 32, 7), // "setCell"
-QT_MOC_LITERAL(5, 40, 5), // "Cell*"
-QT_MOC_LITERAL(6, 46, 9), // "mouseMove"
-QT_MOC_LITERAL(7, 56, 8), // "keyPress"
-QT_MOC_LITERAL(8, 65, 7) // "Qt::Key"
+QT_MOC_LITERAL(5, 40, 11), // "const Cell*"
+QT_MOC_LITERAL(6, 52, 9), // "mouseMove"
+QT_MOC_LITERAL(7, 62, 8), // "keyPress"
+QT_MOC_LITERAL(8, 71, 7) // "Qt::Key"
 
     },
     "SampleObject\0colorChanged\0\0QRgb\0setCell\0"
-    "Cell*\0mouseMove\0keyPress\0Qt::Key"
+    "const Cell*\0mouseMove\0keyPress\0Qt::Key"
 };
 #undef QT_MOC_LITERAL
 
@@ -86,7 +86,7 @@ void SampleObject::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->colorChanged((*reinterpret_cast< QRgb(*)>(_a[1]))); break;
-        case 1: _t->setCell((*reinterpret_cast< Cell*(*)>(_a[1]))); break;
+        case 1: _t->setCell((*reinterpret_cast< const Cell*(*)>(_a[1]))); break;
         case 2: _t->mouseMove((*reinterpret_cast< QPoint(*)>(_a[1]))); break;
         case 3: _t->keyPress((*reinterpret_cast< Qt::Key(*)>(_a[1]))); break;
         default: ;

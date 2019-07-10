@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_ToolColorsWidget_t {
-    QByteArrayData data[8];
-    char stringdata0[92];
+    QByteArrayData data[9];
+    char stringdata0[99];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -38,12 +38,13 @@ QT_MOC_LITERAL(3, 32, 10), // "ToolColors"
 QT_MOC_LITERAL(4, 43, 11), // "attachColor"
 QT_MOC_LITERAL(5, 55, 12), // "ColorHandle*"
 QT_MOC_LITERAL(6, 68, 10), // "initCanvas"
-QT_MOC_LITERAL(7, 79, 12) // "changeColors"
+QT_MOC_LITERAL(7, 79, 6), // "Format"
+QT_MOC_LITERAL(8, 86, 12) // "changeColors"
 
     },
     "ToolColorsWidget\0colorsChanged\0\0"
     "ToolColors\0attachColor\0ColorHandle*\0"
-    "initCanvas\0changeColors"
+    "initCanvas\0Format\0changeColors"
 };
 #undef QT_MOC_LITERAL
 
@@ -65,15 +66,15 @@ static const uint qt_meta_data_ToolColorsWidget[] = {
        4,    1,   37,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       6,    0,   40,    2, 0x0a /* Public */,
-       7,    0,   41,    2, 0x08 /* Private */,
+       6,    1,   40,    2, 0x0a /* Public */,
+       8,    0,   43,    2, 0x08 /* Private */,
 
  // signals: parameters
     QMetaType::Void, 0x80000000 | 3,    2,
     QMetaType::Void, 0x80000000 | 5,    2,
 
  // slots: parameters
-    QMetaType::Void,
+    QMetaType::Void, 0x80000000 | 7,    2,
     QMetaType::Void,
 
        0        // eod
@@ -87,7 +88,7 @@ void ToolColorsWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
         switch (_id) {
         case 0: _t->colorsChanged((*reinterpret_cast< ToolColors(*)>(_a[1]))); break;
         case 1: _t->attachColor((*reinterpret_cast< ColorHandle*(*)>(_a[1]))); break;
-        case 2: _t->initCanvas(); break;
+        case 2: _t->initCanvas((*reinterpret_cast< Format(*)>(_a[1]))); break;
         case 3: _t->changeColors(); break;
         default: ;
         }

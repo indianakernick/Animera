@@ -199,6 +199,7 @@ constexpr WidgetRect pick_name_rect = {
 inline const QColor pick_primary_color = {0, 0, 0};
 inline const QColor pick_secondary_color = {255, 255, 255};
 inline const QColor pick_default_color = {255, 0, 0, 255};
+constexpr int       pick_default_gray = 255;
 
 constexpr int       pick_alpha_tiles = 2;
 

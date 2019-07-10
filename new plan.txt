@@ -367,6 +367,7 @@ Maybe an ellipse tool
 use a pattern to name sprites
 player \frame
 char_\(frame + 33)
+walking \(frame / 8) \(frame % 8)
 assign names to each frame (e.g. brush, line, rotate)
 
 https://lospec.com/pixel-art-tutorials
@@ -386,35 +387,9 @@ https://github.com/NoAvailableAlias/nano-signal-slot
 
 Have a look at Pro Motion NG
 
+A builtin calculator?
+  just a text box and a label (below the palette maybe)
+  can sometimes be useful
+  is it really necessary?
+  how often will it be used?
 
-
-Why do we need palette images?
-  Change the color in the palette to have it changed for the whole animation
-
-Color types
-  32-bit RGBA
-  8-bit Indexed
-  8-bit Gray
-
-Grayscale color picker?
-  Color picker should change for each color type
-
-Should we be allowed to mix color, grayscale and masks?
-  No. Color type is a project-wide setting
-
-
-
-
-
-
-I'm just copying Aseprite
-I can never hope to create something better than Aseprite
-I'm not doing anything new or interesting
-I'm not contributing to the community
-
-Perhaps the problem is that the project is just too big. 
-I'm building an application that does lots of stuff. 
-If I want to see a project through to completion, I should start small.
-I should limit the scope of features.
-I could develop a minimal set of features while ensuring that the application is simple
-and intuitive to use.

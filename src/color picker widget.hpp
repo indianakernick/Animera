@@ -17,6 +17,7 @@
 class SVGraphWidget;
 class HueSliderWidget;
 class AlphaSliderWidget;
+class GraySliderWidget;
 class NumberInputWidget;
 class HexInputWidget;
 class LabelWidget;
@@ -33,34 +34,39 @@ public Q_SLOTS:
   void setColor(QRgb);
   
 private:
+  Format format;
   ColorHandle *handle = nullptr;
   HSV colorHsv;
   RGB colorRgb;
   int alpha;
+  int gray;
   
-  LabelWidget *nameLabel;
+  LabelWidget *nameLabel = nullptr;
   
-  SVGraphWidget *svGraph;
-  HueSliderWidget *hueSlider;
-  AlphaSliderWidget *alphaSlider;
+  SVGraphWidget *svGraph = nullptr;
+  HueSliderWidget *hueSlider = nullptr;
+  AlphaSliderWidget *alphaSlider = nullptr;
+  GraySliderWidget *graySlider = nullptr;
   
-  NumberInputWidget *boxR;
-  NumberInputWidget *boxG;
-  NumberInputWidget *boxB;
-  NumberInputWidget *boxH;
-  NumberInputWidget *boxS;
-  NumberInputWidget *boxV;
-  NumberInputWidget *boxA;
-  HexInputWidget *boxHex;
+  NumberInputWidget *boxR = nullptr;
+  NumberInputWidget *boxG = nullptr;
+  NumberInputWidget *boxB = nullptr;
+  NumberInputWidget *boxH = nullptr;
+  NumberInputWidget *boxS = nullptr;
+  NumberInputWidget *boxV = nullptr;
+  NumberInputWidget *boxA = nullptr;
+  NumberInputWidget *boxY = nullptr;
+  HexInputWidget *boxHex = nullptr;
   
-  LabelWidget *labelR;
-  LabelWidget *labelG;
-  LabelWidget *labelB;
-  LabelWidget *labelH;
-  LabelWidget *labelS;
-  LabelWidget *labelV;
-  LabelWidget *labelA;
-  LabelWidget *labelHex;
+  LabelWidget *labelR = nullptr;
+  LabelWidget *labelG = nullptr;
+  LabelWidget *labelB = nullptr;
+  LabelWidget *labelH = nullptr;
+  LabelWidget *labelS = nullptr;
+  LabelWidget *labelV = nullptr;
+  LabelWidget *labelA = nullptr;
+  LabelWidget *labelY = nullptr;
+  LabelWidget *labelHex = nullptr;
   
   void setupLayout();
   void connectSignals();
@@ -80,6 +86,8 @@ private Q_SLOTS:
   void changeRed(int);
   void changeGreen(int);
   void changeBlue(int);
+  void changeGray(int);
+  //void changeRGBAtoGray(RGB);
 };
 
 #endif

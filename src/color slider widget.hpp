@@ -98,4 +98,31 @@ private:
   void decColor();
 };
 
+class GraySliderWidget final : public ColorSliderWidget<GraySliderWidget> {
+  Q_OBJECT
+  
+  friend class ColorSliderWidget<GraySliderWidget>;
+
+public:
+  explicit GraySliderWidget(QWidget *);
+
+Q_SIGNALS:
+  void grayChanged(int);
+
+public Q_SLOTS:
+  void changeGray(int);
+
+private:
+  int gray;
+  
+  void plotGraph();
+  void renderBackground(QPainter &);
+  
+  void updateGray(int);
+  int getPixel();
+  void setColor(int);
+  void incColor();
+  void decColor();
+};
+
 #endif

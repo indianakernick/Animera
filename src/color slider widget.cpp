@@ -124,16 +124,11 @@ void HueSliderWidget::changeHSV(const HSV hsv) {
 }
 
 void HueSliderWidget::plotGraph() {
-  // x - hue
-  // 0 - left
-  
-  qreal hue = 0.0;
   int idx = 0;
-  
   for (QRgb &pixel : makeSurface<QRgb>(graph).row()) {
-    pixel = hsv2rgb(hue, color.s, color.v);
     // can't use hue2pix here
-    hue = ++idx * 360.0 / pick_slider_rect.inner().width();
+    const qreal hue = idx++ * 360.0 / pick_slider_rect.inner().width();
+    pixel = hsv2rgb(hue, color.s, color.v);
   }
 }
 
@@ -216,13 +211,11 @@ QRgb setAlpha(const QRgb color, const int alpha) {
 
 void AlphaSliderWidget::plotGraph() {
   const QRgb rgb = hsv2rgb(color.h, color.s, color.v);
-  int alp = 0;
   int idx = 0;
-  
   for (QRgb &pixel : makeSurface<QRgb>(graph).row()) {
-    pixel = setAlpha(rgb, alp);
     // can't use alp2pix here
-    alp = qRound(++idx * 255.0 / (pick_slider_rect.inner().width() - 1));
+    const int alp = qRound(idx++ * 255.0 / (pick_slider_rect.inner().width() - 1));
+    pixel = setAlpha(rgb, alp);
   }
 }
 
@@ -265,6 +258,52 @@ void AlphaSliderWidget::incColor() {
 
 void AlphaSliderWidget::decColor() {
   updateAlpha(std::max(alpha - 1, 0));
+}
+
+GraySliderWidget::GraySliderWidget(QWidget *parent)
+  : ColorSliderWidget{parent},
+    gray{pick_default_gray} {
+  plotGraph();
+}
+
+void GraySliderWidget::changeGray(const int newGray) {
+  gray = newGray;
+  repaint();
+}
+
+void GraySliderWidget::plotGraph() {
+  int idx = 0;
+  for (QRgb &pixel : makeSurface<QRgb>(graph).row()) {
+    // can't use alp2pix here
+    const int y = qRound(idx++ * 255.0 / (pick_slider_rect.inner().width() - 1));
+    pixel = qRgb(y, y, y);
+  }
+}
+
+void GraySliderWidget::renderBackground(QPainter &) {}
+
+void GraySliderWidget::updateGray(const int newGray) {
+  if (newGray != gray) {
+    gray = newGray;
+    repaint();
+    Q_EMIT grayChanged(gray);
+  }
+}
+
+int GraySliderWidget::getPixel() {
+  return alp2pix(gray);
+}
+
+void GraySliderWidget::setColor(const int pointX) {
+  updateGray(pix2alp(pointX));
+}
+
+void GraySliderWidget::incColor() {
+  updateGray(std::min(gray + 1, 255));
+}
+
+void GraySliderWidget::decColor() {
+  updateGray(std::max(gray - 1, 0));
 }
 
 #include "color slider widget.moc"

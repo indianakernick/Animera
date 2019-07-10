@@ -220,10 +220,10 @@ void Window::connectSignals() {
   CONNECT(timeline,        nameChanged,         sprite.timeline, setName);
   CONNECT(timeline,        nextFrame,           sprite.timeline, nextFrame);
   
+  CONNECT(sprite,          canvasInitialized,   colorPicker,     initCanvas);
   CONNECT(sprite,          canvasInitialized,   colors,          initCanvas);
   CONNECT(sprite,          canvasInitialized,   editor,          initCanvas);
   CONNECT(sprite,          canvasInitialized,   palette,         initCanvas);
-  CONNECT(sprite,          canvasInitialized,   colorPicker,     initCanvas);
   CONNECT(sprite,          canvasInitialized,   tools,           initCanvas);
   
   CONNECT(sprite.palette,  paletteChanged,      palette,         setPalette);

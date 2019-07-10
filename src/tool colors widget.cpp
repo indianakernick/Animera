@@ -68,14 +68,28 @@ ToolColorsWidget::ToolColorsWidget(QWidget *parent)
     secondary{new ActiveColorWidget{this, "Secondary", &colors.secondary}},
     erase{new ActiveColorWidget{this, "Erase", &colors.erase}} {
   setFixedSize(tool_colors_rect.widget().size());
-  colors.primary = qRgba(255, 0, 0, 255);
-  colors.secondary = qRgba(0, 0, 255, 255);
-  colors.erase = qRgba(0, 0, 0, 0);
   setupLayout();
   connectSignals();
 }
 
-void ToolColorsWidget::initCanvas() {
+void ToolColorsWidget::initCanvas(const Format format) {
+  switch (format) {
+    case Format::color:
+      colors.primary = qRgba(255, 0, 0, 255);
+      colors.secondary = qRgba(0, 0, 255, 255);
+      colors.erase = qRgba(0, 0, 0, 0);
+      break;
+    case Format::palette:
+      colors.primary = 2;
+      colors.secondary = 1;
+      colors.erase = 0;
+      break;
+    case Format::gray:
+      colors.primary = 255;
+      colors.secondary = 128;
+      colors.erase = 0;
+      break;
+  }
   primary->click();
   Q_EMIT colorsChanged(colors);
 }

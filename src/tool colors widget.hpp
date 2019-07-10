@@ -22,7 +22,7 @@ public:
   explicit ToolColorsWidget(QWidget *);
 
 public Q_SLOTS:
-  void initCanvas();
+  void initCanvas(Format);
 
 Q_SIGNALS:
   void colorsChanged(ToolColors);
