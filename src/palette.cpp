@@ -74,6 +74,9 @@ void Palette::initDefault() {
   switch (canvasFormat) {
     case Format::palette:
       *iter++ = 0;
+      *iter++ = qRgb(0, 0, 0);
+      *iter++ = qRgb(255, 255, 255);
+      break;
     case Format::rgba:
       iter = std::copy(hue_palette.cbegin(), hue_palette.cend(), iter);
     case Format::gray:

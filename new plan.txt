@@ -392,4 +392,8 @@ A builtin calculator?
   can sometimes be useful
   is it really necessary?
   how often will it be used?
+  if you find yourself needing to use a calculator then
+    maybe there is a feature missing
 
+image, view, sampler
+vulkan textures

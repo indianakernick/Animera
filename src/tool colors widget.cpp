@@ -90,7 +90,7 @@ void ToolColorsWidget::initCanvas(const Format format) {
       break;
     case Format::palette:
       colors.primary = 1;
-      colors.secondary = 17;
+      colors.secondary = 2;
       colors.erase = 0;
       break;
     case Format::gray:
