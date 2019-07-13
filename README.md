@@ -23,6 +23,8 @@ to use for future projects. I'll certainly use this tool if no-one else does!
 
 Here's a few quick gifs that demostrate some of the features I have implemented so far.
 
+![Palette Mode](https://i.imgur.com/9zZOte3.gif)
+
 ![Magic Wand](https://i.imgur.com/kmQziuq.gif)
 
 ![Color Picker](https://i.imgur.com/UCoMrYK.gif)
