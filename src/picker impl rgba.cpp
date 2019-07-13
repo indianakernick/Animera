@@ -65,8 +65,6 @@ void PickerImplRGBA::setupLayout(QGridLayout *layout) {
   layout->addWidget(boxHex,      6, 3, 1, 3);
 }
 
-// @TODO there has to be a better way
-
 void PickerImplRGBA::connectSignals() {
   // @TODO there has to be a better way
   

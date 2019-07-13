@@ -26,10 +26,20 @@ private Q_SLOTS:
 
 private:
   WidgetRect rect;
+  int offset = 0;
   QTimer cursorBlinkTimer;
   bool cursorBlinkStatus = true;
   
   void focusInEvent(QFocusEvent *) override;
+  void focusOutEvent(QFocusEvent *) override;
+  void wheelEvent(QWheelEvent *) override;
+
+  int getCursorPos(int) const;
+  int getMinCursorPos() const;
+  int getMaxCursorPos() const;
+  void setOffset(int, int);
+  void constrainOffset();
+  void updateMargins();
 
   void renderBackground(QPainter &);
   void renderText(QPainter &);
