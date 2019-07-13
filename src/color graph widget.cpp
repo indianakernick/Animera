@@ -133,7 +133,6 @@ void SVGraphWidget::mousePressEvent(QMouseEvent *event) {
   if (event->button() == Qt::LeftButton) {
     mouseDown = true;
     setColor(event->localPos());
-    grabMouse(Qt::BlankCursor);
   }
 }
 
@@ -141,7 +140,6 @@ void SVGraphWidget::mouseReleaseEvent(QMouseEvent *event) {
   if (event->button() == Qt::LeftButton) {
     mouseDown = false;
     setColor(event->localPos());
-    releaseMouse();
   }
 }
 

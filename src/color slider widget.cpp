@@ -70,7 +70,6 @@ void ColorSliderWidget<Derived>::mousePressEvent(QMouseEvent *event) {
   if (event->button() == Qt::LeftButton) {
     mouseDown = true;
     setColor(event);
-    grabMouse(Qt::BlankCursor);
   }
 }
 
@@ -79,7 +78,6 @@ void ColorSliderWidget<Derived>::mouseReleaseEvent(QMouseEvent *event) {
   if (event->button() == Qt::LeftButton) {
     mouseDown = false;
     setColor(event);
-    releaseMouse();
   }
 }
 
