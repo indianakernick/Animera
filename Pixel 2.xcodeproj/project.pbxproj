@@ -834,6 +834,7 @@
 		45CAC92822CC7B5800F945BF /* sample object.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "sample object.hpp"; sourceTree = "<group>"; };
 		45CFA7CD22A4C1C40059DB41 /* palette widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "palette widget.cpp"; sourceTree = "<group>"; };
 		45CFA7CE22A4C1C40059DB41 /* palette widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "palette widget.hpp"; sourceTree = "<group>"; };
+		45D1098E22D9B18800D1F1CB /* palette select.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = "palette select.pbm"; sourceTree = "<group>"; };
 		45D34F1C22825FE400339A4E /* masking.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = masking.hpp; sourceTree = "<group>"; };
 		45DC255F224A034200F40116 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		45DC2561224A0AC000F40116 /* title.anim */ = {isa = PBXFileReference; lastKnownFileType = file; path = title.anim; sourceTree = "<group>"; };
@@ -2051,6 +2052,7 @@
 				45BE2A2C22683A3000E21A85 /* slider bar s.pbm */,
 				45BE2A2A22680B0900E21A85 /* sv circle p.pbm */,
 				45BE2A2922680B0900E21A85 /* sv circle s.pbm */,
+				45D1098E22D9B18800D1F1CB /* palette select.pbm */,
 			);
 			path = "Color Picker";
 			sourceTree = "<group>";

@@ -11,8 +11,10 @@
 #include "config.hpp"
 #include "connect.hpp"
 #include <QtGui/qevent.h>
+#include <QtGui/qbitmap.h>
 #include <QtGui/qpainter.h>
 #include "color handle.hpp"
+#include "widget painting.hpp"
 #include "radio button widget.hpp"
 #include <QtWidgets/qgridlayout.h>
 
@@ -24,6 +26,7 @@ public:
     : RadioButtonWidget{parent}, color{color}, index{index}, format{format} {
     setFixedSize(pal_tile_size, pal_tile_size);
     CONNECT(this, toggled, this, attachColor);
+    loadPixmaps();
   }
 
 Q_SIGNALS:
@@ -41,6 +44,16 @@ private:
   QRgb &color;
   int index;
   Format format;
+  QPixmap selectBlack;
+  QPixmap selectWhite;
+
+  void loadPixmaps() {
+    // @TODO cache
+    QBitmap bitmap{":/Color Picker/palette select.pbm"};
+    bitmap = bitmap.scaled(bitmap.size() * glob_scale);
+    selectBlack = bakeColoredBitmap(bitmap, QColor{0, 0, 0});
+    selectWhite = bakeColoredBitmap(bitmap, QColor{255, 255, 255});
+  }
 
   void paintChecker(QPainter &painter) {
     constexpr int bord = glob_border_width;
@@ -80,16 +93,11 @@ private:
   
   void paintSelect(QPainter &painter) {
     if (isChecked()) {
-      if (qGray(color) < 128) {
-        painter.setBrush(QColor{255, 255, 255});
+      if (qGray(color) < 128 && qAlpha(color) >= 128) {
+        painter.drawPixmap(glob_border_width, glob_border_width, selectWhite);
       } else {
-        painter.setBrush(QColor{0, 0, 0});
+        painter.drawPixmap(glob_border_width, glob_border_width, selectBlack);
       }
-      painter.drawRect(
-        glob_border_width, glob_border_width,
-        (width() - glob_border_width) / 2,
-        (height() - glob_border_width)
-      );
     }
   }
 
