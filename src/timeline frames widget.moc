@@ -121,7 +121,7 @@ int FramesWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 struct qt_meta_stringdata_FrameScrollWidget_t {
     QByteArrayData data[3];
-    char stringdata0[37];
+    char stringdata0[40];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -131,11 +131,11 @@ struct qt_meta_stringdata_FrameScrollWidget_t {
 static const qt_meta_stringdata_FrameScrollWidget_t qt_meta_stringdata_FrameScrollWidget = {
     {
 QT_MOC_LITERAL(0, 0, 17), // "FrameScrollWidget"
-QT_MOC_LITERAL(1, 18, 17), // "changeRightMargin"
-QT_MOC_LITERAL(2, 36, 0) // ""
+QT_MOC_LITERAL(1, 18, 20), // "shouldSetRightMargin"
+QT_MOC_LITERAL(2, 39, 0) // ""
 
     },
-    "FrameScrollWidget\0changeRightMargin\0"
+    "FrameScrollWidget\0shouldSetRightMargin\0"
     ""
 };
 #undef QT_MOC_LITERAL
@@ -168,14 +168,14 @@ void FrameScrollWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, in
         auto *_t = static_cast<FrameScrollWidget *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->changeRightMargin((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 0: _t->shouldSetRightMargin((*reinterpret_cast< int(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
         int *result = reinterpret_cast<int *>(_a[0]);
         {
             using _t = void (FrameScrollWidget::*)(int );
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&FrameScrollWidget::changeRightMargin)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&FrameScrollWidget::shouldSetRightMargin)) {
                 *result = 0;
                 return;
             }
@@ -224,7 +224,7 @@ int FrameScrollWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void FrameScrollWidget::changeRightMargin(int _t1)
+void FrameScrollWidget::shouldSetRightMargin(int _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);

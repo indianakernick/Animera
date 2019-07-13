@@ -111,7 +111,7 @@ void LayersWidget::setLayerCount(const LayerIdx count) {
   while (layerCount() < count) {
     auto *layerName = new LayerNameWidget{this, layerCount()};
     CONNECT(layerName, visibilityChanged, this, visibilityChanged);
-    CONNECT(layerName, nameChanged, this, nameChanged);
+    CONNECT(layerName, nameChanged,       this, nameChanged);
     layout->addWidget(layerName);
     layers.push_back(layerName);
   }
@@ -133,7 +133,7 @@ LayerScrollWidget::LayerScrollWidget(QWidget *parent)
 LayersWidget *LayerScrollWidget::getChild() {
   auto *layers = new LayersWidget{this};
   // We cannot simply call setViewportMargins
-  CONNECT(this, changeBottomMargin, layers, setMargin);
+  CONNECT(this, shouldSetBottomMargin, layers, setMargin);
   setWidget(layers);
   return layers;
 }

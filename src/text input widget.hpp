@@ -20,13 +20,13 @@ public:
   TextInputWidget(QWidget *, WidgetRect);
 
 private Q_SLOTS:
-  void blinkSlot();
+  void blink();
   void showCursor();
   void hideCursor();
 
 private:
-  QTimer cursorBlinkTimer;
   WidgetRect rect;
+  QTimer cursorBlinkTimer;
   bool cursorBlinkStatus = true;
   
   void focusInEvent(QFocusEvent *) override;

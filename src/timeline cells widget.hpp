@@ -20,7 +20,7 @@ public:
 
 Q_SIGNALS:
   void resized();
-  void ensureVisible(QPoint);
+  void shouldEnsureVisible(QPoint);
   
 public Q_SLOTS:
   void setCurrPos(CellPos);
@@ -52,7 +52,7 @@ Q_SIGNALS:
   void bottomMarginChanged(int);
 
 public Q_SLOTS:
-  void contentResized();
+  void changeMargins();
   void ensureVisible(QPoint);
 
 private:

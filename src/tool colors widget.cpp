@@ -24,6 +24,11 @@ public:
   ActiveColorWidget(QWidget *parent, const QString &name, QRgb &color, const Format format)
     : RadioButtonWidget{parent}, name{name}, color{color}, format{format} {
     setFixedSize(tool_color_rect.widget().size());
+    if (format == Format::palette) {
+      CONNECT(this, toggled, this, attachIndex);
+    } else {
+      CONNECT(this, toggled, this, attachColor);
+    }
   }
 
 public Q_SLOTS:
@@ -43,8 +48,24 @@ public Q_SLOTS:
     }
   }
 
+private Q_SLOTS:
+  void attachColor(const bool checked) {
+    if (checked) {
+      Q_EMIT shouldAttachColor(this);
+      repaint();
+    }
+  }
+  void attachIndex(const bool checked) {
+    if (checked) {
+      Q_EMIT shouldAttachIndex(color);
+      repaint();
+    }
+  }
+
 Q_SIGNALS:
   void colorChanged();
+  void shouldAttachColor(ColorHandle *);
+  void shouldAttachIndex(int);
   
 private:
   QString name;
@@ -99,36 +120,47 @@ ToolColorsWidget::ToolColorsWidget(QWidget *parent)
 }
 
 void ToolColorsWidget::initCanvas(const Format format) {
-  initColors(format);
-  primary = new ActiveColorWidget{this, "Primary", colors.primary, format};
-  secondary = new ActiveColorWidget{this, "Secondary", colors.secondary, format};
-  erase = new ActiveColorWidget{this, "Erase", colors.erase, format};
+  colors = getInitialColors(format);
+  widgets[0] = new ActiveColorWidget{this, "Primary", colors.primary, format};
+  widgets[1] = new ActiveColorWidget{this, "Secondary", colors.secondary, format};
+  widgets[2] = new ActiveColorWidget{this, "Erase", colors.erase, format};
   setupLayout();
-  connectSignals(format);
+  connectSignals();
   Q_EMIT colorsChanged(colors);
 }
 
 void ToolColorsWidget::setPalette(const PaletteCSpan palette) {
-  primary->setPalette(palette);
-  secondary->setPalette(palette);
-  erase->setPalette(palette);
-  primary->click();
+  for (auto *widget : widgets) {
+    widget->setPalette(palette);
+  }
+  widgets[0]->click();
 }
 
 void ToolColorsWidget::setIndex(const int index) {
-  primary->setIndex(index);
-  secondary->setIndex(index);
-  erase->setIndex(index);
+  for (auto *widget : widgets) {
+    widget->setIndex(index);
+  }
 }
 
 void ToolColorsWidget::changePaletteColors() {
-  primary->changePaletteColors();
-  secondary->changePaletteColors();
-  erase->changePaletteColors();
+  for (auto *widget : widgets) {
+    widget->changePaletteColors();
+  }
 }
 
 void ToolColorsWidget::changeColors() {
   Q_EMIT colorsChanged(colors);
+}
+
+ToolColors ToolColorsWidget::getInitialColors(const Format format) {
+  switch (format) {
+    case Format::rgba:
+      return {qRgb(255, 0, 0), qRgb(0, 0, 255), 0};
+    case Format::palette:
+      return {1, 2, 0};
+    case Format::gray:
+      return {255, 128, 0};
+  }
 }
 
 void ToolColorsWidget::setupLayout() {
@@ -136,61 +168,16 @@ void ToolColorsWidget::setupLayout() {
   setLayout(layout);
   layout->setSpacing(0);
   layout->setContentsMargins(0, 0, 0, 0);
-  
-  layout->addWidget(primary);
-  layout->addWidget(secondary);
-  layout->addWidget(erase);
-}
-
-template <auto Color>
-void ToolColorsWidget::toggleColor(const bool checked) {
-  if (checked) {
-    Q_EMIT attachColor(this->*Color);
-    repaint();
+  for (auto *widget : widgets) {
+    layout->addWidget(widget);
   }
 }
 
-template <auto Color>
-void ToolColorsWidget::toggleIndex(const bool checked) {
-  if (checked) {
-    Q_EMIT attachIndex(colors.*Color);
-    repaint();
-  }
-}
-
-void ToolColorsWidget::connectSignals(const Format format) {
-  CONNECT(primary, colorChanged, this, changeColors);
-  CONNECT(secondary, colorChanged, this, changeColors);
-  CONNECT(erase, colorChanged, this, changeColors);
-  
-  if (format == Format::palette) {
-    CONNECT(primary, toggled, this, toggleIndex<&ToolColors::primary>);
-    CONNECT(secondary, toggled, this, toggleIndex<&ToolColors::secondary>);
-    CONNECT(erase, toggled, this, toggleIndex<&ToolColors::erase>);
-  } else {
-    CONNECT(primary, toggled, this, toggleColor<&ToolColorsWidget::primary>);
-    CONNECT(secondary, toggled, this, toggleColor<&ToolColorsWidget::secondary>);
-    CONNECT(erase, toggled, this, toggleColor<&ToolColorsWidget::erase>);
-  }
-}
-
-void ToolColorsWidget::initColors(const Format format) {
-  switch (format) {
-    case Format::rgba:
-      colors.primary = qRgba(255, 0, 0, 255);
-      colors.secondary = qRgba(0, 0, 255, 255);
-      colors.erase = qRgba(0, 0, 0, 0);
-      break;
-    case Format::palette:
-      colors.primary = 1;
-      colors.secondary = 2;
-      colors.erase = 0;
-      break;
-    case Format::gray:
-      colors.primary = 255;
-      colors.secondary = 128;
-      colors.erase = 0;
-      break;
+void ToolColorsWidget::connectSignals() {
+  for (auto *widget : widgets) {
+    CONNECT(widget, colorChanged,      this, changeColors);
+    CONNECT(widget, shouldAttachColor, this, shouldAttachColor);
+    CONNECT(widget, shouldAttachIndex, this, shouldAttachIndex);
   }
 }
 

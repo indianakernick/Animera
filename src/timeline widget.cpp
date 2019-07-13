@@ -35,8 +35,8 @@ TimelineWidget::TimelineWidget(QWidget *parent)
   CONNECT(frameScroll->horizontalScrollBar(), valueChanged, cellScroll->horizontalScrollBar(), setValue);
   CONNECT(cellScroll->horizontalScrollBar(), valueChanged, frameScroll->horizontalScrollBar(), setValue);
   
-  CONNECT(cellScroll, rightMarginChanged, frameScroll, changeRightMargin);
-  CONNECT(cellScroll, bottomMarginChanged, layerScroll, changeBottomMargin);
+  CONNECT(cellScroll, rightMarginChanged, frameScroll, shouldSetRightMargin);
+  CONNECT(cellScroll, bottomMarginChanged, layerScroll, shouldSetBottomMargin);
   
   CONNECT(layers, visibilityChanged, this, visibilityChanged);
   CONNECT(layers, nameChanged, this, nameChanged);

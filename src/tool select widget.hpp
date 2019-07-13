@@ -28,7 +28,7 @@ public:
 Q_SIGNALS:
   void cellModified();
   void overlayModified();
-  void updateStatusBar(std::string_view);
+  void shouldShowPerm(std::string_view);
   void changingAction();
   void cellRequested();
 

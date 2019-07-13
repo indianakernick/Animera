@@ -9,6 +9,7 @@
 #ifndef tool_colors_widget_hpp
 #define tool_colors_widget_hpp
 
+#include <array>
 #include "tool.hpp"
 #include <QtWidgets/qwidget.h>
 
@@ -29,25 +30,19 @@ public Q_SLOTS:
 
 Q_SIGNALS:
   void colorsChanged(ToolColors);
-  void attachColor(ColorHandle *);
-  void attachIndex(int);
+  void shouldAttachColor(ColorHandle *);
+  void shouldAttachIndex(int);
 
 private Q_SLOTS:
   void changeColors();
 
 private:
   ToolColors colors;
-  ActiveColorWidget *primary = nullptr;
-  ActiveColorWidget *secondary = nullptr;
-  ActiveColorWidget *erase = nullptr;
+  std::array<ActiveColorWidget *, 3> widgets;
   
+  static ToolColors getInitialColors(Format);
   void setupLayout();
-  template <auto>
-  void toggleColor(bool);
-  template <auto>
-  void toggleIndex(bool);
-  void connectSignals(Format);
-  void initColors(Format);
+  void connectSignals();
 };
 
 #endif

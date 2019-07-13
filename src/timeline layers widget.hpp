@@ -85,7 +85,7 @@ public:
   LayersWidget *getChild();
 
 Q_SIGNALS:
-  void changeBottomMargin(int);
+  void shouldSetBottomMargin(int);
 
 private:
   void paintEvent(QPaintEvent *) override;

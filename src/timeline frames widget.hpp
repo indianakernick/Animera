@@ -41,7 +41,7 @@ public:
   FramesWidget *getChild();
 
 Q_SIGNALS:
-  void changeRightMargin(int);
+  void shouldSetRightMargin(int);
 
 private:
   void paintEvent(QPaintEvent *) override;

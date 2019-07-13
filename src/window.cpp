@@ -233,7 +233,7 @@ void Window::connectSignals() {
   
   CONNECT(tools,           cellModified,        editor,          composite);
   CONNECT(tools,           overlayModified,     editor,          compositeOverlay);
-  CONNECT(tools,           updateStatusBar,     statusBar,       showPerm);
+  CONNECT(tools,           shouldShowPerm,      statusBar,       showPerm);
   CONNECT(tools,           cellRequested,       sprite.timeline, requestCell);
   
   CONNECT(editor,          mouseLeave,          tools,           mouseLeave);
@@ -249,19 +249,19 @@ void Window::connectSignals() {
   
   CONNECT(colors,          colorsChanged,       tools,           setColors);
   CONNECT(colors,          colorsChanged,       clear,           setColors);
-  CONNECT(colors,          attachColor,         colorPicker,     attach);
-  CONNECT(colors,          attachIndex,         palette,         attachIndex);
+  CONNECT(colors,          shouldAttachColor,   colorPicker,     attach);
+  CONNECT(colors,          shouldAttachIndex,   palette,         attachIndex);
   
   CONNECT(clear,           cellModified,        tools,           cellModified);
   
   CONNECT(sample,          colorChanged,        colorPicker,     setColor);
   
   CONNECT(undo,            cellReverted,        editor,          composite);
-  CONNECT(undo,            showTempStatus,      statusBar,       showTemp);
+  CONNECT(undo,            shouldShowTemp,      statusBar,       showTemp);
   
-  CONNECT(palette,         attachColor,         colorPicker,     attach);
-  CONNECT(palette,         setColor,            colorPicker,     setColor);
-  CONNECT(palette,         setIndex,            colors,          setIndex);
+  CONNECT(palette,         shouldAttachColor,   colorPicker,     attach);
+  CONNECT(palette,         shouldSetColor,      colorPicker,     setColor);
+  CONNECT(palette,         shouldSetIndex,      colors,          setIndex);
   CONNECT(palette,         paletteColorChanged, editor,          composite);
   CONNECT(palette,         paletteColorChanged, colors,          changePaletteColors);
 }

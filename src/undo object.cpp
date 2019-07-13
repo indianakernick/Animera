@@ -36,7 +36,7 @@ void UndoObject::cellModified() {
 
 void UndoObject::undo() {
   if (!cell) {
-    Q_EMIT showTempStatus("Cannot undo actions on this cell");
+    Q_EMIT shouldShowTemp("Cannot undo actions on this cell");
     return;
   }
   UndoState state = stack.undo();
@@ -44,13 +44,13 @@ void UndoObject::undo() {
     cell->image = state.img;
     Q_EMIT cellReverted();
   } else {
-    Q_EMIT showTempStatus("Cannot undo any further");
+    Q_EMIT shouldShowTemp("Cannot undo any further");
   }
 }
 
 void UndoObject::redo() {
   if (!cell) {
-    Q_EMIT showTempStatus("Cannot redo actions on this cell");
+    Q_EMIT shouldShowTemp("Cannot redo actions on this cell");
     return;
   }
   UndoState state = stack.redo();
@@ -58,7 +58,7 @@ void UndoObject::redo() {
     cell->image = state.img;
     Q_EMIT cellReverted();
   } else {
-    Q_EMIT showTempStatus("Cannot redo any further");
+    Q_EMIT shouldShowTemp("Cannot redo any further");
   }
 }
 

@@ -23,18 +23,18 @@ public:
   PaletteColorWidget(QWidget *parent, QRgb &color, const int index, const Format format)
     : RadioButtonWidget{parent}, color{color}, index{index}, format{format} {
     setFixedSize(pal_tile_size, pal_tile_size);
-    CONNECT(this, toggled, this, click);
+    CONNECT(this, toggled, this, attachColor);
   }
 
 Q_SIGNALS:
-  void attachColor(ColorHandle *);
-  void setColor(QRgb);
-  void setIndex(int);
+  void shouldAttachColor(ColorHandle *);
+  void shouldSetColor(QRgb);
+  void shouldSetIndex(int);
   void paletteColorChanged();
 
 private Q_SLOTS:
-  void click() {
-    Q_EMIT attachColor(this);
+  void attachColor() {
+    Q_EMIT shouldAttachColor(this);
   }
 
 private:
@@ -106,9 +106,9 @@ private:
     RadioButtonWidget::mousePressEvent(event);
     if (event->button() == Qt::RightButton) {
       if (format == Format::palette) {
-        Q_EMIT setIndex(index);
+        Q_EMIT shouldSetIndex(index);
       } else {
-        Q_EMIT setColor(color);
+        Q_EMIT shouldSetColor(color);
       }
     }
   }
@@ -147,9 +147,9 @@ public Q_SLOTS:
   }
 
 Q_SIGNALS:
-  void attachColor(ColorHandle *);
-  void setColor(QRgb);
-  void setIndex(int);
+  void shouldAttachColor(ColorHandle *);
+  void shouldSetColor(QRgb);
+  void shouldSetIndex(int);
   void paletteChanged(PaletteSpan);
   void paletteColorChanged();
 
@@ -183,9 +183,9 @@ private:
   
   void connectSignals() {
     for (PaletteColorWidget *colorWidget : colors) {
-      CONNECT(colorWidget, attachColor,         this, attachColor);
-      CONNECT(colorWidget, setColor,            this, setColor);
-      CONNECT(colorWidget, setIndex,            this, setIndex);
+      CONNECT(colorWidget, shouldAttachColor,   this, shouldAttachColor);
+      CONNECT(colorWidget, shouldSetColor,      this, shouldSetColor);
+      CONNECT(colorWidget, shouldSetIndex,      this, shouldSetIndex);
       CONNECT(colorWidget, paletteColorChanged, this, paletteColorChanged);
     }
   }
@@ -212,9 +212,9 @@ PaletteWidget::PaletteWidget(QWidget *parent)
 void PaletteWidget::initCanvas(const Format format) {
   table = new PaletteTableWidget{this, format};
   setWidget(table);
-  CONNECT(table, attachColor,         this, attachColor);
-  CONNECT(table, setColor,            this, setColor);
-  CONNECT(table, setIndex,            this, setIndex);
+  CONNECT(table, shouldAttachColor,   this, shouldAttachColor);
+  CONNECT(table, shouldSetColor,      this, shouldSetColor);
+  CONNECT(table, shouldSetIndex,      this, shouldSetIndex);
   CONNECT(table, paletteColorChanged, this, paletteColorChanged);
 }
 

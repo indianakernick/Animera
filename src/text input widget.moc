@@ -22,7 +22,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_TextInputWidget_t {
     QByteArrayData data[5];
-    char stringdata0[49];
+    char stringdata0[45];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -32,13 +32,13 @@ struct qt_meta_stringdata_TextInputWidget_t {
 static const qt_meta_stringdata_TextInputWidget_t qt_meta_stringdata_TextInputWidget = {
     {
 QT_MOC_LITERAL(0, 0, 15), // "TextInputWidget"
-QT_MOC_LITERAL(1, 16, 9), // "blinkSlot"
-QT_MOC_LITERAL(2, 26, 0), // ""
-QT_MOC_LITERAL(3, 27, 10), // "showCursor"
-QT_MOC_LITERAL(4, 38, 10) // "hideCursor"
+QT_MOC_LITERAL(1, 16, 5), // "blink"
+QT_MOC_LITERAL(2, 22, 0), // ""
+QT_MOC_LITERAL(3, 23, 10), // "showCursor"
+QT_MOC_LITERAL(4, 34, 10) // "hideCursor"
 
     },
-    "TextInputWidget\0blinkSlot\0\0showCursor\0"
+    "TextInputWidget\0blink\0\0showCursor\0"
     "hideCursor"
 };
 #undef QT_MOC_LITERAL
@@ -75,7 +75,7 @@ void TextInputWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int 
         auto *_t = static_cast<TextInputWidget *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->blinkSlot(); break;
+        case 0: _t->blink(); break;
         case 1: _t->showCursor(); break;
         case 2: _t->hideCursor(); break;
         default: ;

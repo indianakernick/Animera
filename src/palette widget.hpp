@@ -28,9 +28,9 @@ public Q_SLOTS:
   void attachIndex(int);
   
 Q_SIGNALS:
-  void attachColor(ColorHandle *);
-  void setColor(QRgb);
-  void setIndex(int);
+  void shouldAttachColor(ColorHandle *);
+  void shouldSetColor(QRgb);
+  void shouldSetIndex(int);
   void paletteColorChanged();
 
 private:

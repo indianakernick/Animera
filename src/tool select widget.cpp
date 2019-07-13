@@ -115,7 +115,7 @@ ToolSelectWidget::ToolSelectWidget(QWidget *parent)
 void ToolSelectWidget::mouseLeave(QImage *overlay) {
   status.clear();
   emitModified(currTool.mouseLeave({{}, overlay, &status}));
-  Q_EMIT updateStatusBar(status.get());
+  Q_EMIT shouldShowPerm(status.get());
 }
 
 void ToolSelectWidget::mouseDown(const QPoint pos, const ButtonType button, QImage *overlay) {
@@ -128,7 +128,7 @@ void ToolSelectWidget::mouseDown(const QPoint pos, const ButtonType button, QIma
     actionChangedCell = true;
   }
   emitModified(changes);
-  if (!status.empty()) Q_EMIT updateStatusBar(status.get());
+  if (!status.empty()) Q_EMIT shouldShowPerm(status.get());
 }
 
 void ToolSelectWidget::mouseMove(const QPoint pos, QImage *overlay) {
@@ -138,7 +138,7 @@ void ToolSelectWidget::mouseMove(const QPoint pos, QImage *overlay) {
     actionChangedCell = true;
   }
   emitModified(changes);
-  if (!status.empty()) Q_EMIT updateStatusBar(status.get());
+  if (!status.empty()) Q_EMIT shouldShowPerm(status.get());
 }
 
 void ToolSelectWidget::mouseUp(const QPoint pos, const ButtonType button, QImage *overlay) {
@@ -149,7 +149,7 @@ void ToolSelectWidget::mouseUp(const QPoint pos, const ButtonType button, QImage
     Q_EMIT changingAction();
     actionChangedCell = false;
   }
-  if (!status.empty()) Q_EMIT updateStatusBar(status.get());
+  if (!status.empty()) Q_EMIT shouldShowPerm(status.get());
 }
 
 void ToolSelectWidget::keyPress(const Qt::Key key, QImage *overlay) {
@@ -157,7 +157,7 @@ void ToolSelectWidget::keyPress(const Qt::Key key, QImage *overlay) {
   if (currTool.nullCell()) Q_EMIT cellRequested();
   status.clear();
   emitModified(currTool.keyPress({key, colors, overlay, &status}));
-  if (!status.empty()) Q_EMIT updateStatusBar(status.get());
+  if (!status.empty()) Q_EMIT shouldShowPerm(status.get());
 }
 
 void ToolSelectWidget::setCell(Cell *cell) {

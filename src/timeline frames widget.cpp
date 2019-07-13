@@ -75,7 +75,7 @@ FrameScrollWidget::FrameScrollWidget(QWidget *parent)
 FramesWidget *FrameScrollWidget::getChild() {
   auto frames = new FramesWidget{this};
   // We cannot simply call setViewportMargins
-  CONNECT(this, changeRightMargin, frames, setMargin);
+  CONNECT(this, shouldSetRightMargin, frames, setMargin);
   setWidget(frames);
   return frames;
 }

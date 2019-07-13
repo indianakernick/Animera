@@ -42,7 +42,7 @@ CellsWidget::CellsWidget(QWidget *parent)
 
 void CellsWidget::setCurrPos(const CellPos pos) {
   const QPoint pixelPos = {pos.f * cell_width, pos.l * cell_height};
-  Q_EMIT ensureVisible(pixelPos);
+  Q_EMIT shouldEnsureVisible(pixelPos);
   currPosImg.fill(0);
   QPainter painter{&currPosImg};
   painter.setPen(Qt::NoPen);
@@ -175,13 +175,13 @@ CellsWidget *CellScrollWidget::getChild() {
   auto *cells = new CellsWidget{this};
   rect = new QWidget{cells};
   rect->setVisible(false);
-  CONNECT(cells, ensureVisible, this, ensureVisible);
-  CONNECT(cells, resized, this, contentResized);
+  CONNECT(cells, shouldEnsureVisible, this, ensureVisible);
+  CONNECT(cells, resized,             this, changeMargins);
   setWidget(cells);
   return cells;
 }
 
-void CellScrollWidget::contentResized() {
+void CellScrollWidget::changeMargins() {
   const QMargins before = viewportMargins();
   adjustMargins();
   const QMargins after = viewportMargins();
@@ -200,7 +200,7 @@ void CellScrollWidget::ensureVisible(const QPoint pos) {
 }
 
 void CellScrollWidget::resizeEvent(QResizeEvent *event) {
-  contentResized();
+  changeMargins();
   ScrollAreaWidget::resizeEvent(event);
 }
 

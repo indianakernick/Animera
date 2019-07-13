@@ -22,7 +22,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_CellsWidget_t {
     QByteArrayData data[12];
-    char stringdata0[115];
+    char stringdata0[121];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -34,18 +34,18 @@ static const qt_meta_stringdata_CellsWidget_t qt_meta_stringdata_CellsWidget = {
 QT_MOC_LITERAL(0, 0, 11), // "CellsWidget"
 QT_MOC_LITERAL(1, 12, 7), // "resized"
 QT_MOC_LITERAL(2, 20, 0), // ""
-QT_MOC_LITERAL(3, 21, 13), // "ensureVisible"
-QT_MOC_LITERAL(4, 35, 10), // "setCurrPos"
-QT_MOC_LITERAL(5, 46, 7), // "CellPos"
-QT_MOC_LITERAL(6, 54, 8), // "setLayer"
-QT_MOC_LITERAL(7, 63, 8), // "LayerIdx"
-QT_MOC_LITERAL(8, 72, 5), // "Spans"
-QT_MOC_LITERAL(9, 78, 13), // "setFrameCount"
-QT_MOC_LITERAL(10, 92, 8), // "FrameIdx"
-QT_MOC_LITERAL(11, 101, 13) // "setLayerCount"
+QT_MOC_LITERAL(3, 21, 19), // "shouldEnsureVisible"
+QT_MOC_LITERAL(4, 41, 10), // "setCurrPos"
+QT_MOC_LITERAL(5, 52, 7), // "CellPos"
+QT_MOC_LITERAL(6, 60, 8), // "setLayer"
+QT_MOC_LITERAL(7, 69, 8), // "LayerIdx"
+QT_MOC_LITERAL(8, 78, 5), // "Spans"
+QT_MOC_LITERAL(9, 84, 13), // "setFrameCount"
+QT_MOC_LITERAL(10, 98, 8), // "FrameIdx"
+QT_MOC_LITERAL(11, 107, 13) // "setLayerCount"
 
     },
-    "CellsWidget\0resized\0\0ensureVisible\0"
+    "CellsWidget\0resized\0\0shouldEnsureVisible\0"
     "setCurrPos\0CellPos\0setLayer\0LayerIdx\0"
     "Spans\0setFrameCount\0FrameIdx\0setLayerCount"
 };
@@ -94,7 +94,7 @@ void CellsWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->resized(); break;
-        case 1: _t->ensureVisible((*reinterpret_cast< QPoint(*)>(_a[1]))); break;
+        case 1: _t->shouldEnsureVisible((*reinterpret_cast< QPoint(*)>(_a[1]))); break;
         case 2: _t->setCurrPos((*reinterpret_cast< CellPos(*)>(_a[1]))); break;
         case 3: _t->setLayer((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< const Spans(*)>(_a[2]))); break;
         case 4: _t->setFrameCount((*reinterpret_cast< FrameIdx(*)>(_a[1]))); break;
@@ -112,7 +112,7 @@ void CellsWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         }
         {
             using _t = void (CellsWidget::*)(QPoint );
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&CellsWidget::ensureVisible)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&CellsWidget::shouldEnsureVisible)) {
                 *result = 1;
                 return;
             }
@@ -167,14 +167,14 @@ void CellsWidget::resized()
 }
 
 // SIGNAL 1
-void CellsWidget::ensureVisible(QPoint _t1)
+void CellsWidget::shouldEnsureVisible(QPoint _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
     QMetaObject::activate(this, &staticMetaObject, 1, _a);
 }
 struct qt_meta_stringdata_CellScrollWidget_t {
     QByteArrayData data[6];
-    char stringdata0[86];
+    char stringdata0[85];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -187,12 +187,12 @@ QT_MOC_LITERAL(0, 0, 16), // "CellScrollWidget"
 QT_MOC_LITERAL(1, 17, 18), // "rightMarginChanged"
 QT_MOC_LITERAL(2, 36, 0), // ""
 QT_MOC_LITERAL(3, 37, 19), // "bottomMarginChanged"
-QT_MOC_LITERAL(4, 57, 14), // "contentResized"
-QT_MOC_LITERAL(5, 72, 13) // "ensureVisible"
+QT_MOC_LITERAL(4, 57, 13), // "changeMargins"
+QT_MOC_LITERAL(5, 71, 13) // "ensureVisible"
 
     },
     "CellScrollWidget\0rightMarginChanged\0"
-    "\0bottomMarginChanged\0contentResized\0"
+    "\0bottomMarginChanged\0changeMargins\0"
     "ensureVisible"
 };
 #undef QT_MOC_LITERAL
@@ -237,7 +237,7 @@ void CellScrollWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
         switch (_id) {
         case 0: _t->rightMarginChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 1: _t->bottomMarginChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 2: _t->contentResized(); break;
+        case 2: _t->changeMargins(); break;
         case 3: _t->ensureVisible((*reinterpret_cast< QPoint(*)>(_a[1]))); break;
         default: ;
         }

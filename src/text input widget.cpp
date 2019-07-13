@@ -15,8 +15,8 @@
 
 TextInputWidget::TextInputWidget(QWidget *parent, const WidgetRect rect)
   : QLineEdit{parent},
-    cursorBlinkTimer{this},
-    rect{rect} {
+    rect{rect},
+    cursorBlinkTimer{this} {
   setFixedSize(rect.widget().size());
   setFont(getGlobalFont());
   setTextMargins(
@@ -28,7 +28,7 @@ TextInputWidget::TextInputWidget(QWidget *parent, const WidgetRect rect)
   setFrame(false);
   setAttribute(Qt::WA_MacShowFocusRect, 0);
   
-  CONNECT(cursorBlinkTimer, timeout,               this, blinkSlot);
+  CONNECT(cursorBlinkTimer, timeout,               this, blink);
   CONNECT(this,             selectionChanged,      this, showCursor);
   CONNECT(this,             cursorPositionChanged, this, showCursor);
   
@@ -37,7 +37,7 @@ TextInputWidget::TextInputWidget(QWidget *parent, const WidgetRect rect)
   cursorBlinkTimer.start();
 }
 
-void TextInputWidget::blinkSlot() {
+void TextInputWidget::blink() {
   cursorBlinkStatus = !cursorBlinkStatus;
   repaint();
 }

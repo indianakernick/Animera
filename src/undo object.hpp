@@ -25,7 +25,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
   void cellReverted();
-  void showTempStatus(std::string_view);
+  void shouldShowTemp(std::string_view);
 
 private:
   Cell *cell = nullptr;

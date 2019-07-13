@@ -34,7 +34,7 @@ static const qt_meta_stringdata_UndoObject_t qt_meta_stringdata_UndoObject = {
 QT_MOC_LITERAL(0, 0, 10), // "UndoObject"
 QT_MOC_LITERAL(1, 11, 12), // "cellReverted"
 QT_MOC_LITERAL(2, 24, 0), // ""
-QT_MOC_LITERAL(3, 25, 14), // "showTempStatus"
+QT_MOC_LITERAL(3, 25, 14), // "shouldShowTemp"
 QT_MOC_LITERAL(4, 40, 16), // "std::string_view"
 QT_MOC_LITERAL(5, 57, 7), // "setCell"
 QT_MOC_LITERAL(6, 65, 5), // "Cell*"
@@ -43,7 +43,7 @@ QT_MOC_LITERAL(8, 80, 7), // "Qt::Key"
 QT_MOC_LITERAL(9, 88, 12) // "cellModified"
 
     },
-    "UndoObject\0cellReverted\0\0showTempStatus\0"
+    "UndoObject\0cellReverted\0\0shouldShowTemp\0"
     "std::string_view\0setCell\0Cell*\0keyPress\0"
     "Qt::Key\0cellModified"
 };
@@ -90,7 +90,7 @@ void UndoObject::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->cellReverted(); break;
-        case 1: _t->showTempStatus((*reinterpret_cast< std::string_view(*)>(_a[1]))); break;
+        case 1: _t->shouldShowTemp((*reinterpret_cast< std::string_view(*)>(_a[1]))); break;
         case 2: _t->setCell((*reinterpret_cast< Cell*(*)>(_a[1]))); break;
         case 3: _t->keyPress((*reinterpret_cast< Qt::Key(*)>(_a[1]))); break;
         case 4: _t->cellModified(); break;
@@ -107,7 +107,7 @@ void UndoObject::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         }
         {
             using _t = void (UndoObject::*)(std::string_view );
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&UndoObject::showTempStatus)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&UndoObject::shouldShowTemp)) {
                 *result = 1;
                 return;
             }
@@ -162,7 +162,7 @@ void UndoObject::cellReverted()
 }
 
 // SIGNAL 1
-void UndoObject::showTempStatus(std::string_view _t1)
+void UndoObject::shouldShowTemp(std::string_view _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
     QMetaObject::activate(this, &staticMetaObject, 1, _a);
