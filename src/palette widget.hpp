@@ -25,10 +25,12 @@ public:
 public Q_SLOTS:
   void initCanvas(Format);
   void setPalette(PaletteSpan);
+  void attachIndex(int);
   
 Q_SIGNALS:
   void attachColor(ColorHandle *);
   void setColor(QRgb);
+  void setIndex(int);
   void paletteColorChanged();
 
 private:

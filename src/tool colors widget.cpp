@@ -26,6 +26,23 @@ public:
     setFixedSize(tool_color_rect.widget().size());
   }
 
+public Q_SLOTS:
+  void setPalette(const PaletteCSpan newPalette) {
+    palette = newPalette;
+  }
+  void setIndex(const int index) {
+    if (isChecked()) {
+      color = index;
+      repaint();
+      Q_EMIT colorChanged();
+    }
+  }
+  void changePaletteColors() {
+    if (format == Format::palette) {
+      repaint();
+    }
+  }
+
 Q_SIGNALS:
   void colorChanged();
   
@@ -33,14 +50,14 @@ private:
   QString name;
   QRgb &color;
   Format format;
+  PaletteCSpan palette;
   
-  // @TODO this function is duplicated in palette widget
   QColor getQColor() const {
     switch (format) {
       case Format::rgba:
         return QColor::fromRgba(color);
       case Format::palette:
-        // @TODO
+        return QColor::fromRgba(palette[color]);
       case Format::gray:
         const int gray = color;
         return QColor{gray, gray, gray};
@@ -82,6 +99,82 @@ ToolColorsWidget::ToolColorsWidget(QWidget *parent)
 }
 
 void ToolColorsWidget::initCanvas(const Format format) {
+  initColors(format);
+  primary = new ActiveColorWidget{this, "Primary", colors.primary, format};
+  secondary = new ActiveColorWidget{this, "Secondary", colors.secondary, format};
+  erase = new ActiveColorWidget{this, "Erase", colors.erase, format};
+  setupLayout();
+  connectSignals(format);
+  Q_EMIT colorsChanged(colors);
+}
+
+void ToolColorsWidget::setPalette(const PaletteCSpan palette) {
+  primary->setPalette(palette);
+  secondary->setPalette(palette);
+  erase->setPalette(palette);
+  primary->click();
+}
+
+void ToolColorsWidget::setIndex(const int index) {
+  primary->setIndex(index);
+  secondary->setIndex(index);
+  erase->setIndex(index);
+}
+
+void ToolColorsWidget::changePaletteColors() {
+  primary->changePaletteColors();
+  secondary->changePaletteColors();
+  erase->changePaletteColors();
+}
+
+void ToolColorsWidget::changeColors() {
+  Q_EMIT colorsChanged(colors);
+}
+
+void ToolColorsWidget::setupLayout() {
+  QHBoxLayout *layout = new QHBoxLayout{this};
+  setLayout(layout);
+  layout->setSpacing(0);
+  layout->setContentsMargins(0, 0, 0, 0);
+  
+  layout->addWidget(primary);
+  layout->addWidget(secondary);
+  layout->addWidget(erase);
+}
+
+template <auto Color>
+void ToolColorsWidget::toggleColor(const bool checked) {
+  if (checked) {
+    Q_EMIT attachColor(this->*Color);
+    repaint();
+  }
+}
+
+template <auto Color>
+void ToolColorsWidget::toggleIndex(const bool checked) {
+  if (checked) {
+    Q_EMIT attachIndex(colors.*Color);
+    repaint();
+  }
+}
+
+void ToolColorsWidget::connectSignals(const Format format) {
+  CONNECT(primary, colorChanged, this, changeColors);
+  CONNECT(secondary, colorChanged, this, changeColors);
+  CONNECT(erase, colorChanged, this, changeColors);
+  
+  if (format == Format::palette) {
+    CONNECT(primary, toggled, this, toggleIndex<&ToolColors::primary>);
+    CONNECT(secondary, toggled, this, toggleIndex<&ToolColors::secondary>);
+    CONNECT(erase, toggled, this, toggleIndex<&ToolColors::erase>);
+  } else {
+    CONNECT(primary, toggled, this, toggleColor<&ToolColorsWidget::primary>);
+    CONNECT(secondary, toggled, this, toggleColor<&ToolColorsWidget::secondary>);
+    CONNECT(erase, toggled, this, toggleColor<&ToolColorsWidget::erase>);
+  }
+}
+
+void ToolColorsWidget::initColors(const Format format) {
   switch (format) {
     case Format::rgba:
       colors.primary = qRgba(255, 0, 0, 255);
@@ -99,46 +192,6 @@ void ToolColorsWidget::initCanvas(const Format format) {
       colors.erase = 0;
       break;
   }
-  primary = new ActiveColorWidget{this, "Primary", colors.primary, format};
-  secondary = new ActiveColorWidget{this, "Secondary", colors.secondary, format};
-  erase = new ActiveColorWidget{this, "Erase", colors.erase, format};
-  setupLayout();
-  connectSignals();
-  primary->click();
-  Q_EMIT colorsChanged(colors);
-}
-
-void ToolColorsWidget::setupLayout() {
-  QHBoxLayout *layout = new QHBoxLayout{this};
-  setLayout(layout);
-  layout->setSpacing(0);
-  layout->setContentsMargins(0, 0, 0, 0);
-  
-  layout->addWidget(primary);
-  layout->addWidget(secondary);
-  layout->addWidget(erase);
-}
-
-template <auto Color>
-auto ToolColorsWidget::toggleColor(const bool checked) {
-  if (checked) {
-    Q_EMIT attachColor(this->*Color);
-    repaint();
-  }
-}
-
-void ToolColorsWidget::connectSignals() {
-  CONNECT(primary, colorChanged, this, changeColors);
-  CONNECT(secondary, colorChanged, this, changeColors);
-  CONNECT(erase, colorChanged, this, changeColors);
-  
-  CONNECT(primary, toggled, this, toggleColor<&ToolColorsWidget::primary>);
-  CONNECT(secondary, toggled, this, toggleColor<&ToolColorsWidget::secondary>);
-  CONNECT(erase, toggled, this, toggleColor<&ToolColorsWidget::erase>);
-}
-
-void ToolColorsWidget::changeColors() {
-  Q_EMIT colorsChanged(colors);
 }
 
 #include "tool colors widget.moc"

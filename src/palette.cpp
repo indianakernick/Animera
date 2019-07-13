@@ -83,6 +83,7 @@ void Palette::initDefault() {
       iter = std::copy(gray_palette.cbegin(), gray_palette.cend(), iter);
   }
   std::fill(iter, colors.end(), 0);
+  Q_EMIT paletteChanged(PaletteSpan{colors.data()});
 }
 
 void Palette::serialize(QIODevice *dev) const {
@@ -99,11 +100,11 @@ void Palette::deserialize(QIODevice *dev) {
     reinterpret_cast<char *>(colors.data()),
     pal_colors * sizeof(QRgb)
   );
+  Q_EMIT paletteChanged(PaletteSpan{colors.data()});
 }
 
 void Palette::initCanvas(const Format format) {
   canvasFormat = format;
-  Q_EMIT paletteChanged(PaletteSpan{colors.data()});
 }
 
 #include "palette.moc"

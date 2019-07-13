@@ -23,10 +23,17 @@ public:
 
 public Q_SLOTS:
   void initCanvas(Format);
+  void setPalette(PaletteCSpan);
+  void setIndex(int);
+  void changePaletteColors();
 
 Q_SIGNALS:
   void colorsChanged(ToolColors);
   void attachColor(ColorHandle *);
+  void attachIndex(int);
+
+private Q_SLOTS:
+  void changeColors();
 
 private:
   ToolColors colors;
@@ -36,11 +43,11 @@ private:
   
   void setupLayout();
   template <auto>
-  auto toggleColor(bool);
-  void connectSignals();
-
-private Q_SLOTS:
-  void changeColors();
+  void toggleColor(bool);
+  template <auto>
+  void toggleIndex(bool);
+  void connectSignals(Format);
+  void initColors(Format);
 };
 
 #endif

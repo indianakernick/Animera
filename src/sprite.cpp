@@ -24,10 +24,10 @@ void Sprite::newFile(const Format newFormat, const QSize newSize) {
   format = newFormat;
   size = newSize;
   Q_EMIT canvasInitialized(format, size);
-  timeline.initCanvas(format, size);
   palette.initCanvas(format);
-  timeline.initDefault();
+  timeline.initCanvas(format, size);
   palette.initDefault();
+  timeline.initDefault();
 }
 
 void Sprite::saveFile(const QString &path) const {
@@ -57,6 +57,7 @@ void Sprite::openFile(const QString &path) {
     throw std::exception{};
   }
   deserializeBytes(&file, format);
+  palette.initCanvas(format);
   palette.deserialize(&file);
  
   uint16_t width;
@@ -66,7 +67,6 @@ void Sprite::openFile(const QString &path) {
   size = {width, height};
   Q_EMIT canvasInitialized(format, size);
   timeline.initCanvas(format, size);
-  palette.initCanvas(format);
   timeline.deserialize(&file);
 }
 

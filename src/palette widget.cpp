@@ -29,6 +29,7 @@ public:
 Q_SIGNALS:
   void attachColor(ColorHandle *);
   void setColor(QRgb);
+  void setIndex(int);
   void paletteColorChanged();
 
 private Q_SLOTS:
@@ -55,7 +56,6 @@ private:
   QColor getQColor() const {
     switch (format) {
       case Format::palette:
-        // @TODO
       case Format::rgba:
         return QColor::fromRgba(color);
       case Format::gray:
@@ -105,7 +105,11 @@ private:
   void mousePressEvent(QMouseEvent *event) override {
     RadioButtonWidget::mousePressEvent(event);
     if (event->button() == Qt::RightButton) {
-      Q_EMIT setColor(color);
+      if (format == Format::palette) {
+        Q_EMIT setIndex(index);
+      } else {
+        Q_EMIT setColor(color);
+      }
     }
   }
   
@@ -133,21 +137,32 @@ public:
     : QWidget{parent}, format{format} {}
 
 public Q_SLOTS:
-  void setPalette(const PaletteSpan newPalette) {
-    palette = newPalette;
+  void setPalette(const PaletteSpan palette) {
+    createWidgets(palette);
     setupLayout();
+    connectSignals();
+  }
+  void attachIndex(const int index) {
+    colors[index]->QAbstractButton::click();
   }
 
 Q_SIGNALS:
   void attachColor(ColorHandle *);
   void setColor(QRgb);
+  void setIndex(int);
   void paletteChanged(PaletteSpan);
   void paletteColorChanged();
 
 private:
   std::vector<PaletteColorWidget *> colors;
-  PaletteSpan palette;
   Format format;
+  
+  void createWidgets(const PaletteSpan palette) {
+    colors.reserve(pal_colors);
+    for (int i = 0; i != pal_colors; ++i) {
+      colors.push_back(new PaletteColorWidget{this, palette[i], i, format});
+    }
+  }
   
   void setupLayout() {
     QGridLayout *grid = new QGridLayout{this};
@@ -156,13 +171,7 @@ private:
     
     for (int y = 0; y != pal_height; ++y) {
       for (int x = 0; x != pal_width; ++x) {
-        const int index = y * pal_width + x;
-        auto *colorWidget = new PaletteColorWidget{this, palette[index], index, format};
-        CONNECT(colorWidget, attachColor,         this, attachColor);
-        CONNECT(colorWidget, setColor,            this, setColor);
-        CONNECT(colorWidget, paletteColorChanged, this, paletteColorChanged);
-        colors.push_back(colorWidget);
-        grid->addWidget(colorWidget, y, x);
+        grid->addWidget(colors[y * pal_width + x], y, x);
       }
     }
     
@@ -170,6 +179,15 @@ private:
       pal_width * pal_tile_size + glob_border_width,
       pal_height * pal_tile_size + glob_border_width
     );
+  }
+  
+  void connectSignals() {
+    for (PaletteColorWidget *colorWidget : colors) {
+      CONNECT(colorWidget, attachColor,         this, attachColor);
+      CONNECT(colorWidget, setColor,            this, setColor);
+      CONNECT(colorWidget, setIndex,            this, setIndex);
+      CONNECT(colorWidget, paletteColorChanged, this, paletteColorChanged);
+    }
   }
   
   void paintEvent(QPaintEvent *) override {
@@ -196,11 +214,16 @@ void PaletteWidget::initCanvas(const Format format) {
   setWidget(table);
   CONNECT(table, attachColor,         this, attachColor);
   CONNECT(table, setColor,            this, setColor);
+  CONNECT(table, setIndex,            this, setIndex);
   CONNECT(table, paletteColorChanged, this, paletteColorChanged);
 }
 
 void PaletteWidget::setPalette(PaletteSpan palette) {
   table->setPalette(palette);
+}
+
+void PaletteWidget::attachIndex(const int index) {
+  table->attachIndex(index);
 }
 
 #include "palette widget.moc"

@@ -229,6 +229,7 @@ void Window::connectSignals() {
   CONNECT(sprite.palette,  paletteChanged,      palette,         setPalette);
   CONNECT(sprite.palette,  paletteChanged,      editor,          setPalette);
   CONNECT(sprite.palette,  paletteChanged,      tools,           setPalette);
+  CONNECT(sprite.palette,  paletteChanged,      colors,          setPalette);
   
   CONNECT(tools,           cellModified,        editor,          composite);
   CONNECT(tools,           overlayModified,     editor,          compositeOverlay);
@@ -247,8 +248,9 @@ void Window::connectSignals() {
   CONNECT(tools,           changingAction,      undo,            cellModified);
   
   CONNECT(colors,          colorsChanged,       tools,           setColors);
-  CONNECT(colors,          attachColor,         colorPicker,     attach);
   CONNECT(colors,          colorsChanged,       clear,           setColors);
+  CONNECT(colors,          attachColor,         colorPicker,     attach);
+  CONNECT(colors,          attachIndex,         palette,         attachIndex);
   
   CONNECT(clear,           cellModified,        tools,           cellModified);
   
@@ -259,7 +261,9 @@ void Window::connectSignals() {
   
   CONNECT(palette,         attachColor,         colorPicker,     attach);
   CONNECT(palette,         setColor,            colorPicker,     setColor);
+  CONNECT(palette,         setIndex,            colors,          setIndex);
   CONNECT(palette,         paletteColorChanged, editor,          composite);
+  CONNECT(palette,         paletteColorChanged, colors,          changePaletteColors);
 }
 
 void Window::setFileName(const QString &name) {
