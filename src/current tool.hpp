@@ -16,20 +16,17 @@ public:
   void changeTool(Tool *);
   void changeCell(Cell *);
   
-  ToolChanges mouseLeave(const ToolLeaveEvent &);
-  ToolChanges mouseDown(const ToolMouseEvent &);
-  ToolChanges mouseMove(const ToolMouseEvent &);
-  ToolChanges mouseUp(const ToolMouseEvent &);
-  ToolChanges keyPress(const ToolKeyEvent &);
+  void mouseLeave();
+  void mouseDown(QPoint, ButtonType);
+  void mouseMove(QPoint);
+  void mouseUp(QPoint, ButtonType);
+  void keyPress(Qt::Key);
   
-  bool nullCell() const;
-
 private:
   Tool *tool = nullptr;
   Cell *cell = nullptr;
   QPoint lastPos = {-1, -1};
   ButtonType button = ButtonType::none;
-  bool enabled = false;
   
   void attach();
   void detach();

@@ -21,69 +21,46 @@ void CurrentTool::changeCell(Cell *newCell) {
   attach();
 }
 
-ToolChanges CurrentTool::mouseLeave(const ToolLeaveEvent &event) {
+void CurrentTool::mouseLeave() {
   assert(tool);
-  assert(event.overlay);
-  assert(event.status);
-  const ToolLeaveEvent newEvent{button, event.overlay, event.status};
-  return enabled ? tool->mouseLeave(newEvent) : ToolChanges::none;
+  tool->mouseLeave({button});
 }
 
-ToolChanges CurrentTool::mouseDown(const ToolMouseEvent &event) {
+void CurrentTool::mouseDown(const QPoint ePos, const ButtonType eButton) {
   assert(tool);
-  assert(event.overlay);
-  assert(event.status);
   if (button == ButtonType::none) {
-    button = event.button;
-    lastPos = event.pos;
-    return enabled ? tool->mouseDown(event) : ToolChanges::none;
-  } else {
-    return ToolChanges::none;
+    button = eButton;
+    lastPos = ePos;
+    tool->mouseDown({ePos, eButton});
   }
 }
 
-ToolChanges CurrentTool::mouseMove(const ToolMouseEvent &event) {
+void CurrentTool::mouseMove(const QPoint ePos) {
   assert(tool);
-  assert(event.overlay);
-  assert(event.status);
-  if (event.pos == lastPos) {
-    return ToolChanges::none;
-  } else {
-    lastPos = event.pos;
-    const ToolMouseEvent newEvent{button, event.pos, event.colors, event.overlay, event.status};
-    return enabled ? tool->mouseMove(newEvent) : ToolChanges::none;
+  if (ePos != lastPos) {
+    lastPos = ePos;
+    tool->mouseMove({ePos, button});
   }
 }
 
-ToolChanges CurrentTool::mouseUp(const ToolMouseEvent &event) {
+void CurrentTool::mouseUp(const QPoint ePos, const ButtonType eButton) {
   assert(tool);
-  assert(event.overlay);
-  assert(event.status);
-  if (event.button == button) {
+  if (eButton == button) {
     button = ButtonType::none;
-    lastPos = event.pos;
-    return enabled ? tool->mouseUp(event) : ToolChanges::none;
-  } else {
-    return ToolChanges::none;
+    lastPos = ePos;
+    tool->mouseUp({ePos, eButton});
   }
 }
 
-ToolChanges CurrentTool::keyPress(const ToolKeyEvent &event) {
+void CurrentTool::keyPress(const Qt::Key eKey) {
   assert(tool);
-  assert(event.overlay);
-  assert(event.status);
-  return enabled ? tool->keyPress(event) : ToolChanges::none;
-}
-
-bool CurrentTool::nullCell() const {
-  return cell == nullptr;
+  tool->keyPress({eKey});
 }
 
 void CurrentTool::attach() {
-  if (cell) tool->attachCell(cell);
-  enabled = cell;
+  if (cell) tool->attachCell();
 }
 
 void CurrentTool::detach() {
-  if (enabled) tool->detachCell();
+  if (cell) tool->detachCell();
 }

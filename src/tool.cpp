@@ -8,40 +8,49 @@
 
 #include "tool.hpp"
 
-void Tool::attachCell(Cell *newCell) {
-  cell = newCell;
+void ToolCtx::emitChanges(const ToolChanges changes) const {
+  if (changes == ToolChanges::cell || changes == ToolChanges::cell_overlay) {
+    Q_EMIT cellModified();
+  } else if (changes == ToolChanges::overlay) {
+    Q_EMIT overlayModified();
+  }
 }
 
-void Tool::detachCell() {
-  cell = nullptr;
+void ToolCtx::emitChanges(const bool drawn) const {
+  if (drawn) {
+    Q_EMIT cellModified();
+  } else {
+    Q_EMIT overlayModified();
+  }
 }
 
-ToolChanges Tool::mouseLeave(const ToolLeaveEvent &event) {
-  // @TODO this feels out of place
-  clearImage(*event.overlay);
-  return ToolChanges::overlay;
+void ToolCtx::requireCell() const {
+  if (!cell) Q_EMIT cellRequested();
 }
 
-ToolChanges Tool::mouseDown(const ToolMouseEvent &) {
-  return ToolChanges::none;
+QRgb ToolCtx::selectColor(const ButtonType button) const {
+  switch (button) {
+    case ButtonType::primary:   return colors.primary;
+    case ButtonType::secondary: return colors.secondary;
+    case ButtonType::erase:     return colors.erase;
+    default: Q_UNREACHABLE();
+  }
 }
 
-ToolChanges Tool::mouseMove(const ToolMouseEvent &) {
-  return ToolChanges::none;
+void ToolCtx::showStatus(const StatusMsg &status) const {
+  Q_EMIT shouldShowPerm(status.get());
 }
 
-ToolChanges Tool::mouseUp(const ToolMouseEvent &) {
-  return ToolChanges::none;
+void ToolCtx::clearStatus() const {
+  Q_EMIT shouldShowPerm("");
 }
 
-ToolChanges Tool::keyPress(const ToolKeyEvent &) {
-  return ToolChanges::none;
+void ToolCtx::finishChange() const {
+  Q_EMIT changingAction();
 }
 
-void Tool::setPalette(const PaletteCSpan newPalette) {
-  palette = newPalette;
+void Tool::setCtx(const ToolCtx *newCtx) {
+  ctx = newCtx;
 }
 
-void Tool::setFormat(const Format newFormat) {
-  format = newFormat;
-}
+#include "tool.moc"

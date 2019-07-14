@@ -23,11 +23,12 @@ public:
   explicit EditorWidget(QWidget *);
 
 Q_SIGNALS:
-  void mouseLeave(QImage *);
-  void mouseDown(QPoint, ButtonType, QImage *);
-  void mouseMove(QPoint, QImage *);
-  void mouseUp(QPoint, ButtonType, QImage *);
-  void keyPress(Qt::Key, QImage *);
+  void overlayChanged(QImage *);
+  void mouseLeave();
+  void mouseDown(QPoint, ButtonType);
+  void mouseMove(QPoint);
+  void mouseUp(QPoint, ButtonType);
+  void keyPress(Qt::Key);
 
 public Q_SLOTS:
   void composite();

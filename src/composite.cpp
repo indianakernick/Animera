@@ -113,6 +113,7 @@ QImage blitImage(const QImage &src, const QRect rect) {
   // @TODO does it really make sense allocate a new QImage?
   QImage dst{rect.size(), src.format()};
   visitSurfaces(dst, src, [pos = rect.topLeft()](auto dstSurface, auto srcSurface) {
+    dstSurface.overFill();
     copyRegion(
       dstSurface,
       srcSurface,
@@ -139,6 +140,7 @@ QImage blitMaskImage(const QImage &src, const QImage &mask, const QPoint pos) {
   // @TODO does it really make sense allocate a new QImage?
   QImage dst{mask.size(), src.format()};
   visitSurfaces(dst, src, [&mask, pos](auto dstSurface, auto srcSurface) {
+    dstSurface.overFill();
     maskCopyRegion(
       dstSurface,
       srcSurface,

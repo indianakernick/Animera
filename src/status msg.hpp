@@ -20,21 +20,22 @@ public:
   bool empty() const;
   std::string_view get() const;
 
-  void append(QPoint);
-  void append(QSize);
-  void append(SelectMode);
-  void append(bool);
-  void append(char);
-  void append(int);
+  StatusMsg &append(QPoint);
+  StatusMsg &append(QSize);
+  StatusMsg &append(SelectMode);
+  StatusMsg &append(bool);
+  StatusMsg &append(char);
+  StatusMsg &append(int);
   
   template <size_t Size>
-  void append(const char (&str)[Size]) {
+  StatusMsg &append(const char (&str)[Size]) {
     msg.append(str, Size - 1);
+    return *this;
   }
   
-  void appendLabeled(QPoint);
-  void appendLabeled(QRect);
-  void appendLabeled(SelectMode);
+  StatusMsg &appendLabeled(QPoint);
+  StatusMsg &appendLabeled(QRect);
+  StatusMsg &appendLabeled(SelectMode);
 
 private:
   std::string msg;

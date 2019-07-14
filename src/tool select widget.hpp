@@ -33,30 +33,34 @@ Q_SIGNALS:
   void cellRequested();
 
 public Q_SLOTS:
-  void mouseLeave(QImage *);
-  void mouseDown(QPoint, ButtonType, QImage *);
-  void mouseMove(QPoint, QImage *);
-  void mouseUp(QPoint, ButtonType, QImage *);
-  void keyPress(Qt::Key, QImage *);
+  void mouseLeave();
+  void mouseDown(QPoint, ButtonType);
+  void mouseMove(QPoint);
+  void mouseUp(QPoint, ButtonType);
+  void keyPress(Qt::Key);
+  
+  void setOverlay(QImage *);
   void setCell(Cell *);
   void setColors(ToolColors);
   void setPalette(PaletteCSpan);
   void initCanvas(Format);
   
+private Q_SLOTS:
+  void changeTool(ToolWidget *, Tool *);
+  
 private:
   QWidget *box;
   std::vector<ToolWidget *> tools;
   CurrentTool currTool;
+  // currWidget only exists to accomodate future changes (tool settings)
   ToolWidget *currWidget = nullptr;
-  ToolColors colors;
-  StatusMsg status;
-  bool actionChangedCell = false;
+  ToolCtx ctx;
   
-  void changeTool(ToolWidget *, Tool *);
   template <typename WidgetClass>
-  ToolWidget *makeToolWidget();
-  
-  void emitModified(ToolChanges);
+  void pushToolWidget();
+  void createTools();
+  void setupLayout();
+  void connectSignals();
 };
 
 #endif

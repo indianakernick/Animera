@@ -236,6 +236,7 @@ void Window::connectSignals() {
   CONNECT(tools,           shouldShowPerm,      statusBar,       showPerm);
   CONNECT(tools,           cellRequested,       sprite.timeline, requestCell);
   
+  CONNECT(editor,          overlayChanged,      tools,           setOverlay);
   CONNECT(editor,          mouseLeave,          tools,           mouseLeave);
   CONNECT(editor,          mouseDown,           tools,           mouseDown);
   CONNECT(editor,          mouseMove,           tools,           mouseMove);

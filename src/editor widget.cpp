@@ -50,12 +50,16 @@ public:
     updateCheckers();
   }
   
+  QImage *getOverlay() {
+    return &overlay;
+  }
+  
 Q_SIGNALS:
-  void mouseLeave(QImage *);
-  void mouseDown(QPoint, ButtonType, QImage *);
-  void mouseMove(QPoint, QImage *);
-  void mouseUp(QPoint, ButtonType, QImage *);
-  void keyPress(Qt::Key, QImage *);
+  void mouseLeave();
+  void mouseDown(QPoint, ButtonType);
+  void mouseMove(QPoint);
+  void mouseUp(QPoint, ButtonType);
+  void keyPress(Qt::Key);
   void resized();
   
 private:
@@ -90,13 +94,13 @@ private:
   
   void checkMouseLeave() {
     if (!rect().contains(pos)) {
-      Q_EMIT mouseLeave(&overlay);
+      Q_EMIT mouseLeave();
     }
   }
   
   void updateMouse() {
     pos = getPos();
-    Q_EMIT mouseMove(pos, &overlay);
+    Q_EMIT mouseMove(pos);
     checkMouseLeave();
   }
   
@@ -184,7 +188,7 @@ private:
       keyButton = false;
       grabMouse(cursor());
       pos = getPos(event);
-      Q_EMIT mouseDown(pos, button, &overlay);
+      Q_EMIT mouseDown(pos, button);
     }
   }
   void mouseReleaseEvent(QMouseEvent *event) override {
@@ -193,20 +197,20 @@ private:
       buttonDown = ButtonType::none;
       releaseMouse();
       pos = getPos(event);
-      Q_EMIT mouseUp(pos, getButton(event), &overlay);
+      Q_EMIT mouseUp(pos, getButton(event));
       checkMouseLeave();
     }
   }
   void mouseMoveEvent(QMouseEvent *event) override {
     pos = getPos(event);
-    Q_EMIT mouseMove(pos, &overlay);
+    Q_EMIT mouseMove(pos);
     setCursor(cursor());
   }
   void enterEvent(QEvent *) override {
     setFocus();
   }
   void leaveEvent(QEvent *) override {
-    Q_EMIT mouseLeave(&overlay);
+    Q_EMIT mouseLeave();
     clearFocus();
   }
 
@@ -223,11 +227,11 @@ public:
           keyButton = true;
           grabMouse(cursor());
           grabKeyboard();
-          Q_EMIT mouseDown(pos, button, &overlay);
+          Q_EMIT mouseDown(pos, button);
         }
       }
     } else {
-      Q_EMIT keyPress(static_cast<Qt::Key>(event->key()), &overlay);
+      Q_EMIT keyPress(static_cast<Qt::Key>(event->key()));
     }
   }
   void keyReleaseEvent(QKeyEvent *event) override {
@@ -237,7 +241,7 @@ public:
         buttonDown = ButtonType::none;
         releaseKeyboard();
         releaseMouse();
-        Q_EMIT mouseUp(pos, button, &overlay);
+        Q_EMIT mouseUp(pos, button);
         checkMouseLeave();
       }
     }
@@ -287,6 +291,7 @@ void EditorWidget::initCanvas(const Format newFormat, const QSize newSize) {
   format = newFormat;
   size = newSize;
   view->setSize(newSize);
+  Q_EMIT overlayChanged(view->getOverlay());
 }
 
 void EditorWidget::resizeEvent(QResizeEvent *event) {

@@ -10,6 +10,7 @@
 #define paint_params_hpp
 
 #include <QtCore/qrect.h>
+#include "enum operators.hpp"
 
 constexpr int no_radius = -1;
 constexpr QPoint no_point{-1, -1};
@@ -41,10 +42,8 @@ enum class SymmetryMode {
   both
 };
 
-constexpr bool operator&(const SymmetryMode set, const SymmetryMode bit) {
-  using Type = std::underlying_type_t<SymmetryMode>;
-  return (static_cast<Type>(set) & static_cast<Type>(bit)) == static_cast<Type>(bit);
-}
+template <>
+struct enum_test_flag<SymmetryMode> : std::true_type {};
 
 enum class SelectMode {
   copy,

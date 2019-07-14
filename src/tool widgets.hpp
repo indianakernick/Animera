@@ -9,8 +9,12 @@
 #ifndef tool_widgets_hpp
 #define tool_widgets_hpp
 
-#include "tool impls.hpp"
+#include "brush tool.hpp"
+#include "select tools.hpp"
+#include "transform tools.hpp"
+#include "flood fill tool.hpp"
 #include <QtWidgets/qwidget.h>
+#include "drag paint tools.hpp"
 
 /*class ToolWidget : public QWidget {
   Q_OBJECT

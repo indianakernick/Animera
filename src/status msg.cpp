@@ -22,19 +22,20 @@ std::string_view StatusMsg::get() const {
   return msg;
 }
 
-void StatusMsg::append(const QPoint point) {
+StatusMsg &StatusMsg::append(const QPoint point) {
   append('[');
   append(point.x());
   append(' ');
   append(point.y());
   append(']');
+  return *this;
 }
 
-void StatusMsg::append(const QSize size) {
+StatusMsg &StatusMsg::append(const QSize size) {
   return append(toPoint(size));
 }
 
-void StatusMsg::append(const SelectMode mode) {
+StatusMsg &StatusMsg::append(const SelectMode mode) {
   switch (mode) {
     case SelectMode::copy:  return append("COPY");
     case SelectMode::paste: return append("PASTE");
@@ -42,31 +43,37 @@ void StatusMsg::append(const SelectMode mode) {
   }
 }
 
-void StatusMsg::append(const bool b) {
+StatusMsg &StatusMsg::append(const bool b) {
   msg += b ? "YES" : "NO";
+  return *this;
 }
 
-void StatusMsg::append(const char c) {
+StatusMsg &StatusMsg::append(const char c) {
   msg += c;
+  return *this;
 }
 
-void StatusMsg::append(const int i) {
+StatusMsg &StatusMsg::append(const int i) {
   msg += std::to_string(i);
+  return *this;
 }
 
-void StatusMsg::appendLabeled(const QPoint pos) {
+StatusMsg &StatusMsg::appendLabeled(const QPoint pos) {
   append("POS: ");
   append(pos);
+  return *this;
 }
 
-void StatusMsg::appendLabeled(const QRect rect) {
+StatusMsg &StatusMsg::appendLabeled(const QRect rect) {
   append("POS: ");
   append(rect.topLeft());
   append(" SIZE: ");
   append(rect.size());
+  return *this;
 }
 
-void StatusMsg::appendLabeled(const SelectMode mode) {
+StatusMsg &StatusMsg::appendLabeled(const SelectMode mode) {
   append(mode);
   append(" - ");
+  return *this;
 }

@@ -28,35 +28,28 @@ class ToolWidget final : public RadioButtonWidget {
   
 public:
   template <typename WidgetClass>
-  ToolWidget(
-    ToolSelectWidget *tools,
-    QWidget *parent,
-    tag_t<WidgetClass>
-  ) : RadioButtonWidget{parent},
-      tools{tools},
+  ToolWidget(QWidget *parent, const ToolCtx *ctx, tag_t<WidgetClass>)
+    : RadioButtonWidget{parent},
       tool{std::make_unique<typename WidgetClass::impl>()},
       widget{std::make_unique<WidgetClass>()} {
+    tool->setCtx(ctx);
     loadIcons(WidgetClass::icon_name);
     setToolTip(WidgetClass::tooltip);
     setFixedSize(tool_button_size);
-    CONNECT(this, toggled, this, toolChanged);
+    CONNECT(this, toggled, this, changeTool);
   }
-  
-  void setPalette(const PaletteCSpan newPalette) {
-    tool->setPalette(newPalette);
-  }
-  
-  void setFormat(const Format format) {
-    tool->setFormat(format);
-  }
-  
-public Q_SLOTS:
-  void toolChanged(const bool checked) {
-    if (checked) tools->changeTool(this, tool.get());
+
+Q_SIGNALS:
+  void shouldChangeTool(ToolWidget *, Tool *);
+
+private Q_SLOTS:
+  void changeTool(const bool checked) {
+    if (checked) {
+      Q_EMIT shouldChangeTool(this, tool.get());
+    }
   }
 
 private:
-  ToolSelectWidget *tools;
   std::unique_ptr<Tool> tool;
   std::unique_ptr<QWidget> widget;
   QPixmap enabledIcon;
@@ -80,104 +73,56 @@ private:
 ToolSelectWidget::ToolSelectWidget(QWidget *parent)
   : QScrollArea{parent}, box{new QWidget{this}} {
   setFixedWidth(tool_select_width);
-
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   setStyleSheet("background-color: " + tool_select_background.name());
-  
   setFrameShape(NoFrame);
-  
-  QVBoxLayout *boxLayout = new QVBoxLayout{box};
-  boxLayout->setSpacing(0);
-  boxLayout->setContentsMargins(glob_padding, glob_padding, glob_padding, glob_padding);
-  box->setLayout(boxLayout);
-  
-  boxLayout->addStretch();
-  makeToolWidget<BrushToolWidget>()->click();
-  makeToolWidget<FloodFillToolWidget>();
-  makeToolWidget<RectangleSelectToolWidget>();
-  makeToolWidget<PolygonSelectToolWidget>();
-  makeToolWidget<WandSelectToolWidget>();
-  makeToolWidget<LineToolWidget>();
-  makeToolWidget<StrokedCircleToolWidget>();
-  makeToolWidget<FilledCircleToolWidget>();
-  makeToolWidget<StrokedRectangleToolWidget>();
-  makeToolWidget<FilledRectangleToolWidget>();
-  makeToolWidget<TranslateToolWidget>();
-  makeToolWidget<FlipToolWidget>();
-  makeToolWidget<RotateToolWidget>();
-  boxLayout->addStretch();
-  
+  createTools();
+  setupLayout();
+  connectSignals();
   setWidget(box);
   setAlignment(Qt::AlignVCenter);
 }
 
-void ToolSelectWidget::mouseLeave(QImage *overlay) {
-  status.clear();
-  emitModified(currTool.mouseLeave({{}, overlay, &status}));
-  Q_EMIT shouldShowPerm(status.get());
+void ToolSelectWidget::mouseLeave() {
+  currTool.mouseLeave();
 }
 
-void ToolSelectWidget::mouseDown(const QPoint pos, const ButtonType button, QImage *overlay) {
-  // @TODO give the null cell to the tool and then let it request a cell
-  if (currTool.nullCell()) Q_EMIT cellRequested();
-  // @TODO I think we need to move the status.clear() call somewhere else
-  status.clear();
-  const ToolChanges changes = currTool.mouseDown({button, pos, colors, overlay, &status});
-  if (changes == ToolChanges::cell || changes == ToolChanges::cell_overlay) {
-    actionChangedCell = true;
-  }
-  emitModified(changes);
-  if (!status.empty()) Q_EMIT shouldShowPerm(status.get());
+void ToolSelectWidget::mouseDown(const QPoint pos, const ButtonType button) {
+  currTool.mouseDown(pos, button);
 }
 
-void ToolSelectWidget::mouseMove(const QPoint pos, QImage *overlay) {
-  status.clear();
-  const ToolChanges changes = currTool.mouseMove({{}, pos, colors, overlay, &status});
-  if (changes == ToolChanges::cell || changes == ToolChanges::cell_overlay) {
-    actionChangedCell = true;
-  }
-  emitModified(changes);
-  if (!status.empty()) Q_EMIT shouldShowPerm(status.get());
+void ToolSelectWidget::mouseMove(const QPoint pos) {
+  currTool.mouseMove(pos);
 }
 
-void ToolSelectWidget::mouseUp(const QPoint pos, const ButtonType button, QImage *overlay) {
-  status.clear();
-  const ToolChanges changes = currTool.mouseUp({button, pos, colors, overlay, &status});
-  emitModified(changes);
-  if (actionChangedCell || changes == ToolChanges::cell || changes == ToolChanges::cell_overlay) {
-    Q_EMIT changingAction();
-    actionChangedCell = false;
-  }
-  if (!status.empty()) Q_EMIT shouldShowPerm(status.get());
+void ToolSelectWidget::mouseUp(const QPoint pos, const ButtonType button) {
+  currTool.mouseUp(pos, button);
 }
 
-void ToolSelectWidget::keyPress(const Qt::Key key, QImage *overlay) {
-  // @TODO give the null cell to the tool and then let it request a cell
-  if (currTool.nullCell()) Q_EMIT cellRequested();
-  status.clear();
-  emitModified(currTool.keyPress({key, colors, overlay, &status}));
-  if (!status.empty()) Q_EMIT shouldShowPerm(status.get());
+void ToolSelectWidget::keyPress(const Qt::Key key) {
+  currTool.keyPress(key);
+}
+
+void ToolSelectWidget::setOverlay(QImage *overlay) {
+  ctx.overlay = overlay;
 }
 
 void ToolSelectWidget::setCell(Cell *cell) {
+  ctx.cell = cell;
   currTool.changeCell(cell);
 }
 
-void ToolSelectWidget::setColors(const ToolColors newColors) {
-  colors = newColors;
+void ToolSelectWidget::setColors(const ToolColors colors) {
+  ctx.colors = colors;
 }
 
-void ToolSelectWidget::setPalette(const PaletteCSpan newPalette) {
-  for (ToolWidget *tool : tools) {
-    tool->setPalette(newPalette);
-  }
+void ToolSelectWidget::setPalette(const PaletteCSpan palette) {
+  ctx.palette = palette;
 }
 
-void ToolSelectWidget::initCanvas(const Format newFormat) {
-  for (ToolWidget *tool : tools) {
-    tool->setFormat(newFormat);
-  }
+void ToolSelectWidget::initCanvas(const Format format) {
+  ctx.format = format;
 }
 
 void ToolSelectWidget::changeTool(ToolWidget *widget, Tool *tool) {
@@ -186,19 +131,48 @@ void ToolSelectWidget::changeTool(ToolWidget *widget, Tool *tool) {
 }
 
 template <typename WidgetClass>
-ToolWidget *ToolSelectWidget::makeToolWidget() {
-  ToolWidget *widget = new ToolWidget{this, box, tag<WidgetClass>};
-  tools.push_back(widget);
-  box->layout()->addWidget(widget);
-  return widget;
+void ToolSelectWidget::pushToolWidget() {
+  tools.push_back(new ToolWidget{box, &ctx, tag<WidgetClass>});
 }
 
-void ToolSelectWidget::emitModified(const ToolChanges changes) {
-  if (changes == ToolChanges::cell || changes == ToolChanges::cell_overlay) {
-    Q_EMIT cellModified();
-  } else if (changes == ToolChanges::overlay) {
-    Q_EMIT overlayModified();
+void ToolSelectWidget::createTools() {
+  pushToolWidget<BrushToolWidget>();
+  pushToolWidget<FloodFillToolWidget>();
+  pushToolWidget<RectangleSelectToolWidget>();
+  pushToolWidget<PolygonSelectToolWidget>();
+  pushToolWidget<WandSelectToolWidget>();
+  pushToolWidget<LineToolWidget>();
+  pushToolWidget<StrokedCircleToolWidget>();
+  pushToolWidget<FilledCircleToolWidget>();
+  pushToolWidget<StrokedRectangleToolWidget>();
+  pushToolWidget<FilledRectangleToolWidget>();
+  pushToolWidget<TranslateToolWidget>();
+  pushToolWidget<FlipToolWidget>();
+  pushToolWidget<RotateToolWidget>();
+}
+
+void ToolSelectWidget::setupLayout() {
+  QVBoxLayout *layout = new QVBoxLayout{box};
+  box->setLayout(layout);
+  layout->setSpacing(0);
+  layout->setContentsMargins(glob_padding, glob_padding, glob_padding, glob_padding);
+  layout->addStretch();
+  for (ToolWidget *tool : tools) {
+    layout->addWidget(tool);
   }
+  layout->addStretch();
+}
+
+void ToolSelectWidget::connectSignals() {
+  CONNECT(ctx, cellModified,    this, cellModified);
+  CONNECT(ctx, overlayModified, this, overlayModified);
+  CONNECT(ctx, shouldShowPerm,  this, shouldShowPerm);
+  CONNECT(ctx, changingAction,  this, changingAction);
+  CONNECT(ctx, cellRequested,   this, cellRequested);
+  for (ToolWidget *tool : tools) {
+    CONNECT(tool, shouldChangeTool, this, changeTool);
+  }
+  tools[0]->click();
 }
 
 #include "tool select widget.moc"

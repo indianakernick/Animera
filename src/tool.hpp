@@ -12,6 +12,7 @@
 #include "image.hpp"
 #include "palette.hpp"
 #include "status msg.hpp"
+#include <QtCore/qobject.h>
 
 class Cell;
 
@@ -37,44 +38,59 @@ struct ToolColors {
 
 struct ToolLeaveEvent {
   ButtonType button;
-  QImage *overlay = nullptr;
-  StatusMsg *status = nullptr;
 };
 
 struct ToolMouseEvent {
-  ButtonType button;
   QPoint pos;
-  ToolColors colors;
-  QImage *overlay = nullptr; // @TODO does this really need to be a pointer?
-  StatusMsg *status = nullptr;
+  ButtonType button;
 };
 
 struct ToolKeyEvent {
   Qt::Key key;
-  ToolColors colors;
+};
+
+class ToolCtx final : public QObject {
+  Q_OBJECT
+
+Q_SIGNALS:
+  void cellModified() const;
+  void overlayModified() const;
+  void shouldShowPerm(std::string_view) const;
+  void changingAction() const;
+  void cellRequested() const;
+
+public:
+  Cell *cell = nullptr;
   QImage *overlay = nullptr;
-  StatusMsg *status = nullptr;
+  PaletteCSpan palette;
+  Format format;
+  ToolColors colors;
+  
+  void emitChanges(ToolChanges) const;
+  void emitChanges(bool) const;
+  void requireCell() const;
+  QRgb selectColor(ButtonType) const;
+  void showStatus(const StatusMsg &) const;
+  void clearStatus() const;
+  void finishChange() const;
 };
 
 class Tool {
 public:
   virtual ~Tool() = default;
-  
-  virtual void attachCell(Cell *);
-  virtual void detachCell();
-  virtual ToolChanges mouseLeave(const ToolLeaveEvent &);
-  virtual ToolChanges mouseDown(const ToolMouseEvent &);
-  virtual ToolChanges mouseMove(const ToolMouseEvent &);
-  virtual ToolChanges mouseUp(const ToolMouseEvent &);
-  virtual ToolChanges keyPress(const ToolKeyEvent &);
 
-  void setPalette(PaletteCSpan);
-  void setFormat(Format);
+  virtual void attachCell() {}
+  virtual void detachCell() {}
+  virtual void mouseLeave(const ToolLeaveEvent &) {}
+  virtual void mouseDown(const ToolMouseEvent &) {}
+  virtual void mouseMove(const ToolMouseEvent &) {}
+  virtual void mouseUp(const ToolMouseEvent &) {}
+  virtual void keyPress(const ToolKeyEvent &) {}
+  
+  void setCtx(const ToolCtx *);
 
 protected:
-  Cell *cell = nullptr;
-  PaletteCSpan palette;
-  Format format;
+  const ToolCtx *ctx = nullptr;
 };
 
 #endif

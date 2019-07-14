@@ -17,6 +17,7 @@ class Cell;
 
 using CellPtr = std::unique_ptr<Cell>;
 
+// @TODO does this class really need to exist anymore? It's just a QImage
 class Cell {
 public:
   Cell() = default;
