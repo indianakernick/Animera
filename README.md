@@ -1,27 +1,8 @@
 ![Imgur](https://i.imgur.com/2Iqka11.png)
 
-## A picture is a thousand words (scroll down for GIFs!)
+### A picture is a thousand words (scroll down for GIFs!)
 
 ![Screenshot](https://i.imgur.com/lS1NJ2L.png)
-
-## A story...
-
-Way back in 2014, I learnt my first programming language: JavaScript. 
-I spent most of the year 2015 working on my first major project: a pixel-art drawing tool. 
-By November-ish, I had a working tool that I used for drawing game sprites in future years
-(see my Github profile for a handful of games built using this tool).
-However, this tool is starting to show its age. Some everyday operations are quite tedious.
-Saving the animation as a sequence of PNGs requires navigating a menu and exporting
-each frame one-by-one. That's just one example.
-
-I have decided to redesign and rewrite this application in C++ using the Qt framework.
-My experience using the old tool for drawing sprites and performing the tedious operations
-should influence the design of this application. I aim to build something that I'll be able
-to use for future projects. I'll certainly use this tool if no-one else does!
-
-## Demos
-
-Here's a few quick gifs that demostrate some of the features I have implemented so far.
 
 ![Palette Mode](https://i.imgur.com/9zZOte3.gif)
 
