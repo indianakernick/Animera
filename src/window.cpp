@@ -219,6 +219,10 @@ void Window::connectSignals() {
   CONNECT(timeline,        visibilityChanged,   sprite.timeline, setVisibility);
   CONNECT(timeline,        nameChanged,         sprite.timeline, setName);
   CONNECT(timeline,        nextFrame,           sprite.timeline, nextFrame);
+  CONNECT(timeline,        insertLayer,         sprite.timeline, insertLayer);
+  CONNECT(timeline,        removeLayer,         sprite.timeline, removeLayer);
+  CONNECT(timeline,        moveLayerUp,         sprite.timeline, moveLayerUp);
+  CONNECT(timeline,        moveLayerDown,       sprite.timeline, moveLayerDown);
   
   CONNECT(sprite,          canvasInitialized,   colorPicker,     initCanvas);
   CONNECT(sprite,          canvasInitialized,   colors,          initCanvas);

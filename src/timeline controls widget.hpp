@@ -10,7 +10,8 @@
 #define timeline_controls_widget_hpp
 
 #include <QtCore/qtimer.h>
-#include <QtWidgets/qwidget.h>
+#include "icon push button widget.hpp"
+#include "icon radio button widget.hpp"
 
 class ControlsWidget final : public QWidget {
   Q_OBJECT
@@ -20,12 +21,31 @@ public:
 
 Q_SIGNALS:
   void nextFrame();
+  void insertLayer();
+  void removeLayer();
+  void moveLayerUp();
+  void moveLayerDown();
 
 public Q_SLOTS:
   void toggleAnimation();
 
 private:
   QTimer animTimer;
+  IconPushButtonWidget *insertLayerButton;
+  IconPushButtonWidget *removeLayerButton;
+  IconPushButtonWidget *moveLayerUpButton;
+  IconPushButtonWidget *moveLayerDownButton;
+  IconRadioButtonWidget *playButton;
+  
+  void toggleTimer();
+  
+  void paintBack(QPixmap &);
+  void paintIcon(QPixmap &, const QString &);
+  IconPushButtonWidget *makePushButton(QPixmap, const QString &);
+  IconRadioButtonWidget *makeRadioButton(QPixmap, const QString &, const QString &);
+  void createWidgets();
+  void setupLayout();
+  void connectSignals();
   
   void paintEvent(QPaintEvent *) override;
 };

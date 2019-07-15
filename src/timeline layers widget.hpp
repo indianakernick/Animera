@@ -11,23 +11,10 @@
 
 #include "cell.hpp"
 #include <QtWidgets/qscrollarea.h>
-#include <QtWidgets/qabstractbutton.h>
+#include "icon radio button widget.hpp"
 
 class TextInputWidget;
 class QVBoxLayout;
-
-// @TODO PushButtonWidget
-// This button doesn't seem to work reliably
-class VisibleWidget final : public QAbstractButton {
-public:
-  explicit VisibleWidget(QWidget *);
-
-private:
-  QPixmap shownPix;
-  QPixmap hiddenPix;
-
-  void paintEvent(QPaintEvent *) override;
-};
 
 class LayerNameWidget final : public QWidget {
   Q_OBJECT
@@ -44,10 +31,13 @@ public Q_SLOTS:
   void setName(std::string_view);
 
 private:
-  VisibleWidget *visible = nullptr;
+  IconRadioButtonWidget *visible = nullptr;
   TextInputWidget *name = nullptr;
   LayerIdx idx;
   
+  void paintBack(QPixmap &);
+  void paintIcon(QPixmap &, const QString &);
+  void createWidgets();
   void setupLayout();
   
   void paintEvent(QPaintEvent *) override;

@@ -10,35 +10,16 @@
 
 #include "config.hpp"
 #include "connect.hpp"
+#include <QtGui/qbitmap.h>
 #include <QtGui/qpainter.h>
 #include "widget painting.hpp"
 #include "text input widget.hpp"
 #include <QtWidgets/qboxlayout.h>
 
-VisibleWidget::VisibleWidget(QWidget *parent)
-  : QAbstractButton{parent} {
-  setCheckable(true);
-  setFixedSize(cell_width, cell_width);
-  // @TODO cache
-  shownPix = bakeColoredBitmap(":/Timeline/shown.pbm", cell_icon_color);
-  hiddenPix = bakeColoredBitmap(":/Timeline/hidden.pbm", cell_icon_color);
-}
-
-void VisibleWidget::paintEvent(QPaintEvent *) {
-  QPainter painter{this};
-  painter.fillRect(0, 0, width() - glob_border_width, height() - glob_border_width, glob_main);
-  QPixmap pixmap = isChecked() ? shownPix : hiddenPix;
-  painter.drawPixmap(cell_icon_pad, cell_icon_pad, pixmap);
-  painter.fillRect(
-    width() - glob_border_width, 0,
-    glob_border_width, height(),
-    glob_border_color
-  );
-}
-
 LayerNameWidget::LayerNameWidget(QWidget *parent, const LayerIdx layer)
   : QWidget{parent}, idx{layer} {
   setFixedSize(layer_width, cell_height);
+  createWidgets();
   setupLayout();
   connect(visible, &QAbstractButton::toggled, [this](const bool visibility) {
     Q_EMIT visibilityChanged(idx, visibility);
@@ -56,15 +37,56 @@ void LayerNameWidget::setName(const std::string_view text) {
   name->setText(QString{QLatin1String{text.data(), static_cast<int>(text.size())}});
 }
 
+void LayerNameWidget::paintBack(QPixmap &pixmap) {
+  QPainter painter{&pixmap};
+  painter.fillRect(
+    0, 0,
+    cell_width - glob_border_width, cell_width - glob_border_width,
+    glob_main
+  );
+  painter.fillRect(
+    cell_width - glob_border_width, 0,
+    glob_border_width, cell_width,
+    glob_border_color
+  );
+  painter.fillRect(
+    0, cell_width - glob_border_width,
+    cell_width - glob_border_width, glob_border_width,
+    glob_border_color
+  );
+}
+
+void LayerNameWidget::paintIcon(QPixmap &pixmap, const QString &path) {
+  QPainter painter{&pixmap};
+  QBitmap bitmap{path};
+  bitmap = bitmap.scaled(bitmap.size() * glob_scale);
+  QRegion region{bitmap};
+  region.translate(cell_icon_pad, cell_icon_pad);
+  painter.setClipRegion(region);
+  painter.fillRect(
+    cell_icon_pad, cell_icon_pad,
+    cell_icon_size, cell_icon_size,
+    cell_icon_color
+  );
+}
+
+void LayerNameWidget::createWidgets() {
+  QPixmap onPix{cell_width, cell_width};
+  paintBack(onPix);
+  QPixmap offPix = onPix;
+  paintIcon(onPix, ":/Timeline/shown.pbm");
+  paintIcon(offPix, ":/Timeline/hidden.pbm");
+  visible = new IconRadioButtonWidget{this, onPix, offPix};
+  name = new TextInputWidget{this, layer_text_rect};
+}
+
 void LayerNameWidget::setupLayout() {
   QHBoxLayout *layout = new QHBoxLayout{this};
   setLayout(layout);
   layout->setSpacing(0);
   layout->setContentsMargins(0, 0, 0, 0);
   layout->setAlignment(Qt::AlignLeft);
-  visible = new VisibleWidget{this};
   layout->addWidget(visible);
-  name = new TextInputWidget{this, layer_text_rect};
   layout->addWidget(name, 0, Qt::AlignTop);
 }
 

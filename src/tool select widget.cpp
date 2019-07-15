@@ -56,10 +56,8 @@ private:
   QPixmap disabledIcon;
   
   void loadIcons(const QString &name) {
-    QBitmap base{":/Tools/base.pbm"};
-    QBitmap shape{":/Tools/" + name + ".pbm"};
-    base = base.scaled(tool_icon_size);
-    shape = shape.scaled(tool_icon_size);
+    QBitmap base = QBitmap{":/Tools/base.pbm"}.scaled(tool_icon_size);
+    QBitmap shape = QBitmap{":/Tools/" + name + ".pbm"}.scaled(tool_icon_size);
     enabledIcon = bakeColoredBitmaps(base, shape, tool_base_enabled, tool_shape_enabled);
     disabledIcon = bakeColoredBitmaps(base, shape, tool_base_disabled, tool_shape_disabled);
   }

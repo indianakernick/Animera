@@ -15,8 +15,6 @@
 
 class ToolWidget;
 
-// @TODO this class is an absolute mess
-
 class ToolSelectWidget final : public QScrollArea {
   Q_OBJECT
 
