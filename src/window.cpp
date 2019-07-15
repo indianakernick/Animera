@@ -13,6 +13,7 @@
 #include "application.hpp"
 #include "global font.hpp"
 #include <QtWidgets/qstyle.h>
+#include <QtWidgets/qtooltip.h>
 #include "separator widget.hpp"
 #include <QtWidgets/qmenubar.h>
 #include <QtWidgets/qboxlayout.h>
@@ -77,16 +78,12 @@ void Window::setupUI() {
   "QToolTip {"
     "background-color: " + glob_main.name() + ";"
     "color: " + glob_light_2.name() + ";"
-    "font-family: \"" + getGlobalFont().family() + "\";"
-    "font-size: " + QString::number(getGlobalFont().pointSize()) + "pt;"
     "border-width: " + QString::number(glob_border_width) + "px;"
     "border-color: " + glob_border_color.name() + ";"
     "border-style: solid;"
   "}"
   
   "QMenuBar {"
-    "font-family: " + getGlobalFont().family() + ";"
-    "font-size: " + QString::number(getGlobalFont().pointSize()) + "pt;"
     "background-color: " + glob_main.name() + ";"
     "color: " + glob_light_2.name() + ";"
   "}"
@@ -101,8 +98,6 @@ void Window::setupUI() {
   "}"
   
   "QMenu::item {"
-    "font-family: " + getGlobalFont().family() + ";"
-    "font-size: " + QString::number(getGlobalFont().pointSize()) + "pt;"
     "background-color: " + glob_main.name() + ";"
     "color: " + glob_light_2.name() + ";"
   "}"
@@ -111,6 +106,7 @@ void Window::setupUI() {
     "background-color: " + glob_light_1.name() + ";"
   "}"
   );
+  QToolTip::setFont(getGlobalFont());
   
   QVBoxLayout *bottomLayout = new QVBoxLayout{&bottom};
   bottom.setLayout(bottomLayout);
@@ -152,15 +148,18 @@ void Window::setupMenubar() {
   if (!menubar->isNativeMenuBar()) {
     makeDockWidget(Qt::TopDockWidgetArea, menubar);
   }
+  menubar->setFont(getGlobalFont());
   
   auto *app = static_cast<Application *>(QApplication::instance());
   QMenu *file = menubar->addMenu("File");
+  file->setFont(getGlobalFont());
   ADD_ACTION(file, "New", QKeySequence::New, *app, newFileDialog);
   ADD_ACTION(file, "Open", QKeySequence::Open, *app, openFileDialog);
   ADD_ACTION(file, "Save", QKeySequence::Save, *this, saveFile);
   ADD_ACTION(file, "Save As", QKeySequence::SaveAs, *this, saveFileDialog);
   
   QMenu *layer = menubar->addMenu("Layer");
+  layer->setFont(getGlobalFont());
   ADD_ACTION(layer, "New Layer", Qt::SHIFT + Qt::Key_N, sprite.timeline, insertLayer);
   ADD_ACTION(layer, "Delete Layer", Qt::SHIFT + Qt::Key_Backspace, sprite.timeline, removeLayer);
   ADD_ACTION(layer, "Move Layer Up", Qt::SHIFT + Qt::Key_Up, sprite.timeline, moveLayerUp);
@@ -180,6 +179,7 @@ void Window::setupMenubar() {
   ADD_ACTION(layer, "Layer Below", Qt::Key_S, sprite.timeline, layerBelow);
   
   QMenu *frame = menubar->addMenu("Frame");
+  frame->setFont(getGlobalFont());
   ADD_ACTION(frame, "New Frame", Qt::ALT + Qt::Key_N, sprite.timeline, insertFrame);
   ADD_ACTION(frame, "New Empty Frame", Qt::ALT + Qt::Key_E, sprite.timeline, insertNullFrame);
   ADD_ACTION(frame, "Delete Frame", Qt::ALT + Qt::Key_Backspace, sprite.timeline, removeFrame);
