@@ -25,6 +25,7 @@ public:
   
 public Q_SLOTS:
   void setCurrPos(CellPos);
+  void setSelection(CellRect);
   void setVisibility(LayerIdx, bool);
   void setName(LayerIdx, std::string_view);
   void setLayer(LayerIdx, const Spans &);
@@ -35,11 +36,18 @@ public Q_SLOTS:
 Q_SIGNALS:
   void visibilityChanged(LayerIdx, bool);
   void nameChanged(LayerIdx, std::string_view);
+  
   void nextFrame();
   void insertLayer();
   void removeLayer();
   void moveLayerUp();
   void moveLayerDown();
+  
+  void beginSelection();
+  void continueSelection();
+  void endSelection();
+  void clearSelection();
+  void currPosChanged(CellPos);
   
 private:
   ControlsWidget *controls = nullptr;

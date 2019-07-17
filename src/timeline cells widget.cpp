@@ -10,6 +10,7 @@
 
 #include "config.hpp"
 #include "connect.hpp"
+#include "painting.hpp"
 #include <QtGui/qpainter.h>
 #include "widget painting.hpp"
 
@@ -34,10 +35,40 @@ void resizeCopyImage(QImage &image, const QSize newSize) {
 CellsWidget::CellsWidget(QWidget *parent)
 : QWidget{parent},
   currPosImg{0, 0, QImage::Format_ARGB32_Premultiplied},
+  selectionImg{0, 0, QImage::Format_ARGB32_Premultiplied},
   layersImg{0, 0, QImage::Format_ARGB32_Premultiplied} {
   cellPix = bakeColoredBitmap(":/Timeline/cell.pbm", cell_icon_color);
   beginLinkPix = bakeColoredBitmap(":/Timeline/begin linked cell.pbm", cell_icon_color);
   endLinkPix = bakeColoredBitmap(":/Timeline/end linked cell.pbm", cell_icon_color);
+}
+
+void CellsWidget::setSelection(const CellRect rect) {
+  selectionImg.fill(0);
+  if (rect.minL >= 0 && rect.minF >= 0) {
+    QRect selectRect = {
+      rect.minF * cell_width,
+      rect.minL * cell_height,
+      (rect.maxF - rect.minF + 1) * cell_width - glob_border_width,
+      (rect.maxL - rect.minL + 1) * cell_height - glob_border_width
+    };
+    drawStrokedRect(
+      selectionImg,
+      cell_select_color.rgba(),
+      selectRect,
+      glob_border_width
+    );
+    selectRect.adjust(
+      -2 * glob_border_width, -2 * glob_border_width,
+      2 * glob_border_width, 2 * glob_border_width
+    );
+    drawStrokedRect(
+      selectionImg,
+      cell_select_color.rgba(),
+      selectRect,
+      glob_border_width
+    );
+  }
+  repaint();
 }
 
 void CellsWidget::setCurrPos(const CellPos pos) {
@@ -46,8 +77,6 @@ void CellsWidget::setCurrPos(const CellPos pos) {
   currPosImg.fill(0);
   QPainter painter{&currPosImg};
   painter.setPen(Qt::NoPen);
-  painter.setBrush(QColor{0, 0, 0, 0});
-  painter.drawRect(currPosImg.rect());
   painter.setBrush(cell_curr_color);
   constexpr int size = 2 * cell_icon_pad + cell_icon_size;
   if (height() > cell_height || width() == cell_width) {
@@ -58,31 +87,6 @@ void CellsWidget::setCurrPos(const CellPos pos) {
   }
   painter.end();
   repaint();
-  
-  /*
-  if (select.minL <= select.maxL && select.minF <= select.maxF) {
-    const int border2 = 2 * glob_border_width;
-    const int width = (select.maxF - select.minF) * cell_width + size;
-    const int height = (select.maxL - select.minL) * cell_width + size;
-    painter.setBrush(cell_select_color);
-    painter.drawRect( // top
-      select.minF * cell_width, select.minL * cell_height,
-      width, glob_border_width
-    );
-    painter.drawRect( // bottom
-      select.minF * cell_width, select.maxL * cell_height + size - glob_border_width,
-      width, glob_border_width
-    );
-    painter.drawRect( // left
-      select.minF * cell_width, select.minL * cell_height + glob_border_width,
-      glob_border_width, height - border2
-    );
-    painter.drawRect( // right
-      select.maxF * cell_width + size - glob_border_width, select.minL * cell_height + glob_border_width,
-      glob_border_width, height - border2
-    );
-  }
-  */
 }
 
 namespace {
@@ -142,6 +146,7 @@ void CellsWidget::setLayer(const LayerIdx idx, const Spans &spans) {
 void CellsWidget::setFrameCount(const FrameIdx count) {
   setFixedWidth(count * cell_width);
   resizeImage(currPosImg, size());
+  resizeImage(selectionImg, size());
   resizeImage(layersImg, size());
   Q_EMIT resized();
 }
@@ -149,6 +154,7 @@ void CellsWidget::setFrameCount(const FrameIdx count) {
 void CellsWidget::setLayerCount(const LayerIdx count) {
   setFixedHeight(count * cell_height);
   resizeImage(currPosImg, size());
+  resizeImage(selectionImg, size());
   resizeCopyImage(layersImg, size());
   Q_EMIT resized();
 }
@@ -157,10 +163,11 @@ void CellsWidget::paintEvent(QPaintEvent *) {
   QPainter painter{this};
   painter.drawImage(0, 0, currPosImg);
   painter.drawImage(0, 0, layersImg);
+  painter.drawImage(0, 0, selectionImg);
 }
 
 void CellsWidget::focusOutEvent(QFocusEvent *) {
-  //select = {-1, -1, -1, -1};
+  Q_EMIT clearSelection();
 }
 
 CellScrollWidget::CellScrollWidget(QWidget *parent)

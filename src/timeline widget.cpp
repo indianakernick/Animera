@@ -38,13 +38,20 @@ TimelineWidget::TimelineWidget(QWidget *parent)
   CONNECT(cellScroll, rightMarginChanged, frameScroll, shouldSetRightMargin);
   CONNECT(cellScroll, bottomMarginChanged, layerScroll, shouldSetBottomMargin);
   
-  CONNECT(layers, visibilityChanged, this, visibilityChanged);
-  CONNECT(layers, nameChanged,       this, nameChanged);
-  CONNECT(controls, nextFrame,       this, nextFrame);
-  CONNECT(controls, insertLayer,     this, insertLayer);
-  CONNECT(controls, removeLayer,     this, removeLayer);
-  CONNECT(controls, moveLayerUp,     this, moveLayerUp);
-  CONNECT(controls, moveLayerDown,   this, moveLayerDown);
+  CONNECT(layers,   visibilityChanged, this, visibilityChanged);
+  CONNECT(layers,   nameChanged,       this, nameChanged);
+  
+  CONNECT(controls, nextFrame,         this, nextFrame);
+  CONNECT(controls, insertLayer,       this, insertLayer);
+  CONNECT(controls, removeLayer,       this, removeLayer);
+  CONNECT(controls, moveLayerUp,       this, moveLayerUp);
+  CONNECT(controls, moveLayerDown,     this, moveLayerDown);
+  
+  CONNECT(cells,    beginSelection,    this, beginSelection);
+  CONNECT(cells,    continueSelection, this, continueSelection);
+  CONNECT(cells,    endSelection,      this, endSelection);
+  CONNECT(cells,    clearSelection,    this, clearSelection);
+  CONNECT(cells,    currPosChanged,    this, currPosChanged);
   
   QGridLayout *grid = new QGridLayout{this};
   setLayout(grid);
@@ -59,6 +66,10 @@ TimelineWidget::TimelineWidget(QWidget *parent)
 
 void TimelineWidget::setCurrPos(const CellPos pos) {
   cells->setCurrPos(pos);
+}
+
+void TimelineWidget::setSelection(const CellRect rect) {
+  cells->setSelection(rect);
 }
 
 void TimelineWidget::setVisibility(const LayerIdx layer, const bool visible) {

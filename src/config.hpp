@@ -236,6 +236,7 @@ constexpr int       pal_tile_size = 13_px;
 
 inline const QColor cell_icon_color = glob_light_2;
 inline const QColor cell_curr_color = glob_light_1;
+inline const QColor cell_select_color = glob_dark_1;
 
 constexpr int       cell_icon_pad = 1_px;
 constexpr int       cell_icon_size = 8_px;

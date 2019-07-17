@@ -21,8 +21,14 @@ public:
 Q_SIGNALS:
   void resized();
   void shouldEnsureVisible(QPoint);
+  void beginSelection();
+  void continueSelection();
+  void endSelection();
+  void clearSelection();
+  void currPosChanged(CellPos);
   
 public Q_SLOTS:
+  void setSelection(CellRect);
   void setCurrPos(CellPos);
   void setLayer(LayerIdx, const Spans &);
   void setFrameCount(FrameIdx);
@@ -33,6 +39,7 @@ private:
   QPixmap beginLinkPix;
   QPixmap endLinkPix;
   QImage currPosImg;
+  QImage selectionImg;
   QImage layersImg;
 
   void paintEvent(QPaintEvent *) override;

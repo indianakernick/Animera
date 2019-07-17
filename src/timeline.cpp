@@ -132,9 +132,11 @@ void Timeline::initDefault() {
   layer.spans.push_back({makeCell(), 1});
   layer.name = "Layer 0";
   layers.push_back(std::move(layer));
+  selection = {-1, -1, -1, -1};
   changeLayerCount();
   changeFrame();
   changePos();
+  Q_EMIT selectionChanged(selection);
   changeLayers(0, 1);
 }
 
@@ -189,10 +191,12 @@ void Timeline::deserialize(QIODevice *dev) {
       }
     }
   }
+  selection = {-1, -1, -1, -1};
   changeFrameCount();
   changeLayerCount();
   changeFrame();
   changePos();
+  Q_EMIT selectionChanged(selection);
   changeLayers(0, layerCount());
 }
 
@@ -221,6 +225,45 @@ void Timeline::layerBelow() {
 void Timeline::layerAbove() {
   currPos.l = std::max(currPos.l - 1, 0);
   changePos();
+}
+
+namespace {
+
+CellRect normalize(const CellRect rect) {
+  return {
+    std::min(rect.minL, rect.maxL),
+    std::min(rect.minF, rect.maxF),
+    std::max(rect.minL, rect.maxL),
+    std::max(rect.minF, rect.maxF)
+  };
+}
+
+}
+
+void Timeline::beginSelection() {
+  selection.minL = currPos.l;
+  selection.minF = currPos.f;
+  selection.maxL = currPos.l;
+  selection.maxF = currPos.f;
+  Q_EMIT selectionChanged(selection);
+}
+
+void Timeline::continueSelection() {
+  selection.maxL = currPos.l;
+  selection.maxF = currPos.f;
+  Q_EMIT selectionChanged(normalize(selection));
+}
+
+void Timeline::endSelection() {
+  selection.maxL = currPos.l;
+  selection.maxF = currPos.f;
+  selection = normalize(selection);
+  Q_EMIT selectionChanged(selection);
+}
+
+void Timeline::clearSelection() {
+  selection = {-1, -1, -1, -1};
+  Q_EMIT selectionChanged(selection);
 }
 
 void Timeline::insertLayer() {
@@ -323,6 +366,21 @@ void Timeline::requestCell() {
   changeSpan(currPos.l);
   changeFrame();
   changePos();
+}
+
+void Timeline::setCurrPos(const CellPos pos) {
+  assert(0 <= pos.l);
+  assert(pos.l < layerCount());
+  assert(0 <= pos.f);
+  assert(pos.f < frameCount);
+  if (currPos.f != pos.f) {
+    currPos = pos;
+    changeFrame();
+    changePos();
+  } else if (currPos.l != pos.l) {
+    currPos.l = pos.l;
+    changePos();
+  }
 }
 
 void Timeline::setVisibility(const LayerIdx idx, const bool visible) {

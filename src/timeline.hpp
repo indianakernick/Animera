@@ -29,6 +29,11 @@ public Q_SLOTS:
   void layerBelow();
   void layerAbove();
   
+  void beginSelection();
+  void continueSelection();
+  void endSelection();
+  void clearSelection();
+  
   void insertLayer();
   void removeLayer();
   void moveLayerUp();
@@ -42,12 +47,14 @@ public Q_SLOTS:
   void extendCell();
   void requestCell();
   
+  void setCurrPos(CellPos);
   void setVisibility(LayerIdx, bool);
   void setName(LayerIdx, std::string_view);
 
 Q_SIGNALS:
   void currPosChanged(CellPos);
   void currCellChanged(Cell *);
+  void selectionChanged(CellRect);
   
   void visibilityChanged(LayerIdx, bool);
   void nameChanged(LayerIdx, std::string_view);
@@ -61,6 +68,7 @@ Q_SIGNALS:
 private:
   Layers layers;
   CellPos currPos;
+  CellRect selection;
   FrameIdx frameCount;
   QSize canvasSize;
   Format canvasFormat;

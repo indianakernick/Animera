@@ -190,6 +190,11 @@ void Window::setupMenubar() {
   ADD_ACTION(frame, "Next Frame", Qt::Key_D, sprite.timeline, nextFrame);
   ADD_ACTION(frame, "Previous Frame", Qt::Key_A, sprite.timeline, prevFrame);
   ADD_ACTION(frame, "Play Animation", Qt::Key_Space, timeline, toggleAnimation);
+  
+  QMenu *test = menubar->addMenu("Test");
+  ADD_ACTION(test, "Begin Selection", Qt::Key_I, sprite.timeline, beginSelection);
+  ADD_ACTION(test, "Continue Selection", Qt::Key_O, sprite.timeline, continueSelection);
+  ADD_ACTION(test, "End Selection", Qt::Key_P, sprite.timeline, endSelection);
 }
 
 #undef ADD_ACTION
@@ -210,6 +215,7 @@ void Window::connectSignals() {
   CONNECT(sprite.timeline, currCellChanged,     undo,            setCell);
   CONNECT(sprite.timeline, frameChanged,        editor,          setFrame);
   CONNECT(sprite.timeline, currPosChanged,      timeline,        setCurrPos);
+  CONNECT(sprite.timeline, selectionChanged,    timeline,        setSelection);
   CONNECT(sprite.timeline, visibilityChanged,   timeline,        setVisibility);
   CONNECT(sprite.timeline, nameChanged,         timeline,        setName);
   CONNECT(sprite.timeline, layerChanged,        timeline,        setLayer);
@@ -223,6 +229,11 @@ void Window::connectSignals() {
   CONNECT(timeline,        removeLayer,         sprite.timeline, removeLayer);
   CONNECT(timeline,        moveLayerUp,         sprite.timeline, moveLayerUp);
   CONNECT(timeline,        moveLayerDown,       sprite.timeline, moveLayerDown);
+  CONNECT(timeline,        beginSelection,      sprite.timeline, beginSelection);
+  CONNECT(timeline,        continueSelection,   sprite.timeline, continueSelection);
+  CONNECT(timeline,        endSelection,        sprite.timeline, endSelection);
+  CONNECT(timeline,        clearSelection,      sprite.timeline, clearSelection);
+  CONNECT(timeline,        currPosChanged,      sprite.timeline, setCurrPos);
   
   CONNECT(sprite,          canvasInitialized,   colorPicker,     initCanvas);
   CONNECT(sprite,          canvasInitialized,   colors,          initCanvas);
@@ -239,6 +250,7 @@ void Window::connectSignals() {
   CONNECT(tools,           overlayModified,     editor,          compositeOverlay);
   CONNECT(tools,           shouldShowPerm,      statusBar,       showPerm);
   CONNECT(tools,           cellRequested,       sprite.timeline, requestCell);
+  CONNECT(tools,           changingAction,      undo,            cellModified);
   
   CONNECT(editor,          overlayChanged,      tools,           setOverlay);
   CONNECT(editor,          mouseLeave,          tools,           mouseLeave);
@@ -250,7 +262,6 @@ void Window::connectSignals() {
   CONNECT(editor,          mouseMove,           sample,          mouseMove);
   CONNECT(editor,          keyPress,            sample,          keyPress);
   CONNECT(editor,          keyPress,            undo,            keyPress);
-  CONNECT(tools,           changingAction,      undo,            cellModified);
   
   CONNECT(colors,          colorsChanged,       tools,           setColors);
   CONNECT(colors,          colorsChanged,       clear,           setColors);
