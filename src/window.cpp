@@ -190,11 +190,6 @@ void Window::setupMenubar() {
   ADD_ACTION(frame, "Next Frame", Qt::Key_D, sprite.timeline, nextFrame);
   ADD_ACTION(frame, "Previous Frame", Qt::Key_A, sprite.timeline, prevFrame);
   ADD_ACTION(frame, "Play Animation", Qt::Key_Space, timeline, toggleAnimation);
-  
-  QMenu *test = menubar->addMenu("Test");
-  ADD_ACTION(test, "Begin Selection", Qt::Key_I, sprite.timeline, beginSelection);
-  ADD_ACTION(test, "Continue Selection", Qt::Key_O, sprite.timeline, continueSelection);
-  ADD_ACTION(test, "End Selection", Qt::Key_P, sprite.timeline, endSelection);
 }
 
 #undef ADD_ACTION

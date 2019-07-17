@@ -44,6 +44,11 @@ private:
 
   void paintEvent(QPaintEvent *) override;
   void focusOutEvent(QFocusEvent *) override;
+  
+  CellPos getPos(QMouseEvent *event);
+  void mousePressEvent(QMouseEvent *) override;
+  void mouseMoveEvent(QMouseEvent *) override;
+  void mouseReleaseEvent(QMouseEvent *) override;
 };
 
 class CellScrollWidget final : public ScrollAreaWidget {

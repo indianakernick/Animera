@@ -316,6 +316,7 @@ void Timeline::insertFrame() {
     insertCopy(layers[l].spans, currPos.f);
     changeSpan(l);
   }
+  Q_EMIT selectionChanged(selection);
   nextFrame();
 }
 
@@ -326,6 +327,7 @@ void Timeline::insertNullFrame() {
     insertNew(layers[l].spans, currPos.f, nullptr);
     changeSpan(l);
   }
+  Q_EMIT selectionChanged(selection);
   nextFrame();
 }
 
@@ -342,6 +344,7 @@ void Timeline::removeFrame() {
       remove(layers[l].spans, currPos.f);
       changeSpan(l);
     }
+    Q_EMIT selectionChanged(selection);
   }
   currPos.f = std::max(currPos.f - 1, 0);
   changeFrame();

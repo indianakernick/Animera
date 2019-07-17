@@ -11,6 +11,7 @@
 #include "config.hpp"
 #include "connect.hpp"
 #include "painting.hpp"
+#include <QtGui/qevent.h>
 #include <QtGui/qpainter.h>
 #include "widget painting.hpp"
 
@@ -40,6 +41,7 @@ CellsWidget::CellsWidget(QWidget *parent)
   cellPix = bakeColoredBitmap(":/Timeline/cell.pbm", cell_icon_color);
   beginLinkPix = bakeColoredBitmap(":/Timeline/begin linked cell.pbm", cell_icon_color);
   endLinkPix = bakeColoredBitmap(":/Timeline/end linked cell.pbm", cell_icon_color);
+  setFocusPolicy(Qt::ClickFocus);
 }
 
 void CellsWidget::setSelection(const CellRect rect) {
@@ -168,6 +170,28 @@ void CellsWidget::paintEvent(QPaintEvent *) {
 
 void CellsWidget::focusOutEvent(QFocusEvent *) {
   Q_EMIT clearSelection();
+}
+
+CellPos CellsWidget::getPos(QMouseEvent *event) {
+  return {
+    std::clamp(event->pos().y(), 0, height() - 1) / cell_height,
+    std::clamp(event->pos().x(), 0, width() - 1) / cell_width
+  };
+}
+
+void CellsWidget::mousePressEvent(QMouseEvent *event) {
+  Q_EMIT currPosChanged(getPos(event));
+  Q_EMIT beginSelection();
+}
+
+void CellsWidget::mouseMoveEvent(QMouseEvent *event) {
+  Q_EMIT currPosChanged(getPos(event));
+  Q_EMIT continueSelection();
+}
+
+void CellsWidget::mouseReleaseEvent(QMouseEvent *event) {
+  Q_EMIT currPosChanged(getPos(event));
+  Q_EMIT endSelection();
 }
 
 CellScrollWidget::CellScrollWidget(QWidget *parent)
