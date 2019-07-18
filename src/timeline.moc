@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_Timeline_t {
-    QByteArrayData data[42];
-    char stringdata0[497];
+    QByteArrayData data[45];
+    char stringdata0[538];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -72,7 +72,10 @@ QT_MOC_LITERAL(37, 441, 10), // "extendCell"
 QT_MOC_LITERAL(38, 452, 11), // "requestCell"
 QT_MOC_LITERAL(39, 464, 10), // "setCurrPos"
 QT_MOC_LITERAL(40, 475, 13), // "setVisibility"
-QT_MOC_LITERAL(41, 489, 7) // "setName"
+QT_MOC_LITERAL(41, 489, 7), // "setName"
+QT_MOC_LITERAL(42, 497, 13), // "clearSelected"
+QT_MOC_LITERAL(43, 511, 12), // "copySelected"
+QT_MOC_LITERAL(44, 524, 13) // "pasteSelected"
 
     },
     "Timeline\0currPosChanged\0\0CellPos\0"
@@ -87,7 +90,8 @@ QT_MOC_LITERAL(41, 489, 7) // "setName"
     "removeLayer\0moveLayerUp\0moveLayerDown\0"
     "insertFrame\0insertNullFrame\0removeFrame\0"
     "clearCell\0extendCell\0requestCell\0"
-    "setCurrPos\0setVisibility\0setName"
+    "setCurrPos\0setVisibility\0setName\0"
+    "clearSelected\0copySelected\0pasteSelected"
 };
 #undef QT_MOC_LITERAL
 
@@ -97,7 +101,7 @@ static const uint qt_meta_data_Timeline[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-      31,   14, // methods
+      34,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -105,39 +109,42 @@ static const uint qt_meta_data_Timeline[] = {
        9,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    1,  169,    2, 0x06 /* Public */,
-       4,    1,  172,    2, 0x06 /* Public */,
-       6,    1,  175,    2, 0x06 /* Public */,
-       8,    2,  178,    2, 0x06 /* Public */,
-      10,    2,  183,    2, 0x06 /* Public */,
-      12,    1,  188,    2, 0x06 /* Public */,
-      14,    2,  191,    2, 0x06 /* Public */,
-      16,    1,  196,    2, 0x06 /* Public */,
-      18,    1,  199,    2, 0x06 /* Public */,
+       1,    1,  184,    2, 0x06 /* Public */,
+       4,    1,  187,    2, 0x06 /* Public */,
+       6,    1,  190,    2, 0x06 /* Public */,
+       8,    2,  193,    2, 0x06 /* Public */,
+      10,    2,  198,    2, 0x06 /* Public */,
+      12,    1,  203,    2, 0x06 /* Public */,
+      14,    2,  206,    2, 0x06 /* Public */,
+      16,    1,  211,    2, 0x06 /* Public */,
+      18,    1,  214,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      19,    2,  202,    2, 0x0a /* Public */,
-      21,    0,  207,    2, 0x0a /* Public */,
-      22,    0,  208,    2, 0x0a /* Public */,
-      23,    0,  209,    2, 0x0a /* Public */,
-      24,    0,  210,    2, 0x0a /* Public */,
-      25,    0,  211,    2, 0x0a /* Public */,
-      26,    0,  212,    2, 0x0a /* Public */,
-      27,    0,  213,    2, 0x0a /* Public */,
-      28,    0,  214,    2, 0x0a /* Public */,
-      29,    0,  215,    2, 0x0a /* Public */,
-      30,    0,  216,    2, 0x0a /* Public */,
-      31,    0,  217,    2, 0x0a /* Public */,
-      32,    0,  218,    2, 0x0a /* Public */,
-      33,    0,  219,    2, 0x0a /* Public */,
-      34,    0,  220,    2, 0x0a /* Public */,
-      35,    0,  221,    2, 0x0a /* Public */,
-      36,    0,  222,    2, 0x0a /* Public */,
-      37,    0,  223,    2, 0x0a /* Public */,
-      38,    0,  224,    2, 0x0a /* Public */,
-      39,    1,  225,    2, 0x0a /* Public */,
-      40,    2,  228,    2, 0x0a /* Public */,
-      41,    2,  233,    2, 0x0a /* Public */,
+      19,    2,  217,    2, 0x0a /* Public */,
+      21,    0,  222,    2, 0x0a /* Public */,
+      22,    0,  223,    2, 0x0a /* Public */,
+      23,    0,  224,    2, 0x0a /* Public */,
+      24,    0,  225,    2, 0x0a /* Public */,
+      25,    0,  226,    2, 0x0a /* Public */,
+      26,    0,  227,    2, 0x0a /* Public */,
+      27,    0,  228,    2, 0x0a /* Public */,
+      28,    0,  229,    2, 0x0a /* Public */,
+      29,    0,  230,    2, 0x0a /* Public */,
+      30,    0,  231,    2, 0x0a /* Public */,
+      31,    0,  232,    2, 0x0a /* Public */,
+      32,    0,  233,    2, 0x0a /* Public */,
+      33,    0,  234,    2, 0x0a /* Public */,
+      34,    0,  235,    2, 0x0a /* Public */,
+      35,    0,  236,    2, 0x0a /* Public */,
+      36,    0,  237,    2, 0x0a /* Public */,
+      37,    0,  238,    2, 0x0a /* Public */,
+      38,    0,  239,    2, 0x0a /* Public */,
+      39,    1,  240,    2, 0x0a /* Public */,
+      40,    2,  243,    2, 0x0a /* Public */,
+      41,    2,  248,    2, 0x0a /* Public */,
+      42,    0,  253,    2, 0x0a /* Public */,
+      43,    0,  254,    2, 0x0a /* Public */,
+      44,    0,  255,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, 0x80000000 | 3,    2,
@@ -173,6 +180,9 @@ static const uint qt_meta_data_Timeline[] = {
     QMetaType::Void, 0x80000000 | 3,    2,
     QMetaType::Void, 0x80000000 | 9, QMetaType::Bool,    2,    2,
     QMetaType::Void, 0x80000000 | 9, 0x80000000 | 11,    2,    2,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
 
        0        // eod
 };
@@ -214,6 +224,9 @@ void Timeline::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, vo
         case 28: _t->setCurrPos((*reinterpret_cast< CellPos(*)>(_a[1]))); break;
         case 29: _t->setVisibility((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
         case 30: _t->setName((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< std::string_view(*)>(_a[2]))); break;
+        case 31: _t->clearSelected(); break;
+        case 32: _t->copySelected(); break;
+        case 33: _t->pasteSelected(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -313,13 +326,13 @@ int Timeline::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 31)
+        if (_id < 34)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 31;
+        _id -= 34;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 31)
+        if (_id < 34)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 31;
+        _id -= 34;
     }
     return _id;
 }

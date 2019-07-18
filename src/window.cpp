@@ -190,6 +190,12 @@ void Window::setupMenubar() {
   ADD_ACTION(frame, "Next Frame", Qt::Key_D, sprite.timeline, nextFrame);
   ADD_ACTION(frame, "Previous Frame", Qt::Key_A, sprite.timeline, prevFrame);
   ADD_ACTION(frame, "Play Animation", Qt::Key_Space, timeline, toggleAnimation);
+  
+  QMenu *selection = menubar->addMenu("Selection");
+  selection->setFont(getGlobalFont());
+  ADD_ACTION(selection, "Clear", Qt::CTRL + Qt::Key_X, sprite.timeline, clearSelected);
+  ADD_ACTION(selection, "Copy", Qt::CTRL + Qt::Key_C, sprite.timeline, copySelected);
+  ADD_ACTION(selection, "Paste", Qt::CTRL + Qt::Key_V, sprite.timeline, pasteSelected);
 }
 
 #undef ADD_ACTION

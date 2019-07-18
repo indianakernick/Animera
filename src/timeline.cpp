@@ -16,6 +16,15 @@ CellPtr copyCell(const CellPtr &cell) {
   return cell ? std::make_unique<Cell>(*cell) : nullptr;
 }
 
+FrameIdx spanLength(const Spans &spans) {
+  FrameIdx len = 0;
+  for (const CellSpan &span : spans) {
+    assert(span.len >= 0);
+    len += span.len;
+  }
+  return len;
+}
+
 void shrinkSpan(Spans &spans, Spans::iterator span) {
   if (--span->len <= 0) {
     spans.erase(span);
@@ -104,6 +113,96 @@ void extend(Spans &spans, FrameIdx idx) {
   return shrinkSpan(spans, next);
 }
 
+Spans::iterator insert(Spans &dst, Spans::iterator pos, Spans &src) {
+  return dst.insert(
+    pos,
+    std::make_move_iterator(src.begin()),
+    std::make_move_iterator(src.end())
+  );
+}
+
+void removeSpan(Spans &spans, Spans::iterator span, FrameIdx len) {
+  assert(span != spans.end());
+  while (len > 0 && span->len <= len) {
+    len -= span->len;
+    span = spans.erase(span);
+  }
+  if (span->len > len) {
+    span->len = span->len - len;
+  }
+}
+
+void replaceSpan(Spans &spans, FrameIdx idx, Spans &newSpans) {
+  const FrameIdx len = spanLength(newSpans);
+  if (len <= 0) return;
+  Spans::iterator span = findSpan(spans, idx);
+  if (idx == 0) {
+    if (span->len < len) {
+      span = insert(spans, span, newSpans) + newSpans.size();
+      removeSpan(spans, span, len - span->len);
+    } else if (span->len > len) {
+      CellPtr copy = std::move(span->cell);
+      span = insert(spans, span, newSpans) + newSpans.size();
+      spans.insert(span, {std::move(copy), span->len - len});
+    } else {
+      span = spans.erase(span);
+      insert(spans, span, newSpans);
+    }
+  } else {
+    const FrameIdx leftSize = idx;
+    const FrameIdx rightSize = span->len - idx - len;
+    span->len = leftSize;
+    if (rightSize < 0) {
+      span = insert(spans, ++span, newSpans) + newSpans.size();
+      removeSpan(spans, span, -rightSize);
+    } else if (rightSize > 0) {
+      CellPtr copy = copyCell(span->cell);
+      span = insert(spans, ++span, newSpans) + newSpans.size();
+      span = spans.insert(span, {std::move(copy), rightSize});
+    } else {
+      insert(spans, ++span, newSpans);
+    }
+  }
+}
+
+Spans extract(const Spans &spans, FrameIdx idx, FrameIdx len) {
+  Spans newSpans;
+  if (len <= 0) return newSpans;
+  Spans::const_iterator span = findSpan(spans, idx);
+  const FrameIdx leftSize = idx;
+  const FrameIdx rightSize = span->len - idx - len;
+  if (rightSize >= 0) {
+    newSpans.push_back({copyCell(span->cell), len});
+  } else {
+    newSpans.push_back({copyCell(span->cell), span->len - leftSize});
+    len -= span->len - leftSize;
+    ++span;
+    while (len > span->len) {
+      newSpans.push_back({copyCell(span->cell), span->len});
+      len -= span->len;
+      ++span;
+    }
+    if (len > 0) {
+      newSpans.push_back({copyCell(span->cell), len});
+    }
+  }
+  return newSpans;
+}
+
+Spans truncateCopy(const Spans &spans, FrameIdx len) {
+  Spans newSpans;
+  Spans::const_iterator span = spans.begin();
+  while (span != spans.end() && len > span->len) {
+    newSpans.push_back({copyCell(span->cell), span->len});
+    len -= span->len;
+    ++span;
+  }
+  if (span != spans.end() && len > 0) {
+    newSpans.push_back({copyCell(span->cell), len});
+  }
+  return newSpans;
+}
+
 // Remove a cell
 void remove(Spans &spans, FrameIdx idx) {
   shrinkSpan(spans, findSpan(spans, idx));
@@ -132,7 +231,7 @@ void Timeline::initDefault() {
   layer.spans.push_back({makeCell(), 1});
   layer.name = "Layer 0";
   layers.push_back(std::move(layer));
-  selection = {-1, -1, -1, -1};
+  selection = {0, 0, -1, -1};
   changeLayerCount();
   changeFrame();
   changePos();
@@ -191,7 +290,7 @@ void Timeline::deserialize(QIODevice *dev) {
       }
     }
   }
-  selection = {-1, -1, -1, -1};
+  selection = {0, 0, -1, -1};
   changeFrameCount();
   changeLayerCount();
   changeFrame();
@@ -262,7 +361,7 @@ void Timeline::endSelection() {
 }
 
 void Timeline::clearSelection() {
-  selection = {-1, -1, -1, -1};
+  selection = {0, 0, -1, -1};
   Q_EMIT selectionChanged(selection);
 }
 
@@ -272,6 +371,7 @@ void Timeline::insertLayer() {
   layer.name = "Layer " + std::to_string(layers.size());
   layers.insert(layers.begin() + currPos.l, std::move(layer));
   changeLayerCount();
+  Q_EMIT selectionChanged(selection);
   changeLayers(currPos.l, layerCount());
   changeFrame();
   changePos();
@@ -286,6 +386,7 @@ void Timeline::removeLayer() {
   } else {
     layers.erase(layers.begin() + currPos.l);
     changeLayerCount();
+    Q_EMIT selectionChanged(selection);
     currPos.l = std::min(currPos.l, layerCount() - 1);
     changeLayers(currPos.l, layerCount());
   }
@@ -402,6 +503,41 @@ void Timeline::setName(const LayerIdx idx, const std::string_view name) {
   assert(idx < layerCount());
   layers[idx].name = name;
   // Q_EMIT nameChanged(idx, name);
+}
+
+void Timeline::clearSelected() {
+  Spans nullSpans;
+  nullSpans.push_back({nullptr, selection.maxF - selection.minF + 1});
+  for (LayerIdx l = selection.minL; l <= selection.maxL; ++l) {
+    replaceSpan(layers[l].spans, selection.minF, nullSpans);
+    changeSpan(l);
+  }
+  changeFrame();
+  changePos();
+}
+
+void Timeline::copySelected() {
+  clipboard.clear();
+  for (LayerIdx l = selection.minL; l <= selection.maxL; ++l) {
+    const FrameIdx idx = selection.minF;
+    const FrameIdx len = selection.maxF - selection.minF + 1;
+    clipboard.push_back(extract(layers[l].spans, idx, len));
+  }
+}
+
+void Timeline::pasteSelected() {
+  if (selection.minL > selection.maxL) return;
+  const LayerIdx endLayer = std::min(
+    layerCount(), selection.minL + static_cast<LayerIdx>(clipboard.size())
+  );
+  const FrameIdx frames = frameCount - selection.minF;
+  for (LayerIdx l = selection.minL; l < endLayer; ++l) {
+    Spans spans = truncateCopy(clipboard[l - selection.minL], frames);
+    replaceSpan(layers[l].spans, selection.minF, spans);
+    changeSpan(l);
+  }
+  changeFrame();
+  changePos();
 }
 
 CellPtr Timeline::makeCell() const {

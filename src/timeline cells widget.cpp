@@ -46,7 +46,8 @@ CellsWidget::CellsWidget(QWidget *parent)
 
 void CellsWidget::setSelection(const CellRect rect) {
   selectionImg.fill(0);
-  if (rect.minL >= 0 && rect.minF >= 0) {
+  if (rect.minL <= rect.maxL && rect.minF <= rect.maxF) {
+    // @TODO this needs work
     QRect selectRect = {
       rect.minF * cell_width,
       rect.minL * cell_height,
