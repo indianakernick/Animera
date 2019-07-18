@@ -20,6 +20,18 @@ struct Factor {
 // https://keithp.com/~keithp/porterduff/p253-porter.pdf
 
 // Using floats makes this a tiny bit faster
+/*
+Branchless is about 6 times slower!
+
+inline Color porterDuff(const Factor f, const Color a, const Color b) {
+  const uint32_t cA = a.a*f.a + b.a*f.b;
+  const uint32_t flag = (static_cast<int32_t>(cA == 0) << 31) >> 31;
+  const uint8_t cR = (a.a*f.a*a.r + b.a*f.b*b.r) / (cA | flag);
+  const uint8_t cG = (a.a*f.a*a.g + b.a*f.b*b.g) / (cA | flag);
+  const uint8_t cB = (a.a*f.a*a.b + b.a*f.b*b.b) / (cA | flag);
+  return {cR, cG, cB, static_cast<uint8_t>(cA / 255)};
+}
+*/
 
 inline Color porterDuff(const Factor f, const Color a, const Color b) {
   const uint32_t cA = a.a*f.a + b.a*f.b;

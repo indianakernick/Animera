@@ -1898,7 +1898,7 @@ int main(int argc, char **argv) {
 #include <fstream>
 
 int main(int argc, char **argv) {
-
+  
 #if BENCHMARK
 
   /*Image img;
@@ -2181,16 +2181,20 @@ int main(int argc, char **argv) {
   blitImageOld(image, sauce, toPoint(image.size() / 4));
   timer.stop();
   
+  timer.start("new blit");
+  blitImageNew(image, sauce, toPoint(image.size() / 4));
+  timer.stop();
+  
+  timer.start("surface source-over");
+  porterDuff(mode_src_over, makeSurface<QRgb>(image), makeCSurface<QRgb>(dup), FormatARGB{}, FormatARGB{});
+  timer.stop();
+  
   timer.start("painter source-over");
   {
     QPainter painter{&image};
     painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
     painter.drawImage(0, 0, dup);
   }
-  timer.stop();
-  
-  timer.start("surface source-over");
-  porterDuff(mode_src_over, makeSurface<QRgb>(image), makeCSurface<QRgb>(dup), FormatARGB{}, FormatARGB{});
   timer.stop();
   
   /*
@@ -2311,10 +2315,13 @@ int main(int argc, char **argv) {
   
   source.image.save("/Users/indikernick/Desktop/Test/brush.png");*/
 
-#endif
+#else
   
   Application app{argc, argv};
   return app.exec();
+  
+#endif
+
 }
 
 #endif
