@@ -38,10 +38,9 @@ void Sprite::saveFile(const QString &path) const {
   }
   file.write(magic_number, sizeof(magic_number));
   serializeBytes(&file, format);
-  palette.serialize(&file);
- 
   serializeBytes(&file, static_cast<uint16_t>(size.width()));
   serializeBytes(&file, static_cast<uint16_t>(size.height()));
+  palette.serialize(&file);
   timeline.serialize(&file);
 }
 
@@ -57,16 +56,14 @@ void Sprite::openFile(const QString &path) {
     throw std::exception{};
   }
   deserializeBytes(&file, format);
-  palette.initCanvas(format);
-  palette.deserialize(&file);
- 
-  uint16_t width;
-  uint16_t height;
-  deserializeBytes(&file, width);
-  deserializeBytes(&file, height);
-  size = {width, height};
+  size = {
+    deserializeBytesAs<uint16_t>(&file),
+    deserializeBytesAs<uint16_t>(&file)
+  };
   Q_EMIT canvasInitialized(format, size);
+  palette.initCanvas(format);
   timeline.initCanvas(format, size);
+  palette.deserialize(&file);
   timeline.deserialize(&file);
 }
 
