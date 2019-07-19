@@ -199,6 +199,7 @@ void Window::setupMenubar() {
   frame->addSeparator();
   ADD_ACTION(frame, "Clear Cell", Qt::ALT + Qt::Key_C, sprite.timeline, clearCell);
   ADD_ACTION(frame, "Extend Linked Cell", Qt::ALT + Qt::Key_L, sprite.timeline, extendCell);
+  ADD_ACTION(frame, "Split Linked Cell", Qt::ALT + Qt::Key_S, sprite.timeline, unlinkCell);
   frame->addSeparator();
   ADD_ACTION(frame, "Next Frame", Qt::Key_D, sprite.timeline, nextFrame);
   ADD_ACTION(frame, "Previous Frame", Qt::Key_A, sprite.timeline, prevFrame);

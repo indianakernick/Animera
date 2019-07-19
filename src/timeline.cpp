@@ -113,6 +113,18 @@ void extend(Spans &spans, FrameIdx idx) {
   return shrinkSpan(spans, next);
 }
 
+// Split the span at the index into two
+// The index becomes the first cell of the second span
+void split(Spans &spans, FrameIdx idx) {
+  Spans::iterator span = findSpan(spans, idx);
+  if (idx == 0) return;
+  const FrameIdx leftSize = idx;
+  const FrameIdx rightSize = span->len - idx;
+  span->len = leftSize;
+  CellPtr copy = copyCell(span->cell);
+  spans.insert(++span, {std::move(copy), rightSize});
+}
+
 Spans::iterator insert(Spans &dst, Spans::iterator pos, Spans &src) {
   return dst.insert(
     pos,
@@ -463,6 +475,13 @@ void Timeline::extendCell() {
   extend(layers[currPos.l].spans, currPos.f);
   changeSpan(currPos.l);
   nextFrame();
+}
+
+void Timeline::unlinkCell() {
+  split(layers[currPos.l].spans, currPos.f);
+  changeSpan(currPos.l);
+  changeFrame();
+  changePos();
 }
 
 void Timeline::requestCell() {
