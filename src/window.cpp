@@ -86,20 +86,33 @@ void Window::setupUI() {
   "QMenuBar {"
     "background-color: " + glob_main.name() + ";"
     "color: " + glob_light_2.name() + ";"
+    "outline-style: none;"
+  "}"
+  
+  "QMenuBar::item:open {"
+    "background-color: " + glob_light_1.name() + ";"
   "}"
   
   "QMenu {"
     "background-color: " + glob_main.name() + ";"
+    "padding: 0;"
+    "outline-style: none;"
+    "border-width: " + QString::number(glob_border_width) + "px;"
+    "border-color: " + glob_border_color.name() + ";"
+    "border-style: solid;"
   "}"
   
   "QMenu::separator {"
     "background-color: " + glob_light_2.name() + ";"
     "height: " + QString::number(glob_border_width) + "px;"
+    "margin-top: " + QString::number(glob_padding) + "px;"
+    "margin-bottom: " + QString::number(glob_padding) + "px;"
   "}"
   
   "QMenu::item {"
     "background-color: " + glob_main.name() + ";"
     "color: " + glob_light_2.name() + ";"
+    "padding: " + QString::number(glob_text_padding) + "px;"
   "}"
   
   "QMenu::item:selected {"
@@ -144,7 +157,7 @@ void Window::setupUI() {
 
 void Window::setupMenubar() {
   menubar = new QMenuBar{this};
-  // menubar->setNativeMenuBar(false);
+  menubar->setNativeMenuBar(false);
   if (!menubar->isNativeMenuBar()) {
     makeDockWidget(Qt::TopDockWidgetArea, menubar);
   }
