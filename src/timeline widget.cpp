@@ -46,6 +46,8 @@ TimelineWidget::TimelineWidget(QWidget *parent)
   CONNECT(controls, removeLayer,       this, removeLayer);
   CONNECT(controls, moveLayerUp,       this, moveLayerUp);
   CONNECT(controls, moveLayerDown,     this, moveLayerDown);
+  CONNECT(controls, extendCell,        this, extendCell);
+  CONNECT(controls, splitCell,         this, splitCell);
   
   CONNECT(cells,    beginSelection,    this, beginSelection);
   CONNECT(cells,    continueSelection, this, continueSelection);

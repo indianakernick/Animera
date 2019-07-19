@@ -45,7 +45,7 @@ public Q_SLOTS:
   
   void clearCell();
   void extendCell();
-  void unlinkCell();
+  void splitCell();
   void requestCell();
   
   void setCurrPos(CellPos);

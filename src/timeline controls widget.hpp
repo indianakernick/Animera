@@ -10,6 +10,7 @@
 #define timeline_controls_widget_hpp
 
 #include <QtCore/qtimer.h>
+#include "color input widget.hpp"
 #include "icon push button widget.hpp"
 #include "icon radio button widget.hpp"
 
@@ -25,6 +26,8 @@ Q_SIGNALS:
   void removeLayer();
   void moveLayerUp();
   void moveLayerDown();
+  void extendCell();
+  void splitCell();
 
 public Q_SLOTS:
   void toggleAnimation();
@@ -35,9 +38,13 @@ private:
   IconPushButtonWidget *removeLayerButton;
   IconPushButtonWidget *moveLayerUpButton;
   IconPushButtonWidget *moveLayerDownButton;
+  IconPushButtonWidget *extendButton;
+  IconPushButtonWidget *splitButton;
   IconRadioButtonWidget *playButton;
+  NumberInputWidget *delayBox;
   
   void toggleTimer();
+  void setInterval(int);
   
   void paintBack(QPixmap &);
   void paintIcon(QPixmap &, const QString &);

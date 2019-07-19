@@ -23,7 +23,8 @@ ControlsWidget::ControlsWidget(QWidget *parent)
   createWidgets();
   setupLayout();
   connectSignals();
-  animTimer.setInterval(100);
+  animTimer.setInterval(ctrl_default_delay_ms);
+  animTimer.setTimerType(Qt::PreciseTimer);
 }
 
 void ControlsWidget::toggleAnimation() {
@@ -36,6 +37,10 @@ void ControlsWidget::toggleTimer() {
   } else {
     animTimer.start();
   }
+}
+
+void ControlsWidget::setInterval(const int interval) {
+  animTimer.setInterval(interval);
 }
 
 // @TODO this is duplicated in LayerNameWidget
@@ -95,11 +100,16 @@ void ControlsWidget::createWidgets() {
   removeLayerButton = makePushButton(baseIcon, ":/Timeline/remove.pbm");
   moveLayerUpButton = makePushButton(baseIcon, ":/Timeline/move up.pbm");
   moveLayerDownButton = makePushButton(baseIcon, ":/Timeline/move down.pbm");
+  extendButton = makePushButton(baseIcon, ":/Timeline/link.pbm");
+  splitButton = makePushButton(baseIcon, ":/Timeline/unlink.pbm");
   playButton = makeRadioButton(baseIcon, ":/Timeline/pause.pbm", ":/Timeline/play.pbm");
+  delayBox = new NumberInputWidget{this, ctrl_text_rect, ctrl_default_delay_ms, ctrl_max_delay_ms};
   insertLayerButton->setToolTip("Insert Layer");
   removeLayerButton->setToolTip("Remove Layer");
   moveLayerUpButton->setToolTip("Move Layer Up");
   moveLayerDownButton->setToolTip("Move Layer Down");
+  extendButton->setToolTip("Extend Linked Cell");
+  splitButton->setToolTip("Split Linked Cell");
   playButton->setToolTip("Toggle Playing");
 }
 
@@ -113,16 +123,22 @@ void ControlsWidget::setupLayout() {
   layout->addWidget(removeLayerButton);
   layout->addWidget(moveLayerUpButton);
   layout->addWidget(moveLayerDownButton);
+  layout->addWidget(extendButton);
+  layout->addWidget(splitButton);
   layout->addWidget(playButton);
+  layout->addWidget(delayBox, 0, Qt::AlignTop);
 }
 
 void ControlsWidget::connectSignals() {
-  CONNECT(insertLayerButton, pressed, this, insertLayer);
-  CONNECT(removeLayerButton, pressed, this, removeLayer);
-  CONNECT(moveLayerUpButton, pressed, this, moveLayerUp);
+  CONNECT(insertLayerButton,   pressed, this, insertLayer);
+  CONNECT(removeLayerButton,   pressed, this, removeLayer);
+  CONNECT(moveLayerUpButton,   pressed, this, moveLayerUp);
   CONNECT(moveLayerDownButton, pressed, this, moveLayerDown);
-  CONNECT(playButton, toggled, this, toggleTimer);
-  CONNECT(animTimer, timeout, this, nextFrame);
+  CONNECT(extendButton,        pressed, this, extendCell);
+  CONNECT(splitButton,         pressed, this, splitCell);
+  CONNECT(playButton,          toggled, this, toggleTimer);
+  CONNECT(animTimer,           timeout, this, nextFrame);
+  CONNECT(delayBox,            valueChanged, this, setInterval);
 }
 
 void ControlsWidget::paintEvent(QPaintEvent *) {

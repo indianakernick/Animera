@@ -477,7 +477,7 @@ void Timeline::extendCell() {
   nextFrame();
 }
 
-void Timeline::unlinkCell() {
+void Timeline::splitCell() {
   split(layers[currPos.l].spans, currPos.f);
   changeSpan(currPos.l);
   changeFrame();

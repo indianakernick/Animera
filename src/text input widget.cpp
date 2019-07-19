@@ -30,7 +30,6 @@ TextInputWidget::TextInputWidget(QWidget *parent, const WidgetRect rect)
   CONNECT(this,             cursorPositionChanged, this, showCursor);
   
   cursorBlinkTimer.setInterval(box_cursor_blink_interval_ms);
-  cursorBlinkTimer.setTimerType(Qt::CoarseTimer);
   cursorBlinkTimer.start();
 }
 

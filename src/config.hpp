@@ -246,12 +246,20 @@ constexpr int       cell_border_offset = cell_icon_pad + glob_border_width;
 
 constexpr int       frame_incr = 5;
 
-constexpr int       layer_width = 101_px;
+constexpr int       layer_width = 97_px;
 constexpr WidgetRect layer_text_rect = {
   {1_px, 2_px},
   {layer_width - cell_width - glob_border_width, cell_height - glob_border_width},
   0, 0
 };
+
+constexpr WidgetRect ctrl_text_rect = {
+  {1_px, 2_px},
+  {textBoxSize(3, 0).width(), cell_height - glob_border_width},
+  0, 0
+};
+constexpr int        ctrl_default_delay_ms = 100;
+constexpr int        ctrl_max_delay_ms = 999;
 
 // ---------------------------------- keys ---------------------------------- //
 

@@ -42,6 +42,8 @@ Q_SIGNALS:
   void removeLayer();
   void moveLayerUp();
   void moveLayerDown();
+  void extendCell();
+  void splitCell();
   
   void beginSelection();
   void continueSelection();

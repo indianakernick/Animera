@@ -22,7 +22,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_Timeline_t {
     QByteArrayData data[46];
-    char stringdata0[549];
+    char stringdata0[548];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -69,14 +69,14 @@ QT_MOC_LITERAL(34, 403, 15), // "insertNullFrame"
 QT_MOC_LITERAL(35, 419, 11), // "removeFrame"
 QT_MOC_LITERAL(36, 431, 9), // "clearCell"
 QT_MOC_LITERAL(37, 441, 10), // "extendCell"
-QT_MOC_LITERAL(38, 452, 10), // "unlinkCell"
-QT_MOC_LITERAL(39, 463, 11), // "requestCell"
-QT_MOC_LITERAL(40, 475, 10), // "setCurrPos"
-QT_MOC_LITERAL(41, 486, 13), // "setVisibility"
-QT_MOC_LITERAL(42, 500, 7), // "setName"
-QT_MOC_LITERAL(43, 508, 13), // "clearSelected"
-QT_MOC_LITERAL(44, 522, 12), // "copySelected"
-QT_MOC_LITERAL(45, 535, 13) // "pasteSelected"
+QT_MOC_LITERAL(38, 452, 9), // "splitCell"
+QT_MOC_LITERAL(39, 462, 11), // "requestCell"
+QT_MOC_LITERAL(40, 474, 10), // "setCurrPos"
+QT_MOC_LITERAL(41, 485, 13), // "setVisibility"
+QT_MOC_LITERAL(42, 499, 7), // "setName"
+QT_MOC_LITERAL(43, 507, 13), // "clearSelected"
+QT_MOC_LITERAL(44, 521, 12), // "copySelected"
+QT_MOC_LITERAL(45, 534, 13) // "pasteSelected"
 
     },
     "Timeline\0currPosChanged\0\0CellPos\0"
@@ -90,7 +90,7 @@ QT_MOC_LITERAL(45, 535, 13) // "pasteSelected"
     "endSelection\0clearSelection\0insertLayer\0"
     "removeLayer\0moveLayerUp\0moveLayerDown\0"
     "insertFrame\0insertNullFrame\0removeFrame\0"
-    "clearCell\0extendCell\0unlinkCell\0"
+    "clearCell\0extendCell\0splitCell\0"
     "requestCell\0setCurrPos\0setVisibility\0"
     "setName\0clearSelected\0copySelected\0"
     "pasteSelected"
@@ -224,7 +224,7 @@ void Timeline::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, vo
         case 24: _t->removeFrame(); break;
         case 25: _t->clearCell(); break;
         case 26: _t->extendCell(); break;
-        case 27: _t->unlinkCell(); break;
+        case 27: _t->splitCell(); break;
         case 28: _t->requestCell(); break;
         case 29: _t->setCurrPos((*reinterpret_cast< CellPos(*)>(_a[1]))); break;
         case 30: _t->setVisibility((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;

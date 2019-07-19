@@ -199,7 +199,7 @@ void Window::setupMenubar() {
   frame->addSeparator();
   ADD_ACTION(frame, "Clear Cell", Qt::ALT + Qt::Key_C, sprite.timeline, clearCell);
   ADD_ACTION(frame, "Extend Linked Cell", Qt::ALT + Qt::Key_L, sprite.timeline, extendCell);
-  ADD_ACTION(frame, "Split Linked Cell", Qt::ALT + Qt::Key_S, sprite.timeline, unlinkCell);
+  ADD_ACTION(frame, "Split Linked Cell", Qt::ALT + Qt::Key_S, sprite.timeline, splitCell);
   frame->addSeparator();
   ADD_ACTION(frame, "Next Frame", Qt::Key_D, sprite.timeline, nextFrame);
   ADD_ACTION(frame, "Previous Frame", Qt::Key_A, sprite.timeline, prevFrame);
@@ -244,6 +244,8 @@ void Window::connectSignals() {
   CONNECT(timeline,        removeLayer,         sprite.timeline, removeLayer);
   CONNECT(timeline,        moveLayerUp,         sprite.timeline, moveLayerUp);
   CONNECT(timeline,        moveLayerDown,       sprite.timeline, moveLayerDown);
+  CONNECT(timeline,        extendCell,          sprite.timeline, extendCell);
+  CONNECT(timeline,        splitCell,           sprite.timeline, splitCell);
   CONNECT(timeline,        beginSelection,      sprite.timeline, beginSelection);
   CONNECT(timeline,        continueSelection,   sprite.timeline, continueSelection);
   CONNECT(timeline,        endSelection,        sprite.timeline, endSelection);
