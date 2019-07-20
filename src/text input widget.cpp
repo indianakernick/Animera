@@ -82,7 +82,7 @@ int TextInputWidget::getMinCursorPos() const {
 }
 
 int TextInputWidget::getMaxCursorPos() const {
-  return rect.widgetSpace() + rect.outer().width() - glob_text_padding;
+  return rect.inner().width() - glob_text_padding;
 }
 
 void TextInputWidget::setOffset(int, const int newCursor) {
