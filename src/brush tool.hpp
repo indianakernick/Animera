@@ -24,8 +24,7 @@ public:
 
 private:
   QPoint lastPos = no_point;
-  // @TODO restore these to 0 and none
-  int radius = 0;
+  int radius = brsh_radius.def;
   SymmetryMode mode = SymmetryMode::none;
   QRgb color = 0;
   

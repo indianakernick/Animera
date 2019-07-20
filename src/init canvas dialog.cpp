@@ -56,8 +56,8 @@ private:
 
 InitCanvasDialog::InitCanvasDialog(QWidget *widget)
   : QDialog{widget},
-    widthWidget{this, textBoxRect(5, 0), 128, 65536},
-    heightWidget{this, textBoxRect(5, 0), 128, 65536} {
+    widthWidget{this, init_size_rect, init_size_range},
+    heightWidget{this, init_size_rect, init_size_range} {
   setWindowTitle("New File");
   setStyleSheet("background-color:" + glob_main.name());
   createWidgets();
@@ -98,9 +98,9 @@ void InitCanvasDialog::setupLayout() {
   setLayout(layout);
   layout->setSpacing(0);
   layout->setContentsMargins(1_px, 1_px, 1_px, 1_px);
-  QWidget *widthLabel = new LabelWidget{this, textBoxRect(8, 0_px), "Width: "};
-  QWidget *heightLabel = new LabelWidget{this, textBoxRect(8, 0_px), "Height: "};
-  QWidget *formatLabel = new LabelWidget{this, textBoxRect(8, 0_px), "Format: "};
+  QWidget *widthLabel = new LabelWidget{this, textBoxRect(8, 0), "Width: "};
+  QWidget *heightLabel = new LabelWidget{this, textBoxRect(8, 0), "Height: "};
+  QWidget *formatLabel = new LabelWidget{this, textBoxRect(8, 0), "Format: "};
   layout->addWidget(widthLabel, 0, 0, Qt::AlignLeft);
   layout->addWidget(&widthWidget, 0, 1, Qt::AlignRight);
   layout->addWidget(heightLabel, 1, 0, Qt::AlignLeft);
@@ -119,6 +119,7 @@ void InitCanvasDialog::setupLayout() {
   
   layout->addWidget(okButton, 4, 0);
   layout->addWidget(cancelButton, 4, 1);
+  layout->setSizeConstraint(QLayout::SetFixedSize);
 }
 
 void InitCanvasDialog::connectSignals() {

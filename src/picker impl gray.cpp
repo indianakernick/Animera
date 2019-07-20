@@ -17,7 +17,7 @@
 void PickerImplGray::init(QWidget *parent) {
   gray = pick_default_gray;
   graySlider = new GraySliderWidget{parent};
-  boxY = new NumberInputWidget{parent, pick_number_rect, gray, 255};
+  boxY = new NumberInputWidget{parent, pick_number_rect, {0, 255, gray}};
   boxHex = new HexInputWidget{parent, pick_hex_rect, {gray, gray, gray}, 255};
   boxHex->setReadOnly(true);
   labelY = new LabelWidget{parent, pick_label_rect, "Y"};

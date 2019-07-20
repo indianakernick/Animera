@@ -15,7 +15,7 @@
 
 class NumberValidator final : public QIntValidator {
 public:
-  NumberValidator(QWidget *, int);
+  NumberValidator(QWidget *, IntRange);
   
   void fixup(QString &) const override;
   void updateValidValue(const QString &);
@@ -39,7 +39,7 @@ private:
 class NumberInputWidget final : public TextInputWidget {
   Q_OBJECT
 public:
-  NumberInputWidget(QWidget *, WidgetRect, int, int);
+  NumberInputWidget(QWidget *, WidgetRect, IntRange);
 
 Q_SIGNALS:
   void valueChanged(int);

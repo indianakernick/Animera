@@ -12,8 +12,8 @@
 #include "connect.hpp"
 #include <QtGui/qevent.h>
 
-NumberValidator::NumberValidator(QWidget *parent, const int max)
-  : QIntValidator{0, max, parent} {}
+NumberValidator::NumberValidator(QWidget *parent, const IntRange range)
+  : QIntValidator{range.min, range.max, parent} {}
 
 void NumberValidator::fixup(QString &input) const {
   input = lastValidValue;
@@ -75,10 +75,10 @@ void HexValidator::updateValidValue(const QString &value) {
 }
 
 NumberInputWidget::NumberInputWidget(
-  QWidget *parent, const WidgetRect rect, const int defaultValue, const int max
-) : TextInputWidget{parent, rect}, boxValidator{parent, max} {
+  QWidget *parent, const WidgetRect rect, const IntRange range
+) : TextInputWidget{parent, rect}, boxValidator{parent, range} {
   setValidator(&boxValidator);
-  changeValue(defaultValue);
+  changeValue(range.def);
   CONNECT(this, textEdited,      this, textChanged);
   CONNECT(this, editingFinished, this, newValidValue);
 }

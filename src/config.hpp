@@ -115,6 +115,12 @@ private:
   int widgetSpace_;
 };
 
+struct IntRange {
+  int min;
+  int max;
+  int def = 0;
+};
+
 // -------------------------------- tools ----------------------------------- //
 
 constexpr QSize     tool_icon_size = {24_px, 24_px};
@@ -129,21 +135,23 @@ inline const QColor tool_base_enabled = glob_light_2;
 inline const QColor tool_shape_disabled = glob_light_2;
 inline const QColor tool_shape_enabled = glob_light_1;
 
-constexpr int       tool_overlay_alpha_min = 32;
-constexpr int       tool_overlay_alpha_max = 191;
-constexpr int       tool_overlay_gray_min = 32;
-constexpr int       tool_overlay_gray_max = 223;
-constexpr int       tool_overlay_alpha = 127;
-constexpr int       tool_overlay_gray = 127;
+constexpr IntRange  tool_overlay_gray = {32, 223, 127};
+constexpr IntRange  tool_overlay_alpha = {32, 191, 127};
 constexpr QRgb      tool_overlay_color = qRgba(
-  tool_overlay_gray, tool_overlay_gray, tool_overlay_gray, tool_overlay_alpha
+  tool_overlay_gray.def,
+  tool_overlay_gray.def,
+  tool_overlay_gray.def,
+  tool_overlay_alpha.def
 );
 
-constexpr int scaleOverlayAlpha(const int alpha) {
-  return alpha * (tool_overlay_alpha_max - tool_overlay_alpha_min) / 255 + tool_overlay_alpha_min;
+constexpr int scaleOverlay(const IntRange range, const int value) {
+  return value * (range.max - range.min) / 255 + range.min;
 }
 constexpr int scaleOverlayGray(const int gray) {
-  return gray * (tool_overlay_gray_max - tool_overlay_gray_min) / 255 + tool_overlay_gray_min;
+  return scaleOverlay(tool_overlay_gray, gray);
+}
+constexpr int scaleOverlayAlpha(const int alpha) {
+  return scaleOverlay(tool_overlay_alpha, alpha);
 }
 
 // ------------------------------- status bar ------------------------------- //
@@ -258,8 +266,13 @@ constexpr WidgetRect ctrl_text_rect = {
   {textBoxSize(3, 0).width(), cell_height - glob_border_width},
   0, 0
 };
-constexpr int        ctrl_default_delay_ms = 100;
-constexpr int        ctrl_max_delay_ms = 999;
+constexpr IntRange   ctrl_delay = {1, 999, 100};
+
+// ---------------------------- init canvas dialog -------------------------- //
+
+constexpr IntRange   init_size_range = {1, 65536, 128};
+constexpr WidgetRect init_size_rect = textBoxRect(5, 0);
+constexpr WidgetRect init_button_rect = textBoxRect(8, 0);
 
 // ---------------------------------- keys ---------------------------------- //
 
@@ -280,8 +293,7 @@ constexpr Qt::Key   key_undo = Qt::Key_N;
 constexpr Qt::Key   key_redo = Qt::Key_M;
 
 // brush
-constexpr int       brsh_min_radius = 0;
-constexpr int       brsh_max_radius = 64;
+constexpr IntRange  brsh_radius = {0, 64, 0};
 
 // translate
 constexpr Qt::Key   key_mov_up = Qt::Key_Up;

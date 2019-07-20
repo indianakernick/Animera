@@ -49,7 +49,7 @@ void BrushTool::mouseUp(const ToolMouseEvent &event) {
 }
 
 void BrushTool::setRadius(const int newRadius) {
-  assert(brsh_min_radius <= newRadius && newRadius <= brsh_max_radius);
+  assert(brsh_radius.min <= newRadius && newRadius <= brsh_radius.max);
   radius = newRadius;
 }
 

@@ -23,7 +23,7 @@ ControlsWidget::ControlsWidget(QWidget *parent)
   createWidgets();
   setupLayout();
   connectSignals();
-  animTimer.setInterval(ctrl_default_delay_ms);
+  animTimer.setInterval(ctrl_delay.def);
   animTimer.setTimerType(Qt::PreciseTimer);
 }
 
@@ -103,7 +103,7 @@ void ControlsWidget::createWidgets() {
   extendButton = makePushButton(baseIcon, ":/Timeline/link.pbm");
   splitButton = makePushButton(baseIcon, ":/Timeline/unlink.pbm");
   playButton = makeRadioButton(baseIcon, ":/Timeline/pause.pbm", ":/Timeline/play.pbm");
-  delayBox = new NumberInputWidget{this, ctrl_text_rect, ctrl_default_delay_ms, ctrl_max_delay_ms};
+  delayBox = new NumberInputWidget{this, ctrl_text_rect, ctrl_delay};
   insertLayerButton->setToolTip("Insert Layer");
   removeLayerButton->setToolTip("Remove Layer");
   moveLayerUpButton->setToolTip("Move Layer Up");
@@ -130,14 +130,14 @@ void ControlsWidget::setupLayout() {
 }
 
 void ControlsWidget::connectSignals() {
-  CONNECT(insertLayerButton,   pressed, this, insertLayer);
-  CONNECT(removeLayerButton,   pressed, this, removeLayer);
-  CONNECT(moveLayerUpButton,   pressed, this, moveLayerUp);
-  CONNECT(moveLayerDownButton, pressed, this, moveLayerDown);
-  CONNECT(extendButton,        pressed, this, extendCell);
-  CONNECT(splitButton,         pressed, this, splitCell);
-  CONNECT(playButton,          toggled, this, toggleTimer);
-  CONNECT(animTimer,           timeout, this, nextFrame);
+  CONNECT(insertLayerButton,   pressed,      this, insertLayer);
+  CONNECT(removeLayerButton,   pressed,      this, removeLayer);
+  CONNECT(moveLayerUpButton,   pressed,      this, moveLayerUp);
+  CONNECT(moveLayerDownButton, pressed,      this, moveLayerDown);
+  CONNECT(extendButton,        pressed,      this, extendCell);
+  CONNECT(splitButton,         pressed,      this, splitCell);
+  CONNECT(playButton,          toggled,      this, toggleTimer);
+  CONNECT(animTimer,           timeout,      this, nextFrame);
   CONNECT(delayBox,            valueChanged, this, setInterval);
 }
 
