@@ -9,12 +9,12 @@
 #include "init canvas dialog.hpp"
 
 #include "connect.hpp"
-#include "global font.hpp"
 #include <QtGui/qbitmap.h>
 #include <QtGui/qpainter.h>
 #include "label widget.hpp"
 #include "radio button widget.hpp"
 #include <QtWidgets/qgridlayout.h>
+#include "text push button widget.hpp"
 
 class FormatWidget final : public RadioButtonWidget {
   Q_OBJECT
@@ -54,43 +54,13 @@ private:
   }
 };
 
-class TextButton final : public QAbstractButton {
-public:
-  TextButton(QWidget *parent, const WidgetRect rect, const QString &text)
-    : QAbstractButton{parent}, rect{rect}, text{text} {
-    setFixedSize(rect.widget().size());
-    setCursor(Qt::PointingHandCursor);
-  }
-
-private:
-  WidgetRect rect;
-  QString text;
-
-  void paintEvent(QPaintEvent *) override {
-    QPainter painter{this};
-    painter.fillRect(rect.outer(), glob_light_1);
-    painter.setFont(getGlobalFont());
-    painter.setBrush(Qt::NoBrush);
-    painter.setPen(glob_text_color);
-    painter.drawText(rect.inner(), Qt::AlignCenter, text);
-  }
-};
-
 InitCanvasDialog::InitCanvasDialog(QWidget *widget)
   : QDialog{widget},
     widthWidget{this, textBoxRect(5, 0), 128, 65536},
     heightWidget{this, textBoxRect(5, 0), 128, 65536} {
   setWindowTitle("New File");
   setStyleSheet("background-color:" + glob_main.name());
-  formatWidgets.push_back(new FormatWidget{this, ":/Formats/rgba.png", Format::rgba});
-  formatWidgets.push_back(new FormatWidget{this, ":/Formats/gray.png", Format::gray});
-  formatWidgets.push_back(new FormatWidget{this, ":/Formats/index.png", Format::palette});
-  formatWidgets[0]->setToolTip("32-bit RGBA");
-  formatWidgets[1]->setToolTip("8-bit Grayscale");
-  formatWidgets[2]->setToolTip("8-bit Indexed");
-  formatWidgets.front()->setChecked(true);
-  okButton = new TextButton{this, textBoxRect(8, 0), "Ok"};
-  cancelButton = new TextButton{this, textBoxRect(8, 0), "Cancel"};
+  createWidgets();
   setupLayout();
   connectSignals();
 }
@@ -109,6 +79,18 @@ void InitCanvasDialog::formatChanged(const Format format) {
 
 void InitCanvasDialog::finalize() {
   Q_EMIT canvasInitialized(colorFormat, size);
+}
+
+void InitCanvasDialog::createWidgets() {
+  formatWidgets.push_back(new FormatWidget{this, ":/Formats/rgba.png", Format::rgba});
+  formatWidgets.push_back(new FormatWidget{this, ":/Formats/gray.png", Format::gray});
+  formatWidgets.push_back(new FormatWidget{this, ":/Formats/index.png", Format::palette});
+  formatWidgets[0]->setToolTip("32-bit RGBA");
+  formatWidgets[1]->setToolTip("8-bit Grayscale");
+  formatWidgets[2]->setToolTip("8-bit Indexed");
+  formatWidgets.front()->setChecked(true);
+  okButton = new TextPushButtonWidget{this, textBoxRect(8, 0), "Ok"};
+  cancelButton = new TextPushButtonWidget{this, textBoxRect(8, 0), "Cancel"};
 }
 
 void InitCanvasDialog::setupLayout() {

@@ -69,6 +69,7 @@
 		45D1099E22DB09C100D1F1CB /* transform tools.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45D1099C22DB09C100D1F1CB /* transform tools.cpp */; };
 		45D109A622DBFAF200D1F1CB /* icon radio button widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45D109A422DBFAF200D1F1CB /* icon radio button widget.cpp */; };
 		45D109A922DC01A200D1F1CB /* icon push button widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45D109A722DC01A200D1F1CB /* icon push button widget.cpp */; };
+		45D109AC22E2D4FD00D1F1CB /* text push button widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45D109AA22E2D4FD00D1F1CB /* text push button widget.cpp */; };
 		45DC2566224B137C00F40116 /* status msg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45DC2564224B137C00F40116 /* status msg.cpp */; };
 		45DFE499224DE89E00EA40C5 /* global font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45DFE497224DE89E00EA40C5 /* global font.cpp */; };
 		45F065F22222998300BCE863 /* current tool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45F065F02222998300BCE863 /* current tool.cpp */; };
@@ -856,6 +857,8 @@
 		45D109A522DBFAF200D1F1CB /* icon radio button widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "icon radio button widget.hpp"; sourceTree = "<group>"; };
 		45D109A722DC01A200D1F1CB /* icon push button widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "icon push button widget.cpp"; sourceTree = "<group>"; };
 		45D109A822DC01A200D1F1CB /* icon push button widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "icon push button widget.hpp"; sourceTree = "<group>"; };
+		45D109AA22E2D4FD00D1F1CB /* text push button widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "text push button widget.cpp"; sourceTree = "<group>"; };
+		45D109AB22E2D4FD00D1F1CB /* text push button widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "text push button widget.hpp"; sourceTree = "<group>"; };
 		45D34F1C22825FE400339A4E /* masking.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = masking.hpp; sourceTree = "<group>"; };
 		45DC255F224A034200F40116 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		45DC2561224A0AC000F40116 /* title.anim */ = {isa = PBXFileReference; lastKnownFileType = file; path = title.anim; sourceTree = "<group>"; };
@@ -1164,6 +1167,8 @@
 				45D109A522DBFAF200D1F1CB /* icon radio button widget.hpp */,
 				45D109A722DC01A200D1F1CB /* icon push button widget.cpp */,
 				45D109A822DC01A200D1F1CB /* icon push button widget.hpp */,
+				45D109AA22E2D4FD00D1F1CB /* text push button widget.cpp */,
+				45D109AB22E2D4FD00D1F1CB /* text push button widget.hpp */,
 			);
 			name = General;
 			sourceTree = "<group>";
@@ -2280,6 +2285,7 @@
 				458F84082249DFC8005F91D0 /* polygon.cpp in Sources */,
 				45DC2566224B137C00F40116 /* status msg.cpp in Sources */,
 				45F065F22222998300BCE863 /* current tool.cpp in Sources */,
+				45D109AC22E2D4FD00D1F1CB /* text push button widget.cpp in Sources */,
 				4595D48C22C05E5400607D64 /* timeline cells widget.cpp in Sources */,
 				453C78432234E13E00818B19 /* window.cpp in Sources */,
 				4512636622781D7B00C66A19 /* tool colors widget.cpp in Sources */,

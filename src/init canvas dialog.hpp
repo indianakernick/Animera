@@ -14,7 +14,7 @@
 #include "color input widget.hpp"
 
 class FormatWidget;
-class TextButton;
+class TextPushButtonWidget;
 
 class InitCanvasDialog final : public QDialog {
   Q_OBJECT
@@ -35,11 +35,12 @@ private:
   NumberInputWidget widthWidget;
   NumberInputWidget heightWidget;
   std::vector<FormatWidget *> formatWidgets;
-  TextButton *okButton = nullptr;
-  TextButton *cancelButton = nullptr;
+  TextPushButtonWidget *okButton = nullptr;
+  TextPushButtonWidget *cancelButton = nullptr;
   QSize size = {128, 128};
   Format colorFormat = Format::rgba;
   
+  void createWidgets();
   void setupLayout();
   void connectSignals();
 };
