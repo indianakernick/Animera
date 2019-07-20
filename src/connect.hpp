@@ -24,13 +24,12 @@ constexpr auto address(T &&obj, long) {
   return &obj;
 }
 
-// It's a real shame that I have to write std::remove_reference_t
-// This code looks so elegant without it
+// @TODO auto(x)
 template <typename T>
-constexpr auto value(T &&obj, int) -> std::remove_reference_t<decltype(*obj)>;
+constexpr auto value(T &&obj, int) -> std::decay_t<decltype(*obj)>;
 
 template <typename T>
-constexpr auto value(T &&obj, long) -> std::remove_reference_t<decltype(obj)>;
+constexpr auto value(T &&obj, long) -> std::decay_t<decltype(obj)>;
 
 }
 

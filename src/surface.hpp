@@ -280,4 +280,14 @@ private:
 template <typename Pixel>
 using CSurface = Surface<const Pixel>;
 
+// @TODO std::type_identity_t
+
+template <typename T>
+struct identity {
+  using type = T;
+};
+
+template <typename T>
+using identity_t = typename identity<T>::type;
+
 #endif

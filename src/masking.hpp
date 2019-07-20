@@ -97,7 +97,7 @@ void maskFill(
 template <typename Pixel>
 void maskCopyRegion(
   const Surface<Pixel> dst,
-  const CSurface<Pixel> src,
+  const CSurface<identity_t<Pixel>> src,
   const CSurface<uint8_t> msk,
   const QPoint srcPos,
   const QPoint mskPos
@@ -127,7 +127,7 @@ void maskCopyRegion(
 template <typename Pixel>
 void maskCopy(
   const Surface<Pixel> dst,
-  const CSurface<Pixel> src,
+  const CSurface<identity_t<Pixel>> src,
   const CSurface<uint8_t> msk
 ) noexcept {
   Q_ASSUME(dst.size() == src.size());
@@ -139,7 +139,7 @@ void maskCopy(
 template <typename Pixel>
 void copyRegion(
   const Surface<Pixel> dst,
-  const CSurface<Pixel> src,
+  const CSurface<identity_t<Pixel>> src,
   const QPoint srcPos
 ) noexcept {
   const QRect srcRect = {srcPos, src.size()};
@@ -157,7 +157,7 @@ void copyRegion(
 template <typename Pixel>
 void copy(
   const Surface<Pixel> dst,
-  const CSurface<Pixel> src
+  const CSurface<identity_t<Pixel>> src
 ) noexcept {
   Q_ASSUME(dst.size() == src.size());
   copyRegion(dst, src, {0, 0});
@@ -166,7 +166,7 @@ void copy(
 template <typename Pixel>
 void copyTile(
   const Surface<Pixel> dst,
-  const CSurface<Pixel> src,
+  const CSurface<identity_t<Pixel>> src,
   const QPoint srcPos
 ) {
   // @TODO GCC produces significantly better assembly than clang for this function

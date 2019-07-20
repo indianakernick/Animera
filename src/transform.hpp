@@ -19,7 +19,7 @@ QPoint xform(QPoint)
 */
 
 template <typename Pixel, typename XForm>
-void spatialTransform(Surface<Pixel> dst, CSurface<Pixel> src, XForm &&xform) {
+void spatialTransform(Surface<Pixel> dst, CSurface<identity_t<Pixel>> src, XForm &&xform) {
   for (int y = 0; y != dst.size().height(); ++y) {
     for (int x = 0; x != dst.size().width(); ++x) {
       dst.setPixel(src.getPixel(xform(QPoint{x, y})), {x, y});
@@ -36,7 +36,7 @@ constexpr QSize rotateSize(const QSize srcSize, const int dir) {
 }
 
 template <typename Pixel>
-void rotate(Surface<Pixel> dst, CSurface<Pixel> src, const int dir) {
+void rotate(Surface<Pixel> dst, CSurface<identity_t<Pixel>> src, const int dir) {
   assert(dst.size() == rotateSize(src.size(), dir));
   const int dstWidth = dst.size().width() - 1;
   const int dstHeight = dst.size().height() - 1;
@@ -61,7 +61,7 @@ void rotate(Surface<Pixel> dst, CSurface<Pixel> src, const int dir) {
 }
 
 template <typename Pixel>
-void transpose(Surface<Pixel> dst, CSurface<Pixel> src) {
+void transpose(Surface<Pixel> dst, CSurface<identity_t<Pixel>> src) {
   assert(dst.size() == src.size().transposed());
   spatialTransform(dst, src, [](const QPoint dstPos) {
     return QPoint{dstPos.y(), dstPos.x()};
@@ -69,7 +69,7 @@ void transpose(Surface<Pixel> dst, CSurface<Pixel> src) {
 }
 
 template <typename Pixel>
-void flipVert(Surface<Pixel> dst, CSurface<Pixel> src) {
+void flipVert(Surface<Pixel> dst, CSurface<identity_t<Pixel>> src) {
   assert(dst.size() == src.size());
   const size_t width = dst.size().width() * sizeof(Pixel);
   int srcY = dst.size().height();
@@ -80,7 +80,7 @@ void flipVert(Surface<Pixel> dst, CSurface<Pixel> src) {
 }
 
 template <typename Pixel>
-void flipHori(Surface<Pixel> dst, CSurface<Pixel> src) {
+void flipHori(Surface<Pixel> dst, CSurface<identity_t<Pixel>> src) {
   assert(dst.size() == src.size());
   auto srcRowIter = src.range().begin();
   for (auto dstRow : dst.range()) {

@@ -89,7 +89,7 @@ void TranslateTool::translate(const QPoint move, const QRgb eraseColor) {
 }
 
 void TranslateTool::updateSourceImage(const QRgb eraseColor) {
-  visitSurfaces(ctx->cell->image, std::as_const(cleanImage), [this, eraseColor](auto src, auto clean) {
+  visitSurfaces(ctx->cell->image, cleanImage, [this, eraseColor](auto src, auto clean) {
     src.overFill(eraseColor);
     copyRegion(src, clean, pos);
   });
@@ -141,7 +141,7 @@ void FlipTool::keyPress(const ToolKeyEvent &event) {
     ctx->requireCell();
     QImage &src = ctx->cell->image;
     QImage flipped{src.size(), src.format()};
-    visitSurfaces(flipped, std::as_const(src), [](auto flipped, auto src) {
+    visitSurfaces(flipped, src, [](auto flipped, auto src) {
       flipHori(flipped, src);
     });
     src = flipped;
@@ -149,7 +149,7 @@ void FlipTool::keyPress(const ToolKeyEvent &event) {
     ctx->requireCell();
     QImage &src = ctx->cell->image;
     QImage flipped{src.size(), src.format()};
-    visitSurfaces(flipped, std::as_const(src), [](auto flipped, auto src) {
+    visitSurfaces(flipped, src, [](auto flipped, auto src) {
       flipVert(flipped, src);
     });
     src = flipped;
@@ -210,7 +210,7 @@ void RotateTool::keyPress(const ToolKeyEvent &event) {
     angle = (angle + rot) & 3;
     QImage &src = ctx->cell->image;
     QImage rotated{src.size(), src.format()};
-    visitSurfaces(rotated, std::as_const(src), [rot](auto rotated, auto src) {
+    visitSurfaces(rotated, src, [rot](auto rotated, auto src) {
       rotate(rotated, src, rot);
     });
     src = rotated;
