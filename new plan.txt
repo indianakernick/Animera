@@ -407,7 +407,7 @@ export options
     all composited
     current
   naming
-    xyz %l %02(f + 33)
+    xyz %l %00f
   file format
     rgba
       rgba png

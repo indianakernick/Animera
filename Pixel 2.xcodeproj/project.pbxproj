@@ -70,6 +70,7 @@
 		45D109A622DBFAF200D1F1CB /* icon radio button widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45D109A422DBFAF200D1F1CB /* icon radio button widget.cpp */; };
 		45D109A922DC01A200D1F1CB /* icon push button widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45D109A722DC01A200D1F1CB /* icon push button widget.cpp */; };
 		45D109AC22E2D4FD00D1F1CB /* text push button widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45D109AA22E2D4FD00D1F1CB /* text push button widget.cpp */; };
+		45D109AF22E2D88500D1F1CB /* export dialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45D109AD22E2D88500D1F1CB /* export dialog.cpp */; };
 		45DC2566224B137C00F40116 /* status msg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45DC2564224B137C00F40116 /* status msg.cpp */; };
 		45DFE499224DE89E00EA40C5 /* global font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45DFE497224DE89E00EA40C5 /* global font.cpp */; };
 		45F065F22222998300BCE863 /* current tool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45F065F02222998300BCE863 /* current tool.cpp */; };
@@ -859,6 +860,8 @@
 		45D109A822DC01A200D1F1CB /* icon push button widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "icon push button widget.hpp"; sourceTree = "<group>"; };
 		45D109AA22E2D4FD00D1F1CB /* text push button widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "text push button widget.cpp"; sourceTree = "<group>"; };
 		45D109AB22E2D4FD00D1F1CB /* text push button widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "text push button widget.hpp"; sourceTree = "<group>"; };
+		45D109AD22E2D88500D1F1CB /* export dialog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "export dialog.cpp"; sourceTree = "<group>"; };
+		45D109AE22E2D88500D1F1CB /* export dialog.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "export dialog.hpp"; sourceTree = "<group>"; };
 		45D34F1C22825FE400339A4E /* masking.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = masking.hpp; sourceTree = "<group>"; };
 		45DC255F224A034200F40116 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		45DC2561224A0AC000F40116 /* title.anim */ = {isa = PBXFileReference; lastKnownFileType = file; path = title.anim; sourceTree = "<group>"; };
@@ -2103,6 +2106,8 @@
 			children = (
 				45F3EB6C22CC430F00F9F93E /* init canvas dialog.cpp */,
 				45F3EB6D22CC430F00F9F93E /* init canvas dialog.hpp */,
+				45D109AD22E2D88500D1F1CB /* export dialog.cpp */,
+				45D109AE22E2D88500D1F1CB /* export dialog.hpp */,
 			);
 			name = Dialogs;
 			sourceTree = "<group>";
@@ -2209,7 +2214,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "function moc {\n  local OUTPUT=\"$PROJECT_DIR/src/$1.moc\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.hpp\" > \"$OUTPUT\"\n  echo \"\" >> \"$OUTPUT\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.cpp\" >> \"$OUTPUT\"\n}\n\nmoc \"timeline controls widget\"\nmoc \"timeline frames widget\"\nmoc \"timeline layers widget\"\nmoc \"timeline cells widget\"\nmoc \"color picker widget\"\nmoc \"color slider widget\"\nmoc \"color graph widget\"\nmoc \"tool select widget\"\nmoc \"color input widget\"\nmoc \"tool colors widget\"\nmoc \"init canvas dialog\"\nmoc \"color picker impl\"\nmoc \"text input widget\"\nmoc \"status bar widget\"\nmoc \"timeline widget\"\nmoc \"palette widget\"\nmoc \"sample object\"\nmoc \"editor widget\"\nmoc \"tool widgets\"\nmoc \"clear object\"\nmoc \"undo object\"\nmoc \"application\"\nmoc \"timeline\"\nmoc \"palette\"\nmoc \"sprite\"\nmoc \"window\"\nmoc \"tool\"\nmoc \"main\"\n";
+			shellScript = "function moc {\n  local OUTPUT=\"$PROJECT_DIR/src/$1.moc\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.hpp\" > \"$OUTPUT\"\n  echo \"\" >> \"$OUTPUT\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.cpp\" >> \"$OUTPUT\"\n}\n\nmoc \"timeline controls widget\"\nmoc \"timeline frames widget\"\nmoc \"timeline layers widget\"\nmoc \"timeline cells widget\"\nmoc \"color picker widget\"\nmoc \"color slider widget\"\nmoc \"color graph widget\"\nmoc \"tool select widget\"\nmoc \"color input widget\"\nmoc \"tool colors widget\"\nmoc \"init canvas dialog\"\nmoc \"color picker impl\"\nmoc \"text input widget\"\nmoc \"status bar widget\"\nmoc \"timeline widget\"\nmoc \"palette widget\"\nmoc \"sample object\"\nmoc \"export dialog\"\nmoc \"editor widget\"\nmoc \"tool widgets\"\nmoc \"clear object\"\nmoc \"undo object\"\nmoc \"application\"\nmoc \"timeline\"\nmoc \"palette\"\nmoc \"sprite\"\nmoc \"window\"\nmoc \"tool\"\nmoc \"main\"\n";
 		};
 		453C787B2235D63B00818B19 /* RCC */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2277,6 +2282,7 @@
 				45BADA1D2247007F000D095C /* glm.cpp in Sources */,
 				453D28BD22768D9900D0E5F9 /* text input widget.cpp in Sources */,
 				4513145B22D5A2A500D66262 /* picker impl gray.cpp in Sources */,
+				45D109AF22E2D88500D1F1CB /* export dialog.cpp in Sources */,
 				45D1099822DAFD7000D1F1CB /* select tools.cpp in Sources */,
 				453C781F22349F0100818B19 /* tool select widget.cpp in Sources */,
 				45054F6D22596BC10078350B /* clear object.cpp in Sources */,

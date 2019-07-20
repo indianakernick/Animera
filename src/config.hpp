@@ -274,6 +274,11 @@ constexpr IntRange   init_size_range = {1, 65536, 128};
 constexpr WidgetRect init_size_rect = textBoxRect(5, 0);
 constexpr WidgetRect init_button_rect = textBoxRect(8, 0);
 
+// ------------------------------- export dialog ---------------------------- //
+
+constexpr IntRange   expt_stride = {-100, 100, 1};
+constexpr IntRange   expt_offset = {-100, 100, 0};
+
 // ---------------------------------- keys ---------------------------------- //
 
 // all tools

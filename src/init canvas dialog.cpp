@@ -12,6 +12,7 @@
 #include <QtGui/qbitmap.h>
 #include <QtGui/qpainter.h>
 #include "label widget.hpp"
+#include "color input widget.hpp"
 #include "radio button widget.hpp"
 #include <QtWidgets/qgridlayout.h>
 #include "text push button widget.hpp"
@@ -55,9 +56,7 @@ private:
 };
 
 InitCanvasDialog::InitCanvasDialog(QWidget *widget)
-  : QDialog{widget},
-    widthWidget{this, init_size_rect, init_size_range},
-    heightWidget{this, init_size_rect, init_size_range} {
+  : QDialog{widget} {
   setWindowTitle("New File");
   setStyleSheet("background-color:" + glob_main.name());
   createWidgets();
@@ -82,6 +81,8 @@ void InitCanvasDialog::finalize() {
 }
 
 void InitCanvasDialog::createWidgets() {
+  widthWidget = new NumberInputWidget{this, init_size_rect, init_size_range};
+  heightWidget = new NumberInputWidget{this, init_size_rect, init_size_range};
   formatWidgets.push_back(new FormatWidget{this, ":/Formats/rgba.png", Format::rgba});
   formatWidgets.push_back(new FormatWidget{this, ":/Formats/gray.png", Format::gray});
   formatWidgets.push_back(new FormatWidget{this, ":/Formats/index.png", Format::palette});
@@ -89,22 +90,23 @@ void InitCanvasDialog::createWidgets() {
   formatWidgets[1]->setToolTip("8-bit Grayscale");
   formatWidgets[2]->setToolTip("8-bit Indexed");
   formatWidgets.front()->setChecked(true);
-  okButton = new TextPushButtonWidget{this, textBoxRect(8, 0), "Ok"};
-  cancelButton = new TextPushButtonWidget{this, textBoxRect(8, 0), "Cancel"};
+  okButton = new TextPushButtonWidget{this, init_button_rect, "Ok"};
+  cancelButton = new TextPushButtonWidget{this, init_button_rect, "Cancel"};
 }
 
 void InitCanvasDialog::setupLayout() {
   QGridLayout *layout = new QGridLayout{this};
   setLayout(layout);
   layout->setSpacing(0);
-  layout->setContentsMargins(1_px, 1_px, 1_px, 1_px);
+  layout->setContentsMargins(glob_padding, glob_padding, glob_padding, glob_padding);
+  layout->setSizeConstraint(QLayout::SetFixedSize);
   QWidget *widthLabel = new LabelWidget{this, textBoxRect(8, 0), "Width: "};
   QWidget *heightLabel = new LabelWidget{this, textBoxRect(8, 0), "Height: "};
   QWidget *formatLabel = new LabelWidget{this, textBoxRect(8, 0), "Format: "};
   layout->addWidget(widthLabel, 0, 0, Qt::AlignLeft);
-  layout->addWidget(&widthWidget, 0, 1, Qt::AlignRight);
+  layout->addWidget(widthWidget, 0, 1, Qt::AlignRight);
   layout->addWidget(heightLabel, 1, 0, Qt::AlignLeft);
-  layout->addWidget(&heightWidget, 1, 1, Qt::AlignRight);
+  layout->addWidget(heightWidget, 1, 1, Qt::AlignRight);
   layout->addWidget(formatLabel, 2, 0, Qt::AlignLeft);
   
   QHBoxLayout *formatLayout = new QHBoxLayout{};
@@ -119,7 +121,6 @@ void InitCanvasDialog::setupLayout() {
   
   layout->addWidget(okButton, 4, 0);
   layout->addWidget(cancelButton, 4, 1);
-  layout->setSizeConstraint(QLayout::SetFixedSize);
 }
 
 void InitCanvasDialog::connectSignals() {

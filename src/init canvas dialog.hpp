@@ -11,9 +11,9 @@
 
 #include "image.hpp"
 #include <QtWidgets/qdialog.h>
-#include "color input widget.hpp"
 
 class FormatWidget;
+class NumberInputWidget;
 class TextPushButtonWidget;
 
 class InitCanvasDialog final : public QDialog {
@@ -32,8 +32,8 @@ private Q_SLOTS:
   void finalize();
 
 private:
-  NumberInputWidget widthWidget;
-  NumberInputWidget heightWidget;
+  NumberInputWidget *widthWidget;
+  NumberInputWidget *heightWidget;
   std::vector<FormatWidget *> formatWidgets;
   TextPushButtonWidget *okButton = nullptr;
   TextPushButtonWidget *cancelButton = nullptr;
