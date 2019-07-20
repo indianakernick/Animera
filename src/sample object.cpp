@@ -21,6 +21,7 @@ void SampleObject::mouseMove(const QPoint newPos) {
 
 void SampleObject::keyPress(const Qt::Key key) {
   if (cell && key == key_sample) {
+    // @TODO should we sample from composited image?
     Q_EMIT colorChanged(cell->image.pixel(pos));
   }
 }

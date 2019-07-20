@@ -1703,7 +1703,35 @@ void blitImageOld(QImage &dst, const QImage &src, const QPoint pos) {
 
 #if BUG_TEST
 
-#include <QtGui/qevent.h>
+#include <QtWidgets/qmenubar.h>
+#include <QtWidgets/qmainwindow.h>
+#include <QtWidgets/qapplication.h>
+
+void disable() {
+  QApplication::setDesktopSettingsAware(false);
+  QApplication::setEffectEnabled(Qt::UI_FadeMenu, false);
+}
+
+int main(int argc, char **argv) {
+  disable();
+  QApplication app{argc, argv};
+  disable();
+  QMainWindow window;
+  disable();
+  QMenuBar menubar{&window};
+  disable();
+  menubar.setNativeMenuBar(false);
+  QMenu *file = menubar.addMenu("File");
+  file->setStyleSheet("border: none; outline: none");
+  disable();
+  file->addAction("Open");
+  file->addAction("Save");
+  window.show();
+  disable();
+  return app.exec();
+}
+
+/*#include <QtGui/qevent.h>
 #include <QtGui/qpainter.h>
 #include <QtWidgets/qscrollbar.h>
 #include <QtWidgets/qscrollarea.h>
@@ -1844,7 +1872,7 @@ int main(int argc, char **argv) {
   window.setCentralWidget(&area);
   window.show();
   return app.exec();
-}
+}*/
 
 /*#include <QtWidgets/qdockwidget.h>
 #include <QtWidgets/qmainwindow.h>

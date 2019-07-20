@@ -65,7 +65,7 @@ Q_SIGNALS:
   void nameChanged(LayerIdx, std::string_view);
   
   void frameChanged(const Frame &);
-  void layerChanged(LayerIdx, const Spans &);
+  void layerChanged(LayerIdx, const Spans &); // @TODO std::span
   
   void frameCountChanged(FrameIdx);
   void layerCountChanged(LayerIdx);

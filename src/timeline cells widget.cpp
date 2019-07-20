@@ -50,6 +50,7 @@ void CellsWidget::setSelection(const CellRect rect) {
     // @TODO this needs work
     // animate?
     // do we really need this at all?
+    // what if we change the colors of the cells? Could be problematic
     QRect selectRect = {
       rect.minF * cell_width,
       rect.minL * cell_height,

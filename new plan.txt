@@ -397,3 +397,25 @@ A builtin calculator?
 
 image, view, sampler
 vulkan textures
+
+export options
+  which cells?
+    composite all frames
+    composite current frame
+    all frames on each layer
+    all frames on current layer
+    current cell
+  naming
+    xyz %l %02(f + 33)
+  file format
+    rgba
+      rgba png
+    indexed
+      rgba png
+      indexed png (without compositing)
+      grayscale png (without compositing)
+    grayscale
+      grayscale png
+      monochrome png
+
+consider grayscale with alpha
