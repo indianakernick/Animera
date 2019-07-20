@@ -21,12 +21,8 @@ LayerNameWidget::LayerNameWidget(QWidget *parent, const LayerIdx layer)
   setFixedSize(layer_width, cell_height);
   createWidgets();
   setupLayout();
-  connect(visible, &QAbstractButton::toggled, [this](const bool visibility) {
-    Q_EMIT visibilityChanged(idx, visibility);
-  });
-  connect(name, &QLineEdit::textEdited, [this](const QString &text) {
-    Q_EMIT nameChanged(idx, text.toStdString());
-  });
+  CONNECT(visible, toggled, this, changeVisibility);
+  CONNECT(name, textEdited, this, changeName);
 }
 
 void LayerNameWidget::setVisibility(const bool visibility) {
@@ -35,6 +31,14 @@ void LayerNameWidget::setVisibility(const bool visibility) {
 
 void LayerNameWidget::setName(const std::string_view text) {
   name->setText(QString{QLatin1String{text.data(), static_cast<int>(text.size())}});
+}
+
+void LayerNameWidget::changeVisibility(const bool visibility) {
+  Q_EMIT visibilityChanged(idx, visibility);
+}
+
+void LayerNameWidget::changeName(const QString &text) {
+  Q_EMIT nameChanged(idx, text.toStdString());
 }
 
 void LayerNameWidget::paintBack(QPixmap &pixmap) {

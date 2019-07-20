@@ -30,6 +30,10 @@ public Q_SLOTS:
   void setVisibility(bool);
   void setName(std::string_view);
 
+private Q_SLOTS:
+  void changeVisibility(bool);
+  void changeName(const QString &);
+
 private:
   IconRadioButtonWidget *visible = nullptr;
   TextInputWidget *name = nullptr;
