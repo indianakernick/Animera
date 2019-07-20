@@ -399,12 +399,13 @@ image, view, sampler
 vulkan textures
 
 export options
-  which cells?
-    composite all frames
-    composite current frame
-    all frames on each layer
-    all frames on current layer
-    current cell
+  frames
+    all
+    current
+  layers
+    all
+    all composited
+    current
   naming
     xyz %l %02(f + 33)
   file format

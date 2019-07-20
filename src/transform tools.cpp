@@ -89,13 +89,10 @@ void TranslateTool::translate(const QPoint move, const QRgb eraseColor) {
 }
 
 void TranslateTool::updateSourceImage(const QRgb eraseColor) {
-  QImage &src = ctx->cell->image;
-  clearImage(src, eraseColor);
-  if (src.depth() == 32) {
-    copyRegion(makeSurface<uint32_t>(src), makeCSurface<uint32_t>(cleanImage), pos);
-  } else if (src.depth() == 8) {
-    copyRegion(makeSurface<uint8_t>(src), makeCSurface<uint8_t>(cleanImage), pos);
-  } else Q_UNREACHABLE();
+  visitSurfaces(ctx->cell->image, std::as_const(cleanImage), [this, eraseColor](auto src, auto clean) {
+    src.overFill(eraseColor);
+    copyRegion(src, clean, pos);
+  });
 }
 
 void TranslateTool::updateStatus() {
@@ -144,21 +141,17 @@ void FlipTool::keyPress(const ToolKeyEvent &event) {
     ctx->requireCell();
     QImage &src = ctx->cell->image;
     QImage flipped{src.size(), src.format()};
-    if (src.depth() == 32) {
-      flipHori(makeSurface<uint32_t>(flipped), makeCSurface<uint32_t>(src));
-    } else if (src.depth() == 8) {
-      flipHori(makeSurface<uint8_t>(flipped), makeCSurface<uint8_t>(src));
-    } else Q_UNREACHABLE();
+    visitSurfaces(flipped, std::as_const(src), [](auto flipped, auto src) {
+      flipHori(flipped, src);
+    });
     src = flipped;
   } else if (flipYChanged(event.key, flipY)) {
     ctx->requireCell();
     QImage &src = ctx->cell->image;
     QImage flipped{src.size(), src.format()};
-    if (src.depth() == 32) {
-      flipVert(makeSurface<uint32_t>(flipped), makeCSurface<uint32_t>(src));
-    } else if (src.depth() == 8) {
-      flipVert(makeSurface<uint8_t>(flipped), makeCSurface<uint8_t>(src));
-    } else Q_UNREACHABLE();
+    visitSurfaces(flipped, std::as_const(src), [](auto flipped, auto src) {
+      flipVert(flipped, src);
+    });
     src = flipped;
   } else {
     return;
@@ -217,11 +210,9 @@ void RotateTool::keyPress(const ToolKeyEvent &event) {
     angle = (angle + rot) & 3;
     QImage &src = ctx->cell->image;
     QImage rotated{src.size(), src.format()};
-    if (src.depth() == 32) {
-      rotate(makeSurface<uint32_t>(rotated), makeCSurface<uint32_t>(src), rot);
-    } else if (src.depth() == 8) {
-      rotate(makeSurface<uint8_t>(rotated), makeCSurface<uint8_t>(src), rot);
-    } else Q_UNREACHABLE();
+    visitSurfaces(rotated, std::as_const(src), [rot](auto rotated, auto src) {
+      rotate(rotated, src, rot);
+    });
     src = rotated;
     updateStatus();
     ctx->emitChanges(ToolChanges::cell);
