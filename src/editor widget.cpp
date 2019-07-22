@@ -8,6 +8,7 @@
 
 #include "editor widget.hpp"
 
+#include <cmath>
 #include "config.hpp"
 #include "connect.hpp"
 #include "composite.hpp"
@@ -15,6 +16,7 @@
 #include <QtGui/qpainter.h>
 #include <QtWidgets/qlabel.h>
 #include "surface factory.hpp"
+#include <QtWidgets/qgesture.h>
 #include <QtWidgets/qscrollbar.h>
 
 class EditorImage final : public QWidget {
@@ -54,6 +56,24 @@ public:
     return &overlay;
   }
   
+  void setScale(const int newScale) {
+    const int oldScale = scale;
+    scale = std::clamp(newScale, edit_min_scale, edit_max_scale);
+    if (scale == oldScale) return;
+    zoomIntoCenter(oldScale);
+    updateMouse();
+    updateCheckers();
+    Q_EMIT resized();
+    repaint();
+  }
+  int getScale() const {
+    return scale;
+  }
+  
+  void zoom(const int dir) {
+    setScale(scale + dir);
+  }
+  
 Q_SIGNALS:
   void mouseLeave();
   void mouseDown(QPoint, ButtonType);
@@ -71,17 +91,6 @@ private:
   int scale = edit_min_scale;
   ButtonType buttonDown = ButtonType::none;
   bool keyButton = false;
-
-  void zoom(const int dir) {
-    const int oldScale = scale;
-    scale = std::clamp(scale + dir, edit_min_scale, edit_max_scale);
-    if (scale == oldScale) return;
-    zoomIntoCenter(oldScale);
-    updateMouse();
-    updateCheckers();
-    Q_EMIT resized();
-    repaint();
-  }
 
   void zoomIntoCenter(const int oldScale) {
     // @TODO this could still be improved
@@ -253,6 +262,7 @@ EditorWidget::EditorWidget(QWidget *parent)
   setFocusPolicy(Qt::NoFocus);
   setFrameShape(NoFrame);
   setAlignment(Qt::AlignCenter);
+  grabGesture(Qt::PinchGesture);
   view = new EditorImage{this};
   setWidget(view);
   CONNECT(view, mouseLeave, this, mouseLeave);
@@ -292,6 +302,30 @@ void EditorWidget::initCanvas(const Format newFormat, const QSize newSize) {
   size = newSize;
   view->setSize(newSize);
   Q_EMIT overlayChanged(view->getOverlay());
+}
+
+bool EditorWidget::event(QEvent *event) {
+  if (event->type() == QEvent::Gesture) {
+    auto *gstEvent = static_cast<QGestureEvent *>(event);
+    QGesture *gesture = gstEvent->gesture(Qt::PinchGesture);
+    auto *pinch = static_cast<QPinchGesture *>(gesture);
+    switch (pinch->state()) {
+      case Qt::GestureStarted:
+        startScale = view->getScale();
+        break;
+      case Qt::GestureUpdated:
+      case Qt::GestureFinished:
+      case Qt::GestureCanceled:
+        if (pinch->changeFlags() & QPinchGesture::ScaleFactorChanged) {
+          view->setScale(qRound(startScale * pinch->totalScaleFactor()));
+        }
+        break;
+      case Qt::NoGesture: ;
+    }
+    return true;
+  } else {
+    return QScrollArea::event(event);
+  }
 }
 
 void EditorWidget::resizeEvent(QResizeEvent *event) {

@@ -44,7 +44,9 @@ private:
   PaletteCSpan palette;
   QSize size;
   Format format;
+  int startScale;
 
+  bool event(QEvent *) override;
   void resizeEvent(QResizeEvent *) override;
 };
 
