@@ -9,6 +9,7 @@
 #ifndef palette_hpp
 #define palette_hpp
 
+#include <span>
 #include <array>
 #include "image.hpp"
 #include "config.hpp"
@@ -18,50 +19,8 @@
 class QIODevice;
 
 using PaletteColors = std::array<QRgb, pal_colors>;
-
-// @TODO use std::span when available
-
-class PaletteSpan {
-public:
-  PaletteSpan() = default;
- 
-  QRgb &operator[](const uint8_t idx) const {
-    assert(colors);
-    return colors[idx];
-  }
-  QRgb *data() const {
-    return colors;
-  }
-  
-private:
-  QRgb *colors;
-  
-  friend class Palette;
-  explicit PaletteSpan(QRgb *colors)
-    : colors{colors} {}
-};
-
-class PaletteCSpan {
-public:
-  PaletteCSpan() = default;
-  PaletteCSpan(const PaletteSpan span)
-    : colors{span.data()} {}
-
-  QRgb operator[](const uint8_t idx) const {
-    assert(colors);
-    return colors[idx];
-  }
-  const QRgb *data() const {
-    return colors;
-  }
-
-private:
-  const QRgb *colors;
-  
-  friend class Palette;
-  explicit PaletteCSpan(QRgb *colors)
-    : colors{colors} {}
-};
+using PaletteSpan = std::span<QRgb>;
+using PaletteCSpan = std::span<const QRgb>;
 
 class Palette final : public QObject {
   Q_OBJECT
