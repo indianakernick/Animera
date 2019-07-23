@@ -9,6 +9,7 @@
 #ifndef timeline_hpp
 #define timeline_hpp
 
+#include <span>
 #include "cell.hpp"
 
 class Timeline final : public QObject {
@@ -65,7 +66,7 @@ Q_SIGNALS:
   void nameChanged(LayerIdx, std::string_view);
   
   void frameChanged(const Frame &);
-  void layerChanged(LayerIdx, const Spans &); // @TODO std::span
+  void layerChanged(LayerIdx, std::span<const CellSpan>);
   
   void frameCountChanged(FrameIdx);
   void layerCountChanged(LayerIdx);

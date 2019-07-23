@@ -9,6 +9,7 @@
 #ifndef timeline_widget_hpp
 #define timeline_widget_hpp
 
+#include <span>
 #include "cell.hpp"
 #include <QtWidgets/qwidget.h>
 
@@ -28,7 +29,7 @@ public Q_SLOTS:
   void setSelection(CellRect);
   void setVisibility(LayerIdx, bool);
   void setName(LayerIdx, std::string_view);
-  void setLayer(LayerIdx, const Spans &);
+  void setLayer(LayerIdx, std::span<const CellSpan>);
   void setFrameCount(FrameIdx);
   void setLayerCount(LayerIdx);
   void toggleAnimation();

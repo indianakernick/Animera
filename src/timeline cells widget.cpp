@@ -107,7 +107,7 @@ void paintBorder(QPainter &painter, const int x, const int y) {
 
 }
 
-void CellsWidget::setLayer(const LayerIdx idx, const Spans &spans) {
+void CellsWidget::setLayer(const LayerIdx idx, std::span<const CellSpan> spans) {
   QPainter painter{&layersImg};
   painter.setCompositionMode(QPainter::CompositionMode_Source);
   painter.fillRect(0, idx * cell_height, width(), cell_height, QColor{0, 0, 0, 0});

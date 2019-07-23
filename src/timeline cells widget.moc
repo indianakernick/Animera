@@ -23,7 +23,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_CellsWidget_t {
     QByteArrayData data[19];
-    char stringdata0[219];
+    char stringdata0[239];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -47,18 +47,18 @@ QT_MOC_LITERAL(11, 138, 8), // "CellRect"
 QT_MOC_LITERAL(12, 147, 10), // "setCurrPos"
 QT_MOC_LITERAL(13, 158, 8), // "setLayer"
 QT_MOC_LITERAL(14, 167, 8), // "LayerIdx"
-QT_MOC_LITERAL(15, 176, 5), // "Spans"
-QT_MOC_LITERAL(16, 182, 13), // "setFrameCount"
-QT_MOC_LITERAL(17, 196, 8), // "FrameIdx"
-QT_MOC_LITERAL(18, 205, 13) // "setLayerCount"
+QT_MOC_LITERAL(15, 176, 25), // "std::span<const CellSpan>"
+QT_MOC_LITERAL(16, 202, 13), // "setFrameCount"
+QT_MOC_LITERAL(17, 216, 8), // "FrameIdx"
+QT_MOC_LITERAL(18, 225, 13) // "setLayerCount"
 
     },
     "CellsWidget\0resized\0\0shouldEnsureVisible\0"
     "beginSelection\0continueSelection\0"
     "endSelection\0clearSelection\0currPosChanged\0"
     "CellPos\0setSelection\0CellRect\0setCurrPos\0"
-    "setLayer\0LayerIdx\0Spans\0setFrameCount\0"
-    "FrameIdx\0setLayerCount"
+    "setLayer\0LayerIdx\0std::span<const CellSpan>\0"
+    "setFrameCount\0FrameIdx\0setLayerCount"
 };
 #undef QT_MOC_LITERAL
 
@@ -125,7 +125,7 @@ void CellsWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         case 6: _t->currPosChanged((*reinterpret_cast< CellPos(*)>(_a[1]))); break;
         case 7: _t->setSelection((*reinterpret_cast< CellRect(*)>(_a[1]))); break;
         case 8: _t->setCurrPos((*reinterpret_cast< CellPos(*)>(_a[1]))); break;
-        case 9: _t->setLayer((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< const Spans(*)>(_a[2]))); break;
+        case 9: _t->setLayer((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< std::span<const CellSpan>(*)>(_a[2]))); break;
         case 10: _t->setFrameCount((*reinterpret_cast< FrameIdx(*)>(_a[1]))); break;
         case 11: _t->setLayerCount((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;
         default: ;

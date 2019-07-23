@@ -82,7 +82,7 @@ void TimelineWidget::setName(const LayerIdx layer, const std::string_view name) 
   layers->setName(layer, name);
 }
 
-void TimelineWidget::setLayer(const LayerIdx layer, const Spans &spans) {
+void TimelineWidget::setLayer(const LayerIdx layer, std::span<const CellSpan> spans) {
   cells->setLayer(layer, spans);
 }
 

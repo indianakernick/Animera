@@ -23,7 +23,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_TimelineWidget_t {
     QByteArrayData data[30];
-    char stringdata0[360];
+    char stringdata0[380];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -57,11 +57,11 @@ QT_MOC_LITERAL(21, 261, 8), // "CellRect"
 QT_MOC_LITERAL(22, 270, 13), // "setVisibility"
 QT_MOC_LITERAL(23, 284, 7), // "setName"
 QT_MOC_LITERAL(24, 292, 8), // "setLayer"
-QT_MOC_LITERAL(25, 301, 5), // "Spans"
-QT_MOC_LITERAL(26, 307, 13), // "setFrameCount"
-QT_MOC_LITERAL(27, 321, 8), // "FrameIdx"
-QT_MOC_LITERAL(28, 330, 13), // "setLayerCount"
-QT_MOC_LITERAL(29, 344, 15) // "toggleAnimation"
+QT_MOC_LITERAL(25, 301, 25), // "std::span<const CellSpan>"
+QT_MOC_LITERAL(26, 327, 13), // "setFrameCount"
+QT_MOC_LITERAL(27, 341, 8), // "FrameIdx"
+QT_MOC_LITERAL(28, 350, 13), // "setLayerCount"
+QT_MOC_LITERAL(29, 364, 15) // "toggleAnimation"
 
     },
     "TimelineWidget\0visibilityChanged\0\0"
@@ -72,8 +72,8 @@ QT_MOC_LITERAL(29, 344, 15) // "toggleAnimation"
     "endSelection\0clearSelection\0currPosChanged\0"
     "CellPos\0setCurrPos\0setSelection\0"
     "CellRect\0setVisibility\0setName\0setLayer\0"
-    "Spans\0setFrameCount\0FrameIdx\0setLayerCount\0"
-    "toggleAnimation"
+    "std::span<const CellSpan>\0setFrameCount\0"
+    "FrameIdx\0setLayerCount\0toggleAnimation"
 };
 #undef QT_MOC_LITERAL
 
@@ -169,7 +169,7 @@ void TimelineWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
         case 15: _t->setSelection((*reinterpret_cast< CellRect(*)>(_a[1]))); break;
         case 16: _t->setVisibility((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
         case 17: _t->setName((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< std::string_view(*)>(_a[2]))); break;
-        case 18: _t->setLayer((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< const Spans(*)>(_a[2]))); break;
+        case 18: _t->setLayer((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< std::span<const CellSpan>(*)>(_a[2]))); break;
         case 19: _t->setFrameCount((*reinterpret_cast< FrameIdx(*)>(_a[1]))); break;
         case 20: _t->setLayerCount((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;
         case 21: _t->toggleAnimation(); break;

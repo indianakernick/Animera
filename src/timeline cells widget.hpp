@@ -9,6 +9,7 @@
 #ifndef timeline_cells_widget_hpp
 #define timeline_cells_widget_hpp
 
+#include <span>
 #include "cell.hpp"
 #include "scroll bar widget.hpp"
 
@@ -30,7 +31,7 @@ Q_SIGNALS:
 public Q_SLOTS:
   void setSelection(CellRect);
   void setCurrPos(CellPos);
-  void setLayer(LayerIdx, const Spans &);
+  void setLayer(LayerIdx, std::span<const CellSpan>);
   void setFrameCount(FrameIdx);
   void setLayerCount(LayerIdx);
 

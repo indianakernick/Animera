@@ -44,6 +44,7 @@ struct CellRect {
   FrameIdx maxF;
 };
 
+// @TODO is CellSpan too similar to std::span?
 struct CellSpan {
   CellPtr cell;
   FrameIdx len = 1;
