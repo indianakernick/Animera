@@ -9,6 +9,7 @@
 #include "export dialog.hpp"
 
 #include "connect.hpp"
+#include <QtCore/qdir.h>
 #include "label widget.hpp"
 #include "combo box widget.hpp"
 #include "color input widget.hpp"
@@ -40,6 +41,14 @@ void ExportDialog::updateFormatItems(const int layerIdx) {
       formatSelect->addItem("Grayscale");
     }
   }
+}
+
+void ExportDialog::setLayerSelect(const int layerIdx) {
+  options.layerSelect = static_cast<LayerSelect>(layerIdx);
+}
+
+void ExportDialog::setFrameSelect(const int frameIdx) {
+  options.frameSelect = static_cast<FrameSelect>(frameIdx);
 }
 
 void ExportDialog::setExportFormat(const int formatIdx) {
@@ -80,6 +89,8 @@ void ExportDialog::addFormatOptions() {
 void ExportDialog::createWidgets() {
   name = new TextInputWidget{this, textBoxRect(16, 0)};
   name->setText("sprite_%000F");
+  dir = new TextInputWidget{this, comboBoxRect(40, 0)};
+  dir->setText(QDir::homePath());
   layerStride = new NumberInputWidget{this, textBoxRect(3, 0), expt_stride};
   layerOffset = new NumberInputWidget{this, textBoxRect(3, 0), expt_offset};
   frameStride = new NumberInputWidget{this, textBoxRect(3, 0), expt_stride};
@@ -104,6 +115,15 @@ LabelWidget *makeLabel(QWidget *parent, const char (&text)[Size]) {
   return new LabelWidget{parent, textBoxRect(Size - 1, 0), text};
 }
 
+template <typename Layout>
+Layout *makeLayout(QBoxLayout *parent) {
+  auto layout = new Layout;
+  parent->addLayout(layout);
+  layout->setSpacing(0);
+  layout->setContentsMargins(0, 0, 0, 0);
+  return layout;
+}
+
 }
 
 void ExportDialog::setupLayout() {
@@ -113,42 +133,38 @@ void ExportDialog::setupLayout() {
   layout->setContentsMargins(glob_padding, glob_padding, glob_padding, glob_padding);
   layout->setSizeConstraint(QLayout::SetFixedSize);
   
-  auto *nameLayout = new QHBoxLayout{};
-  layout->addLayout(nameLayout);
-  nameLayout->setSpacing(0);
-  nameLayout->setContentsMargins(0, 0, 0, 0);
+  auto *dirLayout = makeLayout<QHBoxLayout>(layout);
+  dirLayout->addWidget(makeLabel(this, "Folder: "));
+  dirLayout->addWidget(dir);
+  dirLayout->addStretch();
+  
+  auto *nameLayout = makeLayout<QHBoxLayout>(layout);
   nameLayout->addWidget(makeLabel(this, "Name: "));
-  nameLayout->addStretch();
+  nameLayout->addSpacing(4_px);
   nameLayout->addWidget(name);
+  nameLayout->addStretch();
+  nameLayout->addWidget(makeLabel(this, "Format: "));
+  nameLayout->addWidget(formatSelect);
   
-  auto *lineLayout = new QGridLayout{};
-  layout->addLayout(lineLayout);
-  lineLayout->setSpacing(0);
-  lineLayout->setContentsMargins(0, 0, 0, 0);
-  lineLayout->addWidget(makeLabel(this, "L = layer * "), 0, 0);
-  lineLayout->addWidget(layerStride, 0, 1);
-  lineLayout->addWidget(makeLabel(this, " + "), 0, 2);
-  lineLayout->addWidget(layerOffset, 0, 3);
-  lineLayout->addWidget(makeLabel(this, "F = frame * "), 1, 0);
-  lineLayout->addWidget(frameStride, 1, 1);
-  lineLayout->addWidget(makeLabel(this, " + "), 1, 2);
-  lineLayout->addWidget(frameOffset, 1, 3);
+  auto *layerLayout = makeLayout<QHBoxLayout>(layout);
+  layerLayout->addWidget(makeLabel(this, "L = layer * "));
+  layerLayout->addWidget(layerStride);
+  layerLayout->addWidget(makeLabel(this, " + "));
+  layerLayout->addWidget(layerOffset);
+  layerLayout->addStretch();
+  layerLayout->addWidget(makeLabel(this, "Layers: "));
+  layerLayout->addWidget(layerSelect);
   
-  auto *selectLayout = new QGridLayout{};
-  layout->addLayout(selectLayout);
-  selectLayout->setSpacing(0);
-  selectLayout->setContentsMargins(0, 0, 0, 0);
-  selectLayout->addWidget(makeLabel(this, "Layers: "), 0, 0);
-  selectLayout->addWidget(layerSelect, 0, 1);
-  selectLayout->addWidget(makeLabel(this, "Frames: "), 1, 0);
-  selectLayout->addWidget(frameSelect, 1, 1);
-  selectLayout->addWidget(makeLabel(this, "Format: "), 2, 0);
-  selectLayout->addWidget(formatSelect, 2, 1);
+  auto *frameLayout = makeLayout<QHBoxLayout>(layout);
+  frameLayout->addWidget(makeLabel(this, "F = frame * "));
+  frameLayout->addWidget(frameStride);
+  frameLayout->addWidget(makeLabel(this, " + "));
+  frameLayout->addWidget(frameOffset);
+  frameLayout->addStretch();
+  frameLayout->addWidget(makeLabel(this, "Frames: "));
+  frameLayout->addWidget(frameSelect);
   
-  auto *buttonLayout = new QHBoxLayout{};
-  layout->addLayout(buttonLayout);
-  buttonLayout->setSpacing(0);
-  buttonLayout->setContentsMargins(0, 0, 0, 0);
+  auto *buttonLayout = makeLayout<QHBoxLayout>(layout);
   buttonLayout->addStretch();
   buttonLayout->addWidget(ok);
   buttonLayout->addWidget(cancel);
@@ -156,18 +172,18 @@ void ExportDialog::setupLayout() {
 }
 
 void ExportDialog::connectSignals() {
-  CONNECT_SETTER(name, textChanged, options.name);
-  CONNECT_SETTER(layerStride, valueChanged, options.layerLine.stride);
-  CONNECT_SETTER(layerOffset, valueChanged, options.layerLine.offset);
-  CONNECT_SETTER(frameStride, valueChanged, options.frameLine.stride);
-  CONNECT_SETTER(frameOffset, valueChanged, options.frameLine.offset);
-  CONNECT_SETTER_OVERLOAD(layerSelect, currentIndexChanged, options.layerSelect, int);
-  CONNECT_SETTER_OVERLOAD(frameSelect, currentIndexChanged, options.frameSelect, int);
+  CONNECT_SETTER(  name,         textChanged,         options.name);
+  CONNECT_SETTER(  layerStride,  valueChanged,        options.layerLine.stride);
+  CONNECT_SETTER(  layerOffset,  valueChanged,        options.layerLine.offset);
+  CONNECT_SETTER(  frameStride,  valueChanged,        options.frameLine.stride);
+  CONNECT_SETTER(  frameOffset,  valueChanged,        options.frameLine.offset);
+  CONNECT_OVERLOAD(layerSelect,  currentIndexChanged, this, setLayerSelect, int);
+  CONNECT_OVERLOAD(frameSelect,  currentIndexChanged, this, setFrameSelect, int);
   CONNECT_OVERLOAD(formatSelect, currentIndexChanged, this, setExportFormat, int);
-  CONNECT_OVERLOAD(layerSelect, currentIndexChanged, this, updateFormatItems, int);
-  CONNECT(ok,     pressed,  this, accept);
-  CONNECT(cancel, pressed,  this, reject);
-  CONNECT(this,   accepted, this, finalize);
+  CONNECT_OVERLOAD(layerSelect,  currentIndexChanged, this, updateFormatItems, int);
+  CONNECT(         ok,           pressed,             this, accept);
+  CONNECT(         cancel,       pressed,             this, reject);
+  CONNECT(         this,         accepted,            this, finalize);
 }
 
 void ExportDialog::initDefault() {

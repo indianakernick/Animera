@@ -69,12 +69,15 @@ Q_SIGNALS:
 private Q_SLOTS:
   void finalize();
   void updateFormatItems(int);
+  void setLayerSelect(int);
+  void setFrameSelect(int);
   void setExportFormat(int);
 
 private:
   Format format;
   ExportOptions options;
   TextInputWidget *name;
+  TextInputWidget *dir;
   NumberInputWidget *layerStride;
   NumberInputWidget *layerOffset;
   NumberInputWidget *frameStride;
