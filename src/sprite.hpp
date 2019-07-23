@@ -27,6 +27,9 @@ Q_SIGNALS:
 public:
   Timeline timeline;
   Palette palette;
+  
+  Format getFormat() const;
+  QSize getSize() const;
 
 private:
   Format format;

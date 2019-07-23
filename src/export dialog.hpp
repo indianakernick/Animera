@@ -9,6 +9,7 @@
 #ifndef export_dialog_hpp
 #define export_dialog_hpp
 
+#include "image.hpp"
 #include <QtWidgets/qdialog.h>
 
 class ComboBoxWidget;
@@ -56,15 +57,17 @@ class ExportDialog final : public QDialog {
   Q_OBJECT
   
 public:
-  explicit ExportDialog(QWidget *);
+  ExportDialog(QWidget *, Format);
   
 Q_SIGNALS:
   void exportSprite(ExportOptions);
 
 private Q_SLOTS:
   void finalize();
+  void updateFormatOptions(int);
 
 private:
+  Format format;
   ExportOptions options;
   TextInputWidget *name;
   NumberInputWidget *layerStride;
@@ -73,10 +76,12 @@ private:
   NumberInputWidget *frameOffset;
   ComboBoxWidget *layerSelect;
   ComboBoxWidget *frameSelect;
+  ComboBoxWidget *formatSelect;
   
   TextPushButtonWidget *ok;
   TextPushButtonWidget *cancel;
   
+  void addFormatOptions();
   void createWidgets();
   void setupLayout();
   void connectSignals();

@@ -67,4 +67,12 @@ void Sprite::openFile(const QString &path) {
   timeline.deserialize(&file);
 }
 
+Format Sprite::getFormat() const {
+  return format;
+}
+
+QSize Sprite::getSize() const {
+  return size;
+}
+
 #include "sprite.moc"

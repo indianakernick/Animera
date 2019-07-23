@@ -16,8 +16,8 @@
 #include <QtWidgets/qgridlayout.h>
 #include "text push button widget.hpp"
 
-ExportDialog::ExportDialog(QWidget *parent)
-  : QDialog{parent} {
+ExportDialog::ExportDialog(QWidget *parent, const Format format)
+  : QDialog{parent}, format{format} {
   setWindowTitle("Export");
   setStyleSheet("background-color:" + glob_main.name());
   setFocusPolicy(Qt::ClickFocus);
@@ -28,6 +28,33 @@ ExportDialog::ExportDialog(QWidget *parent)
 
 void ExportDialog::finalize() {
   Q_EMIT exportSprite(options);
+}
+
+void ExportDialog::updateFormatOptions(const int layerIdx) {
+  if (format == Format::palette) {
+    if (layerIdx == 0 /* All (composed) */ && formatSelect->count() == 3) {
+      formatSelect->removeItem(2); // Grayscale
+      formatSelect->removeItem(1); // Indexed
+    } else if (formatSelect->count() == 1) {
+      formatSelect->addItem("Indexed");
+      formatSelect->addItem("Grayscale");
+    }
+  }
+}
+
+void ExportDialog::addFormatOptions() {
+  switch (format) {
+    case Format::rgba:
+      formatSelect->addItem("RGBA");
+      break;
+    case Format::palette:
+      formatSelect->addItem("RGBA");
+      break;
+    case Format::gray:
+      formatSelect->addItem("Grayscale");
+      formatSelect->addItem("Monochrome");
+      break;
+  }
 }
 
 void ExportDialog::createWidgets() {
@@ -44,6 +71,8 @@ void ExportDialog::createWidgets() {
   frameSelect = new ComboBoxWidget{this, comboBoxRect(14, 0)};
   frameSelect->addItem("All");
   frameSelect->addItem("Current");
+  formatSelect = new ComboBoxWidget{this, comboBoxRect(14, 0)};
+  addFormatOptions();
   ok = new TextPushButtonWidget{this, textBoxRect(8, 0), "Ok"};
   cancel = new TextPushButtonWidget{this, textBoxRect(8, 0), "Cancel"};
 }
@@ -93,6 +122,8 @@ void ExportDialog::setupLayout() {
   selectLayout->addWidget(layerSelect, 0, 1);
   selectLayout->addWidget(makeLabel(this, "Frames: "), 1, 0);
   selectLayout->addWidget(frameSelect, 1, 1);
+  selectLayout->addWidget(makeLabel(this, "Format: "), 2, 0);
+  selectLayout->addWidget(formatSelect, 2, 1);
   
   auto *buttonLayout = new QHBoxLayout{};
   layout->addLayout(buttonLayout);
@@ -105,6 +136,10 @@ void ExportDialog::setupLayout() {
 }
 
 void ExportDialog::connectSignals() {
+  connect(
+    layerSelect, qOverload<int>(&QComboBox::currentIndexChanged),
+    this, &ExportDialog::updateFormatOptions
+  );
   CONNECT(ok,     pressed,  this, accept);
   CONNECT(cancel, pressed,  this, reject);
   CONNECT(this,   accepted, this, finalize);

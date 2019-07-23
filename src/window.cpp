@@ -309,7 +309,7 @@ void Window::setFileName(const QString &name) {
 void Window::saveFile() {
   if (fileName.isEmpty()) {
     //saveFileDialog();
-    auto *dialog = new ExportDialog{this};
+    auto *dialog = new ExportDialog{this, sprite.getFormat()};
     dialog->show();
   } else {
     sprite.saveFile(fileName);
