@@ -12,10 +12,12 @@
 #include <QtCore/qdir.h>
 #include "label widget.hpp"
 #include "combo box widget.hpp"
+#include <QtWidgets/qcompleter.h>
 #include "color input widget.hpp"
 #include <QtWidgets/qboxlayout.h>
 #include <QtWidgets/qgridlayout.h>
 #include "text push button widget.hpp"
+#include <Qtwidgets/qfilesystemmodel.h>
 
 ExportDialog::ExportDialog(QWidget *parent, const Format format)
   : QDialog{parent}, format{format} {
@@ -90,7 +92,13 @@ void ExportDialog::createWidgets() {
   name = new TextInputWidget{this, textBoxRect(16, 0)};
   name->setText("sprite_%000F");
   dir = new TextInputWidget{this, comboBoxRect(40, 0)};
-  dir->setText(QDir::homePath());
+  auto *completer = new QCompleter{this};
+  auto *model = new QFileSystemModel{completer};
+  model->setRootPath(QDir::rootPath());
+  completer->setModel(model);
+  completer->setCompletionMode(QCompleter::InlineCompletion);
+  dir->setCompleter(completer);
+  dir->setText(QDir::rootPath());
   layerStride = new NumberInputWidget{this, textBoxRect(3, 0), expt_stride};
   layerOffset = new NumberInputWidget{this, textBoxRect(3, 0), expt_offset};
   frameStride = new NumberInputWidget{this, textBoxRect(3, 0), expt_stride};
