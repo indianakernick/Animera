@@ -30,7 +30,7 @@ void ExportDialog::finalize() {
   Q_EMIT exportSprite(options);
 }
 
-void ExportDialog::updateFormatOptions(const int layerIdx) {
+void ExportDialog::updateFormatItems(const int layerIdx) {
   if (format == Format::palette) {
     if (layerIdx == 0 /* All (composed) */ && formatSelect->count() == 3) {
       formatSelect->removeItem(2); // Grayscale
@@ -39,6 +39,25 @@ void ExportDialog::updateFormatOptions(const int layerIdx) {
       formatSelect->addItem("Indexed");
       formatSelect->addItem("Grayscale");
     }
+  }
+}
+
+void ExportDialog::setExportFormat(const int formatIdx) {
+  switch (format) {
+    case Format::rgba:
+      options.format = ExportFormat::rgba;
+      break;
+    case Format::palette:
+      if (formatSelect->count() == 1) {
+        options.format = ExportFormat::rgba;
+      } else if (formatSelect->count() == 3) {
+        options.format = static_cast<ExportFormat>(formatIdx);
+      } else Q_UNREACHABLE();
+      break;
+    case Format::gray:
+      options.format = static_cast<ExportFormat>(formatIdx + 2);
+      break;
+    default: Q_UNREACHABLE();
   }
 }
 
@@ -54,6 +73,7 @@ void ExportDialog::addFormatOptions() {
       formatSelect->addItem("Grayscale");
       formatSelect->addItem("Monochrome");
       break;
+    default: Q_UNREACHABLE();
   }
 }
 
@@ -136,13 +156,30 @@ void ExportDialog::setupLayout() {
 }
 
 void ExportDialog::connectSignals() {
-  connect(
-    layerSelect, qOverload<int>(&QComboBox::currentIndexChanged),
-    this, &ExportDialog::updateFormatOptions
-  );
+  CONNECT_SETTER(name, textChanged, options.name);
+  CONNECT_SETTER(layerStride, valueChanged, options.layerLine.stride);
+  CONNECT_SETTER(layerOffset, valueChanged, options.layerLine.offset);
+  CONNECT_SETTER(frameStride, valueChanged, options.frameLine.stride);
+  CONNECT_SETTER(frameOffset, valueChanged, options.frameLine.offset);
+  CONNECT_SETTER_OVERLOAD(layerSelect, currentIndexChanged, options.layerSelect, int);
+  CONNECT_SETTER_OVERLOAD(frameSelect, currentIndexChanged, options.frameSelect, int);
+  CONNECT_OVERLOAD(formatSelect, currentIndexChanged, this, setExportFormat, int);
+  CONNECT_OVERLOAD(layerSelect, currentIndexChanged, this, updateFormatItems, int);
   CONNECT(ok,     pressed,  this, accept);
   CONNECT(cancel, pressed,  this, reject);
   CONNECT(this,   accepted, this, finalize);
+}
+
+void ExportDialog::initDefault() {
+  // @TODO maybe create widgets, connect signals, set default values on widgets
+  options.name = name->text();
+  options.layerLine.stride = expt_stride.def;
+  options.layerLine.offset = expt_offset.def;
+  options.frameLine.stride = expt_stride.def;
+  options.frameLine.offset = expt_offset.def;
+  options.layerSelect = LayerSelect::all_composited;
+  options.frameSelect = FrameSelect::all;
+  setExportFormat(0);
 }
 
 #include "export dialog.moc"

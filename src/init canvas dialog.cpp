@@ -64,20 +64,8 @@ InitCanvasDialog::InitCanvasDialog(QWidget *widget)
   connectSignals();
 }
 
-void InitCanvasDialog::widthChanged(const int width) {
-  size.setWidth(width);
-}
-
-void InitCanvasDialog::heightChanged(const int height) {
-  size.setHeight(height);
-}
-
-void InitCanvasDialog::formatChanged(const Format format) {
-  colorFormat = format;
-}
-
 void InitCanvasDialog::finalize() {
-  Q_EMIT canvasInitialized(colorFormat, size);
+  Q_EMIT canvasInitialized(format, size);
 }
 
 void InitCanvasDialog::createWidgets() {
@@ -114,8 +102,8 @@ void InitCanvasDialog::setupLayout() {
   formatLayout->setContentsMargins(0, 0, 0, 0);
   formatLayout->setSpacing(0);
   formatLayout->addStretch();
-  for (FormatWidget *format : formatWidgets) {
-    formatLayout->addWidget(format);
+  for (FormatWidget *widget : formatWidgets) {
+    formatLayout->addWidget(widget);
     formatLayout->addStretch();
   }
   
@@ -124,10 +112,10 @@ void InitCanvasDialog::setupLayout() {
 }
 
 void InitCanvasDialog::connectSignals() {
-  CONNECT(widthWidget, valueChanged, this, widthChanged);
-  CONNECT(heightWidget, valueChanged, this, heightChanged);
-  for (FormatWidget *format : formatWidgets) {
-    CONNECT(format, checked, this, formatChanged);
+  CONNECT_SETTER(widthWidget, valueChanged, size.rwidth());
+  CONNECT_SETTER(heightWidget, valueChanged, size.rheight());
+  for (FormatWidget *widget : formatWidgets) {
+    CONNECT_SETTER(widget, checked, format);
   }
   CONNECT(okButton, pressed, this, accept);
   CONNECT(cancelButton, pressed, this, reject);

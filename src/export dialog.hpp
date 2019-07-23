@@ -18,17 +18,20 @@ class NumberInputWidget;
 class TextPushButtonWidget;
 
 enum class LayerSelect {
+  // export dialog.cpp depends on order
   all_composited,
   all,
   current
 };
 
 enum class FrameSelect {
+  // export dialog.cpp depends on order
   all,
   current
 };
 
 enum class ExportFormat {
+  // export dialog.cpp depends on order
   rgba,
   indexed,
   grayscale,
@@ -51,6 +54,7 @@ struct ExportOptions {
   Line frameLine;
   LayerSelect layerSelect;
   FrameSelect frameSelect;
+  ExportFormat format;
 };
 
 class ExportDialog final : public QDialog {
@@ -64,7 +68,8 @@ Q_SIGNALS:
 
 private Q_SLOTS:
   void finalize();
-  void updateFormatOptions(int);
+  void updateFormatItems(int);
+  void setExportFormat(int);
 
 private:
   Format format;
@@ -85,6 +90,7 @@ private:
   void createWidgets();
   void setupLayout();
   void connectSignals();
+  void initDefault();
 };
 
 #endif

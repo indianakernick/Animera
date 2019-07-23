@@ -26,9 +26,6 @@ Q_SIGNALS:
   void canvasInitialized(Format, QSize);
 
 private Q_SLOTS:
-  void widthChanged(int);
-  void heightChanged(int);
-  void formatChanged(Format);
   void finalize();
 
 private:
@@ -38,7 +35,7 @@ private:
   TextPushButtonWidget *okButton = nullptr;
   TextPushButtonWidget *cancelButton = nullptr;
   QSize size = {128, 128};
-  Format colorFormat = Format::rgba;
+  Format format = Format::rgba;
   
   void createWidgets();
   void setupLayout();
