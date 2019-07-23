@@ -25,6 +25,7 @@ constexpr auto address(T &&obj, long) {
 }
 
 // @TODO auto(x)
+// http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2019/p0849r1.html
 template <typename T>
 constexpr auto value(T &&obj, int) -> std::decay_t<decltype(*obj)>;
 
