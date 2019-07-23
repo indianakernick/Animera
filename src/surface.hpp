@@ -36,8 +36,8 @@ private:
 
 template <typename Begin, typename End>
 Range(Begin &&, End &&) -> Range<
-  std::remove_cv_t<std::remove_reference_t<Begin>>,
-  std::remove_cv_t<std::remove_reference_t<End>>
+  std::remove_cvref_t<Begin>,
+  std::remove_cvref_t<End>
 >;
 
 /// A non-owning view onto pixel data. Think of it as a 2D std::span
