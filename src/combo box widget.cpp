@@ -14,9 +14,10 @@
 
 ComboBoxWidget::ComboBoxWidget(QWidget *parent, const WidgetRect rect)
   : Base{parent}, rect{rect} {
+  setCursor(Qt::PointingHandCursor);
   setFont(getGlobalFont());
   setFixedSize(rect.widget().size());
-  arrow = bakeColoredBitmap(":/combobox arrow.pbm", glob_light_2);
+  arrow = bakeColoredBitmap(":/General/up down arrow.pbm", glob_light_2);
   
   // setItemDelegate
   

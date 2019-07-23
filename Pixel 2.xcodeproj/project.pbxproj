@@ -176,6 +176,8 @@
 		4571C131227C383A00479006 /* radio button widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "radio button widget.hpp"; sourceTree = "<group>"; };
 		4576DFE62298DB2D00FDECA3 /* separator widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "separator widget.cpp"; sourceTree = "<group>"; };
 		4576DFE72298DB2D00FDECA3 /* separator widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "separator widget.hpp"; sourceTree = "<group>"; };
+		457DC0B622E6DD940000777B /* down arrow.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = "down arrow.pbm"; sourceTree = "<group>"; };
+		457DC0B722E6DDC60000777B /* up down arrow.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = "up down arrow.pbm"; sourceTree = "<group>"; };
 		4589188022990520002ADF77 /* flood fill.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "flood fill.hpp"; sourceTree = "<group>"; };
 		45891881229927D4002ADF77 /* porter duff.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "porter duff.hpp"; sourceTree = "<group>"; };
 		4589188222993BBC002ADF77 /* formats.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = formats.hpp; sourceTree = "<group>"; };
@@ -866,7 +868,6 @@
 		45D109B022E304A300D1F1CB /* combo box widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "combo box widget.cpp"; sourceTree = "<group>"; };
 		45D109B122E304A300D1F1CB /* combo box widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "combo box widget.hpp"; sourceTree = "<group>"; };
 		45D109B322E3E12600D1F1CB /* combobox.anim */ = {isa = PBXFileReference; lastKnownFileType = file; path = combobox.anim; sourceTree = "<group>"; };
-		45D109B422E3E13A00D1F1CB /* combobox arrow.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = "combobox arrow.pbm"; sourceTree = "<group>"; };
 		45D34F1C22825FE400339A4E /* masking.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = masking.hpp; sourceTree = "<group>"; };
 		45DC255F224A034200F40116 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		45DC2561224A0AC000F40116 /* title.anim */ = {isa = PBXFileReference; lastKnownFileType = file; path = title.anim; sourceTree = "<group>"; };
@@ -963,13 +964,13 @@
 		453C78222234CB5500818B19 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				45D109B422E3E13A00D1F1CB /* combobox arrow.pbm */,
 				45DC2563224A0AEA00F40116 /* title@4x.png */,
 				45DC2562224A0AEA00F40116 /* title.png */,
 				45B284972219003B00D6D055 /* icon.png */,
 				452926E222BB607E00B17E0D /* screenshot.png */,
 				453C78792235D4B500818B19 /* resources.qrc */,
 				453C787C2235D70D00818B19 /* resources.rcc */,
+				457DC0B422E6DD940000777B /* General */,
 				45F3EB6F22CC5D4F00F9F93E /* Formats */,
 				452926E322BB607E00B17E0D /* Timeline */,
 				45BE2A2822680B0900E21A85 /* Color Picker */,
@@ -1249,6 +1250,15 @@
 				455F2872220691DD00C73F39 /* QtWidgets.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		457DC0B422E6DD940000777B /* General */ = {
+			isa = PBXGroup;
+			children = (
+				457DC0B722E6DDC60000777B /* up down arrow.pbm */,
+				457DC0B622E6DD940000777B /* down arrow.pbm */,
+			);
+			path = General;
 			sourceTree = "<group>";
 		};
 		458F84052249DF97005F91D0 /* Utilities */ = {

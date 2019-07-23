@@ -114,6 +114,7 @@ void ExportDialog::createWidgets() {
   addFormatOptions();
   ok = new TextPushButtonWidget{this, textBoxRect(8, 0), "Ok"};
   cancel = new TextPushButtonWidget{this, textBoxRect(8, 0), "Cancel"};
+  setFocus();
 }
 
 namespace {
