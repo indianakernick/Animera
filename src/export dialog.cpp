@@ -10,6 +10,7 @@
 
 #include "connect.hpp"
 #include "label widget.hpp"
+#include "combo box widget.hpp"
 #include "color input widget.hpp"
 #include <QtWidgets/qboxlayout.h>
 #include <QtWidgets/qgridlayout.h>
@@ -36,6 +37,13 @@ void ExportDialog::createWidgets() {
   layerOffset = new NumberInputWidget{this, textBoxRect(3, 0), expt_offset};
   frameStride = new NumberInputWidget{this, textBoxRect(3, 0), expt_stride};
   frameOffset = new NumberInputWidget{this, textBoxRect(3, 0), expt_offset};
+  layerSelect = new ComboBoxWidget{this, comboBoxRect(14, 0)};
+  layerSelect->addItem("All (composed)");
+  layerSelect->addItem("All");
+  layerSelect->addItem("Current");
+  frameSelect = new ComboBoxWidget{this, comboBoxRect(14, 0)};
+  frameSelect->addItem("All");
+  frameSelect->addItem("Current");
   ok = new TextPushButtonWidget{this, textBoxRect(8, 0), "Ok"};
   cancel = new TextPushButtonWidget{this, textBoxRect(8, 0), "Cancel"};
 }
@@ -50,13 +58,13 @@ LabelWidget *makeLabel(QWidget *parent, const char (&text)[Size]) {
 }
 
 void ExportDialog::setupLayout() {
-  QVBoxLayout *layout = new QVBoxLayout{this};
+  auto *layout = new QVBoxLayout{this};
   setLayout(layout);
   layout->setSpacing(0);
   layout->setContentsMargins(glob_padding, glob_padding, glob_padding, glob_padding);
   layout->setSizeConstraint(QLayout::SetFixedSize);
   
-  QHBoxLayout *nameLayout = new QHBoxLayout{};
+  auto *nameLayout = new QHBoxLayout{};
   layout->addLayout(nameLayout);
   nameLayout->setSpacing(0);
   nameLayout->setContentsMargins(0, 0, 0, 0);
@@ -64,7 +72,7 @@ void ExportDialog::setupLayout() {
   nameLayout->addStretch();
   nameLayout->addWidget(name);
   
-  QGridLayout *lineLayout = new QGridLayout{};
+  auto *lineLayout = new QGridLayout{};
   layout->addLayout(lineLayout);
   lineLayout->setSpacing(0);
   lineLayout->setContentsMargins(0, 0, 0, 0);
@@ -77,7 +85,16 @@ void ExportDialog::setupLayout() {
   lineLayout->addWidget(makeLabel(this, " + "), 1, 2);
   lineLayout->addWidget(frameOffset, 1, 3);
   
-  QHBoxLayout *buttonLayout = new QHBoxLayout{};
+  auto *selectLayout = new QGridLayout{};
+  layout->addLayout(selectLayout);
+  selectLayout->setSpacing(0);
+  selectLayout->setContentsMargins(0, 0, 0, 0);
+  selectLayout->addWidget(makeLabel(this, "Layers: "), 0, 0);
+  selectLayout->addWidget(layerSelect, 0, 1);
+  selectLayout->addWidget(makeLabel(this, "Frames: "), 1, 0);
+  selectLayout->addWidget(frameSelect, 1, 1);
+  
+  auto *buttonLayout = new QHBoxLayout{};
   layout->addLayout(buttonLayout);
   buttonLayout->setSpacing(0);
   buttonLayout->setContentsMargins(0, 0, 0, 0);

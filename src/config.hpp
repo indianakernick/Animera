@@ -187,6 +187,14 @@ constexpr WidgetRect textBoxRect(const int chars, const int offsetX) {
   };
 }
 
+constexpr WidgetRect comboBoxRect(const int chars, const int offsetX) {
+  return {
+    {glob_text_padding + offsetX, glob_text_padding},
+    // @TODO should be put 5_px in a constant?
+    textBoxSize(chars, offsetX) + QSize{5_px + 2 * glob_text_padding + glob_border_width, 0}
+  };
+}
+
 constexpr WidgetRect boxRect(const int width, const int height) {
   return {{}, {width, height}};
 }

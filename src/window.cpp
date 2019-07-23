@@ -307,14 +307,14 @@ void Window::setFileName(const QString &name) {
 #include "export dialog.hpp"
 
 void Window::saveFile() {
-  auto *dialog = new ExportDialog{this};
-  dialog->show();
-  /*if (fileName.isEmpty()) {
-    saveFileDialog();
+  if (fileName.isEmpty()) {
+    //saveFileDialog();
+    auto *dialog = new ExportDialog{this};
+    dialog->show();
   } else {
     sprite.saveFile(fileName);
     statusBar.showTemp("Saved!");
-  }*/
+  }
 }
 
 void Window::saveFileDialog() {

@@ -38,5 +38,6 @@
   <file>./Formats/rgba.png</file>
   <file>./Formats/gray.png</file>
   <file>./Formats/index.png</file>
+  <file>./combobox arrow.pbm</file>
 </qresource>
 </RCC>

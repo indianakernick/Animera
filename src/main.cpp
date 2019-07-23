@@ -1703,7 +1703,47 @@ void blitImageOld(QImage &dst, const QImage &src, const QPoint pos) {
 
 #if BUG_TEST
 
-#include <QtWidgets/qmenubar.h>
+#include <QtCore/qdebug.h>
+#include <QtGui/qpainter.h>
+#include <QtWidgets/qcombobox.h>
+#include <QtWidgets/qboxlayout.h>
+#include <QtWidgets/qmainwindow.h>
+#include <QtWidgets/qapplication.h>
+
+template <typename Base>
+class Rectangle : public Base {
+public:
+  explicit Rectangle(QColor color)
+    : color{color} {
+    Base::setFixedSize(100, 20);
+  }
+
+private:
+  QColor color;
+  
+  void paintEvent(QPaintEvent *) override {
+    qDebug() << color << '\t' << Base::geometry() << '\n';
+    QPainter{this}.fillRect(Base::rect(), color);
+  }
+};
+
+int main(int argc, char **argv) {
+  QApplication app{argc, argv};
+  QMainWindow window;
+  QWidget central;
+  window.setCentralWidget(&central);
+  QHBoxLayout layout{&central};
+  layout.setSpacing(0);
+  layout.setContentsMargins(0, 0, 0, 0);
+  layout.addWidget(new Rectangle<QWidget>{Qt::red});
+  auto *blue = new Rectangle<QComboBox>{Qt::blue};
+  layout.addWidget(blue);
+  blue->setGeometry(101, 39, 100, 20);
+  window.show();
+  return app.exec();
+}
+
+/*#include <QtWidgets/qmenubar.h>
 #include <QtWidgets/qmainwindow.h>
 #include <QtWidgets/qapplication.h>
 
@@ -1729,7 +1769,7 @@ int main(int argc, char **argv) {
   window.show();
   disable();
   return app.exec();
-}
+}*/
 
 /*#include <QtGui/qevent.h>
 #include <QtGui/qpainter.h>

@@ -29,8 +29,7 @@ void LabelWidget::paintEvent(QPaintEvent *) {
   painter.setFont(getGlobalFont());
   painter.setBrush(Qt::NoBrush);
   painter.setPen(glob_text_color);
-  QPoint textPos = rect.inner().topLeft();
-  textPos += QPoint{0, glob_font_accent_px};
-  textPos += toPoint(glob_text_padding);
+  QPoint textPos = rect.contentPos();
+  textPos.ry() += glob_font_accent_px;
   painter.drawText(textPos, text);
 }

@@ -95,7 +95,7 @@ void InitCanvasDialog::createWidgets() {
 }
 
 void InitCanvasDialog::setupLayout() {
-  QGridLayout *layout = new QGridLayout{this};
+  auto *layout = new QGridLayout{this};
   setLayout(layout);
   layout->setSpacing(0);
   layout->setContentsMargins(glob_padding, glob_padding, glob_padding, glob_padding);
@@ -109,7 +109,7 @@ void InitCanvasDialog::setupLayout() {
   layout->addWidget(heightWidget, 1, 1, Qt::AlignRight);
   layout->addWidget(formatLabel, 2, 0, Qt::AlignLeft);
   
-  QHBoxLayout *formatLayout = new QHBoxLayout{};
+  auto *formatLayout = new QHBoxLayout{};
   layout->addLayout(formatLayout, 3, 0, 1, 2, Qt::AlignCenter);
   formatLayout->setContentsMargins(0, 0, 0, 0);
   formatLayout->setSpacing(0);

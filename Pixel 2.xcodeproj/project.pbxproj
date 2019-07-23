@@ -71,6 +71,7 @@
 		45D109A922DC01A200D1F1CB /* icon push button widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45D109A722DC01A200D1F1CB /* icon push button widget.cpp */; };
 		45D109AC22E2D4FD00D1F1CB /* text push button widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45D109AA22E2D4FD00D1F1CB /* text push button widget.cpp */; };
 		45D109AF22E2D88500D1F1CB /* export dialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45D109AD22E2D88500D1F1CB /* export dialog.cpp */; };
+		45D109B222E304A300D1F1CB /* combo box widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45D109B022E304A300D1F1CB /* combo box widget.cpp */; };
 		45DC2566224B137C00F40116 /* status msg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45DC2564224B137C00F40116 /* status msg.cpp */; };
 		45DFE499224DE89E00EA40C5 /* global font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45DFE497224DE89E00EA40C5 /* global font.cpp */; };
 		45F065F22222998300BCE863 /* current tool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45F065F02222998300BCE863 /* current tool.cpp */; };
@@ -862,6 +863,10 @@
 		45D109AB22E2D4FD00D1F1CB /* text push button widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "text push button widget.hpp"; sourceTree = "<group>"; };
 		45D109AD22E2D88500D1F1CB /* export dialog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "export dialog.cpp"; sourceTree = "<group>"; };
 		45D109AE22E2D88500D1F1CB /* export dialog.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "export dialog.hpp"; sourceTree = "<group>"; };
+		45D109B022E304A300D1F1CB /* combo box widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "combo box widget.cpp"; sourceTree = "<group>"; };
+		45D109B122E304A300D1F1CB /* combo box widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "combo box widget.hpp"; sourceTree = "<group>"; };
+		45D109B322E3E12600D1F1CB /* combobox.anim */ = {isa = PBXFileReference; lastKnownFileType = file; path = combobox.anim; sourceTree = "<group>"; };
+		45D109B422E3E13A00D1F1CB /* combobox arrow.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = "combobox arrow.pbm"; sourceTree = "<group>"; };
 		45D34F1C22825FE400339A4E /* masking.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = masking.hpp; sourceTree = "<group>"; };
 		45DC255F224A034200F40116 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		45DC2561224A0AC000F40116 /* title.anim */ = {isa = PBXFileReference; lastKnownFileType = file; path = title.anim; sourceTree = "<group>"; };
@@ -958,6 +963,7 @@
 		453C78222234CB5500818B19 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				45D109B422E3E13A00D1F1CB /* combobox arrow.pbm */,
 				45DC2563224A0AEA00F40116 /* title@4x.png */,
 				45DC2562224A0AEA00F40116 /* title.png */,
 				45B284972219003B00D6D055 /* icon.png */,
@@ -1070,6 +1076,7 @@
 		453C78832236624D00818B19 /* Anims */ = {
 			isa = PBXGroup;
 			children = (
+				45D109B322E3E12600D1F1CB /* combobox.anim */,
 				45DC2561224A0AC000F40116 /* title.anim */,
 				453C78862236626C00818B19 /* icon.anim */,
 				453C78842236626C00818B19 /* tool icons.anim */,
@@ -1172,6 +1179,8 @@
 				45D109A822DC01A200D1F1CB /* icon push button widget.hpp */,
 				45D109AA22E2D4FD00D1F1CB /* text push button widget.cpp */,
 				45D109AB22E2D4FD00D1F1CB /* text push button widget.hpp */,
+				45D109B022E304A300D1F1CB /* combo box widget.cpp */,
+				45D109B122E304A300D1F1CB /* combo box widget.hpp */,
 			);
 			name = General;
 			sourceTree = "<group>";
@@ -2289,6 +2298,7 @@
 				453D28D72278134200D0E5F9 /* color handle.cpp in Sources */,
 				453C78192234935000818B19 /* timeline widget.cpp in Sources */,
 				458F84082249DFC8005F91D0 /* polygon.cpp in Sources */,
+				45D109B222E304A300D1F1CB /* combo box widget.cpp in Sources */,
 				45DC2566224B137C00F40116 /* status msg.cpp in Sources */,
 				45F065F22222998300BCE863 /* current tool.cpp in Sources */,
 				45D109AC22E2D4FD00D1F1CB /* text push button widget.cpp in Sources */,

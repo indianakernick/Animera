@@ -11,19 +11,20 @@
 
 #include <QtWidgets/qdialog.h>
 
+class ComboBoxWidget;
 class TextInputWidget;
 class NumberInputWidget;
 class TextPushButtonWidget;
 
 enum class LayerSelect {
-  current,
+  all_composited,
   all,
-  all_composited
+  current
 };
 
 enum class FrameSelect {
-  current,
-  all
+  all,
+  current
 };
 
 enum class ExportFormat {
@@ -70,6 +71,9 @@ private:
   NumberInputWidget *layerOffset;
   NumberInputWidget *frameStride;
   NumberInputWidget *frameOffset;
+  ComboBoxWidget *layerSelect;
+  ComboBoxWidget *frameSelect;
+  
   TextPushButtonWidget *ok;
   TextPushButtonWidget *cancel;
   
