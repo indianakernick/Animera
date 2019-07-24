@@ -9,20 +9,21 @@
 #ifndef file_input_widget_hpp
 #define file_input_widget_hpp
 
-#include "text input widget.hpp"
+#include <QtWidgets/qwidget.h>
 
-class FileInputWidget final : public TextInputWidget {
+class TextInputWidget;
+class FileInputButton;
+
+class FileInputWidget final : public QWidget {
 public:
   FileInputWidget(QWidget *, int);
 
 private:
-  FileInputWidget(QWidget *, TextIconRects);
+  TextInputWidget *text;
+  FileInputButton *icon;
 
-  WidgetRect iconRect;
-  QRect borderRect;
-  QPixmap arrow;
-
-  void paintEvent(QPaintEvent *) override;
+  void initText();
+  void setTextFromDialog();
 };
 
 #endif

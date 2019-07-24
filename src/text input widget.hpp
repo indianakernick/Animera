@@ -19,6 +19,9 @@ class TextInputWidget : public QLineEdit {
 public:
   TextInputWidget(QWidget *, WidgetRect);
 
+  // @TODO setText
+  // set offset to 0
+
 private Q_SLOTS:
   void blink();
   void showCursor();
@@ -46,7 +49,6 @@ private:
   void paintCursor(QPainter &);
   void paintSelection(QPainter &);
 
-protected:
   void paintEvent(QPaintEvent *) override;
 };
 

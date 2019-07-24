@@ -134,6 +134,17 @@ constexpr TextIconRects textBoxIconRect(const int chars) {
   return {widget, outer, textInner, iconInner, textPos, iconPos, border};
 }
 
+constexpr int text_box_icon_width = 5_px;
+
+/*constexpr WidgetRect textBoxIconRect(const int iconWidth) {
+  constexpr int bordSpace = glob_border_width + glob_widget_space;
+  const QSize innerSize = {iconWidth, glob_font_px};
+  const QRect widget = {
+    QPoint{},
+    innerSize + QSize{bordSpace, 2 * bordSpace}
+  };
+}*/
+
 struct IntRange {
   int min;
   int max;
