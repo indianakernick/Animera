@@ -14,7 +14,7 @@
 #include <QtGui/qpainter.h>
 #include "widget painting.hpp"
 
-TextInputWidget::TextInputWidget(QWidget *parent, const WidgetRect rect)
+TextInputWidget::TextInputWidget(QWidget *parent, const TextBoxRect rect)
   : QLineEdit{parent},
     rect{rect},
     cursorBlinkTimer{this} {
@@ -71,18 +71,18 @@ void TextInputWidget::wheelEvent(QWheelEvent *event) {
 }
 
 int TextInputWidget::getCursorPos(const int chars) const {
-  return rect.contentPos().x()
+  return rect.textPos().x()
     + chars * glob_font_stride_px
     - glob_text_padding
     + offset;
 }
 
 int TextInputWidget::getMinCursorPos() const {
-  return rect.contentPos().x() - glob_text_padding;
+  return rect.textPos().x() - glob_text_padding;
 }
 
 int TextInputWidget::getMaxCursorPos() const {
-  return rect.inner().width() - glob_text_padding;
+  return rect.textInner().width() - glob_text_padding;
 }
 
 void TextInputWidget::setOffset(int, const int newCursor) {
@@ -106,61 +106,61 @@ void TextInputWidget::constrainOffset() {
 
 void TextInputWidget::updateMargins() {
   setTextMargins(
-    rect.contentPos().x() + offset,
-    rect.contentPos().y(),
-    rect.inner().x(),
-    rect.inner().y()
+    rect.textPos().x() + offset,
+    rect.textPos().y(),
+    rect.textInner().x(),
+    rect.textInner().y()
   );
 }
 
-void TextInputWidget::renderBackground(QPainter &painter) {
+void TextInputWidget::paintBackground(QPainter &painter) {
   painter.setBrush(box_background_color);
   painter.setPen(Qt::NoPen);
-  painter.drawRect(rect.inner());
+  painter.drawRect(rect.textInner());
 }
 
-void TextInputWidget::renderText(QPainter &painter) {
+void TextInputWidget::paintText(QPainter &painter) {
   painter.setFont(getGlobalFont());
   painter.setBrush(Qt::NoBrush);
   painter.setPen(glob_text_color);
-  painter.setClipRect(rect.inner());
-  QPoint textPos = rect.contentPos();
+  painter.setClipRect(rect.textInner());
+  QPoint textPos = rect.textPos();
   textPos.rx() += offset;
   textPos.ry() += glob_font_accent_px;
   painter.drawText(textPos, text());
 }
 
-void TextInputWidget::renderCursor(QPainter &painter) {
+void TextInputWidget::paintCursor(QPainter &painter) {
   if (!hasFocus() || !cursorBlinkStatus || selectionStart() != -1) return;
   painter.setBrush(glob_text_color);
   painter.setPen(Qt::NoPen);
   painter.drawRect(
     getCursorPos(cursorPosition()),
-    rect.inner().y(),
+    rect.textInner().y(),
     box_cursor_width,
-    rect.inner().height()
+    rect.textInner().height()
   );
 }
 
-void TextInputWidget::renderSelection(QPainter &painter) {
+void TextInputWidget::paintSelection(QPainter &painter) {
   if (!hasFocus() || selectionStart() == -1) return;
   painter.setBrush(box_selection_color);
   painter.setPen(Qt::NoPen);
   painter.drawRect(
     getCursorPos(selectionStart()),
-    rect.inner().y(),
+    rect.textInner().y(),
     selectionLength() * glob_font_stride_px + glob_font_kern_px,
-    rect.inner().height()
+    rect.textInner().height()
   );
 }
 
 void TextInputWidget::paintEvent(QPaintEvent *) {
   QPainter painter{this};
-  renderBackground(painter);
-  paintBorder(painter, rect, glob_border_color);
-  renderText(painter);
-  renderCursor(painter);
-  renderSelection(painter);
+  paintBackground(painter);
+  paintBorder(painter, rect.widgetRect(), glob_border_color);
+  paintText(painter);
+  paintCursor(painter);
+  paintSelection(painter);
 }
 
 #include "text input widget.moc"

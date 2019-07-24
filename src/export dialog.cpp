@@ -87,21 +87,21 @@ void ExportDialog::addFormatOptions() {
 }
 
 void ExportDialog::createWidgets() {
-  name = new TextInputWidget{this, textBoxRect(16, 0)};
+  name = new TextInputWidget{this, TextBoxRect(16, 0)};
   name->setText("sprite_%000F");
-  dir = new FileInputWidget{this, comboBoxRect(40, 0)};
+  dir = new FileInputWidget{this, 40};
   layerStride = new NumberInputWidget{this, textBoxRect(3, 0), expt_stride};
   layerOffset = new NumberInputWidget{this, textBoxRect(3, 0), expt_offset};
   frameStride = new NumberInputWidget{this, textBoxRect(3, 0), expt_stride};
   frameOffset = new NumberInputWidget{this, textBoxRect(3, 0), expt_offset};
-  layerSelect = new ComboBoxWidget{this, comboBoxRect(14, 0)};
+  layerSelect = new ComboBoxWidget{this, 14};
   layerSelect->addItem("All (composed)");
   layerSelect->addItem("All");
   layerSelect->addItem("Current");
-  frameSelect = new ComboBoxWidget{this, comboBoxRect(14, 0)};
+  frameSelect = new ComboBoxWidget{this, 14};
   frameSelect->addItem("All");
   frameSelect->addItem("Current");
-  formatSelect = new ComboBoxWidget{this, comboBoxRect(14, 0)};
+  formatSelect = new ComboBoxWidget{this, 14};
   addFormatOptions();
   ok = new TextPushButtonWidget{this, textBoxRect(8, 0), "Ok"};
   cancel = new TextPushButtonWidget{this, textBoxRect(8, 0), "Cancel"};

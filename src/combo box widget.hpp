@@ -16,10 +16,10 @@ using Base = QComboBox;
 
 class ComboBoxWidget final : public Base {
 public:
-  ComboBoxWidget(QWidget *, WidgetRect);
+  ComboBoxWidget(QWidget *, int);
 
 private:
-  WidgetRect rect;
+  TextBoxRect rect;
   QPixmap arrow;
 
   void paintEvent(QPaintEvent *) override;

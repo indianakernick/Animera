@@ -13,7 +13,13 @@
 
 class FileInputWidget final : public TextInputWidget {
 public:
-  FileInputWidget(QWidget *, WidgetRect);
+  FileInputWidget(QWidget *, int);
+
+private:
+  TextBoxRect rect;
+  QPixmap arrow;
+
+  void paintEvent(QPaintEvent *) override;
 };
 
 #endif

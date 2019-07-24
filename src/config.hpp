@@ -63,6 +63,10 @@ constexpr int       glob_text_padding = 1_px;
 constexpr int       glob_border_width = 1_px;
 constexpr int       glob_widget_space = 1_px;
 
+// @TODO generic WidgetRect that stores 3 QRect + QPoint
+// Do all the math in factory functions
+// Split TextBoxRect into two
+
 class WidgetRect {
 public:
   constexpr WidgetRect(
@@ -113,6 +117,92 @@ private:
   QSize innerSize_;
   int borderWidth_;
   int widgetSpace_;
+};
+
+constexpr QSize textBoxSize(const int chars, const int offsetX) {
+  return {
+    chars * glob_font_stride_px - glob_font_kern_px + 2 * glob_text_padding + offsetX,
+    glob_font_px + 2 * glob_text_padding
+  };
+}
+
+constexpr WidgetRect textBoxRect(const int chars, const int offsetX) {
+  return {
+    {glob_text_padding + offsetX, glob_text_padding},
+    textBoxSize(chars, offsetX)
+  };
+}
+
+constexpr WidgetRect boxRect(const int width, const int height) {
+  return {{}, {width, height}};
+}
+
+constexpr int       glob_box_button_icon_width = 5_px;
+
+class TextBoxRect {
+  static constexpr int icon_padding = glob_border_width + 2 * glob_text_padding;
+  static constexpr WidgetRect iconTextBoxRect(const int chars, const int offsetX, const int iconWidth) {
+    return {
+      {glob_text_padding + offsetX, glob_text_padding},
+      textBoxSize(chars, offsetX + iconWidth + icon_padding)
+    };
+  }
+
+public:
+  constexpr TextBoxRect(const WidgetRect rect)
+    : rect{rect}, iconWidth{-icon_padding} {}
+  constexpr TextBoxRect(const int chars, const int offsetX)
+    : rect{textBoxRect(chars, offsetX)}, iconWidth{-icon_padding} {}
+  constexpr TextBoxRect(const int chars, const int offsetX, const int iconWidth)
+    : rect{iconTextBoxRect(chars, offsetX, iconWidth)}, iconWidth{iconWidth} {}
+  
+  constexpr QRect widget() const noexcept {
+    return rect.widget();
+  }
+  
+  constexpr QRect outer() const noexcept {
+    return rect.outer();
+  }
+  
+  constexpr QRect textInner() const noexcept {
+    return {
+      rect.inner().topLeft(),
+      rect.inner().size() - QSize{iconWidth + icon_padding, 0}
+    };
+  }
+  
+  constexpr QRect buttonInner() const noexcept {
+    return {
+      rect.inner().topRight() + QPoint{1 + glob_border_width, 0},
+      QSize{iconWidth + 2 * glob_text_padding, rect.inner().height()}
+    };
+  }
+  
+  constexpr QPoint textPos() const noexcept {
+    return rect.contentPos();
+  }
+  
+  constexpr QPoint buttonPos() const noexcept {
+    return {
+      rect.inner().right() + 1 - iconWidth - glob_text_padding,
+      rect.contentPos().y()
+    };
+  }
+  
+  constexpr QRect border() const noexcept {
+    return {
+      textInner().topRight() + QPoint{1, 0},
+      QSize{glob_border_width, rect.inner().height()}
+    };
+  }
+  
+  constexpr WidgetRect widgetRect() const noexcept {
+    return rect;
+  }
+
+private:
+  WidgetRect rect;
+  int iconWidth;
 };
 
 struct IntRange {
@@ -172,32 +262,6 @@ inline const QRgb   edit_checker_a = qRgb(191, 191, 191);
 inline const QRgb   edit_checker_b = qRgb(255, 255, 255);
 
 // ------------------------------ color picker ------------------------------ //
-
-constexpr QSize textBoxSize(const int chars, const int offsetX) {
-  return {
-    chars * glob_font_stride_px - glob_font_kern_px + 2 * glob_text_padding + offsetX,
-    glob_font_px + 2 * glob_text_padding
-  };
-}
-
-constexpr WidgetRect textBoxRect(const int chars, const int offsetX) {
-  return {
-    {glob_text_padding + offsetX, glob_text_padding},
-    textBoxSize(chars, offsetX)
-  };
-}
-
-constexpr WidgetRect comboBoxRect(const int chars, const int offsetX) {
-  return {
-    {glob_text_padding + offsetX, glob_text_padding},
-    // @TODO should be put 5_px in a constant?
-    textBoxSize(chars, offsetX) + QSize{5_px + 2 * glob_text_padding + glob_border_width, 0}
-  };
-}
-
-constexpr WidgetRect boxRect(const int width, const int height) {
-  return {{}, {width, height}};
-}
 
 constexpr WidgetRect pick_svgraph_rect = boxRect(101_px, 101_px);
 constexpr WidgetRect pick_slider_rect = boxRect(pick_svgraph_rect.inner().width(), 12_px);

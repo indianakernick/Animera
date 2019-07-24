@@ -17,7 +17,7 @@ class TextInputWidget : public QLineEdit {
   Q_OBJECT
   
 public:
-  TextInputWidget(QWidget *, WidgetRect);
+  TextInputWidget(QWidget *, TextBoxRect);
 
 private Q_SLOTS:
   void blink();
@@ -25,7 +25,7 @@ private Q_SLOTS:
   void hideCursor();
 
 private:
-  WidgetRect rect;
+  TextBoxRect rect;
   int offset = 0;
   QTimer cursorBlinkTimer;
   bool cursorBlinkStatus = true;
@@ -41,11 +41,12 @@ private:
   void constrainOffset();
   void updateMargins();
 
-  void renderBackground(QPainter &);
-  void renderText(QPainter &);
-  void renderCursor(QPainter &);
-  void renderSelection(QPainter &);
+  void paintBackground(QPainter &);
+  void paintText(QPainter &);
+  void paintCursor(QPainter &);
+  void paintSelection(QPainter &);
 
+protected:
   void paintEvent(QPaintEvent *) override;
 };
 

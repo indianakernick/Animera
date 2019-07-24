@@ -12,13 +12,13 @@
 #include <QtGui/qpainter.h>
 #include "widget painting.hpp"
 
-ComboBoxWidget::ComboBoxWidget(QWidget *parent, const WidgetRect rect)
-  : Base{parent}, rect{rect} {
+ComboBoxWidget::ComboBoxWidget(QWidget *parent, const int chars)
+  : Base{parent}, rect{TextBoxRect{chars, 0, glob_box_button_icon_width}} {
   setCursor(Qt::PointingHandCursor);
   setFont(getGlobalFont());
   setFixedSize(rect.widget().size());
   arrow = bakeColoredBitmap(":/General/up down arrow.pbm", glob_light_2);
-  
+  assert(arrow.width() == glob_box_button_icon_width);
   // setItemDelegate
   
   //setFrame(false);
@@ -50,32 +50,16 @@ ComboBoxWidget::ComboBoxWidget(QWidget *parent, const WidgetRect rect)
 
 void ComboBoxWidget::paintEvent(QPaintEvent *) {
   QPainter painter{this};
-  paintBorder(painter, rect, glob_border_color);
-  const int arrowX = rect.inner().right() + 1 - arrow.width() - glob_text_padding;
-  const int borderX = arrowX - glob_text_padding - glob_border_width;
-  painter.fillRect(
-    borderX, rect.inner().top(),
-    glob_border_width, rect.inner().height(),
-    glob_border_color
-  );
-  painter.fillRect(QRect{
-    rect.inner().topLeft(),
-    QPoint{borderX - 1, rect.inner().bottom()}
-  }, glob_dark_1);
-  painter.fillRect(
-    borderX + glob_border_width, rect.inner().top(),
-    glob_text_padding * 2 + arrow.width(), rect.inner().height(),
-    glob_main
-  );
-  painter.drawPixmap(arrowX, rect.inner().top() + glob_text_padding, arrow);
+  paintBorder(painter, rect.widgetRect(), glob_border_color);
+  painter.fillRect(rect.border(), glob_border_color);
+  painter.fillRect(rect.textInner(), glob_dark_1);
+  painter.fillRect(rect.buttonInner(), glob_main);
+  painter.drawPixmap(rect.buttonPos(), arrow);
   painter.setBrush(Qt::NoBrush);
   painter.setPen(glob_text_color);
   painter.setFont(getGlobalFont());
-  painter.setClipRect(QRect{
-    rect.contentPos(),
-    QPoint{borderX - glob_text_padding, rect.inner().bottom() + 1 - glob_text_padding}
-  });
-  QPoint textPos = rect.contentPos();
+  painter.setClipRect(rect.textInner());
+  QPoint textPos = rect.textPos();
   textPos.ry() += glob_font_accent_px;
   painter.drawText(textPos, currentText());
 }
