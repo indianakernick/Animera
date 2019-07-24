@@ -87,13 +87,13 @@ void ExportDialog::addFormatOptions() {
 }
 
 void ExportDialog::createWidgets() {
-  name = new TextInputWidget{this, TextBoxRect(16, 0)};
+  name = new TextInputWidget{this, textBoxRect(16)};
   name->setText("sprite_%000F");
   dir = new FileInputWidget{this, 40};
-  layerStride = new NumberInputWidget{this, textBoxRect(3, 0), expt_stride};
-  layerOffset = new NumberInputWidget{this, textBoxRect(3, 0), expt_offset};
-  frameStride = new NumberInputWidget{this, textBoxRect(3, 0), expt_stride};
-  frameOffset = new NumberInputWidget{this, textBoxRect(3, 0), expt_offset};
+  layerStride = new NumberInputWidget{this, textBoxRect(3), expt_stride};
+  layerOffset = new NumberInputWidget{this, textBoxRect(3), expt_offset};
+  frameStride = new NumberInputWidget{this, textBoxRect(3), expt_stride};
+  frameOffset = new NumberInputWidget{this, textBoxRect(3), expt_offset};
   layerSelect = new ComboBoxWidget{this, 14};
   layerSelect->addItem("All (composed)");
   layerSelect->addItem("All");
@@ -103,8 +103,8 @@ void ExportDialog::createWidgets() {
   frameSelect->addItem("Current");
   formatSelect = new ComboBoxWidget{this, 14};
   addFormatOptions();
-  ok = new TextPushButtonWidget{this, textBoxRect(8, 0), "Ok"};
-  cancel = new TextPushButtonWidget{this, textBoxRect(8, 0), "Cancel"};
+  ok = new TextPushButtonWidget{this, textBoxRect(8), "Ok"};
+  cancel = new TextPushButtonWidget{this, textBoxRect(8), "Cancel"};
   setFocus();
 }
 
@@ -112,7 +112,7 @@ namespace {
 
 template <size_t Size>
 LabelWidget *makeLabel(QWidget *parent, const char (&text)[Size]) {
-  return new LabelWidget{parent, textBoxRect(Size - 1, 0), text};
+  return new LabelWidget{parent, textBoxRect(Size - 1), text};
 }
 
 template <typename Layout>

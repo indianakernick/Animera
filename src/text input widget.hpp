@@ -17,7 +17,7 @@ class TextInputWidget : public QLineEdit {
   Q_OBJECT
   
 public:
-  TextInputWidget(QWidget *, TextBoxRect);
+  TextInputWidget(QWidget *, WidgetRect);
 
 private Q_SLOTS:
   void blink();
@@ -25,7 +25,7 @@ private Q_SLOTS:
   void hideCursor();
 
 private:
-  TextBoxRect rect;
+  WidgetRect rect;
   int offset = 0;
   QTimer cursorBlinkTimer;
   bool cursorBlinkStatus = true;

@@ -13,12 +13,11 @@
 #include "widget painting.hpp"
 
 ComboBoxWidget::ComboBoxWidget(QWidget *parent, const int chars)
-  : Base{parent}, rect{TextBoxRect{chars, 0, glob_box_button_icon_width}} {
+  : QComboBox{parent}, rects{textBoxIconRect(chars)} {
   setCursor(Qt::PointingHandCursor);
   setFont(getGlobalFont());
-  setFixedSize(rect.widget().size());
+  setFixedSize(rects.widget().size());
   arrow = bakeColoredBitmap(":/General/up down arrow.pbm", glob_light_2);
-  assert(arrow.width() == glob_box_button_icon_width);
   // setItemDelegate
   
   //setFrame(false);
@@ -50,16 +49,17 @@ ComboBoxWidget::ComboBoxWidget(QWidget *parent, const int chars)
 
 void ComboBoxWidget::paintEvent(QPaintEvent *) {
   QPainter painter{this};
-  paintBorder(painter, rect.widgetRect(), glob_border_color);
-  painter.fillRect(rect.border(), glob_border_color);
-  painter.fillRect(rect.textInner(), glob_dark_1);
-  painter.fillRect(rect.buttonInner(), glob_main);
-  painter.drawPixmap(rect.buttonPos(), arrow);
+  paintBorder(painter, rects.text(), glob_border_color);
+  paintBorder(painter, rects.icon(), glob_border_color);
+  painter.fillRect(rects.border(), glob_border_color);
+  painter.fillRect(rects.textInner(), glob_dark_1);
+  painter.fillRect(rects.iconInner(), glob_main);
+  painter.drawPixmap(rects.iconPos(), arrow);
   painter.setBrush(Qt::NoBrush);
   painter.setPen(glob_text_color);
   painter.setFont(getGlobalFont());
-  painter.setClipRect(rect.textInner());
-  QPoint textPos = rect.textPos();
+  painter.setClipRect(rects.textInner());
+  QPoint textPos = rects.textPos();
   textPos.ry() += glob_font_accent_px;
   painter.drawText(textPos, currentText());
 }

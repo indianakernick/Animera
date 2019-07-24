@@ -11,8 +11,7 @@
 
 #include "geometry.hpp"
 #include <QtGui/qcolor.h>
-#include <QtCore/qsize.h>
-#include <QtCore/qpoint.h>
+#include "widget rect.hpp"
 #include <QtCore/qnamespace.h>
 
 // ------------------------------- global ----------------------------------- //
@@ -63,147 +62,77 @@ constexpr int       glob_text_padding = 1_px;
 constexpr int       glob_border_width = 1_px;
 constexpr int       glob_widget_space = 1_px;
 
-// @TODO generic WidgetRect that stores 3 QRect + QPoint
-// Do all the math in factory functions
-// Split TextBoxRect into two
+// @TODO padding = widget_space = margin
 
-class WidgetRect {
-public:
-  constexpr WidgetRect(
-    const QPoint contentOffset,
-    const QSize innerSize,
-    const int borderWidth = glob_border_width,
-    const int widgetSpace = glob_widget_space
-  ) : contentOffset_{contentOffset},
-      innerSize_{innerSize},
-      borderWidth_{borderWidth},
-      widgetSpace_{widgetSpace} {}
-  
-  constexpr QRect widget() const noexcept {
-    return {
-      QPoint{},
-      innerSize_ + toSize(2 * borderWidth_ + 2 * widgetSpace_)
-    };
-  }
-  
-  constexpr QRect outer() const noexcept {
-    return {
-      toPoint(widgetSpace_),
-      innerSize_ + toSize(2 * borderWidth_)
-    };
-  }
-  
-  constexpr QRect inner() const noexcept {
-    return {
-      toPoint(widgetSpace_ + borderWidth_),
-      innerSize_
-    };
-  }
-  
-  constexpr QPoint contentPos() const noexcept {
-    return toPoint(widgetSpace_ + borderWidth_) + contentOffset_;
-  }
-  
-  constexpr int borderWidth() const noexcept {
-    return borderWidth_;
-  }
-  
-  constexpr int widgetSpace() const noexcept {
-    return widgetSpace_;
-  }
+constexpr WidgetRect basicRect(
+  const QPoint pos,
+  const QSize innerSize,
+  const int borderWidth = glob_border_width,
+  const int widgetSpace = glob_widget_space
+) {
+  const QRect widget = {
+    QPoint{},
+    innerSize + toSize(2 * borderWidth + 2 * widgetSpace)
+  };
+  const QRect outer = {
+    toPoint(widgetSpace),
+    innerSize + toSize(2 * borderWidth)
+  };
+  const QRect inner = {
+    toPoint(widgetSpace + borderWidth),
+    innerSize
+  };
+  return {widget, outer, inner, inner.topLeft() + pos};
+}
 
-private:
-  QPoint contentOffset_;
-  QSize innerSize_;
-  int borderWidth_;
-  int widgetSpace_;
-};
-
-constexpr QSize textBoxSize(const int chars, const int offsetX) {
+constexpr QSize textBoxSize(const int chars, const int offsetX = 0) {
   return {
     chars * glob_font_stride_px - glob_font_kern_px + 2 * glob_text_padding + offsetX,
     glob_font_px + 2 * glob_text_padding
   };
 }
 
-constexpr WidgetRect textBoxRect(const int chars, const int offsetX) {
-  return {
+constexpr WidgetRect textBoxRect(const int chars, const int offsetX = 0) {
+  return basicRect(
     {glob_text_padding + offsetX, glob_text_padding},
     textBoxSize(chars, offsetX)
-  };
+  );
 }
 
 constexpr WidgetRect boxRect(const int width, const int height) {
-  return {{}, {width, height}};
+  return basicRect({}, {width, height});
 }
 
-constexpr int       glob_box_button_icon_width = 5_px;
-
-class TextBoxRect {
-  static constexpr int icon_padding = glob_border_width + 2 * glob_text_padding;
-  static constexpr WidgetRect iconTextBoxRect(const int chars, const int offsetX, const int iconWidth) {
-    return {
-      {glob_text_padding + offsetX, glob_text_padding},
-      textBoxSize(chars, offsetX + iconWidth + icon_padding)
-    };
-  }
-
-public:
-  constexpr TextBoxRect(const WidgetRect rect)
-    : rect{rect}, iconWidth{-icon_padding} {}
-  constexpr TextBoxRect(const int chars, const int offsetX)
-    : rect{textBoxRect(chars, offsetX)}, iconWidth{-icon_padding} {}
-  constexpr TextBoxRect(const int chars, const int offsetX, const int iconWidth)
-    : rect{iconTextBoxRect(chars, offsetX, iconWidth)}, iconWidth{iconWidth} {}
-  
-  constexpr QRect widget() const noexcept {
-    return rect.widget();
-  }
-  
-  constexpr QRect outer() const noexcept {
-    return rect.outer();
-  }
-  
-  constexpr QRect textInner() const noexcept {
-    return {
-      rect.inner().topLeft(),
-      rect.inner().size() - QSize{iconWidth + icon_padding, 0}
-    };
-  }
-  
-  constexpr QRect buttonInner() const noexcept {
-    return {
-      rect.inner().topRight() + QPoint{1 + glob_border_width, 0},
-      QSize{iconWidth + 2 * glob_text_padding, rect.inner().height()}
-    };
-  }
-  
-  constexpr QPoint textPos() const noexcept {
-    return rect.contentPos();
-  }
-  
-  constexpr QPoint buttonPos() const noexcept {
-    return {
-      rect.inner().right() + 1 - iconWidth - glob_text_padding,
-      rect.contentPos().y()
-    };
-  }
-  
-  constexpr QRect border() const noexcept {
-    return {
-      textInner().topRight() + QPoint{1, 0},
-      QSize{glob_border_width, rect.inner().height()}
-    };
-  }
-  
-  constexpr WidgetRect widgetRect() const noexcept {
-    return rect;
-  }
-
-private:
-  WidgetRect rect;
-  int iconWidth;
-};
+constexpr TextIconRects textBoxIconRect(const int chars) {
+  const QSize textInnerSize = textBoxSize(chars);
+  const QSize iconInnerSize = textBoxSize(1);
+  const QSize totalInnerSize = textInnerSize + QSize{iconInnerSize.width() + glob_border_width, 0};
+  const QSize borderSize = toSize(2 * glob_border_width);
+  const QSize spaceSize = toSize(2 * glob_widget_space);
+  const QRect widget = {
+    QPoint{},
+    totalInnerSize + borderSize + spaceSize
+  };
+  const QRect outer = {
+    toPoint(glob_widget_space),
+    totalInnerSize + borderSize
+  };
+  const QRect textInner = {
+    toPoint(glob_widget_space + glob_border_width),
+    textInnerSize
+  };
+  const QRect iconInner = {
+    textInner.topRight() + QPoint{1 + glob_border_width, 0},
+    iconInnerSize
+  };
+  const QPoint textPos = textInner.topLeft() + toPoint(glob_text_padding);
+  const QPoint iconPos = textPos + QPoint{textInner.width() + glob_border_width, 0};
+  const QRect border = {
+    textInner.topRight() + QPoint{1, 0},
+    QSize{glob_border_width, textInner.height()}
+  };
+  return {widget, outer, textInner, iconInner, textPos, iconPos, border};
+}
 
 struct IntRange {
   int min;
@@ -266,15 +195,15 @@ inline const QRgb   edit_checker_b = qRgb(255, 255, 255);
 constexpr WidgetRect pick_svgraph_rect = boxRect(101_px, 101_px);
 constexpr WidgetRect pick_slider_rect = boxRect(pick_svgraph_rect.inner().width(), 12_px);
 constexpr WidgetRect pick_label_rect = textBoxRect(1, 1_px);
-constexpr WidgetRect pick_number_rect = textBoxRect(3, 0_px);
-constexpr WidgetRect pick_hex_rect = {
+constexpr WidgetRect pick_number_rect = textBoxRect(3);
+constexpr WidgetRect pick_hex_rect = basicRect(
   QPoint{glob_text_padding + 2_px, glob_text_padding},
   textBoxSize(8, 2_px + 3_px)
-};
-constexpr WidgetRect pick_name_rect = {
+);
+constexpr WidgetRect pick_name_rect = basicRect(
   toPoint(glob_text_padding),
   QSize{pick_svgraph_rect.inner().width(), glob_font_px + 2 * glob_text_padding}
-};
+);
 
 inline const QColor pick_primary_color = {0, 0, 0};
 inline const QColor pick_secondary_color = {255, 255, 255};
@@ -298,12 +227,12 @@ inline const QColor box_background_color = glob_dark_1;
 
 // ------------------------------- tool colors ------------------------------ //
 
-constexpr WidgetRect tool_color_rect = {{}, {24_px, 12_px}, 1_px, 2_px};
-constexpr WidgetRect active_color_rect = {{}, {24_px, 12_px}, 2_px, 1_px};
+constexpr WidgetRect tool_color_rect = basicRect({}, {24_px, 12_px}, 1_px, 2_px);
+constexpr WidgetRect active_color_rect = basicRect({}, {24_px, 12_px}, 2_px, 1_px);
 constexpr int        tool_color_tiles = 2;
-constexpr WidgetRect tool_colors_rect = {
+constexpr WidgetRect tool_colors_rect = basicRect(
   {}, {pick_svgraph_rect.inner().width(), 12_px}, 0_px, 3_px
-};
+);
 
 // ------------------------------ palette colors ---------------------------- //
 
@@ -327,24 +256,25 @@ constexpr int       cell_border_offset = cell_icon_pad + glob_border_width;
 constexpr int       frame_incr = 5;
 
 constexpr int       layer_width = 97_px;
-constexpr WidgetRect layer_text_rect = {
+// @TODO separate factory for these?
+constexpr WidgetRect layer_text_rect = basicRect(
   {1_px, 2_px},
   {layer_width - cell_width - glob_border_width, cell_height - glob_border_width},
   0, 0
-};
+);
 
-constexpr WidgetRect ctrl_text_rect = {
+constexpr WidgetRect ctrl_text_rect = basicRect(
   {1_px, 2_px},
-  {textBoxSize(3, 0).width(), cell_height - glob_border_width},
+  {textBoxSize(3).width(), cell_height - glob_border_width},
   0, 0
-};
+);
 constexpr IntRange   ctrl_delay = {1, 999, 100};
 
 // ---------------------------- init canvas dialog -------------------------- //
 
 constexpr IntRange   init_size_range = {1, 65536, 128};
-constexpr WidgetRect init_size_rect = textBoxRect(5, 0);
-constexpr WidgetRect init_button_rect = textBoxRect(8, 0);
+constexpr WidgetRect init_size_rect = textBoxRect(5);
+constexpr WidgetRect init_button_rect = textBoxRect(8);
 
 // ------------------------------- export dialog ---------------------------- //
 

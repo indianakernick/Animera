@@ -16,7 +16,10 @@ public:
   FileInputWidget(QWidget *, int);
 
 private:
-  TextBoxRect rect;
+  FileInputWidget(QWidget *, TextIconRects);
+
+  WidgetRect iconRect;
+  QRect borderRect;
   QPixmap arrow;
 
   void paintEvent(QPaintEvent *) override;

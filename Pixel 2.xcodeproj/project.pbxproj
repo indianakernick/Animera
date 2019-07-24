@@ -181,6 +181,7 @@
 		457DC0B722E6DDC60000777B /* up down arrow.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = "up down arrow.pbm"; sourceTree = "<group>"; };
 		457DC0BB22E7D6160000777B /* file input widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "file input widget.cpp"; sourceTree = "<group>"; };
 		457DC0BC22E7D6160000777B /* file input widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "file input widget.hpp"; sourceTree = "<group>"; };
+		457DC0BE22E7FB2B0000777B /* widget rect.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "widget rect.hpp"; sourceTree = "<group>"; };
 		4589188022990520002ADF77 /* flood fill.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "flood fill.hpp"; sourceTree = "<group>"; };
 		45891881229927D4002ADF77 /* porter duff.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "porter duff.hpp"; sourceTree = "<group>"; };
 		4589188222993BBC002ADF77 /* formats.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = formats.hpp; sourceTree = "<group>"; };
@@ -1284,6 +1285,7 @@
 				453D28CF2276A9DF00D0E5F9 /* color convert.hpp */,
 				453D28D42277129800D0E5F9 /* connect.hpp */,
 				45D1098F22DAAFAC00D1F1CB /* enum operators.hpp */,
+				457DC0BE22E7FB2B0000777B /* widget rect.hpp */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";

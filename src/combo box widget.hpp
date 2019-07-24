@@ -12,14 +12,12 @@
 #include "config.hpp"
 #include <QtWidgets/qcombobox.h>
 
-using Base = QComboBox;
-
-class ComboBoxWidget final : public Base {
+class ComboBoxWidget final : public QComboBox {
 public:
   ComboBoxWidget(QWidget *, int);
 
 private:
-  TextBoxRect rect;
+  TextIconRects rects;
   QPixmap arrow;
 
   void paintEvent(QPaintEvent *) override;

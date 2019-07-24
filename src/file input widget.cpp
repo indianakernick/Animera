@@ -15,23 +15,27 @@
 #include <Qtwidgets/qfilesystemmodel.h>
 
 FileInputWidget::FileInputWidget(QWidget *parent, const int chars)
-  : TextInputWidget{parent, {chars, 0, glob_box_button_icon_width}},
-    rect{chars, 0, glob_box_button_icon_width} {
+  : FileInputWidget{parent, textBoxIconRect(chars)} {}
+
+FileInputWidget::FileInputWidget(QWidget *parent, const TextIconRects rects)
+  : TextInputWidget{parent, rects.text()},
+    iconRect{rects.icon()},
+    borderRect{rects.border()} {
   auto *completer = new QCompleter{this};
   auto *model = new QFileSystemModel{completer};
   model->setRootPath(QDir::rootPath());
+  model->setFilter(QDir::Dirs | QDir::Drives | QDir::NoDotAndDotDot | QDir::CaseSensitive);
   completer->setModel(model);
   completer->setCompletionMode(QCompleter::InlineCompletion);
   setCompleter(completer);
   setText(QDir::rootPath());
   arrow = bakeColoredBitmap(":/General/down arrow.pbm", glob_light_2);
-  assert(arrow.width() == glob_box_button_icon_width);
 }
 
 void FileInputWidget::paintEvent(QPaintEvent *event) {
   TextInputWidget::paintEvent(event);
   QPainter painter{this};
-  painter.fillRect(rect.border(), glob_border_color);
-  painter.fillRect(rect.buttonInner(), glob_main);
-  painter.drawPixmap(rect.buttonPos(), arrow);
+  painter.fillRect(borderRect, glob_border_color);
+  painter.fillRect(iconRect.inner(), glob_main);
+  painter.drawPixmap(iconRect.pos(), arrow);
 }

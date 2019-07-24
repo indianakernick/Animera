@@ -64,28 +64,38 @@ QPixmap bakeColoredBitmaps(
 }
 
 void paintBorder(QPainter &painter, const WidgetRect rect, const QColor color) {
-  const QSize innerSize = rect.inner().size();
+  /*const QSize innerSize = rect.inner().size();
+  const int widgetSpace = rect.outer().x() - rect.widget().x();
+  const int borderWidth = rect.inner().x() - rect.outer().x();
   const QRect rects[4] = {
     { // top
-      rect.widgetSpace(), rect.widgetSpace(),
-      innerSize.width() + 2 * rect.borderWidth(), rect.borderWidth()
+      widgetSpace, widgetSpace,
+      innerSize.width() + 2 * borderWidth, borderWidth
     },
     { // bottom
-      rect.widgetSpace(), rect.widgetSpace() + rect.borderWidth() + innerSize.height(),
-      innerSize.width() + 2 * rect.borderWidth(), rect.borderWidth()
+      widgetSpace, widgetSpace + borderWidth + innerSize.height(),
+      innerSize.width() + 2 * borderWidth, borderWidth
     },
     { // left
-      rect.widgetSpace(), rect.widgetSpace() + rect.borderWidth(),
-      rect.borderWidth(), innerSize.height()
+      widgetSpace, widgetSpace + borderWidth,
+      borderWidth, innerSize.height()
     },
     { // right
-      rect.widgetSpace() + rect.borderWidth() + innerSize.width(), rect.widgetSpace() + rect.borderWidth(),
-      rect.borderWidth(), innerSize.height()
+      widgetSpace + borderWidth + innerSize.width(), widgetSpace + borderWidth,
+      borderWidth, innerSize.height()
     }
   };
   painter.setPen(Qt::NoPen);
   painter.setBrush(color);
-  painter.drawRects(rects, 4);
+  painter.drawRects(rects, 4);*/
+  QRegion oldRegion = painter.clipRegion();
+  painter.setClipRegion(QRegion{rect.outer()} - QRegion{rect.inner()});
+  painter.fillRect(rect.outer(), color);
+  if (oldRegion.isNull()) {
+    painter.setClipRegion(QRegion{rect.widget()});
+  } else {
+    painter.setClipRegion(std::move(oldRegion));
+  }
 }
 
 void paintChecker(
