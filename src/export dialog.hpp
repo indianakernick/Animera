@@ -13,6 +13,7 @@
 #include <QtWidgets/qdialog.h>
 
 class ComboBoxWidget;
+class FileInputWidget;
 class TextInputWidget;
 class NumberInputWidget;
 class TextPushButtonWidget;
@@ -77,7 +78,7 @@ private:
   Format format;
   ExportOptions options;
   TextInputWidget *name;
-  TextInputWidget *dir;
+  FileInputWidget *dir;
   NumberInputWidget *layerStride;
   NumberInputWidget *layerOffset;
   NumberInputWidget *frameStride;
