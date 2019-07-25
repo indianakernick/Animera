@@ -12,6 +12,8 @@
 #include <span>
 #include "cell.hpp"
 
+struct ExportOptions;
+
 class Timeline final : public QObject {
   Q_OBJECT
 
@@ -21,6 +23,7 @@ public:
   void initDefault();
   void serialize(QIODevice *) const;
   void deserialize(QIODevice *);
+  void exportTimeline(const ExportOptions &) const;
 
 public Q_SLOTS:
   void initCanvas(Format, QSize);

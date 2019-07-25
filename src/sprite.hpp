@@ -13,6 +13,8 @@
 #include "timeline.hpp"
 #include <QtCore/qobject.h>
 
+struct ExportOptions;
+
 class Sprite final : public QObject {
   Q_OBJECT
 
@@ -20,6 +22,7 @@ public Q_SLOTS:
   void newFile(Format, QSize);
   void saveFile(const QString &) const;
   void openFile(const QString &);
+  void exportSprite(const ExportOptions &) const;
   
 Q_SIGNALS:
   void canvasInitialized(Format, QSize);

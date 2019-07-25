@@ -9,7 +9,9 @@
 #include "export dialog.hpp"
 
 #include "connect.hpp"
+#include <QtCore/qdir.h>
 #include "label widget.hpp"
+#include "export options.hpp"
 #include "combo box widget.hpp"
 #include "file input widget.hpp"
 #include "color input widget.hpp"
@@ -88,6 +90,7 @@ void ExportDialog::addFormatOptions() {
 
 void ExportDialog::createWidgets() {
   name = new TextInputWidget{this, textBoxRect(16)};
+  // @TODO validator for export name
   name->setText("sprite_%000F");
   dir = new FileInputWidget{this, 40};
   layerStride = new NumberInputWidget{this, textBoxRect(3), expt_stride};
@@ -190,6 +193,7 @@ void ExportDialog::connectSignals() {
 void ExportDialog::initDefault() {
   // @TODO maybe create widgets, connect signals, set default values on widgets
   options.name = name->text();
+  options.directory = QDir::homePath();
   options.layerLine.stride = expt_stride.def;
   options.layerLine.offset = expt_offset.def;
   options.frameLine.stride = expt_stride.def;

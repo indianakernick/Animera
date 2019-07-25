@@ -58,6 +58,7 @@ private:
   void setFileName(const QString &);
   void saveFile();
   void saveFileDialog();
+  void exportDialog();
   
   void closeEvent(QCloseEvent *) override;
 };

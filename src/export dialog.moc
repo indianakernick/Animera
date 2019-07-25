@@ -91,7 +91,7 @@ void ExportDialog::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         auto *_t = static_cast<ExportDialog *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->exportSprite((*reinterpret_cast< ExportOptions(*)>(_a[1]))); break;
+        case 0: _t->exportSprite((*reinterpret_cast< const ExportOptions(*)>(_a[1]))); break;
         case 1: _t->finalize(); break;
         case 2: _t->updateFormatItems((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 3: _t->setLayerSelect((*reinterpret_cast< int(*)>(_a[1]))); break;
@@ -102,7 +102,7 @@ void ExportDialog::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
     } else if (_c == QMetaObject::IndexOfMethod) {
         int *result = reinterpret_cast<int *>(_a[0]);
         {
-            using _t = void (ExportDialog::*)(ExportOptions );
+            using _t = void (ExportDialog::*)(const ExportOptions & );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ExportDialog::exportSprite)) {
                 *result = 0;
                 return;
@@ -152,7 +152,7 @@ int ExportDialog::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void ExportDialog::exportSprite(ExportOptions _t1)
+void ExportDialog::exportSprite(const ExportOptions & _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);

@@ -12,6 +12,7 @@
 #include "connect.hpp"
 #include "application.hpp"
 #include "global font.hpp"
+#include "export dialog.hpp"
 #include <QtWidgets/qstyle.h>
 #include <QtWidgets/qtooltip.h>
 #include "separator widget.hpp"
@@ -170,6 +171,7 @@ void Window::setupMenubar() {
   ADD_ACTION(file, "Open", QKeySequence::Open, *app, openFileDialog);
   ADD_ACTION(file, "Save", QKeySequence::Save, *this, saveFile);
   ADD_ACTION(file, "Save As", QKeySequence::SaveAs, *this, saveFileDialog);
+  ADD_ACTION(file, "Export", Qt::CTRL + Qt::Key_E, *this, exportDialog);
   
   QMenu *layer = menubar->addMenu("Layer");
   layer->setFont(getGlobalFont());
@@ -304,13 +306,9 @@ void Window::setFileName(const QString &name) {
   setWindowTitle(name);
 }
 
-#include "export dialog.hpp"
-
 void Window::saveFile() {
   if (fileName.isEmpty()) {
-    //saveFileDialog();
-    auto *dialog = new ExportDialog{this, sprite.getFormat()};
-    dialog->show();
+    saveFileDialog();
   } else {
     sprite.saveFile(fileName);
     statusBar.showTemp("Saved!");
@@ -335,6 +333,12 @@ void Window::saveFileDialog() {
     setFileName(saveFileName);
     sprite.saveFile(saveFileName);
   }
+}
+
+void Window::exportDialog() {
+  auto *dialog = new ExportDialog{this, sprite.getFormat()};
+  CONNECT(dialog, exportSprite, sprite, exportSprite);
+  dialog->show();
 }
 
 void Window::closeEvent(QCloseEvent *) {

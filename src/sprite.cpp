@@ -11,6 +11,7 @@
 #include "config.hpp"
 #include "serial.hpp"
 #include <QtCore/qfile.h>
+#include "export options.hpp"
 
 namespace {
 
@@ -65,6 +66,10 @@ void Sprite::openFile(const QString &path) {
   timeline.initCanvas(format, size);
   palette.deserialize(&file);
   timeline.deserialize(&file);
+}
+
+void Sprite::exportSprite(const ExportOptions &options) const {
+  timeline.exportTimeline(options);
 }
 
 Format Sprite::getFormat() const {
