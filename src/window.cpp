@@ -338,6 +338,9 @@ void Window::saveFileDialog() {
 void Window::exportDialog() {
   auto *dialog = new ExportDialog{this, sprite.getFormat()};
   CONNECT(dialog, exportSprite, sprite, exportSprite);
+  CONNECT_LAMBDA(dialog, exportSprite, [this]{
+    statusBar.showTemp("Exported!");
+  });
   dialog->show();
 }
 

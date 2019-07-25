@@ -10,7 +10,8 @@
 
 #include "serial.hpp"
 #include "cell span.hpp"
-#include "export options.hpp"
+#include "composite.hpp"
+#include <QtCore/qdir.h>
 
 Timeline::Timeline()
   : currPos{0, 0}, frameCount{0} {}
@@ -90,8 +91,66 @@ void Timeline::deserialize(QIODevice *dev) {
   changeLayers(0, layerCount());
 }
 
-void Timeline::exportTimeline(const ExportOptions &options) const {
-  
+void Timeline::exportTimeline(const ExportOptions &options, const PaletteCSpan palette) const {
+  const CellRect rect = selectCells(options);
+  if (options.layerSelect == LayerSelect::all_composited) {
+    if (rect.minF == rect.maxF) {
+      QImage result = compositeFrame(palette, getFrame(rect.minF), canvasSize, canvasFormat);
+      exportFile(options, result, {0, rect.minF});
+    } else {
+      Frame frame(layers.size(), nullptr);
+      Frame filteredFrame(layers.size());
+      std::vector<FrameIdx> lengths(layers.size());
+      std::vector<Spans::const_iterator> iterators(layers.size());
+      for (size_t l = 0; l != layers.size(); ++l) {
+        iterators[l] = layers[l].spans.cbegin();
+        lengths[l] = iterators[l]->len;
+      }
+      for (FrameIdx f = rect.minF; f <= rect.maxF; ++f) {
+        for (size_t l = 0; l != layers.size(); ++l) {
+          if (!layers[l].visible) continue;
+          assert(iterators[l]->len > 0);
+          frame[l] = iterators[l]->cell.get();
+          if (--lengths[l] == 0) {
+            ++iterators[l];
+            lengths[l] = iterators[l]->len;
+          }
+        }
+        auto end = std::copy_if(
+          frame.cbegin(),
+          frame.cend(),
+          filteredFrame.begin(),
+          [](const Cell *cell) -> bool {
+            return cell;
+          }
+        );
+        QImage result = compositeFrame(
+          palette,
+          {filteredFrame.data(), end - filteredFrame.begin()},
+          canvasSize,
+          canvasFormat
+        );
+        exportFile(options, result, {0, f});
+      }
+    }
+  } else {
+    for (LayerIdx l = rect.minL; l <= rect.maxL; ++l) {
+      const Layer &layer = layers[l];
+      if (!layer.visible) continue;
+      Spans::const_iterator iter = layer.spans.cbegin();
+      FrameIdx len = iter->len;
+      for (FrameIdx f = rect.minF; f <= rect.maxF; ++f) {
+        assert(iter->len > 0);
+        if (iter->cell) {
+          exportFile(options, iter->cell->image, {l, f});
+        }
+        if (--len == 0) {
+          ++iter;
+          len = iter->len;
+        }
+      }
+    }
+  }
 }
 
 void Timeline::initCanvas(const Format format, const QSize size) {
@@ -350,7 +409,7 @@ Cell *Timeline::getCell(const CellPos pos) {
   return get(layers[pos.l].spans, pos.f);
 }
 
-Frame Timeline::getFrame(const FrameIdx pos) {
+Frame Timeline::getFrame(const FrameIdx pos) const {
   Frame frame;
   frame.reserve(layers.size());
   for (const Layer &layer : layers) {
@@ -366,6 +425,52 @@ Frame Timeline::getFrame(const FrameIdx pos) {
 
 LayerIdx Timeline::layerCount() const {
   return static_cast<LayerIdx>(layers.size());
+}
+
+CellRect Timeline::selectCells(const ExportOptions &options) const {
+  CellRect rect;
+  switch (options.layerSelect) {
+    case LayerSelect::all_composited:
+    case LayerSelect::all:
+      rect.minL = 0;
+      rect.maxL = layerCount() - 1;
+      break;
+    case LayerSelect::current:
+      rect.minL = rect.maxL = currPos.l;
+      break;
+    default: Q_UNREACHABLE();
+  }
+  switch (options.frameSelect) {
+    case FrameSelect::all:
+      rect.minF = 0;
+      rect.maxF = frameCount - 1;
+      break;
+    case FrameSelect::current:
+      rect.minF = rect.maxF = currPos.f;
+      break;
+    default: Q_UNREACHABLE();
+  }
+  return rect;
+}
+
+namespace {
+
+int apply(const Line line, const int value) {
+  return value * line.stride + line.offset;
+}
+
+}
+
+void Timeline::exportFile(const ExportOptions &options, QImage image, CellPos pos) const {
+  QString path = options.directory;
+  if (path.back() != QDir::separator()) {
+    path.push_back(QDir::separator());
+  }
+  pos.l = apply(options.layerLine, pos.l);
+  pos.f = apply(options.frameLine, pos.f);
+  path += "sprite_L" + QString::number(pos.l) + "_F" + QString::number(pos.f);
+  path += ".png";
+  image.save(path);
 }
 
 void Timeline::changePos() {

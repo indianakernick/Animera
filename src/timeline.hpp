@@ -11,8 +11,8 @@
 
 #include <span>
 #include "cell.hpp"
-
-struct ExportOptions;
+#include "palette.hpp"
+#include "export options.hpp"
 
 class Timeline final : public QObject {
   Q_OBJECT
@@ -23,7 +23,7 @@ public:
   void initDefault();
   void serialize(QIODevice *) const;
   void deserialize(QIODevice *);
-  void exportTimeline(const ExportOptions &) const;
+  void exportTimeline(const ExportOptions &, PaletteCSpan) const;
 
 public Q_SLOTS:
   void initCanvas(Format, QSize);
@@ -85,8 +85,10 @@ private:
   
   CellPtr makeCell() const;
   Cell *getCell(CellPos);
-  Frame getFrame(FrameIdx);
+  Frame getFrame(FrameIdx) const;
   LayerIdx layerCount() const;
+  CellRect selectCells(const ExportOptions &) const;
+  void exportFile(const ExportOptions &, QImage, CellPos) const;
   
   void changePos();
   void changeFrame();

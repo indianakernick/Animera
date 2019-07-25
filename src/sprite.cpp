@@ -69,7 +69,7 @@ void Sprite::openFile(const QString &path) {
 }
 
 void Sprite::exportSprite(const ExportOptions &options) const {
-  timeline.exportTimeline(options);
+  timeline.exportTimeline(options, palette.getPalette());
 }
 
 Format Sprite::getFormat() const {

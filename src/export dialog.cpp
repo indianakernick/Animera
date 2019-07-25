@@ -27,6 +27,7 @@ ExportDialog::ExportDialog(QWidget *parent, const Format format)
   createWidgets();
   setupLayout();
   connectSignals();
+  initDefault();
 }
 
 void ExportDialog::finalize() {
@@ -192,6 +193,7 @@ void ExportDialog::connectSignals() {
 
 void ExportDialog::initDefault() {
   // @TODO maybe create widgets, connect signals, set default values on widgets
+  // @TODO remember previous settings
   options.name = name->text();
   options.directory = QDir::homePath();
   options.layerLine.stride = expt_stride.def;

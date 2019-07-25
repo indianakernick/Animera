@@ -49,12 +49,15 @@ constexpr auto setter(Object *obj) {
     &decltype(detail::value(RECEIVER, 0))::SLOT                                 \
   )
 
-#define CONNECT_SETTER(SENDER, SIGNAL, RECEIVER)                                \
+#define CONNECT_LAMBDA(SENDER, SIGNAL, ...)                                     \
   QObject::connect(                                                             \
     detail::address(SENDER, 0),                                                 \
     &decltype(detail::value(SENDER, 0))::SIGNAL,                                \
-    detail::setter(detail::address(RECEIVER, 0))                                \
+    __VA_ARGS__                                                                 \
   )
+
+#define CONNECT_SETTER(SENDER, SIGNAL, RECEIVER)                                \
+  CONNECT_LAMBDA(SENDER, SIGNAL, detail::setter(detail::address(RECEIVER, 0)))
 
 #define CONNECT_OVERLOAD(SENDER, SIGNAL, RECEIVER, SLOT, ...)                   \
   QObject::connect(                                                             \
@@ -69,7 +72,7 @@ constexpr auto setter(Object *obj) {
     detail::address(SENDER, 0),                                                 \
     qOverload<__VA_ARGS__>(&decltype(detail::value(SENDER, 0))::SIGNAL),        \
     detail::setter(detail::address(RECEIVER, 0))                                \
-  )                                                                             \
+  )
 
 // connect\((.+),\s+&\w+::(\w+),\s+(.+),\s+&\w+::(\w+)\);
 // CONNECT($1, $2, $3, $4);

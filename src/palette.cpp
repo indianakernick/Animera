@@ -103,6 +103,10 @@ void Palette::deserialize(QIODevice *dev) {
   Q_EMIT paletteChanged({colors.data(), pal_colors});
 }
 
+PaletteCSpan Palette::getPalette() const {
+  return {colors.data(), pal_colors};
+}
+
 void Palette::initCanvas(const Format format) {
   canvasFormat = format;
 }

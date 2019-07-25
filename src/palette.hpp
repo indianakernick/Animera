@@ -30,6 +30,8 @@ public:
   void serialize(QIODevice *) const;
   void deserialize(QIODevice *);
 
+  PaletteCSpan getPalette() const;
+
 public Q_SLOTS:
   void initCanvas(Format);
 
