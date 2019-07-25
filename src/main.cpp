@@ -1703,7 +1703,27 @@ void blitImageOld(QImage &dst, const QImage &src, const QPoint pos) {
 
 #if BUG_TEST
 
-#include <QtCore/qdebug.h>
+#include <QtCore/qtimer.h>
+#include <QtWidgets/qmainwindow.h>
+#include <QtWidgets/qapplication.h>
+#include <QtWidgets/qdesktopwidget.h>
+
+int main(int argc, char **argv) {
+  QApplication app{argc, argv};
+  QMainWindow a{app.desktop()};
+  QWidget aChild{&a};
+  aChild.setFixedSize(400, 400);
+  a.show();
+  QTimer::singleShot(5000, [&a]{
+    auto *b = new QMainWindow{&a};
+    auto *bChild = new QWidget{b};
+    bChild->setFixedSize(400, 400);
+    b->show();
+  });
+  return app.exec();
+}
+
+/*#include <QtCore/qdebug.h>
 #include <QtGui/qpainter.h>
 #include <QtWidgets/qcombobox.h>
 #include <QtWidgets/qboxlayout.h>
@@ -1741,7 +1761,7 @@ int main(int argc, char **argv) {
   blue->setGeometry(101, 39, 100, 20);
   window.show();
   return app.exec();
-}
+}*/
 
 /*#include <QtWidgets/qmenubar.h>
 #include <QtWidgets/qmainwindow.h>

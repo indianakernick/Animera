@@ -50,12 +50,14 @@ FileInputWidget::FileInputWidget(QWidget *parent, const int chars)
 void FileInputWidget::initText() {
   auto *completer = new QCompleter{text};
   auto *model = new QFileSystemModel{completer};
-  model->setRootPath(QDir::rootPath());
+  // @TODO bug workaround. should be QDir::rootPath()
+  // https://forum.qt.io/topic/105279/update-the-qcompleter-when-calling-qlineedit-settext
+  model->setRootPath(QDir::homePath());
   model->setFilter(QDir::Dirs | QDir::Drives | QDir::NoDotAndDotDot | QDir::CaseSensitive);
   completer->setModel(model);
   completer->setCompletionMode(QCompleter::InlineCompletion);
   text->setCompleter(completer);
-  text->setText(QDir::rootPath());
+  text->setText(QDir::homePath());
 }
 
 void FileInputWidget::setTextFromDialog() {
