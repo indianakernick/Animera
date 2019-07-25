@@ -13,17 +13,29 @@
 
 class TextInputWidget;
 class FileInputButton;
+class DirValidator;
 
 class FileInputWidget final : public QWidget {
+  Q_OBJECT
+  
 public:
   FileInputWidget(QWidget *, int);
+
+Q_SIGNALS:
+  void pathChanged(const QString &);
+
+private Q_SLOTS:
+  void setTextFromDialog();
+  void simplifyPath();
+  void changePath();
 
 private:
   TextInputWidget *text;
   FileInputButton *icon;
+  DirValidator *validator;
 
   void initText();
-  void setTextFromDialog();
+  void connectSignals();
 };
 
 #endif

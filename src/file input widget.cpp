@@ -11,6 +11,7 @@
 #include "connect.hpp"
 #include <QtCore/qdir.h>
 #include <QtGui/qpainter.h>
+#include <QtGui/qvalidator.h>
 #include "widget painting.hpp"
 #include "text input widget.hpp"
 #include <QtWidgets/qcompleter.h>
@@ -36,6 +37,38 @@ private:
   }
 };
 
+class DirValidator final : public QValidator {
+public:
+  explicit DirValidator(QWidget *parent)
+    : QValidator{parent} {}
+  
+  void fixup(QString &input) const override {
+    while (!input.isEmpty() && !QDir{input}.exists()) {
+      input.truncate(input.lastIndexOf(QDir::separator()));
+    }
+    if (input.isEmpty()) {
+      input = QDir::rootPath();
+    }
+  }
+  
+  State validate(QString &input, int &) const override {
+    if (input.isEmpty()) {
+      return State::Intermediate;
+    }
+    if (QDir{input}.exists()) {
+      return State::Acceptable;
+    }
+    const int lastSlash = input.lastIndexOf(QDir::separator());
+    if (lastSlash != -1) {
+      const QString truncated{input.data(), lastSlash};
+      if (QDir{truncated}.exists()) {
+        return State::Intermediate;
+      }
+    }
+    return State::Invalid;
+  }
+};
+
 FileInputWidget::FileInputWidget(QWidget *parent, const int chars)
   : QWidget{parent} {
   const TextIconRects rects = textBoxIconRect(chars);
@@ -44,7 +77,22 @@ FileInputWidget::FileInputWidget(QWidget *parent, const int chars)
   icon = new FileInputButton{this};
   icon->setGeometry(rects.icon().inner());
   initText();
-  CONNECT(icon, pressed, this, setTextFromDialog);
+  connectSignals();
+}
+
+void FileInputWidget::setTextFromDialog() {
+  QString newDir = QFileDialog::getExistingDirectory(nullptr, "", text->text());
+  if (!newDir.isNull()) {
+    text->setText(QDir::cleanPath(newDir));
+  }
+}
+
+void FileInputWidget::simplifyPath() {
+  text->setText(QDir::cleanPath(text->text()));
+}
+
+void FileInputWidget::changePath() {
+  Q_EMIT pathChanged(text->text());
 }
 
 void FileInputWidget::initText() {
@@ -52,17 +100,26 @@ void FileInputWidget::initText() {
   auto *model = new QFileSystemModel{completer};
   // @TODO bug workaround. should be QDir::rootPath()
   // https://forum.qt.io/topic/105279/update-the-qcompleter-when-calling-qlineedit-settext
+  // @TODO completer suggests trailing slashes
+  // these are later removed by cleanPath.
+  // pressing slash while completer is suggesting something should materialize
+  // the suggestion, append a slash and suggest another directory
+  
+  // Custom DirCompleter would solve both problems
   model->setRootPath(QDir::homePath());
   model->setFilter(QDir::Dirs | QDir::Drives | QDir::NoDotAndDotDot | QDir::CaseSensitive);
   completer->setModel(model);
   completer->setCompletionMode(QCompleter::InlineCompletion);
   text->setCompleter(completer);
+  validator = new DirValidator{text};
+  text->setValidator(validator);
   text->setText(QDir::homePath());
 }
 
-void FileInputWidget::setTextFromDialog() {
-  QString newDir = QFileDialog::getExistingDirectory(nullptr, "", text->text());
-  if (!newDir.isNull()) {
-    text->setText(newDir);
-  }
+void FileInputWidget::connectSignals() {
+  CONNECT(icon, pressed,         this, setTextFromDialog);
+  CONNECT(text, editingFinished, this, simplifyPath);
+  CONNECT(text, editingFinished, this, changePath);
 }
+
+#include "file input widget.moc"

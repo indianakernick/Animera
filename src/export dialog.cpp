@@ -173,6 +173,7 @@ void ExportDialog::setupLayout() {
 
 void ExportDialog::connectSignals() {
   CONNECT_SETTER(  name,         textChanged,         options.name);
+  CONNECT_SETTER(  dir,          pathChanged,         options.directory);
   CONNECT_SETTER(  layerStride,  valueChanged,        options.layerLine.stride);
   CONNECT_SETTER(  layerOffset,  valueChanged,        options.layerLine.offset);
   CONNECT_SETTER(  frameStride,  valueChanged,        options.frameLine.stride);
