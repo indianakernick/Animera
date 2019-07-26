@@ -43,6 +43,35 @@ auto findSpan(Spans &spans, FrameIdx &idx) {
 
 }
 
+ConstCellIter::ConstCellIter(const Spans::const_iterator iter, const FrameIdx idx)
+  : iter{iter}, idx{idx} {}
+
+void ConstCellIter::incr() {
+  assert(0 < iter->len);
+  assert(idx < iter->len);
+  if (++idx == iter->len) {
+    ++iter;
+    idx = 0;
+  }
+}
+
+const Cell *ConstCellIter::get() const {
+  return iter->cell.get();
+}
+
+ConstCellIter find(const Spans &spans, FrameIdx idx) {
+  Spans::const_iterator iter = findSpan(spans, idx);
+  return {iter, idx};
+}
+
+Cell *get(Spans &spans, FrameIdx idx) {
+  return findSpan(spans, idx)->cell.get();
+}
+
+const Cell *get(const Spans &spans, FrameIdx idx) {
+  return findSpan(spans, idx)->cell.get();
+}
+
 void insertCopy(Spans &spans, FrameIdx idx) {
   Spans::iterator span = findSpan(spans, idx);
   if (idx < span->len - 1) {
@@ -211,14 +240,6 @@ Spans truncateCopy(const Spans &spans, FrameIdx len) {
 
 void remove(Spans &spans, FrameIdx idx) {
   shrinkSpan(spans, findSpan(spans, idx));
-}
-
-Cell *get(Spans &spans, FrameIdx idx) {
-  return findSpan(spans, idx)->cell.get();
-}
-
-const Cell *get(const Spans &spans, FrameIdx idx) {
-  return findSpan(spans, idx)->cell.get();
 }
 
 void clear(Spans &spans, const FrameIdx len) {

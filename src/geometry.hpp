@@ -31,6 +31,10 @@ constexpr QRect toRect(const QPoint p) {
   return {p, QSize{1, 1}};
 }
 
+constexpr QRect toRect(const QSize s) {
+  return {{0, 0}, s};
+}
+
 constexpr QRect unite(const QPoint a, const QPoint b) {
   // Can't use QRect{a, b}.normalized()
   const auto [minX, maxX] = std::minmax(a.x(), b.x());

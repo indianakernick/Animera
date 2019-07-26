@@ -24,7 +24,7 @@ QPixmap bakeColoredBitmap(const QBitmap &bitmap, const QColor color) {
   QPainter painter{&pixmap};
   painter.setCompositionMode(QPainter::CompositionMode_Source);
   painter.setClipRegion(bitmap);
-  painter.fillRect(QRect{{}, pixmap.size()}, color);
+  painter.fillRect(pixmap.rect(), color);
   return pixmap;
 }
 

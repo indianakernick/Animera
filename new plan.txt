@@ -420,3 +420,7 @@ export options
       monochrome png
 
 consider grayscale with alpha
+
+Swedish word for animate is animera
+
+transform a layer or transform a frame

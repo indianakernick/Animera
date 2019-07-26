@@ -18,6 +18,10 @@ enum class LayerSelect {
   current
 };
 
+constexpr bool composited(const LayerSelect layer) {
+  return layer == LayerSelect::all_composited;
+}
+
 enum class FrameSelect {
   // export dialog.cpp depends on order
   all,

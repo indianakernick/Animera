@@ -23,6 +23,14 @@ public:
   void initDefault();
   void serialize(QIODevice *) const;
   void deserialize(QIODevice *);
+
+private:
+  CellRect selectCells(const ExportOptions &) const;
+  void exportFile(const ExportOptions &, QImage, CellPos) const;
+  void exportCompRect(const ExportOptions &, PaletteCSpan, CellRect) const;
+  void exportRect(const ExportOptions &, CellRect) const;
+
+public:
   void exportTimeline(const ExportOptions &, PaletteCSpan) const;
 
 public Q_SLOTS:
@@ -87,8 +95,6 @@ private:
   Cell *getCell(CellPos);
   Frame getFrame(FrameIdx) const;
   LayerIdx layerCount() const;
-  CellRect selectCells(const ExportOptions &) const;
-  void exportFile(const ExportOptions &, QImage, CellPos) const;
   
   void changePos();
   void changeFrame();

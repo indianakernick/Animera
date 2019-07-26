@@ -91,65 +91,102 @@ void Timeline::deserialize(QIODevice *dev) {
   changeLayers(0, layerCount());
 }
 
+CellRect Timeline::selectCells(const ExportOptions &options) const {
+  CellRect rect;
+  switch (options.layerSelect) {
+    case LayerSelect::all_composited:
+    case LayerSelect::all:
+      rect.minL = 0;
+      rect.maxL = layerCount() - 1;
+      break;
+    case LayerSelect::current:
+      rect.minL = rect.maxL = currPos.l;
+      break;
+    default: Q_UNREACHABLE();
+  }
+  switch (options.frameSelect) {
+    case FrameSelect::all:
+      rect.minF = 0;
+      rect.maxF = frameCount - 1;
+      break;
+    case FrameSelect::current:
+      rect.minF = rect.maxF = currPos.f;
+      break;
+    default: Q_UNREACHABLE();
+  }
+  return rect;
+}
+
+namespace {
+
+int apply(const Line line, const int value) {
+  return value * line.stride + line.offset;
+}
+
+}
+
+void Timeline::exportFile(const ExportOptions &options, QImage image, CellPos pos) const {
+  QString path = options.directory;
+  if (path.back() != QDir::separator()) {
+    path.push_back(QDir::separator());
+  }
+  pos.l = apply(options.layerLine, pos.l);
+  pos.f = apply(options.frameLine, pos.f);
+  path += "sprite_L" + QString::number(pos.l) + "_F" + QString::number(pos.f);
+  path += ".png";
+  image.save(path);
+}
+
+void Timeline::exportCompRect(
+  const ExportOptions &options,
+  const PaletteCSpan palette,
+  const CellRect rect
+) const {
+  const LayerIdx rectLayers = rect.maxL - rect.minL + 1;
+  Frame frame;
+  frame.reserve(rectLayers);
+  std::vector<ConstCellIter> iterators;
+  iterators.reserve(rectLayers);
+  for (LayerIdx l = rect.minL; l <= rect.maxL; ++l) {
+    iterators.push_back(find(layers[l].spans, rect.minF));
+  }
+  for (FrameIdx f = rect.minF; f <= rect.maxF; ++f) {
+    frame.clear();
+    for (LayerIdx l = 0; l != rectLayers; ++l) {
+      if (!layers[l + rect.minL].visible) continue;
+      if (const Cell *cell = iterators[l].get(); cell) {
+        frame.push_back(cell);
+      }
+      iterators[l].incr();
+    }
+    QImage result = compositeFrame(palette, frame, canvasSize, canvasFormat);
+    exportFile(options, result, {rect.minL, f});
+  }
+}
+
+void Timeline::exportRect(
+  const ExportOptions &options,
+  const CellRect rect
+) const {
+  for (LayerIdx l = rect.minL; l <= rect.maxL; ++l) {
+    const Layer &layer = layers[l];
+    if (!layer.visible) continue;
+    ConstCellIter iter = find(layer.spans, rect.minF);
+    for (FrameIdx f = rect.minF; f <= rect.maxF; ++f) {
+      if (const Cell *cell = iter.get(); cell) {
+        exportFile(options, cell->image, {l, f});
+      }
+      iter.incr();
+    }
+  }
+}
+
 void Timeline::exportTimeline(const ExportOptions &options, const PaletteCSpan palette) const {
   const CellRect rect = selectCells(options);
-  if (options.layerSelect == LayerSelect::all_composited) {
-    if (rect.minF == rect.maxF) {
-      QImage result = compositeFrame(palette, getFrame(rect.minF), canvasSize, canvasFormat);
-      exportFile(options, result, {0, rect.minF});
-    } else {
-      Frame frame(layers.size(), nullptr);
-      Frame filteredFrame(layers.size());
-      std::vector<FrameIdx> lengths(layers.size());
-      std::vector<Spans::const_iterator> iterators(layers.size());
-      for (size_t l = 0; l != layers.size(); ++l) {
-        iterators[l] = layers[l].spans.cbegin();
-        lengths[l] = iterators[l]->len;
-      }
-      for (FrameIdx f = rect.minF; f <= rect.maxF; ++f) {
-        for (size_t l = 0; l != layers.size(); ++l) {
-          if (!layers[l].visible) continue;
-          assert(iterators[l]->len > 0);
-          frame[l] = iterators[l]->cell.get();
-          if (--lengths[l] == 0) {
-            ++iterators[l];
-            lengths[l] = iterators[l]->len;
-          }
-        }
-        auto end = std::copy_if(
-          frame.cbegin(),
-          frame.cend(),
-          filteredFrame.begin(),
-          [](const Cell *cell) -> bool {
-            return cell;
-          }
-        );
-        QImage result = compositeFrame(
-          palette,
-          {filteredFrame.data(), end - filteredFrame.begin()},
-          canvasSize,
-          canvasFormat
-        );
-        exportFile(options, result, {0, f});
-      }
-    }
+  if (composited(options.layerSelect)) {
+    exportCompRect(options, palette, rect);
   } else {
-    for (LayerIdx l = rect.minL; l <= rect.maxL; ++l) {
-      const Layer &layer = layers[l];
-      if (!layer.visible) continue;
-      Spans::const_iterator iter = layer.spans.cbegin();
-      FrameIdx len = iter->len;
-      for (FrameIdx f = rect.minF; f <= rect.maxF; ++f) {
-        assert(iter->len > 0);
-        if (iter->cell) {
-          exportFile(options, iter->cell->image, {l, f});
-        }
-        if (--len == 0) {
-          ++iter;
-          len = iter->len;
-        }
-      }
-    }
+    exportRect(options, rect);
   }
 }
 
@@ -352,8 +389,9 @@ void Timeline::setVisibility(const LayerIdx idx, const bool visible) {
   assert(0 <= idx);
   assert(idx < layerCount());
   bool &layerVis = layers[idx].visible;
+  // @TODO Emit signal when layer visibility changed?
   // if (layerVis != visible) {
-     layerVis = visible;
+    layerVis = visible;
   //   Q_EMIT visibilityChanged(idx, visible);
   // }
   changeFrame();
@@ -363,6 +401,7 @@ void Timeline::setName(const LayerIdx idx, const std::string_view name) {
   assert(0 <= idx);
   assert(idx < layerCount());
   layers[idx].name = name;
+  // @TODO Emit signal when layer name changed?
   // Q_EMIT nameChanged(idx, name);
 }
 
@@ -414,8 +453,7 @@ Frame Timeline::getFrame(const FrameIdx pos) const {
   frame.reserve(layers.size());
   for (const Layer &layer : layers) {
     if (layer.visible) {
-      const Cell *cell = get(layer.spans, pos);
-      if (cell) {
+      if (const Cell *cell = get(layer.spans, pos); cell) {
         frame.push_back(cell);
       }
     }
@@ -425,52 +463,6 @@ Frame Timeline::getFrame(const FrameIdx pos) const {
 
 LayerIdx Timeline::layerCount() const {
   return static_cast<LayerIdx>(layers.size());
-}
-
-CellRect Timeline::selectCells(const ExportOptions &options) const {
-  CellRect rect;
-  switch (options.layerSelect) {
-    case LayerSelect::all_composited:
-    case LayerSelect::all:
-      rect.minL = 0;
-      rect.maxL = layerCount() - 1;
-      break;
-    case LayerSelect::current:
-      rect.minL = rect.maxL = currPos.l;
-      break;
-    default: Q_UNREACHABLE();
-  }
-  switch (options.frameSelect) {
-    case FrameSelect::all:
-      rect.minF = 0;
-      rect.maxF = frameCount - 1;
-      break;
-    case FrameSelect::current:
-      rect.minF = rect.maxF = currPos.f;
-      break;
-    default: Q_UNREACHABLE();
-  }
-  return rect;
-}
-
-namespace {
-
-int apply(const Line line, const int value) {
-  return value * line.stride + line.offset;
-}
-
-}
-
-void Timeline::exportFile(const ExportOptions &options, QImage image, CellPos pos) const {
-  QString path = options.directory;
-  if (path.back() != QDir::separator()) {
-    path.push_back(QDir::separator());
-  }
-  pos.l = apply(options.layerLine, pos.l);
-  pos.f = apply(options.frameLine, pos.f);
-  path += "sprite_L" + QString::number(pos.l) + "_F" + QString::number(pos.f);
-  path += ".png";
-  image.save(path);
 }
 
 void Timeline::changePos() {

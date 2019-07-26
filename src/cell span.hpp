@@ -11,6 +11,26 @@
 
 #include "cell.hpp"
 
+// @TODO Make Spans a class and make this a proper iterator
+class ConstCellIter {
+public:
+  ConstCellIter(Spans::const_iterator, FrameIdx);
+  
+  void incr();
+  const Cell *get() const;
+  
+private:
+  Spans::const_iterator iter;
+  FrameIdx idx;
+};
+
+/// Get a constant iterator to a cell
+ConstCellIter find(const Spans &, FrameIdx);
+/// Get a mutable cell
+Cell *get(Spans &, FrameIdx);
+/// Get a constant cell
+const Cell *get(const Spans &, FrameIdx);
+
 /// Insert a copy of the previous cell after the index
 /// If the index refers to the last cell of a span, the span is copied
 /// otherwise the span is extended
@@ -41,11 +61,6 @@ Spans truncateCopy(const Spans &, FrameIdx);
 
 /// Remove a cell
 void remove(Spans &, FrameIdx);
-
-/// Get a mutable cell
-Cell *get(Spans &, FrameIdx);
-/// Get a constant cell
-const Cell *get(const Spans &, FrameIdx);
 
 /// Replace the spans with a single null span
 void clear(Spans &, FrameIdx);
