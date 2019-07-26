@@ -120,6 +120,56 @@ CellRect Timeline::selectCells(const ExportOptions &options) const {
 
 namespace {
 
+inline void assertEval([[maybe_unused]] const bool cond) noexcept {
+  assert(cond);
+}
+
+QImage grayToIndexed(const PaletteCSpan palette, QImage image) {
+  assert(image.format() == QImage::Format_Grayscale8);
+  assertEval(image.reinterpretAsFormat(QImage::Format_Indexed8));
+  QVector<QRgb> table(static_cast<int>(palette.size()));
+  std::copy(palette.cbegin(), palette.cend(), table.begin());
+  image.setColorTable(table);
+  return image;
+}
+
+}
+
+QImage Timeline::convertImage(
+  const ExportFormat format,
+  const PaletteCSpan palette,
+  QImage image
+) const {
+  // @TODO libpng
+  switch (canvasFormat) {
+    case Format::rgba:
+      assert(format == ExportFormat::rgba);
+      return image;
+    case Format::palette:
+      if (format == ExportFormat::rgba) {
+        if (image.format() == qimageFormat(Format::rgba)) {
+          return image; // image was composited
+        } else {
+          return grayToIndexed(palette, image);
+        }
+      } else if (format == ExportFormat::indexed) {
+        return grayToIndexed(palette, image);
+      } else if (format == ExportFormat::grayscale) {
+        assert(image.format() == QImage::Format_Grayscale8);
+        return image;
+      } else Q_UNREACHABLE();
+    case Format::gray:
+      if (format == ExportFormat::grayscale) {
+        return image;
+      } else if (format == ExportFormat::monochrome) {
+        return grayToMono(image);
+      } else Q_UNREACHABLE();
+    default: Q_UNREACHABLE();
+  }
+}
+
+namespace {
+
 int apply(const Line line, const int value) {
   return value * line.stride + line.offset;
 }
@@ -128,6 +178,7 @@ int apply(const Line line, const int value) {
 
 void Timeline::exportFile(
   const ExportOptions &options,
+  const PaletteCSpan palette,
   QImage image,
   CellPos pos
 ) const {
@@ -139,8 +190,7 @@ void Timeline::exportFile(
   pos.f = apply(options.frameLine, pos.f);
   path += evalExportPattern(options.name, pos.l, pos.f);
   path += ".png";
-  [[maybe_unused]] const bool ok = image.save(path);
-  assert(ok);
+  assertEval(convertImage(options.format, palette, image).save(path));
 }
 
 void Timeline::exportCompRect(
@@ -166,21 +216,23 @@ void Timeline::exportCompRect(
       iterators[l].incr();
     }
     QImage result = compositeFrame(palette, frame, canvasSize, canvasFormat);
-    exportFile(options, result, {rect.minL, f});
+    exportFile(options, palette, result, {rect.minL, f});
   }
 }
 
 void Timeline::exportRect(
   const ExportOptions &options,
+  const PaletteCSpan palette,
   const CellRect rect
 ) const {
   for (LayerIdx l = rect.minL; l <= rect.maxL; ++l) {
     const Layer &layer = layers[l];
+    // @TODO does the user want to skip invisible layers?
     if (!layer.visible) continue;
     ConstCellIter iter = find(layer.spans, rect.minF);
     for (FrameIdx f = rect.minF; f <= rect.maxF; ++f) {
       if (const Cell *cell = iter.get(); cell) {
-        exportFile(options, cell->image, {l, f});
+        exportFile(options, palette, cell->image, {l, f});
       }
       iter.incr();
     }
@@ -192,7 +244,7 @@ void Timeline::exportTimeline(const ExportOptions &options, const PaletteCSpan p
   if (composited(options.layerSelect)) {
     exportCompRect(options, palette, rect);
   } else {
-    exportRect(options, rect);
+    exportRect(options, palette, rect);
   }
 }
 

@@ -231,3 +231,16 @@ void writeOverlay(
   writeOverlay(palette, format, overlay, source);
   maskClip(makeSurface<PixelRgba>(overlay), makeCSurface<PixelMask>(mask));
 }
+
+QImage grayToMono(const QImage &src) {
+  // @TODO libpng
+  // This is sooooooo inefficient
+  assert(src.format() == qimageFormat(Format::gray));
+  QImage dst{src.size(), QImage::Format_Mono};
+  for (int y = 0; y != dst.height(); ++y) {
+    for (int x = 0; x != dst.width(); ++x) {
+      dst.setPixel(x, y, static_cast<uint8_t>(src.pixel(x, y)) < 128 ? 0 : 1);
+    }
+  }
+  return dst;
+}

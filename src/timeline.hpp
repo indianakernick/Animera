@@ -26,9 +26,10 @@ public:
 
 private:
   CellRect selectCells(const ExportOptions &) const;
-  void exportFile(const ExportOptions &, QImage, CellPos) const;
+  QImage convertImage(ExportFormat, PaletteCSpan, QImage) const;
+  void exportFile(const ExportOptions &, PaletteCSpan, QImage, CellPos) const;
   void exportCompRect(const ExportOptions &, PaletteCSpan, CellRect) const;
-  void exportRect(const ExportOptions &, CellRect) const;
+  void exportRect(const ExportOptions &, PaletteCSpan, CellRect) const;
 
 public:
   void exportTimeline(const ExportOptions &, PaletteCSpan) const;
