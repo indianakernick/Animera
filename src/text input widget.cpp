@@ -82,7 +82,14 @@ int TextInputWidget::getMinCursorPos() const {
 }
 
 int TextInputWidget::getMaxCursorPos() const {
-  return rect.inner().width() - glob_text_padding;
+  return rect.inner().right() + 1 - glob_text_padding;
+}
+
+int TextInputWidget::getMinOffset() const {
+  // Should we consider rect.pos()?
+  return rect.inner().width()
+    - glob_text_padding
+    - text().length() * glob_font_stride_px;
 }
 
 void TextInputWidget::setOffset(int, const int newCursor) {
@@ -99,8 +106,7 @@ void TextInputWidget::setOffset(int, const int newCursor) {
 }
 
 void TextInputWidget::constrainOffset() {
-  const int max = getMaxCursorPos();
-  offset = std::max(offset, max - text().length() * glob_font_stride_px);
+  offset = std::max(offset, getMinOffset());
   offset = std::min(offset, 0);
 }
 
