@@ -1,8 +1,10 @@
 ![Imgur](https://i.imgur.com/2Iqka11.png)
 
-### A picture is a thousand words (scroll down for GIFs!)
+### If a picture is a thousand words then a gif is what, a million words?
 
-![Screenshot](https://i.imgur.com/lS1NJ2L.png)
+![Screenshot](https://i.imgur.com/7mZF1o8.png)
+
+---
 
 ![Palette Mode](https://i.imgur.com/9zZOte3.gif)
 

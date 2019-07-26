@@ -186,6 +186,7 @@
 		457DC0BF22E94EC00000777B /* export options.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "export options.hpp"; sourceTree = "<group>"; };
 		457DC0C022E9518A0000777B /* cell span.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "cell span.cpp"; sourceTree = "<group>"; };
 		457DC0C122E9518A0000777B /* cell span.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "cell span.hpp"; sourceTree = "<group>"; };
+		457DC0C322EA78910000777B /* icon.px2 */ = {isa = PBXFileReference; lastKnownFileType = file; path = icon.px2; sourceTree = "<group>"; };
 		4589188022990520002ADF77 /* flood fill.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "flood fill.hpp"; sourceTree = "<group>"; };
 		45891881229927D4002ADF77 /* porter duff.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "porter duff.hpp"; sourceTree = "<group>"; };
 		4589188222993BBC002ADF77 /* formats.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = formats.hpp; sourceTree = "<group>"; };
@@ -975,6 +976,7 @@
 				45DC2563224A0AEA00F40116 /* title@4x.png */,
 				45DC2562224A0AEA00F40116 /* title.png */,
 				45B284972219003B00D6D055 /* icon.png */,
+				457DC0C322EA78910000777B /* icon.px2 */,
 				452926E222BB607E00B17E0D /* screenshot.png */,
 				453C78792235D4B500818B19 /* resources.qrc */,
 				453C787C2235D70D00818B19 /* resources.rcc */,
