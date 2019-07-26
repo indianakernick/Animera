@@ -147,15 +147,12 @@ QImage Timeline::convertImage(
       return image;
     case Format::palette:
       if (format == ExportFormat::rgba) {
-        if (image.format() == qimageFormat(Format::rgba)) {
-          return image; // image was composited
-        } else {
-          return grayToIndexed(palette, image);
-        }
+        assert(image.format() == qimageFormat(Format::rgba));
+        return image;
       } else if (format == ExportFormat::indexed) {
         return grayToIndexed(palette, image);
       } else if (format == ExportFormat::grayscale) {
-        assert(image.format() == QImage::Format_Grayscale8);
+        assert(image.format() == qimageFormat(Format::gray));
         return image;
       } else Q_UNREACHABLE();
     case Format::gray:

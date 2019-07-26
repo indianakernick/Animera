@@ -29,7 +29,6 @@ enum class FrameSelect {
 };
 
 enum class ExportFormat {
-  // export dialog.cpp depends on order
   rgba,
   indexed,
   grayscale,

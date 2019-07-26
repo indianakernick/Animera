@@ -26,16 +26,14 @@ Q_SIGNALS:
   void canvasInitialized(Format, QSize);
 
 private Q_SLOTS:
-  void finalize();
+  void submit();
 
 private:
-  NumberInputWidget *widthWidget;
-  NumberInputWidget *heightWidget;
-  std::vector<FormatWidget *> formatWidgets;
-  TextPushButtonWidget *okButton = nullptr;
-  TextPushButtonWidget *cancelButton = nullptr;
-  QSize size = {128, 128};
-  Format format = Format::rgba;
+  NumberInputWidget *width;
+  NumberInputWidget *height;
+  std::vector<FormatWidget *> formats;
+  TextPushButtonWidget *ok;
+  TextPushButtonWidget *cancel;
   
   void createWidgets();
   void setupLayout();

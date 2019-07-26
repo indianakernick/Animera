@@ -83,18 +83,22 @@ NumberInputWidget::NumberInputWidget(
   CONNECT(this, editingFinished, this, newValidValue);
 }
 
+int NumberInputWidget::value() const {
+  return val;
+}
+
 void NumberInputWidget::changeValue(const int num) {
-  value = num;
-  setText(QString::number(value));
+  val = num;
+  setText(QString::number(val));
   boxValidator.updateValidValue(text());
 }
 
 void NumberInputWidget::textChanged() {
   if (!hasAcceptableInput()) return;
   const int newValue = text().toInt();
-  if (value != newValue) {
-    value = newValue;
-    Q_EMIT valueChanged(value);
+  if (val != newValue) {
+    val = newValue;
+    Q_EMIT valueChanged(val);
   }
 }
 
@@ -107,10 +111,10 @@ void NumberInputWidget::newValidValue() {
 
 void NumberInputWidget::keyPressEvent(QKeyEvent *event) {
   if (event->key() == Qt::Key_Up) {
-    setText(QString::number(std::min(value + 1, boxValidator.top())));
+    setText(QString::number(std::min(val + 1, boxValidator.top())));
     textChanged();
   } else if (event->key() == Qt::Key_Down) {
-    setText(QString::number(std::max(value - 1, boxValidator.bottom())));
+    setText(QString::number(std::max(val - 1, boxValidator.bottom())));
     textChanged();
   } else {
     TextInputWidget::keyPressEvent(event);

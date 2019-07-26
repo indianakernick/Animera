@@ -21,27 +21,20 @@ class FormatWidget final : public RadioButtonWidget {
   Q_OBJECT
   
 public:
-  FormatWidget(QWidget *parent, const QString &name, Format format)
-    : RadioButtonWidget{parent}, icon{name}, format{format} {
+  FormatWidget(QWidget *parent, const QString &name, const Format format)
+    : RadioButtonWidget{parent}, icon{name}, fmt{format} {
     setFixedSize(tool_button_size);
     back = QBitmap{":/Tools/base.pbm"}.scaled(tool_icon_size);
-    CONNECT(this, toggled, this, check);
   }
 
-Q_SIGNALS:
-  void checked(Format);
-
-private Q_SLOTS:
-  void check() {
-    if (isChecked()) {
-      Q_EMIT checked(format);
-    }
+  Format format() const {
+    return fmt;
   }
 
 private:
   QPixmap icon;
   QBitmap back;
-  Format format;
+  Format fmt;
   
   void paintEvent(QPaintEvent *) override {
     QPainter painter{this};
@@ -64,22 +57,32 @@ InitCanvasDialog::InitCanvasDialog(QWidget *widget)
   connectSignals();
 }
 
-void InitCanvasDialog::finalize() {
+void InitCanvasDialog::submit() {
+  constexpr Format null_format = static_cast<Format>(-1);
+  Format format = null_format;
+  for (FormatWidget *widget : formats) {
+    if (widget->isChecked()) {
+      format = widget->format();
+      break;
+    }
+  }
+  assert(format != null_format);
+  const QSize size = {width->value(), height->value()};
   Q_EMIT canvasInitialized(format, size);
 }
 
 void InitCanvasDialog::createWidgets() {
-  widthWidget = new NumberInputWidget{this, init_size_rect, init_size_range};
-  heightWidget = new NumberInputWidget{this, init_size_rect, init_size_range};
-  formatWidgets.push_back(new FormatWidget{this, ":/Formats/rgba.png", Format::rgba});
-  formatWidgets.push_back(new FormatWidget{this, ":/Formats/gray.png", Format::gray});
-  formatWidgets.push_back(new FormatWidget{this, ":/Formats/index.png", Format::palette});
-  formatWidgets[0]->setToolTip("32-bit RGBA");
-  formatWidgets[1]->setToolTip("8-bit Grayscale");
-  formatWidgets[2]->setToolTip("8-bit Indexed");
-  formatWidgets.front()->setChecked(true);
-  okButton = new TextPushButtonWidget{this, init_button_rect, "Ok"};
-  cancelButton = new TextPushButtonWidget{this, init_button_rect, "Cancel"};
+  width = new NumberInputWidget{this, init_size_rect, init_size_range};
+  height = new NumberInputWidget{this, init_size_rect, init_size_range};
+  formats.push_back(new FormatWidget{this, ":/Formats/rgba.png", Format::rgba});
+  formats.push_back(new FormatWidget{this, ":/Formats/gray.png", Format::gray});
+  formats.push_back(new FormatWidget{this, ":/Formats/index.png", Format::palette});
+  formats[0]->setToolTip("32-bit RGBA");
+  formats[1]->setToolTip("8-bit Grayscale");
+  formats[2]->setToolTip("8-bit Indexed");
+  formats.front()->setChecked(true);
+  ok = new TextPushButtonWidget{this, init_button_rect, "Ok"};
+  cancel = new TextPushButtonWidget{this, init_button_rect, "Cancel"};
 }
 
 void InitCanvasDialog::setupLayout() {
@@ -92,9 +95,9 @@ void InitCanvasDialog::setupLayout() {
   QWidget *heightLabel = new LabelWidget{this, textBoxRect(8), "Height: "};
   QWidget *formatLabel = new LabelWidget{this, textBoxRect(8), "Format: "};
   layout->addWidget(widthLabel, 0, 0, Qt::AlignLeft);
-  layout->addWidget(widthWidget, 0, 1, Qt::AlignRight);
+  layout->addWidget(width, 0, 1, Qt::AlignRight);
   layout->addWidget(heightLabel, 1, 0, Qt::AlignLeft);
-  layout->addWidget(heightWidget, 1, 1, Qt::AlignRight);
+  layout->addWidget(height, 1, 1, Qt::AlignRight);
   layout->addWidget(formatLabel, 2, 0, Qt::AlignLeft);
   
   auto *formatLayout = new QHBoxLayout{};
@@ -102,24 +105,19 @@ void InitCanvasDialog::setupLayout() {
   formatLayout->setContentsMargins(0, 0, 0, 0);
   formatLayout->setSpacing(0);
   formatLayout->addStretch();
-  for (FormatWidget *widget : formatWidgets) {
+  for (FormatWidget *widget : formats) {
     formatLayout->addWidget(widget);
     formatLayout->addStretch();
   }
   
-  layout->addWidget(okButton, 4, 0);
-  layout->addWidget(cancelButton, 4, 1);
+  layout->addWidget(ok, 4, 0);
+  layout->addWidget(cancel, 4, 1);
 }
 
 void InitCanvasDialog::connectSignals() {
-  CONNECT_SETTER(widthWidget, valueChanged, size.rwidth());
-  CONNECT_SETTER(heightWidget, valueChanged, size.rheight());
-  for (FormatWidget *widget : formatWidgets) {
-    CONNECT_SETTER(widget, checked, format);
-  }
-  CONNECT(okButton, pressed, this, accept);
-  CONNECT(cancelButton, pressed, this, reject);
-  CONNECT(this, accepted, this, finalize);
+  CONNECT(ok,     pressed,  this, accept);
+  CONNECT(cancel, pressed,  this, reject);
+  CONNECT(this,   accepted, this, submit);
 }
 
 #include "init canvas dialog.moc"

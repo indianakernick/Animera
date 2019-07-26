@@ -80,8 +80,12 @@ FileInputWidget::FileInputWidget(QWidget *parent, const int chars)
   connectSignals();
 }
 
+QString FileInputWidget::path() const {
+  return text->text();
+}
+
 void FileInputWidget::setTextFromDialog() {
-  QString newDir = QFileDialog::getExistingDirectory(nullptr, "", text->text());
+  QString newDir = QFileDialog::getExistingDirectory(nullptr, "", path());
   if (!newDir.isNull()) {
     text->setText(QDir::cleanPath(newDir));
     changePath();
@@ -89,11 +93,11 @@ void FileInputWidget::setTextFromDialog() {
 }
 
 void FileInputWidget::simplifyPath() {
-  text->setText(QDir::cleanPath(text->text()));
+  text->setText(QDir::cleanPath(path()));
 }
 
 void FileInputWidget::changePath() {
-  Q_EMIT pathChanged(text->text());
+  Q_EMIT pathChanged(path());
 }
 
 void FileInputWidget::initText() {

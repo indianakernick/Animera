@@ -21,6 +21,8 @@ class FileInputWidget final : public QWidget {
 public:
   FileInputWidget(QWidget *, int);
 
+  QString path() const;
+
 Q_SIGNALS:
   void pathChanged(const QString &);
 

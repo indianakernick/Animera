@@ -40,7 +40,9 @@ class NumberInputWidget final : public TextInputWidget {
   Q_OBJECT
 public:
   NumberInputWidget(QWidget *, WidgetRect, IntRange);
-
+  
+  int value() const;
+  
 Q_SIGNALS:
   void valueChanged(int);
 
@@ -53,7 +55,7 @@ private Q_SLOTS:
 
 private:
   NumberValidator boxValidator;
-  int value;
+  int val;
   
   void keyPressEvent(QKeyEvent *) override;
 };

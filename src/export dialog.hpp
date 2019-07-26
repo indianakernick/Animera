@@ -10,9 +10,9 @@
 #define export_dialog_hpp
 
 #include "image.hpp"
-#include "export options.hpp"
 #include <QtWidgets/qdialog.h>
 
+struct ExportOptions;
 class ComboBoxWidget;
 class FileInputWidget;
 class TextInputWidget;
@@ -29,15 +29,11 @@ Q_SIGNALS:
   void exportSprite(const ExportOptions &);
 
 private Q_SLOTS:
-  void finalize();
+  void submit();
   void updateFormatItems(int);
-  void setLayerSelect(int);
-  void setFrameSelect(int);
-  void setExportFormat(int);
 
 private:
   Format format;
-  ExportOptions options;
   TextInputWidget *name;
   FileInputWidget *dir;
   NumberInputWidget *layerStride;
@@ -55,7 +51,6 @@ private:
   void createWidgets();
   void setupLayout();
   void connectSignals();
-  void initDefault();
 };
 
 #endif
