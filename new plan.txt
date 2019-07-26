@@ -398,29 +398,10 @@ A builtin calculator?
 image, view, sampler
 vulkan textures
 
-export options
-  frames
-    all
-    current
-  layers
-    all
-    all composited
-    current
-  naming
-    xyz %l %00f
-  file format
-    rgba
-      rgba png
-    indexed
-      rgba png
-      indexed png (without compositing)
-      grayscale png (without compositing)
-    grayscale
-      grayscale png
-      monochrome png
-
 consider grayscale with alpha
 
 Swedish word for animate is animera
 
 transform a layer or transform a frame
+
+set cursor and respond to clicks more precisely

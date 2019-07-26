@@ -46,11 +46,11 @@ void PickerImplGray::setColor(const QRgb color) {
   gray = color & 255;
   graySlider->changeGray(gray);
   boxY->changeValue(gray);
-  boxHex->changeRgba({gray, gray, gray}, 255);
+  changeGray(gray);
 }
 
 void PickerImplGray::changeGray(const int newGray) {
   gray = newGray;
-  Q_EMIT boxHex->changeRgba({gray, gray, gray}, 255);
+  boxHex->changeRgba({gray, gray, gray}, 255);
   Q_EMIT colorChanged(gray);
 }
