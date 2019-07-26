@@ -91,14 +91,11 @@ void InitCanvasDialog::setupLayout() {
   layout->setSpacing(0);
   layout->setContentsMargins(glob_padding, glob_padding, glob_padding, glob_padding);
   layout->setSizeConstraint(QLayout::SetFixedSize);
-  QWidget *widthLabel = new LabelWidget{this, textBoxRect(8), "Width: "};
-  QWidget *heightLabel = new LabelWidget{this, textBoxRect(8), "Height: "};
-  QWidget *formatLabel = new LabelWidget{this, textBoxRect(8), "Format: "};
-  layout->addWidget(widthLabel, 0, 0, Qt::AlignLeft);
+  layout->addWidget(makeLabel(this, 8, "Width: "), 0, 0, Qt::AlignLeft);
   layout->addWidget(width, 0, 1, Qt::AlignRight);
-  layout->addWidget(heightLabel, 1, 0, Qt::AlignLeft);
+  layout->addWidget(makeLabel(this, 8, "Height: "), 1, 0, Qt::AlignLeft);
   layout->addWidget(height, 1, 1, Qt::AlignRight);
-  layout->addWidget(formatLabel, 2, 0, Qt::AlignLeft);
+  layout->addWidget(makeLabel(this, 8, "Format: "), 2, 0, Qt::AlignLeft);
   
   auto *formatLayout = new QHBoxLayout{};
   layout->addLayout(formatLayout, 3, 0, 1, 2, Qt::AlignCenter);

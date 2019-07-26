@@ -107,11 +107,6 @@ void ExportDialog::createWidgets() {
 
 namespace {
 
-template <size_t Size>
-LabelWidget *makeLabel(QWidget *parent, const char (&text)[Size]) {
-  return new LabelWidget{parent, textBoxRect(Size - 1), text};
-}
-
 template <typename Layout>
 Layout *makeLayout(QBoxLayout *parent) {
   auto layout = new Layout;

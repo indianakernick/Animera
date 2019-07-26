@@ -25,4 +25,15 @@ private:
   void paintEvent(QPaintEvent *) override;
 };
 
+template <size_t Size>
+LabelWidget *makeLabel(QWidget *parent, const char (&text)[Size]) {
+  return new LabelWidget{parent, textBoxRect(Size - 1), text};
+}
+
+template <size_t Size>
+LabelWidget *makeLabel(QWidget *parent, const int chars, const char (&text)[Size]) {
+  assert(Size - 1 <= chars);
+  return new LabelWidget{parent, textBoxRect(chars), text};
+}
+
 #endif
