@@ -54,7 +54,7 @@ void ExportDialog::submit() {
 }
 
 void ExportDialog::updateFormatItems(const int layerIdx) {
-  if (format == Format::palette) {
+  if (format == Format::index) {
     if (layerIdx == static_cast<int>(LayerSelect::all_composited) && formatSelect->count() == 2) {
       formatSelect->clear();
       formatSelect->addItem("RGBA");
@@ -71,7 +71,7 @@ void ExportDialog::addFormatOptions() {
     case Format::rgba:
       formatSelect->addItem("RGBA");
       break;
-    case Format::palette:
+    case Format::index:
       formatSelect->addItem("RGBA");
       break;
     case Format::gray:

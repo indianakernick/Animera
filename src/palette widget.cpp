@@ -68,7 +68,7 @@ private:
   
   QColor getQColor() const {
     switch (format) {
-      case Format::palette:
+      case Format::index:
       case Format::rgba:
         return QColor::fromRgba(color);
       case Format::gray:
@@ -113,7 +113,7 @@ private:
   void mousePressEvent(QMouseEvent *event) override {
     RadioButtonWidget::mousePressEvent(event);
     if (event->button() == Qt::RightButton) {
-      if (format == Format::palette) {
+      if (format == Format::index) {
         Q_EMIT shouldSetIndex(index);
       } else {
         Q_EMIT shouldSetColor(color);

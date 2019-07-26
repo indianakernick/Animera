@@ -76,7 +76,7 @@ void InitCanvasDialog::createWidgets() {
   height = new NumberInputWidget{this, init_size_rect, init_size_range};
   formats.push_back(new FormatWidget{this, ":/Formats/rgba.png", Format::rgba});
   formats.push_back(new FormatWidget{this, ":/Formats/gray.png", Format::gray});
-  formats.push_back(new FormatWidget{this, ":/Formats/index.png", Format::palette});
+  formats.push_back(new FormatWidget{this, ":/Formats/index.png", Format::index});
   formats[0]->setToolTip("32-bit RGBA");
   formats[1]->setToolTip("8-bit Grayscale");
   formats[2]->setToolTip("8-bit Indexed");

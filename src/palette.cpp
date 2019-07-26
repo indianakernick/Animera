@@ -72,7 +72,7 @@ constexpr std::array<QRgb, 9> gray_palette = {
 void Palette::initDefault() {
   auto iter = colors.begin();
   switch (canvasFormat) {
-    case Format::palette:
+    case Format::index:
       *iter++ = 0;
       *iter++ = qRgb(0, 0, 0);
       *iter++ = qRgb(255, 255, 255);

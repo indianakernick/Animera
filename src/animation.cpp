@@ -25,7 +25,7 @@ void insertNull(Frames &frames, const Frames::iterator begin, const size_t count
 }
 
 void Animation::setPalette(Palette *newPalette) {
-  if (format == Format::palette) {
+  if (format == Format::index) {
     palette = newPalette;
   }
 }

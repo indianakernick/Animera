@@ -24,7 +24,7 @@ public:
   ActiveColorWidget(QWidget *parent, const QString &name, QRgb &color, const Format format)
     : RadioButtonWidget{parent}, name{name}, color{color}, format{format} {
     setFixedSize(tool_color_rect.widget().size());
-    if (format == Format::palette) {
+    if (format == Format::index) {
       CONNECT(this, toggled, this, attachIndex);
     } else {
       CONNECT(this, toggled, this, attachColor);
@@ -43,7 +43,7 @@ public Q_SLOTS:
     }
   }
   void changePaletteColors() {
-    if (format == Format::palette) {
+    if (format == Format::index) {
       repaint();
     }
   }
@@ -77,7 +77,7 @@ private:
     switch (format) {
       case Format::rgba:
         return QColor::fromRgba(color);
-      case Format::palette:
+      case Format::index:
         return QColor::fromRgba(palette[color]);
       case Format::gray:
         const int gray = color;
@@ -156,7 +156,7 @@ ToolColors ToolColorsWidget::getInitialColors(const Format format) {
   switch (format) {
     case Format::rgba:
       return {qRgb(255, 0, 0), qRgb(0, 0, 255), 0};
-    case Format::palette:
+    case Format::index:
       return {1, 2, 0};
     case Format::gray:
       return {255, 128, 0};

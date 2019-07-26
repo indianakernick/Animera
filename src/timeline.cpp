@@ -145,7 +145,7 @@ QImage Timeline::convertImage(
     case Format::rgba:
       assert(format == ExportFormat::rgba);
       return image;
-    case Format::palette:
+    case Format::index:
       if (format == ExportFormat::rgba) {
         assert(image.format() == qimageFormat(Format::rgba));
         return image;

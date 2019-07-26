@@ -49,7 +49,7 @@ void ColorPickerWidget::setHandleColor(const QRgb color) {
 void ColorPickerWidget::setImpl(const Format format) {
   switch (format) {
     case Format::rgba:
-    case Format::palette:
+    case Format::index:
       impl = std::make_unique<PickerImplRGBA>();
       break;
     case Format::gray:

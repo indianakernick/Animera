@@ -356,8 +356,8 @@ void WandSelectTool::addToSelection(const ToolMouseEvent &event) {
       floodFill(manip, event.pos);
       break;
     }
-    case Format::palette: {
-      Surface surface = makeCSurface<PixelPalette>(ctx->cell->image);
+    case Format::index: {
+      Surface surface = makeCSurface<PixelIndex>(ctx->cell->image);
       WandManip manip{
         makeSurface<PixelRgba>(*ctx->overlay),
         makeSurface<PixelMask>(mask),

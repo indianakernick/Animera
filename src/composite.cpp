@@ -42,7 +42,7 @@ void compositePalette(Surface<PixelRgba> output, FrameSpan frame, PaletteCSpan p
     porterDuff(
       mode_src_over,
       output,
-      makeCSurface<PixelPalette>(image),
+      makeCSurface<PixelIndex>(image),
       FormatARGB{},
       format
     );
@@ -77,7 +77,7 @@ QImage compositeFrame(
     case Format::rgba:
       compositeColor(outputSurface, frame);
       break;
-    case Format::palette:
+    case Format::index:
       compositePalette(outputSurface, frame, palette);
       break;
     case Format::gray:
@@ -168,10 +168,10 @@ void rgbaToOverlay(Surface<PixelRgba> overlay, CSurface<PixelRgba> source) {
   }
 }
 
-void paletteToOverlay(Surface<PixelRgba> overlay, CSurface<PixelPalette> source, PaletteCSpan palette) {
+void paletteToOverlay(Surface<PixelRgba> overlay, CSurface<PixelIndex> source, PaletteCSpan palette) {
   auto sourceRowIter = source.range().begin();
   for (auto row : overlay.range()) {
-    const PixelPalette *sourcePixel = (*sourceRowIter).begin();
+    const PixelIndex *sourcePixel = (*sourceRowIter).begin();
     for (PixelRgba &pixel : row) {
       const QRgb color = palette[*sourcePixel];
       const int gray = qGray(color);
@@ -209,8 +209,8 @@ void writeOverlay(
     case Format::rgba:
       rgbaToOverlay(overlaySurface, makeSurface<PixelRgba>(source));
       break;
-    case Format::palette:
-      paletteToOverlay(overlaySurface, makeSurface<PixelPalette>(source), palette);
+    case Format::index:
+      paletteToOverlay(overlaySurface, makeSurface<PixelIndex>(source), palette);
       break;
     case Format::gray:
       grayToOverlay(overlaySurface, makeSurface<PixelGray>(source));

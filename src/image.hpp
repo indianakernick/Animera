@@ -13,7 +13,7 @@
 
 enum class Format : uint8_t {
   rgba,
-  palette,
+  index,
   gray
 };
 
@@ -25,7 +25,7 @@ constexpr QImage::Format qimageFormat(const Format format) {
   switch (format) {
     case Format::rgba:
       return QImage::Format_ARGB32;
-    case Format::palette:
+    case Format::index:
       return QImage::Format_Grayscale8;
     case Format::gray:
       return QImage::Format_Grayscale8;
@@ -35,7 +35,7 @@ constexpr QImage::Format qimageFormat(const Format format) {
 }
 
 using PixelRgba = QRgb;
-using PixelPalette = uint8_t;
+using PixelIndex = uint8_t;
 using PixelGray = uint8_t;
 using PixelMask = uint8_t;
 

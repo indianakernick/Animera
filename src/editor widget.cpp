@@ -283,7 +283,7 @@ void EditorWidget::compositeOverlay() {
 }
 
 void EditorWidget::compositePalette() {
-  if (format == Format::palette) {
+  if (format == Format::index) {
     composite();
   }
 }
