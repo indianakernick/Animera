@@ -194,7 +194,7 @@ bool StrokedRectangleTool::drawPoint(QImage &image, const QPoint pos) {
 }
 
 bool StrokedRectangleTool::drawDrag(QImage &image, const QPoint start, const QPoint end) {
-  const QRect rect = QRect{start, end}.normalized();
+  const QRect rect = unite(start, end);
   return drawStrokedRect(image, getColor(), rect, thickness);
 }
 
@@ -203,7 +203,7 @@ void StrokedRectangleTool::drawOverlay(QImage &overlay, const QPoint pos) {
 }
 
 void StrokedRectangleTool::updateStatus(StatusMsg &status, const QPoint start, const QPoint end) {
-  status.appendLabeled(QRect{start, end}.normalized());
+  status.appendLabeled(unite(start, end));
 }
 
 FilledRectangleTool::~FilledRectangleTool() = default;
@@ -213,7 +213,7 @@ bool FilledRectangleTool::drawPoint(QImage &image, const QPoint pos) {
 }
 
 bool FilledRectangleTool::drawDrag(QImage &image, const QPoint start, const QPoint end) {
-  const QRect rect = QRect{start, end}.normalized();
+  const QRect rect = unite(start, end);
   return drawFilledRect(image, getColor(), rect);
 }
 
@@ -222,5 +222,5 @@ void FilledRectangleTool::drawOverlay(QImage &overlay, const QPoint pos) {
 }
 
 void FilledRectangleTool::updateStatus(StatusMsg &status, const QPoint start, const QPoint end) {
-  status.appendLabeled(QRect{start, end}.normalized());
+  status.appendLabeled(unite(start, end));
 }

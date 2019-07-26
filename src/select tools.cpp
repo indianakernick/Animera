@@ -67,7 +67,7 @@ void RectangleSelectTool::mouseMove(const ToolMouseEvent &event) {
   status.appendLabeled(mode);
   if (mode == SelectMode::copy) {
     if (event.button == ButtonType::primary) {
-      const QRect rect = QRect{startPos, event.pos}.normalized();
+      const QRect rect = unite(startPos, event.pos);
       drawStrokedRect(*ctx->overlay, tool_overlay_color, rect, 1);
       status.appendLabeled(rect);
     } else {
@@ -87,7 +87,7 @@ void RectangleSelectTool::mouseUp(const ToolMouseEvent &event) {
   clearImage(*ctx->overlay);
   if (mode == SelectMode::copy) {
     drawSquarePoint(*ctx->overlay, tool_overlay_color, event.pos);
-    const QRect rect = QRect{startPos, event.pos}.normalized();
+    const QRect rect = unite(startPos, event.pos);
     selection = blitImage(ctx->cell->image, rect);
     overlay = QImage{selection.size(), qimageFormat(Format::rgba)};
     writeOverlay(ctx->palette, ctx->format, overlay, selection);
