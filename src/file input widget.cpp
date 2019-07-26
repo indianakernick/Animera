@@ -84,6 +84,7 @@ void FileInputWidget::setTextFromDialog() {
   QString newDir = QFileDialog::getExistingDirectory(nullptr, "", text->text());
   if (!newDir.isNull()) {
     text->setText(QDir::cleanPath(newDir));
+    changePath();
   }
 }
 

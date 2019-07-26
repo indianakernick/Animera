@@ -12,6 +12,7 @@
 #include "cell span.hpp"
 #include "composite.hpp"
 #include <QtCore/qdir.h>
+#include "export pattern.hpp"
 
 Timeline::Timeline()
   : currPos{0, 0}, frameCount{0} {}
@@ -125,16 +126,21 @@ int apply(const Line line, const int value) {
 
 }
 
-void Timeline::exportFile(const ExportOptions &options, QImage image, CellPos pos) const {
+void Timeline::exportFile(
+  const ExportOptions &options,
+  QImage image,
+  CellPos pos
+) const {
   QString path = options.directory;
   if (path.back() != QDir::separator()) {
     path.push_back(QDir::separator());
   }
   pos.l = apply(options.layerLine, pos.l);
   pos.f = apply(options.frameLine, pos.f);
-  path += "sprite_L" + QString::number(pos.l) + "_F" + QString::number(pos.f);
+  path += evalExportPattern(options.name, pos.l, pos.f);
   path += ".png";
-  image.save(path);
+  [[maybe_unused]] const bool ok = image.save(path);
+  assert(ok);
 }
 
 void Timeline::exportCompRect(
