@@ -114,8 +114,8 @@ void TextInputWidget::updateMargins() {
   setTextMargins(
     rect.pos().x() + offset,
     rect.pos().y(),
-    rect.inner().x(),
-    rect.inner().y()
+    rect.widget().right() - rect.inner().right(),
+    rect.widget().bottom() - rect.inner().bottom()
   );
 }
 
