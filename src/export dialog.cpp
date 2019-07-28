@@ -11,6 +11,7 @@
 #include "connect.hpp"
 #include <QtCore/qdir.h>
 #include "label widget.hpp"
+#include "export pattern.hpp"
 #include "export options.hpp"
 #include "combo box widget.hpp"
 #include "file input widget.hpp"
@@ -84,8 +85,9 @@ void ExportDialog::addFormatOptions() {
 
 void ExportDialog::createWidgets() {
   name = new TextInputWidget{this, textBoxRect(16)};
-  // @TODO validator for export name
-  name->setText("sprite_%000F");
+  auto *validator = new ExportPatternValidator{name};
+  name->setValidator(validator);
+  name->setText(validator->defaultText());
   dir = new FileInputWidget{this, 40};
   layerStride = new NumberInputWidget{this, textBoxRect(3), expt_stride};
   layerOffset = new NumberInputWidget{this, textBoxRect(3), expt_offset};
