@@ -12,13 +12,19 @@
 #include "config.hpp"
 #include <QtWidgets/qcombobox.h>
 
+class ComboBoxPopup;
+
 class ComboBoxWidget final : public QComboBox {
 public:
   ComboBoxWidget(QWidget *, int);
 
+  void showPopup() override;
+  void hidePopup() override;
+
 private:
   TextIconRects rects;
   QPixmap arrow;
+  ComboBoxPopup *popup = nullptr;
 
   void paintEvent(QPaintEvent *) override;
 };
