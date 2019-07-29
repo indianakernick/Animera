@@ -46,19 +46,21 @@ Window::Window(QWidget *parent, const QRect desktop)
   connectSignals();
 }
 
-bool Window::hasOpen(const QString &file) const {
-  return fileName == file;
-}
-
 void Window::newFile(const Format format, const QSize size) {
   show();
   sprite.newFile(format, size);
+  setWindowModified(true);
 }
 
 void Window::openFile(const QString &path) {
   show();
-  setFileName(path);
   sprite.openFile(path);
+  setWindowFilePath(path);
+  setWindowModified(false);
+}
+
+void Window::modify() {
+  setWindowModified(true);
 }
 
 void Window::setupUI() {
@@ -226,6 +228,9 @@ void Window::makeDockWidget(Qt::DockWidgetArea area, QWidget *widget) {
 }
 
 void Window::connectSignals() {
+  // @TODO Connections to the modify slot are scattered around.
+  // I'd rather just CONNECT(sprite, modified, this, modify)
+
   CONNECT(sprite.timeline, currCellChanged,     tools,           setCell);
   CONNECT(sprite.timeline, currCellChanged,     clear,           setCell);
   CONNECT(sprite.timeline, currCellChanged,     sample,          setCell);
@@ -238,6 +243,7 @@ void Window::connectSignals() {
   CONNECT(sprite.timeline, layerChanged,        timeline,        setLayer);
   CONNECT(sprite.timeline, frameCountChanged,   timeline,        setFrameCount);
   CONNECT(sprite.timeline, layerCountChanged,   timeline,        setLayerCount);
+  CONNECT(sprite.timeline, modified,            this,            modify);
   
   CONNECT(timeline,        visibilityChanged,   sprite.timeline, setVisibility);
   CONNECT(timeline,        nameChanged,         sprite.timeline, setName);
@@ -270,6 +276,7 @@ void Window::connectSignals() {
   CONNECT(tools,           shouldShowPerm,      statusBar,       showPerm);
   CONNECT(tools,           cellRequested,       sprite.timeline, requestCell);
   CONNECT(tools,           changingAction,      undo,            cellModified);
+  CONNECT(tools,           changingAction,      this,            modify);
   
   CONNECT(editor,          overlayChanged,      tools,           setOverlay);
   CONNECT(editor,          mouseLeave,          tools,           mouseLeave);
@@ -288,10 +295,12 @@ void Window::connectSignals() {
   CONNECT(colors,          shouldAttachIndex,   palette,         attachIndex);
   
   CONNECT(clear,           cellModified,        tools,           cellModified);
+  CONNECT(clear,           cellModified,        this,            modify);
   
   CONNECT(sample,          colorChanged,        colorPicker,     setColor);
   
   CONNECT(undo,            cellReverted,        editor,          composite);
+  CONNECT(undo,            cellReverted,        this,            modify);
   CONNECT(undo,            shouldShowTemp,      statusBar,       showTemp);
   
   CONNECT(palette,         shouldAttachColor,   colorPicker,     attach);
@@ -299,18 +308,16 @@ void Window::connectSignals() {
   CONNECT(palette,         shouldSetIndex,      colors,          setIndex);
   CONNECT(palette,         paletteColorChanged, editor,          composite);
   CONNECT(palette,         paletteColorChanged, colors,          changePaletteColors);
-}
-
-void Window::setFileName(const QString &name) {
-  fileName = name;
-  setWindowTitle(name);
+  CONNECT(palette,         paletteColorChanged, this,            modify);
 }
 
 void Window::saveFile() {
-  if (fileName.isEmpty()) {
+  const QString path = windowFilePath();
+  if (path.isEmpty()) {
     saveFileDialog();
   } else {
-    sprite.saveFile(fileName);
+    sprite.saveFile(path);
+    setWindowModified(false);
     statusBar.showTemp("Saved!");
   }
 }
@@ -330,8 +337,9 @@ void Window::saveFileDialog() {
     "Pixel 2 File (*.px2)"
   );
   if (!saveFileName.isEmpty()) {
-    setFileName(saveFileName);
     sprite.saveFile(saveFileName);
+    setWindowFilePath(saveFileName);
+    setWindowModified(false);
   }
 }
 

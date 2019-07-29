@@ -78,7 +78,7 @@ void raiseWindow(QMainWindow *window) {
 
 void Application::openFile(const QString &path) {
   for (Window *window : windows) {
-    if (window->hasOpen(path)) {
+    if (window->windowFilePath() == path) {
       return raiseWindow(window);
     }
   }

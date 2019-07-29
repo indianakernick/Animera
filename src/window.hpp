@@ -29,9 +29,11 @@ class Window final : public QMainWindow {
 public:
   Window(QWidget *, QRect);
   
-  bool hasOpen(const QString &) const;
   void newFile(Format, QSize);
   void openFile(const QString &);
+
+private Q_SLOTS:
+  void modify();
 
 private:
   QWidget bottom;
@@ -48,14 +50,12 @@ private:
   StatusBarWidget statusBar;
   ColorPickerWidget colorPicker;
   QMenuBar *menubar = nullptr;
-  QString fileName;
   
   void setupUI();
   void setupMenubar();
   void makeDockWidget(Qt::DockWidgetArea, QWidget *);
   void connectSignals();
   
-  void setFileName(const QString &);
   void saveFile();
   void saveFileDialog();
   void exportDialog();

@@ -321,6 +321,7 @@ void Timeline::insertLayer() {
   changeLayers(currPos.l, layerCount());
   changeFrame();
   changePos();
+  Q_EMIT modified();
 }
 
 void Timeline::removeLayer() {
@@ -338,6 +339,7 @@ void Timeline::removeLayer() {
   }
   changeFrame();
   changePos();
+  Q_EMIT modified();
 }
 
 void Timeline::moveLayerUp() {
@@ -346,6 +348,7 @@ void Timeline::moveLayerUp() {
   changeLayers(currPos.l - 1, currPos.l + 1);
   changeFrame();
   layerAbove();
+  Q_EMIT modified();
 }
 
 void Timeline::moveLayerDown() {
@@ -354,6 +357,7 @@ void Timeline::moveLayerDown() {
   changeLayers(currPos.l, currPos.l + 2);
   changeFrame();
   layerBelow();
+  Q_EMIT modified();
 }
 
 void Timeline::insertFrame() {
@@ -365,6 +369,7 @@ void Timeline::insertFrame() {
   }
   Q_EMIT selectionChanged(selection);
   nextFrame();
+  Q_EMIT modified();
 }
 
 void Timeline::insertNullFrame() {
@@ -376,6 +381,7 @@ void Timeline::insertNullFrame() {
   }
   Q_EMIT selectionChanged(selection);
   nextFrame();
+  Q_EMIT modified();
 }
 
 void Timeline::removeFrame() {
@@ -396,6 +402,7 @@ void Timeline::removeFrame() {
   currPos.f = std::max(currPos.f - 1, 0);
   changeFrame();
   changePos();
+  Q_EMIT modified();
 }
 
 void Timeline::clearCell() {
@@ -403,12 +410,14 @@ void Timeline::clearCell() {
   changeSpan(currPos.l);
   changeFrame();
   changePos();
+  Q_EMIT modified();
 }
 
 void Timeline::extendCell() {
   extend(layers[currPos.l].spans, currPos.f);
   changeSpan(currPos.l);
   nextFrame();
+  Q_EMIT modified();
 }
 
 void Timeline::splitCell() {
@@ -416,6 +425,7 @@ void Timeline::splitCell() {
   changeSpan(currPos.l);
   changeFrame();
   changePos();
+  Q_EMIT modified();
 }
 
 void Timeline::requestCell() {
@@ -423,6 +433,7 @@ void Timeline::requestCell() {
   changeSpan(currPos.l);
   changeFrame();
   changePos();
+  Q_EMIT modified();
 }
 
 void Timeline::setCurrPos(const CellPos pos) {
@@ -450,6 +461,7 @@ void Timeline::setVisibility(const LayerIdx idx, const bool visible) {
   //   Q_EMIT visibilityChanged(idx, visible);
   // }
   changeFrame();
+  Q_EMIT modified();
 }
 
 void Timeline::setName(const LayerIdx idx, const std::string_view name) {
@@ -458,6 +470,7 @@ void Timeline::setName(const LayerIdx idx, const std::string_view name) {
   layers[idx].name = name;
   // @TODO Emit signal when layer name changed?
   // Q_EMIT nameChanged(idx, name);
+  Q_EMIT modified();
 }
 
 void Timeline::clearSelected() {
@@ -469,6 +482,7 @@ void Timeline::clearSelected() {
   }
   changeFrame();
   changePos();
+  Q_EMIT modified();
 }
 
 void Timeline::copySelected() {
@@ -493,6 +507,7 @@ void Timeline::pasteSelected() {
   }
   changeFrame();
   changePos();
+  Q_EMIT modified();
 }
 
 CellPtr Timeline::makeCell() const {

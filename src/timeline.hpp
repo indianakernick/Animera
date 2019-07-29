@@ -83,6 +83,8 @@ Q_SIGNALS:
   void frameCountChanged(FrameIdx);
   void layerCountChanged(LayerIdx);
   
+  void modified();
+  
 private:
   Layers layers;
   CellPos currPos;
