@@ -166,10 +166,10 @@ void ExportDialog::setupLayout() {
 }
 
 void ExportDialog::connectSignals() {
-  CONNECT_OVERLOAD(layerSelect,  currentIndexChanged, this, updateFormatItems, int);
-  CONNECT(         ok,           pressed,             this, accept);
-  CONNECT(         cancel,       pressed,             this, reject);
-  CONNECT(         this,         accepted,            this, submit);
+  CONNECT(layerSelect,  currentIndexChanged, this, updateFormatItems);
+  CONNECT(ok,           pressed,             this, accept);
+  CONNECT(cancel,       pressed,             this, reject);
+  CONNECT(this,         accepted,            this, submit);
 }
 
 #include "export dialog.moc"

@@ -9,6 +9,7 @@
 #include "combo box widget.hpp"
 
 #include "connect.hpp"
+#include <QtGui/qevent.h>
 #include "global font.hpp"
 #include <QtGui/qpainter.h>
 #include "widget painting.hpp"
@@ -61,6 +62,7 @@ private:
   bool hover = false;
   
   void enterEvent(QEvent *) override {
+    // This isn't quite right
     hover = true;
     repaint();
   }
@@ -129,27 +131,69 @@ private:
 };
 
 ComboBoxWidget::ComboBoxWidget(QWidget *parent, const int chars)
-  : QComboBox{parent}, rects{textBoxIconRect(chars)} {
+  : QWidget{parent}, rects{textBoxIconRect(chars)} {
   setCursor(Qt::PointingHandCursor);
   setFont(getGlobalFont());
   setFixedSize(rects.widget().size());
   arrow = bakeColoredBitmap(":/General/up down arrow.pbm", glob_light_2);
 }
 
+void ComboBoxWidget::clear() {
+  items.clear();
+  setCurrentIndex(-1);
+}
+
+void ComboBoxWidget::addItem(const QString &text) {
+  items.push_back(text);
+  if (items.size() == 1) {
+    setCurrentIndex(0);
+  }
+  update();
+}
+
+void ComboBoxWidget::setCurrentIndex(const int index) {
+  current = index;
+  Q_EMIT currentIndexChanged(index);
+  update();
+}
+
+int ComboBoxWidget::count() const {
+  return static_cast<int>(items.size());
+}
+
+QString ComboBoxWidget::itemText(const int index) const {
+  assert(index < static_cast<int>(items.size()));
+  return items[index];
+}
+
+int ComboBoxWidget::currentIndex() const {
+  return static_cast<int>(current);
+}
+
+QString ComboBoxWidget::currentText() const {
+  assert(current < items.size());
+  return items[current];
+}
+
 void ComboBoxWidget::showPopup() {
-  QComboBox::hidePopup();
   assert(popup == nullptr);
   popup = new ComboBoxPopup{this, rects.outer()};
 }
 
 void ComboBoxWidget::hidePopup() {
-  QComboBox::hidePopup();
   delete popup;
   popup = nullptr;
 }
 
+void ComboBoxWidget::mousePressEvent(QMouseEvent *event) {
+  if (event->button() == Qt::LeftButton) {
+    showPopup();
+  }
+}
+
 void ComboBoxWidget::paintEvent(QPaintEvent *) {
   QPainter painter{this};
+  painter.fillRect(rect(), Qt::red);
   paintBorder(painter, rects.text(), glob_border_color);
   paintBorder(painter, rects.icon(), glob_border_color);
   painter.fillRect(rects.border(), glob_border_color);
@@ -164,3 +208,5 @@ void ComboBoxWidget::paintEvent(QPaintEvent *) {
   textPos.ry() += glob_font_accent_px;
   painter.drawText(textPos, currentText());
 }
+
+#include "combo box widget.moc"
