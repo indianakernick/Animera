@@ -31,7 +31,10 @@ public:
 private:
   QRect innerRect() {
     constexpr int bord = glob_border_width;
-    return {rect().x() + bord, rect().y() + bord, rect().width() - 2 * bord, rect().height() - 2 * bord};
+    return {
+      rect().x() + bord, rect().y() + bord,
+      rect().width() - 2 * bord, rect().height() - 2 * bord
+    };
   }
 
   void paintEvent(QPaintEvent *) override {
@@ -44,25 +47,14 @@ private:
 
 class PopupItem final : public QAbstractButton {
 public:
-  PopupItem(QWidget *parent, const int width, ComboBoxWidget *box, const int idx)
-    : QAbstractButton{parent}, box{box},  idx{idx} {
-    setFixedSize(width, item_height);
-    CONNECT(this, pressed, this, setCurrentIndex);
-  }
-
-private Q_SLOTS:
-  void setCurrentIndex() {
-    box->setCurrentIndex(idx);
-    box->hidePopup();
-  }
+  PopupItem(QWidget *parent, const QString &text)
+    : QAbstractButton{parent}, text{text} {}
 
 private:
-  ComboBoxWidget *box;
-  int idx;
+  QString text;
   bool hover = false;
   
   void enterEvent(QEvent *) override {
-    // This isn't quite right
     hover = true;
     repaint();
   }
@@ -81,7 +73,7 @@ private:
     painter.setPen(glob_text_color);
     painter.drawText(
       QPoint{glob_text_padding, glob_text_padding + glob_font_accent_px},
-      box->itemText(idx)
+      text
     );
   }
 };
@@ -90,11 +82,14 @@ private:
 
 class ComboBoxPopup final : public QMainWindow {
 public:
-  ComboBoxPopup(ComboBoxWidget *parent, const QRect outer)
-    : QMainWindow{parent}, box{parent} {
+  explicit ComboBoxPopup(ComboBoxWidget *box)
+    : QMainWindow{box}, box{box} {
     setWindowFlag(Qt::FramelessWindowHint);
+  }
+  
+  void init(const QRect outer) {
     setFixedSize(outer.width(), getHeight());
-    QPoint pos = parent->mapToGlobal(outer.topLeft());
+    QPoint pos = box->mapToGlobal(outer.topLeft());
     pos.ry() -= box->currentIndex() * item_height;
     move(pos);
     auto *list = new PopupList{this, {outer.width(), getHeight()}};
@@ -104,6 +99,10 @@ public:
     populateList(list, innerWidth);
     setFocus();
     show();
+  }
+  
+  void quit() {
+    hide();
   }
 
 private:
@@ -121,17 +120,24 @@ private:
     
     const int count = box->count();
     for (int i = 0; i != count; ++i) {
-      layout->addWidget(new PopupItem{list, width, box, i});
+      auto *item = new PopupItem{list, box->itemText(i)};
+      item->setFixedSize(width, item_height);
+      CONNECT_LAMBDA(item, pressed, [this, i]{
+        box->setCurrentIndex(i);
+        quit();
+      });
+      layout->addWidget(item);
     }
   }
   
   void focusOutEvent(QFocusEvent *) override {
-    box->hidePopup();
+    quit();
   }
 };
 
 ComboBoxWidget::ComboBoxWidget(QWidget *parent, const int chars)
   : QWidget{parent}, rects{textBoxIconRect(chars)} {
+  popup = new ComboBoxPopup{this};
   setCursor(Qt::PointingHandCursor);
   setFont(getGlobalFont());
   setFixedSize(rects.widget().size());
@@ -162,41 +168,28 @@ int ComboBoxWidget::count() const {
 }
 
 QString ComboBoxWidget::itemText(const int index) const {
-  assert(index < static_cast<int>(items.size()));
+  assert(0 <= index && index < static_cast<int>(items.size()));
   return items[index];
 }
 
 int ComboBoxWidget::currentIndex() const {
-  return static_cast<int>(current);
+  return current;
 }
 
 QString ComboBoxWidget::currentText() const {
-  assert(current < items.size());
+  assert(0 <= current && current < static_cast<int>(items.size()));
   return items[current];
-}
-
-void ComboBoxWidget::showPopup() {
-  assert(popup == nullptr);
-  popup = new ComboBoxPopup{this, rects.outer()};
-}
-
-void ComboBoxWidget::hidePopup() {
-  delete popup;
-  popup = nullptr;
 }
 
 void ComboBoxWidget::mousePressEvent(QMouseEvent *event) {
   if (event->button() == Qt::LeftButton) {
-    showPopup();
+    popup->init(rects.outer());
   }
 }
 
 void ComboBoxWidget::paintEvent(QPaintEvent *) {
   QPainter painter{this};
-  painter.fillRect(rect(), Qt::red);
   paintBorder(painter, rects.text(), glob_border_color);
-  paintBorder(painter, rects.icon(), glob_border_color);
-  painter.fillRect(rects.border(), glob_border_color);
   painter.fillRect(rects.textInner(), glob_dark_1);
   painter.fillRect(rects.iconInner(), glob_main);
   painter.drawPixmap(rects.iconPos(), arrow);

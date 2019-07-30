@@ -36,6 +36,7 @@ private:
   QPoint pos_;
 };
 
+// @TODO TextIconRects isn't the right solution
 class TextIconRects final {
 public:
   constexpr TextIconRects(

@@ -29,18 +29,15 @@ public:
   int currentIndex() const;
   QString currentText() const;
 
-  void showPopup();
-  void hidePopup();
-
 Q_SIGNALS:
   void currentIndexChanged(int);
 
 private:
   TextIconRects rects;
   QPixmap arrow;
-  ComboBoxPopup *popup = nullptr;
+  ComboBoxPopup *popup;
   std::vector<QString> items;
-  size_t current = -1;
+  int current = -1;
 
   void mousePressEvent(QMouseEvent *) override;
   void paintEvent(QPaintEvent *) override;
