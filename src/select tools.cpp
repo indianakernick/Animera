@@ -293,7 +293,7 @@ void WandSelectTool::toggleMode(const ToolMouseEvent &event) {
 namespace {
 
 QRgb contrastColor(const QRgb color) {
-  // @TODO constrast same as palette or something better (animation?)
+  // @TODO contrast same as palette or something better (animation?)
   // maybe the overlay could animate between semi-transparent black and white
   return qGray(color) < 128 ? qRgb(255, 255, 255) : qRgb(0, 0, 0);
 }

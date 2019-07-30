@@ -33,6 +33,12 @@ TextInputWidget::TextInputWidget(QWidget *parent, const WidgetRect rect)
   cursorBlinkTimer.start();
 }
 
+void TextInputWidget::setText(const QString &text) {
+  QLineEdit::setText(text);
+  offset = 0;
+  repaint();
+}
+
 void TextInputWidget::blink() {
   cursorBlinkStatus = !cursorBlinkStatus;
   repaint();
@@ -53,6 +59,7 @@ void TextInputWidget::hideCursor() {
 }
 
 void TextInputWidget::focusInEvent(QFocusEvent *event) {
+  // @TODO this is a little jittery
   QLineEdit::focusInEvent(event);
   hideCursor();
   QTimer::singleShot(0, this, &QLineEdit::selectAll);

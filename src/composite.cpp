@@ -17,14 +17,14 @@
 namespace {
 
 template <typename Func>
-void eachImage(FrameSpan frame, Func func) {
+void eachImage(const Frame &frame, Func func) {
   // Layer 0 is on top of layer 1
   for (auto c = frame.crbegin(); c != frame.crend(); ++c) {
     func((*c)->image);
   }
 }
 
-void compositeColor(Surface<PixelRgba> output, FrameSpan frame) {
+void compositeColor(Surface<PixelRgba> output, const Frame &frame) {
   eachImage(frame, [output](const QImage &image) {
     porterDuff(
       mode_src_over,
@@ -36,7 +36,7 @@ void compositeColor(Surface<PixelRgba> output, FrameSpan frame) {
   });
 }
 
-void compositePalette(Surface<PixelRgba> output, FrameSpan frame, PaletteCSpan palette) {
+void compositePalette(Surface<PixelRgba> output, const Frame &frame, PaletteCSpan palette) {
   FormatPalette format{palette.data()};
   eachImage(frame, [output, format](const QImage &image) {
     porterDuff(
@@ -49,7 +49,7 @@ void compositePalette(Surface<PixelRgba> output, FrameSpan frame, PaletteCSpan p
   });
 }
 
-void compositeGray(Surface<PixelRgba> output, FrameSpan frame) {
+void compositeGray(Surface<PixelRgba> output, const Frame &frame) {
   eachImage(frame, [output](const QImage &image) {
     porterDuff(
       mode_src_over,
@@ -65,13 +65,13 @@ void compositeGray(Surface<PixelRgba> output, FrameSpan frame) {
 
 QImage compositeFrame(
   PaletteCSpan palette,
-  const FrameSpan frame,
+  const Frame &frame,
   const QSize size,
   const Format format
 ) {
   QImage output{size, qimageFormat(Format::rgba)};
   clearImage(output);
-  Surface<PixelRgba> outputSurface = makeSurface<PixelRgba>(output);
+  auto outputSurface = makeSurface<PixelRgba>(output);
   
   switch (format) {
     case Format::rgba:

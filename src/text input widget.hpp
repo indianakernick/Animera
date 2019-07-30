@@ -19,8 +19,7 @@ class TextInputWidget : public QLineEdit {
 public:
   TextInputWidget(QWidget *, WidgetRect);
 
-  // @TODO setText
-  // set offset to 0
+  void setText(const QString &);
 
 private Q_SLOTS:
   void blink();

@@ -410,3 +410,5 @@ set cursor and respond to clicks more precisely
 
 Have a look at qtbase/examples/widgets/mainwindows/sdi
 There's a lot to learn
+
+Should probably be calling update() instead of repaint() in most places

@@ -13,13 +13,9 @@
 #include "cell.hpp"
 #include "palette.hpp"
 
-// @TODO This nolonger needs to exist
-// It has a confusing name anyway
-using FrameSpan = std::span<const Cell *const>;
-
 /// Take all of the images that make up a frame and composite them together into
 /// a single image
-QImage compositeFrame(PaletteCSpan, FrameSpan, QSize, Format);
+QImage compositeFrame(PaletteCSpan, const Frame &, QSize, Format);
 /// Composite the overlay on top of the frame
 void compositeOverlay(QImage &, const QImage &);
 
