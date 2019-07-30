@@ -45,15 +45,13 @@ public:
     QRect textInner,
     QRect iconInner,
     QPoint textPos,
-    QPoint iconPos,
-    QRect border
+    QPoint iconPos
   ) : widget_{widget},
       outer_{outer},
       textInner_{textInner},
       iconInner_{iconInner},
       textPos_{textPos},
-      iconPos_{iconPos},
-      border_{border} {}
+      iconPos_{iconPos} {}
   
   constexpr WidgetRect text() const {
     return {widget_, outer_, textInner_, textPos_};
@@ -80,9 +78,6 @@ public:
   constexpr QPoint iconPos() const {
     return iconPos_;
   }
-  constexpr QRect border() const {
-    return border_;
-  }
 
 private:
   QRect widget_;
@@ -91,7 +86,6 @@ private:
   QRect iconInner_;
   QPoint textPos_;
   QPoint iconPos_;
-  QRect border_;
 };
 
 #endif

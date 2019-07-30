@@ -405,6 +405,8 @@ Swedish word for animate is animera
 transform a layer or transform a frame
 
 set cursor and respond to clicks more precisely
+  setMask could help
+  https://doc.qt.io/qt-5/qwidget.html#setMask
 
 Have a look at qtbase/examples/widgets/mainwindows/sdi
 There's a lot to learn

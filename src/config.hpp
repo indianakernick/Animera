@@ -127,23 +127,8 @@ constexpr TextIconRects textBoxIconRect(const int chars) {
   };
   const QPoint textPos = textInner.topLeft() + toPoint(glob_text_padding);
   const QPoint iconPos = textPos + QPoint{textInner.width() + glob_border_width, 0};
-  const QRect border = {
-    textInner.topRight() + QPoint{1, 0},
-    QSize{glob_border_width, textInner.height()}
-  };
-  return {widget, outer, textInner, iconInner, textPos, iconPos, border};
+  return {widget, outer, textInner, iconInner, textPos, iconPos};
 }
-
-constexpr int text_box_icon_width = 5_px;
-
-/*constexpr WidgetRect textBoxIconRect(const int iconWidth) {
-  constexpr int bordSpace = glob_border_width + glob_widget_space;
-  const QSize innerSize = {iconWidth, glob_font_px};
-  const QRect widget = {
-    QPoint{},
-    innerSize + QSize{bordSpace, 2 * bordSpace}
-  };
-}*/
 
 struct IntRange {
   int min;
