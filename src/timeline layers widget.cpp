@@ -10,9 +10,9 @@
 
 #include "config.hpp"
 #include "connect.hpp"
-#include <QtGui/qbitmap.h>
 #include <QtGui/qpainter.h>
 #include "widget painting.hpp"
+#include "timeline painting.hpp"
 #include "text input widget.hpp"
 #include <QtWidgets/qboxlayout.h>
 
@@ -41,52 +41,18 @@ void LayerNameWidget::changeName(const QString &text) {
   Q_EMIT nameChanged(idx, text.toStdString());
 }
 
-void LayerNameWidget::paintBack(QPixmap &pixmap) {
-  QPainter painter{&pixmap};
-  painter.fillRect(
-    0, 0,
-    cell_width - glob_border_width, cell_width - glob_border_width,
-    glob_main
-  );
-  painter.fillRect(
-    cell_width - glob_border_width, 0,
-    glob_border_width, cell_width,
-    glob_border_color
-  );
-  painter.fillRect(
-    0, cell_width - glob_border_width,
-    cell_width - glob_border_width, glob_border_width,
-    glob_border_color
-  );
-}
-
-void LayerNameWidget::paintIcon(QPixmap &pixmap, const QString &path) {
-  QPainter painter{&pixmap};
-  QBitmap bitmap{path};
-  bitmap = bitmap.scaled(bitmap.size() * glob_scale);
-  QRegion region{bitmap};
-  region.translate(cell_icon_pad, cell_icon_pad);
-  painter.setClipRegion(region);
-  painter.fillRect(
-    cell_icon_pad, cell_icon_pad,
-    cell_icon_size, cell_icon_size,
-    cell_icon_color
-  );
-}
-
 void LayerNameWidget::createWidgets() {
   QPixmap onPix{cell_width, cell_width};
-  paintBack(onPix);
+  paintTimelineButtonBack(onPix);
   QPixmap offPix = onPix;
-  paintIcon(onPix, ":/Timeline/shown.pbm");
-  paintIcon(offPix, ":/Timeline/hidden.pbm");
+  paintTimelineButtonIcon(onPix, ":/Timeline/shown.pbm");
+  paintTimelineButtonIcon(offPix, ":/Timeline/hidden.pbm");
   visible = new IconRadioButtonWidget{this, onPix, offPix};
   name = new TextInputWidget{this, layer_text_rect};
 }
 
 void LayerNameWidget::setupLayout() {
-  QHBoxLayout *layout = new QHBoxLayout{this};
-  setLayout(layout);
+  auto *layout = new QHBoxLayout{this};
   layout->setSpacing(0);
   layout->setContentsMargins(0, 0, 0, 0);
   layout->setAlignment(Qt::AlignLeft);
@@ -94,23 +60,8 @@ void LayerNameWidget::setupLayout() {
   layout->addWidget(name, 0, Qt::AlignTop);
 }
 
-void LayerNameWidget::paintEvent(QPaintEvent *) {
-  QPainter painter{this};
-  painter.fillRect(
-    0, cell_height - glob_border_width,
-    width(), glob_border_width,
-    glob_border_color
-  );
-  painter.fillRect(
-    width() - glob_border_width, 0,
-    glob_border_width, height(),
-    glob_border_color
-  );
-}
-
 LayersWidget::LayersWidget(QWidget *parent)
   : QWidget{parent}, layout{new QVBoxLayout{this}} {
-  setLayout(layout);
   layout->setSpacing(0);
   layout->setContentsMargins(0, 0, 0, 0);
   layout->setAlignment(Qt::AlignTop);

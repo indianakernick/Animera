@@ -57,29 +57,26 @@ inline const QColor glob_scroll_handle = glob_light_1;
 // ----------------------------- global dimensions -------------------------- //
 
 constexpr int       glob_scroll_width = 4_px;
-constexpr int       glob_padding      = 1_px;
-constexpr int       glob_text_padding = 1_px;
+constexpr int       glob_margin       = 1_px;
+constexpr int       glob_text_margin  = 1_px;
 constexpr int       glob_border_width = 1_px;
-constexpr int       glob_widget_space = 1_px;
-
-// @TODO padding = widget_space = margin
 
 constexpr WidgetRect basicRect(
   const QPoint pos,
   const QSize innerSize,
   const int borderWidth = glob_border_width,
-  const int widgetSpace = glob_widget_space
+  const int margin = glob_margin
 ) {
   const QRect widget = {
     QPoint{},
-    innerSize + toSize(2 * borderWidth + 2 * widgetSpace)
+    innerSize + toSize(2 * borderWidth + 2 * margin)
   };
   const QRect outer = {
-    toPoint(widgetSpace),
+    toPoint(margin),
     innerSize + toSize(2 * borderWidth)
   };
   const QRect inner = {
-    toPoint(widgetSpace + borderWidth),
+    toPoint(margin + borderWidth),
     innerSize
   };
   return {widget, outer, inner, inner.topLeft() + pos};
@@ -87,14 +84,14 @@ constexpr WidgetRect basicRect(
 
 constexpr QSize textBoxSize(const int chars, const int offsetX = 0) {
   return {
-    chars * glob_font_stride_px - glob_font_kern_px + 2 * glob_text_padding + offsetX,
-    glob_font_px + 2 * glob_text_padding
+    chars * glob_font_stride_px - glob_font_kern_px + 2 * glob_text_margin + offsetX,
+    glob_font_px + 2 * glob_text_margin
   };
 }
 
 constexpr WidgetRect textBoxRect(const int chars, const int offsetX = 0) {
   return basicRect(
-    {glob_text_padding + offsetX, glob_text_padding},
+    {glob_text_margin + offsetX, glob_text_margin},
     textBoxSize(chars, offsetX)
   );
 }
@@ -108,24 +105,24 @@ constexpr TextIconRects textBoxIconRect(const int chars) {
   const QSize iconInnerSize = textBoxSize(1);
   const QSize totalInnerSize = textInnerSize + QSize{iconInnerSize.width() + glob_border_width, 0};
   const QSize borderSize = toSize(2 * glob_border_width);
-  const QSize spaceSize = toSize(2 * glob_widget_space);
+  const QSize marginSize = toSize(2 * glob_margin);
   const QRect widget = {
     QPoint{},
-    totalInnerSize + borderSize + spaceSize
+    totalInnerSize + borderSize + marginSize
   };
   const QRect outer = {
-    toPoint(glob_widget_space),
+    toPoint(glob_margin),
     totalInnerSize + borderSize
   };
   const QRect textInner = {
-    toPoint(glob_widget_space + glob_border_width),
+    toPoint(glob_margin + glob_border_width),
     textInnerSize
   };
   const QRect iconInner = {
     textInner.topRight() + QPoint{1 + glob_border_width, 0},
     iconInnerSize
   };
-  const QPoint textPos = textInner.topLeft() + toPoint(glob_text_padding);
+  const QPoint textPos = textInner.topLeft() + toPoint(glob_text_margin);
   const QPoint iconPos = textPos + QPoint{textInner.width() + glob_border_width, 0};
   return {widget, outer, textInner, iconInner, textPos, iconPos};
 }
@@ -142,7 +139,7 @@ constexpr QSize     tool_icon_size = {24_px, 24_px};
 constexpr QSize     tool_icon_padding = {1_px, 1_px};
 constexpr QSize     tool_button_size = tool_icon_size + 2 * tool_icon_padding;
 constexpr QPoint    tool_icon_pos = toPoint(tool_icon_padding);
-constexpr int       tool_select_width = tool_button_size.width() + 2 * glob_padding;
+constexpr int       tool_select_width = tool_button_size.width() + 2 * glob_margin;
 
 inline const QColor tool_select_background = glob_main;
 inline const QColor tool_base_disabled = glob_light_1;
@@ -173,7 +170,7 @@ constexpr int scaleOverlayAlpha(const int alpha) {
 
 constexpr int       stat_temp_duration_ms = 2500;
 constexpr int       stat_min_width = 200_px;
-constexpr int       stat_height = glob_font_px + 2 * (glob_text_padding + glob_padding);
+constexpr int       stat_height = glob_font_px + 2 * (glob_text_margin + glob_margin);
 
 inline const QColor stat_background = glob_main;
 
@@ -193,12 +190,12 @@ constexpr WidgetRect pick_slider_rect = boxRect(pick_svgraph_rect.inner().width(
 constexpr WidgetRect pick_label_rect = textBoxRect(1, 1_px);
 constexpr WidgetRect pick_number_rect = textBoxRect(3);
 constexpr WidgetRect pick_hex_rect = basicRect(
-  QPoint{glob_text_padding + 2_px, glob_text_padding},
+  QPoint{glob_text_margin + 2_px, glob_text_margin},
   textBoxSize(8, 2_px + 3_px)
 );
 constexpr WidgetRect pick_name_rect = basicRect(
-  toPoint(glob_text_padding),
-  QSize{pick_svgraph_rect.inner().width(), glob_font_px + 2 * glob_text_padding}
+  toPoint(glob_text_margin),
+  QSize{pick_svgraph_rect.inner().width(), glob_font_px + 2 * glob_text_margin}
 );
 
 inline const QColor pick_primary_color = {0, 0, 0};
@@ -248,22 +245,24 @@ constexpr int       cell_icon_size = 8_px;
 constexpr int       cell_width = 2 * cell_icon_pad + cell_icon_size + glob_border_width;
 constexpr int       cell_height = cell_width;
 constexpr int       cell_border_offset = cell_icon_pad + glob_border_width;
-
 constexpr int       frame_incr = 5;
-
 constexpr int       layer_width = 97_px;
-// @TODO separate factory for these?
-constexpr WidgetRect layer_text_rect = basicRect(
-  {1_px, 2_px},
-  {layer_width - cell_width - glob_border_width, cell_height - glob_border_width},
-  0, 0
-);
 
-constexpr WidgetRect ctrl_text_rect = basicRect(
-  {1_px, 2_px},
-  {textBoxSize(3).width(), cell_height - glob_border_width},
-  0, 0
-);
+constexpr WidgetRect timelineTextBox(const int chars) {
+  const QPoint pos = {
+    glob_text_margin,
+    cell_height - glob_border_width - glob_text_margin - glob_font_px
+  };
+  const QSize innerSize = {
+    textBoxSize(chars).width(),
+    cell_height - glob_border_width
+  };
+  const QSize outerSize = innerSize + toSize(glob_border_width);
+  return {toRect(outerSize), toRect(outerSize), toRect(innerSize), pos};
+}
+
+constexpr WidgetRect layer_text_rect = timelineTextBox(14);
+constexpr WidgetRect ctrl_text_rect = timelineTextBox(3);
 constexpr IntRange   ctrl_delay = {1, 999, 100};
 
 // ---------------------------- init canvas dialog -------------------------- //

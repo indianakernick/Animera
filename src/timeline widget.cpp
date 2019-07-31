@@ -55,8 +55,7 @@ TimelineWidget::TimelineWidget(QWidget *parent)
   CONNECT(cells,    clearSelection,    this, clearSelection);
   CONNECT(cells,    currPosChanged,    this, currPosChanged);
   
-  QGridLayout *grid = new QGridLayout{this};
-  setLayout(grid);
+  auto *grid = new QGridLayout{this};
   grid->setSpacing(0);
   grid->setContentsMargins(0, 0, 0, 0);
   grid->addWidget(controls, 0, 0);

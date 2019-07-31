@@ -150,10 +150,9 @@ void ToolSelectWidget::createTools() {
 }
 
 void ToolSelectWidget::setupLayout() {
-  QVBoxLayout *layout = new QVBoxLayout{box};
-  box->setLayout(layout);
+  auto *layout = new QVBoxLayout{box};
   layout->setSpacing(0);
-  layout->setContentsMargins(glob_padding, glob_padding, glob_padding, glob_padding);
+  layout->setContentsMargins(glob_margin, glob_margin, glob_margin, glob_margin);
   layout->addStretch();
   for (ToolWidget *tool : tools) {
     layout->addWidget(tool);

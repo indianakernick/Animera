@@ -20,6 +20,7 @@
 		4513145822D5A29800D66262 /* picker impl rgba.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4513145622D5A29800D66262 /* picker impl rgba.cpp */; };
 		4513145B22D5A2A500D66262 /* picker impl gray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4513145922D5A2A500D66262 /* picker impl gray.cpp */; };
 		45161F0122F11EB60036BBED /* todo.txt in Resources */ = {isa = PBXBuildFile; fileRef = 45161F0022F11EB60036BBED /* todo.txt */; };
+		45161F0622F1399A0036BBED /* timeline painting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45161F0422F1399A0036BBED /* timeline painting.cpp */; };
 		453C78192234935000818B19 /* timeline widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C78172234935000818B19 /* timeline widget.cpp */; };
 		453C781C22349BBD00818B19 /* editor widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C781A22349BBD00818B19 /* editor widget.cpp */; };
 		453C781F22349F0100818B19 /* tool select widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C781D22349F0100818B19 /* tool select widget.cpp */; };
@@ -106,6 +107,8 @@
 		4513145922D5A2A500D66262 /* picker impl gray.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "picker impl gray.cpp"; sourceTree = "<group>"; };
 		4513145A22D5A2A500D66262 /* picker impl gray.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "picker impl gray.hpp"; sourceTree = "<group>"; };
 		45161F0022F11EB60036BBED /* todo.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = todo.txt; sourceTree = "<group>"; };
+		45161F0422F1399A0036BBED /* timeline painting.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "timeline painting.cpp"; sourceTree = "<group>"; };
+		45161F0522F1399A0036BBED /* timeline painting.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "timeline painting.hpp"; sourceTree = "<group>"; };
 		452926E122BB0D6300B17E0D /* transform.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = transform.hpp; sourceTree = "<group>"; };
 		452926E222BB607E00B17E0D /* screenshot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = screenshot.png; sourceTree = "<group>"; };
 		452926E422BB607E00B17E0D /* add.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = add.pbm; sourceTree = "<group>"; };
@@ -1172,6 +1175,8 @@
 				4595D49122C0644B00607D64 /* timeline frames widget.hpp */,
 				4513144B22D1B06F00D66262 /* timeline controls widget.cpp */,
 				4513144C22D1B06F00D66262 /* timeline controls widget.hpp */,
+				45161F0422F1399A0036BBED /* timeline painting.cpp */,
+				45161F0522F1399A0036BBED /* timeline painting.hpp */,
 			);
 			name = Timeline;
 			sourceTree = "<group>";
@@ -2322,6 +2327,7 @@
 				45BADA1D2247007F000D095C /* glm.cpp in Sources */,
 				453D28BD22768D9900D0E5F9 /* text input widget.cpp in Sources */,
 				4513145B22D5A2A500D66262 /* picker impl gray.cpp in Sources */,
+				45161F0622F1399A0036BBED /* timeline painting.cpp in Sources */,
 				45D109AF22E2D88500D1F1CB /* export dialog.cpp in Sources */,
 				45D1099822DAFD7000D1F1CB /* select tools.cpp in Sources */,
 				453C781F22349F0100818B19 /* tool select widget.cpp in Sources */,

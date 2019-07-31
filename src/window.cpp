@@ -76,8 +76,6 @@ void Window::setupUI() {
     "background-color: " + glob_border_color.name() + ";"
   "}"
   
-  // @TODO Maybe use the status bar instead of tooltips
-  // This is too difficult to customize
   "QToolTip {"
     "background-color: " + glob_main.name() + ";"
     "color: " + glob_light_2.name() + ";"
@@ -108,14 +106,14 @@ void Window::setupUI() {
   "QMenu::separator {"
     "background-color: " + glob_light_2.name() + ";"
     "height: " + QString::number(glob_border_width) + "px;"
-    "margin-top: " + QString::number(glob_padding) + "px;"
-    "margin-bottom: " + QString::number(glob_padding) + "px;"
+    "margin-top: " + QString::number(glob_margin) + "px;"
+    "margin-bottom: " + QString::number(glob_margin) + "px;"
   "}"
   
   "QMenu::item {"
     "background-color: " + glob_main.name() + ";"
     "color: " + glob_light_2.name() + ";"
-    "padding: " + QString::number(glob_text_padding) + "px;"
+    "padding: " + QString::number(glob_text_margin) + "px;"
   "}"
   
   "QMenu::item:selected {"
@@ -124,8 +122,7 @@ void Window::setupUI() {
   );
   QToolTip::setFont(getGlobalFont());
   
-  QVBoxLayout *bottomLayout = new QVBoxLayout{&bottom};
-  bottom.setLayout(bottomLayout);
+  auto *bottomLayout = new QVBoxLayout{&bottom};
   bottomLayout->setContentsMargins(0, 0, 0, 0);
   bottomLayout->setSpacing(0);
   bottomLayout->addWidget(&timeline);
@@ -133,16 +130,15 @@ void Window::setupUI() {
   bottomLayout->addWidget(&statusBar);
   bottomLayout->setAlignment(Qt::AlignBottom);
   
-  QVBoxLayout *rightLayout = new QVBoxLayout{&right};
-  right.setLayout(rightLayout);
+  auto *rightLayout = new QVBoxLayout{&right};
   rightLayout->setContentsMargins(0, 0, 0, 0);
-  rightLayout->setSpacing(glob_padding);
+  rightLayout->setSpacing(glob_margin);
   rightLayout->addWidget(&colorPicker);
   rightLayout->addWidget(new HoriSeparator{&right});
   rightLayout->addWidget(&colors);
   rightLayout->addWidget(new HoriSeparator{&right});
   rightLayout->addWidget(&palette);
-  rightLayout->addSpacing(glob_padding);
+  rightLayout->addSpacing(glob_margin);
   right.setStyleSheet("background-color: " + glob_main.name());
   right.setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
   
@@ -219,11 +215,11 @@ void Window::setupMenubar() {
 #undef ADD_ACTION
 
 void Window::makeDockWidget(Qt::DockWidgetArea area, QWidget *widget) {
-  QDockWidget *dock = new QDockWidget{this};
+  auto *dock = new QDockWidget{this};
   dock->setFeatures(QDockWidget::NoDockWidgetFeatures);
   dock->setAllowedAreas(area);
   // @TODO report bug and remove workaround
-  QWidget *wrapper = new QWidget{widget->parentWidget()};
+  auto *wrapper = new QWidget{widget->parentWidget()};
   auto *layout = new QVBoxLayout{wrapper};
   layout->setContentsMargins(0, 1, 0, 0);
   layout->setSpacing(0);

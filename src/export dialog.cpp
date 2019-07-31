@@ -123,9 +123,8 @@ Layout *makeLayout(QBoxLayout *parent) {
 
 void ExportDialog::setupLayout() {
   auto *layout = new QVBoxLayout{this};
-  setLayout(layout);
   layout->setSpacing(0);
-  layout->setContentsMargins(glob_padding, glob_padding, glob_padding, glob_padding);
+  layout->setContentsMargins(glob_margin, glob_margin, glob_margin, glob_margin);
   layout->setSizeConstraint(QLayout::SetFixedSize);
   
   auto *dirLayout = makeLayout<QHBoxLayout>(layout);

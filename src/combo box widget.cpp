@@ -19,7 +19,7 @@
 
 namespace {
 
-constexpr int item_height = glob_font_px + 2 * glob_text_padding;
+constexpr int item_height = glob_font_px + 2 * glob_text_margin;
 
 class PopupList final : public QWidget {
 public:
@@ -72,7 +72,7 @@ private:
     painter.setBrush(Qt::NoBrush);
     painter.setPen(glob_text_color);
     painter.drawText(
-      QPoint{glob_text_padding, glob_text_padding + glob_font_accent_px},
+      QPoint{glob_text_margin, glob_text_margin + glob_font_accent_px},
       text
     );
   }

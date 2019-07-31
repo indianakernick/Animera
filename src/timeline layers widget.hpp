@@ -39,12 +39,8 @@ private:
   TextInputWidget *name = nullptr;
   LayerIdx idx;
   
-  void paintBack(QPixmap &);
-  void paintIcon(QPixmap &, const QString &);
   void createWidgets();
   void setupLayout();
-  
-  void paintEvent(QPaintEvent *) override;
 };
 
 class LayersWidget final : public QWidget {

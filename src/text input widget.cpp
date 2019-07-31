@@ -80,22 +80,22 @@ void TextInputWidget::wheelEvent(QWheelEvent *event) {
 int TextInputWidget::getCursorPos(const int chars) const {
   return rect.pos().x()
     + chars * glob_font_stride_px
-    - glob_text_padding
+    - glob_text_margin
     + offset;
 }
 
 int TextInputWidget::getMinCursorPos() const {
-  return rect.pos().x() - glob_text_padding;
+  return rect.pos().x() - glob_text_margin;
 }
 
 int TextInputWidget::getMaxCursorPos() const {
-  return rect.inner().right() + 1 - glob_text_padding;
+  return rect.inner().right() + 1 - glob_text_margin;
 }
 
 int TextInputWidget::getMinOffset() const {
   // Should we consider rect.pos()?
   return rect.inner().width()
-    - glob_text_padding
+    - glob_text_margin
     - text().length() * glob_font_stride_px;
 }
 

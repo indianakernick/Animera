@@ -46,8 +46,6 @@ private:
   void toggleTimer();
   void setInterval(int);
   
-  void paintBack(QPixmap &);
-  void paintIcon(QPixmap &, const QString &);
   IconPushButtonWidget *makePushButton(QPixmap, const QString &);
   IconRadioButtonWidget *makeRadioButton(QPixmap, const QString &, const QString &);
   void createWidgets();

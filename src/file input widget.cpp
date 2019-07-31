@@ -33,7 +33,7 @@ private:
   void paintEvent(QPaintEvent *) override {
     QPainter painter{this};
     painter.fillRect(rect(), glob_main);
-    painter.drawPixmap(glob_text_padding, glob_text_padding, arrow);
+    painter.drawPixmap(glob_text_margin, glob_text_margin, arrow);
   }
 };
 

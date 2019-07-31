@@ -164,8 +164,7 @@ ToolColors ToolColorsWidget::getInitialColors(const Format format) {
 }
 
 void ToolColorsWidget::setupLayout() {
-  QHBoxLayout *layout = new QHBoxLayout{this};
-  setLayout(layout);
+  auto *layout = new QHBoxLayout{this};
   layout->setSpacing(0);
   layout->setContentsMargins(0, 0, 0, 0);
   for (auto *widget : widgets) {

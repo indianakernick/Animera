@@ -173,7 +173,7 @@ private:
   }
   
   void setupLayout() {
-    QGridLayout *grid = new QGridLayout{this};
+    auto *grid = new QGridLayout{this};
     grid->setSpacing(0);
     grid->setContentsMargins(0, 0, 0, 0);
     

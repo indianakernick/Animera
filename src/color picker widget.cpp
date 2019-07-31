@@ -16,7 +16,7 @@
 
 ColorPickerWidget::ColorPickerWidget(QWidget *parent)
   : QWidget{parent} {
-  setFixedWidth(pick_svgraph_rect.widget().width() + 2 * glob_padding);
+  setFixedWidth(pick_svgraph_rect.widget().width() + 2 * glob_margin);
 }
 
 void ColorPickerWidget::initCanvas(const Format format) {
@@ -64,11 +64,10 @@ void ColorPickerWidget::init() {
 }
 
 void ColorPickerWidget::setupLayout() {
-  QGridLayout *layout = new QGridLayout{this};
-  setLayout(layout);
+  auto *layout = new QGridLayout{this};
   layout->setAlignment(Qt::AlignTop);
   layout->setSpacing(0);
-  layout->setContentsMargins(glob_padding, glob_padding, glob_padding, glob_padding);
+  layout->setContentsMargins(glob_margin, glob_margin, glob_margin, glob_margin);
   layout->addWidget(nameLabel, 0, 0, 1, 6);
   impl->setupLayout(layout);
 }

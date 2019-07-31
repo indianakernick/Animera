@@ -87,9 +87,8 @@ void InitCanvasDialog::createWidgets() {
 
 void InitCanvasDialog::setupLayout() {
   auto *layout = new QGridLayout{this};
-  setLayout(layout);
   layout->setSpacing(0);
-  layout->setContentsMargins(glob_padding, glob_padding, glob_padding, glob_padding);
+  layout->setContentsMargins(glob_margin, glob_margin, glob_margin, glob_margin);
   layout->setSizeConstraint(QLayout::SetFixedSize);
   layout->addWidget(makeLabel(this, 8, "Width: "), 0, 0, Qt::AlignLeft);
   layout->addWidget(width, 0, 1, Qt::AlignRight);

@@ -44,21 +44,11 @@ struct CellRect {
   FrameIdx maxF;
 };
 
-// @TODO is CellSpan too similar to std::span?
 struct CellSpan {
   CellPtr cell;
-  FrameIdx len = 1;
+  FrameIdx len;
 };
 
-using Spans = std::vector<CellSpan>;
-
-struct Layer {
-  Spans spans;
-  std::string name;
-  bool visible = true;
-};
-
-using Layers = std::vector<Layer>;
 using Frame = std::vector<const Cell *>;
 
 #endif

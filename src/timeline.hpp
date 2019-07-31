@@ -10,8 +10,8 @@
 #define timeline_hpp
 
 #include <span>
-#include "cell.hpp"
 #include "palette.hpp"
+#include "cell span.hpp"
 #include "export options.hpp"
 
 class Timeline final : public QObject {
@@ -86,13 +86,19 @@ Q_SIGNALS:
   void modified();
   
 private:
-  Layers layers;
+  struct Layer {
+    LayerCells spans;
+    std::string name;
+    bool visible = true;
+  };
+
+  std::vector<Layer> layers;
   CellPos currPos;
   CellRect selection;
   FrameIdx frameCount;
   QSize canvasSize;
   Format canvasFormat;
-  std::vector<Spans> clipboard;
+  std::vector<LayerCells> clipboard;
   
   CellPtr makeCell() const;
   Cell *getCell(CellPos);

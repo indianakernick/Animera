@@ -11,8 +11,6 @@
 
 #include <QtWidgets/qabstractbutton.h>
 
-// @TODO do we really need to derived from QAbstractButton if we're just going
-// to override the default behaviour?
 class RadioButtonWidget : public QAbstractButton {
 public:
   explicit RadioButtonWidget(QWidget *);

@@ -15,8 +15,7 @@
 
 namespace {
 
-// @TODO maybe this could be improved?
-// Look at PNG
+// @TODO libpng
 constexpr char const magic_number[] = {'P', 'I', 'X', '2'};
 
 }
