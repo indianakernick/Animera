@@ -161,9 +161,9 @@ void Window::setupUI() {
 void Window::setupMenubar() {
   menubar = new QMenuBar{this};
   menubar->setNativeMenuBar(false);
-  if (!menubar->isNativeMenuBar()) {
+  // if (!menubar->isNativeMenuBar()) {
     makeDockWidget(Qt::TopDockWidgetArea, menubar);
-  }
+  // }
   menubar->setFont(getGlobalFont());
   
   auto *app = static_cast<Application *>(QApplication::instance());
@@ -222,7 +222,13 @@ void Window::makeDockWidget(Qt::DockWidgetArea area, QWidget *widget) {
   QDockWidget *dock = new QDockWidget{this};
   dock->setFeatures(QDockWidget::NoDockWidgetFeatures);
   dock->setAllowedAreas(area);
-  dock->setWidget(widget);
+  // @TODO report bug and remove workaround
+  QWidget *wrapper = new QWidget{widget->parentWidget()};
+  auto *layout = new QVBoxLayout{wrapper};
+  layout->setContentsMargins(0, 1, 0, 0);
+  layout->setSpacing(0);
+  layout->addWidget(widget);
+  dock->setWidget(wrapper);
   dock->setTitleBarWidget(new QWidget{dock});
   addDockWidget(area, dock);
 }
