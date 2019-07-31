@@ -12,6 +12,7 @@
 #include <memory>
 #include <vector>
 #include "image.hpp"
+#include "enum operators.hpp"
 
 class Cell;
 
@@ -29,8 +30,20 @@ public:
   QImage image;
 };
 
-using LayerIdx = int;
-using FrameIdx = int;
+enum class LayerIdx {};
+enum class FrameIdx {};
+
+template <>
+struct enum_unary_plus<LayerIdx> : std::true_type {};
+
+template <>
+struct enum_unary_plus<FrameIdx> : std::true_type {};
+
+template <>
+struct enum_math<LayerIdx> : std::true_type {};
+
+template <>
+struct enum_math<FrameIdx> : std::true_type {};
 
 struct CellPos {
   LayerIdx l;
@@ -46,7 +59,7 @@ struct CellRect {
 
 struct CellSpan {
   CellPtr cell;
-  FrameIdx len;
+  FrameIdx len{1};
 };
 
 using Frame = std::vector<const Cell *>;

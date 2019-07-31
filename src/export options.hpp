@@ -9,6 +9,7 @@
 #ifndef export_options_hpp
 #define export_options_hpp
 
+#include "cell.hpp"
 #include <QtCore/qstring.h>
 
 enum class LayerSelect {
@@ -35,16 +36,17 @@ enum class ExportFormat {
   monochrome
 };
 
+template <typename Idx>
 struct Line {
-  int stride;
-  int offset;
+  Idx stride;
+  Idx offset;
 };
 
 struct ExportOptions {
   QString name;
   QString directory;
-  Line layerLine;
-  Line frameLine;
+  Line<LayerIdx> layerLine;
+  Line<FrameIdx> frameLine;
   LayerSelect layerSelect;
   FrameSelect frameSelect;
   ExportFormat format;

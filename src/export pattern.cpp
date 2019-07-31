@@ -54,9 +54,9 @@ QString evalExportPattern(
       const int zeros = countZeros(c, pattern.cend());
       assert(c != pattern.cend());
       if (*c == 'L') {
-        output.push_back(paddedNumber(zeros, layer));
+        output.push_back(paddedNumber(zeros, +layer));
       } else if (*c == 'F') {
-        output.push_back(paddedNumber(zeros, frame));
+        output.push_back(paddedNumber(zeros, +frame));
       } else Q_UNREACHABLE();
     } else {
       assert(validFileNameChar(*c));

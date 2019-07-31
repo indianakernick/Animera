@@ -56,7 +56,7 @@ public:
     spans.push_back({nullptr, len});
   }
   void pushCell(CellPtr cell) {
-    spans.push_back({std::move(cell), 1});
+    spans.push_back({std::move(cell)});
   }
 
   /// Get a constant iterator to a cell

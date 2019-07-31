@@ -31,7 +31,7 @@ void FramesWidget::setMargin(const int newMargin) {
 }
 
 int FramesWidget::roundUpFrames() const {
-  return ((frames + frame_incr - 1) / frame_incr) * frame_incr;
+  return ((+frames + frame_incr - 1) / frame_incr) * frame_incr;
 }
 
 void FramesWidget::setWidth() {

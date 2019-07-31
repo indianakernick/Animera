@@ -17,23 +17,23 @@ CellPtr copyCell(const CellPtr &cell) {
 }
 
 FrameIdx spanLength(const Spans &spans) {
-  FrameIdx len = 0;
+  FrameIdx len = {};
   for (const CellSpan &span : spans) {
-    assert(span.len >= 0);
+    assert(span.len >= FrameIdx{0});
     len += span.len;
   }
   return len;
 }
 
 void shrinkSpan(Spans &spans, Spans::iterator span) {
-  if (--span->len <= 0) {
+  if (--span->len <= FrameIdx{0}) {
     spans.erase(span);
   }
 }
 
 template <typename Spans>
 auto findSpan(Spans &spans, FrameIdx &idx) {
-  assert(0 <= idx);
+  assert(FrameIdx{0} <= idx);
   for (auto s = spans.begin(); s != spans.end(); ++s) {
     if (idx < s->len) {
       return s;
@@ -46,11 +46,11 @@ auto findSpan(Spans &spans, FrameIdx &idx) {
 }
 
 LayerCells::ConstIterator &LayerCells::ConstIterator::operator++() {
-  assert(0 < iter->len);
+  assert(FrameIdx{0} < iter->len);
   assert(idx < iter->len);
   if (++idx == iter->len) {
     ++iter;
-    idx = 0;
+    idx = FrameIdx{0};
   }
   return *this;
 }
@@ -76,7 +76,7 @@ const Cell *LayerCells::get(FrameIdx idx) const {
 
 void LayerCells::insertCopy(FrameIdx idx) {
   Spans::iterator span = findSpan(spans, idx);
-  if (idx < span->len - 1) {
+  if (idx < span->len - FrameIdx{1}) {
     ++span->len;
   } else {
     if (span->cell) {
@@ -92,7 +92,7 @@ void LayerCells::insertNew(FrameIdx idx, CellPtr cell) {
   Spans::iterator span = findSpan(spans, idx);
   if (span->cell == cell) {
     ++span->len;
-  } else if (idx < span->len - 1) {
+  } else if (idx < span->len - FrameIdx{1}) {
     const FrameIdx leftSize = idx;
     const FrameIdx rightSize = span->len - idx;
     span->len = leftSize;
@@ -107,17 +107,17 @@ void LayerCells::insertNew(FrameIdx idx, CellPtr cell) {
 void LayerCells::replaceNew(FrameIdx idx, CellPtr cell) {
   Spans::iterator span = findSpan(spans, idx);
   if (span->cell == cell) return;
-  if (span->len == 1) {
+  if (span->len == FrameIdx{1}) {
     span->cell = std::move(cell);
     return;
   }
   const FrameIdx leftSize = idx;
-  const FrameIdx rightSize = span->len - idx - 1;
-  if (leftSize == 0) {
+  const FrameIdx rightSize = span->len - idx - FrameIdx{1};
+  if (leftSize == FrameIdx{0}) {
     span->len = rightSize;
     spans.insert(span, {std::move(cell)});
     return;
-  } else if (rightSize == 0) {
+  } else if (rightSize == FrameIdx{0}) {
     span->len = leftSize;
     spans.insert(++span, {std::move(cell)});
     return;
@@ -138,7 +138,7 @@ void LayerCells::extend(FrameIdx idx) {
 
 void LayerCells::split(FrameIdx idx) {
   Spans::iterator span = findSpan(spans, idx);
-  if (idx == 0) return;
+  if (idx == FrameIdx{0}) return;
   const FrameIdx leftSize = idx;
   const FrameIdx rightSize = span->len - idx;
   span->len = leftSize;
@@ -158,7 +158,7 @@ Spans::iterator insert(Spans &dst, Spans::iterator pos, Spans &src) {
 
 void removeSpan(Spans &spans, Spans::iterator span, FrameIdx len) {
   assert(span != spans.end());
-  while (len > 0 && span->len <= len) {
+  while (len > FrameIdx{0} && span->len <= len) {
     len -= span->len;
     span = spans.erase(span);
   }
@@ -172,9 +172,9 @@ void removeSpan(Spans &spans, Spans::iterator span, FrameIdx len) {
 void LayerCells::replaceSpan(FrameIdx idx, LayerCells &newCells) {
   Spans &newSpans = newCells.spans;
   const FrameIdx len = spanLength(newSpans);
-  if (len <= 0) return;
+  if (len <= FrameIdx{0}) return;
   Spans::iterator span = findSpan(spans, idx);
-  if (idx == 0) {
+  if (idx == FrameIdx{0}) {
     if (span->len < len) {
       span = insert(spans, span, newSpans) + newSpans.size();
       removeSpan(spans, span, len - span->len);
@@ -190,10 +190,10 @@ void LayerCells::replaceSpan(FrameIdx idx, LayerCells &newCells) {
     const FrameIdx leftSize = idx;
     const FrameIdx rightSize = span->len - idx - len;
     span->len = leftSize;
-    if (rightSize < 0) {
+    if (rightSize < FrameIdx{0}) {
       span = insert(spans, ++span, newSpans) + newSpans.size();
       removeSpan(spans, span, -rightSize);
-    } else if (rightSize > 0) {
+    } else if (rightSize > FrameIdx{0}) {
       CellPtr copy = copyCell(span->cell);
       span = insert(spans, ++span, newSpans) + newSpans.size();
       span = spans.insert(span, {std::move(copy), rightSize});
@@ -205,11 +205,11 @@ void LayerCells::replaceSpan(FrameIdx idx, LayerCells &newCells) {
 
 LayerCells LayerCells::extract(FrameIdx idx, FrameIdx len) const {
   Spans newSpans;
-  if (len <= 0) return LayerCells{std::move(newSpans)};
+  if (len <= FrameIdx{0}) return LayerCells{std::move(newSpans)};
   Spans::const_iterator span = findSpan(spans, idx);
   const FrameIdx leftSize = idx;
   const FrameIdx rightSize = span->len - idx - len;
-  if (rightSize >= 0) {
+  if (rightSize >= FrameIdx{0}) {
     newSpans.push_back({copyCell(span->cell), len});
   } else {
     newSpans.push_back({copyCell(span->cell), span->len - leftSize});
@@ -220,7 +220,7 @@ LayerCells LayerCells::extract(FrameIdx idx, FrameIdx len) const {
       len -= span->len;
       ++span;
     }
-    if (len > 0) {
+    if (len > FrameIdx{0}) {
       newSpans.push_back({copyCell(span->cell), len});
     }
   }
@@ -235,7 +235,7 @@ LayerCells LayerCells::truncateCopy(FrameIdx len) const {
     len -= span->len;
     ++span;
   }
-  if (span != spans.end() && len > 0) {
+  if (span != spans.end() && len > FrameIdx{0}) {
     newSpans.push_back({copyCell(span->cell), len});
   }
   return LayerCells{std::move(newSpans)};

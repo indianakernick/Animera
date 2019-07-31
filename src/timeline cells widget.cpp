@@ -52,10 +52,10 @@ void CellsWidget::setSelection(const CellRect rect) {
     // do we really need this at all?
     // what if we change the colors of the cells? Could be problematic
     QRect selectRect = {
-      rect.minF * cell_width,
-      rect.minL * cell_height,
-      (rect.maxF - rect.minF + 1) * cell_width - glob_border_width,
-      (rect.maxL - rect.minL + 1) * cell_height - glob_border_width
+      +rect.minF * cell_width,
+      +rect.minL * cell_height,
+      +(rect.maxF - rect.minF + FrameIdx{1}) * cell_width - glob_border_width,
+      +(rect.maxL - rect.minL + LayerIdx{1}) * cell_height - glob_border_width
     };
     drawStrokedRect(
       selectionImg,
@@ -78,7 +78,7 @@ void CellsWidget::setSelection(const CellRect rect) {
 }
 
 void CellsWidget::setCurrPos(const CellPos pos) {
-  const QPoint pixelPos = {pos.f * cell_width, pos.l * cell_height};
+  const QPoint pixelPos = {+pos.f * cell_width, +pos.l * cell_height};
   Q_EMIT shouldEnsureVisible(pixelPos);
   currPosImg.fill(0);
   QPainter painter{&currPosImg};
@@ -86,10 +86,10 @@ void CellsWidget::setCurrPos(const CellPos pos) {
   painter.setBrush(cell_curr_color);
   constexpr int size = 2 * cell_icon_pad + cell_icon_size;
   if (height() > cell_height || width() == cell_width) {
-    painter.drawRect(0, pos.l * cell_height, width(), size);
+    painter.drawRect(0, +pos.l * cell_height, width(), size);
   }
   if (width() > cell_width) {
-    painter.drawRect(pos.f * cell_width, 0, size, height());
+    painter.drawRect(+pos.f * cell_width, 0, size, height());
   }
   painter.end();
   repaint();
@@ -110,17 +110,17 @@ void paintBorder(QPainter &painter, const int x, const int y) {
 void CellsWidget::setLayer(const LayerIdx idx, std::span<const CellSpan> spans) {
   QPainter painter{&layersImg};
   painter.setCompositionMode(QPainter::CompositionMode_Source);
-  painter.fillRect(0, idx * cell_height, width(), cell_height, QColor{0, 0, 0, 0});
+  painter.fillRect(0, +idx * cell_height, width(), cell_height, QColor{0, 0, 0, 0});
   int x = cell_icon_pad;
-  const int y = idx * cell_height;
+  const int y = +idx * cell_height;
   for (const CellSpan &span : spans) {
     if (span.cell) {
-      if (span.len == 1) {
+      if (span.len == FrameIdx{1}) {
         painter.drawPixmap(x, y + cell_icon_pad, cellPix);
         x += cell_width;
         paintBorder(painter, x, y);
-      } else if (span.len > 1) {
-        const int between = (span.len - 2) * cell_width;
+      } else if (span.len > FrameIdx{1}) {
+        const int between = +(span.len - FrameIdx{2}) * cell_width;
         painter.drawPixmap(x, y + cell_icon_pad, beginLinkPix);
         x += cell_width;
         painter.fillRect(
@@ -134,7 +134,7 @@ void CellsWidget::setLayer(const LayerIdx idx, std::span<const CellSpan> spans) 
         paintBorder(painter, x, y);
       } else Q_UNREACHABLE();
     } else {
-      for (FrameIdx f = 0; f != span.len; ++f) {
+      for (FrameIdx f = {}; f != span.len; ++f) {
         x += cell_width;
         paintBorder(painter, x, y);
       }
@@ -150,7 +150,7 @@ void CellsWidget::setLayer(const LayerIdx idx, std::span<const CellSpan> spans) 
 }
 
 void CellsWidget::setFrameCount(const FrameIdx count) {
-  setFixedWidth(count * cell_width);
+  setFixedWidth(+count * cell_width);
   resizeImage(currPosImg, size());
   resizeImage(selectionImg, size());
   resizeImage(layersImg, size());
@@ -158,7 +158,7 @@ void CellsWidget::setFrameCount(const FrameIdx count) {
 }
 
 void CellsWidget::setLayerCount(const LayerIdx count) {
-  setFixedHeight(count * cell_height);
+  setFixedHeight(+count * cell_height);
   resizeImage(currPosImg, size());
   resizeImage(selectionImg, size());
   resizeCopyImage(layersImg, size());
@@ -178,8 +178,8 @@ void CellsWidget::focusOutEvent(QFocusEvent *) {
 
 CellPos CellsWidget::getPos(QMouseEvent *event) {
   return {
-    std::clamp(event->pos().y(), 0, height() - 1) / cell_height,
-    std::clamp(event->pos().x(), 0, width() - 1) / cell_width
+    LayerIdx{std::clamp(event->pos().y(), 0, height() - 1) / cell_height},
+    FrameIdx{std::clamp(event->pos().x(), 0, width() - 1) / cell_width}
   };
 }
 

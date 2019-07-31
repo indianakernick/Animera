@@ -14,22 +14,28 @@
 #include <QtCore/qdir.h>
 #include "export pattern.hpp"
 
+namespace {
+
+constexpr CellRect empty_rect = {LayerIdx{0}, FrameIdx{0}, LayerIdx{-1}, FrameIdx{-1}};
+
+}
+
 Timeline::Timeline()
-  : currPos{0, 0}, frameCount{0} {}
+  : currPos{LayerIdx{0}, FrameIdx{0}}, frameCount{0} {}
 
 void Timeline::initDefault() {
-  frameCount = 1;
+  frameCount = FrameIdx{1};
   changeFrameCount();
   Layer layer;
   layer.spans.pushCell(makeCell());
   layer.name = "Layer 0";
   layers.push_back(std::move(layer));
-  selection = {0, 0, -1, -1};
+  selection = empty_rect;
   changeLayerCount();
   changeFrame();
   changePos();
   Q_EMIT selectionChanged(selection);
-  changeLayers(0, 1);
+  changeLayers(LayerIdx{0}, LayerIdx{1});
 }
 
 namespace {
@@ -69,27 +75,27 @@ void Timeline::serialize(QIODevice *dev) const {
 void Timeline::deserialize(QIODevice *dev) {
   assert(dev);
   layers.resize(deserializeBytesAs<uint16_t>(dev));
-  frameCount = deserializeBytesAs<uint16_t>(dev);
+  frameCount = FrameIdx{deserializeBytesAs<uint16_t>(dev)};
   for (Layer &layer : layers) {
     deserializeBytes(dev, layer.visible);
     layer.name.resize(deserializeBytesAs<uint16_t>(dev));
     dev->read(layer.name.data(), layer.name.size());
     layer.spans.resize(deserializeBytesAs<uint16_t>(dev));
     for (CellSpan &span : layer.spans) {
-      span.len = deserializeBytesAs<uint16_t>(dev);
+      span.len = FrameIdx{deserializeBytesAs<uint16_t>(dev)};
       if (deserializeBytesAs<bool>(dev)) {
         span.cell = makeCell();
         deserializeImage(dev, span.cell->image);
       }
     }
   }
-  selection = {0, 0, -1, -1};
+  selection = empty_rect;
   changeFrameCount();
   changeLayerCount();
   changeFrame();
   changePos();
   Q_EMIT selectionChanged(selection);
-  changeLayers(0, layerCount());
+  changeLayers(LayerIdx{0}, layerCount());
 }
 
 CellRect Timeline::selectCells(const ExportOptions &options) const {
@@ -97,8 +103,8 @@ CellRect Timeline::selectCells(const ExportOptions &options) const {
   switch (options.layerSelect) {
     case LayerSelect::all_composited:
     case LayerSelect::all:
-      rect.minL = 0;
-      rect.maxL = layerCount() - 1;
+      rect.minL = LayerIdx{0};
+      rect.maxL = layerCount() - LayerIdx{1};
       break;
     case LayerSelect::current:
       rect.minL = rect.maxL = currPos.l;
@@ -107,8 +113,8 @@ CellRect Timeline::selectCells(const ExportOptions &options) const {
   }
   switch (options.frameSelect) {
     case FrameSelect::all:
-      rect.minF = 0;
-      rect.maxF = frameCount - 1;
+      rect.minF = FrameIdx{0};
+      rect.maxF = frameCount - FrameIdx{1};
       break;
     case FrameSelect::current:
       rect.minF = rect.maxF = currPos.f;
@@ -167,7 +173,8 @@ QImage Timeline::convertImage(
 
 namespace {
 
-int apply(const Line line, const int value) {
+template <typename Idx>
+Idx apply(const Line<Idx> line, const Idx value) {
   return value * line.stride + line.offset;
 }
 
@@ -195,22 +202,22 @@ void Timeline::exportCompRect(
   const PaletteCSpan palette,
   const CellRect rect
 ) const {
-  const LayerIdx rectLayers = rect.maxL - rect.minL + 1;
+  const LayerIdx rectLayers = rect.maxL - rect.minL + LayerIdx{1};
   Frame frame;
-  frame.reserve(rectLayers);
+  frame.reserve(+rectLayers);
   std::vector<LayerCells::ConstIterator> iterators;
-  iterators.reserve(rectLayers);
+  iterators.reserve(+rectLayers);
   for (LayerIdx l = rect.minL; l <= rect.maxL; ++l) {
-    iterators.push_back(layers[l].spans.find(rect.minF));
+    iterators.push_back(layers[+l].spans.find(rect.minF));
   }
   for (FrameIdx f = rect.minF; f <= rect.maxF; ++f) {
     frame.clear();
-    for (LayerIdx l = 0; l != rectLayers; ++l) {
-      if (!layers[l + rect.minL].visible) continue;
-      if (const Cell *cell = *iterators[l]; cell) {
+    for (LayerIdx l = {}; l != rectLayers; ++l) {
+      if (!layers[+(l + rect.minL)].visible) continue;
+      if (const Cell *cell = *iterators[+l]; cell) {
         frame.push_back(cell);
       }
-      ++iterators[l];
+      ++iterators[+l];
     }
     QImage result = compositeFrame(palette, frame, canvasSize, canvasFormat);
     exportFile(options, palette, result, {rect.minL, f});
@@ -223,7 +230,7 @@ void Timeline::exportRect(
   const CellRect rect
 ) const {
   for (LayerIdx l = rect.minL; l <= rect.maxL; ++l) {
-    const Layer &layer = layers[l];
+    const Layer &layer = layers[+l];
     // @TODO does the user want to skip invisible layers?
     if (!layer.visible) continue;
     LayerCells::ConstIterator iter = layer.spans.find(rect.minF);
@@ -251,24 +258,24 @@ void Timeline::initCanvas(const Format format, const QSize size) {
 }
 
 void Timeline::nextFrame() {
-  currPos.f = (currPos.f + 1) % frameCount;
+  currPos.f = (currPos.f + FrameIdx{1}) % frameCount;
   changeFrame();
   changePos();
 }
 
 void Timeline::prevFrame() {
-  currPos.f = (currPos.f - 1 + frameCount) % frameCount;
+  currPos.f = (currPos.f - FrameIdx{1} + frameCount) % frameCount;
   changeFrame();
   changePos();
 }
 
 void Timeline::layerBelow() {
-  currPos.l = std::min(currPos.l + 1, layerCount() - 1);
+  currPos.l = std::min(currPos.l + LayerIdx{1}, layerCount() - LayerIdx{1});
   changePos();
 }
 
 void Timeline::layerAbove() {
-  currPos.l = std::max(currPos.l - 1, 0);
+  currPos.l = std::max(currPos.l - LayerIdx{1}, LayerIdx{0});
   changePos();
 }
 
@@ -307,7 +314,7 @@ void Timeline::endSelection() {
 }
 
 void Timeline::clearSelection() {
-  selection = {0, 0, -1, -1};
+  selection = empty_rect;
   Q_EMIT selectionChanged(selection);
 }
 
@@ -315,7 +322,7 @@ void Timeline::insertLayer() {
   Layer layer;
   layer.spans.pushNull(frameCount);
   layer.name = "Layer " + std::to_string(layers.size());
-  layers.insert(layers.begin() + currPos.l, std::move(layer));
+  layers.insert(layers.begin() + +currPos.l, std::move(layer));
   changeLayerCount();
   Q_EMIT selectionChanged(selection);
   changeLayers(currPos.l, layerCount());
@@ -329,12 +336,12 @@ void Timeline::removeLayer() {
     layers.front().spans.clear(frameCount);
     layers.front().name = "Layer 0";
     layers.front().visible = true;
-    changeLayers(0, 1);
+    changeLayers(LayerIdx{0}, LayerIdx{1});
   } else {
-    layers.erase(layers.begin() + currPos.l);
+    layers.erase(layers.begin() + +currPos.l);
     changeLayerCount();
     Q_EMIT selectionChanged(selection);
-    currPos.l = std::min(currPos.l, layerCount() - 1);
+    currPos.l = std::min(currPos.l, layerCount() - LayerIdx{1});
     changeLayers(currPos.l, layerCount());
   }
   changeFrame();
@@ -343,18 +350,18 @@ void Timeline::removeLayer() {
 }
 
 void Timeline::moveLayerUp() {
-  if (currPos.l == 0) return;
-  std::swap(layers[currPos.l - 1], layers[currPos.l]);
-  changeLayers(currPos.l - 1, currPos.l + 1);
+  if (currPos.l == LayerIdx{0}) return;
+  std::swap(layers[+(currPos.l - LayerIdx{1})], layers[+currPos.l]);
+  changeLayers(currPos.l - LayerIdx{1}, currPos.l + LayerIdx{1});
   changeFrame();
   layerAbove();
   Q_EMIT modified();
 }
 
 void Timeline::moveLayerDown() {
-  if (currPos.l == layerCount() - 1) return;
-  std::swap(layers[currPos.l], layers[currPos.l + 1]);
-  changeLayers(currPos.l, currPos.l + 2);
+  if (currPos.l == layerCount() - LayerIdx{1}) return;
+  std::swap(layers[+currPos.l], layers[+(currPos.l + LayerIdx{1})]);
+  changeLayers(currPos.l, currPos.l + LayerIdx{2});
   changeFrame();
   layerBelow();
   Q_EMIT modified();
@@ -363,8 +370,8 @@ void Timeline::moveLayerDown() {
 void Timeline::insertFrame() {
   ++frameCount;
   changeFrameCount();
-  for (LayerIdx l = 0; l != layerCount(); ++l) {
-    layers[l].spans.insertCopy(currPos.f);
+  for (LayerIdx l = {}; l != layerCount(); ++l) {
+    layers[+l].spans.insertCopy(currPos.f);
     changeSpan(l);
   }
   Q_EMIT selectionChanged(selection);
@@ -375,8 +382,8 @@ void Timeline::insertFrame() {
 void Timeline::insertNullFrame() {
   ++frameCount;
   changeFrameCount();
-  for (LayerIdx l = 0; l != layerCount(); ++l) {
-    layers[l].spans.insertNew(currPos.f, nullptr);
+  for (LayerIdx l = {}; l != layerCount(); ++l) {
+    layers[+l].spans.insertNew(currPos.f, nullptr);
     changeSpan(l);
   }
   Q_EMIT selectionChanged(selection);
@@ -385,28 +392,28 @@ void Timeline::insertNullFrame() {
 }
 
 void Timeline::removeFrame() {
-  if (frameCount == 1) {
-    for (LayerIdx l = 0; l != layerCount(); ++l) {
-      layers[l].spans.clear(1);
+  if (frameCount == FrameIdx{1}) {
+    for (LayerIdx l = {}; l != layerCount(); ++l) {
+      layers[+l].spans.clear(FrameIdx{1});
       changeSpan(l);
     }
   } else {
     --frameCount;
     changeFrameCount();
-    for (LayerIdx l = 0; l != layerCount(); ++l) {
-      layers[l].spans.remove(currPos.f);
+    for (LayerIdx l = {}; l != layerCount(); ++l) {
+      layers[+l].spans.remove(currPos.f);
       changeSpan(l);
     }
     Q_EMIT selectionChanged(selection);
   }
-  currPos.f = std::max(currPos.f - 1, 0);
+  currPos.f = std::max(currPos.f - FrameIdx{1}, FrameIdx{0});
   changeFrame();
   changePos();
   Q_EMIT modified();
 }
 
 void Timeline::clearCell() {
-  layers[currPos.l].spans.replaceNew(currPos.f, nullptr);
+  layers[+currPos.l].spans.replaceNew(currPos.f, nullptr);
   changeSpan(currPos.l);
   changeFrame();
   changePos();
@@ -414,14 +421,14 @@ void Timeline::clearCell() {
 }
 
 void Timeline::extendCell() {
-  layers[currPos.l].spans.extend(currPos.f);
+  layers[+currPos.l].spans.extend(currPos.f);
   changeSpan(currPos.l);
   nextFrame();
   Q_EMIT modified();
 }
 
 void Timeline::splitCell() {
-  layers[currPos.l].spans.split(currPos.f);
+  layers[+currPos.l].spans.split(currPos.f);
   changeSpan(currPos.l);
   changeFrame();
   changePos();
@@ -429,7 +436,7 @@ void Timeline::splitCell() {
 }
 
 void Timeline::requestCell() {
-  layers[currPos.l].spans.replaceNew(currPos.f, makeCell());
+  layers[+currPos.l].spans.replaceNew(currPos.f, makeCell());
   changeSpan(currPos.l);
   changeFrame();
   changePos();
@@ -437,9 +444,9 @@ void Timeline::requestCell() {
 }
 
 void Timeline::setCurrPos(const CellPos pos) {
-  assert(0 <= pos.l);
+  assert(LayerIdx{0} <= pos.l);
   assert(pos.l < layerCount());
-  assert(0 <= pos.f);
+  assert(FrameIdx{0} <= pos.f);
   assert(pos.f < frameCount);
   if (currPos.f != pos.f) {
     currPos = pos;
@@ -452,9 +459,9 @@ void Timeline::setCurrPos(const CellPos pos) {
 }
 
 void Timeline::setVisibility(const LayerIdx idx, const bool visible) {
-  assert(0 <= idx);
+  assert(LayerIdx{0} <= idx);
   assert(idx < layerCount());
-  bool &layerVis = layers[idx].visible;
+  bool &layerVis = layers[+idx].visible;
   // @TODO Emit signal when layer visibility changed?
   // if (layerVis != visible) {
     layerVis = visible;
@@ -465,9 +472,9 @@ void Timeline::setVisibility(const LayerIdx idx, const bool visible) {
 }
 
 void Timeline::setName(const LayerIdx idx, const std::string_view name) {
-  assert(0 <= idx);
+  assert(LayerIdx{0} <= idx);
   assert(idx < layerCount());
-  layers[idx].name = name;
+  layers[+idx].name = name;
   // @TODO Emit signal when layer name changed?
   // Q_EMIT nameChanged(idx, name);
   Q_EMIT modified();
@@ -475,9 +482,9 @@ void Timeline::setName(const LayerIdx idx, const std::string_view name) {
 
 void Timeline::clearSelected() {
   LayerCells nullSpans;
-  nullSpans.pushNull(selection.maxF - selection.minF + 1);
+  nullSpans.pushNull(selection.maxF - selection.minF + FrameIdx{1});
   for (LayerIdx l = selection.minL; l <= selection.maxL; ++l) {
-    layers[l].spans.replaceSpan(selection.minF, nullSpans);
+    layers[+l].spans.replaceSpan(selection.minF, nullSpans);
     changeSpan(l);
   }
   changeFrame();
@@ -489,8 +496,8 @@ void Timeline::copySelected() {
   clipboard.clear();
   for (LayerIdx l = selection.minL; l <= selection.maxL; ++l) {
     const FrameIdx idx = selection.minF;
-    const FrameIdx len = selection.maxF - selection.minF + 1;
-    clipboard.push_back(layers[l].spans.extract(idx, len));
+    const FrameIdx len = selection.maxF - selection.minF + FrameIdx{1};
+    clipboard.push_back(layers[+l].spans.extract(idx, len));
   }
 }
 
@@ -501,8 +508,8 @@ void Timeline::pasteSelected() {
   );
   const FrameIdx frames = frameCount - selection.minF;
   for (LayerIdx l = selection.minL; l < endLayer; ++l) {
-    LayerCells spans = clipboard[l - selection.minL].truncateCopy(frames);
-    layers[l].spans.replaceSpan(selection.minF, spans);
+    LayerCells spans = clipboard[+(l - selection.minL)].truncateCopy(frames);
+    layers[+l].spans.replaceSpan(selection.minF, spans);
     changeSpan(l);
   }
   changeFrame();
@@ -515,7 +522,7 @@ CellPtr Timeline::makeCell() const {
 }
 
 Cell *Timeline::getCell(const CellPos pos) {
-  return layers[pos.l].spans.get(pos.f);
+  return layers[+pos.l].spans.get(pos.f);
 }
 
 Frame Timeline::getFrame(const FrameIdx pos) const {
@@ -545,15 +552,15 @@ void Timeline::changeFrame() {
 }
 
 void Timeline::changeSpan(const LayerIdx idx) {
-  Q_EMIT layerChanged(idx, layers[idx].spans);
+  Q_EMIT layerChanged(idx, layers[+idx].spans);
 }
 
 void Timeline::changeLayers(const LayerIdx begin, const LayerIdx end) {
   assert(begin < end);
   for (LayerIdx l = begin; l != end; ++l) {
-    Q_EMIT layerChanged(l, layers[l].spans);
-    Q_EMIT visibilityChanged(l, layers[l].visible);
-    Q_EMIT nameChanged(l, layers[l].name);
+    Q_EMIT layerChanged(l, layers[+l].spans);
+    Q_EMIT visibilityChanged(l, layers[+l].visible);
+    Q_EMIT nameChanged(l, layers[+l].name);
   }
 }
 

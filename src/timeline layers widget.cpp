@@ -73,11 +73,11 @@ void LayersWidget::setMargin(const int margin) {
 }
 
 void LayersWidget::setVisibility(const LayerIdx idx, const bool visible) {
-  layers[idx]->setVisibility(visible);
+  layers[+idx]->setVisibility(visible);
 }
 
 void LayersWidget::setName(const LayerIdx idx, const std::string_view name) {
-  layers[idx]->setName(name);
+  layers[+idx]->setName(name);
 }
 
 void LayersWidget::setLayerCount(const LayerIdx count) {

@@ -23,7 +23,7 @@ public Q_SLOTS:
   void setMargin(int);
 
 private:
-  FrameIdx frames = 0;
+  FrameIdx frames = {};
   int margin = 0;
   
   int roundUpFrames() const;

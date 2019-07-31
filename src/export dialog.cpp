@@ -38,10 +38,10 @@ void ExportDialog::submit() {
   options.directory = dir->path();
   options.layerSelect = static_cast<LayerSelect>(layerSelect->currentIndex());
   options.frameSelect = static_cast<FrameSelect>(frameSelect->currentIndex());
-  options.layerLine.stride = layerStride->value();
-  options.layerLine.offset = layerOffset->value();
-  options.frameLine.stride = frameStride->value();
-  options.frameLine.offset = frameOffset->value();
+  options.layerLine.stride = LayerIdx{layerStride->value()};
+  options.layerLine.offset = LayerIdx{layerOffset->value()};
+  options.frameLine.stride = FrameIdx{frameStride->value()};
+  options.frameLine.offset = FrameIdx{frameOffset->value()};
   const QString formatStr = formatSelect->currentText();
          if (formatStr == "RGBA") {
     options.format = ExportFormat::rgba;
