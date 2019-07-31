@@ -18,7 +18,7 @@ public:
 
 private:
   WidgetRect rect;
-  QString text;
+  QPixmap pixmap;
 
   void paintEvent(QPaintEvent *) override;
 };

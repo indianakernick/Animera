@@ -9,22 +9,32 @@
 #include "text push button widget.hpp"
 
 #include "global font.hpp"
+#include <QtGui/qbitmap.h>
 #include <QtGui/qpainter.h>
 
 TextPushButtonWidget::TextPushButtonWidget(
   QWidget *parent, const WidgetRect rect, const QString &text
-) : QAbstractButton{parent}, rect{rect}, text{text} {
+) : QAbstractButton{parent}, rect{rect}, pixmap{rect.widget().size()} {
   setFixedSize(rect.widget().size());
   setCursor(Qt::PointingHandCursor);
-}
-
-void TextPushButtonWidget::paintEvent(QPaintEvent *) {
-  // @TODO bake
-  // @TODO round corners
-  QPainter painter{this};
+ 
+  QBitmap bitmap = QBitmap{":/General/text button.pbm"};
+  bitmap = bitmap.scaled(bitmap.size() * glob_scale);
+  assert(bitmap.size() == rect.outer().size());
+  
+  QRegion region = bitmap;
+  region.translate(rect.outer().topLeft());
+  setMask(region);
+  
+  QPainter painter{&pixmap};
   painter.fillRect(rect.outer(), glob_light_1);
   painter.setFont(getGlobalFont());
   painter.setBrush(Qt::NoBrush);
   painter.setPen(glob_text_color);
   painter.drawText(rect.inner(), Qt::AlignCenter, text);
+}
+
+void TextPushButtonWidget::paintEvent(QPaintEvent *) {
+  QPainter painter{this};
+  painter.drawPixmap(rect.widget(), pixmap);
 }

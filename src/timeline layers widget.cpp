@@ -57,7 +57,7 @@ void LayerNameWidget::setupLayout() {
   layout->setContentsMargins(0, 0, 0, 0);
   layout->setAlignment(Qt::AlignLeft);
   layout->addWidget(visible);
-  layout->addWidget(name, 0, Qt::AlignTop);
+  layout->addWidget(name);
 }
 
 LayersWidget::LayersWidget(QWidget *parent)

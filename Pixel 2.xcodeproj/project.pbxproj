@@ -109,6 +109,8 @@
 		45161F0022F11EB60036BBED /* todo.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = todo.txt; sourceTree = "<group>"; };
 		45161F0422F1399A0036BBED /* timeline painting.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "timeline painting.cpp"; sourceTree = "<group>"; };
 		45161F0522F1399A0036BBED /* timeline painting.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "timeline painting.hpp"; sourceTree = "<group>"; };
+		45161F0722F15D720036BBED /* text button.anim */ = {isa = PBXFileReference; lastKnownFileType = file; path = "text button.anim"; sourceTree = "<group>"; };
+		45161F0A22F161170036BBED /* text button.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = "text button.pbm"; sourceTree = "<group>"; };
 		452926E122BB0D6300B17E0D /* transform.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = transform.hpp; sourceTree = "<group>"; };
 		452926E222BB607E00B17E0D /* screenshot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = screenshot.png; sourceTree = "<group>"; };
 		452926E422BB607E00B17E0D /* add.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = add.pbm; sourceTree = "<group>"; };
@@ -1095,6 +1097,7 @@
 		453C78832236624D00818B19 /* Anims */ = {
 			isa = PBXGroup;
 			children = (
+				45161F0722F15D720036BBED /* text button.anim */,
 				45D109B322E3E12600D1F1CB /* combobox.anim */,
 				45DC2561224A0AC000F40116 /* title.anim */,
 				453C78862236626C00818B19 /* icon.anim */,
@@ -1278,6 +1281,7 @@
 		457DC0B422E6DD940000777B /* General */ = {
 			isa = PBXGroup;
 			children = (
+				45161F0A22F161170036BBED /* text button.pbm */,
 				457DC0B722E6DDC60000777B /* up down arrow.pbm */,
 				457DC0B622E6DD940000777B /* down arrow.pbm */,
 			);

@@ -55,3 +55,6 @@ Cell images that aren't a fixed size
 Palette import and export
   export as png
   does the palette need to have a size?
+
+remove layer button appears when hovering layer name
+  would this be more intuitive than a button that removes the current layer?

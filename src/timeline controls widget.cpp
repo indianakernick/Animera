@@ -87,7 +87,7 @@ void ControlsWidget::setupLayout() {
   layout->addWidget(extendButton);
   layout->addWidget(splitButton);
   layout->addWidget(playButton);
-  layout->addWidget(delayBox, 0, Qt::AlignTop);
+  layout->addWidget(delayBox);
 }
 
 void ControlsWidget::connectSignals() {

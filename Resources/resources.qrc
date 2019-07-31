@@ -40,5 +40,6 @@
   <file>./Formats/index.png</file>
   <file>./General/up down arrow.pbm</file>
   <file>./General/down arrow.pbm</file>
+  <file>./General/text button.pbm</file>
 </qresource>
 </RCC>
