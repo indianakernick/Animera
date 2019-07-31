@@ -51,8 +51,6 @@ private:
   void createWidgets();
   void setupLayout();
   void connectSignals();
-  
-  void paintEvent(QPaintEvent *) override;
 };
 
 #endif

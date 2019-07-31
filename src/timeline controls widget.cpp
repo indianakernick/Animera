@@ -103,8 +103,4 @@ void ControlsWidget::connectSignals() {
   // @TODO store delay in Sprite
 }
 
-void ControlsWidget::paintEvent(QPaintEvent *) {
-  
-}
-
 #include "timeline controls widget.moc"

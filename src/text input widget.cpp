@@ -23,6 +23,7 @@ TextInputWidget::TextInputWidget(QWidget *parent, const WidgetRect rect)
   updateMargins();
   setFrame(false);
   setAttribute(Qt::WA_MacShowFocusRect, 0);
+  setMask(QRegion{rect.outer()});
   
   CONNECT(cursorBlinkTimer, timeout,               this, blink);
   CONNECT(this,             selectionChanged,      this, showCursor);

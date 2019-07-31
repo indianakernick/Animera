@@ -141,6 +141,7 @@ ComboBoxWidget::ComboBoxWidget(QWidget *parent, const int chars)
   setCursor(Qt::PointingHandCursor);
   setFont(getGlobalFont());
   setFixedSize(rects.widget().size());
+  setMask(QRegion{rects.outer()});
   arrow = bakeColoredBitmap(":/General/up down arrow.pbm", glob_light_2);
 }
 
