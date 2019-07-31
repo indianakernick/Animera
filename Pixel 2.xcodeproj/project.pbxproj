@@ -19,6 +19,7 @@
 		4513145522D59EA300D66262 /* color picker impl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4513145322D59EA300D66262 /* color picker impl.cpp */; };
 		4513145822D5A29800D66262 /* picker impl rgba.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4513145622D5A29800D66262 /* picker impl rgba.cpp */; };
 		4513145B22D5A2A500D66262 /* picker impl gray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4513145922D5A2A500D66262 /* picker impl gray.cpp */; };
+		45161F0122F11EB60036BBED /* todo.txt in Resources */ = {isa = PBXBuildFile; fileRef = 45161F0022F11EB60036BBED /* todo.txt */; };
 		453C78192234935000818B19 /* timeline widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C78172234935000818B19 /* timeline widget.cpp */; };
 		453C781C22349BBD00818B19 /* editor widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C781A22349BBD00818B19 /* editor widget.cpp */; };
 		453C781F22349F0100818B19 /* tool select widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C781D22349F0100818B19 /* tool select widget.cpp */; };
@@ -104,6 +105,7 @@
 		4513145722D5A29800D66262 /* picker impl rgba.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "picker impl rgba.hpp"; sourceTree = "<group>"; };
 		4513145922D5A2A500D66262 /* picker impl gray.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "picker impl gray.cpp"; sourceTree = "<group>"; };
 		4513145A22D5A2A500D66262 /* picker impl gray.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "picker impl gray.hpp"; sourceTree = "<group>"; };
+		45161F0022F11EB60036BBED /* todo.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = todo.txt; sourceTree = "<group>"; };
 		452926E122BB0D6300B17E0D /* transform.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = transform.hpp; sourceTree = "<group>"; };
 		452926E222BB607E00B17E0D /* screenshot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = screenshot.png; sourceTree = "<group>"; };
 		452926E422BB607E00B17E0D /* add.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = add.pbm; sourceTree = "<group>"; };
@@ -845,9 +847,9 @@
 		45BE2A2A22680B0900E21A85 /* sv circle p.pbm */ = {isa = PBXFileReference; lastKnownFileType = text; path = "sv circle p.pbm"; sourceTree = "<group>"; };
 		45BE2A2B22683A2F00E21A85 /* slider bar p.pbm */ = {isa = PBXFileReference; lastKnownFileType = text; path = "slider bar p.pbm"; sourceTree = "<group>"; };
 		45BE2A2C22683A3000E21A85 /* slider bar s.pbm */ = {isa = PBXFileReference; lastKnownFileType = text; path = "slider bar s.pbm"; sourceTree = "<group>"; };
-		45C2A2562207BC4000E989C2 /* notes.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = notes.txt; sourceTree = "<group>"; };
+		45C2A2562207BC4000E989C2 /* plan r0.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "plan r0.txt"; sourceTree = "<group>"; };
 		45C2A27D220BFD1800E989C2 /* libpixman-1.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libpixman-1.a"; path = "../../../../../../usr/local/Cellar/pixman/0.36.0/lib/libpixman-1.a"; sourceTree = "<group>"; };
-		45C2A280220E821200E989C2 /* new plan.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "new plan.txt"; sourceTree = "<group>"; };
+		45C2A280220E821200E989C2 /* plan r1.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "plan r1.txt"; sourceTree = "<group>"; };
 		45CAC92722CC7B5800F945BF /* sample object.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "sample object.cpp"; sourceTree = "<group>"; };
 		45CAC92822CC7B5800F945BF /* sample object.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "sample object.hpp"; sourceTree = "<group>"; };
 		45CFA7CD22A4C1C40059DB41 /* palette widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "palette widget.cpp"; sourceTree = "<group>"; };
@@ -1209,8 +1211,9 @@
 				455F285B2206890300C73F39 /* Assets.xcassets */,
 				455F28602206890300C73F39 /* Info.plist */,
 				455F28612206890300C73F39 /* Pixel_2.entitlements */,
-				45C2A2562207BC4000E989C2 /* notes.txt */,
-				45C2A280220E821200E989C2 /* new plan.txt */,
+				45C2A2562207BC4000E989C2 /* plan r0.txt */,
+				45C2A280220E821200E989C2 /* plan r1.txt */,
+				45161F0022F11EB60036BBED /* todo.txt */,
 				45BAD7322246FC40000D095C /* include */,
 				453C78832236624D00818B19 /* Anims */,
 				453C78222234CB5500818B19 /* Resources */,
@@ -2224,6 +2227,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				45161F0122F11EB60036BBED /* todo.txt in Resources */,
 				4513145222D4B61100D66262 /* Document.icns in Resources */,
 				453C787D2235D70D00818B19 /* resources.rcc in Resources */,
 				455F285C2206890300C73F39 /* Assets.xcassets in Resources */,
