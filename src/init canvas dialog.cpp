@@ -81,7 +81,7 @@ void InitCanvasDialog::createWidgets() {
   formats[1]->setToolTip("8-bit Grayscale");
   formats[2]->setToolTip("8-bit Indexed");
   formats.front()->setChecked(true);
-  ok = new TextPushButtonWidget{this, init_button_rect, "Ok"};
+  ok = new TextPushButtonWidget{this, init_button_rect, "Create"};
   cancel = new TextPushButtonWidget{this, init_button_rect, "Cancel"};
 }
 

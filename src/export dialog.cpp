@@ -103,7 +103,7 @@ void ExportDialog::createWidgets() {
   frameSelect->addItem("Current");
   formatSelect = new ComboBoxWidget{this, 14};
   addFormatOptions();
-  ok = new TextPushButtonWidget{this, textBoxRect(8), "Ok"};
+  ok = new TextPushButtonWidget{this, textBoxRect(8), "Export"};
   cancel = new TextPushButtonWidget{this, textBoxRect(8), "Cancel"};
   setFocus();
 }
