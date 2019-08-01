@@ -11,6 +11,12 @@
 
 #include <QtWidgets/qabstractbutton.h>
 
+/*
+Radio buttons don't seem to work properly
+Clicking them only sometimes checks them
+The solution is to use mousePressEvent instead of mouseReleaseEvent
+*/
+
 class RadioButtonWidget : public QAbstractButton {
 public:
   explicit RadioButtonWidget(QWidget *);

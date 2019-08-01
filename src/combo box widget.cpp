@@ -84,7 +84,7 @@ class ComboBoxPopup final : public QMainWindow {
 public:
   explicit ComboBoxPopup(ComboBoxWidget *box)
     : QMainWindow{box}, box{box} {
-    setWindowFlag(Qt::FramelessWindowHint);
+    setWindowFlags(Qt::Popup | Qt::FramelessWindowHint);
   }
   
   void init(const QRect outer) {

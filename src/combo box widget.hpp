@@ -14,6 +14,13 @@
 
 class ComboBoxPopup;
 
+/*
+QComboBox has some wierd positioning issues
+It seems to shift itself by a few pixels
+https://forum.qt.io/topic/105191/why-isn-t-a-qcombobox-positioned-correctly-in-a-layout
+Making a custom combobox that doesn't have these issues is really easy
+*/
+
 class ComboBoxWidget final : public QWidget {
   Q_OBJECT
   

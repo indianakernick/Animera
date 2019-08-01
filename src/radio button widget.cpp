@@ -23,8 +23,6 @@ void RadioButtonWidget::uncheck() {
   setAutoExclusive(true);
 }
 
-// Radio buttons don't seem to work properly without this
-// Clicking them only sometimes checks them
 void RadioButtonWidget::mousePressEvent(QMouseEvent *event) {
   if (event->button() == Qt::LeftButton) {
     nextCheckState();
