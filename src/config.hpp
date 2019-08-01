@@ -100,31 +100,34 @@ constexpr WidgetRect boxRect(const int width, const int height) {
   return basicRect({}, {width, height});
 }
 
+struct TextIconRects {
+  WidgetRect text;
+  WidgetRect icon;
+};
+
 constexpr TextIconRects textBoxIconRect(const int chars) {
-  const QSize textInnerSize = textBoxSize(chars);
   const QSize iconInnerSize = textBoxSize(1);
-  const QSize totalInnerSize = textInnerSize + QSize{iconInnerSize.width() + glob_border_width, 0};
-  const QSize borderSize = toSize(2 * glob_border_width);
-  const QSize marginSize = toSize(2 * glob_margin);
-  const QRect widget = {
+  const QRect iconWidget = {
     QPoint{},
-    totalInnerSize + borderSize + marginSize
+    iconInnerSize + QSize{glob_border_width + glob_margin, 2 * glob_border_width + 2 * glob_margin}
   };
-  const QRect outer = {
-    toPoint(glob_margin),
-    totalInnerSize + borderSize
-  };
-  const QRect textInner = {
-    toPoint(glob_margin + glob_border_width),
-    textInnerSize
+  const QRect iconOuter = {
+    {0, glob_margin},
+    iconInnerSize + QSize{glob_border_width, 2 * glob_border_width}
   };
   const QRect iconInner = {
-    textInner.topRight() + QPoint{1 + glob_border_width, 0},
+    {0, glob_margin + glob_border_width},
     iconInnerSize
   };
-  const QPoint textPos = textInner.topLeft() + toPoint(glob_text_margin);
-  const QPoint iconPos = textPos + QPoint{textInner.width() + glob_border_width, 0};
-  return {widget, outer, textInner, iconInner, textPos, iconPos};
+  const QPoint iconPos = {
+    glob_text_margin, glob_text_margin + glob_border_width + glob_margin
+  };
+  const WidgetRect text = textBoxRect(chars);
+  const QRect textWidget = text.widget().adjusted(0, 0, -glob_margin, 0);
+  return {
+    {textWidget, text.outer(), text.inner(), text.pos()},
+    {iconWidget, iconOuter, iconInner, iconPos}
+  };
 }
 
 struct IntRange {

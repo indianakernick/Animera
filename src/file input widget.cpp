@@ -14,6 +14,7 @@
 #include <QtGui/qvalidator.h>
 #include "widget painting.hpp"
 #include "text input widget.hpp"
+#include <QtWidgets/qboxlayout.h>
 #include <QtWidgets/qcompleter.h>
 #include <QtWidgets/qfiledialog.h>
 #include <QtWidgets/qabstractbutton.h>
@@ -21,19 +22,23 @@
 
 class FileInputButton final : public QAbstractButton {
 public:
-  explicit FileInputButton(QWidget *parent)
-    : QAbstractButton{parent} {
+  FileInputButton(QWidget *parent, const WidgetRect rect)
+    : QAbstractButton{parent}, rect{rect} {
     setCursor(Qt::PointingHandCursor);
     arrow = bakeColoredBitmap(":/General/down arrow.pbm", glob_light_2);
+    setFixedSize(rect.widget().size());
+    setMask(QRegion{rect.outer()});
   }
 
 private:
   QPixmap arrow;
+  WidgetRect rect;
 
   void paintEvent(QPaintEvent *) override {
     QPainter painter{this};
-    painter.fillRect(rect(), glob_main);
-    painter.drawPixmap(glob_text_margin, glob_text_margin, arrow);
+    paintBorder(painter, rect, glob_border_color);
+    painter.fillRect(rect.inner(), glob_main);
+    painter.drawPixmap(rect.pos(), arrow);
   }
 };
 
@@ -72,10 +77,14 @@ public:
 FileInputWidget::FileInputWidget(QWidget *parent, const int chars)
   : QWidget{parent} {
   const TextIconRects rects = textBoxIconRect(chars);
-  setFixedSize(rects.widget().size());
-  text = new TextInputWidget{this, rects.text()};
-  icon = new FileInputButton{this};
-  icon->setGeometry(rects.icon().inner());
+  text = new TextInputWidget{this, rects.text};
+  icon = new FileInputButton{this, rects.icon};
+  auto *layout = new QHBoxLayout{this};
+  layout->setContentsMargins(0, 0, 0, 0);
+  layout->setSpacing(0);
+  layout->addWidget(text);
+  layout->addWidget(icon);
+  layout->setSizeConstraint(QLayout::SetFixedSize);
   initText();
   connectSignals();
 }

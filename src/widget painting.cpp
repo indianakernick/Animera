@@ -88,14 +88,10 @@ void paintBorder(QPainter &painter, const WidgetRect rect, const QColor color) {
   painter.setPen(Qt::NoPen);
   painter.setBrush(color);
   painter.drawRects(rects, 4);*/
-  QRegion oldRegion = painter.clipRegion();
+  painter.save();
   painter.setClipRegion(QRegion{rect.outer()} - QRegion{rect.inner()});
   painter.fillRect(rect.outer(), color);
-  if (oldRegion.isNull()) {
-    painter.setClipRegion(QRegion{rect.widget()});
-  } else {
-    painter.setClipRegion(std::move(oldRegion));
-  }
+  painter.restore();
 }
 
 void paintChecker(

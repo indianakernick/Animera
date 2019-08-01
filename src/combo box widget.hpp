@@ -41,6 +41,7 @@ Q_SIGNALS:
 
 private:
   TextIconRects rects;
+  QRect outer;
   QPixmap arrow;
   ComboBoxPopup *popup;
   std::vector<QString> items;

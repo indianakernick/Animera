@@ -19,29 +19,19 @@
 
 namespace {
 
-constexpr int item_height = glob_font_px + 2 * glob_text_margin;
-
 class PopupList final : public QWidget {
 public:
-  PopupList(QWidget *parent, const QSize size)
-    : QWidget{parent} {
-    setFixedSize(size);
+  PopupList(QWidget *parent, const WidgetRect rect)
+    : QWidget{parent}, rect{rect} {
+    setFixedSize(rect.widget().size());
   }
 
 private:
-  QRect innerRect() {
-    constexpr int bord = glob_border_width;
-    return {
-      rect().x() + bord, rect().y() + bord,
-      rect().width() - 2 * bord, rect().height() - 2 * bord
-    };
-  }
-
+  WidgetRect rect;
+  
   void paintEvent(QPaintEvent *) override {
-    // @TODO this is lazy and inefficient
     QPainter painter{this};
-    painter.fillRect(rect(), glob_border_color);
-    painter.fillRect(innerRect(), glob_main);
+    paintBorder(painter, rect, glob_border_color);
   }
 };
 
@@ -55,6 +45,7 @@ private:
   bool hover = false;
   
   void enterEvent(QEvent *) override {
+    // @TODO not quite right
     hover = true;
     repaint();
   }
@@ -87,16 +78,15 @@ public:
     setWindowFlags(Qt::Popup | Qt::FramelessWindowHint);
   }
   
-  void init(const QRect outer) {
-    setFixedSize(outer.width(), getHeight());
-    QPoint pos = box->mapToGlobal(outer.topLeft());
-    pos.ry() -= box->currentIndex() * item_height;
+  void init(const WidgetRect rect) {
+    const WidgetRect adjusted = adjustRect(rect);
+    setFixedSize(adjusted.widget().size());
+    QPoint pos = box->mapToGlobal(rect.widget().topLeft());
+    pos.ry() -= box->currentIndex() * rect.inner().height();
     move(pos);
-    auto *list = new PopupList{this, {outer.width(), getHeight()}};
+    auto *list = new PopupList{this, adjusted};
     setCentralWidget(list);
-    // @TODO pass in WidgetRect
-    const int innerWidth = outer.width() - 2 * glob_border_width;
-    populateList(list, innerWidth);
+    populateList(list, rect.inner().size());
     setFocus();
     show();
   }
@@ -108,12 +98,23 @@ public:
 private:
   ComboBoxWidget *box;
   
-  int getHeight() const {
-    constexpr int border_height = 2 * glob_border_width;
-    return border_height + box->count() * item_height;
+  static QRect addHeight(QRect rect, const int extraHeight) {
+    rect.setBottom(rect.bottom() + extraHeight);
+    return rect;
   }
   
-  void populateList(PopupList *list, const int width) {
+  WidgetRect adjustRect(const WidgetRect rect) const {
+    const QPoint topLeft = rect.widget().topLeft();
+    const int extraHeight = rect.inner().height() * (box->count() - 1);
+    return {
+      addHeight(rect.widget().translated(-topLeft), extraHeight),
+      addHeight(rect.outer().translated(-topLeft), extraHeight),
+      addHeight(rect.inner().translated(-topLeft), extraHeight),
+      rect.pos()
+    };
+  }
+  
+  void populateList(PopupList *list, const QSize innerSize) {
     auto *layout = new QVBoxLayout{list};
     layout->setContentsMargins(glob_border_width, glob_border_width, glob_border_width, glob_border_width);
     layout->setSpacing(0);
@@ -121,7 +122,7 @@ private:
     const int count = box->count();
     for (int i = 0; i != count; ++i) {
       auto *item = new PopupItem{list, box->itemText(i)};
-      item->setFixedSize(width, item_height);
+      item->setFixedSize(innerSize);
       CONNECT_LAMBDA(item, pressed, [this, i]{
         box->setCurrentIndex(i);
         quit();
@@ -131,6 +132,9 @@ private:
   }
   
   void focusOutEvent(QFocusEvent *) override {
+    // @TODO Popup doesn't disappear when parent is destroyed
+    // Is the parent destroyed when the export dialog is closed?
+    // Export dialog is not destroyed when closed
     quit();
   }
 };
@@ -140,8 +144,17 @@ ComboBoxWidget::ComboBoxWidget(QWidget *parent, const int chars)
   popup = new ComboBoxPopup{this};
   setCursor(Qt::PointingHandCursor);
   setFont(getGlobalFont());
-  setFixedSize(rects.widget().size());
-  setMask(QRegion{rects.outer()});
+  setFixedSize(rects.text.widget().size() + QSize{rects.icon.widget().width(), 0});
+  const int dx = rects.text.widget().width();
+  rects.icon = {
+    rects.icon.widget().translated(dx, 0),
+    rects.icon.outer().translated(dx, 0),
+    rects.icon.inner().translated(dx, 0),
+    rects.icon.pos() + QPoint{dx, 0}
+  };
+  outer = rects.text.outer();
+  outer.setWidth(outer.width() + rects.icon.outer().width());
+  setMask(QRegion{outer});
   arrow = bakeColoredBitmap(":/General/up down arrow.pbm", glob_light_2);
 }
 
@@ -184,21 +197,24 @@ QString ComboBoxWidget::currentText() const {
 
 void ComboBoxWidget::mousePressEvent(QMouseEvent *event) {
   if (event->button() == Qt::LeftButton) {
-    popup->init(rects.outer());
+    constexpr int bord = glob_border_width;
+    const QRect inner = outer.adjusted(bord, bord, -bord, -bord);
+    popup->init({outer, outer, inner, inner.topLeft() + toPoint(glob_text_margin)});
   }
 }
 
 void ComboBoxWidget::paintEvent(QPaintEvent *) {
   QPainter painter{this};
-  paintBorder(painter, rects.text(), glob_border_color);
-  painter.fillRect(rects.textInner(), glob_dark_1);
-  painter.fillRect(rects.iconInner(), glob_main);
-  painter.drawPixmap(rects.iconPos(), arrow);
+  paintBorder(painter, rects.text, glob_border_color);
+  paintBorder(painter, rects.icon, glob_border_color);
+  painter.fillRect(rects.text.inner(), glob_dark_1);
+  painter.fillRect(rects.icon.inner(), glob_main);
+  painter.drawPixmap(rects.icon.pos(), arrow);
   painter.setBrush(Qt::NoBrush);
   painter.setPen(glob_text_color);
   painter.setFont(getGlobalFont());
-  painter.setClipRect(rects.textInner());
-  QPoint textPos = rects.textPos();
+  painter.setClipRect(rects.text.inner());
+  QPoint textPos = rects.text.pos();
   textPos.ry() += glob_font_accent_px;
   painter.drawText(textPos, currentText());
 }

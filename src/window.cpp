@@ -220,6 +220,7 @@ void Window::makeDockWidget(Qt::DockWidgetArea area, QWidget *widget) {
   dock->setAllowedAreas(area);
   // @TODO report bug and remove workaround
   auto *wrapper = new QWidget{widget->parentWidget()};
+  // @TODO docks shouldn't be resizable
   auto *layout = new QVBoxLayout{wrapper};
   layout->setContentsMargins(0, 1, 0, 0);
   layout->setSpacing(0);
