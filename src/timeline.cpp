@@ -1,6 +1,6 @@
 //
 //  timeline.cpp
-//  Pixel 2
+//  Animera
 //
 //  Created by Indi Kernick on 6/7/19.
 //  Copyright © 2019 Indi Kernick. All rights reserved.

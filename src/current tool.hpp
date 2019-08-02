@@ -1,6 +1,6 @@
 //
 //  current tool.hpp
-//  Pixel 2
+//  Animera
 //
 //  Created by Indi Kernick on 24/2/19.
 //  Copyright © 2019 Indi Kernick. All rights reserved.

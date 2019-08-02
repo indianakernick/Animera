@@ -1,6 +1,6 @@
 //
 //  window.cpp
-//  Pixel 2
+//  Animera
 //
 //  Created by Indi Kernick on 10/3/19.
 //  Copyright © 2019 Indi Kernick. All rights reserved.
@@ -329,7 +329,7 @@ void Window::saveFileDialog() {
   /*auto *dialog = new QFileDialog{this, "Save File"};
   CONNECT(dialog, fileSelected, this, setFileName);
   CONNECT(dialog, fileSelected, &timeline, saveFile);
-  dialog->setNameFilter("Pixel 2 File (*.px2)");
+  dialog->setNameFilter("Animera File (*.px2)");
   dialog->setDefaultSuffix("px2");
   dialog->setAcceptMode(QFileDialog::AcceptSave);
   dialog->show();*/
@@ -337,7 +337,7 @@ void Window::saveFileDialog() {
     this,
     "Save File",
     QDir::homePath(),
-    "Pixel 2 File (*.px2)"
+    "Animera File (*.px2)"
   );
   if (!saveFileName.isEmpty()) {
     sprite.saveFile(saveFileName);

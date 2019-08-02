@@ -1,6 +1,6 @@
 //
 //  icon push button widget.hpp
-//  Pixel 2
+//  Animera
 //
 //  Created by Indi Kernick on 15/7/19.
 //  Copyright © 2019 Indi Kernick. All rights reserved.

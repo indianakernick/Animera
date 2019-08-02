@@ -32,8 +32,6 @@ vulkan textures
 
 consider grayscale with alpha
 
-Swedish word for animate is animera
-
 transform a layer or transform a frame
 
 set cursor and respond to clicks more precisely
@@ -51,6 +49,7 @@ Cell images that aren't a fixed size
   they can be translated outside of the viewport and then back
   allows importing images that aren't the same size as the viewport
   tools will calculate a bounding rect to resize the image as needed
+  the canvas could be resized without discarding anything
 
 Palette import and export
   export as png

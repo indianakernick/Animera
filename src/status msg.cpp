@@ -1,6 +1,6 @@
 //
 //  status msg.cpp
-//  Pixel 2
+//  Animera
 //
 //  Created by Indi Kernick on 27/3/19.
 //  Copyright © 2019 Indi Kernick. All rights reserved.

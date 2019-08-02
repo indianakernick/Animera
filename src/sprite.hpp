@@ -1,6 +1,6 @@
 //
 //  sprite.hpp
-//  Pixel 2
+//  Animera
 //
 //  Created by Indi Kernick on 7/7/19.
 //  Copyright © 2019 Indi Kernick. All rights reserved.

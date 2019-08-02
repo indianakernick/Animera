@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "455F2850220688FD00C73F39"
-               BuildableName = "Pixel 2.app"
-               BlueprintName = "Pixel 2"
-               ReferencedContainer = "container:Pixel 2.xcodeproj">
+               BuildableName = "Animera.app"
+               BlueprintName = "Animera"
+               ReferencedContainer = "container:Animera.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "455F2850220688FD00C73F39"
-            BuildableName = "Pixel 2.app"
-            BlueprintName = "Pixel 2"
-            ReferencedContainer = "container:Pixel 2.xcodeproj">
+            BuildableName = "Animera.app"
+            BlueprintName = "Animera"
+            ReferencedContainer = "container:Animera.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -56,9 +56,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "455F2850220688FD00C73F39"
-            BuildableName = "Pixel 2.app"
-            BlueprintName = "Pixel 2"
-            ReferencedContainer = "container:Pixel 2.xcodeproj">
+            BuildableName = "Animera.app"
+            BlueprintName = "Animera"
+            ReferencedContainer = "container:Animera.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -75,9 +75,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "455F2850220688FD00C73F39"
-            BuildableName = "Pixel 2.app"
-            BlueprintName = "Pixel 2"
-            ReferencedContainer = "container:Pixel 2.xcodeproj">
+            BuildableName = "Animera.app"
+            BlueprintName = "Animera"
+            ReferencedContainer = "container:Animera.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

@@ -1,6 +1,6 @@
 //
 //  color picker impl.cpp
-//  Pixel 2
+//  Animera
 //
 //  Created by Indi Kernick on 10/7/19.
 //  Copyright © 2019 Indi Kernick. All rights reserved.

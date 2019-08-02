@@ -19,7 +19,6 @@
 		4513145522D59EA300D66262 /* color picker impl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4513145322D59EA300D66262 /* color picker impl.cpp */; };
 		4513145822D5A29800D66262 /* picker impl rgba.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4513145622D5A29800D66262 /* picker impl rgba.cpp */; };
 		4513145B22D5A2A500D66262 /* picker impl gray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4513145922D5A2A500D66262 /* picker impl gray.cpp */; };
-		45161F0122F11EB60036BBED /* todo.txt in Resources */ = {isa = PBXBuildFile; fileRef = 45161F0022F11EB60036BBED /* todo.txt */; };
 		45161F0622F1399A0036BBED /* timeline painting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45161F0422F1399A0036BBED /* timeline painting.cpp */; };
 		453C78192234935000818B19 /* timeline widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C78172234935000818B19 /* timeline widget.cpp */; };
 		453C781C22349BBD00818B19 /* editor widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C781A22349BBD00818B19 /* editor widget.cpp */; };
@@ -159,28 +158,19 @@
 		453D28D42277129800D0E5F9 /* connect.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = connect.hpp; sourceTree = "<group>"; };
 		453D28D52278134200D0E5F9 /* color handle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "color handle.cpp"; sourceTree = "<group>"; };
 		453D28D62278134200D0E5F9 /* color handle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "color handle.hpp"; sourceTree = "<group>"; };
-		455F2851220688FD00C73F39 /* Pixel 2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pixel 2.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		455F2851220688FD00C73F39 /* Animera.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Animera.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		455F285B2206890300C73F39 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		455F28602206890300C73F39 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		455F28612206890300C73F39 /* Pixel_2.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Pixel_2.entitlements; sourceTree = "<group>"; };
+		455F28612206890300C73F39 /* Animera.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Animera.entitlements; sourceTree = "<group>"; };
 		455F2867220690A600C73F39 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		455F286A220691DC00C73F39 /* QtPositioningQuick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtPositioningQuick.framework; path = ../../../../../../usr/local/Cellar/qt/5.12.0/lib/QtPositioningQuick.framework; sourceTree = "<group>"; };
-		455F286B220691DD00C73F39 /* QtMacExtras.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtMacExtras.framework; path = ../../../../../../usr/local/Cellar/qt/5.12.0/lib/QtMacExtras.framework; sourceTree = "<group>"; };
-		455F286C220691DD00C73F39 /* QtMultimediaWidgets.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtMultimediaWidgets.framework; path = ../../../../../../usr/local/Cellar/qt/5.12.0/lib/QtMultimediaWidgets.framework; sourceTree = "<group>"; };
-		455F286D220691DD00C73F39 /* QtOpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtOpenGL.framework; path = ../../../../../../usr/local/Cellar/qt/5.12.0/lib/QtOpenGL.framework; sourceTree = "<group>"; };
 		455F286E220691DD00C73F39 /* QtCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtCore.framework; path = ../../../../../../usr/local/Cellar/qt/5.12.0/lib/QtCore.framework; sourceTree = "<group>"; };
-		455F286F220691DD00C73F39 /* QtMultimedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtMultimedia.framework; path = ../../../../../../usr/local/Cellar/qt/5.12.0/lib/QtMultimedia.framework; sourceTree = "<group>"; };
-		455F2870220691DD00C73F39 /* QtHelp.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtHelp.framework; path = ../../../../../../usr/local/Cellar/qt/5.12.0/lib/QtHelp.framework; sourceTree = "<group>"; };
-		455F2871220691DD00C73F39 /* QtPositioning.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtPositioning.framework; path = ../../../../../../usr/local/Cellar/qt/5.12.0/lib/QtPositioning.framework; sourceTree = "<group>"; };
 		455F2872220691DD00C73F39 /* QtWidgets.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtWidgets.framework; path = ../../../../../../usr/local/Cellar/qt/5.12.0/lib/QtWidgets.framework; sourceTree = "<group>"; };
-		455F2873220691DD00C73F39 /* QtMultimediaQuick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtMultimediaQuick.framework; path = ../../../../../../usr/local/Cellar/qt/5.12.0/lib/QtMultimediaQuick.framework; sourceTree = "<group>"; };
 		455F2874220691DD00C73F39 /* QtGui.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtGui.framework; path = ../../../../../../usr/local/Cellar/qt/5.12.0/lib/QtGui.framework; sourceTree = "<group>"; };
 		455F2880220692EE00C73F39 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		455F28822206930200C73F39 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		455F28842206930800C73F39 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		455F28862206930D00C73F39 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		455F28882206942200C73F39 /* libqcocoa.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libqcocoa.dylib; path = ../../../../../../usr/local/Cellar/qt/5.12.0/plugins/platforms/libqcocoa.dylib; sourceTree = "<group>"; };
-		455F288B2206B57300C73F39 /* QtQuick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtQuick.framework; path = ../../../../../../usr/local/Cellar/qt/5.12.0/lib/QtQuick.framework; sourceTree = "<group>"; };
 		4571C130227C383A00479006 /* radio button widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "radio button widget.cpp"; sourceTree = "<group>"; };
 		4571C131227C383A00479006 /* radio button widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "radio button widget.hpp"; sourceTree = "<group>"; };
 		4576DFE62298DB2D00FDECA3 /* separator widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "separator widget.cpp"; sourceTree = "<group>"; };
@@ -853,7 +843,6 @@
 		45BE2A2B22683A2F00E21A85 /* slider bar p.pbm */ = {isa = PBXFileReference; lastKnownFileType = text; path = "slider bar p.pbm"; sourceTree = "<group>"; };
 		45BE2A2C22683A3000E21A85 /* slider bar s.pbm */ = {isa = PBXFileReference; lastKnownFileType = text; path = "slider bar s.pbm"; sourceTree = "<group>"; };
 		45C2A2562207BC4000E989C2 /* plan r0.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "plan r0.txt"; sourceTree = "<group>"; };
-		45C2A27D220BFD1800E989C2 /* libpixman-1.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libpixman-1.a"; path = "../../../../../../usr/local/Cellar/pixman/0.36.0/lib/libpixman-1.a"; sourceTree = "<group>"; };
 		45C2A280220E821200E989C2 /* plan r1.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "plan r1.txt"; sourceTree = "<group>"; };
 		45CAC92722CC7B5800F945BF /* sample object.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "sample object.cpp"; sourceTree = "<group>"; };
 		45CAC92822CC7B5800F945BF /* sample object.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "sample object.hpp"; sourceTree = "<group>"; };
@@ -1218,7 +1207,7 @@
 				45DC255F224A034200F40116 /* README.md */,
 				455F285B2206890300C73F39 /* Assets.xcassets */,
 				455F28602206890300C73F39 /* Info.plist */,
-				455F28612206890300C73F39 /* Pixel_2.entitlements */,
+				455F28612206890300C73F39 /* Animera.entitlements */,
 				45C2A2562207BC4000E989C2 /* plan r0.txt */,
 				45C2A280220E821200E989C2 /* plan r1.txt */,
 				45161F0022F11EB60036BBED /* todo.txt */,
@@ -1234,7 +1223,7 @@
 		455F2852220688FD00C73F39 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				455F2851220688FD00C73F39 /* Pixel 2.app */,
+				455F2851220688FD00C73F39 /* Animera.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1256,8 +1245,6 @@
 		455F2869220691DC00C73F39 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				45C2A27D220BFD1800E989C2 /* libpixman-1.a */,
-				455F288B2206B57300C73F39 /* QtQuick.framework */,
 				455F28882206942200C73F39 /* libqcocoa.dylib */,
 				455F28862206930D00C73F39 /* OpenGL.framework */,
 				455F28842206930800C73F39 /* CoreVideo.framework */,
@@ -1265,14 +1252,6 @@
 				455F2880220692EE00C73F39 /* Cocoa.framework */,
 				455F286E220691DD00C73F39 /* QtCore.framework */,
 				455F2874220691DD00C73F39 /* QtGui.framework */,
-				455F2870220691DD00C73F39 /* QtHelp.framework */,
-				455F286B220691DD00C73F39 /* QtMacExtras.framework */,
-				455F286F220691DD00C73F39 /* QtMultimedia.framework */,
-				455F2873220691DD00C73F39 /* QtMultimediaQuick.framework */,
-				455F286C220691DD00C73F39 /* QtMultimediaWidgets.framework */,
-				455F286D220691DD00C73F39 /* QtOpenGL.framework */,
-				455F2871220691DD00C73F39 /* QtPositioning.framework */,
-				455F286A220691DC00C73F39 /* QtPositioningQuick.framework */,
 				455F2872220691DD00C73F39 /* QtWidgets.framework */,
 			);
 			name = Frameworks;
@@ -2172,9 +2151,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		455F2850220688FD00C73F39 /* Pixel 2 */ = {
+		455F2850220688FD00C73F39 /* Animera */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 455F28642206890300C73F39 /* Build configuration list for PBXNativeTarget "Pixel 2" */;
+			buildConfigurationList = 455F28642206890300C73F39 /* Build configuration list for PBXNativeTarget "Animera" */;
 			buildPhases = (
 				453C7816223490B500818B19 /* Moc */,
 				455F284D220688FD00C73F39 /* Sources */,
@@ -2187,9 +2166,9 @@
 			);
 			dependencies = (
 			);
-			name = "Pixel 2";
-			productName = "Pixel 2";
-			productReference = 455F2851220688FD00C73F39 /* Pixel 2.app */;
+			name = Animera;
+			productName = Animera;
+			productReference = 455F2851220688FD00C73F39 /* Animera.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -2213,7 +2192,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 455F284C220688FD00C73F39 /* Build configuration list for PBXProject "Pixel 2" */;
+			buildConfigurationList = 455F284C220688FD00C73F39 /* Build configuration list for PBXProject "Animera" */;
 			compatibilityVersion = "Xcode 10.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -2226,7 +2205,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				455F2850220688FD00C73F39 /* Pixel 2 */,
+				455F2850220688FD00C73F39 /* Animera */,
 			);
 		};
 /* End PBXProject section */
@@ -2236,7 +2215,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				45161F0122F11EB60036BBED /* todo.txt in Resources */,
 				4513145222D4B61100D66262 /* Document.icns in Resources */,
 				453C787D2235D70D00818B19 /* resources.rcc in Resources */,
 				455F285C2206890300C73F39 /* Assets.xcassets in Resources */,
@@ -2535,7 +2513,7 @@
 					"-Wno-comma",
 				);
 				OTHER_LDFLAGS = "-headerpad_max_install_names";
-				PRODUCT_BUNDLE_IDENTIFIER = "Indi-Kernick.Pixel-2";
+				PRODUCT_BUNDLE_IDENTIFIER = "Indi-Kernick.Animera";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REEXPORTED_LIBRARY_PATHS = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -2587,7 +2565,7 @@
 					"-Wno-comma",
 				);
 				OTHER_LDFLAGS = "-headerpad_max_install_names";
-				PRODUCT_BUNDLE_IDENTIFIER = "Indi-Kernick.Pixel-2";
+				PRODUCT_BUNDLE_IDENTIFIER = "Indi-Kernick.Animera";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REEXPORTED_LIBRARY_PATHS = "";
 				SWIFT_VERSION = 4.2;
@@ -2597,7 +2575,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		455F284C220688FD00C73F39 /* Build configuration list for PBXProject "Pixel 2" */ = {
+		455F284C220688FD00C73F39 /* Build configuration list for PBXProject "Animera" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				455F28622206890300C73F39 /* Debug */,
@@ -2606,7 +2584,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		455F28642206890300C73F39 /* Build configuration list for PBXNativeTarget "Pixel 2" */ = {
+		455F28642206890300C73F39 /* Build configuration list for PBXNativeTarget "Animera" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				455F28652206890300C73F39 /* Debug */,

@@ -1,6 +1,6 @@
 //
 //  application.cpp
-//  Pixel 2
+//  Animera
 //
 //  Created by Indi Kernick on 10/3/19.
 //  Copyright © 2019 Indi Kernick. All rights reserved.
@@ -34,7 +34,7 @@ void Application::openFileDialog() {
   auto *dialog = new QFileDialog{desktop(), "Open File"};
   CONNECT(dialog, fileSelected, this, openFile);
   dialog->setFileMode(QFileDialog::ExistingFile);
-  dialog->setNameFilter("Pixel 2 File (*.px2)");
+  dialog->setNameFilter("Animera File (*.px2)");
   dialog->show();
 }
 
