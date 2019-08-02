@@ -22,7 +22,6 @@
 
 ExportDialog::ExportDialog(QWidget *parent, const Format format)
   : QDialog{parent}, format{format} {
-  setWindowModality(Qt::ApplicationModal);
   setWindowTitle("Export");
   setStyleSheet("background-color:" + glob_main.name());
   setFocusPolicy(Qt::ClickFocus);

@@ -45,13 +45,17 @@ private:
   bool hover = false;
   
   void enterEvent(QEvent *) override {
-    // @TODO not quite right
     hover = true;
-    repaint();
+    update();
   }
   void leaveEvent(QEvent *) override {
-    hover = false;
-    repaint();
+    // Yes, I actually have to do this.
+    // Can't use underMouse.
+    // Bug?
+    if (!rect().contains(mapFromGlobal(QCursor::pos()))) {
+      hover = false;
+      update();
+    }
   }
   
   void paintEvent(QPaintEvent *) override {
@@ -132,9 +136,6 @@ private:
   }
   
   void focusOutEvent(QFocusEvent *) override {
-    // @TODO Popup doesn't disappear when parent is destroyed
-    // Is the parent destroyed when the export dialog is closed?
-    // Export dialog is not destroyed when closed
     quit();
   }
 };

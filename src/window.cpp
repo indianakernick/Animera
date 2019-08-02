@@ -352,7 +352,10 @@ void Window::exportDialog() {
   CONNECT_LAMBDA(dialog, exportSprite, [this]{
     statusBar.showTemp("Exported!");
   });
-  dialog->show();
+  CONNECT_LAMBDA(dialog, exportSprite, [dialog]{
+    delete dialog;
+  });
+  dialog->open();
 }
 
 void Window::closeEvent(QCloseEvent *) {
