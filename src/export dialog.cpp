@@ -28,7 +28,6 @@ ExportDialog::ExportDialog(QWidget *parent, const Format format)
   createWidgets();
   setupLayout();
   connectSignals();
-  // @TODO remember previous settings
 }
 
 void ExportDialog::submit() {

@@ -66,8 +66,6 @@ void PickerImplRGBA::setupLayout(QGridLayout *layout) {
 }
 
 void PickerImplRGBA::connectSignals() {
-  // @TODO there has to be a better way
-  
   CONNECT(svGraph,     svChanged,    hueSlider,   changeSV);
   CONNECT(hueSlider,   hueChanged,   svGraph,     changeHue);
   CONNECT(boxH,        valueChanged, svGraph,     changeHue);

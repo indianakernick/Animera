@@ -12,6 +12,7 @@
 #include "sprite.hpp"
 #include "undo object.hpp"
 #include "clear object.hpp"
+#include "export dialog.hpp"
 #include "sample object.hpp"
 #include "editor widget.hpp"
 #include "palette widget.hpp"
@@ -50,6 +51,7 @@ private:
   StatusBarWidget statusBar;
   ColorPickerWidget colorPicker;
   QMenuBar *menubar = nullptr;
+  ExportDialog *exportDialog = nullptr;
   
   void setupUI();
   void setupMenubar();
@@ -57,8 +59,8 @@ private:
   void connectSignals();
   
   void saveFile();
-  void saveFileDialog();
-  void exportDialog();
+  void openSaveFileDialog();
+  void openExportDialog();
   
   void closeEvent(QCloseEvent *) override;
 };

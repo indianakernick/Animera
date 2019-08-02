@@ -12,7 +12,6 @@
 #include "connect.hpp"
 #include "application.hpp"
 #include "global font.hpp"
-#include "export dialog.hpp"
 #include <QtWidgets/qstyle.h>
 #include <QtWidgets/qtooltip.h>
 #include "separator widget.hpp"
@@ -168,8 +167,8 @@ void Window::setupMenubar() {
   ADD_ACTION(file, "New", QKeySequence::New, *app, newFileDialog);
   ADD_ACTION(file, "Open", QKeySequence::Open, *app, openFileDialog);
   ADD_ACTION(file, "Save", QKeySequence::Save, *this, saveFile);
-  ADD_ACTION(file, "Save As", QKeySequence::SaveAs, *this, saveFileDialog);
-  ADD_ACTION(file, "Export", Qt::CTRL + Qt::Key_E, *this, exportDialog);
+  ADD_ACTION(file, "Save As", QKeySequence::SaveAs, *this, openSaveFileDialog);
+  ADD_ACTION(file, "Export", Qt::CTRL + Qt::Key_E, *this, openExportDialog);
   
   QMenu *layer = menubar->addMenu("Layer");
   layer->setFont(getGlobalFont());
@@ -222,18 +221,16 @@ void Window::makeDockWidget(Qt::DockWidgetArea area, QWidget *widget) {
   auto *wrapper = new QWidget{widget->parentWidget()};
   // @TODO docks shouldn't be resizable
   auto *layout = new QVBoxLayout{wrapper};
-  layout->setContentsMargins(0, 1, 0, 0);
+  layout->setContentsMargins(0, 0, 0, 0);
   layout->setSpacing(0);
   layout->addWidget(widget);
   dock->setWidget(wrapper);
+  //dock->setWidget(widget);
   dock->setTitleBarWidget(new QWidget{dock});
   addDockWidget(area, dock);
 }
 
 void Window::connectSignals() {
-  // @TODO Connections to the modify slot are scattered around.
-  // I'd rather just CONNECT(sprite, modified, this, modify)
-
   CONNECT(sprite.timeline, currCellChanged,     tools,           setCell);
   CONNECT(sprite.timeline, currCellChanged,     clear,           setCell);
   CONNECT(sprite.timeline, currCellChanged,     sample,          setCell);
@@ -317,7 +314,7 @@ void Window::connectSignals() {
 void Window::saveFile() {
   const QString path = windowFilePath();
   if (path.isEmpty()) {
-    saveFileDialog();
+    openSaveFileDialog();
   } else {
     sprite.saveFile(path);
     setWindowModified(false);
@@ -325,7 +322,7 @@ void Window::saveFile() {
   }
 }
 
-void Window::saveFileDialog() {
+void Window::openSaveFileDialog() {
   /*auto *dialog = new QFileDialog{this, "Save File"};
   CONNECT(dialog, fileSelected, this, setFileName);
   CONNECT(dialog, fileSelected, &timeline, saveFile);
@@ -346,16 +343,15 @@ void Window::saveFileDialog() {
   }
 }
 
-void Window::exportDialog() {
-  auto *dialog = new ExportDialog{this, sprite.getFormat()};
-  CONNECT(dialog, exportSprite, sprite, exportSprite);
-  CONNECT_LAMBDA(dialog, exportSprite, [this]{
-    statusBar.showTemp("Exported!");
-  });
-  CONNECT_LAMBDA(dialog, exportSprite, [dialog]{
-    delete dialog;
-  });
-  dialog->open();
+void Window::openExportDialog() {
+  if (!exportDialog) {
+    exportDialog = new ExportDialog{this, sprite.getFormat()};
+    CONNECT(exportDialog, exportSprite, sprite, exportSprite);
+    CONNECT_LAMBDA(exportDialog, exportSprite, [this]{
+      statusBar.showTemp("Exported!");
+    });
+  }
+  exportDialog->open();
 }
 
 void Window::closeEvent(QCloseEvent *) {

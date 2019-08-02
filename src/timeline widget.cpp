@@ -15,8 +15,6 @@
 #include "timeline frames widget.hpp"
 #include "timeline controls widget.hpp"
 
-// @TODO QSpitter between LayersWidget and CellsWidget?
-
 TimelineWidget::TimelineWidget(QWidget *parent)
   : QWidget{parent} {
   setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
