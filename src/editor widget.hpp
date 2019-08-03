@@ -47,6 +47,7 @@ private:
   int startScale;
 
   bool event(QEvent *) override;
+  void showEvent(QShowEvent *) override;
   void resizeEvent(QResizeEvent *) override;
 };
 

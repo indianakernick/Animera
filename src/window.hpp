@@ -18,6 +18,7 @@
 #include "palette widget.hpp"
 #include "timeline widget.hpp"
 #include "status bar widget.hpp"
+#include <QtWidgets/qsplitter.h>
 #include "init canvas dialog.hpp"
 #include "tool colors widget.hpp"
 #include "tool select widget.hpp"
@@ -37,8 +38,10 @@ private Q_SLOTS:
   void modify();
 
 private:
+  QWidget central;
   QWidget bottom;
   QWidget right;
+  QSplitter splitter;
   Sprite sprite;
   UndoObject undo;
   ClearObject clear;
@@ -55,7 +58,6 @@ private:
   
   void setupUI();
   void setupMenubar();
-  void makeDockWidget(Qt::DockWidgetArea, QWidget *);
   void connectSignals();
   
   void saveFile();

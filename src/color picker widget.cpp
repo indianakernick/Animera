@@ -23,6 +23,7 @@ void ColorPickerWidget::initCanvas(const Format format) {
   setImpl(format);
   init();
   setupLayout();
+  adjustSize();
   connectSignals();
 }
 

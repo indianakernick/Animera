@@ -22,8 +22,10 @@
 
 Window::Window(QWidget *parent, const QRect desktop)
   : QMainWindow{parent},
+    central{this},
     bottom{this},
     right{this},
+    splitter{this},
     editor{this},
     palette{&right},
     colors{&right},
@@ -46,16 +48,16 @@ Window::Window(QWidget *parent, const QRect desktop)
 }
 
 void Window::newFile(const Format format, const QSize size) {
-  show();
   sprite.newFile(format, size);
   setWindowModified(true);
+  show();
 }
 
 void Window::openFile(const QString &path) {
-  show();
   sprite.openFile(path);
   setWindowFilePath(path);
   setWindowModified(false);
+  show();
 }
 
 void Window::modify() {
@@ -63,61 +65,50 @@ void Window::modify() {
 }
 
 void Window::setupUI() {
-  setStyleSheet("QMainWindow::separator {"
-    "width: " + QString::number(glob_border_width) + "px;"
-    "height: " + QString::number(glob_border_width) + "px;"
-    "background-color: " + glob_border_color.name() + ";"
-  "}"
-  
-  // @TODO remove this bug workaround
-  // https://bugreports.qt.io/browse/QTBUG-75783
-  "QMainWindow {"
-    "background-color: " + glob_border_color.name() + ";"
-  "}"
-  
-  "QToolTip {"
-    "background-color: " + glob_main.name() + ";"
-    "color: " + glob_light_2.name() + ";"
-    "border-width: " + QString::number(glob_border_width) + "px;"
-    "border-color: " + glob_border_color.name() + ";"
-    "border-style: solid;"
-  "}"
-  
-  "QMenuBar {"
-    "background-color: " + glob_main.name() + ";"
-    "color: " + glob_light_2.name() + ";"
-    "outline-style: none;"
-  "}"
-  
-  "QMenuBar::item:open {"
-    "background-color: " + glob_light_1.name() + ";"
-  "}"
-  
-  "QMenu {"
-    "background-color: " + glob_main.name() + ";"
-    "padding: 0;"
-    "outline-style: none;"
-    "border-width: " + QString::number(glob_border_width) + "px;"
-    "border-color: " + glob_border_color.name() + ";"
-    "border-style: solid;"
-  "}"
-  
-  "QMenu::separator {"
-    "background-color: " + glob_light_2.name() + ";"
-    "height: " + QString::number(glob_border_width) + "px;"
-    "margin-top: " + QString::number(glob_margin) + "px;"
-    "margin-bottom: " + QString::number(glob_margin) + "px;"
-  "}"
-  
-  "QMenu::item {"
-    "background-color: " + glob_main.name() + ";"
-    "color: " + glob_light_2.name() + ";"
-    "padding: " + QString::number(glob_text_margin) + "px;"
-  "}"
-  
-  "QMenu::item:selected {"
-    "background-color: " + glob_light_1.name() + ";"
-  "}"
+  setStyleSheet(
+    "QToolTip {"
+      "background-color: " + glob_main.name() + ";"
+      "color: " + glob_light_2.name() + ";"
+      "border-width: " + QString::number(glob_border_width) + "px;"
+      "border-color: " + glob_border_color.name() + ";"
+      "border-style: solid;"
+    "}"
+    
+    "QMenuBar {"
+      "background-color: " + glob_main.name() + ";"
+      "color: " + glob_light_2.name() + ";"
+      "outline-style: none;"
+    "}"
+    
+    "QMenuBar::item:open {"
+      "background-color: " + glob_light_1.name() + ";"
+    "}"
+    
+    "QMenu {"
+      "background-color: " + glob_main.name() + ";"
+      "padding: 0;"
+      "outline-style: none;"
+      "border-width: " + QString::number(glob_border_width) + "px;"
+      "border-color: " + glob_border_color.name() + ";"
+      "border-style: solid;"
+    "}"
+    
+    "QMenu::separator {"
+      "background-color: " + glob_light_2.name() + ";"
+      "height: " + QString::number(glob_border_width) + "px;"
+      "margin-top: " + QString::number(glob_margin) + "px;"
+      "margin-bottom: " + QString::number(glob_margin) + "px;"
+    "}"
+    
+    "QMenu::item {"
+      "background-color: " + glob_main.name() + ";"
+      "color: " + glob_light_2.name() + ";"
+      "padding: " + QString::number(glob_text_margin) + "px;"
+    "}"
+    
+    "QMenu::item:selected {"
+      "background-color: " + glob_light_1.name() + ";"
+    "}"
   );
   QToolTip::setFont(getGlobalFont());
   
@@ -141,10 +132,45 @@ void Window::setupUI() {
   right.setStyleSheet("background-color: " + glob_main.name());
   right.setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
   
-  makeDockWidget(Qt::LeftDockWidgetArea, &tools);
-  makeDockWidget(Qt::BottomDockWidgetArea, &bottom);
-  makeDockWidget(Qt::RightDockWidgetArea, &right);
-  setCentralWidget(&editor);
+  menubar = new QMenuBar{this};
+  menubar->setFont(getGlobalFont());
+  menubar->setNativeMenuBar(false);
+  
+  /*
+  Unfortunately, we can't use QDockWidget.
+  When the title bar is removed with setTitleBar(new QWidget{this}),
+  the contents of the dock is shifted up by one pixel.
+  If the title bar is moved to the left with
+  setFeatures(QDockWidget::DockWidgetVerticalTitleBar),
+  the contents of the dock is shifted left by one pixel.
+  I've tried numerous times to correct this issue and so far, the best option
+  seems to be bypassing docks altogether.
+  */
+  
+  auto *centralLayout = new QGridLayout{&central};
+  centralLayout->setContentsMargins(0, 0, 0, 0);
+  centralLayout->setSpacing(0);
+  centralLayout->addWidget(menubar, 0, 0, 1, 5);
+  centralLayout->addWidget(new HoriSeparator{&central}, 1, 0, 1, 5);
+  centralLayout->addWidget(&tools, 2, 0);
+  centralLayout->addWidget(new VertSeparator{&central}, 2, 1);
+  centralLayout->addWidget(&editor, 2, 2);
+  centralLayout->addWidget(new VertSeparator{&central}, 2, 3);
+  centralLayout->addWidget(&right, 2, 4);
+  
+  splitter.setStyleSheet(
+    "QSplitter::handle {"
+      "background-color: " + glob_border_color.name() + ";"
+    "}"
+  );
+  splitter.setOrientation(Qt::Vertical);
+  splitter.setHandleWidth(glob_border_width);
+  splitter.setOpaqueResize(true);
+  splitter.addWidget(&central);
+  splitter.addWidget(&bottom);
+  splitter.setCollapsible(0, false);
+  splitter.setCollapsible(1, false);
+  setCentralWidget(&splitter);
 }
 
 #define ADD_ACTION(MENU, NAME, SHORTCUT, WIDGET, MEMFN) do {                    \
@@ -154,13 +180,6 @@ void Window::setupUI() {
 } while (0)
 
 void Window::setupMenubar() {
-  menubar = new QMenuBar{this};
-  menubar->setNativeMenuBar(false);
-  // if (!menubar->isNativeMenuBar()) {
-    makeDockWidget(Qt::TopDockWidgetArea, menubar);
-  // }
-  menubar->setFont(getGlobalFont());
-  
   auto *app = static_cast<Application *>(QApplication::instance());
   QMenu *file = menubar->addMenu("File");
   file->setFont(getGlobalFont());
@@ -209,26 +228,11 @@ void Window::setupMenubar() {
   ADD_ACTION(selection, "Clear", Qt::CTRL + Qt::Key_X, sprite.timeline, clearSelected);
   ADD_ACTION(selection, "Copy", Qt::CTRL + Qt::Key_C, sprite.timeline, copySelected);
   ADD_ACTION(selection, "Paste", Qt::CTRL + Qt::Key_V, sprite.timeline, pasteSelected);
+  
+  menubar->adjustSize();
 }
 
 #undef ADD_ACTION
-
-void Window::makeDockWidget(Qt::DockWidgetArea area, QWidget *widget) {
-  auto *dock = new QDockWidget{this};
-  dock->setFeatures(QDockWidget::NoDockWidgetFeatures);
-  dock->setAllowedAreas(area);
-  // @TODO report bug and remove workaround
-  auto *wrapper = new QWidget{widget->parentWidget()};
-  // @TODO docks shouldn't be resizable
-  auto *layout = new QVBoxLayout{wrapper};
-  layout->setContentsMargins(0, 0, 0, 0);
-  layout->setSpacing(0);
-  layout->addWidget(widget);
-  dock->setWidget(wrapper);
-  //dock->setWidget(widget);
-  dock->setTitleBarWidget(new QWidget{dock});
-  addDockWidget(area, dock);
-}
 
 void Window::connectSignals() {
   CONNECT(sprite.timeline, currCellChanged,     tools,           setCell);

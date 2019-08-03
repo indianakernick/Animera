@@ -22,7 +22,7 @@ TextInputWidget::TextInputWidget(QWidget *parent, const WidgetRect rect)
   setFont(getGlobalFont());
   updateMargins();
   setFrame(false);
-  setAttribute(Qt::WA_MacShowFocusRect, 0);
+  setAttribute(Qt::WA_MacShowFocusRect, false);
   setMask(QRegion{rect.outer()});
   
   CONNECT(cursorBlinkTimer, timeout,               this, blink);

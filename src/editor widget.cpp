@@ -37,15 +37,20 @@ public:
     repaint();
   }
   
-  void setSize(const QSize size) {
-    overlay = QImage{size, QImage::Format_ARGB32};
-    clearImage(overlay);
-    const QSize viewSize = parent->viewport()->rect().size();
+  void adjustScale() {
+    const QSize size = overlay.size();
+    const QSize viewSize = parent->viewport()->size();
     scale = std::min(viewSize.width() / size.width(), viewSize.height() / size.height());
     scale = std::clamp(scale, edit_min_scale, edit_max_scale);
     setFixedSize(size * scale);
     updateCheckers();
     Q_EMIT resized();
+  }
+  
+  void setSize(const QSize size) {
+    overlay = QImage{size, QImage::Format_ARGB32};
+    clearImage(overlay);
+    adjustScale();
   }
   
   void resize() {
@@ -326,6 +331,10 @@ bool EditorWidget::event(QEvent *event) {
   } else {
     return QScrollArea::event(event);
   }
+}
+
+void EditorWidget::showEvent(QShowEvent *) {
+  view->adjustScale();
 }
 
 void EditorWidget::resizeEvent(QResizeEvent *event) {
