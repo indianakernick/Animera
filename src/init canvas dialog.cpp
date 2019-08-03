@@ -9,6 +9,7 @@
 #include "init canvas dialog.hpp"
 
 #include "connect.hpp"
+#include <QtGui/qevent.h>
 #include <QtGui/qbitmap.h>
 #include <QtGui/qpainter.h>
 #include "label widget.hpp"
@@ -48,8 +49,8 @@ private:
   }
 };
 
-InitCanvasDialog::InitCanvasDialog(QWidget *widget)
-  : QDialog{widget} {
+InitCanvasDialog::InitCanvasDialog(QWidget *parent)
+  : Dialog{parent} {
   setWindowTitle("New File");
   setStyleSheet("background-color:" + glob_main.name());
   createWidgets();

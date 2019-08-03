@@ -10,13 +10,13 @@
 #define init_canvas_dialog_hpp
 
 #include "image.hpp"
-#include <QtWidgets/qdialog.h>
+#include "dialog.hpp"
 
 class FormatWidget;
 class NumberInputWidget;
 class TextPushButtonWidget;
 
-class InitCanvasDialog final : public QDialog {
+class InitCanvasDialog final : public Dialog {
   Q_OBJECT
   
 public:

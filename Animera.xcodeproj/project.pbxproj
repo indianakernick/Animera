@@ -63,6 +63,7 @@
 		45B284B9221E110F00D6D055 /* painting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45B284B7221E110F00D6D055 /* painting.cpp */; };
 		45BADA1D2247007F000D095C /* glm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45BAD9332247007E000D095C /* glm.cpp */; };
 		45BADA77224714A3000D095C /* tool widgets.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45BADA75224714A3000D095C /* tool widgets.cpp */; };
+		45C447F422F56E6100B65AD3 /* dialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45C447F222F56E6100B65AD3 /* dialog.cpp */; };
 		45CAC92922CC7B5800F945BF /* sample object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45CAC92722CC7B5800F945BF /* sample object.cpp */; };
 		45CFA7CF22A4C1C40059DB41 /* palette widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45CFA7CD22A4C1C40059DB41 /* palette widget.cpp */; };
 		45D1099222DAF70000D1F1CB /* brush tool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45D1099022DAF70000D1F1CB /* brush tool.cpp */; };
@@ -844,6 +845,8 @@
 		45BE2A2C22683A3000E21A85 /* slider bar s.pbm */ = {isa = PBXFileReference; lastKnownFileType = text; path = "slider bar s.pbm"; sourceTree = "<group>"; };
 		45C2A2562207BC4000E989C2 /* plan r0.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "plan r0.txt"; sourceTree = "<group>"; };
 		45C2A280220E821200E989C2 /* plan r1.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "plan r1.txt"; sourceTree = "<group>"; };
+		45C447F222F56E6100B65AD3 /* dialog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = dialog.cpp; sourceTree = "<group>"; };
+		45C447F322F56E6100B65AD3 /* dialog.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = dialog.hpp; sourceTree = "<group>"; };
 		45CAC92722CC7B5800F945BF /* sample object.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "sample object.cpp"; sourceTree = "<group>"; };
 		45CAC92822CC7B5800F945BF /* sample object.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "sample object.hpp"; sourceTree = "<group>"; };
 		45CFA7CD22A4C1C40059DB41 /* palette widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "palette widget.cpp"; sourceTree = "<group>"; };
@@ -1196,6 +1199,8 @@
 				45D109B122E304A300D1F1CB /* combo box widget.hpp */,
 				457DC0BB22E7D6160000777B /* file input widget.cpp */,
 				457DC0BC22E7D6160000777B /* file input widget.hpp */,
+				45C447F222F56E6100B65AD3 /* dialog.cpp */,
+				45C447F322F56E6100B65AD3 /* dialog.hpp */,
 			);
 			name = General;
 			sourceTree = "<group>";
@@ -2975,6 +2980,7 @@
 				45D109AF22E2D88500D1F1CB /* export dialog.cpp in Sources */,
 				45D1099822DAFD7000D1F1CB /* select tools.cpp in Sources */,
 				453C781F22349F0100818B19 /* tool select widget.cpp in Sources */,
+				45C447F422F56E6100B65AD3 /* dialog.cpp in Sources */,
 				45054F6D22596BC10078350B /* clear object.cpp in Sources */,
 				453D28D72278134200D0E5F9 /* color handle.cpp in Sources */,
 				453C78192234935000818B19 /* timeline widget.cpp in Sources */,

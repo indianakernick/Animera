@@ -10,6 +10,7 @@
 
 #include "connect.hpp"
 #include <QtCore/qdir.h>
+#include <QtGui/qevent.h>
 #include "label widget.hpp"
 #include "export pattern.hpp"
 #include "export options.hpp"
@@ -21,10 +22,9 @@
 #include "text push button widget.hpp"
 
 ExportDialog::ExportDialog(QWidget *parent, const Format format)
-  : QDialog{parent}, format{format} {
+  : Dialog{parent}, format{format} {
   setWindowTitle("Export");
   setStyleSheet("background-color:" + glob_main.name());
-  setFocusPolicy(Qt::ClickFocus);
   createWidgets();
   setupLayout();
   connectSignals();
@@ -107,7 +107,6 @@ void ExportDialog::createWidgets() {
   addFormatOptions();
   ok = new TextPushButtonWidget{this, textBoxRect(8), "Export"};
   cancel = new TextPushButtonWidget{this, textBoxRect(8), "Cancel"};
-  setFocus();
 }
 
 namespace {

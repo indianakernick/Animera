@@ -10,7 +10,7 @@
 #define export_dialog_hpp
 
 #include "image.hpp"
-#include <QtWidgets/qdialog.h>
+#include "dialog.hpp"
 
 struct ExportOptions;
 class ComboBoxWidget;
@@ -19,7 +19,7 @@ class TextInputWidget;
 class NumberInputWidget;
 class TextPushButtonWidget;
 
-class ExportDialog final : public QDialog {
+class ExportDialog final : public Dialog {
   Q_OBJECT
   
 public:

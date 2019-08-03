@@ -30,7 +30,7 @@ Application::Application(int &argc, char **argv)
 void Application::newFileDialog() {
   auto *dialog = new InitCanvasDialog{desktop()};
   CONNECT(dialog, canvasInitialized, this, newFile);
-  dialog->show();
+  dialog->open();
 }
 
 void Application::openFileDialog() {
@@ -38,7 +38,7 @@ void Application::openFileDialog() {
   CONNECT(dialog, fileSelected, this, openFile);
   dialog->setFileMode(QFileDialog::ExistingFile);
   dialog->setNameFilter("Animera File (*.px2)");
-  dialog->show();
+  dialog->open();
 }
 
 void Application::windowClosed(Window *window) {
