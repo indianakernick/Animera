@@ -28,15 +28,16 @@ public:
 private Q_SLOTS:
   void newFile(Format, QSize);
   void openFile(const QString &);
-  
-  bool event(QEvent *) override;
 
 private:
   std::vector<Window *> windows;
   QTimer noFileTimer;
 
+  void initStyles();
   void loadResources();
   Window *makeWindow();
+  
+  bool event(QEvent *) override;
 };
 
 #endif

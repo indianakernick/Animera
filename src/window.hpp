@@ -17,6 +17,7 @@
 #include "editor widget.hpp"
 #include "palette widget.hpp"
 #include "timeline widget.hpp"
+#include <QtWidgets/qmenubar.h>
 #include "status bar widget.hpp"
 #include <QtWidgets/qsplitter.h>
 #include "init canvas dialog.hpp"
@@ -53,11 +54,12 @@ private:
   TimelineWidget timeline;
   StatusBarWidget statusBar;
   ColorPickerWidget colorPicker;
-  QMenuBar *menubar = nullptr;
+  QMenuBar menubar;
   ExportDialog *exportDialog = nullptr;
   
-  void setupUI();
-  void setupMenubar();
+  void setupLayouts();
+  void initStyles();
+  void populateMenubar();
   void connectSignals();
   
   void saveFile();

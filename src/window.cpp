@@ -13,9 +13,7 @@
 #include "application.hpp"
 #include "global font.hpp"
 #include <QtWidgets/qstyle.h>
-#include <QtWidgets/qtooltip.h>
 #include "separator widget.hpp"
-#include <QtWidgets/qmenubar.h>
 #include <QtWidgets/qboxlayout.h>
 #include <QtWidgets/qdockwidget.h>
 #include <QtWidgets/qfiledialog.h>
@@ -32,7 +30,8 @@ Window::Window(QWidget *parent, const QRect desktop)
     tools{this},
     timeline{&bottom},
     statusBar{&bottom},
-    colorPicker{&right} {
+    colorPicker{&right},
+    menubar{this} {
   resize(glob_window_size);
   setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
   setFocusPolicy(Qt::StrongFocus);
@@ -42,8 +41,9 @@ Window::Window(QWidget *parent, const QRect desktop)
     size(),
     desktop
   ));
-  setupUI();
-  setupMenubar();
+  initStyles();
+  setupLayouts();
+  populateMenubar();
   connectSignals();
 }
 
@@ -64,16 +64,66 @@ void Window::modify() {
   setWindowModified(true);
 }
 
-void Window::setupUI() {
-  setStyleSheet(
-    "QToolTip {"
-      "background-color: " + glob_main.name() + ";"
-      "color: " + glob_light_2.name() + ";"
-      "border-width: " + QString::number(glob_border_width) + "px;"
-      "border-color: " + glob_border_color.name() + ";"
-      "border-style: solid;"
+void Window::setupLayouts() {
+  auto *bottomLayout = new QVBoxLayout{&bottom};
+  bottomLayout->setContentsMargins(0, 0, 0, 0);
+  bottomLayout->setSpacing(0);
+  bottomLayout->addWidget(&timeline);
+  bottomLayout->addWidget(new HoriSeparator{&bottom});
+  bottomLayout->addWidget(&statusBar);
+  bottomLayout->setAlignment(Qt::AlignBottom);
+  
+  auto *rightLayout = new QVBoxLayout{&right};
+  rightLayout->setContentsMargins(0, 0, 0, 0);
+  rightLayout->setSpacing(glob_margin);
+  rightLayout->addWidget(&colorPicker);
+  rightLayout->addWidget(new HoriSeparator{&right});
+  rightLayout->addWidget(&colors);
+  rightLayout->addWidget(new HoriSeparator{&right});
+  rightLayout->addWidget(&palette);
+  rightLayout->addSpacing(glob_margin);
+  right.setStyleSheet("background-color: " + glob_main.name());
+  right.setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+  
+  /*
+  Unfortunately, we can't use QDockWidget.
+  When the title bar is removed with setTitleBar(new QWidget{this}),
+  the contents of the dock is shifted up by one pixel.
+  If the title bar is moved to the left with
+  setFeatures(QDockWidget::DockWidgetVerticalTitleBar),
+  the contents of the dock is shifted left by one pixel.
+  I've tried numerous times to correct this issue and so far, the best option
+  seems to be bypassing docks altogether.
+  */
+  
+  auto *centralLayout = new QGridLayout{&central};
+  centralLayout->setContentsMargins(0, 0, 0, 0);
+  centralLayout->setSpacing(0);
+  centralLayout->addWidget(&menubar, 0, 0, 1, 5);
+  centralLayout->addWidget(new HoriSeparator{&central}, 1, 0, 1, 5);
+  centralLayout->addWidget(&tools, 2, 0);
+  centralLayout->addWidget(new VertSeparator{&central}, 2, 1);
+  centralLayout->addWidget(&editor, 2, 2);
+  centralLayout->addWidget(new VertSeparator{&central}, 2, 3);
+  centralLayout->addWidget(&right, 2, 4);
+  
+  splitter.setStyleSheet(
+    "QSplitter::handle {"
+      "background-color: " + glob_border_color.name() + ";"
     "}"
-    
+  );
+  splitter.setOrientation(Qt::Vertical);
+  splitter.setHandleWidth(glob_border_width);
+  splitter.setOpaqueResize(true);
+  splitter.addWidget(&central);
+  splitter.addWidget(&bottom);
+  splitter.setCollapsible(0, false);
+  splitter.setCollapsible(1, false);
+  setCentralWidget(&splitter);
+}
+
+void Window::initStyles() {
+  setStyleSheet(
     "QMenuBar {"
       "background-color: " + glob_main.name() + ";"
       "color: " + glob_light_2.name() + ";"
@@ -110,67 +160,6 @@ void Window::setupUI() {
       "background-color: " + glob_light_1.name() + ";"
     "}"
   );
-  QToolTip::setFont(getGlobalFont());
-  
-  auto *bottomLayout = new QVBoxLayout{&bottom};
-  bottomLayout->setContentsMargins(0, 0, 0, 0);
-  bottomLayout->setSpacing(0);
-  bottomLayout->addWidget(&timeline);
-  bottomLayout->addWidget(new HoriSeparator{&bottom});
-  bottomLayout->addWidget(&statusBar);
-  bottomLayout->setAlignment(Qt::AlignBottom);
-  
-  auto *rightLayout = new QVBoxLayout{&right};
-  rightLayout->setContentsMargins(0, 0, 0, 0);
-  rightLayout->setSpacing(glob_margin);
-  rightLayout->addWidget(&colorPicker);
-  rightLayout->addWidget(new HoriSeparator{&right});
-  rightLayout->addWidget(&colors);
-  rightLayout->addWidget(new HoriSeparator{&right});
-  rightLayout->addWidget(&palette);
-  rightLayout->addSpacing(glob_margin);
-  right.setStyleSheet("background-color: " + glob_main.name());
-  right.setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
-  
-  menubar = new QMenuBar{this};
-  menubar->setFont(getGlobalFont());
-  menubar->setNativeMenuBar(false);
-  
-  /*
-  Unfortunately, we can't use QDockWidget.
-  When the title bar is removed with setTitleBar(new QWidget{this}),
-  the contents of the dock is shifted up by one pixel.
-  If the title bar is moved to the left with
-  setFeatures(QDockWidget::DockWidgetVerticalTitleBar),
-  the contents of the dock is shifted left by one pixel.
-  I've tried numerous times to correct this issue and so far, the best option
-  seems to be bypassing docks altogether.
-  */
-  
-  auto *centralLayout = new QGridLayout{&central};
-  centralLayout->setContentsMargins(0, 0, 0, 0);
-  centralLayout->setSpacing(0);
-  centralLayout->addWidget(menubar, 0, 0, 1, 5);
-  centralLayout->addWidget(new HoriSeparator{&central}, 1, 0, 1, 5);
-  centralLayout->addWidget(&tools, 2, 0);
-  centralLayout->addWidget(new VertSeparator{&central}, 2, 1);
-  centralLayout->addWidget(&editor, 2, 2);
-  centralLayout->addWidget(new VertSeparator{&central}, 2, 3);
-  centralLayout->addWidget(&right, 2, 4);
-  
-  splitter.setStyleSheet(
-    "QSplitter::handle {"
-      "background-color: " + glob_border_color.name() + ";"
-    "}"
-  );
-  splitter.setOrientation(Qt::Vertical);
-  splitter.setHandleWidth(glob_border_width);
-  splitter.setOpaqueResize(true);
-  splitter.addWidget(&central);
-  splitter.addWidget(&bottom);
-  splitter.setCollapsible(0, false);
-  splitter.setCollapsible(1, false);
-  setCentralWidget(&splitter);
 }
 
 #define ADD_ACTION(MENU, NAME, SHORTCUT, WIDGET, MEMFN) do {                    \
@@ -179,9 +168,12 @@ void Window::setupUI() {
   CONNECT(action, triggered, &WIDGET, MEMFN);                                   \
 } while (0)
 
-void Window::setupMenubar() {
+void Window::populateMenubar() {
+  menubar.setFont(getGlobalFont());
+  menubar.setNativeMenuBar(false);
+  
   auto *app = static_cast<Application *>(QApplication::instance());
-  QMenu *file = menubar->addMenu("File");
+  QMenu *file = menubar.addMenu("File");
   file->setFont(getGlobalFont());
   ADD_ACTION(file, "New", QKeySequence::New, *app, newFileDialog);
   ADD_ACTION(file, "Open", QKeySequence::Open, *app, openFileDialog);
@@ -189,7 +181,7 @@ void Window::setupMenubar() {
   ADD_ACTION(file, "Save As", QKeySequence::SaveAs, *this, openSaveFileDialog);
   ADD_ACTION(file, "Export", Qt::CTRL + Qt::Key_E, *this, openExportDialog);
   
-  QMenu *layer = menubar->addMenu("Layer");
+  QMenu *layer = menubar.addMenu("Layer");
   layer->setFont(getGlobalFont());
   ADD_ACTION(layer, "New Layer", Qt::SHIFT + Qt::Key_N, sprite.timeline, insertLayer);
   ADD_ACTION(layer, "Delete Layer", Qt::SHIFT + Qt::Key_Backspace, sprite.timeline, removeLayer);
@@ -209,7 +201,7 @@ void Window::setupMenubar() {
   ADD_ACTION(layer, "Layer Above", Qt::Key_W, sprite.timeline, layerAbove);
   ADD_ACTION(layer, "Layer Below", Qt::Key_S, sprite.timeline, layerBelow);
   
-  QMenu *frame = menubar->addMenu("Frame");
+  QMenu *frame = menubar.addMenu("Frame");
   frame->setFont(getGlobalFont());
   ADD_ACTION(frame, "New Frame", Qt::ALT + Qt::Key_N, sprite.timeline, insertFrame);
   ADD_ACTION(frame, "New Empty Frame", Qt::ALT + Qt::Key_E, sprite.timeline, insertNullFrame);
@@ -223,13 +215,13 @@ void Window::setupMenubar() {
   ADD_ACTION(frame, "Previous Frame", Qt::Key_A, sprite.timeline, prevFrame);
   ADD_ACTION(frame, "Play Animation", Qt::Key_Space, timeline, toggleAnimation);
   
-  QMenu *selection = menubar->addMenu("Selection");
+  QMenu *selection = menubar.addMenu("Selection");
   selection->setFont(getGlobalFont());
   ADD_ACTION(selection, "Clear", Qt::CTRL + Qt::Key_X, sprite.timeline, clearSelected);
   ADD_ACTION(selection, "Copy", Qt::CTRL + Qt::Key_C, sprite.timeline, copySelected);
   ADD_ACTION(selection, "Paste", Qt::CTRL + Qt::Key_V, sprite.timeline, pasteSelected);
   
-  menubar->adjustSize();
+  menubar.adjustSize();
 }
 
 #undef ADD_ACTION

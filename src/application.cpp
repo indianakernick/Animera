@@ -11,7 +11,9 @@
 #include "window.hpp"
 #include "connect.hpp"
 #include <QtGui/qevent.h>
+#include "global font.hpp"
 #include <QtCore/qresource.h>
+#include <QtWidgets/qtooltip.h>
 #include "init canvas dialog.hpp"
 #include <QtWidgets/qfiledialog.h>
 #include <QtWidgets/qdesktopwidget.h>
@@ -19,6 +21,7 @@
 Application::Application(int &argc, char **argv)
   : QApplication{argc, argv} {
   loadResources();
+  initStyles();
   CONNECT(noFileTimer, timeout, this, newFileDialog);
   noFileTimer.setSingleShot(true);
   noFileTimer.start(0);
@@ -40,25 +43,6 @@ void Application::openFileDialog() {
 
 void Application::windowClosed(Window *window) {
   windows.erase(std::remove(windows.begin(), windows.end(), window), windows.end());
-}
-
-void Application::loadResources() {
-  QString resPath = applicationDirPath();
-  #if defined(Q_OS_MACOS)
-  resPath += "/../Resources/";
-  #elif defined(Q_OS_WIN)
-  resPath += "/";
-  #else
-  resPath += "/";
-  #endif
-  [[maybe_unused]] bool registered = QResource::registerResource(resPath + "resources.rcc");
-  assert(registered);
-}
-
-Window *Application::makeWindow() {
-  return windows.emplace_back(
-    new Window{desktop(), desktop()->availableGeometry()}
-  );
 }
 
 void Application::newFile(const Format format, const QSize size) {
@@ -83,6 +67,38 @@ void Application::openFile(const QString &path) {
     }
   }
   makeWindow()->openFile(path);
+}
+
+void Application::initStyles() {
+  setStyleSheet(
+    "QToolTip {"
+      "background-color: " + glob_main.name() + ";"
+      "color: " + glob_light_2.name() + ";"
+      "border-width: " + QString::number(glob_border_width) + "px;"
+      "border-color: " + glob_border_color.name() + ";"
+      "border-style: solid;"
+    "}"
+  );
+  QToolTip::setFont(getGlobalFont());
+}
+
+void Application::loadResources() {
+  QString resPath = applicationDirPath();
+  #if defined(Q_OS_MACOS)
+  resPath += "/../Resources/";
+  #elif defined(Q_OS_WIN)
+  resPath += "/";
+  #else
+  resPath += "/";
+  #endif
+  [[maybe_unused]] bool registered = QResource::registerResource(resPath + "resources.rcc");
+  assert(registered);
+}
+
+Window *Application::makeWindow() {
+  return windows.emplace_back(
+    new Window{desktop(), desktop()->availableGeometry()}
+  );
 }
 
 bool Application::event(QEvent *event) {
