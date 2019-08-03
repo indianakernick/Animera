@@ -15,7 +15,6 @@
 #include <QtWidgets/qstyle.h>
 #include "separator widget.hpp"
 #include <QtWidgets/qboxlayout.h>
-#include <QtWidgets/qdockwidget.h>
 #include <QtWidgets/qfiledialog.h>
 
 Window::Window(QWidget *parent, const QRect desktop)
