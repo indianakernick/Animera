@@ -12,8 +12,6 @@
 #include "surface.hpp"
 #include <QtGui/qimage.h>
 
-// @TODO is there some way of dealing with the duplication?
-
 template <typename Pixel>
 Surface<Pixel> makeSurface(QImage &image) {
   assert(!image.isNull());
@@ -48,15 +46,34 @@ CSurface<Pixel> makeCSurface(const QImage &image) {
   return makeSurface<const Pixel>(image);
 }
 
+namespace detail {
+
+template <typename Tuple, size_t... Is>
+[[nodiscard]] decltype(auto) visitSurfacesHelper(Tuple tuple, std::index_sequence<Is...>) {
+  using Func = std::tuple_element_t<sizeof...(Is), Tuple>;
+  Func func = std::get<sizeof...(Is)>(tuple);
+  switch (std::get<0>(tuple).depth()) {
+    case 32: return std::forward<Func>(func)(makeSurface<uint32_t>(std::forward<std::tuple_element_t<Is, Tuple>>(std::get<Is>(tuple)))...);
+    case 16: return std::forward<Func>(func)(makeSurface<uint16_t>(std::forward<std::tuple_element_t<Is, Tuple>>(std::get<Is>(tuple)))...);
+    case 8 : return std::forward<Func>(func)(makeSurface<uint8_t> (std::forward<std::tuple_element_t<Is, Tuple>>(std::get<Is>(tuple)))...);
+    default: Q_UNREACHABLE();
+  }
+}
+
+}
+
+template <typename... Args>
+[[nodiscard]] decltype(auto) visitSurfaces(Args &&... args) {
+  static_assert(sizeof...(Args) > 1);
+  return detail::visitSurfacesHelper(
+    std::forward_as_tuple(args...),
+    std::make_index_sequence<sizeof...(Args) - 1>{}
+  );
+}
+
 template <typename Image, typename Func>
 [[nodiscard]] decltype(auto) visitSurface(Image &image, Func &&func) {
-  if (image.depth() == 32) {
-    return func(makeSurface<uint32_t>(image));
-  } else if (image.depth() == 8) {
-    return func(makeSurface<uint8_t>(image));
-  } else {
-    Q_UNREACHABLE();
-  }
+  return visitSurfaces(image, func);
 }
 
 template <typename Image, typename Func>
@@ -64,19 +81,6 @@ template <typename Image, typename Func>
   return visitSurface(image, [color, &func](auto surface) {
     return func(surface, static_cast<typename decltype(surface)::pixel_type>(color));
   });
-}
-
-// If we ever need more than two, use a tuple
-template <typename ImageA, typename ImageB, typename Func>
-[[nodiscard]] decltype(auto) visitSurfaces(ImageA &a, ImageB &b, Func &&func) {
-  assert(a.depth() == b.depth());
-  if (a.depth() == 32) {
-    return func(makeSurface<uint32_t>(a), makeSurface<uint32_t>(b));
-  } else if (a.depth() == 8) {
-    return func(makeSurface<uint8_t>(a), makeSurface<uint8_t>(b));
-  } else {
-    Q_UNREACHABLE();
-  }
 }
 
 #endif
