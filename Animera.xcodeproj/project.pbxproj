@@ -2155,7 +2155,37 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 455F28642206890300C73F39 /* Build configuration list for PBXNativeTarget "Animera" */;
 			buildPhases = (
-				453C7816223490B500818B19 /* Moc */,
+				45AA32C722F524E100005DD8 /* Moc - timeline controls widget */,
+				45AA32C822F5256500005DD8 /* Moc - timeline frames widget */,
+				45AA32C922F525C700005DD8 /* Moc - timeline layers widget */,
+				45AA32CA22F5263200005DD8 /* Moc - timeline cells widget */,
+				45AA32CB22F526CB00005DD8 /* Moc - color picker widget */,
+				45AA32CC22F526FC00005DD8 /* Moc - color slider widget */,
+				45AA32CD22F5272A00005DD8 /* Moc - color graph widget */,
+				45AA32CE22F5275F00005DD8 /* Moc - tool select widget */,
+				45AA32CF22F5279000005DD8 /* Moc - color input widget */,
+				45AA32D022F527C600005DD8 /* Moc - tool colors widget */,
+				45AA32D122F5281400005DD8 /* Moc - init canvas dialog */,
+				45AA32D222F5284B00005DD8 /* Moc - file input widget */,
+				45AA32D322F5288C00005DD8 /* Moc - color picker impl */,
+				45AA32D422F528C300005DD8 /* Moc - text input widget */,
+				45AA32D522F528F300005DD8 /* Moc - status bar widget */,
+				45AA32D622F5292400005DD8 /* Moc - combo box widget */,
+				45AA32D722F5295B00005DD8 /* Moc - timeline widget */,
+				45AA32D822F529A800005DD8 /* Moc - palette widget */,
+				45AA32D922F529D600005DD8 /* Moc - sample object */,
+				45AA32DA22F52A0400005DD8 /* Moc - export dialog */,
+				45AA32DB22F52A3300005DD8 /* Moc - editor widget */,
+				45AA32DC22F52A6400005DD8 /* Moc - tool widgets */,
+				45AA32DD22F52A9400005DD8 /* Moc - clear object */,
+				45AA32DE22F52AC800005DD8 /* Moc - undo object */,
+				45AA32DF22F52B0000005DD8 /* Moc - application */,
+				45AA32E022F52B2900005DD8 /* Moc - timeline */,
+				45AA32E122F52B8B00005DD8 /* Moc - palette */,
+				45AA32E222F52BB500005DD8 /* Moc - sprite */,
+				45AA32C622F51DB900005DD8 /* Moc - window */,
+				45AA32E322F52BE800005DD8 /* Moc - tool */,
+				45AA32E422F52C2E00005DD8 /* Moc - main */,
 				455F284D220688FD00C73F39 /* Sources */,
 				455F284E220688FD00C73F39 /* Frameworks */,
 				453C787B2235D63B00818B19 /* RCC */,
@@ -2224,24 +2254,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		453C7816223490B500818B19 /* Moc */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = Moc;
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "function moc {\n  local OUTPUT=\"$PROJECT_DIR/src/$1.moc\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.hpp\" > \"$OUTPUT\"\n  echo \"\" >> \"$OUTPUT\"\n  /usr/local/opt/Qt/bin/moc \"$PROJECT_DIR/src/$1.cpp\" >> \"$OUTPUT\"\n}\n\nmoc \"timeline controls widget\"\nmoc \"timeline frames widget\"\nmoc \"timeline layers widget\"\nmoc \"timeline cells widget\"\nmoc \"color picker widget\"\nmoc \"color slider widget\"\nmoc \"color graph widget\"\nmoc \"tool select widget\"\nmoc \"color input widget\"\nmoc \"tool colors widget\"\nmoc \"init canvas dialog\"\nmoc \"file input widget\"\nmoc \"color picker impl\"\nmoc \"text input widget\"\nmoc \"status bar widget\"\nmoc \"combo box widget\"\nmoc \"timeline widget\"\nmoc \"palette widget\"\nmoc \"sample object\"\nmoc \"export dialog\"\nmoc \"editor widget\"\nmoc \"tool widgets\"\nmoc \"clear object\"\nmoc \"undo object\"\nmoc \"application\"\nmoc \"timeline\"\nmoc \"palette\"\nmoc \"sprite\"\nmoc \"window\"\nmoc \"tool\"\nmoc \"main\"\n";
-		};
 		453C787B2235D63B00818B19 /* RCC */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2277,7 +2289,657 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/opt/qt/bin/macdeployqt \"$CODESIGNING_FOLDER_PATH\" -codesign=\"kerndog73@gmail.com\" -no-strip\n";
+			shellScript = "/usr/local/opt/qt/bin/macdeployqt \"$CODESIGNING_FOLDER_PATH\" -codesign=\"kerndog73@gmail.com\"\n";
+		};
+		45AA32C622F51DB900005DD8 /* Moc - window */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(PROJECT_DIR)/src/window.hpp",
+				"$(PROJECT_DIR)/src/window.cpp",
+			);
+			name = "Moc - window";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(PROJECT_DIR)/src/window.moc",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+		};
+		45AA32C722F524E100005DD8 /* Moc - timeline controls widget */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(PROJECT_DIR)/src/timeline controls widget.hpp",
+				"$(PROJECT_DIR)/src/timeline controls widget.cpp",
+			);
+			name = "Moc - timeline controls widget";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(PROJECT_DIR)/src/timeline controls widget.moc",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+		};
+		45AA32C822F5256500005DD8 /* Moc - timeline frames widget */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(PROJECT_DIR)/src/timeline frames widget.hpp",
+				"$(PROJECT_DIR)/src/timeline frames widget.cpp",
+			);
+			name = "Moc - timeline frames widget";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(PROJECT_DIR)/src/timeline frames widget.moc",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+		};
+		45AA32C922F525C700005DD8 /* Moc - timeline layers widget */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(PROJECT_DIR)/src/timeline layers widget.hpp",
+				"$(PROJECT_DIR)/src/timeline layers widget.cpp",
+			);
+			name = "Moc - timeline layers widget";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(PROJECT_DIR)/src/timeline layers widget.moc",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+		};
+		45AA32CA22F5263200005DD8 /* Moc - timeline cells widget */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(PROJECT_DIR)/src/timeline cells widget.hpp",
+				"$(PROJECT_DIR)/src/timeline cells widget.cpp",
+			);
+			name = "Moc - timeline cells widget";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(PROJECT_DIR)/src/timeline cells widget.moc",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+		};
+		45AA32CB22F526CB00005DD8 /* Moc - color picker widget */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(PROJECT_DIR)/src/color picker widget.hpp",
+				"$(PROJECT_DIR)/src/color picker widget.cpp",
+			);
+			name = "Moc - color picker widget";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(PROJECT_DIR)/src/color picker widget.moc",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+		};
+		45AA32CC22F526FC00005DD8 /* Moc - color slider widget */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(PROJECT_DIR)/src/color slider widget.hpp",
+				"$(PROJECT_DIR)/src/color slider widget.cpp",
+			);
+			name = "Moc - color slider widget";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(PROJECT_DIR)/src/color slider widget.moc",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+		};
+		45AA32CD22F5272A00005DD8 /* Moc - color graph widget */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(PROJECT_DIR)/src/color graph widget.hpp",
+				"$(PROJECT_DIR)/src/color graph widget.cpp",
+			);
+			name = "Moc - color graph widget";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(PROJECT_DIR)/src/color graph widget.moc",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+		};
+		45AA32CE22F5275F00005DD8 /* Moc - tool select widget */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(PROJECT_DIR)/src/tool select widget.hpp",
+				"$(PROJECT_DIR)/src/tool select widget.cpp",
+			);
+			name = "Moc - tool select widget";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(PROJECT_DIR)/src/tool select widget.moc",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+		};
+		45AA32CF22F5279000005DD8 /* Moc - color input widget */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(PROJECT_DIR)/src/color input widget.hpp",
+				"$(PROJECT_DIR)/src/color input widget.cpp",
+			);
+			name = "Moc - color input widget";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(PROJECT_DIR)/src/color input widget.moc",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+		};
+		45AA32D022F527C600005DD8 /* Moc - tool colors widget */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(PROJECT_DIR)/src/tool colors widget.hpp",
+				"$(PROJECT_DIR)/src/tool colors widget.cpp",
+			);
+			name = "Moc - tool colors widget";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(PROJECT_DIR)/src/tool colors widget.moc",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+		};
+		45AA32D122F5281400005DD8 /* Moc - init canvas dialog */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(PROJECT_DIR)/src/init canvas dialog.hpp",
+				"$(PROJECT_DIR)/src/init canvas dialog.cpp",
+			);
+			name = "Moc - init canvas dialog";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(PROJECT_DIR)/src/init canvas dialog.moc",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+		};
+		45AA32D222F5284B00005DD8 /* Moc - file input widget */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(PROJECT_DIR)/src/file input widget.hpp",
+				"$(PROJECT_DIR)/src/file input widget.cpp",
+			);
+			name = "Moc - file input widget";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(PROJECT_DIR)/src/file input widget.moc",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+		};
+		45AA32D322F5288C00005DD8 /* Moc - color picker impl */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(PROJECT_DIR)/src/color picker impl.hpp",
+				"$(PROJECT_DIR)/src/color picker impl.cpp",
+			);
+			name = "Moc - color picker impl";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(PROJECT_DIR)/src/color picker impl.moc",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+		};
+		45AA32D422F528C300005DD8 /* Moc - text input widget */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(PROJECT_DIR)/src/text input widget.hpp",
+				"$(PROJECT_DIR)/src/text input widget.cpp",
+			);
+			name = "Moc - text input widget";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(PROJECT_DIR)/src/text input widget.moc",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+		};
+		45AA32D522F528F300005DD8 /* Moc - status bar widget */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(PROJECT_DIR)/src/status bar widget.hpp",
+				"$(PROJECT_DIR)/src/status bar widget.cpp",
+			);
+			name = "Moc - status bar widget";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(PROJECT_DIR)/src/status bar widget.moc",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+		};
+		45AA32D622F5292400005DD8 /* Moc - combo box widget */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(PROJECT_DIR)/src/combo box widget.hpp",
+				"$(PROJECT_DIR)/src/combo box widget.cpp",
+			);
+			name = "Moc - combo box widget";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(PROJECT_DIR)/src/combo box widget.moc",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+		};
+		45AA32D722F5295B00005DD8 /* Moc - timeline widget */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(PROJECT_DIR)/src/timeline widget.hpp",
+				"$(PROJECT_DIR)/src/timeline widget.cpp",
+			);
+			name = "Moc - timeline widget";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(PROJECT_DIR)/src/timeline widget.moc",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+		};
+		45AA32D822F529A800005DD8 /* Moc - palette widget */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(PROJECT_DIR)/src/palette widget.hpp",
+				"$(PROJECT_DIR)/src/palette widget.cpp",
+			);
+			name = "Moc - palette widget";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(PROJECT_DIR)/src/palette widget.moc",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+		};
+		45AA32D922F529D600005DD8 /* Moc - sample object */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(PROJECT_DIR)/src/sample object.hpp",
+				"$(PROJECT_DIR)/src/sample object.cpp",
+			);
+			name = "Moc - sample object";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(PROJECT_DIR)/src/sample object.moc",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+		};
+		45AA32DA22F52A0400005DD8 /* Moc - export dialog */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(PROJECT_DIR)/src/export dialog.hpp",
+				"$(PROJECT_DIR)/src/export dialog.cpp",
+			);
+			name = "Moc - export dialog";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(PROJECT_DIR)/src/export dialog.moc",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+		};
+		45AA32DB22F52A3300005DD8 /* Moc - editor widget */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(PROJECT_DIR)/src/editor widget.hpp",
+				"$(PROJECT_DIR)/src/editor widget.cpp",
+			);
+			name = "Moc - editor widget";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(PROJECT_DIR)/src/editor widget.moc",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+		};
+		45AA32DC22F52A6400005DD8 /* Moc - tool widgets */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(PROJECT_DIR)/src/tool widgets.hpp",
+				"$(PROJECT_DIR)/src/tool widgets.cpp",
+			);
+			name = "Moc - tool widgets";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(PROJECT_DIR)/src/tool widgets.moc",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+		};
+		45AA32DD22F52A9400005DD8 /* Moc - clear object */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(PROJECT_DIR)/src/clear object.hpp",
+				"$(PROJECT_DIR)/src/clear object.cpp",
+			);
+			name = "Moc - clear object";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(PROJECT_DIR)/src/clear object.moc",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+		};
+		45AA32DE22F52AC800005DD8 /* Moc - undo object */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(PROJECT_DIR)/src/undo object.hpp",
+				"$(PROJECT_DIR)/src/undo object.cpp",
+			);
+			name = "Moc - undo object";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(PROJECT_DIR)/src/undo object.moc",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+		};
+		45AA32DF22F52B0000005DD8 /* Moc - application */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(PROJECT_DIR)/src/application.hpp",
+				"$(PROJECT_DIR)/src/application.cpp",
+			);
+			name = "Moc - application";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(PROJECT_DIR)/src/application.moc",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+		};
+		45AA32E022F52B2900005DD8 /* Moc - timeline */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(PROJECT_DIR)/src/timeline.hpp",
+				"$(PROJECT_DIR)/src/timeline.cpp",
+			);
+			name = "Moc - timeline";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(PROJECT_DIR)/src/timeline.moc",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+		};
+		45AA32E122F52B8B00005DD8 /* Moc - palette */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(PROJECT_DIR)/src/palette.hpp",
+				"$(PROJECT_DIR)/src/palette.cpp",
+			);
+			name = "Moc - palette";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(PROJECT_DIR)/src/palette.moc",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+		};
+		45AA32E222F52BB500005DD8 /* Moc - sprite */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(PROJECT_DIR)/src/sprite.hpp",
+				"$(PROJECT_DIR)/src/sprite.cpp",
+			);
+			name = "Moc - sprite";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(PROJECT_DIR)/src/sprite.moc",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+		};
+		45AA32E322F52BE800005DD8 /* Moc - tool */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(PROJECT_DIR)/src/tool.hpp",
+				"$(PROJECT_DIR)/src/tool.cpp",
+			);
+			name = "Moc - tool";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(PROJECT_DIR)/src/tool.moc",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+		};
+		45AA32E422F52C2E00005DD8 /* Moc - main */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(PROJECT_DIR)/src/main.cpp",
+			);
+			name = "Moc - main";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(PROJECT_DIR)/src/main.moc",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/opt/Qt/bin/moc \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
