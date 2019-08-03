@@ -33,7 +33,6 @@ void Sprite::newFile(const Format newFormat, const QSize newSize) {
 void Sprite::saveFile(const QString &path) const {
   QFile file{path};
   if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-    // @TODO handle this properly
     throw std::exception{};
   }
   file.write(magic_number, sizeof(magic_number));
@@ -45,7 +44,6 @@ void Sprite::saveFile(const QString &path) const {
 }
 
 void Sprite::openFile(const QString &path) {
-  // @TODO handle corrupted or invalid files properly
   QFile file{path};
   if (!file.open(QIODevice::ReadOnly)) {
     throw std::exception{};

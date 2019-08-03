@@ -38,7 +38,4 @@ void writeOverlay(PaletteCSpan, Format, QImage &, const QImage &);
 /// Colors are converted to grayscale
 void writeOverlay(PaletteCSpan, Format, QImage &, const QImage &, const QImage &);
 
-/// Convert a grayscale image to monochrome
-QImage grayToMono(const QImage &);
-
 #endif

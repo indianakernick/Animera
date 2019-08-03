@@ -9,10 +9,13 @@
 #include "timeline.hpp"
 
 #include "serial.hpp"
+#include "formats.hpp"
+#include "transform.hpp"
 #include "cell span.hpp"
 #include "composite.hpp"
 #include <QtCore/qdir.h>
 #include "export pattern.hpp"
+#include "surface factory.hpp"
 
 namespace {
 
@@ -139,6 +142,55 @@ QImage grayToIndexed(const PaletteCSpan palette, QImage image) {
   return image;
 }
 
+QImage grayToMono(const QImage &src) {
+  QImage dst{src.size(), QImage::Format_Mono};
+  for (int y = 0; y != dst.height(); ++y) {
+    for (int x = 0; x != dst.width(); ++x) {
+      const int gray = FormatGray::toGray(src.pixel(x, y));
+      dst.setPixel(x, y, gray < 128 ? 0 : 1);
+    }
+  }
+  return dst;
+}
+
+QImage grayWithoutAlpha(const QImage &src) {
+  assert(src.format() == QImage::Format_Grayscale16);
+  QImage dst{src.size(), QImage::Format_Grayscale8};
+  pixelTransform(makeSurface<uint8_t>(dst), makeCSurface<PixelGray>(src), &FormatGray::toGray);
+  return dst;
+}
+
+QImage convertIndexImage(const ExportFormat format, const PaletteCSpan palette, QImage image) {
+  switch (format) {
+    case ExportFormat::rgba:
+      assert(image.format() == qimageFormat(Format::rgba));
+      return image;
+    case ExportFormat::index:
+      return grayToIndexed(palette, image);
+    case ExportFormat::gray:
+      assert(image.format() == QImage::Format_Grayscale8);
+      return image;
+    case ExportFormat::monochrome:
+      assert(image.format() == QImage::Format_Grayscale8);
+      return grayToMono(image);
+    default: Q_UNREACHABLE();
+  }
+}
+
+QImage convertGrayImage(const ExportFormat format, QImage image) {
+  switch (format) {
+    case ExportFormat::gray:
+      return grayWithoutAlpha(image);
+    case ExportFormat::gray_alpha:
+      // impossible without libpng
+      // Qt doesn't support gray with alpha
+      return image;
+    case ExportFormat::monochrome:
+      return grayToMono(image);
+    default: Q_UNREACHABLE();
+  }
+}
+
 }
 
 QImage Timeline::convertImage(
@@ -152,21 +204,9 @@ QImage Timeline::convertImage(
       assert(format == ExportFormat::rgba);
       return image;
     case Format::index:
-      if (format == ExportFormat::rgba) {
-        assert(image.format() == qimageFormat(Format::rgba));
-        return image;
-      } else if (format == ExportFormat::indexed) {
-        return grayToIndexed(palette, image);
-      } else if (format == ExportFormat::grayscale) {
-        assert(image.format() == qimageFormat(Format::gray));
-        return image;
-      } else Q_UNREACHABLE();
+      return convertIndexImage(format, palette, image);
     case Format::gray:
-      if (format == ExportFormat::grayscale) {
-        return image;
-      } else if (format == ExportFormat::monochrome) {
-        return grayToMono(image);
-      } else Q_UNREACHABLE();
+      return convertGrayImage(format, image);
     default: Q_UNREACHABLE();
   }
 }

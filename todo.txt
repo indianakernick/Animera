@@ -30,8 +30,6 @@ A builtin calculator?
 image, view, sampler
 vulkan textures
 
-consider grayscale with alpha
-
 transform a layer or transform a frame
 
 set cursor and respond to clicks more precisely

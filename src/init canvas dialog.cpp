@@ -78,7 +78,7 @@ void InitCanvasDialog::createWidgets() {
   formats.push_back(new FormatWidget{this, ":/Formats/gray.png", Format::gray});
   formats.push_back(new FormatWidget{this, ":/Formats/index.png", Format::index});
   formats[0]->setToolTip("32-bit RGBA");
-  formats[1]->setToolTip("8-bit Grayscale");
+  formats[1]->setToolTip("16-bit Gray-Alpha");
   formats[2]->setToolTip("8-bit Indexed");
   formats.front()->setChecked(true);
   ok = new TextPushButtonWidget{this, init_button_rect, "Create"};

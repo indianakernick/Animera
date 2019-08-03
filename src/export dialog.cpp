@@ -44,9 +44,11 @@ void ExportDialog::submit() {
          if (formatStr == "RGBA") {
     options.format = ExportFormat::rgba;
   } else if (formatStr == "Indexed") {
-    options.format = ExportFormat::indexed;
-  } else if (formatStr == "Grayscale") {
-    options.format = ExportFormat::grayscale;
+    options.format = ExportFormat::index;
+  } else if (formatStr == "Gray") {
+    options.format = ExportFormat::gray;
+  } else if (formatStr == "Gray Alpha") {
+    options.format = ExportFormat::gray_alpha;
   } else if (formatStr == "Monochrome") {
     options.format = ExportFormat::monochrome;
   } else Q_UNREACHABLE();
@@ -61,7 +63,8 @@ void ExportDialog::updateFormatItems(const int layerIdx) {
     } else if (formatSelect->count() == 1) {
       formatSelect->clear();
       formatSelect->addItem("Indexed");
-      formatSelect->addItem("Grayscale");
+      formatSelect->addItem("Gray");
+      formatSelect->addItem("Monochrome");
     }
   }
 }
@@ -75,7 +78,8 @@ void ExportDialog::addFormatOptions() {
       formatSelect->addItem("RGBA");
       break;
     case Format::gray:
-      formatSelect->addItem("Grayscale");
+      formatSelect->addItem("Gray");
+      formatSelect->addItem("Gray Alpha");
       formatSelect->addItem("Monochrome");
       break;
     default: Q_UNREACHABLE();

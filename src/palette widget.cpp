@@ -10,6 +10,7 @@
 
 #include "config.hpp"
 #include "connect.hpp"
+#include "formats.hpp"
 #include <QtGui/qevent.h>
 #include <QtGui/qbitmap.h>
 #include <QtGui/qpainter.h>
@@ -66,14 +67,17 @@ private:
     painter.drawRect(bord, bord + half, half, half);
   }
   
+  static QColor toQColor(const Color color) {
+    return QColor{color.r, color.g, color.b, color.a};
+  }
+  
   QColor getQColor() const {
     switch (format) {
       case Format::index:
       case Format::rgba:
-        return QColor::fromRgba(color);
+        return toQColor(FormatARGB::toColor(color));
       case Format::gray:
-        const int gray = color & 255;
-        return QColor{gray, gray, gray};
+        return toQColor(FormatGray::toColor(color));
     }
   }
   

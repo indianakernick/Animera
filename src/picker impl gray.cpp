@@ -10,47 +10,97 @@
 
 #include "config.hpp"
 #include "connect.hpp"
+#include "formats.hpp"
 #include "label widget.hpp"
 #include "color input widget.hpp"
 #include "color slider widget.hpp"
 
+namespace {
+
+constexpr int toValue(const double gray) {
+  return 100 * gray / 255 + 0.5;
+}
+
+constexpr int toGray(const double value) {
+  return 255 * value / 100 + 0.5;
+}
+
+}
+
 void PickerImplGray::init(QWidget *parent) {
   gray = pick_default_gray;
+  alpha = pick_default_color.alpha();
+  const int value = toValue(gray);
   graySlider = new GraySliderWidget{parent};
+  alphaSlider = new AlphaSliderWidget{parent};
+  alphaSlider->changeHSV({0, 0, value});
+  boxA = new NumberInputWidget{parent, pick_number_rect, {0, 255, alpha}};
   boxY = new NumberInputWidget{parent, pick_number_rect, {0, 255, gray}};
-  boxHex = new HexInputWidget{parent, pick_hex_rect, {gray, gray, gray}, 255};
-  boxHex->setReadOnly(true);
+  boxV = new NumberInputWidget{parent, pick_number_rect, {0, 100, value}};
+  labelA = new LabelWidget{parent, pick_label_rect, "A"};
   labelY = new LabelWidget{parent, pick_label_rect, "Y"};
-  labelHex = new LabelWidget{parent, pick_label_rect, "#"};
+  labelV = new LabelWidget{parent, pick_label_rect, "V"};
 }
 
 void PickerImplGray::setupLayout(QGridLayout *layout) {
-  layout->addWidget(graySlider, 1, 0, 1, 6);
-  layout->addWidget(labelY,     2, 0);
-  layout->addWidget(boxY,       2, 1);
-  layout->addWidget(labelHex,   2, 2);
-  layout->addWidget(boxHex,     2, 3, 1, 3);
+  layout->addWidget(graySlider,  1, 0, 1, 6);
+  layout->addWidget(alphaSlider, 2, 0, 1, 6);
+  layout->addWidget(labelA,      3, 0);
+  layout->addWidget(boxA,        3, 1);
+  layout->addWidget(labelY,      3, 2);
+  layout->addWidget(boxY,        3, 3);
+  layout->addWidget(labelV,      3, 4);
+  layout->addWidget(boxV,        3, 5);
 }
 
 void PickerImplGray::connectSignals() {
   CONNECT(graySlider,  grayChanged,  boxY,        changeValue);
   CONNECT(boxY,        valueChanged, graySlider,  changeGray);
 
-  CONNECT(graySlider,  grayChanged,  this,        changeGray);
-  CONNECT(boxY,        valueChanged, this,        changeGray);
+  CONNECT(graySlider,  grayChanged,  this,        setGray);
+  CONNECT(boxY,        valueChanged, this,        setGray);
   
-  //CONNECT(boxHex,      rgbaChanged,  this,        changeRGBAtoGray);
+  CONNECT(alphaSlider, alphaChanged, boxA,        changeValue);
+  CONNECT(boxA,        valueChanged, alphaSlider, changeAlpha);
+  
+  CONNECT(alphaSlider, alphaChanged, this,        setAlpha);
+  CONNECT(boxA,        valueChanged, this,        setAlpha);
+  
+  CONNECT(boxV,        valueChanged, this,        setValue);
 }
 
 void PickerImplGray::setColor(const QRgb color) {
-  gray = color & 255;
+  gray = FormatGray::toGray(color);
+  alpha = FormatGray::toAlpha(color);
   graySlider->changeGray(gray);
+  alphaSlider->changeAlpha(alpha);
+  boxA->changeValue(alpha);
   boxY->changeValue(gray);
-  changeGray(gray);
+  boxV->changeValue(toValue(gray));
+  changeColor();
 }
 
-void PickerImplGray::changeGray(const int newGray) {
+void PickerImplGray::setValue(const int newValue) {
+  gray = toGray(newValue);
+  graySlider->changeGray(gray);
+  alphaSlider->changeHSV({0, 0, newValue});
+  boxY->changeValue(gray);
+  changeColor();
+}
+
+void PickerImplGray::setGray(const int newGray) {
   gray = newGray;
-  boxHex->changeRgba({gray, gray, gray}, 255);
-  Q_EMIT colorChanged(gray);
+  const int value = toValue(gray);
+  boxV->changeValue(value);
+  alphaSlider->changeHSV({0, 0, value});
+  changeColor();
+}
+
+void PickerImplGray::setAlpha(const int newAlpha) {
+  alpha = newAlpha;
+  changeColor();
+}
+
+void PickerImplGray::changeColor() {
+  Q_EMIT colorChanged(FormatGray::toPixel(gray, alpha));
 }

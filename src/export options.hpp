@@ -31,8 +31,9 @@ enum class FrameSelect {
 
 enum class ExportFormat {
   rgba,
-  indexed,
-  grayscale,
+  index,
+  gray,
+  gray_alpha,
   monochrome
 };
 

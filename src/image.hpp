@@ -28,7 +28,7 @@ constexpr QImage::Format qimageFormat(const Format format) {
     case Format::index:
       return QImage::Format_Grayscale8;
     case Format::gray:
-      return QImage::Format_Grayscale8;
+      return QImage::Format_Grayscale16; // Qt doesn't have a gray-alpha format
     default:
       Q_UNREACHABLE();
   }
@@ -36,7 +36,7 @@ constexpr QImage::Format qimageFormat(const Format format) {
 
 using PixelRgba = QRgb;
 using PixelIndex = uint8_t;
-using PixelGray = uint8_t;
+using PixelGray = uint16_t;
 using PixelMask = uint8_t;
 
 bool compatible(const QImage &, const QImage &);

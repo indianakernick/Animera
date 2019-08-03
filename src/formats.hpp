@@ -13,7 +13,9 @@
 #include <QtGui/qrgb.h>
 
 struct FormatARGB {
-  Color toColor(const QRgb pixel) const {
+  using Pixel = QRgb;
+
+  static constexpr Color toColor(const Pixel pixel) {
     return {
       static_cast<uint8_t>(qRed(pixel)),
       static_cast<uint8_t>(qGreen(pixel)),
@@ -22,13 +24,15 @@ struct FormatARGB {
     };
   }
   
-  QRgb toPixel(const Color color) const {
+  static constexpr Pixel toPixel(const Color color) {
     return qRgba(color.r, color.g, color.b, color.a);
   }
 };
 
 struct FormatPalette {
   const QRgb *data;
+  
+  using Pixel = uint8_t;
   
   Color toColor(const uint8_t pixel) const {
     assert(data);
@@ -37,8 +41,26 @@ struct FormatPalette {
 };
 
 struct FormatGray {
-  Color toColor(const uint8_t pixel) const {
-    return {pixel, pixel, pixel, 255};
+  using Pixel = uint16_t;
+
+  static constexpr int toGray(const uint16_t pixel) {
+    return pixel & 0xFF;
+  }
+  static constexpr int toAlpha(const uint16_t pixel) {
+    return pixel >> 8;
+  }
+  static constexpr uint16_t toPixel(const int gray, const int alpha) {
+    return (gray & 0xFF) | (alpha << 8);
+  }
+
+  static constexpr Color toColor(const uint16_t pixel) {
+    const uint8_t gray = toGray(pixel);
+    const uint8_t alpha = toAlpha(pixel);
+    return {gray, gray, gray, alpha};
+  }
+  
+  static constexpr uint16_t toPixel(const Color color) {
+    return toPixel(color.r, color.a);
   }
 };
 

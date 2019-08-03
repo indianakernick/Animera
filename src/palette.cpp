@@ -8,6 +8,7 @@
 
 #include "palette.hpp"
 
+#include "formats.hpp"
 #include <QtCore/qiodevice.h>
 
 namespace {
@@ -20,9 +21,13 @@ constexpr QRgb quantColor(const int size, const int r, const int g, const int b)
   return qRgb(quantColor(size, r), quantColor(size, g), quantColor(size, b));
 }
 
-constexpr QRgb quantGray(const int size, const int y) {
+constexpr QRgb quantGrayColor(const int size, const int y) {
   const int gray = quantColor(size, y);
   return qRgb(gray, gray, gray);
+}
+
+constexpr QRgb quantGray(const int size, const int y) {
+  return FormatGray::toPixel(quantColor(size, y), 255);
 }
 
 constexpr std::array<QRgb, 24> hue_palette = {
@@ -54,6 +59,19 @@ constexpr std::array<QRgb, 24> hue_palette = {
   quantColor(4, 4, 0, 1),
 };
 
+constexpr std::array<QRgb, 9> gray_color_palette = {
+  quantGrayColor(8, 0),
+  quantGrayColor(8, 1),
+  quantGrayColor(8, 2),
+  quantGrayColor(8, 3),
+  quantGrayColor(8, 4),
+  quantGrayColor(8, 5),
+  quantGrayColor(8, 6),
+  quantGrayColor(8, 7),
+  
+  quantGrayColor(8, 8),
+};
+
 constexpr std::array<QRgb, 9> gray_palette = {
   quantGray(8, 0),
   quantGray(8, 1),
@@ -79,6 +97,8 @@ void Palette::initDefault() {
       break;
     case Format::rgba:
       iter = std::copy(hue_palette.cbegin(), hue_palette.cend(), iter);
+      iter = std::copy(gray_color_palette.cbegin(), gray_color_palette.cend(), iter);
+      break;
     case Format::gray:
       iter = std::copy(gray_palette.cbegin(), gray_palette.cend(), iter);
   }

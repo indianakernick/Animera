@@ -12,6 +12,7 @@
 #include "color picker impl.hpp"
 
 class GraySliderWidget;
+class AlphaSliderWidget;
 class NumberInputWidget;
 class HexInputWidget;
 class LabelWidget;
@@ -24,16 +25,24 @@ public:
   void setColor(QRgb) override;
 
 private Q_SLOTS:
-  void changeGray(int);
+  void setValue(int);
+  void setGray(int);
+  void setAlpha(int);
 
 private:
   int gray;
+  int alpha;
   
   GraySliderWidget *graySlider = nullptr;
+  AlphaSliderWidget *alphaSlider = nullptr;
+  NumberInputWidget *boxA = nullptr;
   NumberInputWidget *boxY = nullptr;
-  HexInputWidget *boxHex = nullptr;
+  NumberInputWidget *boxV = nullptr;
+  LabelWidget *labelA = nullptr;
   LabelWidget *labelY = nullptr;
-  LabelWidget *labelHex = nullptr;
+  LabelWidget *labelV = nullptr;
+  
+  void changeColor();
 };
 
 #endif

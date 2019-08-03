@@ -10,6 +10,7 @@
 
 #include "config.hpp"
 #include "connect.hpp"
+#include "formats.hpp"
 #include <QtGui/qpainter.h>
 #include "color handle.hpp"
 #include "color convert.hpp"
@@ -80,8 +81,9 @@ private:
       case Format::index:
         return QColor::fromRgba(palette[color]);
       case Format::gray:
-        const int gray = color;
-        return QColor{gray, gray, gray};
+        const int gray = FormatGray::toGray(color);
+        const int alpha = FormatGray::toAlpha(color);
+        return QColor{gray, gray, gray, alpha};
     }
   }
   
@@ -159,7 +161,11 @@ ToolColors ToolColorsWidget::getInitialColors(const Format format) {
     case Format::index:
       return {1, 2, 0};
     case Format::gray:
-      return {255, 128, 0};
+      return {
+        FormatGray::toPixel(255, 255),
+        FormatGray::toPixel(0, 255),
+        FormatGray::toPixel(0, 0)
+      };
   }
 }
 

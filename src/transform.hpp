@@ -19,11 +19,31 @@ QPoint xform(QPoint)
 */
 
 template <typename Pixel, typename XForm>
-void spatialTransform(Surface<Pixel> dst, CSurface<identity_t<Pixel>> src, XForm &&xform) {
+void spatialTransform(Surface<Pixel> dst, CSurface<identity_t<Pixel>> src, XForm xform) {
   for (int y = 0; y != dst.size().height(); ++y) {
     for (int x = 0; x != dst.size().width(); ++x) {
       dst.setPixel(src.getPixel(xform(QPoint{x, y})), {x, y});
     }
+  }
+}
+
+/*
+
+// Given a pixel on the src image, return a pixel on the dst image
+DstPixel xform(SrcPixel)
+
+*/
+
+template <typename DstPixel, typename SrcPixel, typename XForm>
+void pixelTransform(Surface<DstPixel> dst, CSurface<SrcPixel> src, XForm xform) {
+  auto srcRowIter = src.range().begin();
+  for (auto row : dst.range()) {
+    const SrcPixel *srcPixel = (*srcRowIter).begin();
+    for (DstPixel &pixel : row) {
+      pixel = xform(*srcPixel);
+      ++srcPixel;
+    }
+    ++srcRowIter;
   }
 }
 

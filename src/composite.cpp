@@ -11,6 +11,7 @@
 #include "config.hpp"
 #include "masking.hpp"
 #include "formats.hpp"
+#include "transform.hpp"
 #include "porter duff.hpp"
 #include "surface factory.hpp"
 
@@ -155,44 +156,27 @@ QImage blitMaskImage(const QImage &src, const QImage &mask, const QPoint pos) {
 namespace {
 
 void rgbaToOverlay(Surface<PixelRgba> overlay, CSurface<PixelRgba> source) {
-  auto sourceRowIter = source.range().begin();
-  for (auto row : overlay.range()) {
-    const PixelRgba *sourcePixel = (*sourceRowIter).begin();
-    for (PixelRgba &pixel : row) {
-      const int gray = qGray(*sourcePixel);
-      const int alpha = scaleOverlayAlpha(qAlpha(*sourcePixel));
-      pixel = qRgba(gray, gray, gray, alpha);
-      ++sourcePixel;
-    }
-    ++sourceRowIter;
-  }
+  pixelTransform(overlay, source, [](const PixelRgba pixel) {
+    const int gray = qGray(pixel);
+    const int alpha = scaleOverlayAlpha(qAlpha(pixel));
+    return qRgba(gray, gray, gray, alpha);
+  });
 }
 
 void paletteToOverlay(Surface<PixelRgba> overlay, CSurface<PixelIndex> source, PaletteCSpan palette) {
-  auto sourceRowIter = source.range().begin();
-  for (auto row : overlay.range()) {
-    const PixelIndex *sourcePixel = (*sourceRowIter).begin();
-    for (PixelRgba &pixel : row) {
-      const QRgb color = palette[*sourcePixel];
-      const int gray = qGray(color);
-      pixel = qRgba(gray, gray, gray, scaleOverlayAlpha(qAlpha(color)));
-      ++sourcePixel;
-    }
-    ++sourceRowIter;
-  }
+  pixelTransform(overlay, source, [palette](const PixelIndex pixel) {
+    const QRgb color = palette[pixel];
+    const int gray = qGray(color);
+    return qRgba(gray, gray, gray, scaleOverlayAlpha(qAlpha(color)));
+  });
 }
 
 void grayToOverlay(Surface<PixelRgba> overlay, CSurface<PixelGray> source) {
-  auto sourceRowIter = source.range().begin();
-  for (auto row : overlay.range()) {
-    const PixelGray *sourcePixel = (*sourceRowIter).begin();
-    for (PixelRgba &pixel : row) {
-      const int gray = *sourcePixel;
-      pixel = qRgba(0, 0, scaleOverlayGray(gray), scaleOverlayAlpha(255));
-      ++sourcePixel;
-    }
-    ++sourceRowIter;
-  }
+  pixelTransform(overlay, source, [](const PixelGray pixel) {
+    const int gray = FormatGray::toGray(pixel);
+    const int alpha = FormatGray::toAlpha(pixel);
+    return qRgba(0, 0, scaleOverlayGray(gray), scaleOverlayAlpha(alpha));
+  });
 }
 
 }
@@ -230,17 +214,4 @@ void writeOverlay(
   assert(overlay.size() == mask.size());
   writeOverlay(palette, format, overlay, source);
   maskClip(makeSurface<PixelRgba>(overlay), makeCSurface<PixelMask>(mask));
-}
-
-QImage grayToMono(const QImage &src) {
-  // @TODO libpng
-  // This is sooooooo inefficient
-  assert(src.format() == qimageFormat(Format::gray));
-  QImage dst{src.size(), QImage::Format_Mono};
-  for (int y = 0; y != dst.height(); ++y) {
-    for (int x = 0; x != dst.width(); ++x) {
-      dst.setPixel(x, y, static_cast<uint8_t>(src.pixel(x, y)) < 128 ? 0 : 1);
-    }
-  }
-  return dst;
 }
