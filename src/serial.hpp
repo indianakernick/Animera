@@ -9,6 +9,7 @@
 #ifndef serial_hpp
 #define serial_hpp
 
+#include "zlib.hpp"
 #include <QtCore/qiodevice.h>
 
 template <typename T>
@@ -31,5 +32,70 @@ T deserializeBytesAs(QIODevice *dev) {
   deserializeBytes(dev, data);
   return data;
 }
+
+class ChunkWriter {
+public:
+  explicit ChunkWriter(QIODevice &dev)
+    : dev{dev} {}
+
+  void begin(const uint32_t len, const char *header) {
+    startPos = -1;
+    writeToDev(&len);
+    crc = crc32(0, nullptr, 0);
+    writeToDev(header, 4);
+    updateCRC(header, 4);
+  }
+  
+  void begin(const char *header) {
+    assert(!dev.isSequential());
+    startPos = dev.pos();
+    const uint32_t placeholder = 0;
+    writeToDev(&placeholder);
+    crc = crc32(0, nullptr, 0);
+    writeToDev(header, 4);
+    updateCRC(header, 4);
+  }
+  
+  template <typename T>
+  std::enable_if_t<std::is_trivially_copyable_v<T> && !std::is_pointer_v<T>>
+  write(const T &dat, const uint32_t len = sizeof(T)) {
+    writeToDev(&dat, len);
+    updateCRC(&dat, len);
+  }
+  
+  template <typename Char>
+  std::enable_if_t<std::is_integral_v<Char> && sizeof(Char) == 1>
+  write(const Char *dat, const uint32_t len) {
+    writeToDev(dat, len);
+    updateCRC(dat, len);
+  }
+  
+  void end() {
+    if (startPos != -1) {
+      const qint64 currPos = dev.pos();
+      const uint32_t dataLen = static_cast<uint32_t>(currPos - (startPos + 4));
+      dev.seek(startPos);
+      writeToDev(&dataLen);
+      dev.seek(currPos);
+    }
+    const uint32_t crc4 = static_cast<uint32_t>(crc);
+    writeToDev(&crc4);
+  }
+
+private:
+  QIODevice &dev;
+  uLong crc;
+  qint64 startPos;
+  
+  template <typename T>
+  void writeToDev(const T *dat, const uint32_t len = sizeof(T)) {
+    dev.write(reinterpret_cast<const char *>(dat), len);
+  }
+  
+  template <typename T>
+  void updateCRC(const T *dat, const uint32_t len = sizeof(T)) {
+    crc = crc32(crc, reinterpret_cast<const Bytef *>(dat), len);
+  }
+};
 
 #endif

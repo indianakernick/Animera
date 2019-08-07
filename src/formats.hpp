@@ -15,6 +15,22 @@
 struct FormatARGB {
   using Pixel = QRgb;
 
+  static constexpr int toRed(const Pixel pixel) {
+    return qRed(pixel);
+  }
+  
+  static constexpr int toGreen(const Pixel pixel) {
+    return qGreen(pixel);
+  }
+  
+  static constexpr int toBlue(const Pixel pixel) {
+    return qBlue(pixel);
+  }
+  
+  static constexpr int toAlpha(const Pixel pixel) {
+    return qAlpha(pixel);
+  }
+
   static constexpr Color toColor(const Pixel pixel) {
     return {
       static_cast<uint8_t>(qRed(pixel)),
@@ -30,36 +46,36 @@ struct FormatARGB {
 };
 
 struct FormatPalette {
-  const QRgb *data;
+  const FormatARGB::Pixel *data;
   
   using Pixel = uint8_t;
   
   Color toColor(const uint8_t pixel) const {
     assert(data);
-    return FormatARGB{}.toColor(data[pixel]);
+    return FormatARGB::toColor(data[pixel]);
   }
 };
 
 struct FormatGray {
   using Pixel = uint16_t;
 
-  static constexpr int toGray(const uint16_t pixel) {
+  static constexpr int toGray(const Pixel pixel) {
     return pixel & 0xFF;
   }
-  static constexpr int toAlpha(const uint16_t pixel) {
+  static constexpr int toAlpha(const Pixel pixel) {
     return pixel >> 8;
   }
-  static constexpr uint16_t toPixel(const int gray, const int alpha) {
+  static constexpr Pixel toPixel(const int gray, const int alpha) {
     return (gray & 0xFF) | (alpha << 8);
   }
 
-  static constexpr Color toColor(const uint16_t pixel) {
+  static constexpr Color toColor(const Pixel pixel) {
     const uint8_t gray = toGray(pixel);
     const uint8_t alpha = toAlpha(pixel);
     return {gray, gray, gray, alpha};
   }
   
-  static constexpr uint16_t toPixel(const Color color) {
+  static constexpr Pixel toPixel(const Color color) {
     return toPixel(color.r, color.a);
   }
 };

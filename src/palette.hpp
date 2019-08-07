@@ -11,12 +11,11 @@
 
 #include <span>
 #include <array>
+#include "png.hpp"
 #include "image.hpp"
 #include "config.hpp"
 #include <QtGui/qrgb.h>
 #include <QtCore/qobject.h>
-
-class QIODevice;
 
 using PaletteColors = std::array<QRgb, pal_colors>;
 using PaletteSpan = std::span<QRgb>;
@@ -27,7 +26,7 @@ class Palette final : public QObject {
 
 public:
   void initDefault();
-  void serialize(QIODevice *) const;
+  void serialize(QIODevice &) const;
   void deserialize(QIODevice *);
 
   PaletteCSpan getPalette() const;

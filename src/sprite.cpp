@@ -8,17 +8,11 @@
 
 #include "sprite.hpp"
 
+#include "png.hpp"
 #include "config.hpp"
 #include "serial.hpp"
 #include <QtCore/qfile.h>
 #include "export options.hpp"
-
-namespace {
-
-// @TODO libpng
-constexpr char const magic_number[] = {'P', 'I', 'X', '2'};
-
-}
 
 void Sprite::newFile(const Format newFormat, const QSize newSize) {
   format = newFormat;
@@ -30,20 +24,110 @@ void Sprite::newFile(const Format newFormat, const QSize newSize) {
   timeline.initDefault();
 }
 
-void Sprite::saveFile(const QString &path) const {
-  QFile file{path};
-  if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-    throw std::exception{};
+namespace {
+
+constexpr char magic_number[] = {'P', 'I', 'X', '2'};
+constexpr char signature[8] = "animera";
+
+int getColorType(const Format format) {
+  switch (format) {
+    case Format::rgba:  return PNG_COLOR_TYPE_RGBA;
+    case Format::index: return PNG_COLOR_TYPE_PALETTE;
+    case Format::gray:  return PNG_COLOR_TYPE_GRAY_ALPHA;
+    default: Q_UNREACHABLE();
   }
-  file.write(magic_number, sizeof(magic_number));
-  serializeBytes(&file, format);
-  serializeBytes(&file, static_cast<uint16_t>(size.width()));
-  serializeBytes(&file, static_cast<uint16_t>(size.height()));
-  palette.serialize(&file);
-  timeline.serialize(&file);
 }
 
-void Sprite::openFile(const QString &path) {
+/*
+
+AHDR
+animation header
+ - width
+ - height
+ - number of layers
+ - number of frames
+ - maybe delay
+ - format
+
+PLTE
+palette
+ - 256 colors
+
+LHDR
+layer header
+ - number of spans in the layer
+ - byte visibility
+ - null-terminated ascii string name
+
+CHDR
+cell header
+ - length of span
+ - x coord
+ - y coord
+ - width
+ - height
+ - has data
+
+CDAT
+cell data
+ - compressed image data
+ 
+AEND
+animation end
+*/
+
+}
+
+std::optional<QString> Sprite::saveFile(const QString &path) const {
+  QFile file{path};
+  if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+    return "Failed to open file for writing";
+  }
+  file.write(signature, 8);
+  timeline.serializeHead(file);
+  palette.serialize(file);
+  timeline.serializeBody(file);
+  timeline.serializeTail(file);
+  return std::nullopt;
+  /*png_structp png = png_create_write_struct(
+    PNG_LIBPNG_VER_STRING, nullptr, &pngError, &pngWarning
+  );
+  if (!png) {
+    // does this only happen when malloc returns nullptr?
+    return "Failed to initialize png write struct";
+  }
+  png_infop info = png_create_info_struct(png);
+  if (!info) {
+    png_destroy_write_struct(&png, nullptr);
+    return "Failed to initialize png info struct";
+  }
+  if (setjmp(png_jmpbuf(png))) {
+    png_destroy_write_struct(&png, &info);
+    return pngErrorMsg;
+  }
+  QFile file{path};
+  if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+    return "Failed to open file for writing";
+  }
+  png_set_write_fn(png, &file, &pngWrite, &pngFlush);
+  png_set_IHDR(
+    png,
+    info,
+    size.width(),
+    size.height(),
+    8,
+    getColorType(format),
+    PNG_INTERLACE_NONE,
+    PNG_COMPRESSION_TYPE_DEFAULT,
+    PNG_FILTER_TYPE_DEFAULT
+  );
+  palette.serialize(png, info);
+  timeline.serialize(png, info);
+  png_destroy_write_struct(&png, &info);
+  return std::nullopt;*/
+}
+
+std::optional<QString> Sprite::openFile(const QString &path) {
   QFile file{path};
   if (!file.open(QIODevice::ReadOnly)) {
     throw std::exception{};
@@ -63,6 +147,7 @@ void Sprite::openFile(const QString &path) {
   timeline.initCanvas(format, size);
   palette.deserialize(&file);
   timeline.deserialize(&file);
+  return std::nullopt;
 }
 
 void Sprite::exportSprite(const ExportOptions &options) const {

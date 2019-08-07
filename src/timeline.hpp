@@ -10,9 +10,30 @@
 #define timeline_hpp
 
 #include <span>
+#include "png.hpp"
 #include "palette.hpp"
 #include "cell span.hpp"
 #include "export options.hpp"
+
+// @TODO can we make the interface of Timeline smaller?
+
+/*
+
+struct LayerData {
+  LayerCells spans;
+  std::string name;
+  bool visible;
+};
+
+class Layer {
+public:
+  // signals and slots
+ 
+private:
+  LayerData *data;
+};
+
+*/
 
 class Timeline final : public QObject {
   Q_OBJECT
@@ -20,8 +41,19 @@ class Timeline final : public QObject {
 public:
   Timeline();
 
+private:
+  struct Layer;
+
+  static void writeLHDR(QIODevice &, const Layer &);
+  static void writeCHDR(QIODevice &, const CellSpan &);
+  static void writeCDAT(QIODevice &, const QImage &, Format);
+
+public:
+
   void initDefault();
-  void serialize(QIODevice *) const;
+  void serializeHead(QIODevice &) const;
+  void serializeBody(QIODevice &) const;
+  void serializeTail(QIODevice &) const;
   void deserialize(QIODevice *);
 
 private:

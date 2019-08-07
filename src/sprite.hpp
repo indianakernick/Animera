@@ -20,8 +20,8 @@ class Sprite final : public QObject {
 
 public Q_SLOTS:
   void newFile(Format, QSize);
-  void saveFile(const QString &) const;
-  void openFile(const QString &);
+  std::optional<QString> saveFile(const QString &) const;
+  std::optional<QString> openFile(const QString &);
   void exportSprite(const ExportOptions &) const;
   
 Q_SIGNALS:

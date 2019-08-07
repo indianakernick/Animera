@@ -14,6 +14,8 @@
 #include "cell span.hpp"
 #include "composite.hpp"
 #include <QtCore/qdir.h>
+#include <QtCore/qbuffer.h>
+#include <QtCore/qendian.h>
 #include "export pattern.hpp"
 #include "surface factory.hpp"
 
@@ -43,36 +45,164 @@ void Timeline::initDefault() {
 
 namespace {
 
-void serializeImage(QIODevice *dev, const QImage &image) {
-  assert(dev);
-  assert(!image.isNull());
-  image.save(dev, "png");
-}
-
 void deserializeImage(QIODevice *dev, QImage &image) {
   assert(dev);
   image.load(dev, "png");
 }
 
+struct Chunk_AHDR {
+  uint32_t width;
+  uint32_t height;
+  uint32_t layers;
+  uint32_t frames;
+  uint32_t delay;
+  uint8_t format;
+};
+
+struct Chunk_CHDR {
+  uint32_t length;
+  uint32_t x;
+  uint32_t y;
+  uint32_t width;
+  uint32_t height;
+  uint8_t notNull;
+};
+
+uint8_t formatByte(const Format format) {
+  switch (format) {
+    case Format::rgba:
+      return 4;
+    case Format::index:
+      return 1;
+    case Format::gray:
+      return 2;
+  }
 }
 
-void Timeline::serialize(QIODevice *dev) const {
-  assert(dev);
-  serializeBytes(dev, static_cast<uint16_t>(layers.size()));
-  serializeBytes(dev, static_cast<uint16_t>(frameCount));
+}
+
+void Timeline::writeLHDR(QIODevice &dev, const Layer &layer) {
+  ChunkWriter writer{dev};
+  writer.begin(4 + 1 + static_cast<uint32_t>(layer.name.size()) + 1, "LHDR");
+  writer.write(static_cast<uint32_t>(layer.spans.size()));
+  writer.write(uint8_t{layer.visible});
+  writer.write(layer.name.data(), static_cast<uint32_t>(layer.name.size()));
+  writer.write(uint8_t{0});
+  writer.end();
+}
+
+void Timeline::writeCHDR(QIODevice &dev, const CellSpan &span) {
+  Chunk_CHDR chdr;
+  chdr.length = static_cast<uint32_t>(span.len);
+  if (span.cell) {
+    chdr.x = 0;
+    chdr.y = 0;
+    chdr.width = span.cell->image.width();
+    chdr.height = span.cell->image.height();
+    chdr.notNull = 1;
+  } else {
+    chdr.x = chdr.y = chdr.width = chdr.height = 0;
+    chdr.notNull = 0;
+  }
+  
+  ChunkWriter writer{dev};
+  writer.begin(sizeof(Chunk_CHDR), "CHDR");
+  writer.write(chdr);
+  writer.end();
+}
+
+namespace {
+
+std::optional<QString> initStream(z_streamp stream) {
+  stream->zalloc = nullptr;
+  stream->zfree = nullptr;
+  switch (deflateInit(stream, 7)) {
+    case Z_OK:
+      break;
+    default: assert(false); // @TODO
+  }
+  return std::nullopt;
+}
+
+}
+
+void Timeline::writeCDAT(QIODevice &dev, const QImage &image, Format) {
+  assert(!image.isNull());
+  const uint32_t outBuffSize = 1 << 16;
+  std::vector<Bytef> outBuff(outBuffSize);
+  const uint32_t inBuffSize = image.bytesPerLine();
+  
+  z_stream stream;
+  initStream(&stream);
+  stream.avail_in = 0;
+  stream.next_out = outBuff.data();
+  stream.avail_out = outBuffSize;
+  
+  int rowIdx = -1;
+  int ret;
+  
+  ChunkWriter writer{dev};
+  writer.begin("CDAT");
+  do {
+    if (stream.avail_in == 0) {
+      ++rowIdx;
+      if (rowIdx < image.height()) {
+        // @TODO what assumptions are we making here? Is this safe?
+        stream.next_in = image.scanLine(rowIdx);
+        stream.avail_in = inBuffSize;
+      }
+    }
+    if (stream.avail_out == 0) {
+      writer.write(outBuff.data(), outBuffSize);
+      stream.next_out = outBuff.data();
+      stream.avail_out = outBuffSize;
+    }
+    ret = deflate(&stream, stream.avail_in ? Z_NO_FLUSH : Z_FINISH);
+  } while (ret == Z_OK);
+  assert(ret == Z_STREAM_END);
+  
+  if (stream.avail_out < outBuffSize) {
+    writer.write(outBuff.data(), outBuffSize - stream.avail_out);
+  }
+  
+  ret = deflateEnd(&stream);
+  assert(ret == Z_OK);
+  
+  writer.end();
+}
+
+void Timeline::serializeHead(QIODevice &dev) const {
+  Chunk_AHDR ahdr;
+  ahdr.width = canvasSize.width();
+  ahdr.height = canvasSize.height();
+  ahdr.layers = static_cast<uint32_t>(layerCount());
+  ahdr.frames = static_cast<uint32_t>(frameCount);
+  ahdr.delay = 100;
+  ahdr.format = formatByte(canvasFormat);
+  
+  ChunkWriter writer{dev};
+  writer.begin(sizeof(Chunk_AHDR), "AHDR");
+  writer.write(ahdr);
+  writer.end();
+}
+
+void Timeline::serializeBody(QIODevice &dev) const {
+  ChunkWriter writer{dev};
   for (const Layer &layer : layers) {
-    serializeBytes(dev, layer.visible);
-    serializeBytes(dev, static_cast<uint16_t>(layer.name.size()));
-    dev->write(layer.name.data(), layer.name.size());
-    serializeBytes(dev, static_cast<uint16_t>(layer.spans.size()));
+    writeLHDR(dev, layer);
     for (const CellSpan &span : layer.spans) {
-      serializeBytes(dev, static_cast<uint16_t>(span.len));
-      serializeBytes(dev, static_cast<bool>(span.cell));
+      writeCHDR(dev, span);
       if (span.cell) {
-        serializeImage(dev, span.cell->image);
+        writeCDAT(dev, span.cell->image, canvasFormat);
       }
     }
   }
+}
+
+void Timeline::serializeTail(QIODevice &dev) const {
+  ChunkWriter writer{dev};
+  writer.begin(0, "AEND");
+  writer.end();
 }
 
 void Timeline::deserialize(QIODevice *dev) {
