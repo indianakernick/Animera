@@ -50,24 +50,6 @@ void deserializeImage(QIODevice *dev, QImage &image) {
   image.load(dev, "png");
 }
 
-struct Chunk_AHDR {
-  uint32_t width;
-  uint32_t height;
-  uint32_t layers;
-  uint32_t frames;
-  uint32_t delay;
-  uint8_t format;
-};
-
-struct Chunk_CHDR {
-  uint32_t length;
-  uint32_t x;
-  uint32_t y;
-  uint32_t width;
-  uint32_t height;
-  uint8_t notNull;
-};
-
 uint8_t formatByte(const Format format) {
   switch (format) {
     case Format::rgba:
@@ -83,31 +65,32 @@ uint8_t formatByte(const Format format) {
 
 void Timeline::writeLHDR(QIODevice &dev, const Layer &layer) {
   ChunkWriter writer{dev};
-  writer.begin(4 + 1 + static_cast<uint32_t>(layer.name.size()) + 1, "LHDR");
-  writer.write(static_cast<uint32_t>(layer.spans.size()));
-  writer.write(uint8_t{layer.visible});
-  writer.write(layer.name.data(), static_cast<uint32_t>(layer.name.size()));
-  writer.write(uint8_t{0});
+  const uint32_t len = static_cast<uint32_t>(layer.name.size());
+  writer.begin(4 + 1 + len + 1, "LHDR");
+  writer.writeInt(len);
+  writer.writeByte(layer.visible);
+  writer.writeString(layer.name.data(), len);
+  writer.writeByte(0);
   writer.end();
 }
 
 void Timeline::writeCHDR(QIODevice &dev, const CellSpan &span) {
-  Chunk_CHDR chdr;
-  chdr.length = static_cast<uint32_t>(span.len);
-  if (span.cell) {
-    chdr.x = 0;
-    chdr.y = 0;
-    chdr.width = span.cell->image.width();
-    chdr.height = span.cell->image.height();
-    chdr.notNull = 1;
-  } else {
-    chdr.x = chdr.y = chdr.width = chdr.height = 0;
-    chdr.notNull = 0;
-  }
-  
   ChunkWriter writer{dev};
-  writer.begin(sizeof(Chunk_CHDR), "CHDR");
-  writer.write(chdr);
+  writer.begin(4 * 4 + 1, "CHDR");
+  writer.writeInt(static_cast<uint32_t>(span.len));
+  if (span.cell) {
+    writer.writeInt(0); // x
+    writer.writeInt(0); // y
+    writer.writeInt(span.cell->image.width());
+    writer.writeInt(span.cell->image.height());
+    writer.writeByte(1); // has CDAT chunk
+  } else {
+    writer.writeInt(0); // x
+    writer.writeInt(0); // y
+    writer.writeInt(0); // width
+    writer.writeInt(0); // height
+    writer.writeByte(0); // no CDAT chunk
+  }
   writer.end();
 }
 
@@ -126,11 +109,12 @@ std::optional<QString> initStream(z_streamp stream) {
 
 }
 
-void Timeline::writeCDAT(QIODevice &dev, const QImage &image, Format) {
+void Timeline::writeCDAT(QIODevice &dev, const QImage &image, const Format format) {
   assert(!image.isNull());
   const uint32_t outBuffSize = 1 << 16;
   std::vector<Bytef> outBuff(outBuffSize);
   const uint32_t inBuffSize = image.bytesPerLine();
+  std::vector<Bytef> inBuff(inBuffSize);
   
   z_stream stream;
   initStream(&stream);
@@ -153,7 +137,7 @@ void Timeline::writeCDAT(QIODevice &dev, const QImage &image, Format) {
       }
     }
     if (stream.avail_out == 0) {
-      writer.write(outBuff.data(), outBuffSize);
+      writer.writeString(outBuff.data(), outBuffSize);
       stream.next_out = outBuff.data();
       stream.avail_out = outBuffSize;
     }
@@ -162,7 +146,7 @@ void Timeline::writeCDAT(QIODevice &dev, const QImage &image, Format) {
   assert(ret == Z_STREAM_END);
   
   if (stream.avail_out < outBuffSize) {
-    writer.write(outBuff.data(), outBuffSize - stream.avail_out);
+    writer.writeString(outBuff.data(), outBuffSize - stream.avail_out);
   }
   
   ret = deflateEnd(&stream);
@@ -172,17 +156,14 @@ void Timeline::writeCDAT(QIODevice &dev, const QImage &image, Format) {
 }
 
 void Timeline::serializeHead(QIODevice &dev) const {
-  Chunk_AHDR ahdr;
-  ahdr.width = canvasSize.width();
-  ahdr.height = canvasSize.height();
-  ahdr.layers = static_cast<uint32_t>(layerCount());
-  ahdr.frames = static_cast<uint32_t>(frameCount);
-  ahdr.delay = 100;
-  ahdr.format = formatByte(canvasFormat);
-  
   ChunkWriter writer{dev};
-  writer.begin(sizeof(Chunk_AHDR), "AHDR");
-  writer.write(ahdr);
+  writer.begin(5 * 4 + 1, "AHDR");
+  writer.writeInt(canvasSize.width());
+  writer.writeInt(canvasSize.height());
+  writer.writeInt(static_cast<uint32_t>(layerCount()));
+  writer.writeInt(static_cast<uint32_t>(frameCount));
+  writer.writeInt(100); // delay
+  writer.writeByte(formatByte(canvasFormat));
   writer.end();
 }
 

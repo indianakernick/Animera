@@ -146,49 +146,27 @@ void read_PLTE_tRNS(png_structp png, png_infop info, PaletteSpan colors) {
   for (size_t i = plteSize; i != pal_colors; ++i) {
     colors[i] = 0;
   }
-}
-
-void writeRgba_apLT(png_structp png, png_infop info, PaletteCSpan colors) {
-  Color aplt[pal_colors];
-  std::transform(colors.cbegin(), colors.cend(), std::begin(aplt), &FormatARGB::toColor);
-  setUnknownChunk(png, info, "apLT", std::span{aplt});
-}
-
-void writeGray_apLT(png_structp png, png_infop info, PaletteCSpan colors) {
-  struct {
-    uint8_t gray;
-    uint8_t alpha;
-  } aplt[pal_colors];
-  for (size_t i = 0; i != pal_colors; ++i) {
-    aplt[i].gray = FormatGray::toGray(colors[i]);
-    aplt[i].alpha = FormatGray::toAlpha(colors[i]);
-  }
-  setUnknownChunk(png, info, "apLT", std::span{aplt});
 }*/
 
 void writeRgba(QIODevice &dev, const PaletteCSpan colors) {
   ChunkWriter writer{dev};
-  writer.begin(pal_colors * sizeof(Color), "PLTE");
+  writer.begin(pal_colors * 4, "PLTE");
   for (const QRgb pixel : colors) {
     const Color color = FormatARGB::toColor(pixel);
-    writer.write(color);
+    writer.writeByte(color.r);
+    writer.writeByte(color.g);
+    writer.writeByte(color.b);
+    writer.writeByte(color.a);
   }
   writer.end();
 }
 
 void writeGray(QIODevice &dev, const PaletteCSpan colors) {
-  struct GrayAlpha {
-    uint8_t gray;
-    uint8_t alpha;
-  };
-  
   ChunkWriter writer{dev};
-  writer.begin(pal_colors * sizeof(GrayAlpha), "PLTE");
+  writer.begin(pal_colors * 2, "PLTE");
   for (const QRgb pixel : colors) {
-    GrayAlpha color;
-    color.gray = FormatGray::toGray(pixel);
-    color.alpha = FormatGray::toAlpha(pixel);
-    writer.write(color);
+    writer.writeByte(FormatGray::toGray(pixel));
+    writer.writeByte(FormatGray::toAlpha(pixel));
   };
   writer.end();
 }
@@ -206,13 +184,6 @@ void Palette::serialize(QIODevice &dev) const {
 }
 
 void Palette::deserialize(QIODevice *dev) {
-  /*if (canvasFormat == Format::index) {
-    read_PLTE_tRNS(png, info, colors);
-  } else {
-    // apLT
-    // animation palette
-  }
-  Q_EMIT paletteChanged({colors.data(), pal_colors});*/
   assert(dev);
   dev->read(
     reinterpret_cast<char *>(colors.data()),

@@ -10,6 +10,7 @@
 #define serial_hpp
 
 #include "zlib.hpp"
+#include <QtCore/qendian.h>
 #include <QtCore/qiodevice.h>
 
 template <typename T>
@@ -56,16 +57,20 @@ public:
     updateCRC(header, 4);
   }
   
-  template <typename T>
-  std::enable_if_t<std::is_trivially_copyable_v<T> && !std::is_pointer_v<T>>
-  write(const T &dat, const uint32_t len = sizeof(T)) {
-    writeToDev(&dat, len);
-    updateCRC(&dat, len);
+  void writeByte(const uint8_t byte) {
+    writeToDev(&byte);
+    updateCRC(&byte);
+  }
+  
+  void writeInt(uint32_t num) {
+    num = qToBigEndian(num);
+    writeToDev(&num);
+    updateCRC(&num);
   }
   
   template <typename Char>
-  std::enable_if_t<std::is_integral_v<Char> && sizeof(Char) == 1>
-  write(const Char *dat, const uint32_t len) {
+  std::enable_if_t<sizeof(Char) == 1 && std::is_integral_v<Char>>
+  writeString(const Char *dat, const uint32_t len) {
     writeToDev(dat, len);
     updateCRC(dat, len);
   }
