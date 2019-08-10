@@ -198,21 +198,11 @@ void writeGray(QIODevice &dev, const PaletteCSpan colors) {
 void Palette::serialize(QIODevice &dev) const {
   switch (canvasFormat) {
     case Format::rgba:
-      return;
     case Format::index:
       return writeRgba(dev, colors);
     case Format::gray:
       return writeGray(dev, colors);
   }
-  
-  /*assert(png);
-  assert(info);
-  switch (canvasFormat) {
-    case Format::rgba:  return writeRgba_apLT(png, info, colors);
-    case Format::index: return write_PLTE_tRNS(png, info, colors);
-    case Format::gray:  return writeGray_apLT(png, info, colors);
-    default: Q_UNREACHABLE();
-  }*/
 }
 
 void Palette::deserialize(QIODevice *dev) {

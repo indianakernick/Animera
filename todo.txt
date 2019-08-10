@@ -55,3 +55,9 @@ Palette import and export
 
 remove layer button appears when hovering layer name
   would this be more intuitive than a button that removes the current layer?
+
+there might be a few random constants that should be in config.hpp but aren't
+
+should I make a post to r/gamedev?
+  they might be interested in this
+  could be a good place to get feedback
