@@ -148,11 +148,21 @@ void read_PLTE_tRNS(png_structp png, png_infop info, PaletteSpan colors) {
   }
 }*/
 
+size_t getUsedSize(const PaletteCSpan colors) {
+  for (size_t i = static_cast<size_t>(colors.size()); i != 0; --i) {
+    if (colors[i - 1] != 0) {
+      return i;
+    }
+  }
+  return 0;
+}
+
 void writeRgba(QIODevice &dev, const PaletteCSpan colors) {
+  const size_t used = getUsedSize(colors);
   ChunkWriter writer{dev};
-  writer.begin(pal_colors * 4, "PLTE");
-  for (const QRgb pixel : colors) {
-    const Color color = FormatARGB::toColor(pixel);
+  writer.begin(static_cast<uint32_t>(used) * 4, "PLTE");
+  for (size_t i = 0; i != used; ++i) {
+    const Color color = FormatARGB::toColor(colors[i]);
     writer.writeByte(color.r);
     writer.writeByte(color.g);
     writer.writeByte(color.b);
@@ -162,11 +172,13 @@ void writeRgba(QIODevice &dev, const PaletteCSpan colors) {
 }
 
 void writeGray(QIODevice &dev, const PaletteCSpan colors) {
+  const size_t used = getUsedSize(colors);
   ChunkWriter writer{dev};
-  writer.begin(pal_colors * 2, "PLTE");
-  for (const QRgb pixel : colors) {
-    writer.writeByte(FormatGray::toGray(pixel));
-    writer.writeByte(FormatGray::toAlpha(pixel));
+  writer.begin(static_cast<uint32_t>(used) * 2, "PLTE");
+  for (size_t i = 0; i != used; ++i) {
+    const Color color = FormatGray::toColor(colors[i]);
+    writer.writeByte(color.r);
+    writer.writeByte(color.a);
   };
   writer.end();
 }

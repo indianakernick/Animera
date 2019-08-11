@@ -41,20 +41,13 @@ public:
 
   void begin(const uint32_t len, const char *header) {
     startPos = -1;
-    writeToDev(&len);
-    crc = crc32(0, nullptr, 0);
-    writeToDev(header, 4);
-    updateCRC(header, 4);
+    writeHeader(len, header);
   }
   
   void begin(const char *header) {
     assert(!dev.isSequential());
     startPos = dev.pos();
-    const uint32_t placeholder = 0;
-    writeToDev(&placeholder);
-    crc = crc32(0, nullptr, 0);
-    writeToDev(header, 4);
-    updateCRC(header, 4);
+    writeHeader(0, header);
   }
   
   void writeByte(const uint8_t byte) {
@@ -80,17 +73,22 @@ public:
       const qint64 currPos = dev.pos();
       const uint32_t dataLen = static_cast<uint32_t>(currPos - (startPos + 4));
       dev.seek(startPos);
-      writeToDev(&dataLen);
+      writeInt(dataLen);
       dev.seek(currPos);
     }
-    const uint32_t crc4 = static_cast<uint32_t>(crc);
-    writeToDev(&crc4);
+    writeInt(static_cast<uint32_t>(crc));
   }
 
 private:
   QIODevice &dev;
   uLong crc;
   qint64 startPos;
+  
+  void writeHeader(const uint32_t len, const char *header) {
+    writeInt(len);
+    crc = crc32(0, nullptr, 0);
+    writeString(header, 4);
+  }
   
   template <typename T>
   void writeToDev(const T *dat, const uint32_t len = sizeof(T)) {
