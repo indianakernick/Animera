@@ -110,7 +110,7 @@ void byteOrderCopy(uchar *dst, const uchar *src, const size_t size, const Format
   switch (format) {
     case Format::rgba: {
       auto *srcPx = reinterpret_cast<const FormatARGB::Pixel *>(src);
-      Bytef *dstEnd = dst + size;
+      uchar *dstEnd = dst + size;
       while (dst != dstEnd) {
         const Color color = FormatARGB::toColor(*srcPx);
         dst[0] = color.r;
@@ -128,7 +128,7 @@ void byteOrderCopy(uchar *dst, const uchar *src, const size_t size, const Format
       break;
     case Format::gray: {
       auto *srcPx = reinterpret_cast<const FormatGray::Pixel *>(src);
-      Bytef *dstEnd = dst + size;
+      uchar *dstEnd = dst + size;
       while (dst != dstEnd) {
         const Color color = FormatGray::toColor(*srcPx);
         dst[0] = color.r;
