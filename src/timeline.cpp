@@ -50,7 +50,7 @@ void deserializeImage(QIODevice *dev, QImage &image) {
   image.load(dev, "png");
 }
 
-uint8_t formatByte(const Format format) {
+constexpr int byteDepth(const Format format) {
   switch (format) {
     case Format::rgba:
       return 4;
@@ -59,6 +59,10 @@ uint8_t formatByte(const Format format) {
     case Format::gray:
       return 2;
   }
+}
+
+uint8_t formatByte(const Format format) {
+  return byteDepth(format);
 }
 
 }
@@ -76,20 +80,18 @@ void Timeline::writeLHDR(QIODevice &dev, const Layer &layer) {
 
 void Timeline::writeCHDR(QIODevice &dev, const CellSpan &span) {
   ChunkWriter writer{dev};
-  writer.begin(4 * 4 + 1, "CHDR");
+  writer.begin(4 * 4, "CHDR");
   writer.writeInt(static_cast<uint32_t>(span.len));
   if (span.cell) {
     writer.writeInt(0); // x
     writer.writeInt(0); // y
     writer.writeInt(span.cell->image.width());
     writer.writeInt(span.cell->image.height());
-    writer.writeByte(1); // has CDAT chunk
   } else {
     writer.writeInt(0); // x
     writer.writeInt(0); // y
     writer.writeInt(0); // width
     writer.writeInt(0); // height
-    writer.writeByte(0); // no CDAT chunk
   }
   writer.end();
 }
@@ -145,8 +147,12 @@ void Timeline::writeCDAT(QIODevice &dev, const QImage &image, const Format forma
   assert(!image.isNull());
   const uint32_t outBuffSize = 1 << 16;
   std::vector<Bytef> outBuff(outBuffSize);
-  const uint32_t inBuffSize = image.bytesPerLine();
+  const uint32_t inBuffSize = image.width() * byteDepth(format);
   std::vector<Bytef> inBuff(inBuffSize);
+  
+  // @TODO avoid overflowing uint32_t
+  // might need to reduce maximum image size
+  // or split the image data into multiple chunks
   
   z_stream stream;
   initStream(&stream);
@@ -159,6 +165,7 @@ void Timeline::writeCDAT(QIODevice &dev, const QImage &image, const Format forma
   
   ChunkWriter writer{dev};
   writer.begin("CDAT");
+  
   do {
     if (stream.avail_in == 0) {
       ++rowIdx;
@@ -181,10 +188,10 @@ void Timeline::writeCDAT(QIODevice &dev, const QImage &image, const Format forma
     writer.writeString(outBuff.data(), outBuffSize - stream.avail_out);
   }
   
+  writer.end();
+  
   ret = deflateEnd(&stream);
   assert(ret == Z_OK);
-  
-  writer.end();
 }
 
 void Timeline::serializeHead(QIODevice &dev) const {
@@ -200,7 +207,6 @@ void Timeline::serializeHead(QIODevice &dev) const {
 }
 
 void Timeline::serializeBody(QIODevice &dev) const {
-  ChunkWriter writer{dev};
   for (const Layer &layer : layers) {
     writeLHDR(dev, layer);
     for (const CellSpan &span : layer.spans) {

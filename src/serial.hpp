@@ -71,7 +71,7 @@ public:
   void end() {
     if (startPos != -1) {
       const qint64 currPos = dev.pos();
-      const uint32_t dataLen = static_cast<uint32_t>(currPos - (startPos + 4));
+      const uint32_t dataLen = static_cast<uint32_t>(currPos - startPos - 8);
       dev.seek(startPos);
       writeInt(dataLen);
       dev.seek(currPos);
