@@ -134,7 +134,7 @@ void byteOrderCopy(uchar *dst, const uchar *src, const size_t size, const Format
         dst[0] = color.r;
         dst[1] = color.a;
         ++srcPx;
-        dst += 4;
+        dst += 2;
       }
       break;
     }
