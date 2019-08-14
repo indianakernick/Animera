@@ -70,9 +70,8 @@ uint8_t formatByte(const Format format) {
 void Timeline::writeLHDR(QIODevice &dev, const Layer &layer) {
   ChunkWriter writer{dev};
   const uint32_t nameLen = static_cast<uint32_t>(layer.name.size());
-  writer.begin(2 * 4 + 1 + nameLen, "LHDR");
+  writer.begin(4 + 1 + nameLen, "LHDR");
   writer.writeInt(static_cast<uint32_t>(layer.spans.size()));
-  writer.writeInt(nameLen);
   writer.writeByte(layer.visible);
   writer.writeString(layer.name.data(), nameLen);
   writer.end();
@@ -80,45 +79,36 @@ void Timeline::writeLHDR(QIODevice &dev, const Layer &layer) {
 
 void Timeline::writeCHDR(QIODevice &dev, const CellSpan &span) {
   ChunkWriter writer{dev};
-  writer.begin(4 * 4, "CHDR");
+  writer.begin("CHDR");
   writer.writeInt(static_cast<uint32_t>(span.len));
   if (span.cell) {
     writer.writeInt(0); // x
     writer.writeInt(0); // y
     writer.writeInt(span.cell->image.width());
     writer.writeInt(span.cell->image.height());
-  } else {
-    writer.writeInt(0); // x
-    writer.writeInt(0); // y
-    writer.writeInt(0); // width
-    writer.writeInt(0); // height
   }
   writer.end();
 }
 
 namespace {
 
-void initStream(z_streamp stream) {
-  stream->zalloc = nullptr;
-  stream->zfree = nullptr;
-  [[maybe_unused]] const int err = deflateInit(stream, Z_DEFAULT_COMPRESSION);
-  assert(err == Z_OK);
-  // The errors returned by deflateInit should never happen
-}
-
-void byteOrderCopy(uchar *dst, const uchar *src, const size_t size, const Format format) {
+void byteOrderCopy(
+  unsigned char *dst,
+  const unsigned char *src,
+  const size_t size,
+  const Format format
+) {
+  assert(size % byteDepth(format) == 0);
   switch (format) {
     case Format::rgba: {
       auto *srcPx = reinterpret_cast<const FormatARGB::Pixel *>(src);
-      uchar *dstEnd = dst + size;
+      unsigned char *dstEnd = dst + size;
       while (dst != dstEnd) {
-        const Color color = FormatARGB::toColor(*srcPx);
-        dst[0] = color.r;
-        dst[1] = color.g;
-        dst[2] = color.b;
-        dst[3] = color.a;
-        ++srcPx;
-        dst += 4;
+        const Color color = FormatARGB::toColor(*srcPx++);
+        *dst++ = color.r;
+        *dst++ = color.g;
+        *dst++ = color.b;
+        *dst++ = color.a;
       }
       break;
     }
@@ -128,13 +118,11 @@ void byteOrderCopy(uchar *dst, const uchar *src, const size_t size, const Format
       break;
     case Format::gray: {
       auto *srcPx = reinterpret_cast<const FormatGray::Pixel *>(src);
-      uchar *dstEnd = dst + size;
+      unsigned char *dstEnd = dst + size;
       while (dst != dstEnd) {
-        const Color color = FormatGray::toColor(*srcPx);
-        dst[0] = color.r;
-        dst[1] = color.a;
-        ++srcPx;
-        dst += 2;
+        const Color color = FormatGray::toColor(*srcPx++);
+        *dst++ = color.r;
+        *dst++ = color.a;
       }
       break;
     }
@@ -155,25 +143,27 @@ void Timeline::writeCDAT(QIODevice &dev, const QImage &image, const Format forma
   // or split the image data into multiple chunks
   
   z_stream stream;
-  initStream(&stream);
+  stream.zalloc = nullptr;
+  stream.zfree = nullptr;
+  [[maybe_unused]] const int err = deflateInit(&stream, Z_DEFAULT_COMPRESSION);
+  assert(err == Z_OK);
+  // The errors returned by deflateInit should never happen
   stream.avail_in = 0;
   stream.next_out = outBuff.data();
   stream.avail_out = outBuffSize;
   
-  int rowIdx = -1;
+  int rowIdx = 0;
   int ret;
   
   ChunkWriter writer{dev};
   writer.begin("CDAT");
   
   do {
-    if (stream.avail_in == 0) {
+    if (stream.avail_in == 0 && rowIdx < image.height()) {
+      byteOrderCopy(inBuff.data(), image.scanLine(rowIdx), inBuffSize, format);
+      stream.next_in = inBuff.data();
+      stream.avail_in = inBuffSize;
       ++rowIdx;
-      if (rowIdx < image.height()) {
-        byteOrderCopy(inBuff.data(), image.scanLine(rowIdx), inBuffSize, format);
-        stream.next_in = inBuff.data();
-        stream.avail_in = inBuffSize;
-      }
     }
     if (stream.avail_out == 0) {
       writer.writeString(outBuff.data(), outBuffSize);
