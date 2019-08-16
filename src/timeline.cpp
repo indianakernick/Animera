@@ -67,7 +67,7 @@ uint8_t formatByte(const Format format) {
 
 }
 
-std::optional<QString> Timeline::writeLHDR(QIODevice &dev, const Layer &layer) try {
+Error Timeline::writeLHDR(QIODevice &dev, const Layer &layer) try {
   ChunkWriter writer{dev};
   const uint32_t nameLen = static_cast<uint32_t>(layer.name.size());
   writer.begin(4 + 1 + nameLen, "LHDR");
@@ -75,12 +75,12 @@ std::optional<QString> Timeline::writeLHDR(QIODevice &dev, const Layer &layer) t
   writer.writeByte(layer.visible);
   writer.writeString(layer.name.data(), nameLen);
   writer.end();
-  return std::nullopt;
+  return {};
 } catch (FileIOError &e) {
   return e.what();
 }
 
-std::optional<QString> Timeline::writeCHDR(QIODevice &dev, const CellSpan &span) try {
+Error Timeline::writeCHDR(QIODevice &dev, const CellSpan &span) try {
   ChunkWriter writer{dev};
   writer.begin("CHDR");
   writer.writeInt(static_cast<uint32_t>(span.len));
@@ -91,7 +91,7 @@ std::optional<QString> Timeline::writeCHDR(QIODevice &dev, const CellSpan &span)
     writer.writeInt(span.cell->image.height());
   }
   writer.end();
-  return std::nullopt;
+  return {};
 } catch (FileIOError &e) {
   return e.what();
 }
@@ -137,7 +137,7 @@ void byteOrderCopy(
 
 }
 
-std::optional<QString> Timeline::writeCDAT(
+Error Timeline::writeCDAT(
   QIODevice &dev, const QImage &image, const Format format
 ) {
   assert(!image.isNull());
@@ -197,10 +197,10 @@ std::optional<QString> Timeline::writeCDAT(
   ret = deflateEnd(&stream);
   assert(ret == Z_OK);
   
-  return std::nullopt;
+  return {};
 }
 
-std::optional<QString> Timeline::serializeHead(QIODevice &dev) const try {
+Error Timeline::serializeHead(QIODevice &dev) const try {
   ChunkWriter writer{dev};
   writer.begin(5 * 4 + 1, "AHDR");
   writer.writeInt(canvasSize.width());
@@ -210,29 +210,31 @@ std::optional<QString> Timeline::serializeHead(QIODevice &dev) const try {
   writer.writeInt(100); // delay
   writer.writeByte(formatByte(canvasFormat));
   writer.end();
-  return std::nullopt;
+  return {};
 } catch (FileIOError &e) {
   return e.what();
 }
 
-std::optional<QString> Timeline::serializeBody(QIODevice &dev) const {
+Error Timeline::serializeBody(QIODevice &dev) const {
   for (const Layer &layer : layers) {
-    if (auto err = writeLHDR(dev, layer); err) return err;
+    if (Error err = writeLHDR(dev, layer); err) return err;
     for (const CellSpan &span : layer.spans) {
-      if (auto err = writeCHDR(dev, span); err) return err;
+      if (Error err = writeCHDR(dev, span); err) return err;
       if (span.cell) {
-        if (auto err = writeCDAT(dev, span.cell->image, canvasFormat); err) return err;
+        if (Error err = writeCDAT(dev, span.cell->image, canvasFormat); err) {
+          return err;
+        }
       }
     }
   }
-  return std::nullopt;
+  return {};
 }
 
-std::optional<QString> Timeline::serializeTail(QIODevice &dev) const try {
+Error Timeline::serializeTail(QIODevice &dev) const try {
   ChunkWriter writer{dev};
   writer.begin(0, "AEND");
   writer.end();
-  return std::nullopt;
+  return {};
 } catch (FileIOError &e) {
   return e.what();
 }
@@ -290,10 +292,6 @@ CellRect Timeline::selectCells(const ExportOptions &options) const {
 }
 
 namespace {
-
-inline void assertEval([[maybe_unused]] const bool cond) noexcept {
-  assert(cond);
-}
 
 QImage grayToIndexed(const PaletteCSpan palette, QImage image) {
   assert(image.format() == QImage::Format_Grayscale8);

@@ -12,6 +12,7 @@
 #include <span>
 #include <array>
 #include "png.hpp"
+#include "error.hpp"
 #include "image.hpp"
 #include "config.hpp"
 #include <QtGui/qrgb.h>
@@ -26,7 +27,7 @@ class Palette final : public QObject {
 
 public:
   void initDefault();
-  std::optional<QString> serialize(QIODevice &) const;
+  Error serialize(QIODevice &) const;
   void deserialize(QIODevice *);
 
   PaletteCSpan getPalette() const;

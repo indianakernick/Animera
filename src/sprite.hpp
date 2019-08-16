@@ -9,6 +9,7 @@
 #ifndef sprite_hpp
 #define sprite_hpp
 
+#include "error.hpp"
 #include "palette.hpp"
 #include "timeline.hpp"
 #include <QtCore/qobject.h>
@@ -20,8 +21,8 @@ class Sprite final : public QObject {
 
 public Q_SLOTS:
   void newFile(Format, QSize);
-  std::optional<QString> saveFile(const QString &) const;
-  std::optional<QString> openFile(const QString &);
+  Error saveFile(const QString &) const;
+  Error openFile(const QString &);
   void exportSprite(const ExportOptions &) const;
   
 Q_SIGNALS:

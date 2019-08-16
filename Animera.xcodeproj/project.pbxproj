@@ -228,6 +228,7 @@
 		4595D49322C0B05000607D64 /* move.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = move.pbm; sourceTree = "<group>"; };
 		4595D49422C0B05000607D64 /* unlink.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = unlink.pbm; sourceTree = "<group>"; };
 		4595D49522C0B05000607D64 /* link.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = link.pbm; sourceTree = "<group>"; };
+		45A61039230775CE000A0BD6 /* error.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = error.hpp; sourceTree = "<group>"; };
 		45B284912218E38800D6D055 /* image.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = image.cpp; sourceTree = "<group>"; };
 		45B284922218E38800D6D055 /* image.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = image.hpp; sourceTree = "<group>"; };
 		45B284942218E39300D6D055 /* cell.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = cell.cpp; sourceTree = "<group>"; };
@@ -1325,6 +1326,7 @@
 				453D28D42277129800D0E5F9 /* connect.hpp */,
 				45D1098F22DAAFAC00D1F1CB /* enum operators.hpp */,
 				457DC0BE22E7FB2B0000777B /* widget rect.hpp */,
+				45A61039230775CE000A0BD6 /* error.hpp */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";

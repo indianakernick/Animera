@@ -23,7 +23,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_Sprite_t {
     QByteArrayData data[10];
-    char stringdata0[109];
+    char stringdata0[92];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -38,15 +38,15 @@ QT_MOC_LITERAL(2, 25, 0), // ""
 QT_MOC_LITERAL(3, 26, 6), // "Format"
 QT_MOC_LITERAL(4, 33, 7), // "newFile"
 QT_MOC_LITERAL(5, 41, 8), // "saveFile"
-QT_MOC_LITERAL(6, 50, 22), // "std::optional<QString>"
-QT_MOC_LITERAL(7, 73, 8), // "openFile"
-QT_MOC_LITERAL(8, 82, 12), // "exportSprite"
-QT_MOC_LITERAL(9, 95, 13) // "ExportOptions"
+QT_MOC_LITERAL(6, 50, 5), // "Error"
+QT_MOC_LITERAL(7, 56, 8), // "openFile"
+QT_MOC_LITERAL(8, 65, 12), // "exportSprite"
+QT_MOC_LITERAL(9, 78, 13) // "ExportOptions"
 
     },
     "Sprite\0canvasInitialized\0\0Format\0"
-    "newFile\0saveFile\0std::optional<QString>\0"
-    "openFile\0exportSprite\0ExportOptions"
+    "newFile\0saveFile\0Error\0openFile\0"
+    "exportSprite\0ExportOptions"
 };
 #undef QT_MOC_LITERAL
 
@@ -92,10 +92,10 @@ void Sprite::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
         switch (_id) {
         case 0: _t->canvasInitialized((*reinterpret_cast< Format(*)>(_a[1])),(*reinterpret_cast< QSize(*)>(_a[2]))); break;
         case 1: _t->newFile((*reinterpret_cast< Format(*)>(_a[1])),(*reinterpret_cast< QSize(*)>(_a[2]))); break;
-        case 2: { std::optional<QString> _r = _t->saveFile((*reinterpret_cast< const QString(*)>(_a[1])));
-            if (_a[0]) *reinterpret_cast< std::optional<QString>*>(_a[0]) = std::move(_r); }  break;
-        case 3: { std::optional<QString> _r = _t->openFile((*reinterpret_cast< const QString(*)>(_a[1])));
-            if (_a[0]) *reinterpret_cast< std::optional<QString>*>(_a[0]) = std::move(_r); }  break;
+        case 2: { Error _r = _t->saveFile((*reinterpret_cast< const QString(*)>(_a[1])));
+            if (_a[0]) *reinterpret_cast< Error*>(_a[0]) = std::move(_r); }  break;
+        case 3: { Error _r = _t->openFile((*reinterpret_cast< const QString(*)>(_a[1])));
+            if (_a[0]) *reinterpret_cast< Error*>(_a[0]) = std::move(_r); }  break;
         case 4: _t->exportSprite((*reinterpret_cast< const ExportOptions(*)>(_a[1]))); break;
         default: ;
         }

@@ -53,7 +53,10 @@ void Window::newFile(const Format format, const QSize size) {
 }
 
 void Window::openFile(const QString &path) {
-  sprite.openFile(path);
+  if (Error err = sprite.openFile(path); err) {
+    // @TODO error handling. Show a popup or something
+    assert(false);
+  }
   setWindowFilePath(path);
   setWindowModified(false);
   show();
@@ -311,8 +314,9 @@ void Window::saveFile() {
   if (path.isEmpty()) {
     openSaveFileDialog();
   } else {
-    if (auto err = sprite.saveFile(path); err) {
+    if (Error err = sprite.saveFile(path); err) {
       // @TODO error handling. Show a popup or something
+      assert(false);
     }
     setWindowModified(false);
     statusBar.showTemp("Saved!");
@@ -334,8 +338,9 @@ void Window::openSaveFileDialog() {
     "Animera File (*.px2)"
   );
   if (!saveFileName.isEmpty()) {
-    if (auto err = sprite.saveFile(saveFileName); err) {
+    if (Error err = sprite.saveFile(saveFileName); err) {
       // @TODO error handling. Show a popup or something
+      assert(false);
     }
     setWindowFilePath(saveFileName);
     setWindowModified(false);

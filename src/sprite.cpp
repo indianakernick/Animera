@@ -78,19 +78,19 @@ animation end
 
 }
 
-std::optional<QString> Sprite::saveFile(const QString &path) const {
+Error Sprite::saveFile(const QString &path) const {
   QFile file{path};
   if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
     return "Failed to open file for writing";
   }
   if (file.write(signature, 8) != 8) {
-    return "File write error";
+    return FileIOError{}.what();
   }
-  if (auto err = timeline.serializeHead(file); err) return err;
-  if (auto err = palette.serialize(file); err) return err;
-  if (auto err = timeline.serializeBody(file); err) return err;
-  if (auto err = timeline.serializeTail(file); err) return err;
-  return std::nullopt;
+  if (Error err = timeline.serializeHead(file); err) return err;
+  if (Error err = palette.serialize(file); err) return err;
+  if (Error err = timeline.serializeBody(file); err) return err;
+  if (Error err = timeline.serializeTail(file); err) return err;
+  return {};
   /*png_structp png = png_create_write_struct(
     PNG_LIBPNG_VER_STRING, nullptr, &pngError, &pngWarning
   );
@@ -129,7 +129,7 @@ std::optional<QString> Sprite::saveFile(const QString &path) const {
   return std::nullopt;*/
 }
 
-std::optional<QString> Sprite::openFile(const QString &path) {
+Error Sprite::openFile(const QString &path) {
   QFile file{path};
   if (!file.open(QIODevice::ReadOnly)) {
     throw std::exception{};
@@ -149,7 +149,7 @@ std::optional<QString> Sprite::openFile(const QString &path) {
   timeline.initCanvas(format, size);
   palette.deserialize(&file);
   timeline.deserialize(&file);
-  return std::nullopt;
+  return {};
 }
 
 void Sprite::exportSprite(const ExportOptions &options) const {
