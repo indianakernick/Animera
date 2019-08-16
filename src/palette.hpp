@@ -26,7 +26,7 @@ class Palette final : public QObject {
 
 public:
   void initDefault();
-  void serialize(QIODevice &) const;
+  std::optional<QString> serialize(QIODevice &) const;
   void deserialize(QIODevice *);
 
   PaletteCSpan getPalette() const;

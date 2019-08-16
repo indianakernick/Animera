@@ -83,11 +83,13 @@ std::optional<QString> Sprite::saveFile(const QString &path) const {
   if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
     return "Failed to open file for writing";
   }
-  file.write(signature, 8);
-  timeline.serializeHead(file);
-  palette.serialize(file);
-  timeline.serializeBody(file);
-  timeline.serializeTail(file);
+  if (file.write(signature, 8) != 8) {
+    return "File write error";
+  }
+  if (auto err = timeline.serializeHead(file); err) return err;
+  if (auto err = palette.serialize(file); err) return err;
+  if (auto err = timeline.serializeBody(file); err) return err;
+  if (auto err = timeline.serializeTail(file); err) return err;
   return std::nullopt;
   /*png_structp png = png_create_write_struct(
     PNG_LIBPNG_VER_STRING, nullptr, &pngError, &pngWarning

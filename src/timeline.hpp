@@ -44,16 +44,16 @@ public:
 private:
   struct Layer;
 
-  static void writeLHDR(QIODevice &, const Layer &);
-  static void writeCHDR(QIODevice &, const CellSpan &);
-  static void writeCDAT(QIODevice &, const QImage &, Format);
+  static std::optional<QString> writeLHDR(QIODevice &, const Layer &);
+  static std::optional<QString> writeCHDR(QIODevice &, const CellSpan &);
+  static std::optional<QString> writeCDAT(QIODevice &, const QImage &, Format);
 
 public:
 
   void initDefault();
-  void serializeHead(QIODevice &) const;
-  void serializeBody(QIODevice &) const;
-  void serializeTail(QIODevice &) const;
+  std::optional<QString> serializeHead(QIODevice &) const;
+  std::optional<QString> serializeBody(QIODevice &) const;
+  std::optional<QString> serializeTail(QIODevice &) const;
   void deserialize(QIODevice *);
 
 private:

@@ -67,7 +67,7 @@ uint8_t formatByte(const Format format) {
 
 }
 
-void Timeline::writeLHDR(QIODevice &dev, const Layer &layer) {
+std::optional<QString> Timeline::writeLHDR(QIODevice &dev, const Layer &layer) try {
   ChunkWriter writer{dev};
   const uint32_t nameLen = static_cast<uint32_t>(layer.name.size());
   writer.begin(4 + 1 + nameLen, "LHDR");
@@ -75,9 +75,12 @@ void Timeline::writeLHDR(QIODevice &dev, const Layer &layer) {
   writer.writeByte(layer.visible);
   writer.writeString(layer.name.data(), nameLen);
   writer.end();
+  return std::nullopt;
+} catch (FileIOError &e) {
+  return e.what();
 }
 
-void Timeline::writeCHDR(QIODevice &dev, const CellSpan &span) {
+std::optional<QString> Timeline::writeCHDR(QIODevice &dev, const CellSpan &span) try {
   ChunkWriter writer{dev};
   writer.begin("CHDR");
   writer.writeInt(static_cast<uint32_t>(span.len));
@@ -88,6 +91,9 @@ void Timeline::writeCHDR(QIODevice &dev, const CellSpan &span) {
     writer.writeInt(span.cell->image.height());
   }
   writer.end();
+  return std::nullopt;
+} catch (FileIOError &e) {
+  return e.what();
 }
 
 namespace {
@@ -131,7 +137,9 @@ void byteOrderCopy(
 
 }
 
-void Timeline::writeCDAT(QIODevice &dev, const QImage &image, const Format format) {
+std::optional<QString> Timeline::writeCDAT(
+  QIODevice &dev, const QImage &image, const Format format
+) {
   assert(!image.isNull());
   const uint32_t outBuffSize = 1 << 16;
   std::vector<Bytef> outBuff(outBuffSize);
@@ -155,36 +163,44 @@ void Timeline::writeCDAT(QIODevice &dev, const QImage &image, const Format forma
   int rowIdx = 0;
   int ret;
   
-  ChunkWriter writer{dev};
-  writer.begin("CDAT");
-  
-  do {
-    if (stream.avail_in == 0 && rowIdx < image.height()) {
-      byteOrderCopy(inBuff.data(), image.scanLine(rowIdx), inBuffSize, format);
-      stream.next_in = inBuff.data();
-      stream.avail_in = inBuffSize;
-      ++rowIdx;
+  try {
+    ChunkWriter writer{dev};
+    writer.begin("CDAT");
+    
+    do {
+      if (stream.avail_in == 0 && rowIdx < image.height()) {
+        byteOrderCopy(inBuff.data(), image.scanLine(rowIdx), inBuffSize, format);
+        stream.next_in = inBuff.data();
+        stream.avail_in = inBuffSize;
+        ++rowIdx;
+      }
+      if (stream.avail_out == 0) {
+        writer.writeString(outBuff.data(), outBuffSize);
+        stream.next_out = outBuff.data();
+        stream.avail_out = outBuffSize;
+      }
+      ret = deflate(&stream, stream.avail_in ? Z_NO_FLUSH : Z_FINISH);
+    } while (ret == Z_OK);
+    assert(ret == Z_STREAM_END);
+    
+    if (stream.avail_out < outBuffSize) {
+      writer.writeString(outBuff.data(), outBuffSize - stream.avail_out);
     }
-    if (stream.avail_out == 0) {
-      writer.writeString(outBuff.data(), outBuffSize);
-      stream.next_out = outBuff.data();
-      stream.avail_out = outBuffSize;
-    }
-    ret = deflate(&stream, stream.avail_in ? Z_NO_FLUSH : Z_FINISH);
-  } while (ret == Z_OK);
-  assert(ret == Z_STREAM_END);
-  
-  if (stream.avail_out < outBuffSize) {
-    writer.writeString(outBuff.data(), outBuffSize - stream.avail_out);
+    
+    writer.end();
+  } catch (FileIOError &e) {
+    deflateEnd(&stream);
+    assert(ret == Z_OK);
+    return e.what();
   }
-  
-  writer.end();
   
   ret = deflateEnd(&stream);
   assert(ret == Z_OK);
+  
+  return std::nullopt;
 }
 
-void Timeline::serializeHead(QIODevice &dev) const {
+std::optional<QString> Timeline::serializeHead(QIODevice &dev) const try {
   ChunkWriter writer{dev};
   writer.begin(5 * 4 + 1, "AHDR");
   writer.writeInt(canvasSize.width());
@@ -194,24 +210,31 @@ void Timeline::serializeHead(QIODevice &dev) const {
   writer.writeInt(100); // delay
   writer.writeByte(formatByte(canvasFormat));
   writer.end();
+  return std::nullopt;
+} catch (FileIOError &e) {
+  return e.what();
 }
 
-void Timeline::serializeBody(QIODevice &dev) const {
+std::optional<QString> Timeline::serializeBody(QIODevice &dev) const {
   for (const Layer &layer : layers) {
-    writeLHDR(dev, layer);
+    if (auto err = writeLHDR(dev, layer); err) return err;
     for (const CellSpan &span : layer.spans) {
-      writeCHDR(dev, span);
+      if (auto err = writeCHDR(dev, span); err) return err;
       if (span.cell) {
-        writeCDAT(dev, span.cell->image, canvasFormat);
+        if (auto err = writeCDAT(dev, span.cell->image, canvasFormat); err) return err;
       }
     }
   }
+  return std::nullopt;
 }
 
-void Timeline::serializeTail(QIODevice &dev) const {
+std::optional<QString> Timeline::serializeTail(QIODevice &dev) const try {
   ChunkWriter writer{dev};
   writer.begin(0, "AEND");
   writer.end();
+  return std::nullopt;
+} catch (FileIOError &e) {
+  return e.what();
 }
 
 void Timeline::deserialize(QIODevice *dev) {

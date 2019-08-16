@@ -311,7 +311,9 @@ void Window::saveFile() {
   if (path.isEmpty()) {
     openSaveFileDialog();
   } else {
-    sprite.saveFile(path);
+    if (auto err = sprite.saveFile(path); err) {
+      // @TODO error handling. Show a popup or something
+    }
     setWindowModified(false);
     statusBar.showTemp("Saved!");
   }
@@ -332,7 +334,9 @@ void Window::openSaveFileDialog() {
     "Animera File (*.px2)"
   );
   if (!saveFileName.isEmpty()) {
-    sprite.saveFile(saveFileName);
+    if (auto err = sprite.saveFile(saveFileName); err) {
+      // @TODO error handling. Show a popup or something
+    }
     setWindowFilePath(saveFileName);
     setWindowModified(false);
   }

@@ -10,6 +10,10 @@
 
 #include <QtCore/qendian.h>
 
+const char *FileIOError::what() const noexcept {
+  return "File IO error";
+}
+
 ChunkWriter::ChunkWriter(QIODevice &dev)
   : dev{dev} {}
 
@@ -28,9 +32,9 @@ void ChunkWriter::end() {
   if (startPos != -1) {
     const qint64 currPos = dev.pos();
     const uint32_t dataLen = static_cast<uint32_t>(currPos - startPos - 8);
-    dev.seek(startPos);
+    if (!dev.seek(startPos)) throw FileIOError{};
     writeInt(dataLen);
-    dev.seek(currPos);
+    if (!dev.seek(currPos)) throw FileIOError{};
   }
   writeInt(static_cast<uint32_t>(crc));
 }
@@ -64,6 +68,8 @@ void ChunkWriter::writeHeader(const uint32_t len, const char *header) {
 
 template <typename T>
 void ChunkWriter::writeData(const T *dat, const uint32_t len) {
-  dev.write(reinterpret_cast<const char *>(dat), len);
+  if (dev.write(reinterpret_cast<const char *>(dat), len) != len) {
+    throw FileIOError{};
+  }
   crc = crc32(crc, reinterpret_cast<const Bytef *>(dat), len);
 }

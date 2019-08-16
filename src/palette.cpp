@@ -157,7 +157,7 @@ size_t getUsedSize(const PaletteCSpan colors) {
   return 0;
 }
 
-void writeRgba(QIODevice &dev, const PaletteCSpan colors) {
+std::optional<QString> writeRgba(QIODevice &dev, const PaletteCSpan colors) try {
   const size_t used = getUsedSize(colors);
   ChunkWriter writer{dev};
   writer.begin(static_cast<uint32_t>(used) * 4, "PLTE");
@@ -169,9 +169,12 @@ void writeRgba(QIODevice &dev, const PaletteCSpan colors) {
     writer.writeByte(color.a);
   }
   writer.end();
+  return std::nullopt;
+} catch (FileIOError &e) {
+  return e.what();
 }
 
-void writeGray(QIODevice &dev, const PaletteCSpan colors) {
+std::optional<QString> writeGray(QIODevice &dev, const PaletteCSpan colors) try {
   const size_t used = getUsedSize(colors);
   ChunkWriter writer{dev};
   writer.begin(static_cast<uint32_t>(used) * 2, "PLTE");
@@ -181,11 +184,14 @@ void writeGray(QIODevice &dev, const PaletteCSpan colors) {
     writer.writeByte(color.a);
   };
   writer.end();
+  return std::nullopt;
+} catch (FileIOError &e) {
+  return e.what();
 }
 
 }
 
-void Palette::serialize(QIODevice &dev) const {
+std::optional<QString> Palette::serialize(QIODevice &dev) const {
   switch (canvasFormat) {
     case Format::rgba:
     case Format::index:
