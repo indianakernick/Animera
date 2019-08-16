@@ -16,6 +16,8 @@
 
 class Cell;
 
+// @TODO use std::deque
+// Were using std::unique_ptr because we need stable pointers
 using CellPtr = std::unique_ptr<Cell>;
 
 class Cell {

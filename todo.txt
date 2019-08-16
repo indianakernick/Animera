@@ -48,6 +48,9 @@ Cell images that aren't a fixed size
   allows importing images that aren't the same size as the viewport
   tools will calculate a bounding rect to resize the image as needed
   the canvas could be resized without discarding anything
+  flood fill just fills the viewport
+  should we distinguish between empty and null?
+    perhaps empty should mean null
 
 Palette import and export
   export as png
@@ -61,3 +64,4 @@ there might be a few random constants that should be in config.hpp but aren't
 should I make a post to r/gamedev?
   they might be interested in this
   could be a good place to get feedback
+  laterforreddit.com
