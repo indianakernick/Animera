@@ -318,6 +318,7 @@ void Window::saveToPath(const QString &path) {
   } else {
     setWindowFilePath(path);
     setWindowModified(false);
+    statusBar.showTemp("Saved!");
   }
 }
 
@@ -327,9 +328,6 @@ void Window::saveFile() {
     openSaveFileDialog();
   } else {
     saveToPath(path);
-    if (!isWindowModified()) {
-      statusBar.showTemp("Saved!");
-    }
   }
 }
 
