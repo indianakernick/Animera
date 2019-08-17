@@ -25,13 +25,16 @@ void ChunkWriter::begin(const uint32_t len, const char *header) {
 void ChunkWriter::begin(const char *header) {
   assert(!dev.isSequential());
   startPos = dev.pos();
+  assert(startPos != 0);
   writeHeader(0, header);
 }
 
 void ChunkWriter::end() {
   if (startPos != -1) {
     const qint64 currPos = dev.pos();
+    assert(currPos != 0);
     const uint32_t dataLen = static_cast<uint32_t>(currPos - startPos - 8);
+    assert(qint64{dataLen} == currPos - startPos - 8);
     if (!dev.seek(startPos)) throw FileIOError{};
     writeInt(dataLen);
     if (!dev.seek(currPos)) throw FileIOError{};
@@ -40,12 +43,12 @@ void ChunkWriter::end() {
 }
 
 void ChunkWriter::writeByte(const uint8_t byte) {
-  writeData(&byte);
+  writeData(&byte, 1);
 }
 
 void ChunkWriter::writeInt(uint32_t num) {
   num = qToBigEndian(num);
-  writeData(&num);
+  writeData(&num, 4);
 }
 
 void ChunkWriter::writeString(const char *dat, const uint32_t len) {

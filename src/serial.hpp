@@ -53,7 +53,7 @@ private:
   void writeHeader(uint32_t, const char *);
   
   template <typename T>
-  void writeData(const T *, uint32_t = sizeof(T));
+  void writeData(const T *, uint32_t);
 };
 
 #endif
