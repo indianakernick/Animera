@@ -334,9 +334,9 @@ void Window::saveFile() {
 void Window::openSaveFileDialog() {
   auto *dialog = new QFileDialog{this};
   dialog->setAcceptMode(QFileDialog::AcceptSave);
-  dialog->setNameFilter("Animera File (*.px2)");
-  dialog->setDefaultSuffix("px2");
-  dialog->setDirectory(QDir::homePath() + "/my sprite.px2");
+  dialog->setNameFilter("Animera File (*.animera)");
+  dialog->setDefaultSuffix("animera");
+  dialog->setDirectory(QDir::homePath() + "/my sprite.animera");
   CONNECT(dialog, fileSelected, this, saveToPath);
   dialog->open();
 }

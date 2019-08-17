@@ -36,7 +36,7 @@ void Application::newFileDialog() {
 void Application::openFileDialog() {
   auto *dialog = new QFileDialog{desktop()};
   dialog->setAcceptMode(QFileDialog::AcceptOpen);
-  dialog->setNameFilter("Animera File (*px2)");
+  dialog->setNameFilter("Animera File (*.animera)");
   dialog->setFileMode(QFileDialog::ExistingFile);
   dialog->setDirectory(QDir::homePath());
   CONNECT(dialog, fileSelected, this, openFile);
