@@ -34,11 +34,13 @@ void Application::newFileDialog() {
 }
 
 void Application::openFileDialog() {
-  auto *dialog = new QFileDialog{desktop(), "Open File"};
+  openFile(QFileDialog::getOpenFileName(desktop(), "Open File", {}, "Animera File (*.px2)"));
+  // @TODO this stopped working
+  /*auto *dialog = new QFileDialog{desktop(), "Open File"};
   CONNECT(dialog, fileSelected, this, openFile);
   dialog->setFileMode(QFileDialog::ExistingFile);
   dialog->setNameFilter("Animera File (*.px2)");
-  dialog->open();
+  dialog->open();*/
 }
 
 void Application::windowClosed(Window *window) {

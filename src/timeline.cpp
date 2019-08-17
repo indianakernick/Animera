@@ -45,11 +45,6 @@ void Timeline::initDefault() {
 
 namespace {
 
-void deserializeImage(QIODevice *dev, QImage &image) {
-  assert(dev);
-  image.load(dev, "png");
-}
-
 constexpr int byteDepth(const Format format) {
   switch (format) {
     case Format::rgba:
@@ -61,7 +56,7 @@ constexpr int byteDepth(const Format format) {
   }
 }
 
-uint8_t formatByte(const Format format) {
+constexpr uint8_t formatByte(const Format format) {
   return byteDepth(format);
 }
 
@@ -239,7 +234,65 @@ Error Timeline::serializeTail(QIODevice &dev) const try {
   return e.what();
 }
 
-void Timeline::deserialize(QIODevice *dev) {
+Error Timeline::deserializeHead(QIODevice &dev, Format &format, QSize &size) try {
+  ChunkReader reader{dev};
+  const ChunkStart start = reader.begin();
+  if (Error err = expectedHeader(start, "AHDR"); err) return err;
+  if (Error err = expectedLength(start, 5 * 4 + 1); err) return err;
+  canvasSize.setWidth(reader.readInt());
+  if (canvasSize.width() <= 0) {
+    return "Negative canvas width";
+  }
+  canvasSize.setHeight(reader.readInt());
+  if (canvasSize.height() <= 0) {
+    return "Negative canvas height";
+  }
+  layers.resize(reader.readInt());
+  frameCount = FrameIdx(reader.readInt());
+  if (+frameCount < 0) {
+    return "Negative frame count";
+  }
+  reader.readInt(); // delay
+  const uint8_t readFormat = reader.readByte();
+  switch (readFormat) {
+    case formatByte(Format::rgba):
+      canvasFormat = Format::rgba;
+      break;
+    case formatByte(Format::index):
+      canvasFormat = Format::index;
+      break;
+    case formatByte(Format::gray):
+      canvasFormat = Format::gray;
+      break;
+    default:
+      return "Invalid canvas format " + QString::number(readFormat);
+  }
+  if (Error err = reader.end(); err) return err;
+  format = canvasFormat;
+  size = canvasSize;
+  return {};
+} catch (FileIOError &e) {
+  return e.what();
+}
+
+Error Timeline::deserializeBody(QIODevice &dev) try {
+  return {};
+} catch (FileIOError &e) {
+  return e.what();
+}
+
+Error Timeline::deserializeTail(QIODevice &dev) try {
+  ChunkReader reader{dev};
+  const ChunkStart start = reader.begin();
+  if (Error err = expectedHeader(start, "AEND"); err) return err;
+  if (Error err = expectedLength(start, 0); err) return err;
+  if (Error err = reader.end(); err) return err;
+  return {};
+} catch (FileIOError &e) {
+  return e.what();
+}
+
+/*void Timeline::deserialize(QIODevice *dev) {
   assert(dev);
   layers.resize(deserializeBytesAs<uint16_t>(dev));
   frameCount = FrameIdx{deserializeBytesAs<uint16_t>(dev)};
@@ -263,7 +316,7 @@ void Timeline::deserialize(QIODevice *dev) {
   changePos();
   Q_EMIT selectionChanged(selection);
   changeLayers(LayerIdx{0}, layerCount());
-}
+}*/
 
 CellRect Timeline::selectCells(const ExportOptions &options) const {
   CellRect rect;

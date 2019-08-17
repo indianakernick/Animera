@@ -54,7 +54,9 @@ public:
   Error serializeHead(QIODevice &) const;
   Error serializeBody(QIODevice &) const;
   Error serializeTail(QIODevice &) const;
-  void deserialize(QIODevice *);
+  Error deserializeHead(QIODevice &, Format &, QSize &);
+  Error deserializeBody(QIODevice &);
+  Error deserializeTail(QIODevice &);
 
 private:
   CellRect selectCells(const ExportOptions &) const;

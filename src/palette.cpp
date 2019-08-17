@@ -189,6 +189,56 @@ Error writeGray(QIODevice &dev, const PaletteCSpan colors) try {
   return e.what();
 }
 
+Error checkStart(ChunkStart start, const int multiple) {
+  if (Error err = expectedHeader(start, "PLTE"); err) return err;
+  if (start.length % multiple != 0 || start.length / multiple > pal_colors) {
+    QString msg = "Invalid PLTE chunk length ";
+    msg += QString::number(start.length);
+    return msg;
+  }
+  return {};
+}
+
+Error readRgba(QIODevice &dev, const PaletteSpan colors) try {
+  ChunkReader reader{dev};
+  const ChunkStart start = reader.begin();
+  if (Error err = checkStart(start, 4); err) return err;
+  auto iter = colors.begin();
+  const auto end = colors.begin() + start.length / 4;
+  for (; iter != end; ++iter) {
+    Color color;
+    color.r = reader.readByte();
+    color.g = reader.readByte();
+    color.b = reader.readByte();
+    color.a = reader.readByte();
+    *iter = FormatARGB::toPixel(color);
+  }
+  if (Error err = reader.end(); err) return err;
+  std::fill(iter, colors.end(), 0);
+  return {};
+} catch (FileIOError &e) {
+  return e.what();
+}
+
+Error readGray(QIODevice &dev, const PaletteSpan colors) try {
+  ChunkReader reader{dev};
+  const ChunkStart start = reader.begin();
+  if (Error err = checkStart(start, 2); err) return err;
+  auto iter = colors.begin();
+  const auto end = colors.begin() + start.length / 2;
+  for (; iter != end; ++iter) {
+    Color color;
+    color.r = reader.readByte();
+    color.a = reader.readByte();
+    *iter = FormatGray::toPixel(color);
+  }
+  if (Error err = reader.end(); err) return err;
+  std::fill(iter, colors.end(), 0);
+  return {};
+} catch (FileIOError &e) {
+  return e.what();
+}
+
 }
 
 Error Palette::serialize(QIODevice &dev) const {
@@ -201,13 +251,18 @@ Error Palette::serialize(QIODevice &dev) const {
   }
 }
 
-void Palette::deserialize(QIODevice *dev) {
-  assert(dev);
-  dev->read(
-    reinterpret_cast<char *>(colors.data()),
-    pal_colors * sizeof(QRgb)
-  );
+Error Palette::deserialize(QIODevice &dev) try {
+  switch (canvasFormat) {
+    case Format::rgba:
+    case Format::index:
+      return readRgba(dev, colors);
+    case Format::gray:
+      return readGray(dev, colors);
+  }
   Q_EMIT paletteChanged({colors.data(), pal_colors});
+  return {};
+} catch (FileIOError &e) {
+  return e.what();
 }
 
 PaletteCSpan Palette::getPalette() const {

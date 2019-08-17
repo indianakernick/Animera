@@ -28,7 +28,7 @@ class Palette final : public QObject {
 public:
   void initDefault();
   Error serialize(QIODevice &) const;
-  void deserialize(QIODevice *);
+  Error deserialize(QIODevice &);
 
   PaletteCSpan getPalette() const;
 

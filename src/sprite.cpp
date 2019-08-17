@@ -26,7 +26,6 @@ void Sprite::newFile(const Format newFormat, const QSize newSize) {
 
 namespace {
 
-constexpr char magic_number[] = {'P', 'I', 'X', '2'};
 constexpr char signature[8] = "animera";
 
 int getColorType(const Format format) {
@@ -46,18 +45,18 @@ animation header
  - height
  - number of layers
  - number of frames
- - maybe delay
+ - delay
  - format
 
 PLTE
 palette
- - 256 colors
+ - colors excluding trailing 0 entries
 
 LHDR
 layer header
  - number of spans in the layer
  - byte visibility
- - null-terminated ascii string name
+ - ascii string name
 
 CHDR
 cell header
@@ -66,7 +65,6 @@ cell header
  - y coord
  - width
  - height
- - has data
 
 CDAT
 cell data
@@ -132,23 +130,24 @@ Error Sprite::saveFile(const QString &path) const {
 Error Sprite::openFile(const QString &path) {
   QFile file{path};
   if (!file.open(QIODevice::ReadOnly)) {
-    throw std::exception{};
+    return "Failed to open file for reading";
   }
-  char header[sizeof(magic_number)];
-  file.read(header, sizeof(magic_number));
-  if (std::memcmp(header, magic_number, sizeof(magic_number)) != 0) {
-    throw std::exception{};
+  char sig[8];
+  if (file.read(sig, 8) != 8) {
+    return FileIOError{}.what();
   }
-  deserializeBytes(&file, format);
-  size = {
-    deserializeBytesAs<uint16_t>(&file),
-    deserializeBytesAs<uint16_t>(&file)
-  };
+  if (std::memcmp(sig, signature, 8) != 0) {
+    return "Signature mismatch";
+  }
+  
+  if (Error err = timeline.deserializeHead(file, format, size); err) return err;
   Q_EMIT canvasInitialized(format, size);
   palette.initCanvas(format);
   timeline.initCanvas(format, size);
-  palette.deserialize(&file);
-  timeline.deserialize(&file);
+  if (Error err = palette.deserialize(file); err) return err;
+  if (Error err = timeline.deserializeBody(file); err) return err;
+  if (Error err = timeline.deserializeTail(file); err) return err;
+  
   return {};
 }
 
