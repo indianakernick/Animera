@@ -28,6 +28,7 @@ ErrorDialog::ErrorDialog(
   layout->addWidget(makeLabel(this, title));
   // @TODO remove margin from separator
   layout->addWidget(new HoriSeparator{this});
+  // @TODO wrap long messages
   layout->addWidget(makeLabel(this, message));
   auto *ok = new TextPushButtonWidget{this, textBoxRect(8), "Ok"};
   CONNECT(ok, pressed, this, accept);
