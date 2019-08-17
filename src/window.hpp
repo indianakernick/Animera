@@ -62,6 +62,7 @@ private:
   void populateMenubar();
   void connectSignals();
   
+  void saveToPath(const QString &);
   void saveFile();
   void openSaveFileDialog();
   void openExportDialog();

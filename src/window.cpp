@@ -309,42 +309,33 @@ void Window::connectSignals() {
   CONNECT(palette,         paletteColorChanged, this,            modify);
 }
 
+void Window::saveToPath(const QString &path) {
+  if (Error err = sprite.saveFile(path); err) {
+    // @TODO error handling. Show a popup or something
+    assert(false);
+  }
+  setWindowFilePath(path);
+  setWindowModified(false);
+  statusBar.showTemp("Saved!");
+}
+
 void Window::saveFile() {
   const QString path = windowFilePath();
   if (path.isEmpty()) {
     openSaveFileDialog();
   } else {
-    if (Error err = sprite.saveFile(path); err) {
-      // @TODO error handling. Show a popup or something
-      assert(false);
-    }
-    setWindowModified(false);
-    statusBar.showTemp("Saved!");
+    saveToPath(path);
   }
 }
 
 void Window::openSaveFileDialog() {
-  /*auto *dialog = new QFileDialog{this, "Save File"};
-  CONNECT(dialog, fileSelected, this, setFileName);
-  CONNECT(dialog, fileSelected, &timeline, saveFile);
+  auto *dialog = new QFileDialog{this};
+  dialog->setAcceptMode(QFileDialog::AcceptSave);
   dialog->setNameFilter("Animera File (*.px2)");
   dialog->setDefaultSuffix("px2");
-  dialog->setAcceptMode(QFileDialog::AcceptSave);
-  dialog->show();*/
-  const QString saveFileName = QFileDialog::getSaveFileName(
-    this,
-    "Save File",
-    QDir::homePath(),
-    "Animera File (*.px2)"
-  );
-  if (!saveFileName.isEmpty()) {
-    if (Error err = sprite.saveFile(saveFileName); err) {
-      // @TODO error handling. Show a popup or something
-      assert(false);
-    }
-    setWindowFilePath(saveFileName);
-    setWindowModified(false);
-  }
+  dialog->setDirectory(QDir::homePath() + "/" + "my sprite.px2");
+  CONNECT(dialog, fileSelected, this, saveToPath);
+  dialog->open();
 }
 
 void Window::openExportDialog() {
