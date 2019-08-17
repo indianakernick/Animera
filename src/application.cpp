@@ -30,19 +30,17 @@ Application::Application(int &argc, char **argv)
 void Application::newFileDialog() {
   auto *dialog = new InitCanvasDialog{desktop()};
   CONNECT(dialog, canvasInitialized, this, newFile);
-  dialog->open();
+  dialog->show();
 }
 
 void Application::openFileDialog() {
-  return openFile(QFileDialog::getOpenFileName(desktop(), {}, {}, "Animera File (*.px2)"));
-  // @TODO this stopped working
   auto *dialog = new QFileDialog{desktop()};
   dialog->setAcceptMode(QFileDialog::AcceptOpen);
   dialog->setNameFilter("Animera File (*px2)");
   dialog->setFileMode(QFileDialog::ExistingFile);
   dialog->setDirectory(QDir::homePath());
   CONNECT(dialog, fileSelected, this, openFile);
-  dialog->open();
+  dialog->show();
 }
 
 void Application::windowClosed(Window *window) {
