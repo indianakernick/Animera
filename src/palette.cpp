@@ -255,9 +255,11 @@ Error Palette::deserialize(QIODevice &dev) try {
   switch (canvasFormat) {
     case Format::rgba:
     case Format::index:
-      return readRgba(dev, colors);
+      if (Error err = readRgba(dev, colors); err) return err;
+      break;
     case Format::gray:
-      return readGray(dev, colors);
+      if (Error err = readGray(dev, colors); err) return err;
+      break;
   }
   Q_EMIT paletteChanged({colors.data(), pal_colors});
   return {};

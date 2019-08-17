@@ -41,19 +41,26 @@ class Timeline final : public QObject {
 public:
   Timeline();
 
+  void initDefault();
+
 private:
   struct Layer;
 
   static Error writeLHDR(QIODevice &, const Layer &);
   static Error writeCHDR(QIODevice &, const CellSpan &);
   static Error writeCDAT(QIODevice &, const QImage &, Format);
-
+  
 public:
-
-  void initDefault();
   Error serializeHead(QIODevice &) const;
   Error serializeBody(QIODevice &) const;
   Error serializeTail(QIODevice &) const;
+  
+private:
+  static Error readLHDR(QIODevice &, Layer &);
+  static Error readCHDR(QIODevice &, CellSpan &, Format);
+  static Error readCDAT(QIODevice &, QImage &, Format);
+
+public:
   Error deserializeHead(QIODevice &, Format &, QSize &);
   Error deserializeBody(QIODevice &);
   Error deserializeTail(QIODevice &);

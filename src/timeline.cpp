@@ -93,7 +93,7 @@ Error Timeline::writeCHDR(QIODevice &dev, const CellSpan &span) try {
 
 namespace {
 
-void byteOrderCopy(
+void copyToByteOrder(
   unsigned char *dst,
   const unsigned char *src,
   const size_t size,
@@ -102,7 +102,7 @@ void byteOrderCopy(
   assert(size % byteDepth(format) == 0);
   switch (format) {
     case Format::rgba: {
-      auto *srcPx = reinterpret_cast<const FormatARGB::Pixel *>(src);
+      const auto *srcPx = reinterpret_cast<const FormatARGB::Pixel *>(src);
       unsigned char *dstEnd = dst + size;
       while (dst != dstEnd) {
         const Color color = FormatARGB::toColor(*srcPx++);
@@ -130,11 +130,50 @@ void byteOrderCopy(
   }
 }
 
+void copyFromByteOrder(
+  unsigned char *dst,
+  const unsigned char *src,
+  const size_t size,
+  const Format format
+) {
+  assert(size % byteDepth(format) == 0);
+  switch (format) {
+    case Format::rgba: {
+      auto *dstPx = reinterpret_cast<FormatARGB::Pixel *>(dst);
+      const unsigned char *srcEnd = src + size;
+      while (src != srcEnd) {
+        Color color;
+        color.r = *src++;
+        color.g = *src++;
+        color.b = *src++;
+        color.a = *src++;
+        *dstPx++ = FormatARGB::toPixel(color);
+      }
+      break;
+    }
+    case Format::index:
+      static_assert(sizeof(FormatPalette::Pixel) == 1);
+      std::memcpy(dst, src, size);
+      break;
+    case Format::gray: {
+      auto *dstPx = reinterpret_cast<FormatGray::Pixel *>(dst);
+      const unsigned char *srcEnd = src + size;
+      while (src != srcEnd) {
+        Color color;
+        color.r = *src++;
+        color.a = *src++;
+        *dstPx = FormatGray::toPixel(color);
+      }
+      break;
+    }
+  }
+}
+
 }
 
 Error Timeline::writeCDAT(
   QIODevice &dev, const QImage &image, const Format format
-) {
+) try {
   assert(!image.isNull());
   const uint32_t outBuffSize = 1 << 16;
   std::vector<Bytef> outBuff(outBuffSize);
@@ -148,51 +187,43 @@ Error Timeline::writeCDAT(
   z_stream stream;
   stream.zalloc = nullptr;
   stream.zfree = nullptr;
-  [[maybe_unused]] const int err = deflateInit(&stream, Z_DEFAULT_COMPRESSION);
-  assert(err == Z_OK);
-  // The errors returned by deflateInit should never happen
+  assertEval(deflateInit(&stream, Z_DEFAULT_COMPRESSION) == Z_OK);
+  const std::unique_ptr<z_stream, DeflateDeleter> deleter{&stream};
   stream.avail_in = 0;
   stream.next_out = outBuff.data();
   stream.avail_out = outBuffSize;
   
+  ChunkWriter writer{dev};
+  writer.begin("CDAT");
+  
   int rowIdx = 0;
   int ret;
   
-  try {
-    ChunkWriter writer{dev};
-    writer.begin("CDAT");
-    
-    do {
-      if (stream.avail_in == 0 && rowIdx < image.height()) {
-        byteOrderCopy(inBuff.data(), image.scanLine(rowIdx), inBuffSize, format);
-        stream.next_in = inBuff.data();
-        stream.avail_in = inBuffSize;
-        ++rowIdx;
-      }
-      if (stream.avail_out == 0) {
-        writer.writeString(outBuff.data(), outBuffSize);
-        stream.next_out = outBuff.data();
-        stream.avail_out = outBuffSize;
-      }
-      ret = deflate(&stream, stream.avail_in ? Z_NO_FLUSH : Z_FINISH);
-    } while (ret == Z_OK);
-    assert(ret == Z_STREAM_END);
-    
-    if (stream.avail_out < outBuffSize) {
-      writer.writeString(outBuff.data(), outBuffSize - stream.avail_out);
+  do {
+    if (stream.avail_in == 0 && rowIdx < image.height()) {
+      copyToByteOrder(inBuff.data(), image.scanLine(rowIdx), inBuffSize, format);
+      stream.next_in = inBuff.data();
+      stream.avail_in = inBuffSize;
+      ++rowIdx;
     }
-    
-    writer.end();
-  } catch (FileIOError &e) {
-    deflateEnd(&stream);
-    assert(ret == Z_OK);
-    return e.what();
+    if (stream.avail_out == 0) {
+      writer.writeString(outBuff.data(), outBuffSize);
+      stream.next_out = outBuff.data();
+      stream.avail_out = outBuffSize;
+    }
+    ret = deflate(&stream, stream.avail_in ? Z_NO_FLUSH : Z_FINISH);
+  } while (ret == Z_OK);
+  assert(ret == Z_STREAM_END);
+  
+  if (stream.avail_out < outBuffSize) {
+    writer.writeString(outBuff.data(), outBuffSize - stream.avail_out);
   }
   
-  ret = deflateEnd(&stream);
-  assert(ret == Z_OK);
+  writer.end();
   
   return {};
+} catch (FileIOError &e) {
+  return e.what();
 }
 
 Error Timeline::serializeHead(QIODevice &dev) const try {
@@ -234,6 +265,124 @@ Error Timeline::serializeTail(QIODevice &dev) const try {
   return e.what();
 }
 
+Error Timeline::readLHDR(QIODevice &dev, Layer &layer) try {
+  ChunkReader reader{dev};
+  const ChunkStart start = reader.begin();
+  if (Error err = expectedHeader(start, "LHDR"); err) return err;
+  if (start.length <= 4 + 1) {
+    return "LHDR chunk length too small";
+  }
+  layer.spans.resize(reader.readInt());
+  const uint8_t visibleByte = reader.readByte();
+  switch (visibleByte) {
+    case 0:
+      layer.visible = false;
+      break;
+    case 1:
+      layer.visible = true;
+      break;
+    default:
+      return "Invalid visibility " + QString::number(visibleByte);
+  }
+  const uint32_t nameLen = start.length - (4 + 1);
+  layer.name.resize(nameLen);
+  reader.readString(layer.name.data(), nameLen);
+  if (Error err = reader.end(); err) return err;
+  return {};
+} catch (FileIOError &e) {
+  return e.what();
+}
+
+Error Timeline::readCHDR(QIODevice &dev, CellSpan &span, const Format format) try {
+  ChunkReader reader{dev};
+  const ChunkStart start = reader.begin();
+  if (Error err = expectedHeader(start, "CHDR"); err) return err;
+  if (start.length != 4 && start.length != 5 * 4) {
+    return "CHDR chunk length invalid";
+  }
+  span.len = static_cast<FrameIdx>(reader.readInt());
+  if (start.length == 5 * 4) {
+    reader.readInt(); // x
+    reader.readInt(); // y
+    const int width = reader.readInt();
+    if (width <= 0) {
+      return "Negative cell width";
+    }
+    const int height = reader.readInt();
+    if (height <= 0) {
+      return "Negative cell height";
+    }
+    span.cell = std::make_unique<Cell>(QSize{width, height}, format);
+  }
+  if (Error err = reader.end(); err) return err;
+  return {};
+} catch (FileIOError &e) {
+  return e.what();
+}
+
+Error Timeline::readCDAT(QIODevice &dev, QImage &image, const Format format) try {
+  assert(!image.isNull());
+  const uint32_t outBuffSize = image.width() * byteDepth(format);
+  std::vector<Bytef> outBuff(outBuffSize);
+  const uint32_t inBuffSize = 1 << 16;
+  std::vector<Bytef> inBuff(inBuffSize);
+  
+  z_stream stream;
+  stream.zalloc = nullptr;
+  stream.zfree = nullptr;
+  assertEval(inflateInit(&stream) == Z_OK);
+  const std::unique_ptr<z_stream, InflateDeleter> deleter{&stream};
+  stream.avail_in = 0;
+  stream.next_out = outBuff.data();
+  stream.avail_out = outBuffSize;
+  
+  ChunkReader reader{dev};
+  const ChunkStart start = reader.begin();
+  if (Error err = expectedHeader(start, "CDAT"); err) {
+    return err;
+  }
+  
+  int rowIdx = 0;
+  int ret;
+  uint32_t remainingChunk = start.length;
+  
+  do {
+    if (stream.avail_in == 0 && remainingChunk != 0) {
+      stream.next_in = inBuff.data();
+      stream.avail_in = std::min(inBuffSize, remainingChunk);
+      remainingChunk -= stream.avail_in;
+      reader.readString(inBuff.data(), stream.avail_in);
+    }
+    if (stream.avail_out == 0 && rowIdx < image.height()) {
+      copyFromByteOrder(image.scanLine(rowIdx), outBuff.data(), outBuffSize, format);
+      stream.next_out = outBuff.data();
+      stream.avail_out = outBuffSize;
+      ++rowIdx;
+    }
+    ret = inflate(&stream, stream.avail_in ? Z_NO_FLUSH : Z_FINISH);
+  } while (ret == Z_OK);
+  assert(ret == Z_STREAM_END);
+  
+  if (rowIdx == image.height() - 1) {
+    if (stream.avail_out != 0) {
+      return "Invalid image data";
+    }
+    copyFromByteOrder(image.scanLine(rowIdx), outBuff.data(), outBuffSize, format);
+  } else if (rowIdx == image.height()) {
+    if (stream.avail_out != outBuffSize) {
+      return "Invalid image data";
+    }
+  } else {
+    return "Invalid image data";
+  }
+  
+  if (Error err = reader.end(); err) return err;
+  
+  return {};
+} catch (FileIOError &e) {
+  return e.what();
+}
+
 Error Timeline::deserializeHead(QIODevice &dev, Format &format, QSize &size) try {
   ChunkReader reader{dev};
   const ChunkStart start = reader.begin();
@@ -248,7 +397,7 @@ Error Timeline::deserializeHead(QIODevice &dev, Format &format, QSize &size) try
     return "Negative canvas height";
   }
   layers.resize(reader.readInt());
-  frameCount = FrameIdx(reader.readInt());
+  frameCount = static_cast<FrameIdx>(reader.readInt());
   if (+frameCount < 0) {
     return "Negative frame count";
   }
@@ -276,6 +425,17 @@ Error Timeline::deserializeHead(QIODevice &dev, Format &format, QSize &size) try
 }
 
 Error Timeline::deserializeBody(QIODevice &dev) try {
+  for (Layer &layer : layers) {
+    if (Error err = readLHDR(dev, layer); err) return err;
+    for (CellSpan &span : layer.spans) {
+      if (Error err = readCHDR(dev, span, canvasFormat); err) return err;
+      if (span.cell) {
+        if (Error err = readCDAT(dev, span.cell->image, canvasFormat); err) {
+          return err;
+        }
+      }
+    }
+  }
   return {};
 } catch (FileIOError &e) {
   return e.what();
@@ -287,6 +447,13 @@ Error Timeline::deserializeTail(QIODevice &dev) try {
   if (Error err = expectedHeader(start, "AEND"); err) return err;
   if (Error err = expectedLength(start, 0); err) return err;
   if (Error err = reader.end(); err) return err;
+  selection = empty_rect;
+  changeFrameCount();
+  changeLayerCount();
+  changeFrame();
+  changePos();
+  Q_EMIT selectionChanged(selection);
+  changeLayers(LayerIdx{0}, layerCount());
   return {};
 } catch (FileIOError &e) {
   return e.what();

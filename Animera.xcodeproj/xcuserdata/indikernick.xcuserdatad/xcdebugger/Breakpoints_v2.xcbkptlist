@@ -9,14 +9,14 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "src/timeline.cpp"
-            timestampString = "587703060.370513"
+            filePath = "src/window.cpp"
+            timestampString = "587717987.532385"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "279"
-            endingLineNumber = "279"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            startingLineNumber = "57"
+            endingLineNumber = "57"
+            landmarkName = "Window::openFile(const QString &amp;path)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -26,12 +26,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "src/window.cpp"
-            timestampString = "587703060.370604"
+            timestampString = "587718062.16328"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "57"
-            endingLineNumber = "57"
-            landmarkName = "Window::openFile(const QString &amp;path)"
+            startingLineNumber = "314"
+            endingLineNumber = "314"
+            landmarkName = "Window::saveToPath(const QString &amp;path)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
