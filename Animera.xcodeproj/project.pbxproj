@@ -57,6 +57,7 @@
 		4595D48C22C05E5400607D64 /* timeline cells widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4595D48A22C05E5400607D64 /* timeline cells widget.cpp */; };
 		4595D48F22C061DF00607D64 /* timeline layers widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4595D48D22C061DF00607D64 /* timeline layers widget.cpp */; };
 		4595D49222C0644B00607D64 /* timeline frames widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4595D49022C0644B00607D64 /* timeline frames widget.cpp */; };
+		45A6103C2307E1EF000A0BD6 /* error dialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45A6103A2307E1EF000A0BD6 /* error dialog.cpp */; };
 		45B284932218E38800D6D055 /* image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45B284912218E38800D6D055 /* image.cpp */; };
 		45B284962218E39300D6D055 /* cell.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45B284942218E39300D6D055 /* cell.cpp */; };
 		45B284AA221A331500D6D055 /* serial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45B284A8221A331500D6D055 /* serial.cpp */; };
@@ -229,6 +230,8 @@
 		4595D49422C0B05000607D64 /* unlink.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = unlink.pbm; sourceTree = "<group>"; };
 		4595D49522C0B05000607D64 /* link.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = link.pbm; sourceTree = "<group>"; };
 		45A61039230775CE000A0BD6 /* error.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = error.hpp; sourceTree = "<group>"; };
+		45A6103A2307E1EF000A0BD6 /* error dialog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "error dialog.cpp"; sourceTree = "<group>"; };
+		45A6103B2307E1EF000A0BD6 /* error dialog.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "error dialog.hpp"; sourceTree = "<group>"; };
 		45B284912218E38800D6D055 /* image.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = image.cpp; sourceTree = "<group>"; };
 		45B284922218E38800D6D055 /* image.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = image.hpp; sourceTree = "<group>"; };
 		45B284942218E39300D6D055 /* cell.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = cell.cpp; sourceTree = "<group>"; };
@@ -2175,6 +2178,8 @@
 				45F3EB6D22CC430F00F9F93E /* init canvas dialog.hpp */,
 				45D109AD22E2D88500D1F1CB /* export dialog.cpp */,
 				45D109AE22E2D88500D1F1CB /* export dialog.hpp */,
+				45A6103A2307E1EF000A0BD6 /* error dialog.cpp */,
+				45A6103B2307E1EF000A0BD6 /* error dialog.hpp */,
 			);
 			name = Dialogs;
 			sourceTree = "<group>";
@@ -3029,6 +3034,7 @@
 				45D109AC22E2D4FD00D1F1CB /* text push button widget.cpp in Sources */,
 				4595D48C22C05E5400607D64 /* timeline cells widget.cpp in Sources */,
 				453C78432234E13E00818B19 /* window.cpp in Sources */,
+				45A6103C2307E1EF000A0BD6 /* error dialog.cpp in Sources */,
 				4512636622781D7B00C66A19 /* tool colors widget.cpp in Sources */,
 				4571C132227C383A00479006 /* radio button widget.cpp in Sources */,
 				453D28C02276956A00D0E5F9 /* color input widget.cpp in Sources */,

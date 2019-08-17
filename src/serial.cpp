@@ -18,13 +18,11 @@ ChunkWriter::ChunkWriter(QIODevice &dev)
   : dev{dev} {}
 
 void ChunkWriter::begin(const uint32_t len, const char *header) {
-  assert(!std::exchange(began, true));
   startPos = -1;
   writeHeader(len, header);
 }
 
 void ChunkWriter::begin(const char *header) {
-  assert(!std::exchange(began, true));
   assert(!dev.isSequential());
   startPos = dev.pos();
   assert(startPos != 0);
@@ -32,7 +30,6 @@ void ChunkWriter::begin(const char *header) {
 }
 
 void ChunkWriter::end() {
-  assert(std::exchange(began, false));
   const uint32_t finalCrc = static_cast<uint32_t>(crc);
   if (startPos != -1) {
     const qint64 currPos = dev.pos();
@@ -85,7 +82,6 @@ ChunkReader::ChunkReader(QIODevice &dev)
   : dev{dev} {}
 
 ChunkStart ChunkReader::begin() {
-  assert(!std::exchange(began, true));
   ChunkStart start;
   start.length = readInt();
   crc = crc32(0, nullptr, 0);
@@ -94,7 +90,6 @@ ChunkStart ChunkReader::begin() {
 }
 
 Error ChunkReader::end() {
-  assert(std::exchange(began, false));
   const uint32_t finalCrc = static_cast<uint32_t>(crc);
   if (finalCrc != readInt()) {
     return "CRC mismatch";

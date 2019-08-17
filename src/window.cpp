@@ -12,10 +12,12 @@
 #include "connect.hpp"
 #include "application.hpp"
 #include "global font.hpp"
+#include "error dialog.hpp"
 #include <QtWidgets/qstyle.h>
 #include "separator widget.hpp"
 #include <QtWidgets/qboxlayout.h>
 #include <QtWidgets/qfiledialog.h>
+#include <QtWidgets/qdesktopwidget.h>
 
 Window::Window(QWidget *parent, const QRect desktop)
   : QMainWindow{parent},
@@ -54,12 +56,13 @@ void Window::newFile(const Format format, const QSize size) {
 
 void Window::openFile(const QString &path) {
   if (Error err = sprite.openFile(path); err) {
-    // @TODO error handling. Show a popup or something
-    assert(false);
+    QDesktopWidget *desktop = static_cast<Application *>(QApplication::instance())->desktop();
+    (new ErrorDialog{desktop, "File open error", err.msg()})->open();
+  } else {
+    setWindowFilePath(path);
+    setWindowModified(false);
+    show();
   }
-  setWindowFilePath(path);
-  setWindowModified(false);
-  show();
 }
 
 void Window::modify() {
@@ -311,12 +314,11 @@ void Window::connectSignals() {
 
 void Window::saveToPath(const QString &path) {
   if (Error err = sprite.saveFile(path); err) {
-    // @TODO error handling. Show a popup or something
-    assert(false);
+    (new ErrorDialog{this, "File save error", err.msg()})->open();
+  } else {
+    setWindowFilePath(path);
+    setWindowModified(false);
   }
-  setWindowFilePath(path);
-  setWindowModified(false);
-  statusBar.showTemp("Saved!");
 }
 
 void Window::saveFile() {
@@ -325,6 +327,9 @@ void Window::saveFile() {
     openSaveFileDialog();
   } else {
     saveToPath(path);
+    if (!isWindowModified()) {
+      statusBar.showTemp("Saved!");
+    }
   }
 }
 
@@ -333,7 +338,7 @@ void Window::openSaveFileDialog() {
   dialog->setAcceptMode(QFileDialog::AcceptSave);
   dialog->setNameFilter("Animera File (*.px2)");
   dialog->setDefaultSuffix("px2");
-  dialog->setDirectory(QDir::homePath() + "/" + "my sprite.px2");
+  dialog->setDirectory(QDir::homePath() + "/my sprite.px2");
   CONNECT(dialog, fileSelected, this, saveToPath);
   dialog->open();
 }

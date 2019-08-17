@@ -36,12 +36,6 @@ class ChunkWriter {
 public:
   explicit ChunkWriter(QIODevice &);
 
-  #ifndef NDEBUG
-  ~ChunkWriter() {
-    assert(!began);
-  }
-  #endif
-
   void begin(uint32_t, const char *);
   void begin(const char *);
   void end();
@@ -56,9 +50,6 @@ private:
   QIODevice &dev;
   uLong crc;
   qint64 startPos;
-  #ifndef NDEBUG
-  bool began = false;
-  #endif
   
   void writeHeader(uint32_t, const char *);
   
@@ -79,12 +70,6 @@ class ChunkReader {
 public:
   explicit ChunkReader(QIODevice &);
   
-  #ifndef NDEBUG
-  ~ChunkReader() {
-    assert(!began);
-  }
-  #endif
-  
   ChunkStart begin();
   Error end();
   
@@ -97,9 +82,6 @@ public:
 private:
   QIODevice &dev;
   uLong crc;
-  #ifndef NDEBUG
-  bool began = false;
-  #endif
   
   template <typename T>
   void readData(T *, uint32_t);

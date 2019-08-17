@@ -459,32 +459,6 @@ Error Timeline::deserializeTail(QIODevice &dev) try {
   return e.what();
 }
 
-/*void Timeline::deserialize(QIODevice *dev) {
-  assert(dev);
-  layers.resize(deserializeBytesAs<uint16_t>(dev));
-  frameCount = FrameIdx{deserializeBytesAs<uint16_t>(dev)};
-  for (Layer &layer : layers) {
-    deserializeBytes(dev, layer.visible);
-    layer.name.resize(deserializeBytesAs<uint16_t>(dev));
-    dev->read(layer.name.data(), layer.name.size());
-    layer.spans.resize(deserializeBytesAs<uint16_t>(dev));
-    for (CellSpan &span : layer.spans) {
-      span.len = FrameIdx{deserializeBytesAs<uint16_t>(dev)};
-      if (deserializeBytesAs<bool>(dev)) {
-        span.cell = makeCell();
-        deserializeImage(dev, span.cell->image);
-      }
-    }
-  }
-  selection = empty_rect;
-  changeFrameCount();
-  changeLayerCount();
-  changeFrame();
-  changePos();
-  Q_EMIT selectionChanged(selection);
-  changeLayers(LayerIdx{0}, layerCount());
-}*/
-
 CellRect Timeline::selectCells(const ExportOptions &options) const {
   CellRect rect;
   switch (options.layerSelect) {

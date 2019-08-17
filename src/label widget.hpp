@@ -36,4 +36,8 @@ LabelWidget *makeLabel(QWidget *parent, const int chars, const char (&text)[Size
   return new LabelWidget{parent, textBoxRect(chars), text};
 }
 
+inline LabelWidget *makeLabel(QWidget *parent, const QString &text) {
+  return new LabelWidget{parent, textBoxRect(text.size()), text};
+}
+
 #endif
