@@ -8,6 +8,7 @@
 
 #include "timeline.hpp"
 
+#include "zlib.hpp"
 #include "serial.hpp"
 #include "formats.hpp"
 #include "transform.hpp"
@@ -65,7 +66,7 @@ constexpr uint8_t formatByte(const Format format) {
 Error Timeline::writeLHDR(QIODevice &dev, const Layer &layer) try {
   ChunkWriter writer{dev};
   const uint32_t nameLen = static_cast<uint32_t>(layer.name.size());
-  writer.begin(4 + 1 + nameLen, "LHDR");
+  writer.begin(file_int_size + 1 + nameLen, chunk_layer_header);
   writer.writeInt(static_cast<uint32_t>(layer.spans.size()));
   writer.writeByte(layer.visible);
   writer.writeString(layer.name.data(), nameLen);
@@ -77,7 +78,7 @@ Error Timeline::writeLHDR(QIODevice &dev, const Layer &layer) try {
 
 Error Timeline::writeCHDR(QIODevice &dev, const CellSpan &span) try {
   ChunkWriter writer{dev};
-  writer.begin("CHDR");
+  writer.begin(chunk_cell_header);
   writer.writeInt(static_cast<uint32_t>(span.len));
   if (span.cell) {
     writer.writeInt(0); // x
@@ -175,7 +176,7 @@ Error Timeline::writeCDAT(
   QIODevice &dev, const QImage &image, const Format format
 ) try {
   assert(!image.isNull());
-  const uint32_t outBuffSize = 1 << 16;
+  const uint32_t outBuffSize = file_buff_size;
   std::vector<Bytef> outBuff(outBuffSize);
   const uint32_t inBuffSize = image.width() * byteDepth(format);
   std::vector<Bytef> inBuff(inBuffSize);
@@ -194,7 +195,7 @@ Error Timeline::writeCDAT(
   stream.avail_out = outBuffSize;
   
   ChunkWriter writer{dev};
-  writer.begin("CDAT");
+  writer.begin(chunk_cell_data);
   
   int rowIdx = 0;
   int ret;
@@ -228,7 +229,7 @@ Error Timeline::writeCDAT(
 
 Error Timeline::serializeHead(QIODevice &dev) const try {
   ChunkWriter writer{dev};
-  writer.begin(5 * 4 + 1, "AHDR");
+  writer.begin(5 * file_int_size + 1, chunk_anim_header);
   writer.writeInt(canvasSize.width());
   writer.writeInt(canvasSize.height());
   writer.writeInt(static_cast<uint32_t>(layerCount()));
@@ -258,7 +259,7 @@ Error Timeline::serializeBody(QIODevice &dev) const {
 
 Error Timeline::serializeTail(QIODevice &dev) const try {
   ChunkWriter writer{dev};
-  writer.begin(0, "AEND");
+  writer.begin(0, chunk_anim_end);
   writer.end();
   return {};
 } catch (FileIOError &e) {
@@ -268,9 +269,9 @@ Error Timeline::serializeTail(QIODevice &dev) const try {
 Error Timeline::readLHDR(QIODevice &dev, Layer &layer) try {
   ChunkReader reader{dev};
   const ChunkStart start = reader.begin();
-  if (Error err = expectedHeader(start, "LHDR"); err) return err;
-  if (start.length <= 4 + 1) {
-    return "LHDR chunk length too small";
+  if (Error err = expectedName(start, chunk_layer_header); err) return err;
+  if (start.length <= file_int_size + 1) {
+    return QString{chunk_layer_header} + " chunk length too small";
   }
   layer.spans.resize(reader.readInt());
   const uint8_t visibleByte = reader.readByte();
@@ -284,7 +285,7 @@ Error Timeline::readLHDR(QIODevice &dev, Layer &layer) try {
     default:
       return "Invalid visibility " + QString::number(visibleByte);
   }
-  const uint32_t nameLen = start.length - (4 + 1);
+  const uint32_t nameLen = start.length - (file_int_size + 1);
   layer.name.resize(nameLen);
   reader.readString(layer.name.data(), nameLen);
   if (Error err = reader.end(); err) return err;
@@ -296,12 +297,12 @@ Error Timeline::readLHDR(QIODevice &dev, Layer &layer) try {
 Error Timeline::readCHDR(QIODevice &dev, CellSpan &span, const Format format) try {
   ChunkReader reader{dev};
   const ChunkStart start = reader.begin();
-  if (Error err = expectedHeader(start, "CHDR"); err) return err;
-  if (start.length != 4 && start.length != 5 * 4) {
-    return "CHDR chunk length invalid";
+  if (Error err = expectedName(start, chunk_cell_header); err) return err;
+  if (start.length != file_int_size && start.length != 5 * file_int_size) {
+    return QString{chunk_cell_header} + " chunk length invalid";
   }
   span.len = static_cast<FrameIdx>(reader.readInt());
-  if (start.length == 5 * 4) {
+  if (start.length == 5 * file_int_size) {
     reader.readInt(); // x
     reader.readInt(); // y
     const int width = reader.readInt();
@@ -324,7 +325,7 @@ Error Timeline::readCDAT(QIODevice &dev, QImage &image, const Format format) try
   assert(!image.isNull());
   const uint32_t outBuffSize = image.width() * byteDepth(format);
   std::vector<Bytef> outBuff(outBuffSize);
-  const uint32_t inBuffSize = 1 << 16;
+  const uint32_t inBuffSize = file_buff_size;
   std::vector<Bytef> inBuff(inBuffSize);
   
   z_stream stream;
@@ -338,7 +339,7 @@ Error Timeline::readCDAT(QIODevice &dev, QImage &image, const Format format) try
   
   ChunkReader reader{dev};
   const ChunkStart start = reader.begin();
-  if (Error err = expectedHeader(start, "CDAT"); err) {
+  if (Error err = expectedName(start, chunk_cell_data); err) {
     return err;
   }
   
@@ -386,8 +387,8 @@ Error Timeline::readCDAT(QIODevice &dev, QImage &image, const Format format) try
 Error Timeline::deserializeHead(QIODevice &dev, Format &format, QSize &size) try {
   ChunkReader reader{dev};
   const ChunkStart start = reader.begin();
-  if (Error err = expectedHeader(start, "AHDR"); err) return err;
-  if (Error err = expectedLength(start, 5 * 4 + 1); err) return err;
+  if (Error err = expectedName(start, chunk_anim_header); err) return err;
+  if (Error err = expectedLength(start, 5 * file_int_size + 1); err) return err;
   canvasSize.setWidth(reader.readInt());
   if (canvasSize.width() <= 0) {
     return "Negative canvas width";
@@ -444,7 +445,7 @@ Error Timeline::deserializeBody(QIODevice &dev) try {
 Error Timeline::deserializeTail(QIODevice &dev) try {
   ChunkReader reader{dev};
   const ChunkStart start = reader.begin();
-  if (Error err = expectedHeader(start, "AEND"); err) return err;
+  if (Error err = expectedName(start, chunk_anim_end); err) return err;
   if (Error err = expectedLength(start, 0); err) return err;
   if (Error err = reader.end(); err) return err;
   selection = empty_rect;

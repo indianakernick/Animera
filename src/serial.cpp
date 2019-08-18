@@ -8,7 +8,9 @@
 
 #include "serial.hpp"
 
+#include "zlib.hpp"
 #include <QtCore/qendian.h>
+#include <QtCore/qiodevice.h>
 
 const char *FileIOError::what() const noexcept {
   return "File IO error";
@@ -17,16 +19,16 @@ const char *FileIOError::what() const noexcept {
 ChunkWriter::ChunkWriter(QIODevice &dev)
   : dev{dev} {}
 
-void ChunkWriter::begin(const uint32_t len, const char *header) {
+void ChunkWriter::begin(const uint32_t len, const char *name) {
   startPos = -1;
-  writeHeader(len, header);
+  writeStart(len, name);
 }
 
-void ChunkWriter::begin(const char *header) {
+void ChunkWriter::begin(const char *name) {
   assert(!dev.isSequential());
   startPos = dev.pos();
   assert(startPos != 0);
-  writeHeader(0, header);
+  writeStart(0, name);
 }
 
 void ChunkWriter::end() {
@@ -34,10 +36,10 @@ void ChunkWriter::end() {
   if (startPos != -1) {
     const qint64 currPos = dev.pos();
     assert(currPos != 0);
-    const uint32_t dataLen = static_cast<uint32_t>(currPos - startPos - 8);
-    assert(qint64{dataLen} == currPos - startPos - 8);
+    const qint64 dataLen = currPos - startPos - chunk_name_len - file_int_size;
+    assert(dataLen == qint64{static_cast<uint32_t>(dataLen)});
     if (!dev.seek(startPos)) throw FileIOError{};
-    writeInt(dataLen);
+    writeInt(static_cast<uint32_t>(dataLen));
     if (!dev.seek(currPos)) throw FileIOError{};
   }
   writeInt(finalCrc);
@@ -48,8 +50,9 @@ void ChunkWriter::writeByte(const uint8_t byte) {
 }
 
 void ChunkWriter::writeInt(uint32_t num) {
+  static_assert(sizeof(uint32_t) == file_int_size);
   num = qToBigEndian(num);
-  writeData(&num, 4);
+  writeData(&num, file_int_size);
 }
 
 void ChunkWriter::writeString(const char *dat, const uint32_t len) {
@@ -64,10 +67,10 @@ void ChunkWriter::writeString(const unsigned char *dat, const uint32_t len) {
   writeData(dat, len);
 }
 
-void ChunkWriter::writeHeader(const uint32_t len, const char *header) {
+void ChunkWriter::writeStart(const uint32_t len, const char *name) {
   writeInt(len);
   crc = crc32(0, nullptr, 0);
-  writeString(header, 4);
+  writeString(name, chunk_name_len);
 }
 
 template <typename T>
@@ -85,7 +88,7 @@ ChunkStart ChunkReader::begin() {
   ChunkStart start;
   start.length = readInt();
   crc = crc32(0, nullptr, 0);
-  readString(start.header, 4);
+  readString(start.name, chunk_name_len);
   return start;
 }
 
@@ -105,8 +108,9 @@ uint8_t ChunkReader::readByte() {
 }
 
 uint32_t ChunkReader::readInt() {
+  static_assert(sizeof(uint32_t) == file_int_size);
   uint32_t num;
-  readData(&num, 4);
+  readData(&num, file_int_size);
   return qFromBigEndian(num);
 }
 
@@ -130,12 +134,12 @@ void ChunkReader::readData(T *dat, const uint32_t len) {
   crc = crc32(crc, reinterpret_cast<const Bytef *>(dat), len);
 }
 
-Error expectedHeader(const ChunkStart start, const char *header) {
-  if (std::memcmp(start.header, header, 4) != 0) {
+Error expectedName(const ChunkStart start, const char *name) {
+  if (std::memcmp(start.name, name, chunk_name_len) != 0) {
     QString msg = "Expected '";
-    msg += QLatin1String{header, 4};
+    msg += QLatin1String{name, chunk_name_len};
     msg += "' chunk but found '";
-    msg += QLatin1String{start.header, 4};
+    msg += QLatin1String{start.name, chunk_name_len};
     msg += '\'';
     return msg;
   } else {

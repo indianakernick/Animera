@@ -9,23 +9,10 @@
 #ifndef serial_hpp
 #define serial_hpp
 
-#include "zlib.hpp"
 #include "error.hpp"
-#include <QtCore/qiodevice.h>
+#include "config.hpp"
 
-template <typename T>
-void deserializeBytes(QIODevice *dev, T &data) {
-  assert(dev);
-  assert(dev->isReadable());
-  dev->read(reinterpret_cast<char *>(&data), sizeof(T));
-}
-
-template <typename T>
-T deserializeBytesAs(QIODevice *dev) {
-  T data;
-  deserializeBytes(dev, data);
-  return data;
-}
+class QIODevice;
 
 class FileIOError final : public std::exception {
 public:
@@ -48,10 +35,10 @@ public:
 
 private:
   QIODevice &dev;
-  uLong crc;
+  unsigned long crc;
   qint64 startPos;
   
-  void writeHeader(uint32_t, const char *);
+  void writeStart(uint32_t, const char *);
   
   template <typename T>
   void writeData(const T *, uint32_t);
@@ -59,12 +46,8 @@ private:
 
 struct ChunkStart {
   uint32_t length;
-  char header[4];
+  char name[chunk_name_len];
 };
-
-inline bool headerEq(const ChunkStart start, const char *header) {
-  return std::memcmp(start.header, header, 4) == 0;
-}
 
 class ChunkReader {
 public:
@@ -81,14 +64,14 @@ public:
 
 private:
   QIODevice &dev;
-  uLong crc;
+  unsigned long crc;
   
   template <typename T>
   void readData(T *, uint32_t);
 };
 
-Error expectedHeader(ChunkStart, const char *);
+Error expectedName(ChunkStart, const char *);
 Error expectedLength(ChunkStart, uint32_t);
-Error expectedHeaderLength(ChunkStart, const char *, uint32_t);
+Error expectedNameLength(ChunkStart, const char *, uint32_t);
 
 #endif

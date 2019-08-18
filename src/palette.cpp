@@ -160,7 +160,7 @@ size_t getUsedSize(const PaletteCSpan colors) {
 Error writeRgba(QIODevice &dev, const PaletteCSpan colors) try {
   const size_t used = getUsedSize(colors);
   ChunkWriter writer{dev};
-  writer.begin(static_cast<uint32_t>(used) * 4, "PLTE");
+  writer.begin(static_cast<uint32_t>(used) * 4, chunk_palette);
   for (size_t i = 0; i != used; ++i) {
     const Color color = FormatARGB::toColor(colors[i]);
     writer.writeByte(color.r);
@@ -177,7 +177,7 @@ Error writeRgba(QIODevice &dev, const PaletteCSpan colors) try {
 Error writeGray(QIODevice &dev, const PaletteCSpan colors) try {
   const size_t used = getUsedSize(colors);
   ChunkWriter writer{dev};
-  writer.begin(static_cast<uint32_t>(used) * 2, "PLTE");
+  writer.begin(static_cast<uint32_t>(used) * 2, chunk_palette);
   for (size_t i = 0; i != used; ++i) {
     const Color color = FormatGray::toColor(colors[i]);
     writer.writeByte(color.r);
@@ -190,9 +190,11 @@ Error writeGray(QIODevice &dev, const PaletteCSpan colors) try {
 }
 
 Error checkStart(ChunkStart start, const int multiple) {
-  if (Error err = expectedHeader(start, "PLTE"); err) return err;
+  if (Error err = expectedName(start, chunk_palette); err) return err;
   if (start.length % multiple != 0 || start.length / multiple > pal_colors) {
-    QString msg = "Invalid PLTE chunk length ";
+    QString msg = "Invalid ";
+    msg += chunk_palette;
+    msg += " chunk length ";
     msg += QString::number(start.length);
     return msg;
   }

@@ -26,8 +26,6 @@ void Sprite::newFile(const Format newFormat, const QSize newSize) {
 
 namespace {
 
-constexpr char signature[8] = "animera";
-
 int getColorType(const Format format) {
   switch (format) {
     case Format::rgba:  return PNG_COLOR_TYPE_RGBA;
@@ -81,7 +79,7 @@ Error Sprite::saveFile(const QString &path) const {
   if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
     return "Failed to open file for writing";
   }
-  if (file.write(signature, 8) != 8) {
+  if (file.write(file_sig, file_sig_len) != file_sig_len) {
     return FileIOError{}.what();
   }
   if (Error err = timeline.serializeHead(file); err) return err;
@@ -132,11 +130,11 @@ Error Sprite::openFile(const QString &path) {
   if (!file.open(QIODevice::ReadOnly)) {
     return "Failed to open file for reading";
   }
-  char sig[8];
-  if (file.read(sig, 8) != 8) {
+  char sig[file_sig_len];
+  if (file.read(sig, file_sig_len) != file_sig_len) {
     return FileIOError{}.what();
   }
-  if (std::memcmp(sig, signature, 8) != 0) {
+  if (std::memcmp(sig, file_sig, file_sig_len) != 0) {
     return "Signature mismatch";
   }
   

@@ -65,3 +65,7 @@ should I make a post to r/gamedev?
   they might be interested in this
   could be a good place to get feedback
   laterforreddit.com
+
+use the status bar for more than just tools
+  it could make sense to use it for the color picker
+  at the moment it seems underappreciated
