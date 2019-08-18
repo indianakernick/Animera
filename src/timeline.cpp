@@ -188,7 +188,9 @@ Error Timeline::writeCDAT(
   z_stream stream;
   stream.zalloc = nullptr;
   stream.zfree = nullptr;
-  assertEval(deflateInit(&stream, Z_DEFAULT_COMPRESSION) == Z_OK);
+  int ret = deflateInit(&stream, Z_DEFAULT_COMPRESSION);
+  if (ret == Z_MEM_ERROR) return "zlib: memory error";
+  assert(ret == Z_OK);
   const std::unique_ptr<z_stream, DeflateDeleter> deleter{&stream};
   stream.avail_in = 0;
   stream.next_out = outBuff.data();
@@ -198,7 +200,6 @@ Error Timeline::writeCDAT(
   writer.begin(chunk_cell_data);
   
   int rowIdx = 0;
-  int ret;
   
   do {
     if (stream.avail_in == 0 && rowIdx < image.height()) {
@@ -286,6 +287,9 @@ Error Timeline::readLHDR(QIODevice &dev, Layer &layer) try {
       return "Invalid visibility " + QString::number(visibleByte);
   }
   const uint32_t nameLen = start.length - (file_int_size + 1);
+  if (nameLen > layer_name_max_len) {
+    return QString{chunk_layer_header} + " chunk length too big";
+  }
   layer.name.resize(nameLen);
   reader.readString(layer.name.data(), nameLen);
   if (Error err = reader.end(); err) return err;
@@ -302,17 +306,14 @@ Error Timeline::readCHDR(QIODevice &dev, CellSpan &span, const Format format) tr
     return QString{chunk_cell_header} + " chunk length invalid";
   }
   span.len = static_cast<FrameIdx>(reader.readInt());
+  if (+span.len <= 0) return "Negative cell span length";
   if (start.length == 5 * file_int_size) {
     reader.readInt(); // x
     reader.readInt(); // y
     const int width = reader.readInt();
-    if (width <= 0) {
-      return "Negative cell width";
-    }
+    if (width <= 0) return "Negative cell width";
     const int height = reader.readInt();
-    if (height <= 0) {
-      return "Negative cell height";
-    }
+    if (height <= 0) return "Negative cell height";
     span.cell = std::make_unique<Cell>(QSize{width, height}, format);
   }
   if (Error err = reader.end(); err) return err;
@@ -331,7 +332,9 @@ Error Timeline::readCDAT(QIODevice &dev, QImage &image, const Format format) try
   z_stream stream;
   stream.zalloc = nullptr;
   stream.zfree = nullptr;
-  assertEval(inflateInit(&stream) == Z_OK);
+  int ret = inflateInit(&stream);
+  if (ret == Z_MEM_ERROR) return "zlib: memory error";
+  assert(ret == Z_OK);
   const std::unique_ptr<z_stream, InflateDeleter> deleter{&stream};
   stream.avail_in = 0;
   stream.next_out = outBuff.data();
@@ -344,7 +347,6 @@ Error Timeline::readCDAT(QIODevice &dev, QImage &image, const Format format) try
   }
   
   int rowIdx = 0;
-  int ret;
   uint32_t remainingChunk = start.length;
   
   do {
@@ -360,8 +362,13 @@ Error Timeline::readCDAT(QIODevice &dev, QImage &image, const Format format) try
       stream.avail_out = outBuffSize;
       ++rowIdx;
     }
-    ret = inflate(&stream, stream.avail_in ? Z_NO_FLUSH : Z_FINISH);
+    ret = inflate(&stream, Z_NO_FLUSH);
   } while (ret == Z_OK);
+  if (ret == Z_DATA_ERROR) {
+    return QString{"zlib: "} + stream.msg;
+  } else if (ret == Z_MEM_ERROR) {
+    return "zlib: memory error";
+  }
   assert(ret == Z_STREAM_END);
   
   if (rowIdx == image.height() - 1) {
@@ -390,18 +397,12 @@ Error Timeline::deserializeHead(QIODevice &dev, Format &format, QSize &size) try
   if (Error err = expectedName(start, chunk_anim_header); err) return err;
   if (Error err = expectedLength(start, 5 * file_int_size + 1); err) return err;
   canvasSize.setWidth(reader.readInt());
-  if (canvasSize.width() <= 0) {
-    return "Negative canvas width";
-  }
+  if (canvasSize.width() <= 0) return "Negative canvas width";
   canvasSize.setHeight(reader.readInt());
-  if (canvasSize.height() <= 0) {
-    return "Negative canvas height";
-  }
+  if (canvasSize.height() <= 0) return "Negative canvas height";
   layers.resize(reader.readInt());
   frameCount = static_cast<FrameIdx>(reader.readInt());
-  if (+frameCount < 0) {
-    return "Negative frame count";
-  }
+  if (+frameCount < 0) return "Negative frame count";
   reader.readInt(); // delay
   const uint8_t readFormat = reader.readByte();
   switch (readFormat) {

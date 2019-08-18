@@ -250,6 +250,7 @@ constexpr int       cell_height = cell_width;
 constexpr int       cell_border_offset = cell_icon_pad + glob_border_width;
 constexpr int       frame_incr = 5;
 constexpr int       layer_width = 97_px;
+constexpr int       layer_name_max_len = 256;
 
 constexpr WidgetRect timelineTextBox(const int chars) {
   const QPoint pos = {

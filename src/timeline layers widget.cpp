@@ -49,6 +49,7 @@ void LayerNameWidget::createWidgets() {
   paintTimelineButtonIcon(offPix, ":/Timeline/hidden.pbm");
   visible = new IconRadioButtonWidget{this, onPix, offPix};
   name = new TextInputWidget{this, layer_text_rect};
+  name->setMaxLength(layer_name_max_len);
 }
 
 void LayerNameWidget::setupLayout() {
