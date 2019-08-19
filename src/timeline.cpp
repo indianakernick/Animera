@@ -106,7 +106,7 @@ void copyToByteOrder(
       const auto *srcPx = reinterpret_cast<const FormatARGB::Pixel *>(src);
       unsigned char *dstEnd = dst + size;
       while (dst != dstEnd) {
-        const Color color = FormatARGB::toColor(*srcPx++);
+        const Color color = FormatARGB::color(*srcPx++);
         *dst++ = color.r;
         *dst++ = color.g;
         *dst++ = color.b;
@@ -122,7 +122,7 @@ void copyToByteOrder(
       auto *srcPx = reinterpret_cast<const FormatYA::Pixel *>(src);
       unsigned char *dstEnd = dst + size;
       while (dst != dstEnd) {
-        const Color color = FormatYA::toColor(*srcPx++);
+        const Color color = FormatYA::color(*srcPx++);
         *dst++ = color.r;
         *dst++ = color.a;
       }
@@ -148,7 +148,7 @@ void copyFromByteOrder(
         color.g = *src++;
         color.b = *src++;
         color.a = *src++;
-        *dstPx++ = FormatARGB::toPixel(color);
+        *dstPx++ = FormatARGB::pixel(color);
       }
       break;
     }
@@ -163,7 +163,7 @@ void copyFromByteOrder(
         Color color;
         color.r = *src++;
         color.a = *src++;
-        *dstPx = FormatYA::toPixel(color);
+        *dstPx = FormatYA::pixel(color);
       }
       break;
     }
@@ -500,7 +500,7 @@ QImage grayToMono(const QImage &srcImage) {
     for (uint8_t &pixel : row) {
       pixel = 0;
       for (int i = 7; i >= 0; --i) {
-        const uint8_t gray = Format::toColor(*srcPixelIter++).r;
+        const uint8_t gray = Format::color(*srcPixelIter++).r;
         pixel |= (gray < Threshold ? 0 : 1) << i;
       }
     }
@@ -578,7 +578,7 @@ void set_PLTE_tRNS(png_structp png, png_infop info, PaletteCSpan palette) {
   png_color plte[pal_colors];
   png_byte trns[pal_colors];
   for (size_t i = 0; i != pal_colors; ++i) {
-    const Color color = FormatARGB::toColor(palette[i]);
+    const Color color = FormatARGB::color(palette[i]);
     plte[i].red = color.r;
     plte[i].green = color.g;
     plte[i].blue = color.b;

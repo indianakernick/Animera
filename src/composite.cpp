@@ -198,8 +198,8 @@ void paletteToOverlay(Surface<PixelRgba> overlay, CSurface<PixelIndex> source, P
 
 void grayToOverlay(Surface<PixelRgba> overlay, CSurface<PixelGray> source) {
   pixelTransform(overlay, source, [](const PixelGray pixel) {
-    const int gray = FormatYA::toGray(pixel);
-    const int alpha = FormatYA::toAlpha(pixel);
+    const int gray = FormatYA::gray(pixel);
+    const int alpha = FormatYA::alpha(pixel);
     return qRgba(0, 0, scaleOverlayGray(gray), scaleOverlayAlpha(alpha));
   });
 }

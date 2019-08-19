@@ -81,8 +81,8 @@ private:
       case Format::index:
         return QColor::fromRgba(palette[color]);
       case Format::gray:
-        const int gray = FormatYA::toGray(color);
-        const int alpha = FormatYA::toAlpha(color);
+        const int gray = FormatYA::gray(color);
+        const int alpha = FormatYA::alpha(color);
         return QColor{gray, gray, gray, alpha};
     }
   }
@@ -162,9 +162,9 @@ ToolColors ToolColorsWidget::getInitialColors(const Format format) {
       return {1, 2, 0};
     case Format::gray:
       return {
-        FormatYA::toPixel(255, 255),
-        FormatYA::toPixel(0, 255),
-        FormatYA::toPixel(0, 0)
+        FormatYA::pixel(255, 255),
+        FormatYA::pixel(0, 255),
+        FormatYA::pixel(0, 0)
       };
   }
 }

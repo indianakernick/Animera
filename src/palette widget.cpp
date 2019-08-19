@@ -75,9 +75,9 @@ private:
     switch (format) {
       case Format::index:
       case Format::rgba:
-        return toQColor(FormatARGB::toColor(color));
+        return toQColor(FormatARGB::color(color));
       case Format::gray:
-        return toQColor(FormatYA::toColor(color));
+        return toQColor(FormatYA::color(color));
     }
   }
   

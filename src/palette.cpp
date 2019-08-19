@@ -27,7 +27,7 @@ constexpr QRgb quantGrayColor(const int size, const int y) {
 }
 
 constexpr QRgb quantGray(const int size, const int y) {
-  return FormatYA::toPixel(quantColor(size, y), 255);
+  return FormatYA::pixel(quantColor(size, y), 255);
 }
 
 constexpr std::array<QRgb, 24> hue_palette = {
@@ -127,7 +127,7 @@ namespace {
   }
   for (size_t i = 0; i != static_cast<size_t>(plteSize); ++i) {
     const Color color = {plte[i].red, plte[i].green, plte[i].blue, trns[i]};
-    colors[i] = FormatARGB::toPixel(color);
+    colors[i] = FormatARGB::pixel(color);
   }
   for (size_t i = plteSize; i != pal_colors; ++i) {
     colors[i] = 0;
@@ -148,7 +148,7 @@ Error writeRgba(QIODevice &dev, const PaletteCSpan colors) try {
   ChunkWriter writer{dev};
   writer.begin(static_cast<uint32_t>(used) * 4, chunk_palette);
   for (size_t i = 0; i != used; ++i) {
-    const Color color = FormatARGB::toColor(colors[i]);
+    const Color color = FormatARGB::color(colors[i]);
     writer.writeByte(color.r);
     writer.writeByte(color.g);
     writer.writeByte(color.b);
@@ -165,7 +165,7 @@ Error writeGray(QIODevice &dev, const PaletteCSpan colors) try {
   ChunkWriter writer{dev};
   writer.begin(static_cast<uint32_t>(used) * 2, chunk_palette);
   for (size_t i = 0; i != used; ++i) {
-    const Color color = FormatYA::toColor(colors[i]);
+    const Color color = FormatYA::color(colors[i]);
     writer.writeByte(color.r);
     writer.writeByte(color.a);
   };
@@ -199,7 +199,7 @@ Error readRgba(QIODevice &dev, const PaletteSpan colors) try {
     color.g = reader.readByte();
     color.b = reader.readByte();
     color.a = reader.readByte();
-    *iter = FormatARGB::toPixel(color);
+    *iter = FormatARGB::pixel(color);
   }
   if (Error err = reader.end(); err) return err;
   std::fill(iter, colors.end(), 0);
@@ -218,7 +218,7 @@ Error readGray(QIODevice &dev, const PaletteSpan colors) try {
     Color color;
     color.r = reader.readByte();
     color.a = reader.readByte();
-    *iter = FormatYA::toPixel(color);
+    *iter = FormatYA::pixel(color);
   }
   if (Error err = reader.end(); err) return err;
   std::fill(iter, colors.end(), 0);

@@ -86,8 +86,8 @@ Color porterDuff(const Mode mode, const Color a, const Color b) {
 
 struct Format {
   Format(const Format &);
-  Color toColor(Pixel) const;
-  Pixel toPixel(Color) const;
+  Color color(Pixel) const;
+  Pixel pixel(Color) const;
 };
 
 */
@@ -109,10 +109,10 @@ void porterDuffRegion(
   for (auto row : dst.range(dstRect)) {
     const SrcPixel *srcPixelIter = (*srcRowIter).begin();
     for (DstPixel &pixel : row) {
-      pixel = dstFmt.toPixel(porterDuff(
+      pixel = dstFmt.pixel(porterDuff(
         mode,
-        srcFmt.toColor(*srcPixelIter),
-        dstFmt.toColor(pixel)
+        srcFmt.color(*srcPixelIter),
+        dstFmt.color(pixel)
       ));
       ++srcPixelIter;
     }
