@@ -12,6 +12,21 @@
 #include "color.hpp"
 #include <QtGui/qrgb.h>
 
+// @TODO fixed order pixel formats
+/*
+
+union Union {
+  Pixel pixel;
+  uint8_t channels[4];
+};
+
+union Union {
+  Pixel pixel;
+  uint8_t channels[2];
+};
+
+*/
+
 struct FormatARGB {
   using Pixel = QRgb;
 
@@ -45,7 +60,7 @@ struct FormatARGB {
   }
 };
 
-struct FormatPalette {
+struct FormatIndex {
   const FormatARGB::Pixel *data;
   
   using Pixel = uint8_t;
@@ -56,7 +71,7 @@ struct FormatPalette {
   }
 };
 
-struct FormatGray {
+struct FormatYA {
   using Pixel = uint16_t;
 
   static constexpr int toGray(const Pixel pixel) {
@@ -79,5 +94,23 @@ struct FormatGray {
     return toPixel(color.r, color.a);
   }
 };
+
+struct FormatY {
+  using Pixel = uint8_t;
+  
+  static constexpr Color toColor(const Pixel pixel) {
+    return {pixel, pixel, pixel, 255};
+  }
+  static constexpr Pixel toPixel(const Color color) {
+    return color.r;
+  }
+};
+
+template <typename DstFormat, typename SrcFormat>
+auto makeFormatConv(const DstFormat dstFmt, const SrcFormat srcFmt) {
+  return [dstFmt, srcFmt](const typename SrcFormat::Pixel src) -> typename DstFormat::Pixel {
+    return dstFmt.toPixel(srcFmt.toColor(src));
+  };
+}
 
 #endif

@@ -115,14 +115,14 @@ void copyToByteOrder(
       break;
     }
     case Format::index:
-      static_assert(sizeof(FormatPalette::Pixel) == 1);
+      static_assert(sizeof(FormatIndex::Pixel) == 1);
       std::memcpy(dst, src, size);
       break;
     case Format::gray: {
-      auto *srcPx = reinterpret_cast<const FormatGray::Pixel *>(src);
+      auto *srcPx = reinterpret_cast<const FormatYA::Pixel *>(src);
       unsigned char *dstEnd = dst + size;
       while (dst != dstEnd) {
-        const Color color = FormatGray::toColor(*srcPx++);
+        const Color color = FormatYA::toColor(*srcPx++);
         *dst++ = color.r;
         *dst++ = color.a;
       }
@@ -153,17 +153,17 @@ void copyFromByteOrder(
       break;
     }
     case Format::index:
-      static_assert(sizeof(FormatPalette::Pixel) == 1);
+      static_assert(sizeof(FormatIndex::Pixel) == 1);
       std::memcpy(dst, src, size);
       break;
     case Format::gray: {
-      auto *dstPx = reinterpret_cast<FormatGray::Pixel *>(dst);
+      auto *dstPx = reinterpret_cast<FormatYA::Pixel *>(dst);
       const unsigned char *srcEnd = src + size;
       while (src != srcEnd) {
         Color color;
         color.r = *src++;
         color.a = *src++;
-        *dstPx = FormatGray::toPixel(color);
+        *dstPx = FormatYA::toPixel(color);
       }
       break;
     }
@@ -489,82 +489,37 @@ CellRect Timeline::selectCells(const ExportOptions &options) const {
 
 namespace {
 
-QImage grayToIndexed(const PaletteCSpan palette, QImage image) {
-  assert(image.format() == QImage::Format_Grayscale8);
-  assertEval(image.reinterpretAsFormat(QImage::Format_Indexed8));
-  QVector<QRgb> table(static_cast<int>(palette.size()));
-  std::copy(palette.cbegin(), palette.cend(), table.begin());
-  image.setColorTable(table);
-  return image;
-}
-
-QImage grayToMono(const QImage &src) {
-  QImage dst{src.size(), QImage::Format_Mono};
-  for (int y = 0; y != dst.height(); ++y) {
-    for (int x = 0; x != dst.width(); ++x) {
-      const int gray = FormatGray::toGray(src.pixel(x, y));
-      dst.setPixel(x, y, gray < 128 ? 0 : 1);
+template <typename Format, uint8_t Threshold>
+QImage grayToMono(const QImage &srcImage) {
+  QImage dstImage{srcImage.width() / 8, srcImage.height(), QImage::Format_Grayscale8};
+  auto dst = makeSurface<uint8_t>(dstImage);
+  auto src = makeCSurface<typename Format::Pixel>(srcImage);
+  auto srcRowIter = src.range().begin();
+  for (auto row : dst.range()) {
+    auto *srcPixelIter = (*srcRowIter).begin();
+    for (uint8_t &pixel : row) {
+      pixel = 0;
+      for (int i = 7; i >= 0; --i) {
+        const uint8_t gray = Format::toColor(*srcPixelIter++).r;
+        pixel |= (gray < Threshold ? 0 : 1) << i;
+      }
     }
+    ++srcRowIter;
   }
-  return dst;
+  return dstImage;
 }
 
 QImage grayWithoutAlpha(const QImage &src) {
   assert(src.format() == QImage::Format_Grayscale16);
   QImage dst{src.size(), QImage::Format_Grayscale8};
-  pixelTransform(makeSurface<uint8_t>(dst), makeCSurface<PixelGray>(src), &FormatGray::toGray);
+  pixelTransform(
+    makeSurface<FormatY::Pixel>(dst),
+    makeCSurface<FormatYA::Pixel>(src),
+    makeFormatConv(FormatY{}, FormatYA{})
+  );
   return dst;
 }
 
-QImage convertIndexImage(const ExportFormat format, const PaletteCSpan palette, QImage image) {
-  switch (format) {
-    case ExportFormat::rgba:
-      assert(image.format() == qimageFormat(Format::rgba));
-      return image;
-    case ExportFormat::index:
-      return grayToIndexed(palette, image);
-    case ExportFormat::gray:
-      assert(image.format() == QImage::Format_Grayscale8);
-      return image;
-    case ExportFormat::monochrome:
-      assert(image.format() == QImage::Format_Grayscale8);
-      return grayToMono(image);
-    default: Q_UNREACHABLE();
-  }
-}
-
-QImage convertGrayImage(const ExportFormat format, QImage image) {
-  switch (format) {
-    case ExportFormat::gray:
-      return grayWithoutAlpha(image);
-    case ExportFormat::gray_alpha:
-      // impossible without libpng
-      // Qt doesn't support gray with alpha
-      return image;
-    case ExportFormat::monochrome:
-      return grayToMono(image);
-    default: Q_UNREACHABLE();
-  }
-}
-
-}
-
-QImage Timeline::convertImage(
-  const ExportFormat format,
-  const PaletteCSpan palette,
-  QImage image
-) const {
-  // @TODO libpng
-  switch (canvasFormat) {
-    case Format::rgba:
-      assert(format == ExportFormat::rgba);
-      return image;
-    case Format::index:
-      return convertIndexImage(format, palette, image);
-    case Format::gray:
-      return convertGrayImage(format, image);
-    default: Q_UNREACHABLE();
-  }
 }
 
 namespace {
@@ -574,14 +529,7 @@ Idx apply(const Line<Idx> line, const Idx value) {
   return value * line.stride + line.offset;
 }
 
-}
-
-void Timeline::exportFile(
-  const ExportOptions &options,
-  const PaletteCSpan palette,
-  QImage image,
-  CellPos pos
-) const {
+QString getPath(const ExportOptions &options, CellPos pos) {
   QString path = options.directory;
   if (path.back() != QDir::separator()) {
     path.push_back(QDir::separator());
@@ -590,7 +538,168 @@ void Timeline::exportFile(
   pos.f = apply(options.frameLine, pos.f);
   path += evalExportPattern(options.name, pos.l, pos.f);
   path += ".png";
-  assertEval(convertImage(options.format, palette, image).save(path));
+  return path;
+}
+
+int getBitDepth(const ExportFormat format) {
+  return format == ExportFormat::monochrome ? 1 : 8;
+}
+
+int getColorType(const ExportFormat format) {
+  switch (format) {
+    case ExportFormat::rgba:
+      return PNG_COLOR_TYPE_RGB_ALPHA;
+    case ExportFormat::index:
+      return PNG_COLOR_TYPE_PALETTE;
+    case ExportFormat::gray:
+      return PNG_COLOR_TYPE_GRAY;
+    case ExportFormat::gray_alpha:
+      return PNG_COLOR_TYPE_GRAY_ALPHA;
+    case ExportFormat::monochrome:
+      return PNG_COLOR_TYPE_GRAY;
+  }
+}
+
+std::vector<png_bytep> getRows(QImage &image) {
+  std::vector<png_bytep> rows;
+  png_bytep row = image.bits();
+  const ptrdiff_t pitch = image.bytesPerLine();
+  const ptrdiff_t height = image.height();
+  const png_bytep endRow = row + pitch * height;
+  rows.reserve(height);
+  while (row != endRow) {
+    rows.push_back(row);
+    row += pitch;
+  }
+  return rows;
+}
+
+void set_PLTE_tRNS(png_structp png, png_infop info, PaletteCSpan palette) {
+  png_color plte[pal_colors];
+  png_byte trns[pal_colors];
+  for (size_t i = 0; i != pal_colors; ++i) {
+    const Color color = FormatARGB::toColor(palette[i]);
+    plte[i].red = color.r;
+    plte[i].green = color.g;
+    plte[i].blue = color.b;
+    trns[i] = color.a;
+  }
+  png_set_PLTE(png, info, plte, pal_colors);
+  png_set_tRNS(png, info, trns, pal_colors, nullptr);
+}
+
+}
+
+void Timeline::exportFile(
+  const ExportOptions &options,
+  const PaletteCSpan palette,
+  QImage image,
+  const CellPos pos
+) const {
+  const QString path = getPath(options, pos);
+  pngErrorMsg.clear();
+  png_structp png = png_create_write_struct(
+    PNG_LIBPNG_VER_STRING, nullptr, &pngError, &pngWarning
+  );
+  if (!png) {
+    // does this only happen when malloc returns nullptr?
+    //return "Failed to initialize png write struct";
+    return;
+  }
+  png_infop info = png_create_info_struct(png);
+  if (!info) {
+    png_destroy_write_struct(&png, nullptr);
+    //return "Failed to initialize png info struct";
+    return;
+  }
+  if (setjmp(png_jmpbuf(png))) {
+    png_destroy_write_struct(&png, &info);
+    //return pngErrorMsg;
+    return;
+  }
+  QFile file{path};
+  if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+    //return "Failed to open file for writing";
+    return;
+  }
+  png_set_write_fn(png, &file, &pngWrite, &pngFlush);
+  png_set_IHDR(
+    png,
+    info,
+    image.width(),
+    image.height(),
+    getBitDepth(options.format),
+    getColorType(options.format),
+    PNG_INTERLACE_NONE,
+    PNG_COMPRESSION_TYPE_DEFAULT,
+    PNG_FILTER_TYPE_DEFAULT
+  );
+  // @TODO avoid doing a bunch of allocations for each image
+  // allocate one image at the very beginning of the export and reuse it
+  // the rows vector could also get the same treatment
+  // would this be as simple as making the variable static?
+  int transforms = PNG_TRANSFORM_IDENTITY;
+  switch (options.format) {
+    case ExportFormat::rgba:
+      // @TODO Make FormatARGB endian aware so that we don't need to do this
+      transforms = PNG_TRANSFORM_BGR;
+      break;
+    case ExportFormat::index:
+      set_PLTE_tRNS(png, info, palette);
+      break;
+    case ExportFormat::gray:
+      if (canvasFormat == Format::index) {
+        assert(image.format() == QImage::Format_Grayscale8);
+      } else if (canvasFormat == Format::gray) {
+        image = grayWithoutAlpha(image);
+      } else Q_UNREACHABLE();
+      break;
+    case ExportFormat::gray_alpha:
+      break;
+    case ExportFormat::monochrome:
+      if (canvasFormat == Format::gray) {
+        image = grayToMono<FormatYA, 128>(image);
+      } else if (canvasFormat == Format::index) {
+        assert(image.format() == QImage::Format_Grayscale8);
+        image = grayToMono<FormatY, 1>(image);
+      } else Q_UNREACHABLE();
+      break;
+  }
+  std::vector<png_bytep> rows = getRows(image);
+  png_set_rows(png, info, rows.data());
+  png_write_png(png, info, transforms, nullptr);
+  
+/*
+rgba
+  rgba
+index
+  rgba
+  index (not composited)
+  gray (not composited)
+  monochrome (not composited)
+gray
+  gray
+  gray_alpha
+  monochrome
+*/
+  
+  png_destroy_write_struct(&png, &info);
+  return;
+}
+
+void Timeline::exportFile(
+  const ExportOptions &options,
+  const PaletteCSpan palette,
+  const Frame &frame,
+  const CellPos pos
+) const {
+  QImage result;
+  if (canvasFormat == Format::gray) {
+    result = compositeFrame<FormatYA>(palette, frame, canvasSize, canvasFormat);
+  } else {
+    result = compositeFrame<FormatARGB>(palette, frame, canvasSize, canvasFormat);
+  }
+  exportFile(options, palette, result, pos);
 }
 
 void Timeline::exportCompRect(
@@ -615,8 +724,7 @@ void Timeline::exportCompRect(
       }
       ++iterators[+l];
     }
-    QImage result = compositeFrame(palette, frame, canvasSize, canvasFormat);
-    exportFile(options, palette, result, {rect.minL, f});
+    exportFile(options, palette, frame, {rect.minL, f});
   }
 }
 

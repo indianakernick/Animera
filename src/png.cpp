@@ -8,6 +8,7 @@
 
 #include "png.hpp"
 
+#include <iostream>
 #include <QtCore/qfile.h>
 
 QString pngErrorMsg = []{
@@ -21,7 +22,9 @@ void pngError(png_structp png, png_const_charp msg) {
   png_longjmp(png, 1);
 }
 
-void pngWarning(png_structp, png_const_charp) {}
+void pngWarning(png_structp, png_const_charp msg) {
+  std::cout << "PNG warning: " << msg << '\n';
+}
 
 void pngWrite(png_structp png, png_bytep data, size_t size) {
   auto *file = reinterpret_cast<QFile *>(png_get_io_ptr(png));

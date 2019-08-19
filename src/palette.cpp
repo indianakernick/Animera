@@ -27,7 +27,7 @@ constexpr QRgb quantGrayColor(const int size, const int y) {
 }
 
 constexpr QRgb quantGray(const int size, const int y) {
-  return FormatGray::toPixel(quantColor(size, y), 255);
+  return FormatYA::toPixel(quantColor(size, y), 255);
 }
 
 constexpr std::array<QRgb, 24> hue_palette = {
@@ -108,21 +108,7 @@ void Palette::initDefault() {
 
 namespace {
 
-/*void write_PLTE_tRNS(png_structp png, png_infop info, PaletteCSpan colors) {
-  png_color plte[pal_colors];
-  png_byte trns[pal_colors];
-  for (size_t i = 0; i != pal_colors; ++i) {
-    const Color color = FormatARGB::toColor(colors[i]);
-    plte[i].red = color.r;
-    plte[i].green = color.g;
-    plte[i].blue = color.b;
-    trns[i] = color.a;
-  }
-  png_set_PLTE(png, info, plte, pal_colors);
-  png_set_tRNS(png, info, trns, pal_colors, nullptr);
-}
-
-void read_PLTE_tRNS(png_structp png, png_infop info, PaletteSpan colors) {
+/*void read_PLTE_tRNS(png_structp png, png_infop info, PaletteSpan colors) {
   png_color *plte;
   int plteSize;
   if (png_get_PLTE(png, info, &plte, &plteSize) != PNG_INFO_PLTE) {
@@ -179,7 +165,7 @@ Error writeGray(QIODevice &dev, const PaletteCSpan colors) try {
   ChunkWriter writer{dev};
   writer.begin(static_cast<uint32_t>(used) * 2, chunk_palette);
   for (size_t i = 0; i != used; ++i) {
-    const Color color = FormatGray::toColor(colors[i]);
+    const Color color = FormatYA::toColor(colors[i]);
     writer.writeByte(color.r);
     writer.writeByte(color.a);
   };
@@ -232,7 +218,7 @@ Error readGray(QIODevice &dev, const PaletteSpan colors) try {
     Color color;
     color.r = reader.readByte();
     color.a = reader.readByte();
-    *iter = FormatGray::toPixel(color);
+    *iter = FormatYA::toPixel(color);
   }
   if (Error err = reader.end(); err) return err;
   std::fill(iter, colors.end(), 0);

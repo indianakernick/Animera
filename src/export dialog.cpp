@@ -78,8 +78,8 @@ void ExportDialog::addFormatOptions() {
       formatSelect->addItem("RGBA");
       break;
     case Format::gray:
-      formatSelect->addItem("Gray");
       formatSelect->addItem("Gray Alpha");
+      formatSelect->addItem("Gray");
       formatSelect->addItem("Monochrome");
       break;
     default: Q_UNREACHABLE();

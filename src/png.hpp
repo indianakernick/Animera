@@ -13,8 +13,6 @@
 #include <libpng16/png.h>
 #include <QtCore/qstring.h>
 
-// might want to use Z_RLE
-
 extern QString pngErrorMsg;
 
 void pngError(png_structp, png_const_charp);

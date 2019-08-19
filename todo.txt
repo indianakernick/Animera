@@ -69,3 +69,14 @@ should I make a post to r/gamedev?
 use the status bar for more than just tools
   it could make sense to use it for the color picker
   at the moment it seems underappreciated
+
+differentiate between indexed with full alpha and indexed with transparent entry
+  if there is a single fully transparent entry then it will be possible to
+  composite indexed images into indexed images
+
+optimize the palette carefully
+  if we only export part of the palette we must make sure that there aren't any
+  indicies in the image that are out of range
+  we could determine the maximum index in the image and export all entries up to
+  that index
+  we could provide a button that optimizes the palette

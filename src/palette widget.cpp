@@ -77,7 +77,7 @@ private:
       case Format::rgba:
         return toQColor(FormatARGB::toColor(color));
       case Format::gray:
-        return toQColor(FormatGray::toColor(color));
+        return toQColor(FormatYA::toColor(color));
     }
   }
   

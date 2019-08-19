@@ -70,8 +70,8 @@ void PickerImplGray::connectSignals() {
 }
 
 void PickerImplGray::setColor(const QRgb color) {
-  gray = FormatGray::toGray(color);
-  alpha = FormatGray::toAlpha(color);
+  gray = FormatYA::toGray(color);
+  alpha = FormatYA::toAlpha(color);
   graySlider->changeGray(gray);
   alphaSlider->changeAlpha(alpha);
   boxA->changeValue(alpha);
@@ -102,5 +102,5 @@ void PickerImplGray::setAlpha(const int newAlpha) {
 }
 
 void PickerImplGray::changeColor() {
-  Q_EMIT colorChanged(FormatGray::toPixel(gray, alpha));
+  Q_EMIT colorChanged(FormatYA::toPixel(gray, alpha));
 }

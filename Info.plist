@@ -14,7 +14,7 @@
 			<key>CFBundleTypeIconFile</key>
 			<string>../Resources/Document.icns</string>
 			<key>CFBundleTypeName</key>
-			<string>Animera File</string>
+			<string>Animera Sprite</string>
 			<key>CFBundleTypeOSTypes</key>
 			<array>
 				<string>????</string>

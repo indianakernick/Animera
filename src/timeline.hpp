@@ -67,8 +67,8 @@ public:
 
 private:
   CellRect selectCells(const ExportOptions &) const;
-  QImage convertImage(ExportFormat, PaletteCSpan, QImage) const;
   void exportFile(const ExportOptions &, PaletteCSpan, QImage, CellPos) const;
+  void exportFile(const ExportOptions &, PaletteCSpan, const Frame &, CellPos) const;
   void exportCompRect(const ExportOptions &, PaletteCSpan, CellRect) const;
   void exportRect(const ExportOptions &, PaletteCSpan, CellRect) const;
 
