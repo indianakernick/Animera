@@ -11,7 +11,6 @@
 
 #include <span>
 #include <array>
-#include "png.hpp"
 #include "error.hpp"
 #include "image.hpp"
 #include "config.hpp"

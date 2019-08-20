@@ -65,6 +65,7 @@ private:
   void saveToPath(const QString &);
   void saveFile();
   void openSaveFileDialog();
+  void exportSprite(const ExportOptions &);
   void openExportDialog();
   
   void closeEvent(QCloseEvent *) override;

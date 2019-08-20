@@ -104,8 +104,8 @@ Error Sprite::openFile(const QString &path) {
   return {};
 }
 
-void Sprite::exportSprite(const ExportOptions &options) const {
-  timeline.exportTimeline(options, palette.getPalette());
+Error Sprite::exportSprite(const ExportOptions &options) const {
+  return timeline.exportTimeline(options, palette.getPalette());
 }
 
 Format Sprite::getFormat() const {

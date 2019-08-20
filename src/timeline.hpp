@@ -67,13 +67,13 @@ public:
 
 private:
   CellRect selectCells(const ExportOptions &) const;
-  void exportFile(const ExportOptions &, PaletteCSpan, QImage, CellPos) const;
-  void exportFile(const ExportOptions &, PaletteCSpan, const Frame &, CellPos) const;
-  void exportCompRect(const ExportOptions &, PaletteCSpan, CellRect) const;
-  void exportRect(const ExportOptions &, PaletteCSpan, CellRect) const;
+  Error exportFile(const ExportOptions &, PaletteCSpan, const QImage &, CellPos) const;
+  Error exportFile(const ExportOptions &, PaletteCSpan, const Frame &, CellPos) const;
+  Error exportCompRect(const ExportOptions &, PaletteCSpan, CellRect) const;
+  Error exportRect(const ExportOptions &, PaletteCSpan, CellRect) const;
 
 public:
-  void exportTimeline(const ExportOptions &, PaletteCSpan) const;
+  Error exportTimeline(const ExportOptions &, PaletteCSpan) const;
 
 public Q_SLOTS:
   void initCanvas(Format, QSize);

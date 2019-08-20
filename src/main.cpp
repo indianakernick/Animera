@@ -1704,7 +1704,34 @@ void blitImageOld(QImage &dst, const QImage &src, const QPoint pos) {
 
 #if BUG_TEST
 
-#include <QtCore/qtimer.h>
+#include <csetjmp>
+#include <iostream>
+
+struct Dtor {
+  int i;
+
+  ~Dtor() {
+    std::cout << "Dtor " << i << '\n';
+  }
+};
+
+jmp_buf buf;
+
+int main() {
+  Dtor a{0};
+  if (setjmp(buf)) {
+    std::cout << "Returning\n";
+    return 0;
+  }
+  Dtor b{1};
+  if (setjmp(buf)) {
+    std::cout << "Returning\n";
+    return 0;
+  }
+  longjmp(buf, 1);
+}
+
+/*#include <QtCore/qtimer.h>
 #include <QtWidgets/qmainwindow.h>
 #include <QtWidgets/qapplication.h>
 #include <QtWidgets/qdesktopwidget.h>
@@ -1722,7 +1749,7 @@ int main(int argc, char **argv) {
     b->show();
   });
   return app.exec();
-}
+}*/
 
 /*#include <QtCore/qdebug.h>
 #include <QtGui/qpainter.h>

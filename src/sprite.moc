@@ -79,7 +79,7 @@ static const uint qt_meta_data_Sprite[] = {
     QMetaType::Void, 0x80000000 | 3, QMetaType::QSize,    2,    2,
     0x80000000 | 6, QMetaType::QString,    2,
     0x80000000 | 6, QMetaType::QString,    2,
-    QMetaType::Void, 0x80000000 | 9,    2,
+    0x80000000 | 6, 0x80000000 | 9,    2,
 
        0        // eod
 };
@@ -96,7 +96,8 @@ void Sprite::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
             if (_a[0]) *reinterpret_cast< Error*>(_a[0]) = std::move(_r); }  break;
         case 3: { Error _r = _t->openFile((*reinterpret_cast< const QString(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< Error*>(_a[0]) = std::move(_r); }  break;
-        case 4: _t->exportSprite((*reinterpret_cast< const ExportOptions(*)>(_a[1]))); break;
+        case 4: { Error _r = _t->exportSprite((*reinterpret_cast< const ExportOptions(*)>(_a[1])));
+            if (_a[0]) *reinterpret_cast< Error*>(_a[0]) = std::move(_r); }  break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {

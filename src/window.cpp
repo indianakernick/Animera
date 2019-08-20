@@ -341,13 +341,18 @@ void Window::openSaveFileDialog() {
   dialog->open();
 }
 
+void Window::exportSprite(const ExportOptions &options) {
+  if (Error err = sprite.exportSprite(options); err) {
+    (new ErrorDialog{this, "Export error", err.msg()})->open();
+  } else {
+    statusBar.showTemp("Exported!");
+  }
+}
+
 void Window::openExportDialog() {
   if (!exportDialog) {
     exportDialog = new ExportDialog{this, sprite.getFormat()};
-    CONNECT(exportDialog, exportSprite, sprite, exportSprite);
-    CONNECT_LAMBDA(exportDialog, exportSprite, [this]{
-      statusBar.showTemp("Exported!");
-    });
+    CONNECT(exportDialog, exportSprite, this, exportSprite);
   }
   exportDialog->open();
 }

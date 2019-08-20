@@ -23,7 +23,7 @@ public Q_SLOTS:
   void newFile(Format, QSize);
   Error saveFile(const QString &) const;
   Error openFile(const QString &);
-  void exportSprite(const ExportOptions &) const;
+  Error exportSprite(const ExportOptions &) const;
   
 Q_SIGNALS:
   void canvasInitialized(Format, QSize);

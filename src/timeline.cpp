@@ -11,15 +11,11 @@
 #include "zlib.hpp"
 #include "serial.hpp"
 #include "formats.hpp"
-#include "transform.hpp"
 #include "cell span.hpp"
 #include "composite.hpp"
 #include <QtCore/qdir.h>
-#include <QtCore/qbuffer.h>
-#include <QtCore/qendian.h>
+#include "export png.hpp"
 #include "export pattern.hpp"
-#include "format convert.hpp"
-#include "surface factory.hpp"
 
 namespace {
 
@@ -507,150 +503,18 @@ QString getPath(const ExportOptions &options, CellPos pos) {
   return path;
 }
 
-int getBitDepth(const ExportFormat format) {
-  return format == ExportFormat::monochrome ? 1 : 8;
 }
 
-int getColorType(const ExportFormat format) {
-  switch (format) {
-    case ExportFormat::rgba:
-      return PNG_COLOR_TYPE_RGB_ALPHA;
-    case ExportFormat::index:
-      return PNG_COLOR_TYPE_PALETTE;
-    case ExportFormat::gray:
-      return PNG_COLOR_TYPE_GRAY;
-    case ExportFormat::gray_alpha:
-      return PNG_COLOR_TYPE_GRAY_ALPHA;
-    case ExportFormat::monochrome:
-      return PNG_COLOR_TYPE_GRAY;
-  }
-}
-
-std::vector<png_bytep> getRows(QImage &image) {
-  std::vector<png_bytep> rows;
-  png_bytep row = image.bits();
-  const ptrdiff_t pitch = image.bytesPerLine();
-  const ptrdiff_t height = image.height();
-  const png_bytep endRow = row + pitch * height;
-  rows.reserve(height);
-  while (row != endRow) {
-    rows.push_back(row);
-    row += pitch;
-  }
-  return rows;
-}
-
-void set_PLTE_tRNS(png_structp png, png_infop info, PaletteCSpan palette) {
-  png_color plte[pal_colors];
-  png_byte trns[pal_colors];
-  for (size_t i = 0; i != pal_colors; ++i) {
-    const Color color = FormatARGB::color(palette[i]);
-    plte[i].red = color.r;
-    plte[i].green = color.g;
-    plte[i].blue = color.b;
-    trns[i] = color.a;
-  }
-  png_set_PLTE(png, info, plte, pal_colors);
-  png_set_tRNS(png, info, trns, pal_colors, nullptr);
-}
-
-}
-
-void Timeline::exportFile(
+Error Timeline::exportFile(
   const ExportOptions &options,
   const PaletteCSpan palette,
-  QImage image,
+  const QImage &image,
   const CellPos pos
 ) const {
-  const QString path = getPath(options, pos);
-  pngErrorMsg.clear();
-  png_structp png = png_create_write_struct(
-    PNG_LIBPNG_VER_STRING, nullptr, &pngError, &pngWarning
-  );
-  if (!png) {
-    // does this only happen when malloc returns nullptr?
-    //return "Failed to initialize png write struct";
-    return;
-  }
-  png_infop info = png_create_info_struct(png);
-  if (!info) {
-    png_destroy_write_struct(&png, nullptr);
-    //return "Failed to initialize png info struct";
-    return;
-  }
-  if (setjmp(png_jmpbuf(png))) {
-    png_destroy_write_struct(&png, &info);
-    //return pngErrorMsg;
-    return;
-  }
-  QFile file{path};
-  if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-    //return "Failed to open file for writing";
-    return;
-  }
-  png_set_write_fn(png, &file, &pngWrite, &pngFlush);
-  png_set_IHDR(
-    png,
-    info,
-    image.width(),
-    image.height(),
-    getBitDepth(options.format),
-    getColorType(options.format),
-    PNG_INTERLACE_NONE,
-    PNG_COMPRESSION_TYPE_DEFAULT,
-    PNG_FILTER_TYPE_DEFAULT
-  );
-  // @TODO avoid doing a bunch of allocations for each image
-  // allocate one image at the very beginning of the export and reuse it
-  // the rows vector could also get the same treatment
-  // would this be as simple as making the variable static?
-  int transforms = PNG_TRANSFORM_IDENTITY;
-  switch (options.format) {
-    case ExportFormat::rgba:
-      // @TODO Make FormatARGB endian aware so that we don't need to do this
-      transforms = PNG_TRANSFORM_BGR;
-      break;
-    case ExportFormat::index:
-      set_PLTE_tRNS(png, info, palette);
-      break;
-    case ExportFormat::gray:
-      if (canvasFormat == Format::gray) {
-        convertInplace<FormatY, FormatYA>(makeSurface<FormatYA::Pixel>(image));
-      }
-      break;
-    case ExportFormat::gray_alpha:
-      break;
-    case ExportFormat::monochrome:
-      if (canvasFormat == Format::gray) {
-        convertToMono<FormatYA, 128>(makeSurface<FormatYA::Pixel>(image));
-      } else if (canvasFormat == Format::index) {
-        convertToMono<FormatY, 1>(makeSurface<FormatY::Pixel>(image));
-      } else Q_UNREACHABLE();
-      break;
-  }
-  std::vector<png_bytep> rows = getRows(image);
-  png_set_rows(png, info, rows.data());
-  png_write_png(png, info, transforms, nullptr);
-  
-/*
-rgba
-  rgba
-index
-  rgba
-  index (not composited)
-  gray (not composited)
-  monochrome (not composited)
-gray
-  gray
-  gray_alpha
-  monochrome
-*/
-  
-  png_destroy_write_struct(&png, &info);
-  return;
+  return exportPng(getPath(options, pos), palette, image, canvasFormat, options.format);
 }
 
-void Timeline::exportFile(
+Error Timeline::exportFile(
   const ExportOptions &options,
   const PaletteCSpan palette,
   const Frame &frame,
@@ -662,10 +526,10 @@ void Timeline::exportFile(
   } else {
     result = compositeFrame<FormatARGB>(palette, frame, canvasSize, canvasFormat);
   }
-  exportFile(options, palette, result, pos);
+  return exportFile(options, palette, result, pos);
 }
 
-void Timeline::exportCompRect(
+Error Timeline::exportCompRect(
   const ExportOptions &options,
   const PaletteCSpan palette,
   const CellRect rect
@@ -687,11 +551,14 @@ void Timeline::exportCompRect(
       }
       ++iterators[+l];
     }
-    exportFile(options, palette, frame, {rect.minL, f});
+    if (Error err = exportFile(options, palette, frame, {rect.minL, f}); err) {
+      return err;
+    }
   }
+  return {};
 }
 
-void Timeline::exportRect(
+Error Timeline::exportRect(
   const ExportOptions &options,
   const PaletteCSpan palette,
   const CellRect rect
@@ -703,19 +570,22 @@ void Timeline::exportRect(
     LayerCells::ConstIterator iter = layer.spans.find(rect.minF);
     for (FrameIdx f = rect.minF; f <= rect.maxF; ++f) {
       if (const Cell *cell = *iter; cell) {
-        exportFile(options, palette, cell->image, {l, f});
+        if (Error err = exportFile(options, palette, cell->image, {l, f}); err) {
+          return err;
+        }
       }
       ++iter;
     }
   }
+  return {};
 }
 
-void Timeline::exportTimeline(const ExportOptions &options, const PaletteCSpan palette) const {
+Error Timeline::exportTimeline(const ExportOptions &options, const PaletteCSpan palette) const {
   const CellRect rect = selectCells(options);
   if (composited(options.layerSelect)) {
-    exportCompRect(options, palette, rect);
+    return exportCompRect(options, palette, rect);
   } else {
-    exportRect(options, palette, rect);
+    return exportRect(options, palette, rect);
   }
 }
 
