@@ -50,37 +50,59 @@ public:
   using pixel_type = Pixel;
 
   Surface(Pixel *data, const ptrdiff_t pitch, const int width, const int height) noexcept
-    : data{data}, pitch{pitch}, width{width}, height{height} {}
+    : data_{data}, pitch_{pitch}, width_{width}, height_{height} {}
   
   template <typename OtherPixel, typename = std::enable_if_t<
     std::is_convertible_v<OtherPixel (*)[], Pixel (*)[]>
   >>
   Surface(const Surface<OtherPixel> &other) noexcept
-    : Surface{other.data, other.pitch, other.width, other.height} {}
+    : Surface{other.data_, other.pitch_, other.width_, other.height_} {}
   Surface(const Surface &) noexcept = default;
   
+  Pixel *data() const noexcept {
+    return data_;
+  }
+  ptrdiff_t pitch() const noexcept {
+    return pitch_;
+  }
+  int width() const noexcept {
+    return width_;
+  }
+  int height() const noexcept {
+    return height_;
+  }
+  
+  template <typename OtherPixel>
+  OtherPixel *dataAs() const noexcept {
+    return reinterpret_cast<OtherPixel *>(data_);
+  }
+  template <typename OtherPixel>
+  ptrdiff_t pitchAs() const noexcept {
+    return pitch_ * ptrdiff_t{sizeof(Pixel)} / ptrdiff_t{sizeof(OtherPixel)};
+  }
+  
   QSize size() const noexcept {
-    return {width, height};
+    return {width_, height_};
   }
   QRect rect() const noexcept {
     return {{}, size()};
   }
   
   bool insideImageX(const int posX) const noexcept {
-    return 0 <= posX && posX < width;
+    return 0 <= posX && posX < width_;
   }
   bool insideImageY(const int posY) const noexcept {
-    return 0 <= posY && posY < height;
+    return 0 <= posY && posY < height_;
   }
   bool insideImage(const QPoint pos) const noexcept {
     return insideImageX(pos.x()) && insideImageY(pos.y());
   }
   
   ptrdiff_t pixelIndex(const QPoint pos) const noexcept {
-    return pos.y() * pitch + pos.x();
+    return pos.y() * pitch_ + pos.x();
   }
   Pixel *pixelAddr(const QPoint pos) const noexcept {
-    return data + pixelIndex(pos);
+    return data_ + pixelIndex(pos);
   }
   
   // @TODO Better error messages with CRTP
@@ -119,10 +141,10 @@ public:
     }
   }
   MODIFYING(void) fillCol(const Pixel color, Pixel *firstPixel, const ptrdiff_t count) const noexcept {
-    Pixel *const afterLastPixel = firstPixel + count * pitch;
+    Pixel *const afterLastPixel = firstPixel + count * pitch_;
     while (firstPixel != afterLastPixel) {
       *firstPixel = color;
-      firstPixel += pitch;
+      firstPixel += pitch_;
     }
   }
   
@@ -142,7 +164,7 @@ public:
   MODIFYING(bool) horiLineClip(const Pixel color, QPoint first, int last) const noexcept {
     if (!insideImageY(first.y())) return false;
     first.setX(std::max(first.x(), 0));
-    last = std::min(last, width - 1);
+    last = std::min(last, width_ - 1);
     if (first.x() > last) return false;
     horiLine(color, first, last);
     return true;
@@ -150,7 +172,7 @@ public:
   MODIFYING(bool) vertLineClip(const Pixel color, QPoint first, int last) const noexcept {
     if (!insideImageX(first.x())) return false;
     first.setY(std::max(first.y(), 0));
-    last = std::min(last, height - 1);
+    last = std::min(last, height_ - 1);
     if (first.y() > last) return false;
     vertLine(color, first, last);
     return true;
@@ -168,8 +190,8 @@ public:
   MODIFYING(bool) fillRectClip(const Pixel color, QRect rect) const noexcept {
     rect.setLeft(std::max(rect.left(), 0));
     rect.setTop(std::max(rect.top(), 0));
-    rect.setRight(std::min(rect.right(), width - 1));
-    rect.setBottom(std::min(rect.bottom(), height - 1));
+    rect.setRight(std::min(rect.right(), width_ - 1));
+    rect.setBottom(std::min(rect.bottom(), height_ - 1));
     if (rect.isEmpty()) return false;
     fillRect(color, rect);
     return true;
@@ -177,7 +199,7 @@ public:
   
   MODIFYING(void) fill(const Pixel color) const noexcept {
     for (auto row : range()) {
-      fillRow(color, (*row).begin(), width);
+      fillRow(color, (*row).begin(), width_);
     }
   }
   MODIFYING(void) fill() const noexcept {
@@ -185,15 +207,15 @@ public:
   }
   MODIFYING(void) overFill(const Pixel color) const noexcept {
     if constexpr (sizeof(Pixel) == 1) {
-      std::memset(data, color, pitch * height);
+      std::memset(data_, color, pitch_ * height_);
     } else {
-      for (Pixel &pixel : Row{data, pixelAddr({width, height - 1})}) {
+      for (Pixel &pixel : Row{data_, pixelAddr({width_, height_ - 1})}) {
         pixel = color;
       }
     }
   }
   MODIFYING(void) overFill() const noexcept {
-    std::memset(data, 0, pitch * height * sizeof(Pixel));
+    std::memset(data_, 0, pitch_ * height_ * sizeof(Pixel));
   }
   
   using Row = Range<Pixel *>;
@@ -245,19 +267,19 @@ public:
   using Range = Range<Iterator, Sentinel>;
   
   Range range() const noexcept {
-    return {Iterator{data, pitch, width}, Sentinel{data + pitch * height}};
+    return {Iterator{data_, pitch_, width_}, Sentinel{data_ + pitch_ * height_}};
   }
   Range range(const QRect rect) const noexcept {
     return {
-      Iterator{pixelAddr(rect.topLeft()), pitch, rect.width()},
+      Iterator{pixelAddr(rect.topLeft()), pitch_, rect.width()},
       Sentinel{pixelAddr({rect.left(), rect.bottom() + 1})}
     };
   }
   Row row() const noexcept {
-    return {data, data + width};
+    return {data_, data_ + width_};
   }
   Row row(const int y) const noexcept {
-    return {pixelAddr({0, y}), pixelAddr({width, y})};
+    return {pixelAddr({0, y}), pixelAddr({width_, y})};
   }
   
   // @TODO wrapping iterator would probably be better
@@ -270,10 +292,10 @@ public:
   #undef MODIFYING
 
 private:
-  Pixel *data;
-  ptrdiff_t pitch;
-  int width;
-  int height;
+  Pixel *data_;
+  ptrdiff_t pitch_;
+  int width_;
+  int height_;
 };
 
 /// A non-owning view onto immutable pixel data. Think of it as a 2D std::cspan

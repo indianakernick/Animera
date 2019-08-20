@@ -18,6 +18,7 @@
 #include <QtCore/qbuffer.h>
 #include <QtCore/qendian.h>
 #include "export pattern.hpp"
+#include "format convert.hpp"
 #include "surface factory.hpp"
 
 namespace {
@@ -489,41 +490,6 @@ CellRect Timeline::selectCells(const ExportOptions &options) const {
 
 namespace {
 
-template <typename Format, uint8_t Threshold>
-QImage grayToMono(const QImage &srcImage) {
-  QImage dstImage{srcImage.width() / 8, srcImage.height(), QImage::Format_Grayscale8};
-  auto dst = makeSurface<uint8_t>(dstImage);
-  auto src = makeCSurface<typename Format::Pixel>(srcImage);
-  auto srcRowIter = src.range().begin();
-  for (auto row : dst.range()) {
-    auto *srcPixelIter = (*srcRowIter).begin();
-    for (uint8_t &pixel : row) {
-      pixel = 0;
-      for (int i = 7; i >= 0; --i) {
-        const uint8_t gray = Format::color(*srcPixelIter++).r;
-        pixel |= (gray < Threshold ? 0 : 1) << i;
-      }
-    }
-    ++srcRowIter;
-  }
-  return dstImage;
-}
-
-QImage grayWithoutAlpha(const QImage &src) {
-  assert(src.format() == QImage::Format_Grayscale16);
-  QImage dst{src.size(), QImage::Format_Grayscale8};
-  pixelTransform(
-    makeSurface<FormatY::Pixel>(dst),
-    makeCSurface<FormatYA::Pixel>(src),
-    makeFormatConv(FormatY{}, FormatYA{})
-  );
-  return dst;
-}
-
-}
-
-namespace {
-
 template <typename Idx>
 Idx apply(const Line<Idx> line, const Idx value) {
   return value * line.stride + line.offset;
@@ -648,20 +614,17 @@ void Timeline::exportFile(
       set_PLTE_tRNS(png, info, palette);
       break;
     case ExportFormat::gray:
-      if (canvasFormat == Format::index) {
-        assert(image.format() == QImage::Format_Grayscale8);
-      } else if (canvasFormat == Format::gray) {
-        image = grayWithoutAlpha(image);
-      } else Q_UNREACHABLE();
+      if (canvasFormat == Format::gray) {
+        convertInplace<FormatY, FormatYA>(makeSurface<FormatYA::Pixel>(image));
+      }
       break;
     case ExportFormat::gray_alpha:
       break;
     case ExportFormat::monochrome:
       if (canvasFormat == Format::gray) {
-        image = grayToMono<FormatYA, 128>(image);
+        convertToMono<FormatYA, 128>(makeSurface<FormatYA::Pixel>(image));
       } else if (canvasFormat == Format::index) {
-        assert(image.format() == QImage::Format_Grayscale8);
-        image = grayToMono<FormatY, 1>(image);
+        convertToMono<FormatY, 1>(makeSurface<FormatY::Pixel>(image));
       } else Q_UNREACHABLE();
       break;
   }

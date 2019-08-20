@@ -232,6 +232,7 @@
 		45A61039230775CE000A0BD6 /* error.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = error.hpp; sourceTree = "<group>"; };
 		45A6103A2307E1EF000A0BD6 /* error dialog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "error dialog.cpp"; sourceTree = "<group>"; };
 		45A6103B2307E1EF000A0BD6 /* error dialog.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "error dialog.hpp"; sourceTree = "<group>"; };
+		45A61040230A3F42000A0BD6 /* format convert.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "format convert.hpp"; sourceTree = "<group>"; };
 		45B284912218E38800D6D055 /* image.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = image.cpp; sourceTree = "<group>"; };
 		45B284922218E38800D6D055 /* image.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = image.hpp; sourceTree = "<group>"; };
 		45B284942218E39300D6D055 /* cell.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = cell.cpp; sourceTree = "<group>"; };
@@ -997,6 +998,7 @@
 				4589188222993BBC002ADF77 /* formats.hpp */,
 				4589188322993BDB002ADF77 /* color.hpp */,
 				452926E122BB0D6300B17E0D /* transform.hpp */,
+				45A61040230A3F42000A0BD6 /* format convert.hpp */,
 			);
 			name = Graphics;
 			sourceTree = "<group>";

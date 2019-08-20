@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "src/timeline.cpp"
-            timestampString = "587871112.9281861"
+            timestampString = "587981712.181299"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "618"
-            endingLineNumber = "618"
+            startingLineNumber = "584"
+            endingLineNumber = "584"
             landmarkName = "Timeline::exportFile( const ExportOptions &amp;options, const PaletteCSpan palette, QImage image, const CellPos pos )"
             landmarkType = "7">
          </BreakpointContent>
@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "src/timeline.cpp"
-            timestampString = "587871112.929598"
+            timestampString = "587981712.202026"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "623"
-            endingLineNumber = "623"
+            startingLineNumber = "589"
+            endingLineNumber = "589"
             landmarkName = "Timeline::exportFile( const ExportOptions &amp;options, const PaletteCSpan palette, QImage image, const CellPos pos )"
             landmarkType = "7">
          </BreakpointContent>
@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "src/timeline.cpp"
-            timestampString = "587871112.930091"
+            timestampString = "587981712.204105"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "623"
-            endingLineNumber = "623"
+            startingLineNumber = "589"
+            endingLineNumber = "589"
             landmarkName = "Timeline::exportFile( const ExportOptions &amp;options, const PaletteCSpan palette, QImage image, const CellPos pos )"
             landmarkType = "7">
          </BreakpointContent>
@@ -58,11 +58,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "src/timeline.cpp"
-            timestampString = "587871112.930521"
+            timestampString = "587981712.205785"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "607"
-            endingLineNumber = "607"
+            startingLineNumber = "573"
+            endingLineNumber = "573"
             landmarkName = "Timeline::exportFile( const ExportOptions &amp;options, const PaletteCSpan palette, QImage image, const CellPos pos )"
             landmarkType = "7">
          </BreakpointContent>
@@ -74,11 +74,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "src/timeline.cpp"
-            timestampString = "587871112.932364"
+            timestampString = "587981712.2103209"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "613"
-            endingLineNumber = "613"
+            startingLineNumber = "579"
+            endingLineNumber = "579"
             landmarkName = "Timeline::exportFile( const ExportOptions &amp;options, const PaletteCSpan palette, QImage image, const CellPos pos )"
             landmarkType = "7">
          </BreakpointContent>

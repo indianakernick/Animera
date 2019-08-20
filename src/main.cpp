@@ -1657,6 +1657,7 @@ bool drawStrokedEllipse(QImage &img, const QRgb color, const QRect ellipse) {
 
 #include "masking.hpp"
 #include "geometry.hpp"
+#include "format convert.hpp"
 #include "surface factory.hpp"
 
 void blitMaskImageNew(QImage &dst, const QImage &mask, const QImage &src, const QPoint pos) {
@@ -2281,6 +2282,18 @@ int main(int argc, char **argv) {
     painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
     painter.drawImage(0, 0, dup);
   }
+  timer.stop();
+  
+  QImage maskCopy1 = mask;
+  maskCopy1.detach();
+  timer.start("convertToMono");
+  convertToMono<FormatY, 128>(makeSurface<uint8_t>(maskCopy1));
+  timer.stop();
+  
+  QImage maskCopy2 = mask;
+  maskCopy2.detach();
+  timer.start("QImage::convertTo");
+  maskCopy2.convertTo(QImage::Format_Mono);
   timer.stop();
   
   /*

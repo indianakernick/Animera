@@ -84,13 +84,13 @@ struct FormatYA {
   using Pixel = uint16_t;
 
   static constexpr int gray(const Pixel pixel) {
-    return pixel & 0xFF;
+    return pixel & 255;
   }
   static constexpr int alpha(const Pixel pixel) {
     return pixel >> 8;
   }
   static constexpr Pixel pixel(const int gray, const int alpha) {
-    return (gray & 0xFF) | (alpha << 8);
+    return (gray & 255) | (alpha << 8);
   }
 
   static constexpr Color color(const Pixel pixel) {
@@ -115,9 +115,12 @@ struct FormatY {
   }
 };
 
+template <typename Format>
+using Pixel = typename Format::Pixel;
+
 template <typename DstFormat, typename SrcFormat>
 auto makeFormatConv(const DstFormat dstFmt, const SrcFormat srcFmt) {
-  return [dstFmt, srcFmt](const typename SrcFormat::Pixel src) -> typename DstFormat::Pixel {
+  return [dstFmt, srcFmt](const Pixel<SrcFormat> src) -> Pixel<DstFormat> {
     return dstFmt.pixel(srcFmt.color(src));
   };
 }
