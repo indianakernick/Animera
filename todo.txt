@@ -80,3 +80,14 @@ optimize the palette carefully
   we could determine the maximum index in the image and export all entries up to
   that index
   we could provide a button that optimizes the palette
+
+Could be useful
+  https://stackoverflow.com/questions/53771040/how-do-you-use-file-lists-xcfilelist-within-xcode-10-script-build-phases
+
+Build system
+  https://stackoverflow.com/questions/2144406/how-to-make-shallow-git-submodules
+  https://github.com/ionyshch/cmake-bundle-macos/blob/master/CMakeLists.txt
+  https://stackoverflow.com/questions/41345844/adding-header-only-dependencies-with-cmake
+  https://cmake.org/cmake/help/latest/prop_tgt/MACOSX_BUNDLE_INFO_PLIST.html#prop_tgt:MACOSX_BUNDLE_INFO_PLIST
+  https://cmake.org/cmake/help/latest/module/CPack.html
+  https://cmake.org/cmake/help/latest/module/BundleUtilities.html
