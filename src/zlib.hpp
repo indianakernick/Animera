@@ -12,18 +12,5 @@
 #define ZLIB_CONST
 
 #include <zlib.h>
-#include "error.hpp"
-
-struct DeflateDeleter {
-  void operator()(z_streamp stream) const noexcept {
-    assertEval(deflateEnd(stream) == Z_OK);
-  }
-};
-
-struct InflateDeleter {
-  void operator()(z_streamp stream) const noexcept {
-    assertEval(inflateEnd(stream) == Z_OK);
-  }
-};
 
 #endif

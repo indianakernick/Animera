@@ -10,7 +10,7 @@
 #define palette_widget_hpp
 
 #include "image.hpp"
-#include "palette.hpp"
+#include "palette span.hpp"
 #include <QtWidgets/qscrollarea.h>
 
 class ColorHandle;

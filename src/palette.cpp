@@ -10,6 +10,7 @@
 
 #include "serial.hpp"
 #include "formats.hpp"
+#include "sprite file.hpp"
 
 namespace {
 
@@ -134,125 +135,16 @@ namespace {
   }
 }*/
 
-size_t getUsedSize(const PaletteCSpan colors) {
-  for (size_t i = static_cast<size_t>(colors.size()); i != 0; --i) {
-    if (colors[i - 1] != 0) {
-      return i;
-    }
-  }
-  return 0;
-}
-
-Error writeRgba(QIODevice &dev, const PaletteCSpan colors) try {
-  const size_t used = getUsedSize(colors);
-  ChunkWriter writer{dev};
-  writer.begin(static_cast<uint32_t>(used) * 4, chunk_palette);
-  for (size_t i = 0; i != used; ++i) {
-    const Color color = FormatARGB::color(colors[i]);
-    writer.writeByte(color.r);
-    writer.writeByte(color.g);
-    writer.writeByte(color.b);
-    writer.writeByte(color.a);
-  }
-  writer.end();
-  return {};
-} catch (FileIOError &e) {
-  return e.what();
-}
-
-Error writeGray(QIODevice &dev, const PaletteCSpan colors) try {
-  const size_t used = getUsedSize(colors);
-  ChunkWriter writer{dev};
-  writer.begin(static_cast<uint32_t>(used) * 2, chunk_palette);
-  for (size_t i = 0; i != used; ++i) {
-    const Color color = FormatYA::color(colors[i]);
-    writer.writeByte(color.r);
-    writer.writeByte(color.a);
-  };
-  writer.end();
-  return {};
-} catch (FileIOError &e) {
-  return e.what();
-}
-
-Error checkStart(ChunkStart start, const int multiple) {
-  if (Error err = expectedName(start, chunk_palette); err) return err;
-  if (start.length % multiple != 0 || start.length / multiple > pal_colors) {
-    QString msg = "Invalid ";
-    msg += chunk_palette;
-    msg += " chunk length ";
-    msg += QString::number(start.length);
-    return msg;
-  }
-  return {};
-}
-
-Error readRgba(QIODevice &dev, const PaletteSpan colors) try {
-  ChunkReader reader{dev};
-  const ChunkStart start = reader.begin();
-  if (Error err = checkStart(start, 4); err) return err;
-  auto iter = colors.begin();
-  const auto end = colors.begin() + start.length / 4;
-  for (; iter != end; ++iter) {
-    Color color;
-    color.r = reader.readByte();
-    color.g = reader.readByte();
-    color.b = reader.readByte();
-    color.a = reader.readByte();
-    *iter = FormatARGB::pixel(color);
-  }
-  if (Error err = reader.end(); err) return err;
-  std::fill(iter, colors.end(), 0);
-  return {};
-} catch (FileIOError &e) {
-  return e.what();
-}
-
-Error readGray(QIODevice &dev, const PaletteSpan colors) try {
-  ChunkReader reader{dev};
-  const ChunkStart start = reader.begin();
-  if (Error err = checkStart(start, 2); err) return err;
-  auto iter = colors.begin();
-  const auto end = colors.begin() + start.length / 2;
-  for (; iter != end; ++iter) {
-    Color color;
-    color.r = reader.readByte();
-    color.a = reader.readByte();
-    *iter = FormatYA::pixel(color);
-  }
-  if (Error err = reader.end(); err) return err;
-  std::fill(iter, colors.end(), 0);
-  return {};
-} catch (FileIOError &e) {
-  return e.what();
-}
-
 }
 
 Error Palette::serialize(QIODevice &dev) const {
-  switch (canvasFormat) {
-    case Format::rgba:
-    case Format::index:
-      return writeRgba(dev, colors);
-    case Format::gray:
-      return writeGray(dev, colors);
-  }
+  return writePLTE(dev, colors, canvasFormat);
 }
 
-Error Palette::deserialize(QIODevice &dev) try {
-  switch (canvasFormat) {
-    case Format::rgba:
-    case Format::index:
-      if (Error err = readRgba(dev, colors); err) return err;
-      break;
-    case Format::gray:
-      if (Error err = readGray(dev, colors); err) return err;
-      break;
-  }
+Error Palette::deserialize(QIODevice &dev) {
+  if (Error err = readPLTE(dev, colors, canvasFormat); err) return err;
   Q_EMIT paletteChanged({colors.data(), pal_colors});
   return {};
-} catch (FileIOError &e) {
-  return e.what();
 }
 
 PaletteCSpan Palette::getPalette() const {

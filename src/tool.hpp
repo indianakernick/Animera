@@ -10,8 +10,8 @@
 #define tool_hpp
 
 #include "image.hpp"
-#include "palette.hpp"
 #include "status msg.hpp"
+#include "palette span.hpp"
 #include <QtCore/qobject.h>
 
 class Cell;

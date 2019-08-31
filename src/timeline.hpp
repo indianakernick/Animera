@@ -9,10 +9,8 @@
 #ifndef timeline_hpp
 #define timeline_hpp
 
-#include <span>
-#include "png.hpp"
-#include "palette.hpp"
 #include "cell span.hpp"
+#include "palette span.hpp"
 #include "export options.hpp"
 
 // @TODO can we make the interface of Timeline smaller?
@@ -43,24 +41,10 @@ public:
 
   void initDefault();
 
-private:
-  struct Layer;
-
-  static Error writeLHDR(QIODevice &, const Layer &);
-  static Error writeCHDR(QIODevice &, const CellSpan &);
-  static Error writeCDAT(QIODevice &, const QImage &, Format);
-  
-public:
   Error serializeHead(QIODevice &) const;
   Error serializeBody(QIODevice &) const;
   Error serializeTail(QIODevice &) const;
-  
-private:
-  static Error readLHDR(QIODevice &, Layer &);
-  static Error readCHDR(QIODevice &, CellSpan &, Format);
-  static Error readCDAT(QIODevice &, QImage &, Format);
 
-public:
   Error deserializeHead(QIODevice &, Format &, QSize &);
   Error deserializeBody(QIODevice &);
   Error deserializeTail(QIODevice &);
@@ -127,12 +111,6 @@ Q_SIGNALS:
   void modified();
   
 private:
-  struct Layer {
-    LayerCells spans;
-    std::string name;
-    bool visible = true;
-  };
-
   std::vector<Layer> layers;
   CellPos currPos;
   CellRect selection;

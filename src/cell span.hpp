@@ -106,4 +106,10 @@ private:
   explicit LayerCells(std::vector<CellSpan>);
 };
 
+struct Layer {
+  LayerCells spans;
+  std::string name;
+  bool visible = true;
+};
+
 #endif

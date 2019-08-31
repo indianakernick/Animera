@@ -10,7 +10,7 @@
 #define export_png_hpp
 
 #include "error.hpp"
-#include "palette.hpp"
+#include "palette span.hpp"
 #include "export options.hpp"
 
 Error exportPng(const QString &, PaletteCSpan, QImage, Format, ExportFormat);

@@ -9,17 +9,11 @@
 #ifndef palette_hpp
 #define palette_hpp
 
-#include <span>
-#include <array>
 #include "error.hpp"
 #include "image.hpp"
-#include "config.hpp"
 #include <QtGui/qrgb.h>
+#include "palette span.hpp"
 #include <QtCore/qobject.h>
-
-using PaletteColors = std::array<QRgb, pal_colors>;
-using PaletteSpan = std::span<QRgb>;
-using PaletteCSpan = std::span<const QRgb>;
 
 class Palette final : public QObject {
   Q_OBJECT

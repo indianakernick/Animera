@@ -8,13 +8,12 @@
 
 #include "timeline.hpp"
 
-#include "zlib.hpp"
-#include "serial.hpp"
 #include "formats.hpp"
 #include "cell span.hpp"
 #include "composite.hpp"
 #include <QtCore/qdir.h>
 #include "export png.hpp"
+#include "sprite file.hpp"
 #include "export pattern.hpp"
 
 namespace {
@@ -41,203 +40,15 @@ void Timeline::initDefault() {
   changeLayers(LayerIdx{0}, LayerIdx{1});
 }
 
-namespace {
-
-constexpr int byteDepth(const Format format) {
-  switch (format) {
-    case Format::rgba:
-      return 4;
-    case Format::index:
-      return 1;
-    case Format::gray:
-      return 2;
-  }
-}
-
-constexpr uint8_t formatByte(const Format format) {
-  return byteDepth(format);
-}
-
-}
-
-Error Timeline::writeLHDR(QIODevice &dev, const Layer &layer) try {
-  ChunkWriter writer{dev};
-  const uint32_t nameLen = static_cast<uint32_t>(layer.name.size());
-  writer.begin(file_int_size + 1 + nameLen, chunk_layer_header);
-  writer.writeInt(static_cast<uint32_t>(layer.spans.size()));
-  writer.writeByte(layer.visible);
-  writer.writeString(layer.name.data(), nameLen);
-  writer.end();
-  return {};
-} catch (FileIOError &e) {
-  return e.what();
-}
-
-Error Timeline::writeCHDR(QIODevice &dev, const CellSpan &span) try {
-  ChunkWriter writer{dev};
-  writer.begin(chunk_cell_header);
-  writer.writeInt(static_cast<uint32_t>(span.len));
-  if (span.cell) {
-    writer.writeInt(0); // x
-    writer.writeInt(0); // y
-    writer.writeInt(span.cell->image.width());
-    writer.writeInt(span.cell->image.height());
-  }
-  writer.end();
-  return {};
-} catch (FileIOError &e) {
-  return e.what();
-}
-
-namespace {
-
-void copyToByteOrder(
-  unsigned char *dst,
-  const unsigned char *src,
-  const size_t size,
-  const Format format
-) {
-  assert(size % byteDepth(format) == 0);
-  switch (format) {
-    case Format::rgba: {
-      const auto *srcPx = reinterpret_cast<const FormatARGB::Pixel *>(src);
-      unsigned char *dstEnd = dst + size;
-      while (dst != dstEnd) {
-        const Color color = FormatARGB::color(*srcPx++);
-        *dst++ = color.r;
-        *dst++ = color.g;
-        *dst++ = color.b;
-        *dst++ = color.a;
-      }
-      break;
-    }
-    case Format::index:
-      static_assert(sizeof(FormatIndex::Pixel) == 1);
-      std::memcpy(dst, src, size);
-      break;
-    case Format::gray: {
-      auto *srcPx = reinterpret_cast<const FormatYA::Pixel *>(src);
-      unsigned char *dstEnd = dst + size;
-      while (dst != dstEnd) {
-        const Color color = FormatYA::color(*srcPx++);
-        *dst++ = color.r;
-        *dst++ = color.a;
-      }
-      break;
-    }
-  }
-}
-
-void copyFromByteOrder(
-  unsigned char *dst,
-  const unsigned char *src,
-  const size_t size,
-  const Format format
-) {
-  assert(size % byteDepth(format) == 0);
-  switch (format) {
-    case Format::rgba: {
-      auto *dstPx = reinterpret_cast<FormatARGB::Pixel *>(dst);
-      const unsigned char *srcEnd = src + size;
-      while (src != srcEnd) {
-        Color color;
-        color.r = *src++;
-        color.g = *src++;
-        color.b = *src++;
-        color.a = *src++;
-        *dstPx++ = FormatARGB::pixel(color);
-      }
-      break;
-    }
-    case Format::index:
-      static_assert(sizeof(FormatIndex::Pixel) == 1);
-      std::memcpy(dst, src, size);
-      break;
-    case Format::gray: {
-      auto *dstPx = reinterpret_cast<FormatYA::Pixel *>(dst);
-      const unsigned char *srcEnd = src + size;
-      while (src != srcEnd) {
-        Color color;
-        color.r = *src++;
-        color.a = *src++;
-        *dstPx = FormatYA::pixel(color);
-      }
-      break;
-    }
-  }
-}
-
-}
-
-Error Timeline::writeCDAT(
-  QIODevice &dev, const QImage &image, const Format format
-) try {
-  assert(!image.isNull());
-  const uint32_t outBuffSize = file_buff_size;
-  std::vector<Bytef> outBuff(outBuffSize);
-  const uint32_t inBuffSize = image.width() * byteDepth(format);
-  std::vector<Bytef> inBuff(inBuffSize);
-  
-  // @TODO avoid overflowing uint32_t
-  // might need to reduce maximum image size
-  // or split the image data into multiple chunks
-  
-  z_stream stream;
-  stream.zalloc = nullptr;
-  stream.zfree = nullptr;
-  int ret = deflateInit(&stream, Z_DEFAULT_COMPRESSION);
-  if (ret == Z_MEM_ERROR) return "zlib: memory error";
-  assert(ret == Z_OK);
-  const std::unique_ptr<z_stream, DeflateDeleter> deleter{&stream};
-  stream.avail_in = 0;
-  stream.next_out = outBuff.data();
-  stream.avail_out = outBuffSize;
-  
-  ChunkWriter writer{dev};
-  writer.begin(chunk_cell_data);
-  
-  int rowIdx = 0;
-  
-  do {
-    if (stream.avail_in == 0 && rowIdx < image.height()) {
-      copyToByteOrder(inBuff.data(), image.scanLine(rowIdx), inBuffSize, format);
-      stream.next_in = inBuff.data();
-      stream.avail_in = inBuffSize;
-      ++rowIdx;
-    }
-    if (stream.avail_out == 0) {
-      writer.writeString(outBuff.data(), outBuffSize);
-      stream.next_out = outBuff.data();
-      stream.avail_out = outBuffSize;
-    }
-    ret = deflate(&stream, stream.avail_in ? Z_NO_FLUSH : Z_FINISH);
-  } while (ret == Z_OK);
-  assert(ret == Z_STREAM_END);
-  
-  if (stream.avail_out < outBuffSize) {
-    writer.writeString(outBuff.data(), outBuffSize - stream.avail_out);
-  }
-  
-  writer.end();
-  
-  return {};
-} catch (FileIOError &e) {
-  return e.what();
-}
-
-Error Timeline::serializeHead(QIODevice &dev) const try {
-  ChunkWriter writer{dev};
-  writer.begin(5 * file_int_size + 1, chunk_anim_header);
-  writer.writeInt(canvasSize.width());
-  writer.writeInt(canvasSize.height());
-  writer.writeInt(static_cast<uint32_t>(layerCount()));
-  writer.writeInt(static_cast<uint32_t>(frameCount));
-  writer.writeInt(100); // delay
-  writer.writeByte(formatByte(canvasFormat));
-  writer.end();
-  return {};
-} catch (FileIOError &e) {
-  return e.what();
+Error Timeline::serializeHead(QIODevice &dev) const {
+  SpriteInfo info;
+  info.width = canvasSize.width();
+  info.height = canvasSize.height();
+  info.layers = layerCount();
+  info.frames = frameCount;
+  info.delay = 100;
+  info.format = canvasFormat;
+  return writeAHDR(dev, info);
 }
 
 Error Timeline::serializeBody(QIODevice &dev) const {
@@ -255,175 +66,21 @@ Error Timeline::serializeBody(QIODevice &dev) const {
   return {};
 }
 
-Error Timeline::serializeTail(QIODevice &dev) const try {
-  ChunkWriter writer{dev};
-  writer.begin(0, chunk_anim_end);
-  writer.end();
-  return {};
-} catch (FileIOError &e) {
-  return e.what();
+Error Timeline::serializeTail(QIODevice &dev) const {
+  return writeAEND(dev);
 }
 
-Error Timeline::readLHDR(QIODevice &dev, Layer &layer) try {
-  ChunkReader reader{dev};
-  const ChunkStart start = reader.begin();
-  if (Error err = expectedName(start, chunk_layer_header); err) return err;
-  if (start.length <= file_int_size + 1) {
-    return QString{chunk_layer_header} + " chunk length too small";
-  }
-  layer.spans.resize(reader.readInt());
-  const uint8_t visibleByte = reader.readByte();
-  switch (visibleByte) {
-    case 0:
-      layer.visible = false;
-      break;
-    case 1:
-      layer.visible = true;
-      break;
-    default:
-      return "Invalid visibility " + QString::number(visibleByte);
-  }
-  const uint32_t nameLen = start.length - (file_int_size + 1);
-  if (nameLen > layer_name_max_len) {
-    return QString{chunk_layer_header} + " chunk length too big";
-  }
-  layer.name.resize(nameLen);
-  reader.readString(layer.name.data(), nameLen);
-  if (Error err = reader.end(); err) return err;
+Error Timeline::deserializeHead(QIODevice &dev, Format &format, QSize &size) {
+  SpriteInfo info;
+  if (Error err = readAHDR(dev, info); err) return err;
+  canvasSize = size = {info.width, info.height};
+  layers.resize(+info.layers);
+  frameCount = info.frames;
+  canvasFormat = format = info.format;
   return {};
-} catch (FileIOError &e) {
-  return e.what();
 }
 
-Error Timeline::readCHDR(QIODevice &dev, CellSpan &span, const Format format) try {
-  ChunkReader reader{dev};
-  const ChunkStart start = reader.begin();
-  if (Error err = expectedName(start, chunk_cell_header); err) return err;
-  if (start.length != file_int_size && start.length != 5 * file_int_size) {
-    return QString{chunk_cell_header} + " chunk length invalid";
-  }
-  span.len = static_cast<FrameIdx>(reader.readInt());
-  if (+span.len <= 0) return "Negative cell span length";
-  if (start.length == 5 * file_int_size) {
-    reader.readInt(); // x
-    reader.readInt(); // y
-    const int width = reader.readInt();
-    if (width <= 0) return "Negative cell width";
-    const int height = reader.readInt();
-    if (height <= 0) return "Negative cell height";
-    span.cell = std::make_unique<Cell>(QSize{width, height}, format);
-  }
-  if (Error err = reader.end(); err) return err;
-  return {};
-} catch (FileIOError &e) {
-  return e.what();
-}
-
-Error Timeline::readCDAT(QIODevice &dev, QImage &image, const Format format) try {
-  assert(!image.isNull());
-  const uint32_t outBuffSize = image.width() * byteDepth(format);
-  std::vector<Bytef> outBuff(outBuffSize);
-  const uint32_t inBuffSize = file_buff_size;
-  std::vector<Bytef> inBuff(inBuffSize);
-  
-  z_stream stream;
-  stream.zalloc = nullptr;
-  stream.zfree = nullptr;
-  int ret = inflateInit(&stream);
-  if (ret == Z_MEM_ERROR) return "zlib: memory error";
-  assert(ret == Z_OK);
-  const std::unique_ptr<z_stream, InflateDeleter> deleter{&stream};
-  stream.avail_in = 0;
-  stream.next_out = outBuff.data();
-  stream.avail_out = outBuffSize;
-  
-  ChunkReader reader{dev};
-  const ChunkStart start = reader.begin();
-  if (Error err = expectedName(start, chunk_cell_data); err) {
-    return err;
-  }
-  
-  int rowIdx = 0;
-  uint32_t remainingChunk = start.length;
-  
-  do {
-    if (stream.avail_in == 0 && remainingChunk != 0) {
-      stream.next_in = inBuff.data();
-      stream.avail_in = std::min(inBuffSize, remainingChunk);
-      remainingChunk -= stream.avail_in;
-      reader.readString(inBuff.data(), stream.avail_in);
-    }
-    if (stream.avail_out == 0 && rowIdx < image.height()) {
-      copyFromByteOrder(image.scanLine(rowIdx), outBuff.data(), outBuffSize, format);
-      stream.next_out = outBuff.data();
-      stream.avail_out = outBuffSize;
-      ++rowIdx;
-    }
-    ret = inflate(&stream, Z_NO_FLUSH);
-  } while (ret == Z_OK);
-  if (ret == Z_DATA_ERROR) {
-    return QString{"zlib: "} + stream.msg;
-  } else if (ret == Z_MEM_ERROR) {
-    return "zlib: memory error";
-  }
-  assert(ret == Z_STREAM_END);
-  
-  if (rowIdx == image.height() - 1) {
-    if (stream.avail_out != 0) {
-      return "Invalid image data";
-    }
-    copyFromByteOrder(image.scanLine(rowIdx), outBuff.data(), outBuffSize, format);
-  } else if (rowIdx == image.height()) {
-    if (stream.avail_out != outBuffSize) {
-      return "Invalid image data";
-    }
-  } else {
-    return "Invalid image data";
-  }
-  
-  if (Error err = reader.end(); err) return err;
-  
-  return {};
-} catch (FileIOError &e) {
-  return e.what();
-}
-
-Error Timeline::deserializeHead(QIODevice &dev, Format &format, QSize &size) try {
-  ChunkReader reader{dev};
-  const ChunkStart start = reader.begin();
-  if (Error err = expectedName(start, chunk_anim_header); err) return err;
-  if (Error err = expectedLength(start, 5 * file_int_size + 1); err) return err;
-  canvasSize.setWidth(reader.readInt());
-  if (canvasSize.width() <= 0) return "Negative canvas width";
-  canvasSize.setHeight(reader.readInt());
-  if (canvasSize.height() <= 0) return "Negative canvas height";
-  layers.resize(reader.readInt());
-  frameCount = static_cast<FrameIdx>(reader.readInt());
-  if (+frameCount < 0) return "Negative frame count";
-  reader.readInt(); // delay
-  const uint8_t readFormat = reader.readByte();
-  switch (readFormat) {
-    case formatByte(Format::rgba):
-      canvasFormat = Format::rgba;
-      break;
-    case formatByte(Format::index):
-      canvasFormat = Format::index;
-      break;
-    case formatByte(Format::gray):
-      canvasFormat = Format::gray;
-      break;
-    default:
-      return "Invalid canvas format " + QString::number(readFormat);
-  }
-  if (Error err = reader.end(); err) return err;
-  format = canvasFormat;
-  size = canvasSize;
-  return {};
-} catch (FileIOError &e) {
-  return e.what();
-}
-
-Error Timeline::deserializeBody(QIODevice &dev) try {
+Error Timeline::deserializeBody(QIODevice &dev) {
   for (Layer &layer : layers) {
     if (Error err = readLHDR(dev, layer); err) return err;
     for (CellSpan &span : layer.spans) {
@@ -436,16 +93,10 @@ Error Timeline::deserializeBody(QIODevice &dev) try {
     }
   }
   return {};
-} catch (FileIOError &e) {
-  return e.what();
 }
 
-Error Timeline::deserializeTail(QIODevice &dev) try {
-  ChunkReader reader{dev};
-  const ChunkStart start = reader.begin();
-  if (Error err = expectedName(start, chunk_anim_end); err) return err;
-  if (Error err = expectedLength(start, 0); err) return err;
-  if (Error err = reader.end(); err) return err;
+Error Timeline::deserializeTail(QIODevice &dev) {
+  if (Error err = readAEND(dev); err) return err;
   selection = empty_rect;
   changeFrameCount();
   changeLayerCount();
@@ -454,8 +105,6 @@ Error Timeline::deserializeTail(QIODevice &dev) try {
   Q_EMIT selectionChanged(selection);
   changeLayers(LayerIdx{0}, layerCount());
   return {};
-} catch (FileIOError &e) {
-  return e.what();
 }
 
 CellRect Timeline::selectCells(const ExportOptions &options) const {

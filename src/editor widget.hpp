@@ -11,7 +11,7 @@
 
 #include "tool.hpp"
 #include "cell.hpp"
-#include "palette.hpp"
+#include "palette span.hpp"
 #include "scroll bar widget.hpp"
 
 class EditorImage;

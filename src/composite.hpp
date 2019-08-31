@@ -11,8 +11,8 @@
 
 #include <span>
 #include "cell.hpp"
-#include "palette.hpp"
 #include "formats.hpp"
+#include "palette span.hpp"
 
 /// Take all of the images that make up a frame and composite them together into
 /// a single image

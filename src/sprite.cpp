@@ -8,11 +8,8 @@
 
 #include "sprite.hpp"
 
-#include "png.hpp"
-#include "config.hpp"
 #include "serial.hpp"
 #include <QtCore/qfile.h>
-#include "export options.hpp"
 
 void Sprite::newFile(const Format newFormat, const QSize newSize) {
   format = newFormat;
