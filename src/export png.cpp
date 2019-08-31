@@ -72,9 +72,9 @@ Error exportPng(
   const Format canvasFormat,
   const ExportFormat exportFormat
 ) {
-  pngErrorMsg.clear();
+  QString errorMessage;
   png_structp png = png_create_write_struct(
-    PNG_LIBPNG_VER_STRING, nullptr, &pngError, &pngWarning
+    PNG_LIBPNG_VER_STRING, &errorMessage, &pngError, &pngWarning
   );
   if (!png) {
     // does this only happen when malloc returns nullptr?
@@ -88,7 +88,7 @@ Error exportPng(
   // @TODO compile libpng with exceptions
   if (setjmp(png_jmpbuf(png))) {
     png_destroy_write_struct(&png, &info);
-    return pngErrorMsg;
+    return errorMessage;
   }
   QFile file{path};
   if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
@@ -96,7 +96,7 @@ Error exportPng(
   }
   if (setjmp(png_jmpbuf(png))) { // call file dtor
     png_destroy_write_struct(&png, &info);
-    return pngErrorMsg;
+    return errorMessage;
   }
   png_set_write_fn(png, &file, &pngWrite, &pngFlush);
   png_set_IHDR(
@@ -141,7 +141,7 @@ Error exportPng(
   std::vector<png_bytep> rows = getRows(image);
   if (setjmp(png_jmpbuf(png))) { // call rows dtor
     png_destroy_write_struct(&png, &info);
-    return pngErrorMsg;
+    return errorMessage;
   }
   png_set_rows(png, info, rows.data());
   png_write_png(png, info, transforms, nullptr);

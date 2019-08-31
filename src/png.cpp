@@ -10,15 +10,10 @@
 
 #include <iostream>
 #include <QtCore/qfile.h>
-
-QString pngErrorMsg = []{
-  QString msg;
-  msg.reserve(1024);
-  return msg;
-}();
+#include <QtCore/qstring.h>
 
 void pngError(png_structp png, png_const_charp msg) {
-  pngErrorMsg.append(msg);
+  reinterpret_cast<QString *>(png_get_error_ptr(png))->append(msg);
   png_longjmp(png, 1);
 }
 

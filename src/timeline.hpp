@@ -9,6 +9,7 @@
 #ifndef timeline_hpp
 #define timeline_hpp
 
+#include "error.hpp"
 #include "cell span.hpp"
 #include "palette span.hpp"
 #include "export options.hpp"

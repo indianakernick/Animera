@@ -9,11 +9,7 @@
 #ifndef png_hpp
 #define png_hpp
 
-#include <span>
 #include <libpng16/png.h>
-#include <QtCore/qstring.h>
-
-extern QString pngErrorMsg;
 
 void pngError(png_structp, png_const_charp);
 void pngWarning(png_structp, png_const_charp);
