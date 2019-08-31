@@ -85,7 +85,6 @@ Error exportPng(
     png_destroy_write_struct(&png, nullptr);
     return "Failed to initialize png info struct";
   }
-  // @TODO compile libpng with exceptions
   if (setjmp(png_jmpbuf(png))) {
     png_destroy_write_struct(&png, &info);
     return errorMessage;

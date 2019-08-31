@@ -12,14 +12,6 @@
 #include <cstdint>
 
 struct Color {
-  // @TODO is this a bad idea?
-  /*
-  union {
-    uint8_t r;
-    uint8_t y;
-  };
-  */
-
   uint8_t r, g, b, a;
 };
 
