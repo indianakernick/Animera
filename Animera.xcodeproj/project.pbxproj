@@ -332,6 +332,12 @@
 		45F3EB7422CC5D9100F9F93E /* timeline.anim */ = {isa = PBXFileReference; lastKnownFileType = file; path = timeline.anim; sourceTree = "<group>"; };
 		45F3EB7522CC5D9100F9F93E /* sv graph circle.anim */ = {isa = PBXFileReference; lastKnownFileType = file; path = "sv graph circle.anim"; sourceTree = "<group>"; };
 		45F3EB7622CC5D9100F9F93E /* slider bar.anim */ = {isa = PBXFileReference; lastKnownFileType = file; path = "slider bar.anim"; sourceTree = "<group>"; };
+		45FA33A4231BB6CC004FD484 /* surface.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = surface.hpp; sourceTree = "<group>"; };
+		45FA33A5231BB7EF004FD484 /* geometry.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = geometry.hpp; sourceTree = "<group>"; };
+		45FA33A6231BC797004FD484 /* traits.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = traits.hpp; sourceTree = "<group>"; };
+		45FA33A7231BCA33004FD484 /* range.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = range.hpp; sourceTree = "<group>"; };
+		45FA33A8231BCB70004FD484 /* color.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = color.hpp; sourceTree = "<group>"; };
+		45FA33A9231BCCE0004FD484 /* iterator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = iterator.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -741,6 +747,7 @@
 		45BAD7322246FC40000D095C /* include */ = {
 			isa = PBXGroup;
 			children = (
+				45FA33A3231BB334004FD484 /* Graphics */,
 			);
 			path = include;
 			sourceTree = "<group>";
@@ -778,6 +785,19 @@
 				45F3EB7222CC5D4F00F9F93E /* rgba.png */,
 			);
 			path = Formats;
+			sourceTree = "<group>";
+		};
+		45FA33A3231BB334004FD484 /* Graphics */ = {
+			isa = PBXGroup;
+			children = (
+				45FA33A4231BB6CC004FD484 /* surface.hpp */,
+				45FA33A5231BB7EF004FD484 /* geometry.hpp */,
+				45FA33A6231BC797004FD484 /* traits.hpp */,
+				45FA33A7231BCA33004FD484 /* range.hpp */,
+				45FA33A8231BCB70004FD484 /* color.hpp */,
+				45FA33A9231BCCE0004FD484 /* iterator.hpp */,
+			);
+			path = Graphics;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
