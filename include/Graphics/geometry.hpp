@@ -28,6 +28,13 @@ struct Point {
   constexpr Point operator-(const Point other) const noexcept {
     return {x - other.x, y - other.y};
   }
+  
+  bool operator==(const Point other) const noexcept {
+    return x == other.x && y == other.y;
+  }
+  bool operator!=(const Point other) const noexcept {
+    return !(*this == other);
+  }
 };
 
 struct Size {
@@ -40,6 +47,13 @@ struct Size {
   
   constexpr bool empty() const noexcept {
     return w <= 0 || h <= 0;
+  }
+  
+  bool operator==(const Size other) const noexcept {
+    return w == other.w && h == other.h;
+  }
+  bool operator!=(const Size other) const noexcept {
+    return !(*this == other);
   }
 };
 
@@ -87,6 +101,13 @@ struct Rect {
     } else {
       return {};
     }
+  }
+  
+  bool operator==(const Rect other) const noexcept {
+    return p == other.p && s == other.s;
+  }
+  bool operator!=(const Rect other) const noexcept {
+    return !(*this == other);
   }
 };
 

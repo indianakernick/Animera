@@ -11,6 +11,7 @@
 
 #include <cassert>
 #include <iterator>
+#include "range.hpp"
 #include "surface.hpp"
 
 namespace gfx {

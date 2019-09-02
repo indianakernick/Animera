@@ -9,8 +9,8 @@
 #ifndef graphics_porter_duff_hpp
 #define graphics_porter_duff_hpp
 
+#include "each.hpp"
 #include "format.hpp"
-#include "surface.hpp"
 
 namespace gfx {
 
@@ -103,23 +103,13 @@ void porterDuffRegion(
   const SrcFormat srcFmt,
   const Point srcPos
 ) {
-  const Rect srcRect = {srcPos, src.size()};
-  const Rect dstRect = srcRect.intersected(dst.rect());
-  if (dstRect.empty()) return;
-  
-  auto srcRowIter = src.range({dstRect.topLeft() - srcPos, dstRect.s}).begin();
-  for (ColRange row : dst.range(dstRect)) {
-    const SrcPixel *srcPixelIter = srcRowIter.begin();
-    for (DstPixel &pixel : row) {
-      pixel = dstFmt.pixel(porterDuff(
-        mode,
-        srcFmt.color(*srcPixelIter),
-        dstFmt.color(pixel)
-      ));
-      ++srcPixelIter;
-    }
-    ++srcRowIter;
-  }
+  eachIntersect(dst, src, srcPos, [mode, dstFmt, srcFmt](auto &dst, auto &src) {
+    dst = dstFmt.pixel(porterDuff(
+      mode,
+      srcFmt.color(src),
+      dstFmt.color(dst)
+    ));
+  });
 }
 
 template <typename Mode, typename DstPixel, typename SrcPixel, typename DstFormat, typename SrcFormat>
@@ -130,8 +120,13 @@ void porterDuff(
   const DstFormat dstFmt,
   const SrcFormat srcFmt
 ) {
-  assert(dst.size() == src.size());
-  porterDuffRegion(mode, dst, src, dstFmt, srcFmt, {0, 0});
+  each(dst, src, [mode, dstFmt, srcFmt](auto &dst, auto &src) {
+    dst = dstFmt.pixel(porterDuff(
+      mode,
+      srcFmt.color(src),
+      dstFmt.color(dst)
+    ));
+  });
 }
 
 }
