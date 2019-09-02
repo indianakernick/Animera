@@ -239,6 +239,7 @@
 		45A61040230A3F42000A0BD6 /* format convert.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "format convert.hpp"; sourceTree = "<group>"; };
 		45A61041230BE989000A0BD6 /* export png.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "export png.cpp"; sourceTree = "<group>"; };
 		45A61042230BE989000A0BD6 /* export png.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "export png.hpp"; sourceTree = "<group>"; };
+		45B00FFD231D1756000A2519 /* copy.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = copy.hpp; sourceTree = "<group>"; };
 		45B284912218E38800D6D055 /* image.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = image.cpp; sourceTree = "<group>"; };
 		45B284922218E38800D6D055 /* image.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = image.hpp; sourceTree = "<group>"; };
 		45B284942218E39300D6D055 /* cell.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = cell.cpp; sourceTree = "<group>"; };
@@ -802,6 +803,7 @@
 				45FA33AA231CA11C004FD484 /* format.hpp */,
 				45139157231CA5EC001BB0C7 /* porter duff.hpp */,
 				45139158231CB1C9001BB0C7 /* each.hpp */,
+				45B00FFD231D1756000A2519 /* copy.hpp */,
 			);
 			path = Graphics;
 			sourceTree = "<group>";
