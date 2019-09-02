@@ -48,8 +48,12 @@ public:
   int height() const noexcept {
     return height_;
   }
+  
   Size size() const noexcept {
     return {width_, height_};
+  }
+  Rect rect() const noexcept {
+    return {{}, size()};
   }
   
   template <typename OtherPixel>
@@ -71,11 +75,14 @@ public:
     return insideX(pos.x) && insideY(pos.y);
   }
   
-  ptrdiff_t pixelIndex(const Point pos) const noexcept {
+  ptrdiff_t idx(const Point pos) const noexcept {
     return pos.y * pitch_ + pos.x;
   }
-  Pixel *pixelAddr(const Point pos) const noexcept {
-    return data_ + pixelIndex(pos);
+  Pixel *ptr(const Point pos) const noexcept {
+    return data_ + idx(pos);
+  }
+  Pixel &ref(const Pixel pos) const noexcept {
+    return *ptr(pos);
   }
 
 private:

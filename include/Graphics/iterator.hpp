@@ -144,8 +144,8 @@ RowRange<Pixel> range(const Surface<Pixel> &surface) noexcept {
 template <typename Pixel>
 RowRange<Pixel> range(const Surface<Pixel> &surface, const Rect rect) noexcept {
   return {
-    {surface.pixelAddr(rect.p), surface.pitch(), rect.s.w},
-    {surface.pixelAddr({rect.p.x, rect.p.y + rect.s.h}), surface.pitch(), rect.s.w}
+    {surface.ptr(rect.topLeft()), surface.pitch(), rect.s.w},
+    {surface.ptr(rect.bottomLeft()), surface.pitch(), rect.s.w}
   };
 }
 

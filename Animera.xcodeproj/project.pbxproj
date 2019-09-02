@@ -127,6 +127,7 @@
 		4513145722D5A29800D66262 /* picker impl rgba.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "picker impl rgba.hpp"; sourceTree = "<group>"; };
 		4513145922D5A2A500D66262 /* picker impl gray.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "picker impl gray.cpp"; sourceTree = "<group>"; };
 		4513145A22D5A2A500D66262 /* picker impl gray.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "picker impl gray.hpp"; sourceTree = "<group>"; };
+		45139157231CA5EC001BB0C7 /* porter duff.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "porter duff.hpp"; sourceTree = "<group>"; };
 		45161F0022F11EB60036BBED /* todo.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = todo.txt; sourceTree = "<group>"; };
 		45161F0422F1399A0036BBED /* timeline painting.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "timeline painting.cpp"; sourceTree = "<group>"; };
 		45161F0522F1399A0036BBED /* timeline painting.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "timeline painting.hpp"; sourceTree = "<group>"; };
@@ -338,6 +339,7 @@
 		45FA33A7231BCA33004FD484 /* range.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = range.hpp; sourceTree = "<group>"; };
 		45FA33A8231BCB70004FD484 /* color.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = color.hpp; sourceTree = "<group>"; };
 		45FA33A9231BCCE0004FD484 /* iterator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = iterator.hpp; sourceTree = "<group>"; };
+		45FA33AA231CA11C004FD484 /* format.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = format.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -796,6 +798,8 @@
 				45FA33A7231BCA33004FD484 /* range.hpp */,
 				45FA33A8231BCB70004FD484 /* color.hpp */,
 				45FA33A9231BCCE0004FD484 /* iterator.hpp */,
+				45FA33AA231CA11C004FD484 /* format.hpp */,
+				45139157231CA5EC001BB0C7 /* porter duff.hpp */,
 			);
 			path = Graphics;
 			sourceTree = "<group>";
