@@ -283,17 +283,16 @@ std::pair<int, int> signdiff(const int a, const int b) {
 template <typename SetPixel>
 bool midpointLine(QPoint p1, const QPoint p2, SetPixel &&setPixel) {
   const auto [sx, dx] = signdiff(p1.x(), p2.x());
-  auto [sy, dy] = signdiff(p1.y(), p2.y());
-  dy = -dy;
-  int err = dx + dy;
+  const auto [sy, dy] = signdiff(p1.y(), p2.y());
+  int err = dx - dy;
   bool drawn = false;
   
   while (true) {
     drawn |= setPixel(p1);
     const int err2 = 2 * err;
-    if (err2 >= dy) {
+    if (err2 <= dy) {
       if (p1.x() == p2.x()) break;
-      err += dy;
+      err -= dy;
       p1.rx() += sx;
     }
     if (err2 <= dx) {
