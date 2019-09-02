@@ -28,7 +28,12 @@ public:
   static_assert(std::is_unsigned_v<Pixel>);
   
   Surface(Pixel *data, const ptrdiff_t pitch, const int width, const int height) noexcept
-    : data_{data}, pitch_{pitch}, width_{width}, height_{height} {}
+    : data_{data}, pitch_{pitch}, width_{width}, height_{height} {
+    assert(data != nullptr);
+    assert(pitch > 0);
+    assert(width > 0);
+    assert(height > 0);
+  }
   
   template <typename OtherPixel, typename = std::enable_if_t<
     std::is_convertible_v<OtherPixel (*)[], Pixel (*)[]>

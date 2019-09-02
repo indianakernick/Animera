@@ -18,8 +18,8 @@ namespace gfx {
 
 template <typename Pixel>
 void copyRegion(
-  Surface<Pixel> dst,
-  CSurface<identity_t<Pixel>> src,
+  const Surface<Pixel> dst,
+  const CSurface<identity_t<Pixel>> src,
   const Point srcPos
 ) noexcept {
   const Rect srcRect = {srcPos, src.size()};
@@ -34,7 +34,10 @@ void copyRegion(
 }
 
 template <typename Pixel>
-void copy(Surface<Pixel> dst, CSurface<identity_t<Pixel>> src) noexcept {
+void copy(
+  const Surface<Pixel> dst,
+  const CSurface<identity_t<Pixel>> src
+) noexcept {
   assert(dst.size() == src.size());
   const size_t width = dst.width() * sizeof(Pixel);
   auto srcRowIter = range(src).begin();
