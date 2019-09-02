@@ -9,6 +9,7 @@
 #ifndef graphics_surface_hpp
 #define graphics_surface_hpp
 
+#include <cassert>
 #include <type_traits>
 #include "geometry.hpp"
 
@@ -65,14 +66,17 @@ public:
     return pitch_ * ptrdiff_t{sizeof(Pixel)} / ptrdiff_t{sizeof(OtherPixel)};
   }
   
-  bool insideX(const int posX) const noexcept {
+  bool containsX(const int posX) const noexcept {
     return 0 <= posX && posX < width_;
   }
-  bool insideY(const int posY) const noexcept {
+  bool containsY(const int posY) const noexcept {
     return 0 <= posY && posY < height_;
   }
-  bool inside(const Point pos) const noexcept {
-    return insideX(pos.x) && insideY(pos.y);
+  bool contains(const Point pos) const noexcept {
+    return containsX(pos.x) && containsY(pos.y);
+  }
+  bool contains(const Rect rect) const noexcept {
+    return contains(rect.p) && contains(rect.p + rect.s.point() - Point{1, 1});
   }
   
   ptrdiff_t idx(const Point pos) const noexcept {
@@ -82,6 +86,7 @@ public:
     return data_ + idx(pos);
   }
   Pixel &ref(const Pixel pos) const noexcept {
+    assert(contains(pos));
     return *ptr(pos);
   }
 

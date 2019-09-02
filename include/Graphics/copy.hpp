@@ -9,6 +9,8 @@
 #ifndef graphics_copy_hpp
 #define graphics_copy_hpp
 
+#include <cassert>
+#include <cstring>
 #include "traits.hpp"
 #include "surface.hpp"
 
