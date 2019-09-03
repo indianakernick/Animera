@@ -91,3 +91,8 @@ Build system
   https://cmake.org/cmake/help/latest/prop_tgt/MACOSX_BUNDLE_INFO_PLIST.html#prop_tgt:MACOSX_BUNDLE_INFO_PLIST
   https://cmake.org/cmake/help/latest/module/CPack.html
   https://cmake.org/cmake/help/latest/module/BundleUtilities.html
+
+create polymorphic surface in graphics library
+  gfx::Image perhaps
+  add visit function for converting to gfx::Surface
+  should it store Format? how?
