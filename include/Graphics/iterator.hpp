@@ -9,7 +9,6 @@
 #ifndef graphics_iterator_hpp
 #define graphics_iterator_hpp
 
-#include <cassert>
 #include <iterator>
 #include "range.hpp"
 #include "surface.hpp"
