@@ -31,6 +31,9 @@ image, view, sampler
 vulkan textures
 
 transform a layer or transform a frame
+  would it make sense to extend this concept to all tools?
+  bulk operations?
+  apply the actions of a tool on multiple cells
 
 set cursor and respond to clicks more precisely
   setMask could help
@@ -96,3 +99,5 @@ create polymorphic surface in graphics library
   gfx::Image perhaps
   add visit function for converting to gfx::Surface
   should it store Format? how?
+
+generate a palette from a gradient
