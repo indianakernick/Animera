@@ -19,7 +19,7 @@ struct Point {
   int x = 0;
   int y = 0;
   
-  Size size() const noexcept;
+  constexpr Size size() const noexcept;
   
   constexpr Point operator+(const Point other) const noexcept {
     return {x + other.x, y + other.y};
@@ -29,10 +29,10 @@ struct Point {
     return {x - other.x, y - other.y};
   }
   
-  bool operator==(const Point other) const noexcept {
+  constexpr bool operator==(const Point other) const noexcept {
     return x == other.x && y == other.y;
   }
-  bool operator!=(const Point other) const noexcept {
+  constexpr bool operator!=(const Point other) const noexcept {
     return !(*this == other);
   }
 };
@@ -41,23 +41,26 @@ struct Size {
   int w = 0;
   int h = 0;
   
-  Point point() const noexcept {
+  constexpr Point point() const noexcept {
     return {w, h};
   }
   
   constexpr bool empty() const noexcept {
     return w <= 0 || h <= 0;
   }
+  constexpr Size transposed() const noexcept {
+    return {h, w};
+  }
   
-  bool operator==(const Size other) const noexcept {
+  constexpr bool operator==(const Size other) const noexcept {
     return w == other.w && h == other.h;
   }
-  bool operator!=(const Size other) const noexcept {
+  constexpr bool operator!=(const Size other) const noexcept {
     return !(*this == other);
   }
 };
 
-inline Size Point::size() const noexcept {
+constexpr  Size Point::size() const noexcept {
   return {x, y};
 }
 
