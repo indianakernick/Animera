@@ -46,6 +46,16 @@ void copy(
   }
 }
 
+template <typename Pixel>
+void overCopy(
+  const Surface<Pixel> dst,
+  const CSurface<identity_t<Pixel>> src
+) noexcept {
+  assert(dst.size() == src.size());
+  assert(dst.pitch() == src.pitch());
+  std::memcpy(dst.data(), src.data(), dst.pitch() * dst.height());
+}
+
 }
 
 #endif

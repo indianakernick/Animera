@@ -37,6 +37,7 @@ void each(Surface<PixelA> a, Surface<PixelB> b, Func func) {
   }
 }
 
+// @TODO Does this belong somewhere else?
 template <typename DstPixel, typename SrcPixel, typename Func>
 void pixelTransform(Surface<DstPixel> dst, CSurface<SrcPixel> src, Func func) {
   each(dst, src, [func](DstPixel &dst, const SrcPixel &src) {
