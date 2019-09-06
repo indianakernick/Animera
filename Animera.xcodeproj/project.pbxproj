@@ -337,6 +337,7 @@
 		45F3EB7422CC5D9100F9F93E /* timeline.anim */ = {isa = PBXFileReference; lastKnownFileType = file; path = timeline.anim; sourceTree = "<group>"; };
 		45F3EB7522CC5D9100F9F93E /* sv graph circle.anim */ = {isa = PBXFileReference; lastKnownFileType = file; path = "sv graph circle.anim"; sourceTree = "<group>"; };
 		45F3EB7622CC5D9100F9F93E /* slider bar.anim */ = {isa = PBXFileReference; lastKnownFileType = file; path = "slider bar.anim"; sourceTree = "<group>"; };
+		45F5EB282321D7A000BB9CEB /* transform.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = transform.hpp; sourceTree = "<group>"; };
 		45FA33A4231BB6CC004FD484 /* surface.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = surface.hpp; sourceTree = "<group>"; };
 		45FA33A5231BB7EF004FD484 /* geometry.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = geometry.hpp; sourceTree = "<group>"; };
 		45FA33A6231BC797004FD484 /* traits.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = traits.hpp; sourceTree = "<group>"; };
@@ -808,6 +809,7 @@
 				45B00FFD231D1756000A2519 /* copy.hpp */,
 				45B00FFE231D270C000A2519 /* fill.hpp */,
 				45B00FFF231E6553000A2519 /* flood fill.hpp */,
+				45F5EB282321D7A000BB9CEB /* transform.hpp */,
 			);
 			path = Graphics;
 			sourceTree = "<group>";

@@ -26,7 +26,7 @@ void each(Surface<Pixel> surface, Func func) {
 template <typename PixelA, typename PixelB, typename Func>
 void each(Surface<PixelA> a, Surface<PixelB> b, Func func) {
   assert(a.size() == b.size());
-  RowIterator bRowIter = range(b).begin();
+  RowIterator bRowIter = begin(b);
   for (auto aRow : range(a)) {
     PixelB *bColIter = bRowIter.begin();
     for (PixelA &aPixel : aRow) {
@@ -35,14 +35,6 @@ void each(Surface<PixelA> a, Surface<PixelB> b, Func func) {
     }
     ++bRowIter;
   }
-}
-
-// @TODO Does this belong somewhere else?
-template <typename DstPixel, typename SrcPixel, typename Func>
-void pixelTransform(Surface<DstPixel> dst, CSurface<SrcPixel> src, Func func) {
-  each(dst, src, [func](DstPixel &dst, const SrcPixel &src) {
-    dst = func(src);
-  });
 }
 
 template <typename Pixel, typename Func>
@@ -59,7 +51,7 @@ void eachIntersect(Surface<PixelA> a, Surface<PixelB> b, const Point bPos, Func 
   const Rect bRect = {bPos, b.size()};
   const Rect aRect = bRect.intersected(a.rect());
   if (aRect.empty()) return;
-  RowIterator bRowIter = range(b, {aRect.p - bPos, aRect.s}).begin();
+  RowIterator bRowIter = begin(b, {aRect.p - bPos, aRect.s});
   for (auto aRow : range(a, aRect)) {
     PixelB *bColIter = bRowIter.begin();
     for (PixelA &aPixel : aRow) {

@@ -134,19 +134,33 @@ template <typename Pixel>
 using RowRange = Range<RowIterator<Pixel>>;
 
 template <typename Pixel>
-RowRange<Pixel> range(const Surface<Pixel> &surface) noexcept {
-  return {
-    {surface.data(), surface.pitch(), surface.width()},
-    {surface.data() + surface.pitch() * surface.height(), surface.pitch(), surface.width()}
-  };
+RowIterator<Pixel> begin(const Surface<Pixel> surface) noexcept {
+  return {surface.data(), surface.pitch(), surface.width()};
 }
 
 template <typename Pixel>
-RowRange<Pixel> range(const Surface<Pixel> &surface, const Rect rect) noexcept {
-  return {
-    {surface.ptr(rect.topLeft()), surface.pitch(), rect.s.w},
-    {surface.ptr(rect.bottomLeft()), surface.pitch(), rect.s.w}
-  };
+RowIterator<Pixel> end(const Surface<Pixel> surface) noexcept {
+  return {surface.data() + surface.pitch() * surface.height(), surface.pitch(), surface.width()};
+}
+
+template <typename Pixel>
+RowIterator<Pixel> begin(const Surface<Pixel> surface, const Rect rect) noexcept {
+  return {surface.ptr(rect.topLeft()), surface.pitch(), rect.s.w};
+}
+
+template <typename Pixel>
+RowIterator<Pixel> end(const Surface<Pixel> surface, const Rect rect) noexcept {
+  return {surface.ptr(rect.bottomLeft()), surface.pitch(), rect.s.w};
+}
+
+template <typename Pixel>
+RowRange<Pixel> range(const Surface<Pixel> surface) noexcept {
+  return {begin(surface), end(surface)};
+}
+
+template <typename Pixel>
+RowRange<Pixel> range(const Surface<Pixel> surface, const Rect rect) noexcept {
+  return {begin(surface, rect), end(surface, rect)};
 }
 
 }

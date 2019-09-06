@@ -33,8 +33,8 @@ private:
 
 template <typename Begin, typename End>
 Range(Begin &&, End &&) -> Range<
-  std::remove_cvref_t<Begin>,
-  std::remove_cvref_t<End>
+  std::decay_t<Begin>,
+  std::decay_t<End>
 >;
 
 }

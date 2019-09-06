@@ -25,7 +25,7 @@ void copyRegion(
   const Rect dstRect = srcRect.intersected(dst.rect());
   if (dstRect.empty()) return;
   const size_t width = dstRect.s.w * sizeof(Pixel);
-  auto srcRowIter = range(src, {dstRect.p - srcPos, dstRect.s}).begin();
+  auto srcRowIter = begin(src, {dstRect.p - srcPos, dstRect.s});
   for (auto row : range(dst, dstRect)) {
     std::memcpy(row.begin(), srcRowIter.begin(), width);
     ++srcRowIter;
@@ -39,7 +39,7 @@ void copy(
 ) noexcept {
   assert(dst.size() == src.size());
   const size_t width = dst.width() * sizeof(Pixel);
-  auto srcRowIter = range(src).begin();
+  auto srcRowIter = begin(src);
   for (auto row : range(dst)) {
     std::memcpy(row.begin(), srcRowIter.begin(), width);
     ++srcRowIter;
