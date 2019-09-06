@@ -90,7 +90,7 @@ public:
   Pixel *ptr(const Point pos) const noexcept {
     return data_ + idx(pos);
   }
-  Pixel &ref(const Pixel pos) const noexcept {
+  Pixel &ref(const Point pos) const noexcept {
     assert(contains(pos));
     return *ptr(pos);
   }
