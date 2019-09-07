@@ -9,8 +9,6 @@
 #ifndef graphics_geometry_hpp
 #define graphics_geometry_hpp
 
-#include <algorithm>
-
 namespace gfx {
 
 struct Size;
@@ -93,13 +91,20 @@ struct Rect {
       return {};
     }
     
+    const auto max = [](const int a, const int b) {
+      return a < b ? b : a;
+    };
+    const auto min = [](const int a, const int b) {
+      return a < b ? a : b;
+    };
+    
     const Point topLeft = {
-      std::max(p.x, other.p.x),
-      std::max(p.y, other.p.y)
+      max(p.x, other.p.x),
+      max(p.y, other.p.y)
     };
     const Point bottomRight = {
-      std::min(p.x + s.w, other.p.x + other.s.w),
-      std::min(p.y + s.h, other.p.y + other.s.h)
+      min(p.x + s.w, other.p.x + other.s.w),
+      min(p.y + s.h, other.p.y + other.s.h)
     };
     
     if (bottomRight.x > topLeft.x && bottomRight.y > topLeft.y) {
