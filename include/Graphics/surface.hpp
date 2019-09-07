@@ -34,6 +34,8 @@ public:
     assert(width > 0);
     assert(height > 0);
   }
+  Surface(Pixel *data, const ptrdiff_t pitch, const Size size) noexcept
+    : Surface{data, pitch, size.w, size.h} {}
   
   template <typename OtherPixel, typename = std::enable_if_t<
     std::is_convertible_v<OtherPixel (*)[], Pixel (*)[]>

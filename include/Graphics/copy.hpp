@@ -25,6 +25,7 @@ void copyRegion(
   const Rect srcRect = {srcPos, src.size()};
   const Rect dstRect = srcRect.intersected(dst.rect());
   if (dstRect.empty()) return;
+  // copyRegion could call copy
   const size_t width = dstRect.s.w * sizeof(Pixel);
   auto srcRowIter = begin(src, {dstRect.p - srcPos, dstRect.s});
   for (auto row : range(dst, dstRect)) {
