@@ -67,6 +67,8 @@
 		45B284B3221A919000D6D055 /* tool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45B284B1221A919000D6D055 /* tool.cpp */; };
 		45B284B9221E110F00D6D055 /* painting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45B284B7221E110F00D6D055 /* painting.cpp */; };
 		45BADA77224714A3000D095C /* tool widgets.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45BADA75224714A3000D095C /* tool widgets.cpp */; };
+		45BB5F6923239BC400E42371 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45BB5F6423239AB900E42371 /* main.cpp */; };
+		45BB5F6B23239CB700E42371 /* copy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45BB5F6A23239CB700E42371 /* copy.cpp */; };
 		45C447F422F56E6100B65AD3 /* dialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45C447F222F56E6100B65AD3 /* dialog.cpp */; };
 		45C447F622F64ECB00B65AD3 /* libpng16.16.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 45C447F522F64ECA00B65AD3 /* libpng16.16.dylib */; };
 		45C447F822F64F0300B65AD3 /* libpng16.16.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 45C447F522F64ECA00B65AD3 /* libpng16.16.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
@@ -260,6 +262,10 @@
 		45B284BB221E252300D6D055 /* paint params.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "paint params.hpp"; sourceTree = "<group>"; };
 		45BADA75224714A3000D095C /* tool widgets.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "tool widgets.cpp"; sourceTree = "<group>"; };
 		45BADA76224714A3000D095C /* tool widgets.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "tool widgets.hpp"; sourceTree = "<group>"; };
+		45BB5F5923239A1D00E42371 /* catch.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = catch.hpp; sourceTree = "<group>"; };
+		45BB5F6223239AB900E42371 /* Graphics-Test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Graphics-Test"; sourceTree = BUILT_PRODUCTS_DIR; };
+		45BB5F6423239AB900E42371 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		45BB5F6A23239CB700E42371 /* copy.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = copy.cpp; sourceTree = "<group>"; };
 		45BE2A2922680B0900E21A85 /* sv circle s.pbm */ = {isa = PBXFileReference; lastKnownFileType = text; path = "sv circle s.pbm"; sourceTree = "<group>"; };
 		45BE2A2A22680B0900E21A85 /* sv circle p.pbm */ = {isa = PBXFileReference; lastKnownFileType = text; path = "sv circle p.pbm"; sourceTree = "<group>"; };
 		45BE2A2B22683A2F00E21A85 /* slider bar p.pbm */ = {isa = PBXFileReference; lastKnownFileType = text; path = "slider bar p.pbm"; sourceTree = "<group>"; };
@@ -659,6 +665,7 @@
 				45C2A2562207BC4000E989C2 /* plan r0.txt */,
 				45C2A280220E821200E989C2 /* plan r1.txt */,
 				45161F0022F11EB60036BBED /* todo.txt */,
+				45BB5F57232399B100E42371 /* test */,
 				45BAD7322246FC40000D095C /* include */,
 				453C78832236624D00818B19 /* Anims */,
 				453C78222234CB5500818B19 /* Resources */,
@@ -672,6 +679,7 @@
 			isa = PBXGroup;
 			children = (
 				455F2851220688FD00C73F39 /* Animera.app */,
+				45BB5F6223239AB900E42371 /* Graphics-Test */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -757,6 +765,24 @@
 				45FA33A3231BB334004FD484 /* Graphics */,
 			);
 			path = include;
+			sourceTree = "<group>";
+		};
+		45BB5F57232399B100E42371 /* test */ = {
+			isa = PBXGroup;
+			children = (
+				45BB5F5923239A1D00E42371 /* catch.hpp */,
+				45BB5F5D23239A8500E42371 /* Graphics */,
+			);
+			path = test;
+			sourceTree = "<group>";
+		};
+		45BB5F5D23239A8500E42371 /* Graphics */ = {
+			isa = PBXGroup;
+			children = (
+				45BB5F6423239AB900E42371 /* main.cpp */,
+				45BB5F6A23239CB700E42371 /* copy.cpp */,
+			);
+			path = Graphics;
 			sourceTree = "<group>";
 		};
 		45BE2A2822680B0900E21A85 /* Color Picker */ = {
@@ -868,6 +894,21 @@
 			productReference = 455F2851220688FD00C73F39 /* Animera.app */;
 			productType = "com.apple.product-type.application";
 		};
+		45BB5F6123239AB900E42371 /* Graphics-Test */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 45BB5F6623239AB900E42371 /* Build configuration list for PBXNativeTarget "Graphics-Test" */;
+			buildPhases = (
+				45BB5F5E23239AB900E42371 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Graphics-Test";
+			productName = "Graphics-Test";
+			productReference = 45BB5F6223239AB900E42371 /* Graphics-Test */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -887,6 +928,9 @@
 							};
 						};
 					};
+					45BB5F6123239AB900E42371 = {
+						CreatedOnToolsVersion = 10.3;
+					};
 				};
 			};
 			buildConfigurationList = 455F284C220688FD00C73F39 /* Build configuration list for PBXProject "Animera" */;
@@ -903,6 +947,7 @@
 			projectRoot = "";
 			targets = (
 				455F2850220688FD00C73F39 /* Animera */,
+				45BB5F6123239AB900E42371 /* Graphics-Test */,
 			);
 		};
 /* End PBXProject section */
@@ -1684,6 +1729,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		45BB5F5E23239AB900E42371 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				45BB5F6B23239CB700E42371 /* copy.cpp in Sources */,
+				45BB5F6923239BC400E42371 /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
@@ -1917,6 +1971,66 @@
 			};
 			name = Release;
 		};
+		45BB5F6723239AB900E42371 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = QY44MADGVC;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					CATCH_CONFIG_FAST_COMPILE,
+					CATCH_CONFIG_DISABLE_MATCHERS,
+				);
+				HEADER_SEARCH_PATHS = $PROJECT_DIR/include;
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-Wall",
+					"-Wextra",
+					"-Weffc++",
+					"-Wpedantic",
+					"-Wshadow",
+					"-Wno-documentation",
+					"-Wnull-dereference",
+					"-Woverloaded-virtual",
+					"-Wreturn-type",
+					"-Wnonportable-include-path",
+					"-Wstrict-aliasing",
+					"-Wno-comma",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		45BB5F6823239AB900E42371 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = QY44MADGVC;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					CATCH_CONFIG_FAST_COMPILE,
+					CATCH_CONFIG_DISABLE_MATCHERS,
+				);
+				HEADER_SEARCH_PATHS = $PROJECT_DIR/include;
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-Wall",
+					"-Wextra",
+					"-Weffc++",
+					"-Wpedantic",
+					"-Wshadow",
+					"-Wno-documentation",
+					"-Wnull-dereference",
+					"-Woverloaded-virtual",
+					"-Wreturn-type",
+					"-Wnonportable-include-path",
+					"-Wstrict-aliasing",
+					"-Wno-comma",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1934,6 +2048,15 @@
 			buildConfigurations = (
 				455F28652206890300C73F39 /* Debug */,
 				455F28662206890300C73F39 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		45BB5F6623239AB900E42371 /* Build configuration list for PBXNativeTarget "Graphics-Test" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				45BB5F6723239AB900E42371 /* Debug */,
+				45BB5F6823239AB900E42371 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -12,6 +12,7 @@
 #include <cstring>
 #include "traits.hpp"
 #include "surface.hpp"
+#include "iterator.hpp"
 
 namespace gfx {
 
