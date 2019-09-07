@@ -9,10 +9,8 @@
 #ifndef graphics_fill_hpp
 #define graphics_fill_hpp
 
-#include <cassert>
 #include <cstring>
 #include "traits.hpp"
-#include "surface.hpp"
 #include "iterator.hpp"
 
 namespace gfx {

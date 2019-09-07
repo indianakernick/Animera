@@ -11,7 +11,6 @@
 
 #include "copy.hpp"
 #include "each.hpp"
-#include "traits.hpp"
 
 namespace gfx {
 

@@ -9,7 +9,6 @@
 #ifndef graphics_each_hpp
 #define graphics_each_hpp
 
-#include "surface.hpp"
 #include "iterator.hpp"
 
 namespace gfx {
