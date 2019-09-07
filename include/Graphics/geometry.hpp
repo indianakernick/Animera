@@ -84,6 +84,9 @@ struct Rect {
   constexpr bool empty() const noexcept {
     return s.empty();
   }
+  constexpr bool contains(const Point pos) const noexcept {
+    return p.x <= pos.x && p.y <= pos.y && pos.x < p.x + s.w && pos.y < p.y + s.h;
+  }
   
   constexpr Rect intersected(const Rect other) const noexcept {
     if (empty() || other.empty()) {

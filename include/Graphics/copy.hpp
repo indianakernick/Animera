@@ -25,13 +25,10 @@ void copyRegion(
   const Rect srcRect = {srcPos, src.size()};
   const Rect dstRect = srcRect.intersected(dst.rect());
   if (dstRect.empty()) return;
-  // copyRegion could call copy
-  const size_t width = dstRect.s.w * sizeof(Pixel);
-  auto srcRowIter = begin(src, {dstRect.p - srcPos, dstRect.s});
-  for (auto row : range(dst, dstRect)) {
-    std::memcpy(row.begin(), srcRowIter.begin(), width);
-    ++srcRowIter;
-  }
+  copy(
+    Surface{dst.ptr(dstRect.p), dst.pitch(), dstRect.s},
+    Surface{src.ptr(dstRect.p - srcPos), src.pitch(), dstRect.s}
+  );
 }
 
 template <typename Pixel>
@@ -55,7 +52,7 @@ void overCopy(
 ) noexcept {
   assert(dst.size() == src.size());
   assert(dst.pitch() == src.pitch());
-  std::memcpy(dst.data(), src.data(), dst.pitch() * dst.height());
+  std::memcpy(dst.data(), src.data(), dst.pitch() * dst.height() * sizeof(Pixel));
 }
 
 }
