@@ -61,16 +61,43 @@ constexpr Size rotateSize(const Size srcSize, const int dir) noexcept {
 template <typename Pixel>
 void rotate1(Surface<Pixel> dst, CSurface<identity_t<Pixel>> src) noexcept {
   assert(dst.size() == src.size().transposed());
+  const Pixel *srcColIter = src.data() + src.pitch() * src.height();
+  for (auto dstRow : range(dst)) {
+    const Pixel *srcRowIter = srcColIter;
+    ++srcColIter;
+    for (Pixel &dstPixel : dstRow) {
+      srcRowIter -= src.pitch();
+      dstPixel = *srcRowIter;
+    }
+  }
 }
 
 template <typename Pixel>
 void rotate2(Surface<Pixel> dst, CSurface<identity_t<Pixel>> src) noexcept {
   assert(dst.size() == src.size());
+  auto srcRowIter = end(src);
+  for (auto dstRow : range(dst)) {
+    --srcRowIter;
+    const Pixel *srcPixelIter = srcRowIter.end();
+    for (Pixel &dstPixel : dstRow) {
+      --srcPixelIter;
+      dstPixel = *srcPixelIter;
+    }
+  }
 }
 
 template <typename Pixel>
 void rotate3(Surface<Pixel> dst, CSurface<identity_t<Pixel>> src) noexcept {
   assert(dst.size() == src.size().transposed());
+  const Pixel *srcColIter = src.data() + src.width();
+  for (auto dstRow : range(dst)) {
+    --srcColIter;
+    const Pixel *srcRowIter = srcColIter;
+    for (Pixel &dstPixel : dstRow) {
+      dstPixel = *srcRowIter;
+      srcRowIter += src.pitch();
+    }
+  }
 }
 
 template <typename Pixel>

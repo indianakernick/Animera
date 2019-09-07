@@ -71,28 +71,41 @@ public:
     return pitch_ * ptrdiff_t{sizeof(Pixel)} / ptrdiff_t{sizeof(OtherPixel)};
   }
   
-  bool containsX(const int posX) const noexcept {
-    return 0 <= posX && posX < width_;
+  bool containsX(const int x) const noexcept {
+    return 0 <= x && x < width_;
   }
-  bool containsY(const int posY) const noexcept {
-    return 0 <= posY && posY < height_;
+  bool containsY(const int y) const noexcept {
+    return 0 <= y && y < height_;
+  }
+  bool contains(const int x, const int y) const noexcept {
+    return containsX(x) && containsY(y);
   }
   bool contains(const Point pos) const noexcept {
-    return containsX(pos.x) && containsY(pos.y);
+    return contains(pos.x, pos.y);
   }
   bool contains(const Rect rect) const noexcept {
     return contains(rect.p) && contains(rect.p + rect.s.point() - Point{1, 1});
   }
   
+  ptrdiff_t idx(const int x, const int y) const noexcept {
+    return y * pitch_ + x;
+  }
+  Pixel *ptr(const int x, const int y) const noexcept {
+    return data_ + idx(x, y);
+  }
+  Pixel &ref(const int x, const int y) const noexcept {
+    assert(contains(x, y));
+    return *ptr(x, y);
+  }
+  
   ptrdiff_t idx(const Point pos) const noexcept {
-    return pos.y * pitch_ + pos.x;
+    return idx(pos.x, pos.y);
   }
   Pixel *ptr(const Point pos) const noexcept {
-    return data_ + idx(pos);
+    return ptr(pos.x, pos.y);
   }
   Pixel &ref(const Point pos) const noexcept {
-    assert(contains(pos));
-    return *ptr(pos);
+    return ref(pos.x, pos.y);
   }
 
 private:
