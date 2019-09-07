@@ -24,11 +24,9 @@ void copyRegion(
 ) noexcept {
   const Rect srcRect = {srcPos, src.size()};
   const Rect dstRect = srcRect.intersected(dst.rect());
-  if (dstRect.empty()) return;
-  copy(
-    Surface{dst.ptr(dstRect.p), dst.pitch(), dstRect.s},
-    Surface{src.ptr(dstRect.p - srcPos), src.pitch(), dstRect.s}
-  );
+  if (!dstRect.empty()) {
+    copy(dst.view(dstRect), src.view({{dstRect.p - srcPos}, dstRect.s}));
+  }
 }
 
 template <typename Pixel>

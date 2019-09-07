@@ -39,26 +39,15 @@ void each(Surface<PixelA> a, Surface<PixelB> b, Func func) {
 
 template <typename Pixel, typename Func>
 void eachIntersect(Surface<Pixel> surface, const Rect rect, Func func) {
-  for (auto row : range(surface, rect)) {
-    for (Pixel &pixel : row) {
-      func(pixel);
-    }
-  }
+  each(surface.view(rect), func);
 }
 
 template <typename PixelA, typename PixelB, typename Func>
 void eachIntersect(Surface<PixelA> a, Surface<PixelB> b, const Point bPos, Func func) {
   const Rect bRect = {bPos, b.size()};
   const Rect aRect = bRect.intersected(a.rect());
-  if (aRect.empty()) return;
-  RowIterator bRowIter = begin(b, {aRect.p - bPos, aRect.s});
-  for (auto aRow : range(a, aRect)) {
-    PixelB *bColIter = bRowIter.begin();
-    for (PixelA &aPixel : aRow) {
-      func(aPixel, *bColIter);
-      ++bColIter;
-    }
-    ++bRowIter;
+  if (!aRect.empty()) {
+    each(a.view(aRect), b.view(aRect.p - bPos, aRect.s), func);
   }
 }
 

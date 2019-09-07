@@ -86,7 +86,9 @@ public:
     return contains(pos.x, pos.y);
   }
   bool contains(const Rect rect) const noexcept {
-    return contains(rect.p) && contains(rect.p + rect.s.point() - Point{1, 1});
+    return !rect.s.empty() &&
+           contains(rect.p) &&
+           contains(rect.p + rect.s.point() - Point{1, 1});
   }
   
   ptrdiff_t idx(const int x, const int y) const noexcept {
@@ -108,6 +110,15 @@ public:
   }
   Pixel &ref(const Point pos) const noexcept {
     return ref(pos.x, pos.y);
+  }
+  
+  Surface view(const Rect rect) const noexcept {
+    assert(contains(rect));
+    return {ptr(rect.p), pitch_, rect.s};
+  }
+  Surface view(const Size size) const noexcept {
+    assert(contains({{}, size}));
+    return {data_, pitch_, size};
   }
 
 private:

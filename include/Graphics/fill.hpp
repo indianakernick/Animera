@@ -13,6 +13,7 @@
 #include <cstring>
 #include "traits.hpp"
 #include "surface.hpp"
+#include "iterator.hpp"
 
 namespace gfx {
 
@@ -63,44 +64,37 @@ void fillRect(
   const identity_t<Pixel> pixel,
   const Rect rect
 ) noexcept {
-  assert(!rect.empty());
-  assert(dst.contains(rect));
-  Pixel *firstRow = dst.ptr(rect.p);
-  Pixel *const lastRow = firstRow + dst.pitch() * rect.s.h;
-  while (firstRow != lastRow) {
-    if constexpr (sizeof(Pixel) == 1) {
-      std::memset(firstRow, pixel, dst.width());
-    } else {
-      Pixel *firstPixel = firstRow;
-      Pixel *const lastPixel = firstPixel + dst.width();
-      while (firstPixel != lastPixel) {
-        *firstPixel++ = pixel;
-      }
-    }
-    firstRow += dst.pitch();
+  if (!rect.empty()) {
+    fill(dst.view(rect), pixel);
   }
 }
 
 template <typename Pixel>
 void fillRect(const Surface<Pixel> dst, const Rect rect) noexcept {
-  assert(!rect.empty());
-  assert(dst.contains(rect));
-  Pixel *firstRow = dst.ptr(rect.p);
-  Pixel *const lastRow = firstRow + dst.pitch() * rect.s.h;
-  while (firstRow != lastRow) {
-    std::memset(firstRow, 0, dst.width() * sizeof(Pixel));
-    firstRow += dst.pitch();
+  if (!rect.empty()) {
+    fill(dst.view(rect));
   }
 }
 
 template <typename Pixel>
 void fill(const Surface<Pixel> dst, const identity_t<Pixel> pixel) noexcept {
-  fillRect(dst, pixel, dst.rect());
+  for (auto dstRow : dst) {
+    if constexpr (sizeof(Pixel) == 1) {
+      std::memset(dstRow.begin(), pixel, dst.width());
+    } else {
+      for (Pixel &dstPixel : dstRow) {
+        dstPixel = pixel;
+      }
+    }
+  }
 }
 
 template <typename Pixel>
 void fill(const Surface<Pixel> dst) noexcept {
-  fillRect(dst, dst.rect());
+  const size_t width = dst.width() * sizeof(Pixel);
+  for (auto row : dst) {
+    std::memset(row.begin(), 0, width);
+  }
 }
 
 template <typename Pixel>
