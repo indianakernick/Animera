@@ -78,7 +78,7 @@ TEST_CASE("copyRegion") {
     for (int y = 0; y != height; ++y) {
       for (int x = 0; x != width; ++x) {
         INFO("(" << x << ", " << y << ")");
-        if (srcRect.contains({x, y})) {
+        if (srcRect.contains(gfx::Point{x, y})) {
           REQUIRE(dstArr[y][x] == fn(x - srcRect.p.x, y - srcRect.p.y));
           REQUIRE(srcArr[y][x] == fn(x, y));
         } else {

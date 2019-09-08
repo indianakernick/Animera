@@ -22,3 +22,4 @@
 #include <Graphics/region.hpp>
 #include <Graphics/mask.hpp>
 #include <Graphics/convert.hpp>
+#include <Graphics/draw.hpp>

@@ -178,7 +178,7 @@ TEMPLATE_TEST_CASE("fillRegion", "", uint8_t, uint16_t, uint32_t) {
     for (int y = 0; y != height; ++y) {
       for (int x = 0; x != height; ++x) {
         INFO("(" << x << ", " << y << ")");
-        if (rect.contains({x, y})) {
+        if (rect.contains(gfx::Point{x, y})) {
           REQUIRE(dstArr[y][x] == fill_px);
         } else {
           REQUIRE(dstArr[y][x] == init_px);
@@ -193,7 +193,7 @@ TEMPLATE_TEST_CASE("fillRegion", "", uint8_t, uint16_t, uint32_t) {
     for (int y = 0; y != height; ++y) {
       for (int x = 0; x != height; ++x) {
         INFO("(" << x << ", " << y << ")");
-        if (rect.contains({x, y})) {
+        if (rect.contains(gfx::Point{x, y})) {
           REQUIRE(dstArr[y][x] == 0);
         } else {
           REQUIRE(dstArr[y][x] == init_px);
@@ -242,7 +242,7 @@ TEMPLATE_TEST_CASE("fill", "", uint8_t, uint16_t, uint32_t) {
     for (int y = 0; y != height; ++y) {
       for (int x = 0; x != width; ++x) {
         INFO("(" << x << ", " << y << ")");
-        if (rect.contains({x, y})) {
+        if (rect.contains(gfx::Point{x, y})) {
           REQUIRE(dstArr[y][x] == fill_px);
         } else {
           REQUIRE(dstArr[y][x] == init_px);
@@ -257,7 +257,7 @@ TEMPLATE_TEST_CASE("fill", "", uint8_t, uint16_t, uint32_t) {
     for (int y = 0; y != height; ++y) {
       for (int x = 0; x != width; ++x) {
         INFO("(" << x << ", " << y << ")");
-        if (rect.contains({x, y})) {
+        if (rect.contains(gfx::Point{x, y})) {
           REQUIRE(dstArr[y][x] == 0);
         } else {
           REQUIRE(dstArr[y][x] == init_px);

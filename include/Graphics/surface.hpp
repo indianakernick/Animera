@@ -85,10 +85,8 @@ public:
   bool contains(const Point pos) const noexcept {
     return contains(pos.x, pos.y);
   }
-  bool contains(const Rect rect) const noexcept {
-    return !rect.s.empty() &&
-           contains(rect.p) &&
-           contains(rect.p + rect.s.point() - Point{1, 1});
+  bool contains(const Rect r) const noexcept {
+    return rect().contains(r);
   }
   
   ptrdiff_t idx(const int x, const int y) const noexcept {

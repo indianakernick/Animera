@@ -26,6 +26,12 @@ struct Point {
   constexpr Point operator-(const Point other) const noexcept {
     return {x - other.x, y - other.y};
   }
+  constexpr Point operator+(const int value) const noexcept {
+    return {x + value, y + value};
+  }
+  constexpr Point operator-(const int value) const noexcept {
+    return {x - value, x - value};
+  }
   
   constexpr bool operator==(const Point other) const noexcept {
     return x == other.x && y == other.y;
@@ -48,6 +54,13 @@ struct Size {
   }
   constexpr Size transposed() const noexcept {
     return {h, w};
+  }
+  
+  constexpr Size operator+(const int value) const noexcept {
+    return {w + value, h + value};
+  }
+  constexpr Size operator-(const int value) const noexcept {
+    return {w - value, h - value};
   }
   
   constexpr bool operator==(const Size other) const noexcept {
@@ -84,6 +97,12 @@ struct Rect {
   }
   constexpr bool contains(const Point pos) const noexcept {
     return p.x <= pos.x && p.y <= pos.y && pos.x < p.x + s.w && pos.y < p.y + s.h;
+  }
+  constexpr bool contains(const Rect rect) const noexcept {
+    return !rect.empty() &&
+           contains(rect.p) &&
+           rect.p.x + rect.s.w <= p.x + s.w &&
+           rect.p.y + rect.s.h <= p.y + s.h;
   }
   
   constexpr Rect intersected(const Rect other) const noexcept {
