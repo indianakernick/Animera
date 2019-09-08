@@ -218,7 +218,7 @@ std::pair<int, int> signdiff(const int a, const int b) {
 
 template <typename Func>
 void drawLine(Point p1, const Point p2, Func func) {
-  // could be optimized by splitting into four functions
+  // @TODO could be optimized by splitting into four functions
   const auto [sx, dx] = signdiff(p1.x, p2.x);
   auto [sy, dy] = signdiff(p1.y, p2.y);
   dy = -dy;

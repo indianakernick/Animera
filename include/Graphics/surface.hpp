@@ -24,8 +24,7 @@ public:
   
   using Pixel = Pixel_;
   
-  static_assert(std::is_integral_v<Pixel>);
-  static_assert(std::is_unsigned_v<Pixel>);
+  static_assert(std::has_unique_object_representations_v<Pixel>);
   
   Surface(Pixel *data, const ptrdiff_t pitch, const int width, const int height) noexcept
     : data_{data}, pitch_{pitch}, width_{width}, height_{height} {
