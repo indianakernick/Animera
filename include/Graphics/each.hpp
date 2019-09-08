@@ -26,7 +26,7 @@ void each(Surface<Pixel> surface, Func func) {
 template <typename PixelA, typename PixelB, typename Func>
 void each(Surface<PixelA> a, Surface<PixelB> b, Func func) {
   assert(a.size() == b.size());
-  RowIterator bRowIter = begin(b);
+  auto bRowIter = begin(b);
   for (auto aRow : range(a)) {
     PixelB *bColIter = bRowIter.begin();
     for (PixelA &aPixel : aRow) {
@@ -34,6 +34,25 @@ void each(Surface<PixelA> a, Surface<PixelB> b, Func func) {
       ++bColIter;
     }
     ++bRowIter;
+  }
+}
+
+template <typename PixelA, typename PixelB, typename PixelC, typename Func>
+void each(Surface<PixelA> a, Surface<PixelB> b, Surface<PixelC> c, Func func) {
+  assert(a.size() == b.size());
+  assert(b.size() == c.size());
+  auto bRowIter = begin(b);
+  auto cRowIter = begin(c);
+  for (auto aRow : range(a)) {
+    PixelB *bColIter = bRowIter.begin();
+    PixelC *cColIter = cRowIter.begin();
+    for (PixelA &aPixel : aRow) {
+      func(aPixel, *bColIter, *cColIter);
+      ++bColIter;
+      ++cColIter;
+    }
+    ++bRowIter;
+    ++cRowIter;
   }
 }
 
@@ -48,6 +67,20 @@ template <typename PixelA, typename PixelB, typename Func>
 void eachRegion(Surface<PixelA> a, Surface<PixelB> b, const Point bPos, Func func) {
   region(a, b, bPos, [func](auto aView, auto bView) {
     each(aView, bView, func);
+  });
+}
+
+template <typename PixelA, typename PixelB, typename PixelC, typename Func>
+void eachRegion(
+  Surface<PixelA> a,
+  Surface<PixelB> b,
+  Surface<PixelC> c,
+  const Point bPos,
+  const Point cPos,
+  Func func
+) {
+  region(a, b, c, bPos, cPos, [func](auto aView, auto bView, auto cView) {
+    each(aView, bView, cView, func);
   });
 }
 

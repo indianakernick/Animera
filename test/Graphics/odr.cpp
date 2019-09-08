@@ -20,3 +20,4 @@
 #include <Graphics/flood fill.hpp>
 #include <Graphics/transform.hpp>
 #include <Graphics/region.hpp>
+#include <Graphics/mask.hpp>
