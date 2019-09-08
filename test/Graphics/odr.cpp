@@ -19,3 +19,4 @@
 #include <Graphics/fill.hpp>
 #include <Graphics/flood fill.hpp>
 #include <Graphics/transform.hpp>
+#include <Graphics/region.hpp>

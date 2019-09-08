@@ -10,6 +10,7 @@
 #define graphics_copy_hpp
 
 #include <cstring>
+#include "region.hpp"
 #include "traits.hpp"
 #include "surface.hpp"
 #include "iterator.hpp"
@@ -22,11 +23,9 @@ void copyRegion(
   const CSurface<identity_t<Pixel>> src,
   const Point srcPos
 ) noexcept {
-  const Rect srcRect = {srcPos, src.size()};
-  const Rect dstRect = srcRect.intersected(dst.rect());
-  if (!dstRect.empty()) {
-    copy(dst.view(dstRect), src.view({{dstRect.p - srcPos}, dstRect.s}));
-  }
+  region(dst, src, srcPos, [](auto dstView, auto srcView) {
+    copy(dstView, srcView);
+  });
 }
 
 template <typename Pixel>

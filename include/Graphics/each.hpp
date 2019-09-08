@@ -9,6 +9,7 @@
 #ifndef graphics_each_hpp
 #define graphics_each_hpp
 
+#include "region.hpp"
 #include "iterator.hpp"
 
 namespace gfx {
@@ -37,17 +38,17 @@ void each(Surface<PixelA> a, Surface<PixelB> b, Func func) {
 }
 
 template <typename Pixel, typename Func>
-void eachIntersect(Surface<Pixel> surface, const Rect rect, Func func) {
-  each(surface.view(rect), func);
+void eachRegion(Surface<Pixel> surface, const Rect rect, Func func) {
+  region(surface, rect, [func](auto view) {
+    each(view, func);
+  });
 }
 
 template <typename PixelA, typename PixelB, typename Func>
-void eachIntersect(Surface<PixelA> a, Surface<PixelB> b, const Point bPos, Func func) {
-  const Rect bRect = {bPos, b.size()};
-  const Rect aRect = bRect.intersected(a.rect());
-  if (!aRect.empty()) {
-    each(a.view(aRect), b.view(aRect.p - bPos, aRect.s), func);
-  }
+void eachRegion(Surface<PixelA> a, Surface<PixelB> b, const Point bPos, Func func) {
+  region(a, b, bPos, [func](auto aView, auto bView) {
+    each(aView, bView, func);
+  });
 }
 
 }

@@ -10,6 +10,7 @@
 #define graphics_fill_hpp
 
 #include <cstring>
+#include "region.hpp"
 #include "traits.hpp"
 #include "iterator.hpp"
 
@@ -62,18 +63,16 @@ void fillRegion(
   const identity_t<Pixel> pixel,
   const Rect rect
 ) noexcept {
-  const Rect dstRect = rect.intersected(dst.rect());
-  if (!dstRect.empty()) {
-    fill(dst.view(dstRect), pixel);
-  }
+  region(dst, rect, [pixel](auto dstView) {
+    fill(dstView, pixel);
+  });
 }
 
 template <typename Pixel>
 void fillRegion(const Surface<Pixel> dst, const Rect rect) noexcept {
-  const Rect dstRect = rect.intersected(dst.rect());
-  if (!dstRect.empty()) {
-    fill(dst.view(dstRect));
-  }
+  region(dst, rect, [](auto dstView) {
+    fill(dstView);
+  });
 }
 
 template <typename Pixel>

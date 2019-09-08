@@ -103,12 +103,8 @@ void porterDuffRegion(
   const SrcFormat srcFmt,
   const Point srcPos
 ) {
-  eachIntersect(dst, src, srcPos, [mode, dstFmt, srcFmt](auto &dst, auto &src) {
-    dst = dstFmt.pixel(porterDuff(
-      mode,
-      srcFmt.color(src),
-      dstFmt.color(dst)
-    ));
+  region(dst, src, srcPos, [mode, dstFmt, srcFmt](auto dstView, auto srcView) {
+    porterDuff(mode, dstView, srcView, dstFmt, srcFmt);
   });
 }
 
