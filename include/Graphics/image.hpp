@@ -17,6 +17,14 @@ class Image {
 public:
   Image() noexcept
     : data_{}, pitch_{}, width_{}, height_{}, depth_{} {}
+  
+  Image(const int width, const int height, const int depth)
+    : data_{operator new(width * depth * height)},
+      pitch_{width * depth},
+      width_{width},
+      height_{height},
+      depth_{depth} {}
+  
   Image(Image &&other) noexcept
     : data_{other.data_},
       pitch_{other.pitch_},
@@ -29,6 +37,7 @@ public:
     other.height_ = 0;
     other.depth_ = 0;
   }
+  
   Image &operator=(Image &&other) noexcept {
     operator delete(data_);
     data_ = other.data_;
@@ -43,6 +52,7 @@ public:
     other.depth_ = 0;
     return *this;
   }
+  
   ~Image() noexcept {
     operator delete(data_);
   }
@@ -68,7 +78,7 @@ public:
   
 private:
   void *data_;
-  ptrdiff_t pitch_;
+  ptrdiff_t pitch_; // do we even need this?
   int width_;
   int height_;
   int depth_;
