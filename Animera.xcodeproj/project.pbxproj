@@ -87,6 +87,7 @@
 		45D109B222E304A300D1F1CB /* combo box widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45D109B022E304A300D1F1CB /* combo box widget.cpp */; };
 		45DC2566224B137C00F40116 /* status msg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45DC2564224B137C00F40116 /* status msg.cpp */; };
 		45DFE499224DE89E00EA40C5 /* global font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45DFE497224DE89E00EA40C5 /* global font.cpp */; };
+		45F0431423247BFE00E99F95 /* odr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45F0431323247BFE00E99F95 /* odr.cpp */; };
 		45F065F22222998300BCE863 /* current tool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45F065F02222998300BCE863 /* current tool.cpp */; };
 		45F3EB6E22CC430F00F9F93E /* init canvas dialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45F3EB6C22CC430F00F9F93E /* init canvas dialog.cpp */; };
 /* End PBXBuildFile section */
@@ -331,6 +332,7 @@
 		45DFE498224DE89E00EA40C5 /* global font.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "global font.hpp"; sourceTree = "<group>"; };
 		45DFE4A12252038700EA40C5 /* 5x7+2_var_ascii.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "5x7+2_var_ascii.ttf"; sourceTree = "<group>"; };
 		45DFE4A22252039600EA40C5 /* 5x7+2ascii.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "5x7+2ascii.ttf"; sourceTree = "<group>"; };
+		45F0431323247BFE00E99F95 /* odr.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = odr.cpp; sourceTree = "<group>"; };
 		45F065F02222998300BCE863 /* current tool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "current tool.cpp"; sourceTree = "<group>"; };
 		45F065F12222998300BCE863 /* current tool.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "current tool.hpp"; sourceTree = "<group>"; };
 		45F3EB6922C5F44700F9F93E /* 5x7ascii.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = 5x7ascii.ttf; sourceTree = "<group>"; };
@@ -781,6 +783,7 @@
 			children = (
 				45BB5F6423239AB900E42371 /* main.cpp */,
 				45BB5F6A23239CB700E42371 /* copy.cpp */,
+				45F0431323247BFE00E99F95 /* odr.cpp */,
 			);
 			path = Graphics;
 			sourceTree = "<group>";
@@ -1733,6 +1736,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				45F0431423247BFE00E99F95 /* odr.cpp in Sources */,
 				45BB5F6B23239CB700E42371 /* copy.cpp in Sources */,
 				45BB5F6923239BC400E42371 /* main.cpp in Sources */,
 			);
