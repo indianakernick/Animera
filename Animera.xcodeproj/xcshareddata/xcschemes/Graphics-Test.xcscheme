@@ -63,7 +63,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "-b"
+            argument = "--break"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

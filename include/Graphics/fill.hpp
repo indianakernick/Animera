@@ -24,11 +24,11 @@ void fillRow(
 ) noexcept {
   assert(first.x <= last);
   assert(dst.contains(first));
-  assert(dst.contains({last, first.y}));
+  assert(dst.contains(Point{last, first.y}));
   if constexpr (sizeof(Pixel) == 1) {
     std::memset(dst.ptr(first), pixel, last - first.x + 1);
   } else {
-    Pixel *firstPixel = dst.pitch() * first.y;
+    Pixel *firstPixel = dst.data() + dst.pitch() * first.y;
     Pixel *const lastPixel = firstPixel + last + 1;
     firstPixel += first.x;
     while (firstPixel != lastPixel) {
@@ -46,8 +46,8 @@ void fillCol(
 ) noexcept {
   assert(first.y <= last);
   assert(dst.contains(first));
-  assert(dst.contains({first.x, last}));
-  Pixel *firstPixel = first.x;
+  assert(dst.contains(Point{first.x, last}));
+  Pixel *firstPixel = dst.data() + first.x;
   Pixel *const lastPixel = firstPixel + (last + 1) * dst.pitch();
   firstPixel += first.y * dst.pitch();
   while (firstPixel != lastPixel) {
@@ -57,20 +57,22 @@ void fillCol(
 }
 
 template <typename Pixel>
-void fillRect(
+void fillRegion(
   const Surface<Pixel> dst,
   const identity_t<Pixel> pixel,
   const Rect rect
 ) noexcept {
-  if (!rect.empty()) {
-    fill(dst.view(rect), pixel);
+  const Rect dstRect = rect.intersected(dst.rect());
+  if (!dstRect.empty()) {
+    fill(dst.view(dstRect), pixel);
   }
 }
 
 template <typename Pixel>
-void fillRect(const Surface<Pixel> dst, const Rect rect) noexcept {
-  if (!rect.empty()) {
-    fill(dst.view(rect));
+void fillRegion(const Surface<Pixel> dst, const Rect rect) noexcept {
+  const Rect dstRect = rect.intersected(dst.rect());
+  if (!dstRect.empty()) {
+    fill(dst.view(dstRect));
   }
 }
 
