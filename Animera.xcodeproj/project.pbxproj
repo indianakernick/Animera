@@ -311,6 +311,7 @@
 		45D34F1C22825FE400339A4E /* masking.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = masking.hpp; sourceTree = "<group>"; };
 		45DAE12323249C22001E593C /* region.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = region.hpp; sourceTree = "<group>"; };
 		45DAE1242324A272001E593C /* mask.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = mask.hpp; sourceTree = "<group>"; };
+		45DAE1252324B5E1001E593C /* convert.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = convert.hpp; sourceTree = "<group>"; };
 		45DC255F224A034200F40116 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		45DC2561224A0AC000F40116 /* title.anim */ = {isa = PBXFileReference; lastKnownFileType = file; path = title.anim; sourceTree = "<group>"; };
 		45DC2562224A0AEA00F40116 /* title.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = title.png; sourceTree = "<group>"; };
@@ -846,6 +847,7 @@
 				45F5EB282321D7A000BB9CEB /* transform.hpp */,
 				45DAE12323249C22001E593C /* region.hpp */,
 				45DAE1242324A272001E593C /* mask.hpp */,
+				45DAE1252324B5E1001E593C /* convert.hpp */,
 			);
 			path = Graphics;
 			sourceTree = "<group>";

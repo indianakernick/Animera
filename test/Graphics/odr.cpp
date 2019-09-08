@@ -21,3 +21,4 @@
 #include <Graphics/transform.hpp>
 #include <Graphics/region.hpp>
 #include <Graphics/mask.hpp>
+#include <Graphics/convert.hpp>
