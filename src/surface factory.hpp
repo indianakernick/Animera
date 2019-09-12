@@ -21,7 +21,7 @@ Surface<Pixel> makeSurface(QImage &image) {
   return {
     // non-const QImage::bits calls QImage::detach
     reinterpret_cast<Pixel *>(image.bits()),
-    image.bytesPerLine() / static_cast<ptrdiff_t>(sizeof(Pixel)),
+    image.bytesPerLine() / ptrdiff_t{sizeof(Pixel)},
     image.width(),
     image.height()
   };
@@ -35,7 +35,7 @@ CSurface<Pixel> makeSurface(const QImage &image) {
   assert(image.bytesPerLine() % sizeof(Pixel) == 0);
   return {
     reinterpret_cast<const Pixel *>(image.bits()),
-    image.bytesPerLine() / static_cast<ptrdiff_t>(sizeof(Pixel)),
+    image.bytesPerLine() / ptrdiff_t{sizeof(Pixel)},
     image.width(),
     image.height()
   };

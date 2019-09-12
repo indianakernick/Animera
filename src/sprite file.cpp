@@ -119,7 +119,7 @@ void copyFromByteOrder(
 }
 
 size_t getUsedSize(const PaletteCSpan colors) {
-  for (size_t i = static_cast<size_t>(colors.size()); i != 0; --i) {
+  for (size_t i = colors.size(); i != 0; --i) {
     if (colors[i - 1] != 0) {
       return i;
     }

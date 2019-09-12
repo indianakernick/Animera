@@ -34,8 +34,8 @@ void ExportDialog::submit() {
   ExportOptions options;
   options.name = name->text();
   options.directory = dir->path();
-  options.layerSelect = static_cast<LayerSelect>(layerSelect->currentIndex());
-  options.frameSelect = static_cast<FrameSelect>(frameSelect->currentIndex());
+  options.layerSelect = LayerSelect{layerSelect->currentIndex()};
+  options.frameSelect = FrameSelect{frameSelect->currentIndex()};
   options.layerLine.stride = LayerIdx{layerStride->value()};
   options.layerLine.offset = LayerIdx{layerOffset->value()};
   options.frameLine.stride = FrameIdx{frameStride->value()};
