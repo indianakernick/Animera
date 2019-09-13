@@ -96,7 +96,10 @@ struct Rect {
     return s.empty();
   }
   constexpr bool contains(const Point pos) const noexcept {
-    return p.x <= pos.x && p.y <= pos.y && pos.x < p.x + s.w && pos.y < p.y + s.h;
+    return p.x <= pos.x &&
+           p.y <= pos.y &&
+           pos.x < p.x + s.w &&
+           pos.y < p.y + s.h;
   }
   constexpr bool contains(const Rect rect) const noexcept {
     return !rect.empty() &&
@@ -110,6 +113,7 @@ struct Rect {
       return {};
     }
     
+    // <algorithm> header is about 20k lines
     const auto max = [](const int a, const int b) {
       return a < b ? b : a;
     };
