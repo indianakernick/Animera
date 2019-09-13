@@ -20,6 +20,7 @@
 		4513145822D5A29800D66262 /* picker impl rgba.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4513145622D5A29800D66262 /* picker impl rgba.cpp */; };
 		4513145B22D5A2A500D66262 /* picker impl gray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4513145922D5A2A500D66262 /* picker impl gray.cpp */; };
 		45161F0622F1399A0036BBED /* timeline painting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45161F0422F1399A0036BBED /* timeline painting.cpp */; };
+		4520A82A232B424B009FCD1F /* transform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4520A828232B424B009FCD1F /* transform.cpp */; };
 		45288B6122FA8AAD008FB52D /* libz.1.2.11.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 45288B6022FA8AAC008FB52D /* libz.1.2.11.dylib */; };
 		45288B6222FA8AB8008FB52D /* libz.1.2.11.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 45288B6022FA8AAC008FB52D /* libz.1.2.11.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		453A20C6231A078100F055BA /* sprite file.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453A20C4231A078100F055BA /* sprite file.cpp */; };
@@ -138,6 +139,7 @@
 		45161F0522F1399A0036BBED /* timeline painting.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "timeline painting.hpp"; sourceTree = "<group>"; };
 		45161F0722F15D720036BBED /* text button.anim */ = {isa = PBXFileReference; lastKnownFileType = file; path = "text button.anim"; sourceTree = "<group>"; };
 		45161F0A22F161170036BBED /* text button.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = "text button.pbm"; sourceTree = "<group>"; };
+		4520A828232B424B009FCD1F /* transform.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = transform.cpp; sourceTree = "<group>"; };
 		45288B6022FA8AAC008FB52D /* libz.1.2.11.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.11.dylib; path = ../../../../../../usr/local/Cellar/zlib/1.2.11/lib/libz.1.2.11.dylib; sourceTree = "<group>"; };
 		452926E122BB0D6300B17E0D /* transform.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = transform.hpp; sourceTree = "<group>"; };
 		452926E222BB607E00B17E0D /* screenshot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = screenshot.png; sourceTree = "<group>"; };
@@ -793,6 +795,7 @@
 				45BB5F6423239AB900E42371 /* main.cpp */,
 				45BB5F6A23239CB700E42371 /* copy.cpp */,
 				45F043172324833400E99F95 /* fill.cpp */,
+				4520A828232B424B009FCD1F /* transform.cpp */,
 			);
 			path = Graphics;
 			sourceTree = "<group>";
@@ -1756,6 +1759,7 @@
 			files = (
 				45F043182324833400E99F95 /* fill.cpp in Sources */,
 				45F0431423247BFE00E99F95 /* odr.cpp in Sources */,
+				4520A82A232B424B009FCD1F /* transform.cpp in Sources */,
 				45BB5F6B23239CB700E42371 /* copy.cpp in Sources */,
 				45BB5F6923239BC400E42371 /* main.cpp in Sources */,
 			);
