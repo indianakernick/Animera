@@ -12,7 +12,6 @@
 #include <cstring>
 #include "region.hpp"
 #include "traits.hpp"
-#include "surface.hpp"
 #include "iterator.hpp"
 
 namespace gfx {
