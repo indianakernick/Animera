@@ -16,6 +16,9 @@
 
 namespace gfx {
 
+constexpr uint8_t mask_off = 0;
+constexpr uint8_t mask_on = 0xFF;
+
 namespace detail {
 
 template <typename Uint>
