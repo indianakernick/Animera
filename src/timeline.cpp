@@ -8,13 +8,13 @@
 
 #include "timeline.hpp"
 
-#include "formats.hpp"
 #include "cell span.hpp"
 #include "composite.hpp"
 #include <QtCore/qdir.h>
 #include "export png.hpp"
 #include "sprite file.hpp"
 #include "export pattern.hpp"
+#include <Graphics/format.hpp>
 
 namespace {
 
@@ -171,9 +171,9 @@ Error Timeline::exportFile(
 ) const {
   QImage result;
   if (canvasFormat == Format::gray) {
-    result = compositeFrame<FormatYA>(palette, frame, canvasSize, canvasFormat);
+    result = compositeFrame<gfx::YA>(palette, frame, canvasSize, canvasFormat);
   } else {
-    result = compositeFrame<FormatARGB>(palette, frame, canvasSize, canvasFormat);
+    result = compositeFrame<gfx::ARGB>(palette, frame, canvasSize, canvasFormat);
   }
   return exportFile(options, palette, result, pos);
 }

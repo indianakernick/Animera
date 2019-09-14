@@ -10,11 +10,11 @@
 
 #include "config.hpp"
 #include "connect.hpp"
-#include "formats.hpp"
 #include <QtGui/qevent.h>
 #include <QtGui/qbitmap.h>
 #include <QtGui/qpainter.h>
 #include "color handle.hpp"
+#include <Graphics/format.hpp>
 #include "widget painting.hpp"
 #include "radio button widget.hpp"
 #include <QtWidgets/qgridlayout.h>
@@ -67,7 +67,7 @@ private:
     painter.drawRect(bord, bord + half, half, half);
   }
   
-  static QColor toQColor(const Color color) {
+  static QColor toQColor(const gfx::Color color) {
     return QColor{color.r, color.g, color.b, color.a};
   }
   
@@ -75,9 +75,9 @@ private:
     switch (format) {
       case Format::index:
       case Format::rgba:
-        return toQColor(FormatARGB::color(color));
+        return toQColor(gfx::ARGB::color(color));
       case Format::gray:
-        return toQColor(FormatYA::color(color));
+        return toQColor(gfx::YA::color(color));
     }
   }
   

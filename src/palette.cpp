@@ -9,8 +9,8 @@
 #include "palette.hpp"
 
 #include "serial.hpp"
-#include "formats.hpp"
 #include "sprite file.hpp"
+#include <Graphics/format.hpp>
 
 namespace {
 
@@ -28,7 +28,7 @@ constexpr QRgb quantGrayColor(const int size, const int y) {
 }
 
 constexpr QRgb quantGray(const int size, const int y) {
-  return FormatYA::pixel(quantColor(size, y), 255);
+  return gfx::YA::pixel(quantColor(size, y), 255);
 }
 
 constexpr std::array<QRgb, 24> hue_palette = {
@@ -128,7 +128,7 @@ namespace {
   }
   for (size_t i = 0; i != static_cast<size_t>(plteSize); ++i) {
     const Color color = {plte[i].red, plte[i].green, plte[i].blue, trns[i]};
-    colors[i] = FormatARGB::pixel(color);
+    colors[i] = ARGB::pixel(color);
   }
   for (size_t i = plteSize; i != pal_colors; ++i) {
     colors[i] = 0;

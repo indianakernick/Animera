@@ -9,19 +9,18 @@
 #include "painting.hpp"
 
 #include "geometry.hpp"
-#include "flood fill.hpp"
 #include <QtGui/qpainter.h>
+#include <Graphics/draw.hpp>
 #include "surface factory.hpp"
 
-// @TODO naming and parameter order are not very consistent in this file
-
-bool drawSquarePoint(QImage &img, const QRgb color, const QPoint pos, const CircleShape shape) {
-  return visitSurface(img, [color, pos, shape](auto surface) {
-    return surface.fillRectClip(color, centerRect(pos, shape));
+bool drawSquarePoint(QImage &img, const QRgb color, const QPoint pos, const gfx::CircleShape shape) {
+  visitSurface(img, [color, pos, shape](auto surface) {
+    gfx::drawFilledRect(surface, color, gfx::centerRect(convert(pos), shape));
   });
+  return true;
 }
 
-bool drawRoundPoint(QImage &img, const QRgb color, const QPoint pos, const int radius, const CircleShape shape) {
+bool drawRoundPoint(QImage &img, const QRgb color, const QPoint pos, const int radius, const gfx::CircleShape shape) {
   assert(radius >= 0);
   if (radius == 0) {
     return drawSquarePoint(img, color, pos, shape);
@@ -30,309 +29,50 @@ bool drawRoundPoint(QImage &img, const QRgb color, const QPoint pos, const int r
   }
 }
 
-namespace {
-
-template <typename Pixel>
-class FillManip {
-public:
-  FillManip(const Surface<Pixel> surface, const Pixel toolColor)
-    : surface{surface},
-      toolColor{toolColor} {}
-  
-  bool start(const QPoint pos) {
-    startColor = surface.getPixel(pos);
-    return startColor != toolColor;
-  }
-  QSize size() const {
-    return surface.size();
-  }
-  bool shouldSet(const QPoint pos) const {
-    return surface.getPixel(pos) == startColor;
-  }
-  void set(const QPoint pos) {
-    surface.setPixel(toolColor, pos);
-  }
-  
-private:
-  Surface<Pixel> surface;
-  Pixel toolColor;
-  Pixel startColor;
-};
-
-}
-
 bool drawFloodFill(QImage &img, const QRgb color, const QPoint pos) {
   if (!img.rect().contains(pos)) return false;
-  return visitSurface(img, color, [pos](auto surface, auto color) {
-    return floodFill(FillManip{surface, color}, pos);
+  return visitSurface(img, [pos, color](auto surface) {
+    return gfx::drawFloodFill(surface, color, convert(pos));
   });
 }
 
-// @TODO radius 6
-
-namespace {
-
-template <typename Pixel>
-bool midpointFilledCircle(
-  const Surface<Pixel> surface,
-  const Pixel col,
-  const QPoint ctr,
-  const int rad,
-  const CircleShape shape
-) {
-  QPoint pos = {rad, 0};
-  int err = 1 - rad;
-  const int extraX = centerOffsetX(shape);
-  const int extraY = centerOffsetY(shape);
-  bool drawn = false;
-  
-  while (pos.x() >= pos.y()) {
-    drawn |= surface.horiLineClip(col, {ctr.x() - pos.x(), ctr.y() + pos.y() + extraY}, ctr.x() + pos.x() + extraX);
-    drawn |= surface.horiLineClip(col, {ctr.x() - pos.x(), ctr.y() - pos.y()},          ctr.x() + pos.x() + extraX);
-    drawn |= surface.horiLineClip(col, {ctr.x() - pos.y(), ctr.y() + pos.x() + extraY}, ctr.x() + pos.y() + extraX);
-    drawn |= surface.horiLineClip(col, {ctr.x() - pos.y(), ctr.y() - pos.x()},          ctr.x() + pos.y() + extraX);
-    
-    ++pos.ry();
-    
-    if (err < 0) {
-      err += 2 * pos.y() + 1;
-    } else {
-      --pos.rx();
-      err += 2 * (pos.y() - pos.x()) + 1;
-    }
-  }
-  
-  return drawn;
-}
-
-}
-
-bool drawFilledCircle(QImage &img, const QRgb color, const QPoint center, const int radius, const CircleShape shape) {
-  return visitSurface(img, color, [center, radius, shape](auto surface, auto color) {
-    return midpointFilledCircle(surface, color, center, radius, shape);
+bool drawFilledCircle(QImage &img, const QRgb color, const QPoint center, const int radius, const gfx::CircleShape shape) {
+  visitSurface(img, [center, radius, shape, color](auto surface) {
+    gfx::drawFilledCircle(surface, color, convert(center), radius, shape);
   });
+  return true;
 }
 
-namespace {
-
-template <typename Pixel>
-bool midpointCircle(
-  const Surface<Pixel> surface,
-  const Pixel color,
-  const QPoint center,
-  const int radius,
-  const CircleShape shape
-) {
-  QPoint pos = {radius, 0};
-  int err = 1 - radius;
-  const int extraX = centerOffsetX(shape);
-  const int extraY = centerOffsetY(shape);
-  bool drawn = false;
-  
-  while (pos.x() >= pos.y()) {
-    drawn |= surface.setPixelClip(color, {center.x() + pos.x() + extraX, center.y() + pos.y() + extraY});
-    drawn |= surface.setPixelClip(color, {center.x() - pos.x(),          center.y() + pos.y() + extraY});
-    drawn |= surface.setPixelClip(color, {center.x() + pos.x() + extraX, center.y() - pos.y()});
-    drawn |= surface.setPixelClip(color, {center.x() - pos.x(),          center.y() - pos.y()});
-    
-    drawn |= surface.setPixelClip(color, {center.x() + pos.y() + extraX, center.y() + pos.x() + extraY});
-    drawn |= surface.setPixelClip(color, {center.x() - pos.y(),          center.y() + pos.x() + extraY});
-    drawn |= surface.setPixelClip(color, {center.x() + pos.y() + extraX, center.y() - pos.x()});
-    drawn |= surface.setPixelClip(color, {center.x() - pos.y(),          center.y() - pos.x()});
-    
-    pos.ry()++;
-    
-    if (err < 0) {
-      err += 2 * pos.y() + 1;
-    } else {
-      pos.rx()--;
-      err += 2 * (pos.y() - pos.x()) + 1;
-    }
-  }
-  
-  return drawn;
-}
-
-template <typename Pixel>
-bool midpointThickCircle(
-  const Surface<Pixel> surface,
-  const Pixel color,
-  const QPoint center,
-  const int innerRadius,
-  const int outerRadius,
-  const CircleShape shape
-) {
-  assert(0 <= innerRadius);
-  assert(innerRadius <= outerRadius);
-
-  int innerX = innerRadius;
-  int outerX = outerRadius;
-  int posY = 0;
-  int innerErr = 1 - innerRadius;
-  int outerErr = 1 - outerRadius;
-  const int extraX = centerOffsetX(shape);
-  const int extraY = centerOffsetY(shape);
-  bool drawn = false;
-  
-  while (outerX >= posY) {
-    drawn |= surface.horiLineClip(color, {center.x() + innerX + extraX, center.y() + posY + extraY},   center.x() + outerX + extraX); // right down
-    drawn |= surface.vertLineClip(color, {center.x() + posY + extraX,   center.y() + innerX + extraY}, center.y() + outerX + extraY); // right down
-    drawn |= surface.horiLineClip(color, {center.x() - outerX,          center.y() + posY + extraY},   center.x() - innerX);          //       down
-    drawn |= surface.vertLineClip(color, {center.x() - posY,            center.y() + innerX + extraY}, center.y() + outerX + extraY); //       down
-    
-    drawn |= surface.horiLineClip(color, {center.x() - outerX,          center.y() - posY},   center.x() - innerX);                   //
-    drawn |= surface.vertLineClip(color, {center.x() - posY,            center.y() - outerX}, center.y() - innerX);                   //
-    drawn |= surface.horiLineClip(color, {center.x() + innerX + extraX, center.y() - posY},   center.x() + outerX + extraX);          // right
-    drawn |= surface.vertLineClip(color, {center.x() + posY + extraX,   center.y() - outerX}, center.y() - innerX);                   // right
-    
-    posY++;
-    
-    if (outerErr < 0) {
-      outerErr += 2 * posY + 1;
-    } else {
-      outerX--;
-      outerErr += 2 * (posY - outerX) + 1;
-    }
-    
-    if (posY > innerRadius) {
-      innerX = posY;
-    } else {
-      if (innerErr < 0) {
-        innerErr += 2 * posY + 1;
-      } else {
-        innerX--;
-        innerErr += 2 * (posY - innerX) + 1;
-      }
-    }
-  }
-  
-  return drawn;
-}
-
-}
-
-bool drawStrokedCircle(QImage &img, const QRgb color, const QPoint center, const int radius, const int thickness, const CircleShape shape) {
+bool drawStrokedCircle(QImage &img, const QRgb color, const QPoint center, const int radius, const int thickness, const gfx::CircleShape shape) {
   assert(thickness > 0);
-  return visitSurface(img, color, [center, radius, thickness, shape](auto surface, auto color) {
-    if (thickness == 1) {
-      return midpointCircle(surface, color, center, radius, shape);
-    } else {
-      return midpointThickCircle(surface, color, center, std::max(radius - thickness + 1, 0), radius, shape);
-    }
+  visitSurface(img, [center, radius, thickness, shape, color](auto surface) {
+    gfx::drawStrokedCircle(surface, color, convert(center), radius, radius - thickness + 1, shape);
   });
+  return true;
 }
 
 bool drawFilledRect(QImage &img, const QRgb color, const QRect rect) {
-  return visitSurface(img, color, [rect](auto surface, auto color) {
-    return surface.fillRectClip(color, rect);
+  visitSurface(img, [rect, color](auto surface) {
+    gfx::drawFilledRect(surface, color, convert(rect));
   });
-}
-
-namespace {
-
-template <typename Pixel>
-bool strokedRect(const Surface<Pixel> surface, const Pixel color, const QRect rect, const int thickness) {
-  if (rect.width() <= thickness * 2 || rect.height() <= thickness * 2) {
-    return surface.fillRectClip(color, rect);
-  }
-  const QRect sideRects[] = {
-    { // top
-      QPoint{rect.left(), rect.top()},
-      QPoint{rect.right(), rect.top() + thickness - 1}
-    },
-    { // left
-      QPoint{rect.left(), rect.top() + thickness},
-      QPoint{rect.left() + thickness - 1, rect.bottom() - thickness}
-    },
-    { // right
-      QPoint{rect.right() - thickness + 1, rect.top() + thickness},
-      QPoint{rect.right(), rect.bottom() - thickness}
-    },
-    { // bottom
-      QPoint{rect.left(), rect.bottom() - thickness + 1},
-      QPoint{rect.right(), rect.bottom()}
-    }
-  };
-  bool drawn = false;
-  for (const QRect &sideRect : sideRects) {
-    drawn |= surface.fillRectClip(color, sideRect);
-  }
-  return drawn;
-}
-
+  return true;
 }
 
 bool drawStrokedRect(QImage &img, const QRgb color, const QRect rect, const int thickness) {
   assert(thickness > 0);
   if (!img.rect().intersects(rect)) return false;
-  return visitSurface(img, color, [rect, thickness](auto surface, auto color) {
-    return strokedRect(surface, color, rect, thickness);
+  visitSurface(img, [rect, thickness, color](auto surface) {
+    const QRect inner = rect.marginsRemoved({thickness, thickness, thickness, thickness});
+    gfx::drawStrokedRect(surface, color, convert(rect), convert(inner));
   });
-}
-
-namespace {
-
-std::pair<int, int> signdiff(const int a, const int b) {
-  if (a < b) {
-    return {1, b - a};
-  } else {
-    return {-1, a - b};
-  }
-}
-
-template <typename SetPixel>
-bool midpointLine(QPoint p1, const QPoint p2, SetPixel &&setPixel) {
-  const auto [sx, dx] = signdiff(p1.x(), p2.x());
-  auto [sy, dy] = signdiff(p1.y(), p2.y());
-  dy = -dy;
-  int err = dx + dy;
-  bool drawn = false;
-  
-  while (true) {
-    drawn |= setPixel(p1);
-    const int err2 = 2 * err;
-    if (err2 >= dy) {
-      if (p1.x() == p2.x()) break;
-      err += dy;
-      p1.rx() += sx;
-    }
-    if (err2 <= dx) {
-      if (p1.y() == p2.y()) break;
-      err += dx;
-      p1.ry() += sy;
-    }
-  }
-  
-  return drawn;
-}
-
-template <typename Pixel>
-bool midpointLine(const Surface<Pixel> surface, const Pixel col, const QPoint p1, const QPoint p2) {
-  return midpointLine(p1, p2, [surface, col](const QPoint pos) mutable {
-    return surface.setPixelClip(col, pos);
-  });
-}
-
-// @TODO this is suboptimial but seems to be fast enough
-template <typename Pixel>
-bool midpointThickLine(const Surface<Pixel> surface, const Pixel col, const QPoint p1, const QPoint p2, const int radius) {
-  midpointFilledCircle(surface, col, p1, radius, CircleShape::c1x1);
-  return midpointLine(p1, p2, [surface, col, radius](const QPoint pos) {
-    return midpointThickCircle(surface, col, pos, radius - 1, radius, CircleShape::c1x1);
-  });
-}
-
+  return true;
 }
 
 bool drawLine(QImage &img, const QRgb color, const QLine line, const int radius) {
-  assert(radius >= 0);
-  return visitSurface(img, color, [line, radius](auto surface, auto color) {
-    if (radius == 0) {
-      return midpointLine(surface, color, line.p1(), line.p2());
-    } else {
-      return midpointThickLine(surface, color, line.p1(), line.p2(), radius);
-    }
+  visitSurface(img, [line, radius, color](auto surface) {
+    gfx::drawLine(surface, color, convert(line.p1()), convert(line.p2()), radius);
   });
+  return true;
 }
 
 bool drawFilledPolygon(
@@ -343,7 +83,7 @@ bool drawFilledPolygon(
 ) {
   std::vector<QPoint> shiftedPoly;
   shiftedPoly.reserve(poly.size());
-  for (const QPoint vertex : poly) {
+  for (const QPoint &vertex : poly) {
     shiftedPoly.push_back(vertex + offset);
   }
   // @TODO avoid using QPainter

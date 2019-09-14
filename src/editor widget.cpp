@@ -17,6 +17,7 @@
 #include <QtWidgets/qlabel.h>
 #include "surface factory.hpp"
 #include <QtWidgets/qgesture.h>
+#include <Graphics/iterator.hpp>
 #include <QtWidgets/qscrollbar.h>
 
 class EditorImage final : public QWidget {
@@ -142,10 +143,10 @@ private:
     checkers = QImage{size, QImage::Format_ARGB32};
     const int lilScale = scale / 2;
     const int bigScale = lilScale + scale % 2;
-    Surface surface = makeSurface<QRgb>(checkers);
+    gfx::Surface surface = makeSurface<QRgb>(checkers);
     int x = 0;
     int y = 0;
-    for (auto row : surface.range()) {
+    for (auto row : gfx::range(surface)) {
       for (QRgb &pixel : row) {
         const bool color = (x < bigScale || (scale <= x && x < scale + lilScale))
                         == (y < bigScale || (scale <= y && y < scale + lilScale));

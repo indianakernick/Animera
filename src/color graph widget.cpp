@@ -13,6 +13,7 @@
 #include <QtGui/qpainter.h>
 #include "widget painting.hpp"
 #include "surface factory.hpp"
+#include <Graphics/iterator.hpp>
 
 SVGraphWidget::SVGraphWidget(QWidget *parent)
   : QWidget{parent},
@@ -50,7 +51,7 @@ void SVGraphWidget::plotGraph(const int hue) {
   
   int sat = 0;
   int val = pick_svgraph_rect.inner().height() - 1;
-  for (auto row : makeSurface<QRgb>(graph).range()) {
+  for (auto row : gfx::range(makeSurface<QRgb>(graph))) {
     for (QRgb &pixel : row) {
       pixel = hsv2rgb(
         hue, // can't use sat2pix and val2pix here

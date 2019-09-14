@@ -9,11 +9,11 @@
 #include "select tools.hpp"
 
 #include "cell.hpp"
-#include "masking.hpp"
 #include "painting.hpp"
 #include "composite.hpp"
-#include "flood fill.hpp"
+#include <Graphics/mask.hpp>
 #include "surface factory.hpp"
+#include <Graphics/flood fill.hpp>
 
 void RectangleSelectTool::detachCell() {
   ctx->clearStatus();
@@ -139,8 +139,13 @@ void PolygonSelectTool::mouseDown(const ToolMouseEvent &event) {
       blitMaskImage(ctx->cell->image, mask, selection, event.pos + offset);
     } else if (event.button == ButtonType::erase) {
       // @TODO should this be encapsulated in another file?
-      visitSurface(ctx->cell->image, ctx->colors.erase, [this, &event](auto surface, auto color) {
-        maskFillRegion(surface, makeCSurface<uint8_t>(mask), color, event.pos + offset);
+      visitSurfaces(ctx->cell->image, ctx->colors.erase, [this, &event](auto surface, auto color) {
+        gfx::maskFillRegion(
+          surface,
+          makeCSurface<uint8_t>(mask),
+          color,
+          convert(event.pos + offset)
+        );
       });
     } else {
       return ctx->emitChanges(ToolChanges::overlay);
@@ -247,8 +252,13 @@ void WandSelectTool::mouseDown(const ToolMouseEvent &event) {
     if (event.button == ButtonType::primary) {
       blitMaskImage(ctx->cell->image, mask, selection, event.pos + offset);
     } else if (event.button == ButtonType::erase) {
-      visitSurface(ctx->cell->image, ctx->colors.erase, [this, &event](auto surface, auto color) {
-        maskFillRegion(surface, makeCSurface<uint8_t>(mask), color, event.pos + offset);
+      visitSurfaces(ctx->cell->image, ctx->colors.erase, [this, &event](auto surface, auto color) {
+        gfx::maskFillRegion(
+          surface,
+          makeCSurface<uint8_t>(mask),
+          color,
+          convert(event.pos + offset)
+        );
       });
     } else {
       return ctx->emitChanges(ToolChanges::overlay);
@@ -299,16 +309,23 @@ QRgb contrastColor(const QRgb color) {
 }
 
 template <typename Pixel>
-class WandManip {
+class WandPolicy {
 public:
-  WandManip(Surface<PixelRgba> overlay, Surface<PixelMask> mask, CSurface<Pixel> source, const PixelRgba constrastColor)
-    : overlay{overlay}, mask{mask}, source{source}, constrastColor{constrastColor} {}
+  WandPolicy(
+    gfx::Surface<PixelRgba> overlay,
+    gfx::Surface<PixelMask> mask,
+    gfx::CSurface<Pixel> source,
+    const PixelRgba constrastColor
+  ) : overlay{overlay},
+      mask{mask},
+      source{source},
+      constrastColor{constrastColor} {}
 
-  bool start(const QPoint pos) {
-    startColor = source.getPixel(pos);
-    maskCheckColor = mask.getPixel(pos);
+  bool start(const gfx::Point pos) {
+    startColor = source.ref(pos);
+    maskCheckColor = mask.ref(pos);
     maskColor = ~maskCheckColor;
-    if (maskColor == mask_off) {
+    if (maskColor == gfx::mask_off) {
       overlayColor = qRgba(0, 0, 0, 0);
     } else {
       overlayColor = constrastColor;
@@ -316,24 +333,24 @@ public:
     return true;
   }
   
-  QSize size() const {
+  gfx::Size size() const {
     return source.size();
   }
   
-  bool shouldSet(const QPoint pos) const {
-    return source.getPixel(pos) == startColor &&
-           mask.getPixel(pos) == maskCheckColor;
+  bool check(const gfx::Point pos) const {
+    return source.ref(pos) == startColor &&
+           mask.ref(pos) == maskCheckColor;
   }
   
-  void set(const QPoint pos) const {
-    overlay.setPixel(overlayColor, pos);
-    mask.setPixel(maskColor, pos);
+  void set(const gfx::Point pos) const {
+    overlay.ref(pos) = overlayColor;
+    mask.ref(pos) = maskColor;
   }
 
 private:
-  Surface<PixelRgba> overlay;
-  Surface<PixelMask> mask;
-  CSurface<Pixel> source;
+  gfx::Surface<PixelRgba> overlay;
+  gfx::Surface<PixelMask> mask;
+  gfx::CSurface<Pixel> source;
   Pixel startColor;
   PixelRgba constrastColor;
   PixelRgba overlayColor;
@@ -346,36 +363,36 @@ private:
 void WandSelectTool::addToSelection(const ToolMouseEvent &event) {
   switch (ctx->format) {
     case Format::rgba: {
-      Surface surface = makeCSurface<PixelRgba>(ctx->cell->image);
-      WandManip manip{
+      gfx::Surface surface = makeCSurface<PixelRgba>(ctx->cell->image);
+      WandPolicy policy{
         makeSurface<PixelRgba>(*ctx->overlay),
         makeSurface<PixelMask>(mask),
         surface,
-        contrastColor(surface.getPixel(event.pos))
+        contrastColor(surface.ref(convert(event.pos)))
       };
-      floodFill(manip, event.pos);
+      gfx::floodFill(policy, convert(event.pos));
       break;
     }
     case Format::index: {
-      Surface surface = makeCSurface<PixelIndex>(ctx->cell->image);
-      WandManip manip{
+      gfx::Surface surface = makeCSurface<PixelIndex>(ctx->cell->image);
+      WandPolicy policy{
         makeSurface<PixelRgba>(*ctx->overlay),
         makeSurface<PixelMask>(mask),
         surface,
-        contrastColor(ctx->palette[surface.getPixel(event.pos)])
+        contrastColor(ctx->palette[surface.ref(convert(event.pos))])
       };
-      floodFill(manip, event.pos);
+      gfx::floodFill(policy, convert(event.pos));
       break;
     }
     case Format::gray: {
-      Surface surface = makeCSurface<PixelGray>(ctx->cell->image);
-      WandManip manip{
+      gfx::Surface surface = makeCSurface<PixelGray>(ctx->cell->image);
+      WandPolicy policy{
         makeSurface<PixelRgba>(*ctx->overlay),
         makeSurface<PixelMask>(mask),
         surface,
-        qRgba(0, 0, scaleOverlayGray(surface.getPixel(event.pos)), scaleOverlayAlpha(255))
+        qRgba(0, 0, scaleOverlayGray(surface.ref(convert(event.pos))), scaleOverlayAlpha(255))
       };
-      floodFill(manip, event.pos);
+      gfx::floodFill(policy, convert(event.pos));
       break;
     }
   }

@@ -13,13 +13,13 @@
 #include <QtGui/qimage.h>
 #include "paint params.hpp"
 
-bool drawSquarePoint  (QImage &, QRgb, QPoint, CircleShape = CircleShape::c1x1);
-bool drawRoundPoint   (QImage &, QRgb, QPoint, int = 1, CircleShape = CircleShape::c1x1);
+bool drawSquarePoint  (QImage &, QRgb, QPoint, gfx::CircleShape = gfx::CircleShape::c1x1);
+bool drawRoundPoint   (QImage &, QRgb, QPoint, int = 1, gfx::CircleShape = gfx::CircleShape::c1x1);
 
 bool drawFloodFill    (QImage &, QRgb, QPoint);
 
-bool drawFilledCircle (QImage &, QRgb, QPoint, int, CircleShape = CircleShape::c1x1);
-bool drawStrokedCircle(QImage &, QRgb, QPoint, int, int = 1, CircleShape = CircleShape::c1x1);
+bool drawFilledCircle (QImage &, QRgb, QPoint, int, gfx::CircleShape = gfx::CircleShape::c1x1);
+bool drawStrokedCircle(QImage &, QRgb, QPoint, int, int = 1, gfx::CircleShape = gfx::CircleShape::c1x1);
 
 bool drawFilledRect   (QImage &, QRgb, QRect);
 bool drawStrokedRect  (QImage &, QRgb, QRect, int = 1);

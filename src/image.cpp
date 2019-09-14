@@ -8,6 +8,7 @@
 
 #include "image.hpp"
 
+#include <Graphics/fill.hpp>
 #include "surface factory.hpp"
 
 bool compatible(const QImage &a, const QImage &b) {
@@ -34,7 +35,7 @@ void clearImage(QImage &dst) {
 }
 
 void clearImage(QImage &dst, const QRgb color) {
-  visitSurface(dst, color, [](auto surface, auto color) {
-    surface.overFill(color);
+  visitSurfaces(dst, color, [](auto dst, auto color) {
+    gfx::overFill(dst, color);
   });
 }

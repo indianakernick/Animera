@@ -11,6 +11,7 @@
 #include <cmath>
 #include "cell.hpp"
 #include "painting.hpp"
+#include "surface factory.hpp"
 
 template <typename Derived>
 DragPaintTool<Derived>::~DragPaintTool() {
@@ -117,7 +118,7 @@ void LineTool::updateStatus(StatusMsg &status, const QPoint start, const QPoint 
 
 StrokedCircleTool::~StrokedCircleTool() = default;
 
-void StrokedCircleTool::setShape(const CircleShape newShape) {
+void StrokedCircleTool::setShape(const gfx::CircleShape newShape) {
   shape = newShape;
 }
 
@@ -148,7 +149,7 @@ bool StrokedCircleTool::drawDrag(QImage &image, const QPoint start, const QPoint
 }
 
 void StrokedCircleTool::drawOverlay(QImage &overlay, const QPoint pos) {
-  drawFilledRect(overlay, tool_overlay_color, centerRect(pos, shape));
+  drawFilledRect(overlay, tool_overlay_color, convert(gfx::centerRect(convert(pos), shape)));
 }
 
 void StrokedCircleTool::updateStatus(StatusMsg &status, const QPoint start, const QPoint end) {
@@ -160,7 +161,7 @@ void StrokedCircleTool::updateStatus(StatusMsg &status, const QPoint start, cons
 
 FilledCircleTool::~FilledCircleTool() = default;
 
-void FilledCircleTool::setShape(const CircleShape newShape) {
+void FilledCircleTool::setShape(const gfx::CircleShape newShape) {
   shape = newShape;
 }
 
@@ -173,7 +174,7 @@ bool FilledCircleTool::drawDrag(QImage &image, const QPoint start, const QPoint 
 }
 
 void FilledCircleTool::drawOverlay(QImage &overlay, const QPoint pos) {
-  drawFilledRect(overlay, tool_overlay_color, centerRect(pos, shape));
+  drawFilledRect(overlay, tool_overlay_color, convert(gfx::centerRect(convert(pos), shape)));
 }
 
 void FilledCircleTool::updateStatus(StatusMsg &status, const QPoint start, const QPoint end) {

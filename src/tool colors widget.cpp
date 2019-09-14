@@ -10,10 +10,10 @@
 
 #include "config.hpp"
 #include "connect.hpp"
-#include "formats.hpp"
 #include <QtGui/qpainter.h>
 #include "color handle.hpp"
 #include "color convert.hpp"
+#include <Graphics/format.hpp>
 #include "widget painting.hpp"
 #include <QtWidgets/qboxlayout.h>
 #include "radio button widget.hpp"
@@ -81,8 +81,8 @@ private:
       case Format::index:
         return QColor::fromRgba(palette[color]);
       case Format::gray:
-        const int gray = FormatYA::gray(color);
-        const int alpha = FormatYA::alpha(color);
+        const int gray = gfx::YA::gray(color);
+        const int alpha = gfx::YA::alpha(color);
         return QColor{gray, gray, gray, alpha};
     }
   }
@@ -157,14 +157,18 @@ void ToolColorsWidget::changeColors() {
 ToolColors ToolColorsWidget::getInitialColors(const Format format) {
   switch (format) {
     case Format::rgba:
-      return {qRgb(255, 0, 0), qRgb(0, 0, 255), 0};
+      return {
+        gfx::ARGB::pixel(255, 0, 0),
+        gfx::ARGB::pixel(0, 0, 255),
+        gfx::ARGB::pixel(0, 0, 0, 0),
+      };
     case Format::index:
       return {1, 2, 0};
     case Format::gray:
       return {
-        FormatYA::pixel(255, 255),
-        FormatYA::pixel(0, 255),
-        FormatYA::pixel(0, 0)
+        gfx::YA::pixel(255, 255),
+        gfx::YA::pixel(0, 255),
+        gfx::YA::pixel(0, 0)
       };
   }
 }

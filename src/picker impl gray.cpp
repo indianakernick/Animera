@@ -10,8 +10,8 @@
 
 #include "config.hpp"
 #include "connect.hpp"
-#include "formats.hpp"
 #include "label widget.hpp"
+#include <Graphics/format.hpp>
 #include "color input widget.hpp"
 #include "color slider widget.hpp"
 
@@ -70,8 +70,8 @@ void PickerImplGray::connectSignals() {
 }
 
 void PickerImplGray::setColor(const QRgb color) {
-  gray = FormatYA::gray(color);
-  alpha = FormatYA::alpha(color);
+  gray = gfx::YA::gray(color);
+  alpha = gfx::YA::alpha(color);
   graySlider->changeGray(gray);
   alphaSlider->changeAlpha(alpha);
   boxA->changeValue(alpha);
@@ -102,5 +102,5 @@ void PickerImplGray::setAlpha(const int newAlpha) {
 }
 
 void PickerImplGray::changeColor() {
-  Q_EMIT colorChanged(FormatYA::pixel(gray, alpha));
+  Q_EMIT colorChanged(gfx::YA::pixel(gray, alpha));
 }

@@ -9,9 +9,10 @@
 #include "transform tools.hpp"
 
 #include "cell.hpp"
-#include "masking.hpp"
-#include "transform.hpp"
+#include <Graphics/fill.hpp>
+#include <Graphics/mask.hpp>
 #include "surface factory.hpp"
+#include <Graphics/transform.hpp>
 
 // @TODO do we need to know the difference between switching tools and switching cells?
 
@@ -90,8 +91,8 @@ void TranslateTool::translate(const QPoint move, const QRgb eraseColor) {
 
 void TranslateTool::updateSourceImage(const QRgb eraseColor) {
   visitSurfaces(ctx->cell->image, cleanImage, [this, eraseColor](auto src, auto clean) {
-    src.overFill(eraseColor);
-    copyRegion(src, clean, pos);
+    gfx::overFill(src, eraseColor);
+    gfx::copyRegion(src, clean, convert(pos));
   });
 }
 
@@ -142,7 +143,7 @@ void FlipTool::keyPress(const ToolKeyEvent &event) {
     QImage &src = ctx->cell->image;
     QImage flipped{src.size(), src.format()};
     visitSurfaces(flipped, src, [](auto flipped, auto src) {
-      flipHori(flipped, src);
+      gfx::flipHori(flipped, src);
     });
     src = flipped;
   } else if (flipYChanged(event.key, flipY)) {
@@ -150,7 +151,7 @@ void FlipTool::keyPress(const ToolKeyEvent &event) {
     QImage &src = ctx->cell->image;
     QImage flipped{src.size(), src.format()};
     visitSurfaces(flipped, src, [](auto flipped, auto src) {
-      flipVert(flipped, src);
+      gfx::flipVert(flipped, src);
     });
     src = flipped;
   } else {
@@ -211,7 +212,7 @@ void RotateTool::keyPress(const ToolKeyEvent &event) {
     QImage &src = ctx->cell->image;
     QImage rotated{src.size(), src.format()};
     visitSurfaces(rotated, src, [rot](auto rotated, auto src) {
-      rotate(rotated, src, rot);
+      gfx::rotate(rotated, src, rot);
     });
     src = rotated;
     updateStatus();

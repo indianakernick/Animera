@@ -187,8 +187,8 @@ In case I decide that we need KC filters
 */
 
 #include <cmath>
-#include "formats.hpp"
 #include "porter duff.hpp"
+#include <Graphics/format.hpp>
 
 struct ColorF {
   float r, g, b, a;
@@ -202,16 +202,16 @@ uint8_t fromFloat(const float component) {
   return static_cast<uint8_t>(std::clamp(std::round(component * 255.0f), 0.0f, 255.0f));
 }
 
-ColorF toFloat(const Color color) {
+ColorF toFloat(const gfx::Color color) {
   return {toFloat(color.r), toFloat(color.g), toFloat(color.b), toFloat(color.a)};
 }
 
-Color fromFloat(const ColorF color) {
+gfx::Color fromFloat(const ColorF color) {
   return {fromFloat(color.r), fromFloat(color.g), fromFloat(color.b), fromFloat(color.a)};
 }
 
 // straight alpha with float precision
-Color compositeF(const Color aInt, const Color bInt, const uint8_t afInt, const uint8_t bfInt) {
+gfx::Color compositeF(const gfx::Color aInt, const gfx::Color bInt, const uint8_t afInt, const uint8_t bfInt) {
   const float aF = toFloat(afInt);
   const float bF = toFloat(bfInt);
   const ColorF a = toFloat(aInt);
@@ -229,7 +229,7 @@ Color compositeF(const Color aInt, const Color bInt, const uint8_t afInt, const 
 }
 
 // straight alpha with uint8 precision
-Color compositeI(const Color a, const Color b, const uint8_t aF, const uint8_t bF) {
+gfx::Color compositeI(const gfx::Color a, const gfx::Color b, const uint8_t aF, const uint8_t bF) {
   const uint32_t cA = a.a*aF + b.a*bF;
   if (cA == 0) {
     return {0, 0, 0, 0};
@@ -242,7 +242,7 @@ Color compositeI(const Color a, const Color b, const uint8_t aF, const uint8_t b
 }
 
 // premultiplied alpha with uint8 precision
-Color compositeM(const Color a, const Color b, const uint8_t aF, const uint8_t bF) {
+gfx::Color compositeM(const gfx::Color a, const gfx::Color b, const uint8_t aF, const uint8_t bF) {
   const uint8_t cR = (aF*a.r + bF*b.r) / 255;
   const uint8_t cG = (aF*a.g + bF*b.g) / 255;
   const uint8_t cB = (aF*a.b + bF*b.b) / 255;
@@ -250,14 +250,14 @@ Color compositeM(const Color a, const Color b, const uint8_t aF, const uint8_t b
   return {cR, cG, cB, cA};
 }
 
-Color mulAlpha(const Color color) {
+gfx::Color mulAlpha(const gfx::Color color) {
   const uint8_t r = (color.r * color.a) / 255;
   const uint8_t g = (color.g * color.a) / 255;
   const uint8_t b = (color.b * color.a) / 255;
   return {r, g, b, color.a};
 }
 
-Color divAlpha(const Color color) {
+gfx::Color divAlpha(const gfx::Color color) {
   if (color.a == 0) {
     return {0, 0, 0, 0};
   } else {
@@ -268,7 +268,7 @@ Color divAlpha(const Color color) {
   }
 }
 
-std::ostream &operator<<(std::ostream &stream, const Color color) {
+std::ostream &operator<<(std::ostream &stream, const gfx::Color color) {
   stream.width(3);
   stream << int(color.r) << ' ';
   stream.width(3);
@@ -292,11 +292,11 @@ std::ostream &operator<<(std::ostream &stream, const ColorF color) {
   return stream;
 }
 
-bool operator==(const Color a, const Color b) {
+bool operator==(const gfx::Color a, const gfx::Color b) {
   return a.r == b.r && a.g == b.g && a.b == b.b && a.a == b.a;
 }
 
-bool operator!=(const Color a, const Color b) {
+bool operator!=(const gfx::Color a, const gfx::Color b) {
   return !(a == b);
 }
 
@@ -308,7 +308,7 @@ bool different(const uint8_t a, const uint8_t b) {
   return aI + difference_threshold < bI || bI + difference_threshold < aI;
 }
 
-bool different(const Color a, const Color b) {
+bool different(const gfx::Color a, const gfx::Color b) {
   return different(a.r, b.r) ||
          different(a.g, b.g) ||
          different(a.b, b.b) ||
@@ -323,12 +323,12 @@ void testComposite() {
     for (int aA = 0; aA != sizeof(vals); ++aA) {
       for (int cB = 0; cB != sizeof(vals); ++cB) {
         for (int aB = 0; aB != sizeof(vals); ++aB) {
-          const Color a = {vals[cA], 0, 0, vals[aA]};
-          const Color b = {vals[cB], 0, 0, vals[aB]};
+          const gfx::Color a = {vals[cA], 0, 0, vals[aA]};
+          const gfx::Color b = {vals[cB], 0, 0, vals[aB]};
           const uint8_t aF = 255;
           const uint8_t bF = 255 - a.a;
-          const Color cF = compositeF(a, b, aF, bF);
-          const Color cI = compositeI(a, b, aF, bF);
+          const gfx::Color cF = compositeF(a, b, aF, bF);
+          const gfx::Color cI = compositeI(a, b, aF, bF);
           //const Color cM = divAlpha(compositeM(mulAlpha(a), mulAlpha(b), aF, bF));
           //if (different(cF, cI) || different(cI, cM) || different(cF, cM)) {
           //  std::cout << a << " \t" << b << " \t" << cF << " \t" << cI << " \t" << cM << '\n';
@@ -736,7 +736,7 @@ void bresenhamStroked(
   const QRgb col,
   const QPoint ctr,
   const int rad,
-  CircleShape
+  gfx::CircleShape
 ) {
   QPoint pos = {0, rad};
   int err = 3 - 2 * rad;
@@ -762,7 +762,7 @@ void midpointStroked(
   QRgb col,
   const QPoint ctr,
   const int rad,
-  CircleShape
+  gfx::CircleShape
 ) { // radius 6
   QPoint pos = {rad, 0};
   int err = 1 - rad;
@@ -812,7 +812,7 @@ void midpointFilled(
   QRgb col,
   const QPoint ctr,
   const int rad,
-  CircleShape
+  gfx::CircleShape
 ) { // radius 6
   QPoint pos = {rad, 0};
   int err = 1 - rad;
@@ -1277,7 +1277,7 @@ void midpointCircle(
   Color color,
   Point center,
   int radius,
-  CircleShape shape
+  gfx::CircleShape shape
 ) {
   Point pos = {radius, 0};
   int err = 1 - radius;
@@ -1312,7 +1312,7 @@ void midpointCircleThick(
   Point center,
   int innerRadius,
   int outerRadius,
-  CircleShape shape
+  gfx::CircleShape shape
 ) {
   assert(0 <= innerRadius);
   assert(innerRadius <= outerRadius);
@@ -1590,15 +1590,15 @@ void midpointEllipseThick(
 
 }
 
-int centerWidth(const CircleShape shape) {
-  return (shape == CircleShape::c2x1 || shape == CircleShape::c2x2) ? 2 : 1;
+int centerWidth(const gfx::CircleShape shape) {
+  return (shape == gfx::CircleShape::c2x1 || shape == gfx::CircleShape::c2x2) ? 2 : 1;
 }
 
-int centerHeight(const CircleShape shape) {
-  return (shape == CircleShape::c1x2 || shape == CircleShape::c2x2) ? 2 : 1;
+int centerHeight(const gfx::CircleShape shape) {
+  return (shape == gfx::CircleShape::c1x2 || shape == gfx::CircleShape::c2x2) ? 2 : 1;
 }
 
-QRect circleToRect(const QPoint center, const int radius, const CircleShape shape) {
+QRect circleToRect(const QPoint center, const int radius, const gfx::CircleShape shape) {
   return QRect{
     center.x() - radius,
     center.y() - radius,
@@ -1655,19 +1655,20 @@ bool drawStrokedEllipse(QImage &img, const QRgb color, const QRect ellipse) {
   return true;
 }
 
-#include "masking.hpp"
 #include "geometry.hpp"
-#include "format convert.hpp"
+#include <Graphics/copy.hpp>
+#include <Graphics/mask.hpp>
 #include "surface factory.hpp"
+#include <Graphics/convert.hpp>
 
 void blitMaskImageNew(QImage &dst, const QImage &mask, const QImage &src, const QPoint pos) {
   assert(mask.size() == src.size());
-  maskCopyRegion(
+  gfx::maskCopyRegion(
     makeSurface<QRgb>(dst),
     makeSurface<QRgb>(src),
     makeSurface<uint8_t>(mask),
-    pos,
-    pos
+    convert(pos),
+    convert(pos)
   );
 }
 
@@ -1685,10 +1686,10 @@ void blitMaskImageOld(QImage &dst, const QImage &mask, const QImage &src, const 
 }
 
 void blitImageNew(QImage &dst, const QImage &src, const QPoint pos) {
-  copyRegion(
+  gfx::copyRegion(
     makeSurface<QRgb>(dst),
     makeSurface<QRgb>(src),
-    pos
+    convert(pos)
   );
 }
 
@@ -2164,10 +2165,10 @@ int main(int argc, char **argv) {
     const int x = 64 * (r + 1);
     const int rx = 4 * r / 3;
     const int ry = r;
-    drawStrokedEllipse(image, fillColor, circleToRect({x, 64 * 1}, r, CircleShape::c1x1));
-    bresenhamStroked(image, fillColor, {x, 64 * 2}, r, CircleShape::c1x1);
-    test::midpointCircle(image, fillColor, {x, 64 * 3}, r, CircleShape::c1x1);
-    test::midpointCircleThick(image, fillColor, {x, 64 * 4}, std::max(r - 3 + 1, 0), r, CircleShape::c1x1);
+    drawStrokedEllipse(image, fillColor, circleToRect({x, 64 * 1}, r, gfx::CircleShape::c1x1));
+    bresenhamStroked(image, fillColor, {x, 64 * 2}, r, gfx::CircleShape::c1x1);
+    test::midpointCircle(image, fillColor, {x, 64 * 3}, r, gfx::CircleShape::c1x1);
+    test::midpointCircleThick(image, fillColor, {x, 64 * 4}, std::max(r - 3 + 1, 0), r, gfx::CircleShape::c1x1);
     midpointEllipse(image, fillColor, {x, 64 * 5}, {r, r});
     test::midpointEllipse(image, fillColor, {x, 64 * 6}, {r, r});
     test::midpointEllipseThick({x, 64 * 7}, {rx, ry}, {rx, ry}, horiLine);
@@ -2181,33 +2182,33 @@ int main(int argc, char **argv) {
     midpointEllipse(image, fillColor, {x, 64 * 9}, {rx, ry});
     test::midpointEllipseThick({x, 64 * 10}, {std::max(rx - 3 + 1, 0), std::max(ry - 3 + 1, 0)}, {rx, ry}, horiLine);
     midpointEllipseFilled(image, fillColor, {x, 64 * 11}, {rx, ry});
-    midpointFilled(image, fillColor, {x, 64 * 12}, r, CircleShape::c1x1);
-    drawFilledEllipse(image, fillColor, circleToRect({x, 64 * 13}, r, CircleShape::c1x1));
+    midpointFilled(image, fillColor, {x, 64 * 12}, r, gfx::CircleShape::c1x1);
+    drawFilledEllipse(image, fillColor, circleToRect({x, 64 * 13}, r, gfx::CircleShape::c1x1));
   }
   
   const QPoint circPos = {dup.width() / 2, dup.height() / 2};
   const int circRad = std::min(dup.width(), dup.height()) / 2 - 1;
   
   timer.start("painter stroked");
-  drawStrokedEllipse(dup, fillColor, circleToRect(circPos, circRad, CircleShape::c1x1));
+  drawStrokedEllipse(dup, fillColor, circleToRect(circPos, circRad, gfx::CircleShape::c1x1));
   timer.stop();
   
   dup.fill(0);
   
   timer.start("bres stroked");
-  bresenhamStroked(dup, fillColor, circPos, circRad, CircleShape::c1x1);
+  bresenhamStroked(dup, fillColor, circPos, circRad, gfx::CircleShape::c1x1);
   timer.stop();
   
   dup.fill(0);
   
   timer.start("midpoint stroked");
-  midpointStroked(dup, fillColor, circPos, circRad, CircleShape::c1x1);
+  midpointStroked(dup, fillColor, circPos, circRad, gfx::CircleShape::c1x1);
   timer.stop();
   
   dup.fill(0);
   
   timer.start("painter filled");
-  drawFilledEllipse(dup, fillColor, circleToRect(circPos, circRad, CircleShape::c1x1));
+  drawFilledEllipse(dup, fillColor, circleToRect(circPos, circRad, gfx::CircleShape::c1x1));
   timer.stop();
   
   dup.fill(0);
@@ -2237,7 +2238,7 @@ int main(int argc, char **argv) {
   
   timer.start("filled smear");
   for (int x = 64; x < image.width() - 64; ++x) {
-    midpointFilled(image, fillColor, {x, x}, 32, CircleShape::c1x1);
+    midpointFilled(image, fillColor, {x, x}, 32, gfx::CircleShape::c1x1);
   }
   timer.stop();
   
@@ -2264,7 +2265,7 @@ int main(int argc, char **argv) {
   
   timer.start("painter smear");
   for (int x = 64; x < image.width() - 64; ++x) {
-    drawFilledEllipse(image, fillColor, circleToRect({x, x}, 32, CircleShape::c1x1));
+    drawFilledEllipse(image, fillColor, circleToRect({x, x}, 32, gfx::CircleShape::c1x1));
   }
   timer.stop();
   
@@ -2369,7 +2370,7 @@ int main(int argc, char **argv) {
   RotateTool tool;
   //tool.setMode(SymmetryMode::both);
   //tool.setRadius(2);
-  //tool.setShape(CircleShape::c1x1);
+  //tool.setShape(gfx::CircleShape::c1x1);
   [[maybe_unused]] const bool ok = tool.attachCell(&source);
   assert(ok);
   

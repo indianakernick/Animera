@@ -59,11 +59,11 @@ public:
 
   ~StrokedCircleTool();
 
-  void setShape(CircleShape);
+  void setShape(gfx::CircleShape);
   void setThick(int);
   
 private:
-  CircleShape shape = CircleShape::c1x1;
+  gfx::CircleShape shape = gfx::CircleShape::c1x1;
   // @TODO restore this to 1
   int thickness = 8;
 
@@ -79,10 +79,10 @@ public:
   
   ~FilledCircleTool();
   
-  void setShape(CircleShape);
+  void setShape(gfx::CircleShape);
 
 private:
-  CircleShape shape = CircleShape::c1x1;
+  gfx::CircleShape shape = gfx::CircleShape::c1x1;
   
   bool drawPoint(QImage &, QPoint);
   bool drawDrag(QImage &, QPoint, QPoint);

@@ -11,12 +11,12 @@
 
 #include <span>
 #include "cell.hpp"
-#include "formats.hpp"
 #include "palette span.hpp"
+#include <Graphics/format.hpp>
 
 /// Take all of the images that make up a frame and composite them together into
 /// a single image
-template <typename PxFmt = FormatARGB>
+template <typename PxFmt = gfx::ARGB>
 QImage compositeFrame(PaletteCSpan, const Frame &, QSize, Format);
 /// Composite the overlay on top of the frame
 void compositeOverlay(QImage &, const QImage &);

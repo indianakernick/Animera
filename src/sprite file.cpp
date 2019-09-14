@@ -10,8 +10,8 @@
 
 #include "zlib.hpp"
 #include "serial.hpp"
-#include "formats.hpp"
 #include "cell span.hpp"
+#include <Graphics/format.hpp>
 
 namespace {
 
@@ -51,10 +51,10 @@ void copyToByteOrder(
   assert(size % byteDepth(format) == 0);
   switch (format) {
     case Format::rgba: {
-      const auto *srcPx = reinterpret_cast<const FormatARGB::Pixel *>(src);
+      const auto *srcPx = reinterpret_cast<const gfx::ARGB::Pixel *>(src);
       unsigned char *dstEnd = dst + size;
       while (dst != dstEnd) {
-        const Color color = FormatARGB::color(*srcPx++);
+        const gfx::Color color = gfx::ARGB::color(*srcPx++);
         *dst++ = color.r;
         *dst++ = color.g;
         *dst++ = color.b;
@@ -63,14 +63,14 @@ void copyToByteOrder(
       break;
     }
     case Format::index:
-      static_assert(sizeof(FormatIndex::Pixel) == 1);
+      static_assert(sizeof(gfx::I<>::Pixel) == 1);
       std::memcpy(dst, src, size);
       break;
     case Format::gray: {
-      auto *srcPx = reinterpret_cast<const FormatYA::Pixel *>(src);
+      auto *srcPx = reinterpret_cast<const gfx::YA::Pixel *>(src);
       unsigned char *dstEnd = dst + size;
       while (dst != dstEnd) {
-        const Color color = FormatYA::color(*srcPx++);
+        const gfx::Color color = gfx::YA::color(*srcPx++);
         *dst++ = color.r;
         *dst++ = color.a;
       }
@@ -88,30 +88,30 @@ void copyFromByteOrder(
   assert(size % byteDepth(format) == 0);
   switch (format) {
     case Format::rgba: {
-      auto *dstPx = reinterpret_cast<FormatARGB::Pixel *>(dst);
+      auto *dstPx = reinterpret_cast<gfx::ARGB::Pixel *>(dst);
       const unsigned char *srcEnd = src + size;
       while (src != srcEnd) {
-        Color color;
+        gfx::Color color;
         color.r = *src++;
         color.g = *src++;
         color.b = *src++;
         color.a = *src++;
-        *dstPx++ = FormatARGB::pixel(color);
+        *dstPx++ = gfx::ARGB::pixel(color);
       }
       break;
     }
     case Format::index:
-      static_assert(sizeof(FormatIndex::Pixel) == 1);
+      static_assert(sizeof(gfx::I<>::Pixel) == 1);
       std::memcpy(dst, src, size);
       break;
     case Format::gray: {
-      auto *dstPx = reinterpret_cast<FormatYA::Pixel *>(dst);
+      auto *dstPx = reinterpret_cast<gfx::YA::Pixel *>(dst);
       const unsigned char *srcEnd = src + size;
       while (src != srcEnd) {
-        Color color;
+        gfx::Color color;
         color.r = *src++;
         color.a = *src++;
-        *dstPx = FormatYA::pixel(color);
+        *dstPx = gfx::YA::pixel(color);
       }
       break;
     }
@@ -132,7 +132,7 @@ Error writeRgba(QIODevice &dev, const PaletteCSpan colors) try {
   ChunkWriter writer{dev};
   writer.begin(static_cast<uint32_t>(used) * 4, chunk_palette);
   for (size_t i = 0; i != used; ++i) {
-    const Color color = FormatARGB::color(colors[i]);
+    const gfx::Color color = gfx::ARGB::color(colors[i]);
     writer.writeByte(color.r);
     writer.writeByte(color.g);
     writer.writeByte(color.b);
@@ -149,7 +149,7 @@ Error writeGray(QIODevice &dev, const PaletteCSpan colors) try {
   ChunkWriter writer{dev};
   writer.begin(static_cast<uint32_t>(used) * 2, chunk_palette);
   for (size_t i = 0; i != used; ++i) {
-    const Color color = FormatYA::color(colors[i]);
+    const gfx::Color color = gfx::YA::color(colors[i]);
     writer.writeByte(color.r);
     writer.writeByte(color.a);
   };
@@ -178,12 +178,12 @@ Error readRgba(QIODevice &dev, const PaletteSpan colors) try {
   auto iter = colors.begin();
   const auto end = colors.begin() + start.length / 4;
   for (; iter != end; ++iter) {
-    Color color;
+    gfx::Color color;
     color.r = reader.readByte();
     color.g = reader.readByte();
     color.b = reader.readByte();
     color.a = reader.readByte();
-    *iter = FormatARGB::pixel(color);
+    *iter = gfx::ARGB::pixel(color);
   }
   if (Error err = reader.end(); err) return err;
   std::fill(iter, colors.end(), 0);
@@ -199,10 +199,10 @@ Error readGray(QIODevice &dev, const PaletteSpan colors) try {
   auto iter = colors.begin();
   const auto end = colors.begin() + start.length / 2;
   for (; iter != end; ++iter) {
-    Color color;
+    gfx::Color color;
     color.r = reader.readByte();
     color.a = reader.readByte();
-    *iter = FormatYA::pixel(color);
+    *iter = gfx::YA::pixel(color);
   }
   if (Error err = reader.end(); err) return err;
   std::fill(iter, colors.end(), 0);

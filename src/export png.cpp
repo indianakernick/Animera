@@ -9,10 +9,10 @@
 #include "export png.hpp"
 
 #include "png.hpp"
-#include "formats.hpp"
 #include <QtCore/qfile.h>
-#include "format convert.hpp"
 #include "surface factory.hpp"
+#include <Graphics/format.hpp>
+#include <Graphics/convert.hpp>
 
 namespace {
 
@@ -53,7 +53,7 @@ void set_PLTE_tRNS(png_structp png, png_infop info, PaletteCSpan palette) {
   png_color plte[pal_colors];
   png_byte trns[pal_colors];
   for (size_t i = 0; i != pal_colors; ++i) {
-    const Color color = FormatARGB::color(palette[i]);
+    const gfx::Color color = gfx::ARGB::color(palette[i]);
     plte[i].red = color.r;
     plte[i].green = color.g;
     plte[i].blue = color.b;
@@ -116,7 +116,7 @@ Error exportPng(
   int transforms = PNG_TRANSFORM_IDENTITY;
   switch (exportFormat) {
     case ExportFormat::rgba:
-      // @TODO Make FormatARGB endian aware so that we don't need to do this
+      // @TODO Make ARGB endian aware so that we don't need to do this
       transforms = PNG_TRANSFORM_BGR;
       break;
     case ExportFormat::index:
@@ -124,16 +124,16 @@ Error exportPng(
       break;
     case ExportFormat::gray:
       if (canvasFormat == Format::gray) {
-        convertInplace<FormatY, FormatYA>(makeSurface<FormatYA::Pixel>(image));
+        gfx::convertInplace(makeSurface<gfx::YA::Pixel>(image), gfx::Y{}, gfx::YA{});
       }
       break;
     case ExportFormat::gray_alpha:
       break;
     case ExportFormat::monochrome:
       if (canvasFormat == Format::gray) {
-        convertToMono<FormatYA, 128>(makeSurface<FormatYA::Pixel>(image));
+        gfx::convertToMono<gfx::YA, 128>(makeSurface<gfx::YA::Pixel>(image));
       } else if (canvasFormat == Format::index) {
-        convertToMono<FormatY, 1>(makeSurface<FormatY::Pixel>(image));
+        gfx::convertToMono<gfx::Y, 1>(makeSurface<gfx::Y::Pixel>(image));
       } else Q_UNREACHABLE();
       break;
   }
