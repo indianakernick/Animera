@@ -165,7 +165,7 @@ constexpr int centerOffsetY(const CircleShape shape) {
 }
 
 constexpr Rect centerRect(const Point point, const CircleShape shape) {
-  return {point, {centerOffsetX(shape), centerOffsetY(shape)}};
+  return {point, {1 + centerOffsetX(shape), 1 + centerOffsetY(shape)}};
 }
 
 }
