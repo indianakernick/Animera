@@ -9,6 +9,7 @@
 #ifndef graphics_convert_hpp
 #define graphics_convert_hpp
 
+#include "traits.hpp"
 #include "format.hpp"
 #include "surface.hpp"
 #include "iterator.hpp"
@@ -53,12 +54,14 @@ Surface<uint8_t> convertToMono(const Surface<Pixel<Format>> src) noexcept {
   return dst;
 }
 
-template <typename DstPixel, typename SrcPixel, typename DstFormat, typename SrcFormat>
-Surface<DstPixel> convertInplace(
-  Surface<SrcPixel> src,
+template <typename DstFormat, typename SrcFormat>
+Surface<Pixel<DstFormat>> convertInplace(
+  Surface<Pixel<SrcFormat>> src,
   DstFormat dstFmt,
   SrcFormat srcFmt
 ) noexcept {
+  using SrcPixel = Pixel<SrcFormat>;
+  using DstPixel = Pixel<DstFormat>;
   static_assert(sizeof(DstPixel) <= sizeof(SrcPixel));
   
   Surface<DstPixel> dst{
