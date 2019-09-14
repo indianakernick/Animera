@@ -58,10 +58,12 @@ template <typename Tuple, size_t... Is>
 [[nodiscard]] decltype(auto) visitSurfacesHelper(Tuple tuple, std::index_sequence<Is...>) {
   using Func = std::tuple_element_t<sizeof...(Is), Tuple>;
   switch (std::get<0>(tuple).depth()) {
-    case 8: return std::forward<Func>(std::get<sizeof...(Is)>(tuple))(handleArg<uint64_t>(std::forward<std::tuple_element_t<Is, Tuple>>(std::get<Is>(tuple)))...);
+    // uncomment when we have a 64-bit color format
+    // case 8: return std::forward<Func>(std::get<sizeof...(Is)>(tuple))(handleArg<uint64_t>(std::forward<std::tuple_element_t<Is, Tuple>>(std::get<Is>(tuple)))...);
     case 4: return std::forward<Func>(std::get<sizeof...(Is)>(tuple))(handleArg<uint32_t>(std::forward<std::tuple_element_t<Is, Tuple>>(std::get<Is>(tuple)))...);
     case 2: return std::forward<Func>(std::get<sizeof...(Is)>(tuple))(handleArg<uint16_t>(std::forward<std::tuple_element_t<Is, Tuple>>(std::get<Is>(tuple)))...);
     case 1: return std::forward<Func>(std::get<sizeof...(Is)>(tuple))(handleArg<uint8_t> (std::forward<std::tuple_element_t<Is, Tuple>>(std::get<Is>(tuple)))...);
+    default: assert(false);
   }
 }
 
