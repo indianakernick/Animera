@@ -15,25 +15,6 @@
 
 namespace gfx {
 
-enum class CircleShape {
-  c1x1,
-  c1x2,
-  c2x1,
-  c2x2
-};
-
-constexpr int centerOffsetX(const CircleShape shape) {
-  return (static_cast<int>(shape) & 0b10) >> 1;
-}
-
-constexpr int centerOffsetY(const CircleShape shape) {
-  return (static_cast<int>(shape) & 0b01);
-}
-
-constexpr Rect centerRect(const Point point, const CircleShape shape) {
-  return {point, {centerOffsetX(shape), centerOffsetY(shape)}};
-}
-
 template <typename Pixel>
 void drawFilledRect(
   const Surface<Pixel> dst,
@@ -84,6 +65,8 @@ void drawStrokedRect(
   fillCol(dst, pixel, {rect.p.x + rect.s.w - 2, rect.p.y + 1}, rect.p.y + rect.s.h - 2); // right
   fillRow(dst, pixel, {rect.p.x, rect.p.y + rect.s.h - 1}, rect.p.x + rect.s.w - 1); // bottom
 }
+
+// @TODO radius 6
 
 template <typename Pixel>
 void drawFilledCircle(
@@ -245,7 +228,7 @@ void drawLine(Point p1, const Point p2, Func func) {
 template <typename Pixel>
 void drawLine(
   const Surface<Pixel> dst,
-  const Pixel pixel,
+  const identity_t<Pixel> pixel,
   const Point p1,
   const Point p2
 ) noexcept {
@@ -257,7 +240,7 @@ void drawLine(
 template <typename Pixel>
 void drawLine(
   const Surface<Pixel> dst,
-  const Pixel pixel,
+  const identity_t<Pixel> pixel,
   const Point p1,
   const Point p2,
   const int radius

@@ -19,6 +19,10 @@ struct Point {
   
   constexpr Size size() const noexcept;
   
+  constexpr Point operator-() const noexcept {
+    return {-x, -y};
+  }
+  
   constexpr Point operator+(const Point other) const noexcept {
     return {x + other.x, y + other.y};
   }
@@ -144,6 +148,25 @@ struct Rect {
     return !(*this == other);
   }
 };
+
+enum class CircleShape {
+  c1x1,
+  c1x2,
+  c2x1,
+  c2x2
+};
+
+constexpr int centerOffsetX(const CircleShape shape) {
+  return (static_cast<int>(shape) & 0b10) >> 1;
+}
+
+constexpr int centerOffsetY(const CircleShape shape) {
+  return (static_cast<int>(shape) & 0b01);
+}
+
+constexpr Rect centerRect(const Point point, const CircleShape shape) {
+  return {point, {centerOffsetX(shape), centerOffsetY(shape)}};
+}
 
 }
 
