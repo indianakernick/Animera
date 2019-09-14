@@ -22,11 +22,7 @@ using CellPtr = std::unique_ptr<Cell>;
 
 class Cell {
 public:
-  Cell() = default;
-  explicit Cell(QImage);
   Cell(QSize, Format);
-  
-  CellPtr clone() const;
   
   QImage image;
 };
