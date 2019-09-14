@@ -15,7 +15,7 @@ namespace gfx {
 
 // @TODO fixed order pixel formats
 
-struct FormatARGB {
+struct ARGB {
   using Pixel = uint32_t;
 
   static constexpr uint8_t red(const Pixel pixel) noexcept {
@@ -51,8 +51,8 @@ struct FormatARGB {
   }
 };
 
-template <typename Target = FormatARGB>
-struct FormatI {
+template <typename Target = ARGB>
+struct I {
   const typename Target::Pixel *data;
   
   using Pixel = uint8_t;
@@ -63,7 +63,7 @@ struct FormatI {
   }
 };
 
-struct FormatYA {
+struct YA {
   using Pixel = uint16_t;
 
   static constexpr uint8_t gray(const Pixel pixel) noexcept {
@@ -87,7 +87,7 @@ struct FormatYA {
   }
 };
 
-struct FormatY {
+struct Y {
   using Pixel = uint8_t;
   
   static constexpr Color color(const Pixel pixel) noexcept {
