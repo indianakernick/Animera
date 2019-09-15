@@ -43,9 +43,9 @@ public:
     Q_EMIT resized();
   }
   
-  void setSize(const Format format, const QSize size) {
+  void setSize(const QSize size) {
     overlay = {size, QImage::Format_ARGB32};
-    editor = {size, qimageFormat(format)};
+    editor = {size, QImage::Format_ARGB32};
     clearImage(overlay);
     clearImage(editor);
     adjustScale();
@@ -308,7 +308,7 @@ void EditorWidget::setPalette(const PaletteCSpan newPalette) {
 void EditorWidget::initCanvas(const Format newFormat, const QSize newSize) {
   format = newFormat;
   size = newSize;
-  view->setSize(format, size);
+  view->setSize(size);
   Q_EMIT overlayChanged(view->getOverlay());
 }
 
