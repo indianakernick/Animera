@@ -26,94 +26,78 @@ void eachImage(const Frame &frame, Func func) {
 }
 
 template <typename Format>
-void compositeColor(gfx::Surface<gfx::Pixel<Format>> output, const Frame &frame) {
+using Surface = gfx::Surface<gfx::Pixel<Format>>;
+
+template <typename Format>
+void compositeColor(Surface<Format> output, const Frame &frame) {
   eachImage(frame, [output](const QImage &image) {
-    porterDuff(
+    gfx::porterDuffRegion(
       gfx::mode_src_over,
       output,
       makeCSurface<PixelRgba>(image),
       Format{},
-      gfx::ARGB{}
+      gfx::ARGB{},
+      convert(image.offset())
     );
   });
 }
 
 template <typename Format>
-void compositePalette(gfx::Surface<gfx::Pixel<Format>> output, const Frame &frame, PaletteCSpan palette) {
+void compositePalette(Surface<Format> output, const Frame &frame, PaletteCSpan palette) {
   gfx::I<> format{palette.data()};
   eachImage(frame, [output, format](const QImage &image) {
-    porterDuff(
+    gfx::porterDuffRegion(
       gfx::mode_src_over,
       output,
       makeCSurface<PixelIndex>(image),
       Format{},
-      format
+      format,
+      convert(image.offset())
     );
   });
 }
 
 template <typename Format>
-void compositeGray(gfx::Surface<gfx::Pixel<Format>> output, const Frame &frame) {
+void compositeGray(Surface<Format> output, const Frame &frame) {
   eachImage(frame, [output](const QImage &image) {
-    porterDuff(
+    gfx::porterDuffRegion(
       gfx::mode_src_over,
       output,
       makeCSurface<PixelGray>(image),
       Format{},
-      gfx::YA{}
+      gfx::YA{},
+      convert(image.offset())
     );
   });
-}
-
-template <typename Pixel>
-QImage::Format qimageFormat();
-
-template <>
-QImage::Format qimageFormat<uint8_t>() {
-  return QImage::Format_Grayscale8;
-}
-
-template <>
-QImage::Format qimageFormat<uint16_t>() {
-  return QImage::Format_Grayscale16;
-}
-
-template <>
-QImage::Format qimageFormat<uint32_t>() {
-  return QImage::Format_ARGB32;
 }
 
 }
 
 template <typename PxFmt>
-QImage compositeFrame(
+void compositeFrame(
+  QImage &dst,
   PaletteCSpan palette,
   const Frame &frame,
-  const QSize size,
   const Format format
 ) {
-  QImage output{size, qimageFormat<typename PxFmt::Pixel>()};
-  clearImage(output);
-  auto outputSurface = makeSurface<typename PxFmt::Pixel>(output);
+  auto dstSurface = makeSurface<typename PxFmt::Pixel>(dst);
   
   switch (format) {
     case Format::rgba:
-      compositeColor<PxFmt>(outputSurface, frame);
+      compositeColor<PxFmt>(dstSurface, frame);
       break;
     case Format::index:
-      compositePalette<PxFmt>(outputSurface, frame, palette);
+      compositePalette<PxFmt>(dstSurface, frame, palette);
       break;
     case Format::gray:
-      compositeGray<PxFmt>(outputSurface, frame);
+      compositeGray<PxFmt>(dstSurface, frame);
       break;
     default: Q_UNREACHABLE();
   }
-
-  return output;
 }
 
-template QImage compositeFrame<gfx::ARGB>(PaletteCSpan, const Frame &, QSize, Format);
-template QImage compositeFrame<gfx::YA>(PaletteCSpan, const Frame &, QSize, Format);
+template void compositeFrame<gfx::ARGB>(QImage &, PaletteCSpan, const Frame &, Format);
+template void compositeFrame<gfx::YA>(QImage &, PaletteCSpan, const Frame &, Format);
 
 void compositeOverlay(QImage &drawing, const QImage &overlay) {
   porterDuff(

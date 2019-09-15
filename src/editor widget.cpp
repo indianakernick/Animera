@@ -33,11 +33,6 @@ public:
     CONNECT(parent->verticalScrollBar(),   actionTriggered, this, updateMouse);
   }
   
-  void setImage(const QImage &img) {
-    editor = img;
-    repaint();
-  }
-  
   void adjustScale() {
     const QSize size = overlay.size();
     const QSize viewSize = parent->viewport()->size();
@@ -48,9 +43,11 @@ public:
     Q_EMIT resized();
   }
   
-  void setSize(const QSize size) {
-    overlay = QImage{size, QImage::Format_ARGB32};
+  void setSize(const Format format, const QSize size) {
+    overlay = {size, QImage::Format_ARGB32};
+    editor = {size, qimageFormat(format)};
     clearImage(overlay);
+    clearImage(editor);
     adjustScale();
   }
   
@@ -60,6 +57,9 @@ public:
   
   QImage *getOverlay() {
     return &overlay;
+  }
+  QImage &getTarget() {
+    return editor;
   }
   
   void setScale(const int newScale) {
@@ -281,7 +281,9 @@ EditorWidget::EditorWidget(QWidget *parent)
 }
 
 void EditorWidget::composite() {
-  view->setImage(compositeFrame(palette, frame, size, format));
+  clearImage(view->getTarget());
+  compositeFrame(view->getTarget(), palette, frame, format);
+  view->repaint();
 }
 
 void EditorWidget::compositeOverlay() {
@@ -306,7 +308,7 @@ void EditorWidget::setPalette(const PaletteCSpan newPalette) {
 void EditorWidget::initCanvas(const Format newFormat, const QSize newSize) {
   format = newFormat;
   size = newSize;
-  view->setSize(newSize);
+  view->setSize(format, size);
   Q_EMIT overlayChanged(view->getOverlay());
 }
 

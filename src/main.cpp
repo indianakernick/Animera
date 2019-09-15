@@ -2013,7 +2013,7 @@ int main(int argc, char **argv) {
 #if !BUG_TEST
 
 int main(int argc, char **argv) {
-  
+
 #if BENCHMARK
 
   /*Image img;

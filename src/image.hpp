@@ -34,6 +34,24 @@ constexpr QImage::Format qimageFormat(const Format format) {
   }
 }
 
+template <typename Pixel>
+constexpr QImage::Format qimageFormat();
+
+template <>
+constexpr QImage::Format qimageFormat<uint8_t>() {
+  return QImage::Format_Grayscale8;
+}
+
+template <>
+constexpr QImage::Format qimageFormat<uint16_t>() {
+  return QImage::Format_Grayscale16;
+}
+
+template <>
+constexpr QImage::Format qimageFormat<uint32_t>() {
+  return QImage::Format_ARGB32;
+}
+
 using PixelRgba = QRgb;
 using PixelIndex = uint8_t;
 using PixelGray = uint16_t;

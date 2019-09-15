@@ -169,11 +169,13 @@ Error Timeline::exportFile(
   const Frame &frame,
   const CellPos pos
 ) const {
-  QImage result;
+  // @TODO don't allocate every time this is called
+  QImage result{canvasSize, qimageFormat(canvasFormat)};
+  clearImage(result);
   if (canvasFormat == Format::gray) {
-    result = compositeFrame<gfx::YA>(palette, frame, canvasSize, canvasFormat);
+    compositeFrame<gfx::YA>(result, palette, frame, canvasFormat);
   } else {
-    result = compositeFrame<gfx::ARGB>(palette, frame, canvasSize, canvasFormat);
+    compositeFrame<gfx::ARGB>(result, palette, frame, canvasFormat);
   }
   return exportFile(options, palette, result, pos);
 }
