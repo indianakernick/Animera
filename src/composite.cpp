@@ -25,6 +25,10 @@ void eachImage(const Frame &frame, Func func) {
   for (auto c = frame.crbegin(); c != frame.crend(); ++c) {
     const Cell &cell = **c;
     if (cell) {
+      // @TODO remove
+      QImage dup = cell.image;
+      dup.fill(qRgba(127, 127, 127, 63));
+      func(dup);
       func(cell.image);
     }
   }
