@@ -16,8 +16,7 @@
 
 class Cell;
 
-// @TODO use std::deque
-// Were using std::unique_ptr because we need stable pointers
+// A null pointer to a cell is a null cell
 using CellPtr = std::unique_ptr<Cell>;
 
 class Cell {
