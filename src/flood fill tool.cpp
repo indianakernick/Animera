@@ -22,11 +22,11 @@ void FloodFillTool::mouseLeave(const ToolLeaveEvent &) {
 }
 
 void FloodFillTool::mouseDown(const ToolMouseEvent &event) {
-  ctx->requireCell();
   clearImage(*ctx->overlay);
   drawSquarePoint(*ctx->overlay, tool_overlay_color, event.pos);
   ctx->showStatus(StatusMsg{}.appendLabeled(event.pos));
   const QRgb color = ctx->selectColor(event.button);
+  ctx->requireCell(toRect(ctx->size));
   ctx->emitChanges(drawFloodFill(ctx->cell->image, color, event.pos));
   ctx->finishChange();
 }
