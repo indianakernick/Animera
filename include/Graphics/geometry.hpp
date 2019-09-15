@@ -168,6 +168,13 @@ constexpr Rect centerRect(const Point point, const CircleShape shape) {
   return {point, {1 + centerOffsetX(shape), 1 + centerOffsetY(shape)}};
 }
 
+constexpr Rect circleRect(const Point ctr, const int rad, const CircleShape shape = gfx::CircleShape::c1x1) {
+  return {
+    {ctr.x - rad, ctr.y - rad},
+    {2 * rad + 1 + centerOffsetX(shape), 2 * rad + 1 + centerOffsetY(shape)}
+  };
+}
+
 }
 
 #endif

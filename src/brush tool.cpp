@@ -10,6 +10,7 @@
 
 #include "cell.hpp"
 #include "painting.hpp"
+#include "graphics convert.hpp"
 
 void BrushTool::detachCell() {
   ctx->clearStatus();
@@ -45,6 +46,7 @@ void BrushTool::mouseMove(const ToolMouseEvent &event) {
 
 void BrushTool::mouseUp(const ToolMouseEvent &event) {
   symPointStatus(event.pos);
+  ctx->growCell(symPointRect(event.pos));
   ctx->emitChanges(symLine(ctx->cell->image, color, {lastPos, event.pos}));
   ctx->finishChange();
 }
@@ -126,30 +128,17 @@ bool BrushTool::symLine(QImage &img, const QRgb col, const QLine line) {
   return drawn;
 }
 
-namespace {
-
-QRect circleRect(const QPoint ctr, const int rad, const gfx::CircleShape shape = gfx::CircleShape::c1x1) {
-  return {
-    ctr.x() - rad,
-    ctr.y() - rad,
-    2 * rad + gfx::centerOffsetX(shape),
-    2 * rad + gfx::centerOffsetY(shape)
-  };
-}
-
-}
-
 QRect BrushTool::symPointRect(const QPoint point) {
   const QPoint refl = reflectXY(ctx->size, point);
   QRect rect = toRect(point);
   if (test_flag(mode, SymmetryMode::hori)) {
-    rect = rect.united(circleRect({refl.x(), point.y()}, radius));
+    rect = rect.united(convert(gfx::circleRect({refl.x(), point.y()}, radius)));
   }
   if (test_flag(mode, SymmetryMode::vert)) {
-    rect = rect.united(circleRect({point.x(), refl.y()}, radius));
+    rect = rect.united(convert(gfx::circleRect({point.x(), refl.y()}, radius)));
   }
   if (test_flag(mode, SymmetryMode::both)) {
-    rect = rect.united(circleRect(refl, radius));
+    rect = rect.united(convert(gfx::circleRect(convert(refl), radius)));
   }
   return rect;
 }

@@ -13,6 +13,7 @@
 #include "composite.hpp"
 #include <Graphics/mask.hpp>
 #include "surface factory.hpp"
+#include "graphics convert.hpp"
 #include <Graphics/flood fill.hpp>
 
 void RectangleSelectTool::detachCell() {

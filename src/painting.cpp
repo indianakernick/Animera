@@ -12,6 +12,7 @@
 #include <QtGui/qpainter.h>
 #include <Graphics/draw.hpp>
 #include "surface factory.hpp"
+#include "graphics convert.hpp"
 
 bool drawSquarePoint(QImage &img, const QRgb color, QPoint pos, const gfx::CircleShape shape) {
   pos -= img.offset();

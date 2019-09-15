@@ -1659,6 +1659,7 @@ bool drawStrokedEllipse(QImage &img, const QRgb color, const QRect ellipse) {
 #include <Graphics/copy.hpp>
 #include <Graphics/mask.hpp>
 #include "surface factory.hpp"
+#include "graphics convert.hpp"
 #include <Graphics/convert.hpp>
 
 void blitMaskImageNew(QImage &dst, const QImage &mask, const QImage &src, const QPoint pos) {

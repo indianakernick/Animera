@@ -137,6 +137,7 @@
 		45161F0722F15D720036BBED /* text button.anim */ = {isa = PBXFileReference; lastKnownFileType = file; path = "text button.anim"; sourceTree = "<group>"; };
 		45161F0A22F161170036BBED /* text button.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = "text button.pbm"; sourceTree = "<group>"; };
 		4520A828232B424B009FCD1F /* transform.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = transform.cpp; sourceTree = "<group>"; };
+		45259062232E0D3600FE38A2 /* graphics convert.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "graphics convert.hpp"; sourceTree = "<group>"; };
 		45288B6022FA8AAC008FB52D /* libz.1.2.11.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.11.dylib; path = ../../../../../../usr/local/Cellar/zlib/1.2.11/lib/libz.1.2.11.dylib; sourceTree = "<group>"; };
 		452926E222BB607E00B17E0D /* screenshot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = screenshot.png; sourceTree = "<group>"; };
 		452926E422BB607E00B17E0D /* add.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = add.pbm; sourceTree = "<group>"; };
@@ -397,6 +398,7 @@
 			isa = PBXGroup;
 			children = (
 				45DECE1422813AA2000920A9 /* surface factory.hpp */,
+				45259062232E0D3600FE38A2 /* graphics convert.hpp */,
 			);
 			name = Graphics;
 			sourceTree = "<group>";

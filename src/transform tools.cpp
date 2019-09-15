@@ -12,6 +12,7 @@
 #include <Graphics/fill.hpp>
 #include <Graphics/mask.hpp>
 #include "surface factory.hpp"
+#include "graphics convert.hpp"
 #include <Graphics/transform.hpp>
 
 // @TODO do we need to know the difference between switching tools and switching cells?

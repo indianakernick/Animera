@@ -11,7 +11,7 @@
 #include <cmath>
 #include "cell.hpp"
 #include "painting.hpp"
-#include "surface factory.hpp"
+#include "graphics convert.hpp"
 
 template <typename Derived>
 DragPaintTool<Derived>::~DragPaintTool() {

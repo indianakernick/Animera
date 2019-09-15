@@ -84,20 +84,4 @@ template <typename Image, typename Func>
   return visitSurfaces(image, func);
 }
 
-constexpr gfx::Point convert(const QPoint p) {
-  return {p.x(), p.y()};
-}
-
-constexpr gfx::Size convert(const QSize s) {
-  return {s.width(), s.height()};
-}
-
-constexpr gfx::Rect convert(const QRect r) {
-  return {{r.x(), r.y()}, {r.width(), r.height()}};
-}
-
-constexpr QRect convert(const gfx::Rect r) {
-  return {r.p.x, r.p.y, r.s.w, r.s.h};
-}
-
 #endif

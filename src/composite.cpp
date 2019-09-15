@@ -13,6 +13,7 @@
 #include <Graphics/fill.hpp>
 #include <Graphics/mask.hpp>
 #include "surface factory.hpp"
+#include "graphics convert.hpp"
 #include <Graphics/transform.hpp>
 #include <Graphics/porter duff.hpp>
 
