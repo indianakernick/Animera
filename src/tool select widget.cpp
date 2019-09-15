@@ -120,8 +120,9 @@ void ToolSelectWidget::setPalette(const PaletteCSpan palette) {
   ctx.palette = palette;
 }
 
-void ToolSelectWidget::initCanvas(const Format format) {
+void ToolSelectWidget::initCanvas(const Format format, const QSize size) {
   ctx.format = format;
+  ctx.size = size;
 }
 
 void ToolSelectWidget::changeTool(ToolWidget *widget, Tool *tool) {

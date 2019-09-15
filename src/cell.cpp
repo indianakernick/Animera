@@ -8,7 +8,8 @@
 
 #include "cell.hpp"
 
-Cell::Cell(const QSize size, const Format format)
-  : image{size, qimageFormat(format)} {
-  clearImage(image);
+// @TODO remove this hack
+Cell::Cell(const Format format)
+  : image{1, 1, qimageFormat(format)} {
+  image.setPixel(0, 0, 0);
 }

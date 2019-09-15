@@ -224,3 +224,22 @@ void writeOverlay(
   writeOverlay(palette, format, overlay, source);
   gfx::maskClip(makeSurface<PixelRgba>(overlay), makeCSurface<PixelMask>(mask));
 }
+
+void growCell(Cell *cell, const Format format, const QRect rect) {
+  assert(cell);
+  if (cell->image.isNull()) {
+    cell->image = {rect.size(), qimageFormat(format)};
+    cell->image.setOffset(rect.topLeft());
+    clearImage(cell->image);
+    return;
+  }
+  const QRect cellRect = {cell->image.offset(), cell->image.size()};
+  if (!cellRect.contains(rect)) {
+    const QRect newRect = cellRect.united(rect);
+    QImage newImage{newRect.size(), cell->image.format()};
+    clearImage(newImage);
+    blitImage(newImage, cell->image, cellRect.topLeft() - newRect.topLeft());
+    newImage.setOffset(newRect.topLeft());
+    cell->image = newImage;
+  }
+}

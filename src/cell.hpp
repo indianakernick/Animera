@@ -21,8 +21,9 @@ using CellPtr = std::unique_ptr<Cell>;
 
 class Cell {
 public:
-  Cell(QSize, Format);
-  
+  Cell() = default;
+  explicit Cell(Format);
+
   QImage image;
 };
 

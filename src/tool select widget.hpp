@@ -41,7 +41,7 @@ public Q_SLOTS:
   void setCell(Cell *);
   void setColors(ToolColors);
   void setPalette(PaletteCSpan);
-  void initCanvas(Format);
+  void initCanvas(Format, QSize);
   
 private Q_SLOTS:
   void changeTool(ToolWidget *, Tool *);

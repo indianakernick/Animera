@@ -64,6 +64,7 @@ public:
   QImage *overlay = nullptr;
   PaletteCSpan palette;
   Format format;
+  QSize size;
   ToolColors colors;
   
   void emitChanges(ToolChanges) const;

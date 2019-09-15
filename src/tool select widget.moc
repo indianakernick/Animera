@@ -104,8 +104,8 @@ static const uint qt_meta_data_ToolSelectWidget[] = {
       17,    1,  121,    2, 0x0a /* Public */,
       19,    1,  124,    2, 0x0a /* Public */,
       21,    1,  127,    2, 0x0a /* Public */,
-      23,    1,  130,    2, 0x0a /* Public */,
-      25,    2,  133,    2, 0x08 /* Private */,
+      23,    2,  130,    2, 0x0a /* Public */,
+      25,    2,  135,    2, 0x08 /* Private */,
 
  // signals: parameters
     QMetaType::Void,
@@ -124,7 +124,7 @@ static const uint qt_meta_data_ToolSelectWidget[] = {
     QMetaType::Void, 0x80000000 | 18,    2,
     QMetaType::Void, 0x80000000 | 20,    2,
     QMetaType::Void, 0x80000000 | 22,    2,
-    QMetaType::Void, 0x80000000 | 24,    2,
+    QMetaType::Void, 0x80000000 | 24, QMetaType::QSize,    2,    2,
     QMetaType::Void, 0x80000000 | 26, 0x80000000 | 27,    2,    2,
 
        0        // eod
@@ -150,7 +150,7 @@ void ToolSelectWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
         case 11: _t->setCell((*reinterpret_cast< Cell*(*)>(_a[1]))); break;
         case 12: _t->setColors((*reinterpret_cast< ToolColors(*)>(_a[1]))); break;
         case 13: _t->setPalette((*reinterpret_cast< PaletteCSpan(*)>(_a[1]))); break;
-        case 14: _t->initCanvas((*reinterpret_cast< Format(*)>(_a[1]))); break;
+        case 14: _t->initCanvas((*reinterpret_cast< Format(*)>(_a[1])),(*reinterpret_cast< QSize(*)>(_a[2]))); break;
         case 15: _t->changeTool((*reinterpret_cast< ToolWidget*(*)>(_a[1])),(*reinterpret_cast< Tool*(*)>(_a[2]))); break;
         default: ;
         }

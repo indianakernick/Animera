@@ -120,7 +120,6 @@ private:
   Format canvasFormat;
   std::vector<LayerCells> clipboard;
   
-  CellPtr makeCell() const;
   Cell *getCell(CellPos);
   Frame getFrame(FrameIdx) const;
   LayerIdx layerCount() const;

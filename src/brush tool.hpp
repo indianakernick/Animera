@@ -31,6 +31,7 @@ private:
   void symPointStatus(QPoint);
   bool symPoint(QImage &, QRgb, QPoint);
   bool symLine(QImage &, QRgb, QLine);
+  QRect symPointRect(QPoint);
 };
 
 #endif

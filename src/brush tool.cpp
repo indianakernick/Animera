@@ -10,6 +10,7 @@
 
 #include "cell.hpp"
 #include "painting.hpp"
+#include "composite.hpp"
 
 void BrushTool::detachCell() {
   ctx->clearStatus();
@@ -28,6 +29,7 @@ void BrushTool::mouseDown(const ToolMouseEvent &event) {
   symPointStatus(event.pos);
   lastPos = event.pos;
   color = ctx->selectColor(event.button);
+  growCell(ctx->cell, ctx->format, symPointRect(lastPos));
   ctx->emitChanges(symPoint(ctx->cell->image, color, lastPos));
 }
 
@@ -38,6 +40,7 @@ void BrushTool::mouseMove(const ToolMouseEvent &event) {
   if (event.button == ButtonType::none) {
     return ctx->emitChanges(ToolChanges::overlay);
   }
+  growCell(ctx->cell, ctx->format, symPointRect(event.pos));
   ctx->emitChanges(symLine(ctx->cell->image, color, {lastPos, event.pos}));
   lastPos = event.pos;
 }
@@ -75,8 +78,7 @@ QPoint reflectXY(const QSize size, const QPoint point) {
 
 void BrushTool::symPointStatus(const QPoint point) {
   StatusMsg status;
-  const QSize size = ctx->overlay->size();
-  const QPoint refl = reflectXY(size, point);
+  const QPoint refl = reflectXY(ctx->size, point);
   status.appendLabeled(point);
   if (test_flag(mode, SymmetryMode::hori)) {
     status.append(' ');
@@ -109,7 +111,7 @@ bool BrushTool::symPoint(QImage &img, const QRgb col, const QPoint point) {
 }
 
 bool BrushTool::symLine(QImage &img, const QRgb col, const QLine line) {
-  const QSize size = img.size();
+  const QSize size = ctx->size;
   bool drawn = drawLine(img, col, line, radius);
   if (test_flag(mode, SymmetryMode::hori)) {
     const QLine refl = {reflectX(size, line.p1()), reflectX(size, line.p2())};
@@ -124,4 +126,32 @@ bool BrushTool::symLine(QImage &img, const QRgb col, const QLine line) {
     drawn |= drawLine(img, col, refl, radius);
   }
   return drawn;
+}
+
+namespace {
+
+QRect circleRect(const QPoint ctr, const int rad, const gfx::CircleShape shape = gfx::CircleShape::c1x1) {
+  return {
+    ctr.x() - rad,
+    ctr.y() - rad,
+    2 * rad + gfx::centerOffsetX(shape),
+    2 * rad + gfx::centerOffsetY(shape)
+  };
+}
+
+}
+
+QRect BrushTool::symPointRect(const QPoint point) {
+  const QPoint refl = reflectXY(ctx->size, point);
+  QRect rect = toRect(point);
+  if (test_flag(mode, SymmetryMode::hori)) {
+    rect = rect.united(circleRect({refl.x(), point.y()}, radius));
+  }
+  if (test_flag(mode, SymmetryMode::vert)) {
+    rect = rect.united(circleRect({point.x(), refl.y()}, radius));
+  }
+  if (test_flag(mode, SymmetryMode::both)) {
+    rect = rect.united(circleRect(refl, radius));
+  }
+  return rect;
 }

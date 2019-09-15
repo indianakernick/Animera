@@ -258,8 +258,8 @@ Error writeCHDR(QIODevice &dev, const CellSpan &span) try {
   writer.begin(chunk_cell_header);
   writer.writeInt(static_cast<uint32_t>(span.len));
   if (span.cell) {
-    writer.writeInt(0); // x
-    writer.writeInt(0); // y
+    writer.writeInt(span.cell->image.offset().x());
+    writer.writeInt(span.cell->image.offset().y());
     writer.writeInt(span.cell->image.width());
     writer.writeInt(span.cell->image.height());
   }
@@ -421,13 +421,15 @@ Error readCHDR(QIODevice &dev, CellSpan &span, const Format format) try {
   span.len = static_cast<FrameIdx>(reader.readInt());
   if (+span.len <= 0) return "Negative cell span length";
   if (start.length == 5 * file_int_size) {
-    reader.readInt(); // x
-    reader.readInt(); // y
+    const int x = reader.readInt();
+    const int y = reader.readInt();
     const int width = reader.readInt();
     if (width <= 0) return "Negative cell width";
     const int height = reader.readInt();
     if (height <= 0) return "Negative cell height";
-    span.cell = std::make_unique<Cell>(QSize{width, height}, format);
+    span.cell = std::make_unique<Cell>();
+    span.cell->image = {width, height, qimageFormat(format)};
+    span.cell->image.setOffset({x, y});
   }
   if (Error err = reader.end(); err) return err;
   return {};

@@ -40,4 +40,7 @@ void writeOverlay(PaletteCSpan, Format, QImage &, const QImage &);
 /// Colors are converted to grayscale
 void writeOverlay(PaletteCSpan, Format, QImage &, const QImage &, const QImage &);
 
+/// Ensure that the cell is large enough to enclose the given rectangle
+void growCell(Cell *, Format, QRect);
+
 #endif

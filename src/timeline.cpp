@@ -29,7 +29,7 @@ void Timeline::initDefault() {
   frameCount = FrameIdx{1};
   changeFrameCount();
   Layer layer;
-  layer.spans.pushCell(makeCell());
+  layer.spans.pushCell(std::make_unique<Cell>(canvasFormat));
   layer.name = "Layer 0";
   layers.push_back(std::move(layer));
   selection = empty_rect;
@@ -424,7 +424,7 @@ void Timeline::splitCell() {
 }
 
 void Timeline::requestCell() {
-  layers[+currPos.l].spans.replaceNew(currPos.f, makeCell());
+  layers[+currPos.l].spans.replaceNew(currPos.f, std::make_unique<Cell>(canvasFormat));
   changeSpan(currPos.l);
   changeFrame();
   changePos();
@@ -503,10 +503,6 @@ void Timeline::pasteSelected() {
   changeFrame();
   changePos();
   Q_EMIT modified();
-}
-
-CellPtr Timeline::makeCell() const {
-  return std::make_unique<Cell>(canvasSize, canvasFormat);
 }
 
 Cell *Timeline::getCell(const CellPos pos) {
