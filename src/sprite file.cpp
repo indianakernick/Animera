@@ -257,7 +257,7 @@ Error writeCHDR(QIODevice &dev, const CellSpan &span) try {
   ChunkWriter writer{dev};
   writer.begin(chunk_cell_header);
   writer.writeInt(static_cast<uint32_t>(span.len));
-  if (span.cell) {
+  if (*span.cell) {
     writer.writeInt(span.cell->image.offset().x());
     writer.writeInt(span.cell->image.offset().y());
     writer.writeInt(span.cell->image.width());

@@ -7,9 +7,3 @@
 //
 
 #include "cell.hpp"
-
-// @TODO remove this hack
-Cell::Cell(const Format format)
-  : image{1, 1, qimageFormat(format)} {
-  image.setPixel(0, 0, 0);
-}

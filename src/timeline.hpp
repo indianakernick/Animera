@@ -85,7 +85,7 @@ public Q_SLOTS:
   void clearCell();
   void extendCell();
   void splitCell();
-  void requestCell();
+  void growCell(QRect);
   
   void setCurrPos(CellPos);
   void setVisibility(LayerIdx, bool);

@@ -57,7 +57,7 @@ Q_SIGNALS:
   void overlayModified() const;
   void shouldShowPerm(std::string_view) const;
   void changingAction() const;
-  void cellRequested() const;
+  void cellRequested(QRect) const;
 
 public:
   Cell *cell = nullptr;
@@ -69,7 +69,8 @@ public:
   
   void emitChanges(ToolChanges) const;
   void emitChanges(bool) const;
-  void requireCell() const;
+  void requireCell(QRect = {}) const;
+  void growCell(QRect) const;
   QRgb selectColor(ButtonType) const;
   void showStatus(const StatusMsg &) const;
   void clearStatus() const;

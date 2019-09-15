@@ -233,7 +233,6 @@ void Window::populateMenubar() {
 
 void Window::connectSignals() {
   CONNECT(sprite.timeline, currCellChanged,     tools,           setCell);
-  CONNECT(sprite.timeline, currCellChanged,     clear,           setCell);
   CONNECT(sprite.timeline, currCellChanged,     sample,          setCell);
   CONNECT(sprite.timeline, currCellChanged,     undo,            setCell);
   CONNECT(sprite.timeline, frameChanged,        editor,          setFrame);
@@ -275,7 +274,7 @@ void Window::connectSignals() {
   CONNECT(tools,           cellModified,        editor,          composite);
   CONNECT(tools,           overlayModified,     editor,          compositeOverlay);
   CONNECT(tools,           shouldShowPerm,      statusBar,       showPerm);
-  CONNECT(tools,           cellRequested,       sprite.timeline, requestCell);
+  CONNECT(tools,           cellRequested,       sprite.timeline, growCell);
   CONNECT(tools,           changingAction,      undo,            cellModified);
   CONNECT(tools,           changingAction,      this,            modify);
   
@@ -285,18 +284,13 @@ void Window::connectSignals() {
   CONNECT(editor,          mouseMove,           tools,           mouseMove);
   CONNECT(editor,          mouseUp,             tools,           mouseUp);
   CONNECT(editor,          keyPress,            tools,           keyPress);
-  CONNECT(editor,          keyPress,            clear,           keyPress);
   CONNECT(editor,          mouseMove,           sample,          mouseMove);
   CONNECT(editor,          keyPress,            sample,          keyPress);
   CONNECT(editor,          keyPress,            undo,            keyPress);
   
   CONNECT(colors,          colorsChanged,       tools,           setColors);
-  CONNECT(colors,          colorsChanged,       clear,           setColors);
   CONNECT(colors,          shouldAttachColor,   colorPicker,     attach);
   CONNECT(colors,          shouldAttachIndex,   palette,         attachIndex);
-  
-  CONNECT(clear,           cellModified,        tools,           cellModified);
-  CONNECT(clear,           cellModified,        this,            modify);
   
   CONNECT(sample,          colorChanged,        colorPicker,     setColor);
   

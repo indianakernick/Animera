@@ -8,6 +8,9 @@
 
 #include "tool.hpp"
 
+#include "cell.hpp"
+#include "composite.hpp"
+
 void ToolCtx::emitChanges(const ToolChanges changes) const {
   if (changes == ToolChanges::cell || changes == ToolChanges::cell_overlay) {
     Q_EMIT cellModified();
@@ -24,8 +27,12 @@ void ToolCtx::emitChanges(const bool drawn) const {
   }
 }
 
-void ToolCtx::requireCell() const {
-  if (!cell) Q_EMIT cellRequested();
+void ToolCtx::requireCell(const QRect rect) const {
+  Q_EMIT cellRequested(rect);
+}
+
+void ToolCtx::growCell(const QRect rect) const {
+  ::growCell(*cell, format, rect);
 }
 
 QRgb ToolCtx::selectColor(const ButtonType button) const {

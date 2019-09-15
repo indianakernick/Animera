@@ -16,15 +16,16 @@
 
 class Cell;
 
-// A null pointer to a cell is a null cell
+// we need stable cell pointers
 using CellPtr = std::unique_ptr<Cell>;
 
 class Cell {
 public:
-  Cell() = default;
-  explicit Cell(Format);
-
   QImage image;
+  
+  explicit operator bool() const {
+    return !image.isNull();
+  }
 };
 
 enum class LayerIdx {};

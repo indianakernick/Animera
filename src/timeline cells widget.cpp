@@ -114,7 +114,7 @@ void CellsWidget::setLayer(const LayerIdx idx, std::span<const CellSpan> spans) 
   int x = cell_icon_pad;
   const int y = +idx * cell_height;
   for (const CellSpan &span : spans) {
-    if (span.cell) {
+    if (*span.cell) {
       if (span.len == FrameIdx{1}) {
         painter.drawPixmap(x, y + cell_icon_pad, cellPix);
         x += cell_width;

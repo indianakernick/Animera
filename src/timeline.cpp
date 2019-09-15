@@ -29,7 +29,7 @@ void Timeline::initDefault() {
   frameCount = FrameIdx{1};
   changeFrameCount();
   Layer layer;
-  layer.spans.pushCell(std::make_unique<Cell>(canvasFormat));
+  layer.spans.pushCell(std::make_unique<Cell>());
   layer.name = "Layer 0";
   layers.push_back(std::move(layer));
   selection = empty_rect;
@@ -56,7 +56,7 @@ Error Timeline::serializeBody(QIODevice &dev) const {
     if (Error err = writeLHDR(dev, layer); err) return err;
     for (const CellSpan &span : layer.spans) {
       if (Error err = writeCHDR(dev, span); err) return err;
-      if (span.cell) {
+      if (*span.cell) {
         if (Error err = writeCDAT(dev, span.cell->image, canvasFormat); err) {
           return err;
         }
@@ -85,7 +85,7 @@ Error Timeline::deserializeBody(QIODevice &dev) {
     if (Error err = readLHDR(dev, layer); err) return err;
     for (CellSpan &span : layer.spans) {
       if (Error err = readCHDR(dev, span, canvasFormat); err) return err;
-      if (span.cell) {
+      if (*span.cell) {
         if (Error err = readCDAT(dev, span.cell->image, canvasFormat); err) {
           return err;
         }
@@ -197,8 +197,8 @@ Error Timeline::exportCompRect(
     frame.clear();
     for (LayerIdx l = {}; l != rectLayers; ++l) {
       if (!layers[+(l + rect.minL)].visible) continue;
-      if (const Cell *cell = *iterators[+l]; cell) {
-        frame.push_back(cell);
+      if (const Cell *cell = *iterators[+l]; *cell) {
+        frame.push_back(*iterators[+l]);
       }
       ++iterators[+l];
     }
@@ -220,7 +220,7 @@ Error Timeline::exportRect(
     if (!layer.visible) continue;
     LayerCells::ConstIterator iter = layer.spans.find(rect.minF);
     for (FrameIdx f = rect.minF; f <= rect.maxF; ++f) {
-      if (const Cell *cell = *iter; cell) {
+      if (const Cell *cell = *iter; *cell) {
         if (Error err = exportFile(options, palette, cell->image, {l, f}); err) {
           return err;
         }
@@ -371,7 +371,7 @@ void Timeline::insertNullFrame() {
   ++frameCount;
   changeFrameCount();
   for (LayerIdx l = {}; l != layerCount(); ++l) {
-    layers[+l].spans.insertNew(currPos.f, nullptr);
+    layers[+l].spans.insertNew(currPos.f, std::make_unique<Cell>());
     changeSpan(l);
   }
   Q_EMIT selectionChanged(selection);
@@ -401,7 +401,7 @@ void Timeline::removeFrame() {
 }
 
 void Timeline::clearCell() {
-  layers[+currPos.l].spans.replaceNew(currPos.f, nullptr);
+  layers[+currPos.l].spans.replaceNew(currPos.f, std::make_unique<Cell>());
   changeSpan(currPos.l);
   changeFrame();
   changePos();
@@ -423,8 +423,14 @@ void Timeline::splitCell() {
   Q_EMIT modified();
 }
 
-void Timeline::requestCell() {
-  layers[+currPos.l].spans.replaceNew(currPos.f, std::make_unique<Cell>(canvasFormat));
+void Timeline::growCell(const QRect rect) {
+  Cell &cell = *getCell(currPos);
+  if (cell) {
+    ::growCell(cell, canvasFormat, rect);
+    return;
+  }
+  layers[+currPos.l].spans.replaceNew(currPos.f, std::make_unique<Cell>());
+  ::growCell(cell, canvasFormat, rect);
   changeSpan(currPos.l);
   changeFrame();
   changePos();
@@ -514,9 +520,7 @@ Frame Timeline::getFrame(const FrameIdx pos) const {
   frame.reserve(layers.size());
   for (const Layer &layer : layers) {
     if (layer.visible) {
-      if (const Cell *cell = layer.spans.get(pos); cell) {
-        frame.push_back(cell);
-      }
+      frame.push_back(layer.spans.get(pos));
     }
   }
   return frame;

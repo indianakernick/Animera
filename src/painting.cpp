@@ -13,7 +13,8 @@
 #include <Graphics/draw.hpp>
 #include "surface factory.hpp"
 
-bool drawSquarePoint(QImage &img, const QRgb color, const QPoint pos, const gfx::CircleShape shape) {
+bool drawSquarePoint(QImage &img, const QRgb color, QPoint pos, const gfx::CircleShape shape) {
+  pos -= img.offset();
   visitSurface(img, [color, pos, shape](auto surface) {
     gfx::drawFilledRect(surface, color, gfx::centerRect(convert(pos), shape));
   });
@@ -29,37 +30,42 @@ bool drawRoundPoint(QImage &img, const QRgb color, const QPoint pos, const int r
   }
 }
 
-bool drawFloodFill(QImage &img, const QRgb color, const QPoint pos) {
+bool drawFloodFill(QImage &img, const QRgb color, QPoint pos) {
+  pos -= img.offset();
   if (!img.rect().contains(pos)) return false;
   return visitSurface(img, [pos, color](auto surface) {
     return gfx::drawFloodFill(surface, color, convert(pos));
   });
 }
 
-bool drawFilledCircle(QImage &img, const QRgb color, const QPoint center, const int radius, const gfx::CircleShape shape) {
+bool drawFilledCircle(QImage &img, const QRgb color, QPoint center, const int radius, const gfx::CircleShape shape) {
+  center -= img.offset();
   visitSurface(img, [center, radius, shape, color](auto surface) {
     gfx::drawFilledCircle(surface, color, convert(center), radius, shape);
   });
   return true;
 }
 
-bool drawStrokedCircle(QImage &img, const QRgb color, const QPoint center, const int radius, const int thickness, const gfx::CircleShape shape) {
+bool drawStrokedCircle(QImage &img, const QRgb color, QPoint center, const int radius, const int thickness, const gfx::CircleShape shape) {
   assert(thickness > 0);
+  center -= img.offset();
   visitSurface(img, [center, radius, thickness, shape, color](auto surface) {
     gfx::drawStrokedCircle(surface, color, convert(center), radius, radius - thickness + 1, shape);
   });
   return true;
 }
 
-bool drawFilledRect(QImage &img, const QRgb color, const QRect rect) {
+bool drawFilledRect(QImage &img, const QRgb color, QRect rect) {
+  rect.translate(-img.offset());
   visitSurface(img, [rect, color](auto surface) {
     gfx::drawFilledRect(surface, color, convert(rect));
   });
   return true;
 }
 
-bool drawStrokedRect(QImage &img, const QRgb color, const QRect rect, const int thickness) {
+bool drawStrokedRect(QImage &img, const QRgb color, QRect rect, const int thickness) {
   assert(thickness > 0);
+  rect.translate(-img.offset());
   if (!img.rect().intersects(rect)) return false;
   visitSurface(img, [rect, thickness, color](auto surface) {
     const QRect inner = rect.marginsRemoved({thickness, thickness, thickness, thickness});
@@ -68,7 +74,8 @@ bool drawStrokedRect(QImage &img, const QRgb color, const QRect rect, const int 
   return true;
 }
 
-bool drawLine(QImage &img, const QRgb color, const QLine line, const int radius) {
+bool drawLine(QImage &img, const QRgb color, QLine line, const int radius) {
+  line.translate(-img.offset());
   visitSurface(img, [line, radius, color](auto surface) {
     gfx::drawLine(surface, color, convert(line.p1()), convert(line.p2()), radius);
   });
@@ -79,8 +86,9 @@ bool drawFilledPolygon(
   QImage &img,
   const QRgb color,
   const Polygon &poly,
-  const QPoint offset
+  QPoint offset
 ) {
+  offset -= img.offset();
   std::vector<QPoint> shiftedPoly;
   shiftedPoly.reserve(poly.size());
   for (const QPoint &vertex : poly) {

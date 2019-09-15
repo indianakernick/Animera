@@ -10,7 +10,6 @@
 
 #include "cell.hpp"
 #include "painting.hpp"
-#include "composite.hpp"
 
 void BrushTool::detachCell() {
   ctx->clearStatus();
@@ -23,13 +22,12 @@ void BrushTool::mouseLeave(const ToolLeaveEvent &) {
 }
 
 void BrushTool::mouseDown(const ToolMouseEvent &event) {
-  ctx->requireCell();
   clearImage(*ctx->overlay);
   symPoint(*ctx->overlay, tool_overlay_color, event.pos);
   symPointStatus(event.pos);
   lastPos = event.pos;
   color = ctx->selectColor(event.button);
-  growCell(ctx->cell, ctx->format, symPointRect(lastPos));
+  ctx->requireCell(symPointRect(lastPos));
   ctx->emitChanges(symPoint(ctx->cell->image, color, lastPos));
 }
 
@@ -40,7 +38,7 @@ void BrushTool::mouseMove(const ToolMouseEvent &event) {
   if (event.button == ButtonType::none) {
     return ctx->emitChanges(ToolChanges::overlay);
   }
-  growCell(ctx->cell, ctx->format, symPointRect(event.pos));
+  ctx->growCell(symPointRect(event.pos));
   ctx->emitChanges(symLine(ctx->cell->image, color, {lastPos, event.pos}));
   lastPos = event.pos;
 }

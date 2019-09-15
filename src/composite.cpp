@@ -22,7 +22,10 @@ template <typename Func>
 void eachImage(const Frame &frame, Func func) {
   // Layer 0 is on top of layer 1
   for (auto c = frame.crbegin(); c != frame.crend(); ++c) {
-    func((*c)->image);
+    const Cell &cell = **c;
+    if (cell) {
+      func(cell.image);
+    }
   }
 }
 
@@ -226,34 +229,32 @@ void writeOverlay(
   gfx::maskClip(makeSurface<PixelRgba>(overlay), makeCSurface<PixelMask>(mask));
 }
 
-void growCell(Cell *cell, const Format format, const QRect rect) {
-  assert(cell);
-  if (cell->image.isNull()) {
-    cell->image = {rect.size(), qimageFormat(format)};
-    cell->image.setOffset(rect.topLeft());
-    clearImage(cell->image);
+void growCell(Cell &cell, const Format format, const QRect rect) {
+  if (!cell) {
+    cell.image = {rect.size(), qimageFormat(format)};
+    cell.image.setOffset(rect.topLeft());
+    clearImage(cell.image);
     return;
   }
-  const QRect cellRect = {cell->image.offset(), cell->image.size()};
+  const QRect cellRect = {cell.image.offset(), cell.image.size()};
   if (!cellRect.contains(rect)) {
     const QRect newRect = cellRect.united(rect);
-    QImage newImage{newRect.size(), cell->image.format()};
+    QImage newImage{newRect.size(), cell.image.format()};
     clearImage(newImage);
-    blitImage(newImage, cell->image, cellRect.topLeft() - newRect.topLeft());
+    blitImage(newImage, cell.image, cellRect.topLeft() - newRect.topLeft());
     newImage.setOffset(newRect.topLeft());
-    cell->image = std::move(newImage);
+    cell.image = std::move(newImage);
   }
 }
 
 // @TODO call this before saving
 // this might create some null cells so the timeline could be optimized too
-// while we're at it, we could optimize palette too
-void optimizeCell(Cell *cell) {
-  assert(cell);
-  if (cell->image.isNull()) return;
+// while we're at it, we could optimize palette as well
+void optimizeCell(Cell &cell) {
+  if (!cell) return;
   QPoint min = toPoint(std::numeric_limits<int>::max());
   QPoint max = toPoint(std::numeric_limits<int>::min());
-  visitSurface(cell->image, [&min, &max](auto image) {
+  visitSurface(cell.image, [&min, &max](auto image) {
     int y = 0;
     for (auto row : gfx::range(image)) {
       int x = 0;
@@ -271,10 +272,11 @@ void optimizeCell(Cell *cell) {
   });
   const QRect newRect{min, max};
   if (newRect.isEmpty()) {
-    cell->image = {};
+    cell.image = {};
+    return;
   }
-  QImage newImage{newRect.size(), cell->image.format()};
-  blitImage(newImage, cell->image, newRect.topLeft());
-  newImage.setOffset(newRect.topLeft() + cell->image.offset());
-  cell->image = std::move(newImage);
+  QImage newImage{newRect.size(), cell.image.format()};
+  blitImage(newImage, cell.image, newRect.topLeft());
+  newImage.setOffset(newRect.topLeft() + cell.image.offset());
+  cell.image = std::move(newImage);
 }

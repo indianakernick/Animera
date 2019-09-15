@@ -28,7 +28,7 @@ Q_SIGNALS:
   void overlayModified();
   void shouldShowPerm(std::string_view);
   void changingAction();
-  void cellRequested();
+  void cellRequested(QRect);
 
 public Q_SLOTS:
   void mouseLeave();

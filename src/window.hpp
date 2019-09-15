@@ -11,7 +11,6 @@
 
 #include "sprite.hpp"
 #include "undo object.hpp"
-#include "clear object.hpp"
 #include "export dialog.hpp"
 #include "sample object.hpp"
 #include "editor widget.hpp"
@@ -45,7 +44,6 @@ private:
   QSplitter splitter;
   Sprite sprite;
   UndoObject undo;
-  ClearObject clear;
   SampleObject sample;
   EditorWidget editor;
   PaletteWidget palette;

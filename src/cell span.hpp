@@ -53,7 +53,7 @@ public:
   }
   
   void pushNull(const FrameIdx len) {
-    spans.push_back({nullptr, len});
+    spans.push_back({std::make_unique<Cell>(), len});
   }
   void pushCell(CellPtr cell) {
     spans.push_back({std::move(cell)});

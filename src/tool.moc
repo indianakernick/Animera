@@ -66,14 +66,14 @@ static const uint qt_meta_data_ToolCtx[] = {
        3,    0,   40,    2, 0x06 /* Public */,
        4,    1,   41,    2, 0x06 /* Public */,
        6,    0,   44,    2, 0x06 /* Public */,
-       7,    0,   45,    2, 0x06 /* Public */,
+       7,    1,   45,    2, 0x06 /* Public */,
 
  // signals: parameters
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void, 0x80000000 | 5,    2,
     QMetaType::Void,
-    QMetaType::Void,
+    QMetaType::Void, QMetaType::QRect,    2,
 
        0        // eod
 };
@@ -88,7 +88,7 @@ void ToolCtx::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, voi
         case 1: _t->overlayModified(); break;
         case 2: _t->shouldShowPerm((*reinterpret_cast< std::string_view(*)>(_a[1]))); break;
         case 3: _t->changingAction(); break;
-        case 4: _t->cellRequested(); break;
+        case 4: _t->cellRequested((*reinterpret_cast< QRect(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -122,7 +122,7 @@ void ToolCtx::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, voi
             }
         }
         {
-            using _t = void (ToolCtx::*)() const;
+            using _t = void (ToolCtx::*)(QRect ) const;
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ToolCtx::cellRequested)) {
                 *result = 4;
                 return;
@@ -197,9 +197,10 @@ void ToolCtx::changingAction()const
 }
 
 // SIGNAL 4
-void ToolCtx::cellRequested()const
+void ToolCtx::cellRequested(QRect _t1)const
 {
-    QMetaObject::activate(const_cast< ToolCtx *>(this), &staticMetaObject, 4, nullptr);
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    QMetaObject::activate(const_cast< ToolCtx *>(this), &staticMetaObject, 4, _a);
 }
 QT_WARNING_POP
 QT_END_MOC_NAMESPACE

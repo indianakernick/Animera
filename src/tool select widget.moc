@@ -92,27 +92,27 @@ static const uint qt_meta_data_ToolSelectWidget[] = {
        3,    0,   95,    2, 0x06 /* Public */,
        4,    1,   96,    2, 0x06 /* Public */,
        6,    0,   99,    2, 0x06 /* Public */,
-       7,    0,  100,    2, 0x06 /* Public */,
+       7,    1,  100,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       8,    0,  101,    2, 0x0a /* Public */,
-       9,    2,  102,    2, 0x0a /* Public */,
-      11,    1,  107,    2, 0x0a /* Public */,
-      12,    2,  110,    2, 0x0a /* Public */,
-      13,    1,  115,    2, 0x0a /* Public */,
-      15,    1,  118,    2, 0x0a /* Public */,
-      17,    1,  121,    2, 0x0a /* Public */,
-      19,    1,  124,    2, 0x0a /* Public */,
-      21,    1,  127,    2, 0x0a /* Public */,
-      23,    2,  130,    2, 0x0a /* Public */,
-      25,    2,  135,    2, 0x08 /* Private */,
+       8,    0,  103,    2, 0x0a /* Public */,
+       9,    2,  104,    2, 0x0a /* Public */,
+      11,    1,  109,    2, 0x0a /* Public */,
+      12,    2,  112,    2, 0x0a /* Public */,
+      13,    1,  117,    2, 0x0a /* Public */,
+      15,    1,  120,    2, 0x0a /* Public */,
+      17,    1,  123,    2, 0x0a /* Public */,
+      19,    1,  126,    2, 0x0a /* Public */,
+      21,    1,  129,    2, 0x0a /* Public */,
+      23,    2,  132,    2, 0x0a /* Public */,
+      25,    2,  137,    2, 0x08 /* Private */,
 
  // signals: parameters
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void, 0x80000000 | 5,    2,
     QMetaType::Void,
-    QMetaType::Void,
+    QMetaType::Void, QMetaType::QRect,    2,
 
  // slots: parameters
     QMetaType::Void,
@@ -140,7 +140,7 @@ void ToolSelectWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
         case 1: _t->overlayModified(); break;
         case 2: _t->shouldShowPerm((*reinterpret_cast< std::string_view(*)>(_a[1]))); break;
         case 3: _t->changingAction(); break;
-        case 4: _t->cellRequested(); break;
+        case 4: _t->cellRequested((*reinterpret_cast< QRect(*)>(_a[1]))); break;
         case 5: _t->mouseLeave(); break;
         case 6: _t->mouseDown((*reinterpret_cast< QPoint(*)>(_a[1])),(*reinterpret_cast< ButtonType(*)>(_a[2]))); break;
         case 7: _t->mouseMove((*reinterpret_cast< QPoint(*)>(_a[1]))); break;
@@ -185,7 +185,7 @@ void ToolSelectWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
             }
         }
         {
-            using _t = void (ToolSelectWidget::*)();
+            using _t = void (ToolSelectWidget::*)(QRect );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ToolSelectWidget::cellRequested)) {
                 *result = 4;
                 return;
@@ -260,9 +260,10 @@ void ToolSelectWidget::changingAction()
 }
 
 // SIGNAL 4
-void ToolSelectWidget::cellRequested()
+void ToolSelectWidget::cellRequested(QRect _t1)
 {
-    QMetaObject::activate(this, &staticMetaObject, 4, nullptr);
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    QMetaObject::activate(this, &staticMetaObject, 4, _a);
 }
 QT_WARNING_POP
 QT_END_MOC_NAMESPACE
