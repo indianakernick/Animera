@@ -8,6 +8,7 @@
 
 #include "composite.hpp"
 
+#include <limits>
 #include "config.hpp"
 #include <Graphics/fill.hpp>
 #include <Graphics/mask.hpp>
@@ -240,6 +241,40 @@ void growCell(Cell *cell, const Format format, const QRect rect) {
     clearImage(newImage);
     blitImage(newImage, cell->image, cellRect.topLeft() - newRect.topLeft());
     newImage.setOffset(newRect.topLeft());
-    cell->image = newImage;
+    cell->image = std::move(newImage);
   }
+}
+
+// @TODO call this before saving
+// this might create some null cells so the timeline could be optimized too
+// while we're at it, we could optimize palette too
+void optimizeCell(Cell *cell) {
+  assert(cell);
+  if (cell->image.isNull()) return;
+  QPoint min = toPoint(std::numeric_limits<int>::max());
+  QPoint max = toPoint(std::numeric_limits<int>::min());
+  visitSurface(cell->image, [&min, &max](auto image) {
+    int y = 0;
+    for (auto row : gfx::range(image)) {
+      int x = 0;
+      for (auto pixel : row) {
+        if (pixel) {
+          min.setX(std::min(min.x(), x));
+          min.setY(std::min(min.y(), y));
+          max.setX(std::max(max.x(), x));
+          max.setY(std::max(max.y(), y));
+        }
+        ++x;
+      }
+      ++y;
+    }
+  });
+  const QRect newRect{min, max};
+  if (newRect.isEmpty()) {
+    cell->image = {};
+  }
+  QImage newImage{newRect.size(), cell->image.format()};
+  blitImage(newImage, cell->image, newRect.topLeft());
+  newImage.setOffset(newRect.topLeft() + cell->image.offset());
+  cell->image = std::move(newImage);
 }
