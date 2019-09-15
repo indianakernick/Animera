@@ -420,6 +420,7 @@ Error readCHDR(QIODevice &dev, CellSpan &span, const Format format) try {
   }
   span.len = static_cast<FrameIdx>(reader.readInt());
   if (+span.len <= 0) return "Negative cell span length";
+  span.cell = std::make_unique<Cell>();
   if (start.length == 5 * file_int_size) {
     const int x = reader.readInt();
     const int y = reader.readInt();
@@ -427,7 +428,6 @@ Error readCHDR(QIODevice &dev, CellSpan &span, const Format format) try {
     if (width <= 0) return "Negative cell width";
     const int height = reader.readInt();
     if (height <= 0) return "Negative cell height";
-    span.cell = std::make_unique<Cell>();
     span.cell->image = {width, height, qimageFormat(format)};
     span.cell->image.setOffset({x, y});
   }

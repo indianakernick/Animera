@@ -181,10 +181,10 @@ namespace {
 int arrowToRot(const Qt::Key key) {
   switch (key) {
     case key_rot_cw_a:
-    case key_rot_cw_b: return 1;
+    case key_rot_cw_b:  return 1;
     case key_rot_ccw_a:
     case key_rot_ccw_b: return 3;
-    default: return 0;
+    default:            return 0;
   }
 }
 
