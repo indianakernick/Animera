@@ -22,13 +22,10 @@ public:
   void keyPress(const ToolKeyEvent &) override;
 
 private:
-  QImage cleanImage;
   QPoint lastPos = no_point;
-  QPoint pos = no_point;
   bool drag = false;
   
-  void translate(QPoint, QRgb);
-  void updateSourceImage(QRgb);
+  void translate(QPoint);
   void updateStatus();
 };
 
@@ -57,7 +54,6 @@ public:
 
 private:
   int angle = 0;
-  bool square;
   
   void updateStatus();
 };

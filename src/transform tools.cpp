@@ -18,11 +18,6 @@
 // @TODO do we need to know the difference between switching tools and switching cells?
 
 void TranslateTool::attachCell() {
-  if (!compatible(cleanImage, ctx->cell->image)) {
-    cleanImage = makeCompatible(ctx->cell->image);
-  }
-  copyImage(cleanImage, ctx->cell->image);
-  pos = {0, 0};
   //updateStatus();
 }
 
@@ -35,17 +30,16 @@ void TranslateTool::mouseLeave(const ToolLeaveEvent &) {
 }
 
 void TranslateTool::mouseDown(const ToolMouseEvent &event) {
-  ctx->requireCell();
   if (event.button != ButtonType::primary) return;
   lastPos = event.pos;
-  drag = true;
+  drag = bool{*ctx->cell};
 }
 
 void TranslateTool::mouseMove(const ToolMouseEvent &event) {
   if (event.button != ButtonType::primary || !drag) {
     return updateStatus();
   }
-  translate(event.pos - lastPos, ctx->colors.erase);
+  translate(event.pos - lastPos);
   updateStatus();
   lastPos = event.pos;
   ctx->emitChanges(ToolChanges::cell);
@@ -53,7 +47,7 @@ void TranslateTool::mouseMove(const ToolMouseEvent &event) {
 
 void TranslateTool::mouseUp(const ToolMouseEvent &event) {
   if (event.button != ButtonType::primary || !drag) return;
-  translate(event.pos - lastPos, ctx->colors.erase);
+  translate(event.pos - lastPos);
   updateStatus();
   lastPos = event.pos;
   drag = false;
@@ -76,29 +70,21 @@ QPoint arrowToDir(const Qt::Key key) {
 }
 
 void TranslateTool::keyPress(const ToolKeyEvent &event) {
+  if (!*ctx->cell) return;
   QPoint move = arrowToDir(event.key);
   if (move == QPoint{0, 0}) return;
-  ctx->requireCell();
-  translate(move, ctx->colors.erase);
+  translate(move);
   updateStatus();
   ctx->emitChanges(ToolChanges::cell);
   ctx->finishChange();
 }
 
-void TranslateTool::translate(const QPoint move, const QRgb eraseColor) {
-  pos += move;
-  updateSourceImage(eraseColor);
-}
-
-void TranslateTool::updateSourceImage(const QRgb eraseColor) {
-  visitSurfaces(ctx->cell->image, cleanImage, [this, eraseColor](auto src, auto clean) {
-    gfx::overFill(src, eraseColor);
-    gfx::copyRegion(src, clean, convert(pos));
-  });
+void TranslateTool::translate(const QPoint move) {
+  ctx->cell->image.setOffset(ctx->cell->image.offset() + move);
 }
 
 void TranslateTool::updateStatus() {
-  ctx->showStatus(StatusMsg{}.appendLabeled(pos));
+  ctx->showStatus(StatusMsg{}.appendLabeled(ctx->cell->image.offset()));
 }
 
 void FlipTool::attachCell() {
@@ -139,22 +125,27 @@ void FlipTool::mouseMove(const ToolMouseEvent &) {
 }
 
 void FlipTool::keyPress(const ToolKeyEvent &event) {
+  if (!*ctx->cell) return;
   if (flipXChanged(event.key, flipX)) {
-    ctx->requireCell();
     QImage &src = ctx->cell->image;
     QImage flipped{src.size(), src.format()};
     visitSurfaces(flipped, src, [](auto flipped, auto src) {
       gfx::flipHori(flipped, src);
     });
-    src = flipped;
+    QPoint offset = src.offset();
+    offset.setX(ctx->size.width() - (offset.x() + src.width()));
+    flipped.setOffset(offset);
+    src = std::move(flipped);
   } else if (flipYChanged(event.key, flipY)) {
-    ctx->requireCell();
     QImage &src = ctx->cell->image;
     QImage flipped{src.size(), src.format()};
     visitSurfaces(flipped, src, [](auto flipped, auto src) {
       gfx::flipVert(flipped, src);
     });
-    src = flipped;
+    QPoint offset = src.offset();
+    offset.setY(ctx->size.height() - (offset.y() + src.height()));
+    flipped.setOffset(offset);
+    src = std::move(flipped);
   } else {
     return;
   }
@@ -173,8 +164,6 @@ void FlipTool::updateStatus() {
 }
 
 void RotateTool::attachCell() {
-  const QSize size = ctx->cell->image.size();
-  square = size.width() == size.height();
   angle = 0;
   //updateStatus();
 }
@@ -189,7 +178,7 @@ void RotateTool::mouseLeave(const ToolLeaveEvent &) {
 
 namespace {
 
-quint8 arrowToRot(const Qt::Key key) {
+int arrowToRot(const Qt::Key key) {
   switch (key) {
     case key_rot_cw_a:
     case key_rot_cw_b: return 1;
@@ -206,31 +195,31 @@ void RotateTool::mouseMove(const ToolMouseEvent &) {
 }
 
 void RotateTool::keyPress(const ToolKeyEvent &event) {
-  const quint8 rot = arrowToRot(event.key);
-  if (square && rot) {
-    ctx->requireCell();
-    angle = (angle + rot) & 3;
-    QImage &src = ctx->cell->image;
-    QImage rotated{src.size(), src.format()};
-    visitSurfaces(rotated, src, [rot](auto rotated, auto src) {
-      gfx::rotate(rotated, src, rot);
-    });
-    src = rotated;
-    updateStatus();
-    ctx->emitChanges(ToolChanges::cell);
-    ctx->finishChange();
-  }
+  if (!*ctx->cell) return;
+  const int rot = arrowToRot(event.key);
+  if (rot == 0) return;
+  angle = (angle + rot) & 3;
+  QImage &src = ctx->cell->image;
+  QImage rotated{src.size().transposed(), src.format()};
+  visitSurfaces(rotated, src, [rot](auto rotated, auto src) {
+    gfx::rotate(rotated, src, rot);
+  });
+  QPoint offset = src.offset();
+  if (rot == 1) {
+    offset = {ctx->size.height() - (offset.y() + src.height()), offset.x()};
+  } else if (rot == 3) {
+    offset = {offset.y(), ctx->size.width() - (offset.x() + src.width())};
+  } else Q_UNREACHABLE();
+  rotated.setOffset(offset);
+  src = std::move(rotated);
+  updateStatus();
+  ctx->emitChanges(ToolChanges::cell);
+  ctx->finishChange();
 }
 
 void RotateTool::updateStatus() {
   StatusMsg status;
-  if (square) {
-    status.append("ANGLE: ");
-    status.append(angle * 90);
-  } else {
-    // I think this is a sensible limitation
-    // Sprites for games are square 99% of the time
-    status.append("Only square sprites can be rotated");
-  }
+  status.append("ANGLE: ");
+  status.append(angle * 90);
   ctx->showStatus(status);
 }
