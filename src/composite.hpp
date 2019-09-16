@@ -32,7 +32,11 @@ void blitMaskImage(QImage &, const QImage &, const QImage &, QPoint);
 /// Copy all pixels of src that are on the mask (shifted to the position) onto a
 /// new image
 QImage blitMaskImage(const QImage &, const QImage &, QPoint);
+/// Set all pixels on the mask (shifted to the position) to the color
+void fillMaskImage(QImage &, const QImage &, QRgb, QPoint);
 
+/// Create a blank RGBA overlay image
+void writeOverlay(PaletteCSpan, Format, QImage &);
 /// Convert a color RGBA image to an RGBA overlay image. Colors are converted
 /// to grayscale
 void writeOverlay(PaletteCSpan, Format, QImage &, const QImage &);

@@ -119,35 +119,27 @@ void compositeOverlay(QImage &drawing, const QImage &overlay) {
 }
 
 void blitImage(QImage &dst, const QImage &src, const QPoint pos) {
-  visitSurfaces(dst, src, [pos](auto dstSurface, auto srcSurface) {
-    gfx::copyRegion(
-      dstSurface,
-      srcSurface,
-      convert(pos)
-    );
+  visitSurfaces(dst, src, [pos](auto dst, auto src) {
+    gfx::copyRegion(dst, src, convert(pos));
   });
 }
 
 QImage blitImage(const QImage &src, const QRect rect) {
   // @TODO does it really make sense allocate a new QImage?
   QImage dst{rect.size(), src.format()};
-  visitSurfaces(dst, src, [pos = rect.topLeft()](auto dstSurface, auto srcSurface) {
-    gfx::overFill(dstSurface);
-    gfx::copyRegion(
-      dstSurface,
-      srcSurface,
-      convert(-pos)
-    );
+  visitSurfaces(dst, src, [pos = rect.topLeft()](auto dst, auto src) {
+    gfx::overFill(dst);
+    gfx::copyRegion(dst, src, convert(-pos));
   });
   return dst;
 }
 
 void blitMaskImage(QImage &dst, const QImage &mask, const QImage &src, const QPoint pos) {
   assert(mask.size() == src.size());
-  visitSurfaces(dst, src, [&mask, pos](auto dstSurface, auto srcSurface) {
+  visitSurfaces(dst, src, [&mask, pos](auto dst, auto src) {
     gfx::maskCopyRegion(
-      dstSurface,
-      srcSurface,
+      dst,
+      src,
       makeSurface<PixelMask>(mask),
       convert(pos),
       convert(pos)
@@ -158,11 +150,11 @@ void blitMaskImage(QImage &dst, const QImage &mask, const QImage &src, const QPo
 QImage blitMaskImage(const QImage &src, const QImage &mask, const QPoint pos) {
   // @TODO does it really make sense allocate a new QImage?
   QImage dst{mask.size(), src.format()};
-  visitSurfaces(dst, src, [&mask, pos](auto dstSurface, auto srcSurface) {
-    gfx::overFill(dstSurface);
+  visitSurfaces(dst, src, [&mask, pos](auto dst, auto src) {
+    gfx::overFill(dst);
     gfx::maskCopyRegion(
-      dstSurface,
-      srcSurface,
+      dst,
+      src,
       makeSurface<PixelMask>(mask),
       convert(-pos),
       {0, 0}
@@ -171,32 +163,61 @@ QImage blitMaskImage(const QImage &src, const QImage &mask, const QPoint pos) {
   return dst;
 }
 
+void fillMaskImage(QImage &dst, const QImage &mask, const QRgb color, const QPoint pos) {
+  visitSurface(dst, [&mask, pos, color](auto dst) {
+    gfx::maskFillRegion(dst, makeCSurface<PixelMask>(mask), color, convert(pos));
+  });
+}
+
 namespace {
 
+PixelRgba rgbaToOverlayPx(const PixelRgba pixel) {
+  const int gray = qGray(pixel);
+  const int alpha = scaleOverlayAlpha(qAlpha(pixel));
+  return qRgba(gray, gray, gray, alpha);
+}
+
+PixelRgba paletteToOverlayPx(const PaletteCSpan palette, const PixelIndex pixel) {
+  return rgbaToOverlayPx(palette[pixel]);
+}
+
+PixelRgba grayToOverlayPx(const PixelGray pixel) {
+  const int gray = gfx::YA::gray(pixel);
+  const int alpha = gfx::YA::alpha(pixel);
+  return qRgba(0, 0, scaleOverlayGray(gray), scaleOverlayAlpha(alpha));
+}
+
 void rgbaToOverlay(gfx::Surface<PixelRgba> overlay, gfx::CSurface<PixelRgba> source) {
-  pixelTransform(overlay, source, [](const PixelRgba pixel) {
-    const int gray = qGray(pixel);
-    const int alpha = scaleOverlayAlpha(qAlpha(pixel));
-    return qRgba(gray, gray, gray, alpha);
-  });
+  pixelTransform(overlay, source, rgbaToOverlayPx);
 }
 
 void paletteToOverlay(gfx::Surface<PixelRgba> overlay, gfx::CSurface<PixelIndex> source, PaletteCSpan palette) {
   pixelTransform(overlay, source, [palette](const PixelIndex pixel) {
-    const QRgb color = palette[pixel];
-    const int gray = qGray(color);
-    return qRgba(gray, gray, gray, scaleOverlayAlpha(qAlpha(color)));
+    return paletteToOverlayPx(palette, pixel);
   });
 }
 
 void grayToOverlay(gfx::Surface<PixelRgba> overlay, gfx::CSurface<PixelGray> source) {
-  pixelTransform(overlay, source, [](const PixelGray pixel) {
-    const int gray = gfx::YA::gray(pixel);
-    const int alpha = gfx::YA::alpha(pixel);
-    return qRgba(0, 0, scaleOverlayGray(gray), scaleOverlayAlpha(alpha));
-  });
+  pixelTransform(overlay, source, grayToOverlayPx);
 }
 
+}
+
+void writeOverlay(
+  PaletteCSpan palette,
+  const Format format,
+  QImage &overlay
+) {
+  gfx::Surface overlaySurface = makeSurface<PixelRgba>(overlay);
+  switch (format) {
+    case Format::rgba:
+      return gfx::overFill(overlaySurface, rgbaToOverlayPx(0));
+    case Format::index:
+      return gfx::overFill(overlaySurface, paletteToOverlayPx(palette, 0));
+    case Format::gray:
+      return gfx::overFill(overlaySurface, grayToOverlayPx(0));
+    default: Q_UNREACHABLE();
+  }
 }
 
 void writeOverlay(
