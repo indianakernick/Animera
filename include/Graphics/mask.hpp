@@ -68,7 +68,7 @@ template <typename Pixel>
 void maskFillRegion(
   const Surface<Pixel> dst,
   const CSurface<uint8_t> msk,
-  const Pixel pixel,
+  const identity_t<Pixel> pixel,
   const Point mskPos
 ) noexcept {
   region(dst, msk, mskPos, [pixel](auto dstView, auto mskView) {
