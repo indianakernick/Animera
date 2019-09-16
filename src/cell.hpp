@@ -26,6 +26,12 @@ public:
   explicit operator bool() const {
     return !image.isNull();
   }
+  QPoint pos() const {
+    return image.offset();
+  }
+  QRect rect() const {
+    return {image.offset(), image.size()};
+  }
 };
 
 enum class LayerIdx {};

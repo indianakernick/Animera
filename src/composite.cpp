@@ -306,3 +306,7 @@ void optimizeCell(Cell &cell) {
   newImage.setOffset(newRect.topLeft() + cell.image.offset());
   cell.image = std::move(newImage);
 }
+
+QRgb sampleCell(const Cell &cell, const QPoint pos) {
+  return cell.rect().contains(pos) ? cell.image.pixel(pos - cell.pos()) : 0;
+}

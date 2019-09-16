@@ -31,10 +31,14 @@ bool drawRoundPoint(QImage &img, const QRgb color, const QPoint pos, const int r
   }
 }
 
-bool drawFloodFill(QImage &img, const QRgb color, QPoint pos) {
+bool drawFloodFill(QImage &img, const QRgb color, QPoint pos, QRect rect) {
   pos -= img.offset();
   if (!img.rect().contains(pos)) return false;
-  return visitSurface(img, [pos, color](auto surface) {
+  rect.translate(-img.offset());
+  return visitSurface(img, [pos, color, rect](auto surface) {
+    if (!rect.isEmpty()) {
+      surface = surface.view(convert(rect));
+    }
     return gfx::drawFloodFill(surface, color, convert(pos));
   });
 }

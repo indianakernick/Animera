@@ -10,6 +10,7 @@
 
 #include "cell.hpp"
 #include "painting.hpp"
+#include "composite.hpp"
 
 void FloodFillTool::detachCell() {
   ctx->clearStatus();
@@ -26,8 +27,11 @@ void FloodFillTool::mouseDown(const ToolMouseEvent &event) {
   drawSquarePoint(*ctx->overlay, tool_overlay_color, event.pos);
   ctx->showStatus(StatusMsg{}.appendLabeled(event.pos));
   const QRgb color = ctx->selectColor(event.button);
-  ctx->requireCell(toRect(ctx->size));
-  ctx->emitChanges(drawFloodFill(ctx->cell->image, color, event.pos));
+  if (sampleCell(*ctx->cell, event.pos) == 0) {
+    ctx->requireCell(toRect(ctx->size));
+  }
+  const QRect rect = toRect(ctx->size).intersected(ctx->cell->rect());
+  ctx->emitChanges(drawFloodFill(ctx->cell->image, color, event.pos, rect));
   ctx->finishChange();
 }
 

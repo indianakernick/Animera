@@ -16,7 +16,7 @@
 bool drawSquarePoint  (QImage &, QRgb, QPoint, gfx::CircleShape = gfx::CircleShape::c1x1);
 bool drawRoundPoint   (QImage &, QRgb, QPoint, int = 1, gfx::CircleShape = gfx::CircleShape::c1x1);
 
-bool drawFloodFill    (QImage &, QRgb, QPoint);
+bool drawFloodFill    (QImage &, QRgb, QPoint, QRect);
 
 bool drawFilledCircle (QImage &, QRgb, QPoint, int, gfx::CircleShape = gfx::CircleShape::c1x1);
 bool drawStrokedCircle(QImage &, QRgb, QPoint, int, int = 1, gfx::CircleShape = gfx::CircleShape::c1x1);
