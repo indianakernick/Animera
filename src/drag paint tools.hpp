@@ -51,6 +51,8 @@ private:
   bool drawDrag(QImage &, QPoint, QPoint);
   void drawOverlay(QImage &, QPoint);
   void updateStatus(StatusMsg &, QPoint, QPoint);
+  QRect pointRect(QPoint);
+  QRect dragRect(QPoint, QPoint);
 };
 
 class StrokedCircleTool final : public DragPaintTool<StrokedCircleTool> {
@@ -71,6 +73,8 @@ private:
   bool drawDrag(QImage &, QPoint, QPoint);
   void drawOverlay(QImage &, QPoint);
   void updateStatus(StatusMsg &, QPoint, QPoint);
+  QRect pointRect(QPoint);
+  QRect dragRect(QPoint, QPoint);
 };
 
 class FilledCircleTool final : public DragPaintTool<FilledCircleTool> {
@@ -88,6 +92,8 @@ private:
   bool drawDrag(QImage &, QPoint, QPoint);
   void drawOverlay(QImage &, QPoint);
   void updateStatus(StatusMsg &, QPoint, QPoint);
+  QRect pointRect(QPoint);
+  QRect dragRect(QPoint, QPoint);
 };
 
 class StrokedRectangleTool final : public DragPaintTool<StrokedRectangleTool> {
@@ -106,6 +112,8 @@ private:
   bool drawDrag(QImage &, QPoint, QPoint);
   void drawOverlay(QImage &, QPoint);
   void updateStatus(StatusMsg &, QPoint, QPoint);
+  QRect pointRect(QPoint);
+  QRect dragRect(QPoint, QPoint);
 };
 
 class FilledRectangleTool final : public DragPaintTool<FilledRectangleTool> {
@@ -119,6 +127,8 @@ private:
   bool drawDrag(QImage &, QPoint, QPoint);
   void drawOverlay(QImage &, QPoint);
   void updateStatus(StatusMsg &, QPoint, QPoint);
+  QRect pointRect(QPoint);
+  QRect dragRect(QPoint, QPoint);
 };
 
 #endif

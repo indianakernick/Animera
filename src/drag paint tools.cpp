@@ -19,11 +19,7 @@ DragPaintTool<Derived>::~DragPaintTool() {
 }
 
 template <typename Derived>
-void DragPaintTool<Derived>::attachCell() {
-  if (!compatible(cleanImage, ctx->cell->image)) {
-    cleanImage = makeCompatible(ctx->cell->image);
-  }
-}
+void DragPaintTool<Derived>::attachCell() {}
 
 template <typename Derived>
 void DragPaintTool<Derived>::detachCell() {
@@ -39,15 +35,15 @@ void DragPaintTool<Derived>::mouseLeave(const ToolLeaveEvent &) {
 
 template <typename Derived>
 void DragPaintTool<Derived>::mouseDown(const ToolMouseEvent &event) {
-  ctx->requireCell();
   clearImage(*ctx->overlay);
   that()->drawOverlay(*ctx->overlay, event.pos);
   StatusMsg status;
   that()->updateStatus(status, event.pos, event.pos);
   ctx->showStatus(status);
   startPos = event.pos;
-  copyImage(cleanImage, ctx->cell->image);
   color = ctx->selectColor(event.button);
+  ctx->requireCell(that()->pointRect(startPos));
+  cleanImage = ctx->cell->image;
   ctx->emitChanges(that()->drawPoint(ctx->cell->image, startPos));
 }
 
@@ -62,7 +58,8 @@ void DragPaintTool<Derived>::mouseMove(const ToolMouseEvent &event) {
   StatusMsg status;
   that()->updateStatus(status, startPos, event.pos);
   ctx->showStatus(status);
-  copyImage(ctx->cell->image, cleanImage);
+  ctx->cell->image = cleanImage;
+  ctx->growCell(that()->dragRect(startPos, event.pos));
   ctx->emitChanges(that()->drawDrag(ctx->cell->image, startPos, event.pos));
 }
 
@@ -70,10 +67,11 @@ template <typename Derived>
 void DragPaintTool<Derived>::mouseUp(const ToolMouseEvent &event) {
   clearImage(*ctx->overlay);
   that()->drawOverlay(*ctx->overlay, event.pos);
-  copyImage(ctx->cell->image, cleanImage);
+  ctx->cell->image = cleanImage;
+  ctx->growCell(that()->dragRect(startPos, event.pos));
   ctx->emitChanges(that()->drawDrag(ctx->cell->image, startPos, event.pos));
-  startPos = no_point;
   ctx->finishChange();
+  startPos = no_point;
 }
 
 template <typename Derived>
@@ -114,6 +112,14 @@ void LineTool::updateStatus(StatusMsg &status, const QPoint start, const QPoint 
   status.append(start);
   status.append(" END: ");
   status.append(end);
+}
+
+QRect LineTool::pointRect(const QPoint pos) {
+  return convert(gfx::circleRect(convert(pos), radius));
+}
+
+QRect LineTool::dragRect(QPoint, const QPoint end) {
+  return pointRect(end);
 }
 
 StrokedCircleTool::~StrokedCircleTool() = default;
@@ -159,6 +165,14 @@ void StrokedCircleTool::updateStatus(StatusMsg &status, const QPoint start, cons
   status.append(calcRadius(start, end));
 }
 
+QRect StrokedCircleTool::pointRect(const QPoint pos) {
+  return convert(gfx::centerRect(convert(pos), shape));
+}
+
+QRect StrokedCircleTool::dragRect(const QPoint start, const QPoint end) {
+  return convert(gfx::circleRect(convert(start), calcRadius(start, end), shape));
+}
+
 FilledCircleTool::~FilledCircleTool() = default;
 
 void FilledCircleTool::setShape(const gfx::CircleShape newShape) {
@@ -184,6 +198,14 @@ void FilledCircleTool::updateStatus(StatusMsg &status, const QPoint start, const
   status.append(calcRadius(start, end));
 }
 
+QRect FilledCircleTool::pointRect(const QPoint pos) {
+  return convert(gfx::centerRect(convert(pos), shape));
+}
+
+QRect FilledCircleTool::dragRect(const QPoint start, const QPoint end) {
+  return convert(gfx::circleRect(convert(start), calcRadius(start, end), shape));
+}
+
 StrokedRectangleTool::~StrokedRectangleTool() = default;
 
 void StrokedRectangleTool::setThick(const int newThick) {
@@ -195,8 +217,7 @@ bool StrokedRectangleTool::drawPoint(QImage &image, const QPoint pos) {
 }
 
 bool StrokedRectangleTool::drawDrag(QImage &image, const QPoint start, const QPoint end) {
-  const QRect rect = unite(start, end);
-  return drawStrokedRect(image, getColor(), rect, thickness);
+  return drawStrokedRect(image, getColor(), unite(start, end), thickness);
 }
 
 void StrokedRectangleTool::drawOverlay(QImage &overlay, const QPoint pos) {
@@ -205,6 +226,14 @@ void StrokedRectangleTool::drawOverlay(QImage &overlay, const QPoint pos) {
 
 void StrokedRectangleTool::updateStatus(StatusMsg &status, const QPoint start, const QPoint end) {
   status.appendLabeled(unite(start, end));
+}
+
+QRect StrokedRectangleTool::pointRect(const QPoint pos) {
+  return toRect(pos);
+}
+
+QRect StrokedRectangleTool::dragRect(const QPoint start, const QPoint end) {
+  return unite(start, end);
 }
 
 FilledRectangleTool::~FilledRectangleTool() = default;
@@ -224,4 +253,12 @@ void FilledRectangleTool::drawOverlay(QImage &overlay, const QPoint pos) {
 
 void FilledRectangleTool::updateStatus(StatusMsg &status, const QPoint start, const QPoint end) {
   status.appendLabeled(unite(start, end));
+}
+
+QRect FilledRectangleTool::pointRect(const QPoint pos) {
+  return toRect(pos);
+}
+
+QRect FilledRectangleTool::dragRect(const QPoint start, const QPoint end) {
+  return unite(start, end);
 }
