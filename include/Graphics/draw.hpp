@@ -280,7 +280,7 @@ bool drawStrokedCircle(
 
 namespace detail {
 
-std::pair<int, int> signdiff(const int a, const int b) {
+inline std::pair<int, int> signdiff(const int a, const int b) {
   if (a < b) {
     return {1, b - a};
   } else {

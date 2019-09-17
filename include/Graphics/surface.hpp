@@ -72,6 +72,9 @@ public:
   ptrdiff_t pitchAs() const noexcept {
     return pitch_ * ptrdiff_t{sizeof(Pixel)} / ptrdiff_t{sizeof(OtherPixel)};
   }
+  Surface<const Pixel> asConst() const noexcept {
+    return *this;
+  }
   
   bool containsX(const int x) const noexcept {
     return 0 <= x && x < width_;

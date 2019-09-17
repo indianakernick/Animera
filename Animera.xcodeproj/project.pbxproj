@@ -20,6 +20,7 @@
 		4513145B22D5A2A500D66262 /* picker impl gray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4513145922D5A2A500D66262 /* picker impl gray.cpp */; };
 		45161F0622F1399A0036BBED /* timeline painting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45161F0422F1399A0036BBED /* timeline painting.cpp */; };
 		4520A82A232B424B009FCD1F /* transform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4520A828232B424B009FCD1F /* transform.cpp */; };
+		4525907E2330B7D600FE38A2 /* shrink.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4525907D2330B7D600FE38A2 /* shrink.cpp */; };
 		45288B6122FA8AAD008FB52D /* libz.1.2.11.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 45288B6022FA8AAC008FB52D /* libz.1.2.11.dylib */; };
 		45288B6222FA8AB8008FB52D /* libz.1.2.11.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 45288B6022FA8AAC008FB52D /* libz.1.2.11.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		453A20C6231A078100F055BA /* sprite file.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453A20C4231A078100F055BA /* sprite file.cpp */; };
@@ -138,6 +139,7 @@
 		45161F0A22F161170036BBED /* text button.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = "text button.pbm"; sourceTree = "<group>"; };
 		4520A828232B424B009FCD1F /* transform.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = transform.cpp; sourceTree = "<group>"; };
 		45259062232E0D3600FE38A2 /* graphics convert.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "graphics convert.hpp"; sourceTree = "<group>"; };
+		4525907D2330B7D600FE38A2 /* shrink.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = shrink.cpp; sourceTree = "<group>"; };
 		45288B6022FA8AAC008FB52D /* libz.1.2.11.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.11.dylib; path = ../../../../../../usr/local/Cellar/zlib/1.2.11/lib/libz.1.2.11.dylib; sourceTree = "<group>"; };
 		452926E222BB607E00B17E0D /* screenshot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = screenshot.png; sourceTree = "<group>"; };
 		452926E422BB607E00B17E0D /* add.pbm */ = {isa = PBXFileReference; lastKnownFileType = file; path = add.pbm; sourceTree = "<group>"; };
@@ -775,6 +777,7 @@
 				45BB5F6A23239CB700E42371 /* copy.cpp */,
 				45F043172324833400E99F95 /* fill.cpp */,
 				4520A828232B424B009FCD1F /* transform.cpp */,
+				4525907D2330B7D600FE38A2 /* shrink.cpp */,
 			);
 			path = Graphics;
 			sourceTree = "<group>";
@@ -1711,6 +1714,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4525907E2330B7D600FE38A2 /* shrink.cpp in Sources */,
 				45F043182324833400E99F95 /* fill.cpp in Sources */,
 				45F0431423247BFE00E99F95 /* odr.cpp in Sources */,
 				4520A82A232B424B009FCD1F /* transform.cpp in Sources */,
@@ -1990,6 +1994,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = QY44MADGVC;
+				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					CATCH_CONFIG_FAST_COMPILE,
 					CATCH_CONFIG_DISABLE_MATCHERS,

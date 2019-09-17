@@ -275,8 +275,10 @@ void growCell(Cell &cell, const Format format, const QRect rect) {
 
 // @TODO call this before saving
 // this might create some null cells so the timeline could be optimized too
-// while we're at it, we could optimize palette as well
+// while we're at it, we could optimize the palette as well
 void optimizeCell(Cell &cell) {
+  // we don't actually need to reallocate the new cell
+  // we can just use the rectangle to save part of the image
   if (!cell) return;
   QPoint min = toPoint(std::numeric_limits<int>::max());
   QPoint max = toPoint(std::numeric_limits<int>::min());
