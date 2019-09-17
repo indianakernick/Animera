@@ -14,24 +14,28 @@
 namespace gfx {
 
 template <typename Pixel, typename Func>
-void region(const Surface<Pixel> a, const Rect rect, Func func) {
+bool region(const Surface<Pixel> a, const Rect rect, Func func) {
   const Rect aRect = rect.intersected(a.rect());
   if (!aRect.empty()) {
     func(a.view(aRect));
+    return true;
   }
+  return false;
 }
 
 template <typename PixelA, typename PixelB, typename Func>
-void region(const Surface<PixelA> a, const Surface<PixelB> b, const Point bPos, Func func) {
+bool region(const Surface<PixelA> a, const Surface<PixelB> b, const Point bPos, Func func) {
   const Rect bRect = {bPos, b.size()};
   const Rect aRect = bRect.intersected(a.rect());
   if (!aRect.empty()) {
     func(a.view(aRect), b.view({{aRect.p - bPos}, aRect.s}));
+    return true;
   }
+  return false;
 }
 
 template <typename PixelA, typename PixelB, typename PixelC, typename Func>
-void region(
+bool region(
   const Surface<PixelA> a,
   const Surface<PixelB> b,
   const Surface<PixelC> c,
@@ -48,7 +52,9 @@ void region(
       b.view(Rect{aRect.p - bPos, aRect.s}),
       c.view(Rect{aRect.p - cPos, aRect.s})
     );
+    return true;
   }
+  return false;
 }
 
 }

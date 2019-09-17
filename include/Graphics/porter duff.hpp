@@ -95,7 +95,7 @@ struct Format {
 */
 
 template <typename Mode, typename DstPixel, typename SrcPixel, typename DstFormat, typename SrcFormat>
-void porterDuffRegion(
+bool porterDuffRegion(
   const Mode mode,
   const Surface<DstPixel> dst,
   const CSurface<SrcPixel> src,
@@ -103,7 +103,7 @@ void porterDuffRegion(
   const SrcFormat srcFmt,
   const Point srcPos
 ) {
-  region(dst, src, srcPos, [mode, dstFmt, srcFmt](auto dstView, auto srcView) {
+  return region(dst, src, srcPos, [mode, dstFmt, srcFmt](auto dstView, auto srcView) {
     porterDuff(mode, dstView, srcView, dstFmt, srcFmt);
   });
 }

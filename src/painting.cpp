@@ -16,10 +16,9 @@
 
 bool drawSquarePoint(QImage &img, const QRgb color, QPoint pos, const gfx::CircleShape shape) {
   pos -= img.offset();
-  visitSurface(img, [color, pos, shape](auto surface) {
-    gfx::drawFilledRect(surface, color, gfx::centerRect(convert(pos), shape));
+  return visitSurface(img, [color, pos, shape](auto surface) {
+    return gfx::drawFilledRect(surface, color, gfx::centerRect(convert(pos), shape));
   });
-  return true;
 }
 
 bool drawRoundPoint(QImage &img, const QRgb color, const QPoint pos, const int radius, const gfx::CircleShape shape) {
@@ -44,46 +43,41 @@ bool drawFloodFill(QImage &img, const QRgb color, QPoint pos, QRect rect) {
 
 bool drawFilledCircle(QImage &img, const QRgb color, QPoint center, const int radius, const gfx::CircleShape shape) {
   center -= img.offset();
-  visitSurface(img, [center, radius, shape, color](auto surface) {
-    gfx::drawFilledCircle(surface, color, convert(center), radius, shape);
+  return visitSurface(img, [center, radius, shape, color](auto surface) {
+    return gfx::drawFilledCircle(surface, color, convert(center), radius, shape);
   });
-  return true;
 }
 
 bool drawStrokedCircle(QImage &img, const QRgb color, QPoint center, const int radius, const int thickness, const gfx::CircleShape shape) {
   assert(thickness > 0);
   center -= img.offset();
-  visitSurface(img, [center, radius, thickness, shape, color](auto surface) {
-    gfx::drawStrokedCircle(surface, color, convert(center), radius, radius - thickness + 1, shape);
+  return visitSurface(img, [center, radius, thickness, shape, color](auto surface) {
+    return gfx::drawStrokedCircle(surface, color, convert(center), radius, radius - thickness + 1, shape);
   });
-  return true;
 }
 
 bool drawFilledRect(QImage &img, const QRgb color, QRect rect) {
   rect.translate(-img.offset());
-  visitSurface(img, [rect, color](auto surface) {
-    gfx::drawFilledRect(surface, color, convert(rect));
+  return visitSurface(img, [rect, color](auto surface) {
+    return gfx::drawFilledRect(surface, color, convert(rect));
   });
-  return true;
 }
 
 bool drawStrokedRect(QImage &img, const QRgb color, QRect rect, const int thickness) {
   assert(thickness > 0);
   rect.translate(-img.offset());
   if (!img.rect().intersects(rect)) return false;
-  visitSurface(img, [rect, thickness, color](auto surface) {
+  return visitSurface(img, [rect, thickness, color](auto surface) {
     const QRect inner = rect.marginsRemoved({thickness, thickness, thickness, thickness});
-    gfx::drawStrokedRect(surface, color, convert(rect), convert(inner));
+    return gfx::drawStrokedRect(surface, color, convert(rect), convert(inner));
   });
-  return true;
 }
 
 bool drawLine(QImage &img, const QRgb color, QLine line, const int radius) {
   line.translate(-img.offset());
-  visitSurface(img, [line, radius, color](auto surface) {
-    gfx::drawLine(surface, color, convert(line.p1()), convert(line.p2()), radius);
+  return visitSurface(img, [line, radius, color](auto surface) {
+    return gfx::drawLine(surface, color, convert(line.p1()), convert(line.p2()), radius);
   });
-  return true;
 }
 
 bool drawFilledPolygon(

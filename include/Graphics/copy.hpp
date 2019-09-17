@@ -17,12 +17,12 @@
 namespace gfx {
 
 template <typename Pixel>
-void copyRegion(
+bool copyRegion(
   const Surface<Pixel> dst,
   const CSurface<identity_t<Pixel>> src,
   const Point srcPos
 ) noexcept {
-  region(dst, src, srcPos, [](auto dstView, auto srcView) {
+  return region(dst, src, srcPos, [](auto dstView, auto srcView) {
     copy(dstView, srcView);
   });
 }

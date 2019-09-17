@@ -57,20 +57,52 @@ void fillCol(
   }
 }
 
+// @TODO add to unit tests
+// also test other Region functions
 template <typename Pixel>
-void fillRegion(
+bool fillRowRegion(
+  const Surface<Pixel> dst,
+  const identity_t<Pixel> pixel,
+  Point first,
+  int last
+) noexcept {
+  if (!dst.containsY(first.y)) return false;
+  first.x = first.x > 0 ? first.x : 0;
+  last = last < dst.width() ? last : dst.width() - 1;
+  if (first.x > last) return false;
+  fillRow(dst, pixel, first, last);
+  return true;
+}
+
+template <typename Pixel>
+bool fillColRegion(
+  const Surface<Pixel> dst,
+  const identity_t<Pixel> pixel,
+  Point first,
+  int last
+) noexcept {
+  if (!dst.containsX(first.x)) return false;
+  first.y = first.y > 0 ? first.y : 0;
+  last = last < dst.height() ? last : dst.height() - 1;
+  if (first.y > last) return false;
+  fillCol(dst, pixel, first, last);
+  return true;
+}
+
+template <typename Pixel>
+bool fillRegion(
   const Surface<Pixel> dst,
   const identity_t<Pixel> pixel,
   const Rect rect
 ) noexcept {
-  region(dst, rect, [pixel](auto dstView) {
+  return region(dst, rect, [pixel](auto dstView) {
     fill(dstView, pixel);
   });
 }
 
 template <typename Pixel>
-void fillRegion(const Surface<Pixel> dst, const Rect rect) noexcept {
-  region(dst, rect, [](auto dstView) {
+bool fillRegion(const Surface<Pixel> dst, const Rect rect) noexcept {
+  return region(dst, rect, [](auto dstView) {
     fill(dstView);
   });
 }

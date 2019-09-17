@@ -57,21 +57,21 @@ void each(Surface<PixelA> a, Surface<PixelB> b, Surface<PixelC> c, Func func) {
 }
 
 template <typename Pixel, typename Func>
-void eachRegion(Surface<Pixel> surface, const Rect rect, Func func) {
-  region(surface, rect, [func](auto view) {
+bool eachRegion(Surface<Pixel> surface, const Rect rect, Func func) {
+  return region(surface, rect, [func](auto view) {
     each(view, func);
   });
 }
 
 template <typename PixelA, typename PixelB, typename Func>
-void eachRegion(Surface<PixelA> a, Surface<PixelB> b, const Point bPos, Func func) {
-  region(a, b, bPos, [func](auto aView, auto bView) {
+bool eachRegion(Surface<PixelA> a, Surface<PixelB> b, const Point bPos, Func func) {
+  return region(a, b, bPos, [func](auto aView, auto bView) {
     each(aView, bView, func);
   });
 }
 
 template <typename PixelA, typename PixelB, typename PixelC, typename Func>
-void eachRegion(
+bool eachRegion(
   Surface<PixelA> a,
   Surface<PixelB> b,
   Surface<PixelC> c,
@@ -79,7 +79,7 @@ void eachRegion(
   const Point cPos,
   Func func
 ) {
-  region(a, b, c, bPos, cPos, [func](auto aView, auto bView, auto cView) {
+  return region(a, b, c, bPos, cPos, [func](auto aView, auto bView, auto cView) {
     each(aView, bView, cView, func);
   });
 }

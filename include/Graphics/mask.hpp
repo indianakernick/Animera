@@ -42,12 +42,12 @@ void maskClip(const Surface<Pixel> dst, const CSurface<uint8_t> msk) noexcept {
 }
 
 template <typename Pixel>
-void maskClipRegion(
+bool maskClipRegion(
   const Surface<Pixel> dst,
   const CSurface<uint8_t> msk,
   const Point mskPos
 ) noexcept {
-  region(dst, msk, mskPos, [](auto dstView, auto mskView) {
+  return region(dst, msk, mskPos, [](auto dstView, auto mskView) {
     maskClip(dstView, mskView);
   });
 }
@@ -65,13 +65,13 @@ void maskFill(
 }
 
 template <typename Pixel>
-void maskFillRegion(
+bool maskFillRegion(
   const Surface<Pixel> dst,
   const CSurface<uint8_t> msk,
   const identity_t<Pixel> pixel,
   const Point mskPos
 ) noexcept {
-  region(dst, msk, mskPos, [pixel](auto dstView, auto mskView) {
+  return region(dst, msk, mskPos, [pixel](auto dstView, auto mskView) {
     maskFill(dstView, mskView, pixel);
   });
 }
@@ -89,14 +89,14 @@ void maskCopy(
 }
 
 template <typename Pixel>
-void maskCopyRegion(
+bool maskCopyRegion(
   const Surface<Pixel> dst,
   const CSurface<identity_t<Pixel>> src,
   const CSurface<uint8_t> msk,
   const Point srcPos,
   const Point mskPos
 ) noexcept {
-  region(dst, src, msk, srcPos, mskPos, [](auto dstView, auto srcView, auto mskView) {
+  return region(dst, src, msk, srcPos, mskPos, [](auto dstView, auto srcView, auto mskView) {
     maskCopy(dstView, srcView, mskView);
   });
 }
