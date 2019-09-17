@@ -11,7 +11,6 @@
 #include "cell.hpp"
 #include "painting.hpp"
 #include "composite.hpp"
-#include <Graphics/mask.hpp>
 #include "surface factory.hpp"
 #include "graphics convert.hpp"
 #include <Graphics/flood fill.hpp>
@@ -27,7 +26,6 @@ void RectangleSelectTool::mouseLeave(const ToolLeaveEvent &) {
 }
 
 void RectangleSelectTool::mouseDown(const ToolMouseEvent &event) {
-  ctx->requireCell();
   clearImage(*ctx->overlay);
   if (event.button == ButtonType::secondary && !overlay.isNull()) {
     mode = opposite(mode);
@@ -40,7 +38,7 @@ void RectangleSelectTool::mouseDown(const ToolMouseEvent &event) {
     status.appendLabeled(event.pos);
   } else if (mode == SelectMode::paste) {
     blitImage(*ctx->overlay, overlay, event.pos + offset);
-    status.appendLabeled({event.pos + offset, overlay.size()});
+    status.appendLabeled({event.pos + offset, selection.size()});
   } else Q_UNREACHABLE();
   
   ctx->showStatus(status);
@@ -49,16 +47,18 @@ void RectangleSelectTool::mouseDown(const ToolMouseEvent &event) {
     if (event.button == ButtonType::primary) startPos = event.pos;
     ctx->emitChanges(ToolChanges::overlay);
   } else if (mode == SelectMode::paste) {
+    const QRect rect{event.pos + offset, selection.size()};
     if (event.button == ButtonType::primary) {
-      blitImage(ctx->cell->image, selection, event.pos + offset);
+      ctx->requireCell(rect);
+      blitImage(ctx->cell->image, selection, rect.topLeft() - ctx->cell->image.offset());
     } else if (event.button == ButtonType::erase) {
-      const QRect rect{event.pos + offset, selection.size()};
+      ctx->requireCell(rect);
       drawFilledRect(ctx->cell->image, ctx->colors.erase, rect);
     } else {
       return ctx->emitChanges(ToolChanges::overlay);
     }
-    ctx->finishChange();
     ctx->emitChanges(ToolChanges::cell_overlay);
+    ctx->finishChange();
   } else Q_UNREACHABLE();
 }
 
@@ -69,7 +69,7 @@ void RectangleSelectTool::mouseMove(const ToolMouseEvent &event) {
   if (mode == SelectMode::copy) {
     if (event.button == ButtonType::primary) {
       const QRect rect = unite(startPos, event.pos);
-      drawStrokedRect(*ctx->overlay, tool_overlay_color, rect, 1);
+      drawStrokedRect(*ctx->overlay, tool_overlay_color, rect);
       status.appendLabeled(rect);
     } else {
       drawSquarePoint(*ctx->overlay, tool_overlay_color, event.pos);
@@ -77,7 +77,7 @@ void RectangleSelectTool::mouseMove(const ToolMouseEvent &event) {
     }
   } else if (mode == SelectMode::paste) {
     blitImage(*ctx->overlay, overlay, event.pos + offset);
-    status.appendLabeled({event.pos + offset, overlay.size()});
+    status.appendLabeled({event.pos + offset, selection.size()});
   } else Q_UNREACHABLE();
   ctx->showStatus(status);
   ctx->emitChanges(ToolChanges::overlay);
@@ -87,18 +87,25 @@ void RectangleSelectTool::mouseUp(const ToolMouseEvent &event) {
   if (event.button != ButtonType::primary) return;
   clearImage(*ctx->overlay);
   if (mode == SelectMode::copy) {
-    drawSquarePoint(*ctx->overlay, tool_overlay_color, event.pos);
+    drawSquarePoint(*ctx->overlay, tool_overlay_color, event.pos); // why?
     const QRect rect = unite(startPos, event.pos);
-    selection = blitImage(ctx->cell->image, rect);
-    overlay = QImage{selection.size(), qimageFormat(Format::rgba)};
-    writeOverlay(ctx->palette, ctx->format, overlay, selection);
+    overlay = QImage{rect.size(), qimageFormat(Format::rgba)};
+    if (ctx->cell->image.isNull()) {
+      selection = {rect.size(), qimageFormat(ctx->format)};
+      clearImage(selection);
+      writeOverlay(ctx->palette, ctx->format, overlay);
+    } else {
+      const QRect offsetRect = rect.translated(-ctx->cell->image.offset());
+      selection = blitImage(ctx->cell->image, offsetRect);
+      writeOverlay(ctx->palette, ctx->format, overlay, selection);
+    }
     offset = rect.topLeft() - event.pos;
     mode = SelectMode::paste;
   }
   blitImage(*ctx->overlay, overlay, event.pos + offset);
   StatusMsg status;
   status.appendLabeled(mode);
-  status.appendLabeled({event.pos + offset, overlay.size()});
+  status.appendLabeled({event.pos + offset, selection.size()});
   ctx->showStatus(status);
   ctx->emitChanges(ToolChanges::overlay);
 }
@@ -114,7 +121,6 @@ void PolygonSelectTool::mouseLeave(const ToolLeaveEvent &) {
 }
 
 void PolygonSelectTool::mouseDown(const ToolMouseEvent &event) {
-  ctx->requireCell();
   clearImage(*ctx->overlay);
   if (event.button == ButtonType::secondary && !overlay.isNull()) {
     mode = opposite(mode);
@@ -127,7 +133,7 @@ void PolygonSelectTool::mouseDown(const ToolMouseEvent &event) {
     status.appendLabeled(event.pos);
   } else if (mode == SelectMode::paste) {
     blitImage(*ctx->overlay, overlay, event.pos + offset);
-    status.appendLabeled({event.pos + offset, overlay.size()});
+    status.appendLabeled({event.pos + offset, selection.size()});
   } else Q_UNREACHABLE();
   
   ctx->showStatus(status);
@@ -136,23 +142,20 @@ void PolygonSelectTool::mouseDown(const ToolMouseEvent &event) {
     if (event.button == ButtonType::primary) polygon.init(event.pos);
     ctx->emitChanges(ToolChanges::overlay);
   } else if (mode == SelectMode::paste) {
+    const QRect rect{event.pos + offset, selection.size()};
     if (event.button == ButtonType::primary) {
-      blitMaskImage(ctx->cell->image, mask, selection, event.pos + offset);
+      ctx->requireCell(rect);
+      const QPoint offsetPos = rect.topLeft() - ctx->cell->image.offset();
+      blitMaskImage(ctx->cell->image, mask, selection, offsetPos);
     } else if (event.button == ButtonType::erase) {
-      // @TODO should this be encapsulated in another file?
-      visitSurfaces(ctx->cell->image, ctx->colors.erase, [this, &event](auto surface, auto color) {
-        gfx::maskFillRegion(
-          surface,
-          makeCSurface<uint8_t>(mask),
-          color,
-          convert(event.pos + offset)
-        );
-      });
+      ctx->requireCell(rect);
+      const QPoint offsetPos = rect.topLeft() - ctx->cell->image.offset();
+      fillMaskImage(ctx->cell->image, mask, ctx->colors.erase, offsetPos);
     } else {
       return ctx->emitChanges(ToolChanges::overlay);
     }
-    ctx->finishChange();
     ctx->emitChanges(ToolChanges::cell_overlay);
+    ctx->finishChange();
   } else Q_UNREACHABLE();
 }
 
@@ -171,7 +174,7 @@ void PolygonSelectTool::mouseMove(const ToolMouseEvent &event) {
     }
   } else if (mode == SelectMode::paste) {
     blitImage(*ctx->overlay, overlay, event.pos + offset);
-    status.appendLabeled({event.pos + offset, overlay.size()});
+    status.appendLabeled({event.pos + offset, selection.size()});
   } else Q_UNREACHABLE();
   ctx->showStatus(status);
   ctx->emitChanges(ToolChanges::overlay);
@@ -180,33 +183,41 @@ void PolygonSelectTool::mouseMove(const ToolMouseEvent &event) {
 void PolygonSelectTool::mouseUp(const ToolMouseEvent &event) {
   if (event.button != ButtonType::primary) return;
   clearImage(*ctx->overlay);
-  QPolygon p;
   if (mode == SelectMode::copy) {
     polygon.push(event.pos);
-    const QRect clippedBounds = polygon.bounds().intersected(ctx->cell->image.rect());
-    mask = QImage{clippedBounds.size(), mask_format};
+    const QRect bounds = polygon.bounds();
+    mask = QImage{bounds.size(), mask_format};
     clearImage(mask);
-    drawFilledPolygon(mask, mask_color_on, polygon, -clippedBounds.topLeft());
-    selection = blitMaskImage(ctx->cell->image, mask, clippedBounds.topLeft());
-    overlay = QImage{selection.size(), qimageFormat(Format::rgba)};
+    drawFilledPolygon(mask, mask_color_on, polygon, -bounds.topLeft());
+    if (ctx->cell->image.isNull()) {
+      selection = {bounds.size(), qimageFormat(ctx->format)};
+      clearImage(selection);
+    } else {
+      const QPoint offsetPos = bounds.topLeft() - ctx->cell->image.offset();
+      selection = blitMaskImage(ctx->cell->image, mask, offsetPos);
+    }
+    overlay = QImage{bounds.size(), qimageFormat(Format::rgba)};
     writeOverlay(ctx->palette, ctx->format, overlay, selection, mask);
-    offset = clippedBounds.topLeft() - event.pos;
+    offset = bounds.topLeft() - event.pos;
     mode = SelectMode::paste;
   }
   blitImage(*ctx->overlay, overlay, event.pos + offset);
   StatusMsg status;
   status.appendLabeled(mode);
-  status.appendLabeled({event.pos + offset, overlay.size()});
+  status.appendLabeled({event.pos + offset, selection.size()});
   ctx->showStatus(status);
   ctx->emitChanges(ToolChanges::overlay);
 }
 
 void WandSelectTool::attachCell() {
   mode = SelectMode::copy;
-  if (!compatible(ctx->cell->image, selection)) {
-    selection = makeCompatible(ctx->cell->image);
-    overlay = QImage{selection.size(), qimageFormat(Format::rgba)};
-    mask = makeMask(selection.size());
+  const QImage::Format format = qimageFormat(ctx->format);
+  if (selection.format() != format || selection.size() != ctx->size) {
+    selection = {ctx->size, format};
+  }
+  if (overlay.size() != ctx->size) {
+    overlay = {ctx->size, qimageFormat(Format::rgba)};
+    mask = {ctx->size, mask_format};
   }
   clearImage(mask);
 }
@@ -226,7 +237,6 @@ void WandSelectTool::mouseLeave(const ToolLeaveEvent &) {
 }
 
 void WandSelectTool::mouseDown(const ToolMouseEvent &event) {
-  ctx->requireCell();
   if (event.button == ButtonType::secondary) {
     toggleMode(event);
   }
@@ -236,7 +246,7 @@ void WandSelectTool::mouseDown(const ToolMouseEvent &event) {
   if (mode == SelectMode::copy) {
     status.appendLabeled(event.pos);
   } else if (mode == SelectMode::paste) {
-    status.appendLabeled({event.pos + offset, selection.size()});
+    status.appendLabeled(event.pos + offset);
     clearImage(*ctx->overlay);
     blitImage(*ctx->overlay, overlay, event.pos + offset);
   } else Q_UNREACHABLE();
@@ -250,22 +260,20 @@ void WandSelectTool::mouseDown(const ToolMouseEvent &event) {
     ctx->emitChanges(ToolChanges::overlay);
   } else if (mode == SelectMode::paste) {
     // @TODO this is very similar to PolygonSelectTool
+    const QRect rect{event.pos + offset, selection.size()};
     if (event.button == ButtonType::primary) {
-      blitMaskImage(ctx->cell->image, mask, selection, event.pos + offset);
+      ctx->requireCell(rect);
+      const QPoint offsetPos = rect.topLeft() - ctx->cell->image.offset();
+      blitMaskImage(ctx->cell->image, mask, selection, offsetPos);
     } else if (event.button == ButtonType::erase) {
-      visitSurfaces(ctx->cell->image, ctx->colors.erase, [this, &event](auto surface, auto color) {
-        gfx::maskFillRegion(
-          surface,
-          makeCSurface<uint8_t>(mask),
-          color,
-          convert(event.pos + offset)
-        );
-      });
+      ctx->requireCell(rect);
+      const QPoint offsetPos = rect.topLeft() - ctx->cell->image.offset();
+      fillMaskImage(ctx->cell->image, mask, ctx->colors.erase, offsetPos);
     } else {
       return ctx->emitChanges(ToolChanges::overlay);
     }
-    ctx->finishChange();
     ctx->emitChanges(ToolChanges::cell_overlay);
+    ctx->finishChange();
   } else Q_UNREACHABLE();
 }
 
@@ -275,7 +283,7 @@ void WandSelectTool::mouseMove(const ToolMouseEvent &event) {
   if (mode == SelectMode::copy) {
     status.appendLabeled(event.pos);
   } else if (mode == SelectMode::paste) {
-    status.appendLabeled({event.pos + offset, selection.size()});
+    status.appendLabeled(event.pos + offset);
     clearImage(*ctx->overlay);
     blitImage(*ctx->overlay, overlay, event.pos + offset);
     ctx->emitChanges(ToolChanges::overlay);
@@ -283,9 +291,7 @@ void WandSelectTool::mouseMove(const ToolMouseEvent &event) {
   ctx->showStatus(status);
 }
 
-void WandSelectTool::mouseUp(const ToolMouseEvent &) {
-  
-}
+void WandSelectTool::mouseUp(const ToolMouseEvent &) {}
 
 void WandSelectTool::toggleMode(const ToolMouseEvent &event) {
   mode = opposite(mode);
@@ -295,7 +301,7 @@ void WandSelectTool::toggleMode(const ToolMouseEvent &event) {
     clearImage(selection);
     clearImage(mask);
   } else if (mode == SelectMode::paste) {
-    selection = blitMaskImage(ctx->cell->image, mask, {0, 0});
+    selection = blitMaskImage(ctx->cell->image, mask, -ctx->cell->pos());
     writeOverlay(ctx->palette, ctx->format, overlay, selection, mask);
     offset = -event.pos;
   } else Q_UNREACHABLE();
@@ -326,7 +332,7 @@ public:
     startColor = source.ref(pos);
     maskCheckColor = mask.ref(pos);
     maskColor = ~maskCheckColor;
-    if (maskColor == gfx::mask_off) {
+    if (maskColor == 0) {
       overlayColor = qRgba(0, 0, 0, 0);
     } else {
       overlayColor = constrastColor;
@@ -362,39 +368,52 @@ private:
 }
 
 void WandSelectTool::addToSelection(const ToolMouseEvent &event) {
+  QRect rect = toRect(ctx->size);
+  if (sampleCell(*ctx->cell, event.pos) == 0) {
+    ctx->requireCell(rect);
+  } else {
+    rect = rect.intersected(ctx->cell->rect());
+  }
+  const gfx::Surface overlaySurface = makeSurface<PixelRgba>(*ctx->overlay).view(convert(rect));
+  const gfx::Surface maskSurface = makeSurface<PixelMask>(mask).view(convert(rect));
+  const gfx::Point cellPos = convert(event.pos - rect.topLeft());
+  const gfx::Rect cellRect = convert(rect.translated(-ctx->cell->pos()));
+
   switch (ctx->format) {
     case Format::rgba: {
-      gfx::Surface surface = makeCSurface<PixelRgba>(ctx->cell->image);
+      gfx::Surface surface = makeCSurface<PixelRgba>(ctx->cell->image).view(cellRect);
       WandPolicy policy{
-        makeSurface<PixelRgba>(*ctx->overlay),
-        makeSurface<PixelMask>(mask),
+        overlaySurface,
+        maskSurface,
         surface,
-        contrastColor(surface.ref(convert(event.pos)))
+        contrastColor(surface.ref(cellPos))
       };
-      gfx::floodFill(policy, convert(event.pos));
+      gfx::floodFill(policy, cellPos);
       break;
     }
     case Format::index: {
-      gfx::Surface surface = makeCSurface<PixelIndex>(ctx->cell->image);
+      gfx::Surface surface = makeCSurface<PixelIndex>(ctx->cell->image).view(cellRect);
       WandPolicy policy{
-        makeSurface<PixelRgba>(*ctx->overlay),
-        makeSurface<PixelMask>(mask),
+        overlaySurface,
+        maskSurface,
         surface,
-        contrastColor(ctx->palette[surface.ref(convert(event.pos))])
+        contrastColor(ctx->palette[surface.ref(cellPos)])
       };
-      gfx::floodFill(policy, convert(event.pos));
+      gfx::floodFill(policy, cellPos);
       break;
     }
     case Format::gray: {
-      gfx::Surface surface = makeCSurface<PixelGray>(ctx->cell->image);
+      gfx::Surface surface = makeCSurface<PixelGray>(ctx->cell->image).view(cellRect);
       WandPolicy policy{
-        makeSurface<PixelRgba>(*ctx->overlay),
-        makeSurface<PixelMask>(mask),
+        overlaySurface,
+        maskSurface,
         surface,
-        qRgba(0, 0, scaleOverlayGray(surface.ref(convert(event.pos))), scaleOverlayAlpha(255))
+        qRgba(0, 0, scaleOverlayGray(surface.ref(cellPos)), scaleOverlayAlpha(255))
       };
-      gfx::floodFill(policy, convert(event.pos));
+      gfx::floodFill(policy, cellPos);
       break;
     }
   }
+  
+  // @TODO get the rectangle of the flood fill and only paste that rectangle
 }

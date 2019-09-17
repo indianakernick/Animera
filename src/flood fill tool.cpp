@@ -27,10 +27,12 @@ void FloodFillTool::mouseDown(const ToolMouseEvent &event) {
   drawSquarePoint(*ctx->overlay, tool_overlay_color, event.pos);
   ctx->showStatus(StatusMsg{}.appendLabeled(event.pos));
   const QRgb color = ctx->selectColor(event.button);
+  QRect rect = toRect(ctx->size);
   if (sampleCell(*ctx->cell, event.pos) == 0) {
-    ctx->requireCell(toRect(ctx->size));
+    ctx->requireCell(rect);
+  } else {
+    rect = rect.intersected(ctx->cell->rect());
   }
-  const QRect rect = toRect(ctx->size).intersected(ctx->cell->rect());
   ctx->emitChanges(drawFloodFill(ctx->cell->image, color, event.pos, rect));
   ctx->finishChange();
 }
