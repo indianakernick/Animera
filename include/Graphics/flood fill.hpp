@@ -111,6 +111,8 @@ void floodFillStart(Policy &&policy, Point pos, const Size size) {
 
 }
 
+// @TODO return the filled bounds
+
 template <typename Policy>
 bool floodFill(Policy &&policy, const Point pos) {
   if (!policy.start(pos)) return false;

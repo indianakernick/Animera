@@ -41,7 +41,7 @@ TEST_CASE("copyRegion") {
   SECTION("no overlap") {
     gfx::Surface<Px> dst{&dstArr[0][0], width, width, height};
     gfx::CSurface<Px> src{&srcArr[0][0], width, width, height};
-    gfx::copyRegion(dst, src, {width, height});
+    REQUIRE_FALSE(gfx::copyRegion(dst, src, {width, height}));
     for (int y = 0; y != height; ++y) {
       for (int x = 0; x != width; ++x) {
         INFO("(" << x << ", " << y << ")");
@@ -55,7 +55,7 @@ TEST_CASE("copyRegion") {
     gfx::Surface<Px> dst{&dstArr[0][0], width, width, height};
     gfx::CSurface<Px> src{&srcArr[0][0], width, width, height};
     const gfx::Point srcPos = {1 - width, 1 - height};
-    gfx::copyRegion(dst, src, srcPos);
+    REQUIRE(gfx::copyRegion(dst, src, srcPos));
     for (int y = 0; y != height; ++y) {
       for (int x = 0; x != width; ++x) {
         INFO("(" << x << ", " << y << ")");
@@ -74,7 +74,7 @@ TEST_CASE("copyRegion") {
     gfx::Surface<Px> dst{&dstArr[0][0], width, width, height};
     const gfx::Rect srcRect = {{2, 3}, {width - 4, height - 5}};
     gfx::CSurface<Px> src{&srcArr[0][0], width, srcRect.s};
-    gfx::copyRegion(dst, src, srcRect.p);
+    REQUIRE(gfx::copyRegion(dst, src, srcRect.p));
     for (int y = 0; y != height; ++y) {
       for (int x = 0; x != width; ++x) {
         INFO("(" << x << ", " << y << ")");

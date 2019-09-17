@@ -125,7 +125,7 @@ TEMPLATE_TEST_CASE("fillRegion", "", uint8_t, uint16_t, uint32_t) {
   }
   
   SECTION("no overlap pixel") {
-    gfx::fillRegion(makeSurface(dstArr), fill_px, {{width, height}, {1, 1}});
+    REQUIRE_FALSE(gfx::fillRegion(makeSurface(dstArr), fill_px, {{width, height}, {1, 1}}));
     for (int y = 0; y != height; ++y) {
       for (int x = 0; x != width; ++x) {
         INFO("(" << x << ", " << y << ")");
@@ -135,7 +135,7 @@ TEMPLATE_TEST_CASE("fillRegion", "", uint8_t, uint16_t, uint32_t) {
   }
   
   SECTION("no overlap zero") {
-    gfx::fillRegion(makeSurface(dstArr), {{width, height}, {1, 1}});
+    REQUIRE_FALSE(gfx::fillRegion(makeSurface(dstArr), {{width, height}, {1, 1}}));
     for (int y = 0; y != height; ++y) {
       for (int x = 0; x != width; ++x) {
         INFO("(" << x << ", " << y << ")");
@@ -145,7 +145,7 @@ TEMPLATE_TEST_CASE("fillRegion", "", uint8_t, uint16_t, uint32_t) {
   }
   
   SECTION("top left pixel") {
-    gfx::fillRegion(makeSurface(dstArr), fill_px, {{-3, -4}, {4, 5}});
+    REQUIRE(gfx::fillRegion(makeSurface(dstArr), fill_px, {{-3, -4}, {4, 5}}));
     for (int y = 0; y != height; ++y) {
       for (int x = 0; x != width; ++x) {
         INFO("(" << x << ", " << y << ")");
@@ -159,7 +159,7 @@ TEMPLATE_TEST_CASE("fillRegion", "", uint8_t, uint16_t, uint32_t) {
   }
   
   SECTION("top left zero") {
-    gfx::fillRegion(makeSurface(dstArr), {{-3, -4}, {4, 5}});
+    REQUIRE(gfx::fillRegion(makeSurface(dstArr), {{-3, -4}, {4, 5}}));
     for (int y = 0; y != height; ++y) {
       for (int x = 0; x != width; ++x) {
         INFO("(" << x << ", " << y << ")");
@@ -174,7 +174,7 @@ TEMPLATE_TEST_CASE("fillRegion", "", uint8_t, uint16_t, uint32_t) {
   
   SECTION("middle pixel") {
     const gfx::Rect rect = {{3, 2}, {4, 5}};
-    gfx::fillRegion(makeSurface(dstArr), fill_px, rect);
+    REQUIRE(gfx::fillRegion(makeSurface(dstArr), fill_px, rect));
     for (int y = 0; y != height; ++y) {
       for (int x = 0; x != height; ++x) {
         INFO("(" << x << ", " << y << ")");
@@ -189,7 +189,7 @@ TEMPLATE_TEST_CASE("fillRegion", "", uint8_t, uint16_t, uint32_t) {
   
   SECTION("middle zero") {
     const gfx::Rect rect = {{3, 2}, {4, 5}};
-    gfx::fillRegion(makeSurface(dstArr), rect);
+    REQUIRE(gfx::fillRegion(makeSurface(dstArr), rect));
     for (int y = 0; y != height; ++y) {
       for (int x = 0; x != height; ++x) {
         INFO("(" << x << ", " << y << ")");
