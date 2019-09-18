@@ -20,10 +20,10 @@ void SampleObject::mouseMove(const QPoint newPos) {
 }
 
 void SampleObject::keyPress(const Qt::Key key) {
-  if (cell && key == key_sample) {
+  if (key == key_sample) {
     // @TODO should we sample from composited image?
-    if (QRect{cell->image.offset(), cell->image.size()}.contains(pos)) {
-      Q_EMIT colorChanged(cell->image.pixel(pos - cell->image.offset()));
+    if (cell->rect().contains(pos)) {
+      Q_EMIT colorChanged(cell->image.pixel(pos - cell->pos()));
     } else {
       Q_EMIT colorChanged(0);
     }

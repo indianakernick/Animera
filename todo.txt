@@ -45,16 +45,6 @@ There's a lot to learn
 Should probably be calling update() instead of repaint() in most places
 Should probably be using mouse release instead of mouse press in some places
 
-Cell images that aren't a fixed size
-  they grow as you draw on them
-  they can be translated outside of the viewport and then back
-  allows importing images that aren't the same size as the viewport
-  tools will calculate a bounding rect to resize the image as needed
-  the canvas could be resized without discarding anything
-  flood fill just fills the viewport
-  should we distinguish between empty and null?
-    perhaps empty should mean null
-
 Palette import and export
   export as png
   does the palette need to have a size?
@@ -95,9 +85,20 @@ Build system
   https://cmake.org/cmake/help/latest/module/CPack.html
   https://cmake.org/cmake/help/latest/module/BundleUtilities.html
 
-create polymorphic surface in graphics library
-  gfx::Image perhaps
-  add visit function for converting to gfx::Surface
-  should it store Format? how?
-
 generate a palette from a gradient
+
+filled polygon
+  polygon to triangles (ear something)
+  even-odd fill rule
+  fill triangles
+  scanline algorithm for filling polygons
+  http://www.sunshine2k.de/coding/java/Polygon/Filling/FillPolygon.htm
+  http://www.sunshine2k.de/coding/java/TriangleRasterization/TriangleRasterization.html
+
+scale tool
+  it's possible now that we have dynamically resizable cells
+  we could also allow the user to resize the canvas
+
+proper undo/redo system
+  the current one kind of falls apart when cells transition from null to non-null
+  an application-wide undo system would be cool
