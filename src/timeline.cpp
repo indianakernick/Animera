@@ -401,6 +401,9 @@ void Timeline::removeFrame() {
 }
 
 void Timeline::clearCell() {
+  // in a lot of places, we call changePos even through the position isn't changing
+  // this is because the address of the cell is changing
+  // changing the way the currCellChanged signal is emitted could break things
   layers[+currPos.l].spans.replaceNew(currPos.f, std::make_unique<Cell>());
   changeSpan(currPos.l);
   changeFrame();
