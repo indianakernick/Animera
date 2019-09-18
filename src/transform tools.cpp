@@ -204,13 +204,24 @@ void RotateTool::keyPress(const ToolKeyEvent &event) {
   visitSurfaces(rotated, src, [rot](auto rotated, auto src) {
     gfx::rotate(rotated, src, rot);
   });
-  QPoint offset = src.offset();
+  QSize size = ctx->size;
+  if (size.width() % 2 > size.height() % 2) {
+    size = {size.width() - 1, size.height()};
+  } else if (size.width() % 2 < size.height() % 2) {
+    size = {size.width(), size.height() - 1};
+  }
+  const QPoint offset = src.offset();
   if (rot == 1) {
-    offset = {ctx->size.height() - (offset.y() + src.height()), offset.x()};
+    rotated.setOffset({
+      size.width() / 2 + (size.height() + 1) / 2 - offset.y() - src.height(),
+      (size.height() + 1) / 2 - (size.width() + 1) / 2 + offset.x()
+    });
   } else if (rot == 3) {
-    offset = {offset.y(), ctx->size.width() - (offset.x() + src.width())};
+    rotated.setOffset({
+      (size.width() + 1) / 2 - (size.height() + 1) / 2 + offset.y(),
+      size.height() / 2 + (size.width() + 1) / 2 - offset.x() - src.width()
+    });
   } else Q_UNREACHABLE();
-  rotated.setOffset(offset);
   src = std::move(rotated);
   updateStatus();
   ctx->emitChanges(ToolChanges::cell);
