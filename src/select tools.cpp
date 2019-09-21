@@ -87,7 +87,6 @@ void RectangleSelectTool::mouseUp(const ToolMouseEvent &event) {
   if (event.button != ButtonType::primary) return;
   clearImage(*ctx->overlay);
   if (mode == SelectMode::copy) {
-    drawSquarePoint(*ctx->overlay, tool_overlay_color, event.pos); // TODO: why?
     const QRect rect = unite(startPos, event.pos);
     overlay = QImage{rect.size(), qimageFormat(Format::rgba)};
     if (ctx->cell->image.isNull()) {
