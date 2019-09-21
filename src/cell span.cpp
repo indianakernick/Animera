@@ -13,7 +13,7 @@ namespace {
 using Spans = std::vector<CellSpan>;
 
 FrameIdx spanLength(const Spans &spans) {
-  FrameIdx len = {};
+  FrameIdx len{0};
   for (const CellSpan &span : spans) {
     assert(span.len >= FrameIdx{0});
     len += span.len;
@@ -53,6 +53,22 @@ LayerCells::ConstIterator &LayerCells::ConstIterator::operator++() {
 
 const Cell *LayerCells::ConstIterator::operator*() const {
   return iter->cell.get();
+}
+         
+void LayerCells::optimize() {
+  FrameIdx prevNull{0};
+  for (auto s = spans.begin(); s != spans.end(); ++s) {
+    if (!*s->cell) {
+      if (prevNull > FrameIdx{0}) {
+        auto prev = std::prev(s);
+        s->len += prev->len;
+        s = spans.erase(prev);
+      }
+      prevNull = s->len;
+    } else {
+      prevNull = {0};
+    }
+  }
 }
 
 LayerCells::ConstIterator LayerCells::find(FrameIdx idx) const {

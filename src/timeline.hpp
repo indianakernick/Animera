@@ -41,6 +41,7 @@ public:
   Timeline();
 
   void initDefault();
+  void optimize();
 
   Error serializeHead(QIODevice &) const;
   Error serializeBody(QIODevice &) const;

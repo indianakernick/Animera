@@ -40,6 +40,20 @@ void Timeline::initDefault() {
   changeLayers(LayerIdx{0}, LayerIdx{1});
 }
 
+void Timeline::optimize() {
+  LayerIdx idx{};
+  for (Layer &layer : layers) {
+    for (CellSpan &span : layer.spans) {
+      optimizeCell(*span.cell);
+    }
+    layer.spans.optimize();
+    changeSpan(idx);
+    ++idx;
+  }
+  changeFrame();
+  changePos();
+}
+
 Error Timeline::serializeHead(QIODevice &dev) const {
   SpriteInfo info;
   info.width = canvasSize.width();

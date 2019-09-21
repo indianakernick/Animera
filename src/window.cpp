@@ -307,6 +307,7 @@ void Window::connectSignals() {
 }
 
 void Window::saveToPath(const QString &path) {
+  sprite.optimize();
   if (Error err = sprite.saveFile(path); err) {
     (new ErrorDialog{this, "File save error", err.msg()})->open();
   } else {

@@ -59,6 +59,9 @@ public:
     spans.push_back({std::move(cell)});
   }
 
+  /// Combine consecutive null spans into a single span
+  void optimize();
+  
   /// Get a constant iterator to a cell
   ConstIterator find(FrameIdx) const;
   /// Get a mutable cell
@@ -70,33 +73,27 @@ public:
   /// If the index refers to the last cell of a span, the span is copied
   /// otherwise the span is extended
   void insertCopy(FrameIdx);
-
   /// Insert a new cell after the index
   void insertNew(FrameIdx, CellPtr);
-
   /// Replace a cell with a new cell
   void replaceNew(FrameIdx, CellPtr);
 
   /// Extend the span at the index and shrink the following span
   /// The span will not be extended past the end
   void extend(FrameIdx);
-
   /// Split the span at the index into two
   /// The index becomes the first cell of the second span
   void split(FrameIdx);
 
   /// Replace part of a span with another span
   void replaceSpan(FrameIdx, LayerCells &);
-
   /// Make a copy of part of a span
   LayerCells extract(FrameIdx, FrameIdx) const;
-
   /// Make a truncated copy of the spans
   LayerCells truncateCopy(FrameIdx) const;
 
   /// Remove a cell
   void remove(FrameIdx);
-
   /// Replace the spans with a single null span
   void clear(FrameIdx);
   

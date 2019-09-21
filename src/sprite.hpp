@@ -20,6 +20,7 @@ class Sprite final : public QObject {
   Q_OBJECT
 
 public Q_SLOTS:
+  void optimize();
   void newFile(Format, QSize);
   Error saveFile(const QString &) const;
   Error openFile(const QString &);

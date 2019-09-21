@@ -62,6 +62,10 @@ animation end
 
 }
 
+void Sprite::optimize() {
+  timeline.optimize();
+}
+
 Error Sprite::saveFile(const QString &path) const {
   QFile file{path};
   if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
