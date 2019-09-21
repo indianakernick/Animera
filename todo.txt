@@ -100,5 +100,13 @@ scale tool
   we could also allow the user to resize the canvas
 
 proper undo/redo system
-  the current one kind of falls apart when cells transition from null to non-null
   an application-wide undo system would be cool
+
+using the offset property of QImage could be a mistake
+  Cells should have positions
+  images should not
+  if we're dealing with an image that has a position,
+    we're actually dealing with a cell but it looks like an image
+  perhaps using isNull() directly on an image is a mistake too?
+
+wand select tool should use the flood fill bounds to improve efficiency

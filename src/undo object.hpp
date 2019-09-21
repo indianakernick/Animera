@@ -10,10 +10,9 @@
 #define undo_object_hpp
 
 #include "undo.hpp"
+#include "cell.hpp"
 #include <string_view>
 #include <QtCore/qobject.h>
-
-class Cell;
 
 class UndoObject final : public QObject {
   Q_OBJECT
@@ -26,6 +25,8 @@ public Q_SLOTS:
 Q_SIGNALS:
   void cellReverted();
   void shouldShowTemp(std::string_view);
+  void shouldClearCell();
+  void shouldGrowCell(QRect);
 
 private:
   Cell *cell = nullptr;
@@ -33,6 +34,7 @@ private:
   
   void undo();
   void redo();
+  void restore(const QImage &);
 };
 
 #endif

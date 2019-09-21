@@ -297,6 +297,8 @@ void Window::connectSignals() {
   CONNECT(undo,            cellReverted,        editor,          composite);
   CONNECT(undo,            cellReverted,        this,            modify);
   CONNECT(undo,            shouldShowTemp,      statusBar,       showTemp);
+  CONNECT(undo,            shouldClearCell,     sprite.timeline, clearCell);
+  CONNECT(undo,            shouldGrowCell,      sprite.timeline, growCell);
   
   CONNECT(palette,         shouldAttachColor,   colorPicker,     attach);
   CONNECT(palette,         shouldSetColor,      colorPicker,     setColor);

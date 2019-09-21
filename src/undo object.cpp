@@ -8,16 +8,14 @@
 
 #include "undo object.hpp"
 
-#include "cell.hpp"
 #include "config.hpp"
+#include "composite.hpp"
 
 void UndoObject::setCell(Cell *newCell) {
-  cell = newCell;
-  if (cell) {
-    stack.reset(cell->image);
-  } else {
-    stack.clear();
+  if (cell != newCell) {
+    stack.reset(newCell->image);
   }
+  cell = newCell;
 }
 
 void UndoObject::keyPress(const Qt::Key key) {
@@ -29,36 +27,36 @@ void UndoObject::keyPress(const Qt::Key key) {
 }
 
 void UndoObject::cellModified() {
-  if (cell) {
-    stack.modify(cell->image);
-  }
+  stack.modify(cell->image);
 }
 
 void UndoObject::undo() {
-  if (!cell) {
-    Q_EMIT shouldShowTemp("Cannot undo actions on this cell");
-    return;
-  }
   UndoState state = stack.undo();
   if (state.undid) {
-    cell->image = state.img;
-    Q_EMIT cellReverted();
+    restore(state.img);
   } else {
     Q_EMIT shouldShowTemp("Cannot undo any further");
   }
 }
 
 void UndoObject::redo() {
-  if (!cell) {
-    Q_EMIT shouldShowTemp("Cannot redo actions on this cell");
-    return;
-  }
   UndoState state = stack.redo();
   if (state.undid) {
-    cell->image = state.img;
-    Q_EMIT cellReverted();
+    restore(state.img);
   } else {
     Q_EMIT shouldShowTemp("Cannot redo any further");
+  }
+}
+
+void UndoObject::restore(const QImage &image) {
+  if (cell->image.isNull() > image.isNull()) {
+    Q_EMIT shouldGrowCell({image.offset(), image.size()});
+    blitImage(cell->image, image, {});
+  } else if (cell->image.isNull() < image.isNull()) {
+    Q_EMIT shouldClearCell();
+  } else {
+    cell->image = image;
+    Q_EMIT cellReverted();
   }
 }
 
