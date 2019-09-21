@@ -112,9 +112,9 @@ void FileInputWidget::changePath() {
 void FileInputWidget::initText() {
   auto *completer = new QCompleter{text};
   auto *model = new QFileSystemModel{completer};
-  // @TODO bug workaround. should be QDir::rootPath()
+  // TODO: bug workaround. should be QDir::rootPath()
   // https://forum.qt.io/topic/105279/update-the-qcompleter-when-calling-qlineedit-settext
-  // @TODO completer suggests trailing slashes
+  // TODO: completer suggests trailing slashes
   // these are later removed by cleanPath.
   // pressing slash while completer is suggesting something should materialize
   // the suggestion, append a slash and suggest another directory

@@ -99,7 +99,7 @@ private:
   bool keyButton = false;
 
   void zoomIntoCenter(const int oldScale) {
-    // @TODO this could still be improved
+    // TODO: this could still be improved
     const QSize viewportSize = parent->viewport()->size();
     const QPoint center = mapFromParent(toPoint(viewportSize / 2));
     setFixedSize(editor.size() * scale);

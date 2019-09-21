@@ -100,7 +100,7 @@ void ControlsWidget::connectSignals() {
   CONNECT(playButton,          toggled,      this, toggleTimer);
   CONNECT(animTimer,           timeout,      this, nextFrame);
   CONNECT(delayBox,            valueChanged, this, setInterval);
-  // @TODO store delay in Sprite
+  // TODO: store delay in Sprite
 }
 
 #include "timeline controls widget.moc"

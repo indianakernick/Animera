@@ -27,7 +27,7 @@ void UndoObject::keyPress(const Qt::Key key) {
 }
 
 void UndoObject::cellModified() {
-  // @TODO not notified of cells being cleared or pasted onto
+  // TODO: not notified of cells being cleared or pasted onto
   // maybe we could listen to the timeline.modified signal?
   stack.modify(cell->image);
 }

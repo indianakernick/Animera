@@ -47,7 +47,7 @@ CellsWidget::CellsWidget(QWidget *parent)
 void CellsWidget::setSelection(const CellRect rect) {
   selectionImg.fill(0);
   if (rect.minL <= rect.maxL && rect.minF <= rect.maxF) {
-    // @TODO this needs work
+    // TODO: this needs work
     // animate?
     // do we really need this at all?
     // what if we change the colors of the cells? Could be problematic
@@ -229,7 +229,7 @@ void CellScrollWidget::changeMargins() {
 }
 
 void CellScrollWidget::ensureVisible(const QPoint pos) {
-  // @TODO Why do I have to add 1 here? Bug?
+  // TODO: Why do I have to add 1 here? Bug?
   rect->setGeometry(pos.x(), pos.y(), cell_width + 1, cell_height + 1);
   QScrollArea::ensureWidgetVisible(rect, 0, 0);
 }

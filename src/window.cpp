@@ -193,7 +193,7 @@ void Window::populateMenubar() {
   ADD_ACTION(layer, "Move Layer Up", Qt::SHIFT + Qt::Key_Up, sprite.timeline, moveLayerUp);
   ADD_ACTION(layer, "Move Layer Down", Qt::SHIFT + Qt::Key_Down, sprite.timeline, moveLayerDown);
   //ADD_ACTION(layer, "Toggle Visibility", Qt::SHIFT + Qt::Key_V, sprite.timeline, toggleLayerVisible);
-  // @TODO Maybe consider this
+  // TODO: Maybe consider this
   // We have to keep the action in sync with the timeline
   /*{
     QAction *action = layer->addAction("Visible");

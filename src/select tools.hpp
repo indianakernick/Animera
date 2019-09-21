@@ -28,7 +28,7 @@ private:
   SelectMode mode = SelectMode::copy;
 };
 
-// @TODO is polygon select really all that useful?
+// TODO: is polygon select really all that useful?
 class PolygonSelectTool final : public Tool {
 public:
   void detachCell() override;
@@ -46,7 +46,7 @@ private:
   SelectMode mode = SelectMode::copy;
 };
 
-// @TODO What if you could remove from the selection by pressing undo?
+// TODO: What if you could remove from the selection by pressing undo?
 
 class WandSelectTool final : public Tool {
 public:

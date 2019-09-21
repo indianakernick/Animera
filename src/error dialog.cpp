@@ -26,9 +26,9 @@ ErrorDialog::ErrorDialog(
   layout->setContentsMargins(glob_margin, glob_margin, glob_margin, glob_margin);
   layout->setSizeConstraint(QLayout::SetFixedSize);
   layout->addWidget(makeLabel(this, title));
-  // @TODO remove margin from separator
+  // TODO: remove margin from separator
   layout->addWidget(new HoriSeparator{this});
-  // @TODO wrap long messages
+  // TODO: wrap long messages
   layout->addWidget(makeLabel(this, message));
   auto *ok = new TextPushButtonWidget{this, textBoxRect(8), "Ok"};
   CONNECT(ok, pressed, this, accept);

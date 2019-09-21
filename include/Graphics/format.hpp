@@ -13,7 +13,7 @@
 
 namespace gfx {
 
-// @TODO fixed order pixel formats
+// TODO: fixed order pixel formats
 
 struct ARGB {
   using Pixel = uint32_t;

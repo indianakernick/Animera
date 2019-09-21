@@ -88,7 +88,7 @@ private:
   }
   
   void paintEvent(QPaintEvent *) override {
-    // @TODO consider baking checkerboard and border
+    // TODO: consider baking checkerboard and border
     QPainter painter{this};
     paintChecker(painter, tool_color_rect, tool_color_tiles);
     if (isChecked()) {

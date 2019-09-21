@@ -11,7 +11,7 @@
 
 namespace gfx {
 
-// @TODO std::type_identity_t
+// TODO: std::type_identity_t
 
 template <typename T>
 struct identity {

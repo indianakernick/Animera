@@ -14,7 +14,7 @@
 #include "palette span.hpp"
 #include "export options.hpp"
 
-// @TODO can we make the interface of Timeline smaller?
+// TODO: can we make the interface of Timeline smaller?
 
 /*
 

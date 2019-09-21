@@ -276,7 +276,7 @@ Error writeCDAT(QIODevice &dev, const QImage &image, const Format format) try {
   const uint32_t inBuffSize = image.width() * byteDepth(format);
   std::vector<Bytef> inBuff(inBuffSize);
   
-  // @TODO avoid overflowing uint32_t
+  // TODO: avoid overflowing uint32_t
   // might need to reduce maximum image size
   // or split the image data into multiple chunks
   

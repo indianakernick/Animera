@@ -183,7 +183,7 @@ Error Timeline::exportFile(
   const Frame &frame,
   const CellPos pos
 ) const {
-  // @TODO don't allocate every time this is called
+  // TODO: don't allocate every time this is called
   QImage result{canvasSize, qimageFormat(canvasFormat)};
   clearImage(result);
   if (canvasFormat == Format::gray) {
@@ -230,7 +230,7 @@ Error Timeline::exportRect(
 ) const {
   for (LayerIdx l = rect.minL; l <= rect.maxL; ++l) {
     const Layer &layer = layers[+l];
-    // @TODO does the user want to skip invisible layers?
+    // TODO: does the user want to skip invisible layers?
     if (!layer.visible) continue;
     LayerCells::ConstIterator iter = layer.spans.find(rect.minF);
     for (FrameIdx f = rect.minF; f <= rect.maxF; ++f) {
@@ -470,7 +470,7 @@ void Timeline::setVisibility(const LayerIdx idx, const bool visible) {
   assert(LayerIdx{0} <= idx);
   assert(idx < layerCount());
   bool &layerVis = layers[+idx].visible;
-  // @TODO Emit signal when layer visibility changed?
+  // TODO: Emit signal when layer visibility changed?
   // if (layerVis != visible) {
     layerVis = visible;
   //   Q_EMIT visibilityChanged(idx, visible);
@@ -483,7 +483,7 @@ void Timeline::setName(const LayerIdx idx, const std::string_view name) {
   assert(LayerIdx{0} <= idx);
   assert(idx < layerCount());
   layers[+idx].name = name;
-  // @TODO Emit signal when layer name changed?
+  // TODO: Emit signal when layer name changed?
   // Q_EMIT nameChanged(idx, name);
   Q_EMIT modified();
 }

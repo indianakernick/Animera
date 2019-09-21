@@ -108,7 +108,7 @@ bool drawStrokedRect(
   return drawn;
 }
 
-// @TODO radius 6
+// TODO: radius 6
 
 template <typename Pixel>
 bool drawFilledCircle(
@@ -290,7 +290,7 @@ inline std::pair<int, int> signdiff(const int a, const int b) {
 
 template <typename Func>
 bool drawLine(Point p1, const Point p2, Func func) {
-  // @TODO could be optimized by splitting into four functions
+  // TODO: could be optimized by splitting into four functions
   const auto [sx, dx] = signdiff(p1.x, p2.x);
   auto [sy, dy] = signdiff(p1.y, p2.y);
   dy = -dy;
@@ -341,7 +341,7 @@ bool drawLine(
     return drawLine(dst, pixel, p1, p2);
   } else {
     assert(radius > 0);
-    // @TODO this is suboptimial but seems to be fast enough
+    // TODO: this is suboptimial but seems to be fast enough
     bool drawn = drawFilledCircle(dst, pixel, p1, radius);
     drawn |= detail::drawLine(p1, p2, [dst, pixel, radius](const Point pos) {
       return drawStrokedCircle(dst, pixel, pos, radius, radius - 1);

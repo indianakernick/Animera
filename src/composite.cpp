@@ -25,7 +25,7 @@ void eachImage(const Frame &frame, Func func) {
   for (auto c = frame.crbegin(); c != frame.crend(); ++c) {
     const Cell &cell = **c;
     if (cell) {
-      // @TODO remove
+      // TODO: remove
       QImage dup = cell.image;
       dup.fill(qRgba(127, 127, 127, 63));
       func(dup);
@@ -125,7 +125,7 @@ void blitImage(QImage &dst, const QImage &src, const QPoint pos) {
 }
 
 QImage blitImage(const QImage &src, const QRect rect) {
-  // @TODO does it really make sense allocate a new QImage?
+  // TODO: does it really make sense allocate a new QImage?
   QImage dst{rect.size(), src.format()};
   visitSurfaces(dst, src, [pos = rect.topLeft()](auto dst, auto src) {
     gfx::overFill(dst);
@@ -148,7 +148,7 @@ void blitMaskImage(QImage &dst, const QImage &mask, const QImage &src, const QPo
 }
 
 QImage blitMaskImage(const QImage &src, const QImage &mask, const QPoint pos) {
-  // @TODO does it really make sense allocate a new QImage?
+  // TODO: does it really make sense allocate a new QImage?
   QImage dst{mask.size(), src.format()};
   visitSurfaces(dst, src, [&mask, pos](auto dst, auto src) {
     gfx::overFill(dst);

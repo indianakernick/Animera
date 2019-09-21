@@ -16,7 +16,7 @@
 
 namespace gfx {
 
-// @TODO allow Surface to deal with formats that don't fit in a single integer
+// TODO: allow Surface to deal with formats that don't fit in a single integer
 template <typename Format, uint8_t Threshold>
 Surface<uint8_t> convertToMono(const Surface<Pixel<Format>> src) noexcept {
   Surface<uint8_t> dst{

@@ -92,7 +92,7 @@ bool drawFilledPolygon(
   for (const QPoint &vertex : poly) {
     shiftedPoly.push_back(vertex + offset);
   }
-  // @TODO avoid using QPainter
+  // TODO: avoid using QPainter
   QPainter painter{&img};
   painter.setCompositionMode(QPainter::CompositionMode_Source);
   painter.setBrush(QColor::fromRgba(color));

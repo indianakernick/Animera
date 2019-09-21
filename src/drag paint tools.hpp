@@ -44,7 +44,7 @@ public:
   void setRadius(int);
 
 private:
-  // @TODO restore this to 0
+  // TODO: restore this to 0
   int radius = 2;
  
   bool drawPoint(QImage &, QPoint);
@@ -66,7 +66,7 @@ public:
   
 private:
   gfx::CircleShape shape = gfx::CircleShape::c1x1;
-  // @TODO restore this to 1
+  // TODO: restore this to 1
   int thickness = 8;
 
   bool drawPoint(QImage &, QPoint);
@@ -105,7 +105,7 @@ public:
   void setThick(int);
 
 private:
-  // @TODO restore this to 1
+  // TODO: restore this to 1
   int thickness = 4;
 
   bool drawPoint(QImage &, QPoint);

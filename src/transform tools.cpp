@@ -15,7 +15,7 @@
 #include "graphics convert.hpp"
 #include <Graphics/transform.hpp>
 
-// @TODO do we need to know the difference between switching tools and switching cells?
+// TODO: do we need to know the difference between switching tools and switching cells?
 
 void TranslateTool::attachCell() {
   //updateStatus();

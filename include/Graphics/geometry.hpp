@@ -26,7 +26,7 @@ struct Point {
   constexpr Point operator+(const Point other) const noexcept {
     return {x + other.x, y + other.y};
   }
-  // @TODO should this return a Size?
+  // TODO: should this return a Size?
   constexpr Point operator-(const Point other) const noexcept {
     return {x - other.x, y - other.y};
   }

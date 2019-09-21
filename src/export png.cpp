@@ -109,14 +109,14 @@ Error exportPng(
     PNG_COMPRESSION_TYPE_DEFAULT,
     PNG_FILTER_TYPE_DEFAULT
   );
-  // @TODO avoid doing a bunch of allocations for each image
+  // TODO: avoid doing a bunch of allocations for each image
   // allocate one image at the very beginning of the export and reuse it
   // the rows vector could also get the same treatment
   // would this be as simple as making the variable static?
   int transforms = PNG_TRANSFORM_IDENTITY;
   switch (exportFormat) {
     case ExportFormat::rgba:
-      // @TODO Make ARGB endian aware so that we don't need to do this
+      // TODO: Make ARGB endian aware so that we don't need to do this
       transforms = PNG_TRANSFORM_BGR;
       break;
     case ExportFormat::index:

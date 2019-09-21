@@ -22,7 +22,7 @@ constexpr int operator""_px(const unsigned long long literal) {
   return static_cast<int>(literal * glob_scale);
 }
 
-// @TODO robust font system
+// TODO: robust font system
 // we might end up using
 // 5x7ascii for the status bar and
 // 5x7+2_var_ascii for the tooltips
