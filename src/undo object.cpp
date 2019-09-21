@@ -27,6 +27,8 @@ void UndoObject::keyPress(const Qt::Key key) {
 }
 
 void UndoObject::cellModified() {
+  // @TODO not notified of cells being cleared or pasted onto
+  // maybe we could listen to the timeline.modified signal?
   stack.modify(cell->image);
 }
 
@@ -52,6 +54,7 @@ void UndoObject::restore(const QImage &image) {
   if (cell->image.isNull() > image.isNull()) {
     Q_EMIT shouldGrowCell({image.offset(), image.size()});
     blitImage(cell->image, image, {});
+    Q_EMIT cellReverted();
   } else if (cell->image.isNull() < image.isNull()) {
     Q_EMIT shouldClearCell();
   } else {

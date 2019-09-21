@@ -55,9 +55,6 @@ public:
   void pushNull(const FrameIdx len) {
     spans.push_back({std::make_unique<Cell>(), len});
   }
-  void pushCell(CellPtr cell) {
-    spans.push_back({std::move(cell)});
-  }
 
   /// Combine consecutive null spans into a single span
   void optimize();
@@ -74,9 +71,9 @@ public:
   /// otherwise the span is extended
   void insertCopy(FrameIdx);
   /// Insert a new cell after the index
-  void insertNew(FrameIdx, CellPtr);
+  void insertNew(FrameIdx);
   /// Replace a cell with a new cell
-  void replaceNew(FrameIdx, CellPtr);
+  void replaceNew(FrameIdx);
 
   /// Extend the span at the index and shrink the following span
   /// The span will not be extended past the end

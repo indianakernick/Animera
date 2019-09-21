@@ -110,3 +110,12 @@ using the offset property of QImage could be a mistake
   perhaps using isNull() directly on an image is a mistake too?
 
 wand select tool should use the flood fill bounds to improve efficiency
+
+optimize LayerCells
+  we need stable pointers to Cells
+  std::deque keeps pointers stable if you insert or erase from either end
+  are these guarantees enough?
+  in Timeline
+    in a lot of places, we call changePos even through the position isn't changing
+    this is because the address of the cell is changing
+    changing the way the currCellChanged signal is emitted could break things

@@ -100,43 +100,43 @@ void LayerCells::insertCopy(FrameIdx idx) {
   }
 }
 
-void LayerCells::insertNew(FrameIdx idx, CellPtr cell) {
+void LayerCells::insertNew(FrameIdx idx) {
   Spans::iterator span = findSpan(spans, idx);
-  if (!*span->cell && !*cell) {
+  if (!*span->cell) {
     ++span->len;
   } else if (idx < span->len - FrameIdx{1}) {
     const FrameIdx leftSize = idx;
     const FrameIdx rightSize = span->len - idx;
     span->len = leftSize;
     CellPtr copy = std::make_unique<Cell>(*span->cell);
-    span = spans.insert(++span, {std::move(cell)});
+    span = spans.insert(++span, {std::make_unique<Cell>()});
     spans.insert(++span, {std::move(copy), rightSize});
   } else {
-    spans.insert(++span, {std::move(cell)});
+    spans.insert(++span, {std::make_unique<Cell>()});
   }
 }
 
-void LayerCells::replaceNew(FrameIdx idx, CellPtr cell) {
+void LayerCells::replaceNew(FrameIdx idx) {
   Spans::iterator span = findSpan(spans, idx);
-  if (!*span->cell && !*cell) return;
+  if (!*span->cell) return;
   if (span->len == FrameIdx{1}) {
-    span->cell = std::move(cell);
+    span->cell->image = {};
     return;
   }
   const FrameIdx leftSize = idx;
   const FrameIdx rightSize = span->len - idx - FrameIdx{1};
   if (leftSize == FrameIdx{0}) {
     span->len = rightSize;
-    spans.insert(span, {std::move(cell)});
+    spans.insert(span, {std::make_unique<Cell>()});
     return;
   } else if (rightSize == FrameIdx{0}) {
     span->len = leftSize;
-    spans.insert(++span, {std::move(cell)});
+    spans.insert(++span, {std::make_unique<Cell>()});
     return;
   }
   span->len = leftSize;
   CellPtr copy = std::make_unique<Cell>(*span->cell);
-  span = spans.insert(++span, {std::move(cell)});
+  span = spans.insert(++span, {std::make_unique<Cell>()});
   spans.insert(++span, {std::move(copy), rightSize});
 }
 

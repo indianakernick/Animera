@@ -29,7 +29,7 @@ void Timeline::initDefault() {
   frameCount = FrameIdx{1};
   changeFrameCount();
   Layer layer;
-  layer.spans.pushCell(std::make_unique<Cell>());
+  layer.spans.pushNull(frameCount);
   layer.name = "Layer 0";
   layers.push_back(std::move(layer));
   selection = empty_rect;
@@ -385,7 +385,7 @@ void Timeline::insertNullFrame() {
   ++frameCount;
   changeFrameCount();
   for (LayerIdx l = {}; l != layerCount(); ++l) {
-    layers[+l].spans.insertNew(currPos.f, std::make_unique<Cell>());
+    layers[+l].spans.insertNew(currPos.f);
     changeSpan(l);
   }
   Q_EMIT selectionChanged(selection);
@@ -415,10 +415,7 @@ void Timeline::removeFrame() {
 }
 
 void Timeline::clearCell() {
-  // in a lot of places, we call changePos even through the position isn't changing
-  // this is because the address of the cell is changing
-  // changing the way the currCellChanged signal is emitted could break things
-  layers[+currPos.l].spans.replaceNew(currPos.f, std::make_unique<Cell>());
+  layers[+currPos.l].spans.replaceNew(currPos.f);
   changeSpan(currPos.l);
   changeFrame();
   changePos();
@@ -446,7 +443,7 @@ void Timeline::growCell(const QRect rect) {
     ::growCell(cell, canvasFormat, rect);
     return;
   }
-  layers[+currPos.l].spans.replaceNew(currPos.f, std::make_unique<Cell>());
+  layers[+currPos.l].spans.replaceNew(currPos.f);
   ::growCell(cell, canvasFormat, rect);
   changeSpan(currPos.l);
   changeFrame();
