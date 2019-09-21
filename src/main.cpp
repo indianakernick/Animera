@@ -187,8 +187,8 @@ In case I decide that we need KC filters
 */
 
 #include <cmath>
-#include "porter duff.hpp"
 #include <Graphics/format.hpp>
+#include <Graphics/porter duff.hpp>
 
 struct ColorF {
   float r, g, b, a;
