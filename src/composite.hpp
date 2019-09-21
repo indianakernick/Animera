@@ -27,7 +27,7 @@ void blitImage(QImage &, const QImage &, QPoint);
 QImage blitImage(const QImage &, QRect);
 
 /// Copy all pixels of src that are on the mask (shifted to the position) onto
-/// onto an image
+/// an image
 void blitMaskImage(QImage &, const QImage &, const QImage &, QPoint);
 /// Copy all pixels of src that are on the mask (shifted to the position) onto a
 /// new image

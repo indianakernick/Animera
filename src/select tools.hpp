@@ -63,6 +63,7 @@ private:
   QImage overlay;
   QPoint offset;
   SelectMode mode = SelectMode::copy;
+  QRect bounds;
   
   void toggleMode(const ToolMouseEvent &);
   void addToSelection(const ToolMouseEvent &);

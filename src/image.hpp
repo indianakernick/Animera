@@ -64,4 +64,11 @@ void copyImage(QImage &, const QImage &);
 void clearImage(QImage &);
 void clearImage(QImage &, QRgb);
 
+// TODO: Is a custom image worth considering?
+// The non-const version is kind of annoying to use.
+// I'm afraid of unnecessary copies happening in the background using either one
+QImage view(QImage &, QRect);
+QImage view(const QImage &, QRect);
+QImage cview(const QImage &, QRect);
+
 #endif

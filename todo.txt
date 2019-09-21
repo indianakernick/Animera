@@ -109,8 +109,6 @@ using the offset property of QImage could be a mistake
     we're actually dealing with a cell but it looks like an image
   perhaps using isNull() directly on an image is a mistake too?
 
-wand select tool should use the flood fill bounds to improve efficiency
-
 optimize LayerCells
   we need stable pointers to Cells
   std::deque keeps pointers stable if you insert or erase from either end
