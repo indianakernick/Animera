@@ -387,7 +387,7 @@ bool drawFloodFill(
   const Point pos
 ) noexcept {
   if (dst.contains(pos)) {
-    return floodFill(detail::FillPolicy{dst, pixel}, pos);
+    return !floodFill(detail::FillPolicy{dst, pixel}, pos).empty();
   }
   return false;
 }
