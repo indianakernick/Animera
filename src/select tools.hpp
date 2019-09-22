@@ -10,10 +10,31 @@
 #define select_tools_hpp
 
 #include "tool.hpp"
-#include "polygon.hpp"
 
-class RectangleSelectTool final : public Tool {
+template <typename Derived>
+class SelectTool : public Tool {
 public:
+  ~SelectTool();
+  
+protected:
+  bool resizeImages();
+  void copy(QPoint);
+  void copyWithMask(QPoint, const QImage &);
+  void paste(QPoint, ButtonType);
+  void pasteWithMask(QPoint, ButtonType, const QImage &);
+  void showOverlay(QPoint);
+  void toggleMode();
+  
+  QImage selection;
+  QImage overlay;
+  QPoint offset;
+  QRect bounds;
+  SelectMode mode = SelectMode::copy;
+};
+
+class RectangleSelectTool final : public SelectTool<RectangleSelectTool> {
+public:
+  void attachCell() override;
   void detachCell() override;
   void mouseLeave(const ToolLeaveEvent &) override;
   void mouseDown(const ToolMouseEvent &) override;
@@ -22,15 +43,12 @@ public:
   
 private:
   QPoint startPos = no_point;
-  QImage selection;
-  QImage overlay;
-  QPoint offset;
-  SelectMode mode = SelectMode::copy;
 };
 
 // TODO: is polygon select really all that useful?
-class PolygonSelectTool final : public Tool {
+class PolygonSelectTool final : public SelectTool<PolygonSelectTool> {
 public:
+  void attachCell() override;
   void detachCell() override;
   void mouseLeave(const ToolLeaveEvent &) override;
   void mouseDown(const ToolMouseEvent &) override;
@@ -38,17 +56,15 @@ public:
   void mouseUp(const ToolMouseEvent &) override;
   
 private:
-  Polygon polygon;
-  QImage selection;
   QImage mask;
-  QImage overlay;
-  QPoint offset;
-  SelectMode mode = SelectMode::copy;
+  std::vector<QPoint> polygon;
+  
+  void initPoly(QPoint);
+  void pushPoly(QPoint);
 };
 
 // TODO: What if you could remove from the selection by pressing undo?
-
-class WandSelectTool final : public Tool {
+class WandSelectTool final : public SelectTool<WandSelectTool> {
 public:
   void attachCell() override;
   void detachCell() override;
@@ -58,12 +74,7 @@ public:
   void mouseUp(const ToolMouseEvent &) override;
 
 private:
-  QImage selection;
   QImage mask;
-  QImage overlay;
-  QPoint offset;
-  SelectMode mode = SelectMode::copy;
-  QRect bounds;
   
   void toggleMode(const ToolMouseEvent &);
   void addToSelection(const ToolMouseEvent &);

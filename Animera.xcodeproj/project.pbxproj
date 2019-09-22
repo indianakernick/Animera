@@ -53,7 +53,6 @@
 		457DC0BD22E7D6160000777B /* file input widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 457DC0BB22E7D6160000777B /* file input widget.cpp */; };
 		457DC0C222E9518A0000777B /* cell span.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 457DC0C022E9518A0000777B /* cell span.cpp */; };
 		457DC0C622EA93FC0000777B /* export pattern.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 457DC0C422EA93FC0000777B /* export pattern.cpp */; };
-		458F84082249DFC8005F91D0 /* polygon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 458F84062249DFC8005F91D0 /* polygon.cpp */; };
 		4595D48622BCA0E000607D64 /* scroll bar widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4595D48422BCA0E000607D64 /* scroll bar widget.cpp */; };
 		4595D48C22C05E5400607D64 /* timeline cells widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4595D48A22C05E5400607D64 /* timeline cells widget.cpp */; };
 		4595D48F22C061DF00607D64 /* timeline layers widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4595D48D22C061DF00607D64 /* timeline layers widget.cpp */; };
@@ -220,8 +219,6 @@
 		457DC0C422EA93FC0000777B /* export pattern.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "export pattern.cpp"; sourceTree = "<group>"; };
 		457DC0C522EA93FC0000777B /* export pattern.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "export pattern.hpp"; sourceTree = "<group>"; };
 		458F84032249CB7C005F91D0 /* config.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = config.hpp; sourceTree = "<group>"; };
-		458F84062249DFC8005F91D0 /* polygon.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = polygon.cpp; sourceTree = "<group>"; };
-		458F84072249DFC8005F91D0 /* polygon.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = polygon.hpp; sourceTree = "<group>"; };
 		4595D48422BCA0E000607D64 /* scroll bar widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "scroll bar widget.cpp"; sourceTree = "<group>"; };
 		4595D48522BCA0E000607D64 /* scroll bar widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "scroll bar widget.hpp"; sourceTree = "<group>"; };
 		4595D48A22C05E5400607D64 /* timeline cells widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "timeline cells widget.cpp"; sourceTree = "<group>"; };
@@ -725,8 +722,6 @@
 				45B284AC221A59EB00D6D055 /* undo.hpp */,
 				45B284AE221A83C300D6D055 /* composite.cpp */,
 				45B284AF221A83C300D6D055 /* composite.hpp */,
-				458F84062249DFC8005F91D0 /* polygon.cpp */,
-				458F84072249DFC8005F91D0 /* polygon.hpp */,
 				45DFE497224DE89E00EA40C5 /* global font.cpp */,
 				45DFE498224DE89E00EA40C5 /* global font.hpp */,
 				453D28BA22768B2B00D0E5F9 /* geometry.hpp */,
@@ -1672,7 +1667,6 @@
 				45C447F422F56E6100B65AD3 /* dialog.cpp in Sources */,
 				453D28D72278134200D0E5F9 /* color handle.cpp in Sources */,
 				453C78192234935000818B19 /* timeline widget.cpp in Sources */,
-				458F84082249DFC8005F91D0 /* polygon.cpp in Sources */,
 				45D109B222E304A300D1F1CB /* combo box widget.cpp in Sources */,
 				45DC2566224B137C00F40116 /* status msg.cpp in Sources */,
 				45F065F22222998300BCE863 /* current tool.cpp in Sources */,

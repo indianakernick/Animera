@@ -83,20 +83,13 @@ bool drawLine(QImage &img, const QRgb color, QLine line, const int radius) {
 bool drawFilledPolygon(
   QImage &img,
   const QRgb color,
-  const Polygon &poly,
-  QPoint offset
+  const std::vector<QPoint> &poly
 ) {
-  offset -= img.offset();
-  std::vector<QPoint> shiftedPoly;
-  shiftedPoly.reserve(poly.size());
-  for (const QPoint &vertex : poly) {
-    shiftedPoly.push_back(vertex + offset);
-  }
   // TODO: avoid using QPainter
   QPainter painter{&img};
   painter.setCompositionMode(QPainter::CompositionMode_Source);
   painter.setBrush(QColor::fromRgba(color));
   painter.setPen(QColor::fromRgba(color));
-  painter.drawPolygon(shiftedPoly.data(), static_cast<int>(shiftedPoly.size()));
+  painter.drawPolygon(poly.data(), static_cast<int>(poly.size()));
   return true;
 }

@@ -9,7 +9,6 @@
 #ifndef painting_hpp
 #define painting_hpp
 
-#include "polygon.hpp"
 #include <QtGui/qimage.h>
 #include "paint params.hpp"
 
@@ -26,6 +25,6 @@ bool drawStrokedRect  (QImage &, QRgb, QRect, int = 1);
 
 bool drawLine         (QImage &, QRgb, QLine, int = 1);
 
-bool drawFilledPolygon(QImage &, QRgb, const Polygon &, QPoint);
+bool drawFilledPolygon(QImage &, QRgb, const std::vector<QPoint> &);
 
 #endif
