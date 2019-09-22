@@ -9,7 +9,6 @@
 #include "undo object.hpp"
 
 #include "config.hpp"
-#include "composite.hpp"
 
 void UndoObject::setCell(Cell *newCell) {
   if (cell != newCell) {
@@ -53,7 +52,7 @@ void UndoObject::redo() {
 void UndoObject::restore(const QImage &image) {
   if (cell->image.isNull() > image.isNull()) {
     Q_EMIT shouldGrowCell({image.offset(), image.size()});
-    blitImage(cell->image, image, {});
+    copyImage(cell->image, image);
     Q_EMIT cellReverted();
   } else if (cell->image.isNull() < image.isNull()) {
     Q_EMIT shouldClearCell();

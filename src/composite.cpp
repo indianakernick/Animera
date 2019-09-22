@@ -124,16 +124,6 @@ void blitImage(QImage &dst, const QImage &src, const QPoint pos) {
   });
 }
 
-QImage blitImage(const QImage &src, const QRect rect) {
-  // TODO: does it really make sense allocate a new QImage?
-  QImage dst{rect.size(), src.format()};
-  visitSurfaces(dst, src, [pos = rect.topLeft()](auto dst, auto src) {
-    gfx::overFill(dst);
-    gfx::copyRegion(dst, src, convert(-pos));
-  });
-  return dst;
-}
-
 void blitMaskImage(QImage &dst, const QImage &mask, const QImage &src, const QPoint pos) {
   assert(mask.size() == src.size());
   visitSurfaces(dst, src, [&mask, pos](auto dst, auto src) {
@@ -145,22 +135,6 @@ void blitMaskImage(QImage &dst, const QImage &mask, const QImage &src, const QPo
       convert(pos)
     );
   });
-}
-
-QImage blitMaskImage(const QImage &src, const QImage &mask, const QPoint pos) {
-  // TODO: does it really make sense allocate a new QImage?
-  QImage dst{mask.size(), src.format()};
-  visitSurfaces(dst, src, [&mask, pos](auto dst, auto src) {
-    gfx::overFill(dst);
-    gfx::maskCopyRegion(
-      dst,
-      src,
-      makeSurface<PixelMask>(mask),
-      convert(-pos),
-      {0, 0}
-    );
-  });
-  return dst;
 }
 
 void fillMaskImage(QImage &dst, const QImage &mask, const QRgb color, const QPoint pos) {

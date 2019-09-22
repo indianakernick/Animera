@@ -23,15 +23,10 @@ void compositeOverlay(QImage &, const QImage &);
 
 /// Copy an image onto another image at a position
 void blitImage(QImage &, const QImage &, QPoint);
-/// Copy part of an image into a new image
-QImage blitImage(const QImage &, QRect);
 
 /// Copy all pixels of src that are on the mask (shifted to the position) onto
 /// an image
 void blitMaskImage(QImage &, const QImage &, const QImage &, QPoint);
-/// Copy all pixels of src that are on the mask (shifted to the position) onto a
-/// new image
-QImage blitMaskImage(const QImage &, const QImage &, QPoint);
 /// Set all pixels on the mask (shifted to the position) to the color
 void fillMaskImage(QImage &, const QImage &, QRgb, QPoint);
 
