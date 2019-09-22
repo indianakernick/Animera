@@ -121,3 +121,10 @@ optimize LayerCells
 compositing index images is broken
   it kind of gets weird if index 0 doesn't correspond to the color 0
   i'm not really sure what the "correct" behaviour is
+
+lto
+  99fb460bb1d36e6dab434940a0ea62ddbeecc69c
+  none
+    769,856 bytes
+  monolithic
+    722,208 bytes

@@ -1852,7 +1852,6 @@
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					GLM_FORCE_SILENT_WARNINGS,
-					"DEBUG=1",
 					"$(inherited)",
 				);
 				HEADER_SEARCH_PATHS = (
@@ -1871,6 +1870,7 @@
 					/usr/local/Cellar/libpng/1.6.37/lib,
 					/usr/local/Cellar/zlib/1.2.11/lib,
 				);
+				LLVM_LTO = NO;
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-Wall",
@@ -1931,6 +1931,7 @@
 					/usr/local/Cellar/libpng/1.6.37/lib,
 					/usr/local/Cellar/zlib/1.2.11/lib,
 				);
+				LLVM_LTO = YES;
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-Wall",
