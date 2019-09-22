@@ -281,7 +281,6 @@ EditorWidget::EditorWidget(QWidget *parent)
 }
 
 void EditorWidget::composite() {
-  clearImage(view->getTarget());
   compositeFrame(view->getTarget(), palette, frame, format);
   view->repaint();
 }

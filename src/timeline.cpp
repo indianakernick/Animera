@@ -189,7 +189,6 @@ Error Timeline::exportFile(
 ) const {
   // TODO: don't allocate every time this is called
   QImage result{canvasSize, qimageFormat(canvasFormat)};
-  clearImage(result);
   if (canvasFormat == Format::gray) {
     compositeFrame<gfx::YA>(result, palette, frame, canvasFormat);
   } else {

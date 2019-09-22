@@ -267,6 +267,7 @@ void Window::connectSignals() {
   CONNECT(sprite,          canvasInitialized,   editor,          initCanvas);
   CONNECT(sprite,          canvasInitialized,   palette,         initCanvas);
   CONNECT(sprite,          canvasInitialized,   tools,           initCanvas);
+  CONNECT(sprite,          canvasInitialized,   sample,          initCanvas);
   
   CONNECT(sprite.palette,  paletteChanged,      palette,         setPalette);
   CONNECT(sprite.palette,  paletteChanged,      editor,          setPalette);
@@ -294,7 +295,9 @@ void Window::connectSignals() {
   CONNECT(colors,          shouldAttachColor,   colorPicker,     attach);
   CONNECT(colors,          shouldAttachIndex,   palette,         attachIndex);
   
-  CONNECT(sample,          colorChanged,        colorPicker,     setColor);
+  CONNECT(sample,          shouldSetColor,      colorPicker,     setColor);
+  CONNECT(sample,          shouldSetIndex,      colors,          setIndex);
+  CONNECT(sample,          shouldSetIndex,      palette,         attachIndex);
   
   CONNECT(undo,            cellReverted,        editor,          composite);
   CONNECT(undo,            cellReverted,        this,            modify);

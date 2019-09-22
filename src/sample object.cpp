@@ -10,6 +10,11 @@
 
 #include "cell.hpp"
 #include "config.hpp"
+#include "composite.hpp"
+
+void SampleObject::initCanvas(const Format newFormat) {
+  format = newFormat;
+}
 
 void SampleObject::setCell(const Cell *newCell) {
   cell = newCell;
@@ -21,11 +26,12 @@ void SampleObject::mouseMove(const QPoint newPos) {
 
 void SampleObject::keyPress(const Qt::Key key) {
   if (key == key_sample) {
-    // TODO: should we sample from composited image?
-    if (cell->rect().contains(pos)) {
-      Q_EMIT colorChanged(cell->image.pixel(pos - cell->pos()));
+    const QRgb pixel = sampleCell(*cell, pos);
+    // similar to right-clicking on a palette color
+    if (format == Format::index) {
+      Q_EMIT shouldSetIndex(pixel);
     } else {
-      Q_EMIT colorChanged(0);
+      Q_EMIT shouldSetColor(pixel);
     }
   }
 }

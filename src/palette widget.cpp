@@ -119,6 +119,7 @@ private:
     if (event->button() == Qt::RightButton) {
       if (format == Format::index) {
         Q_EMIT shouldSetIndex(index);
+        click();
       } else {
         Q_EMIT shouldSetColor(color);
       }

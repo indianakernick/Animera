@@ -117,3 +117,7 @@ optimize LayerCells
     in a lot of places, we call changePos even through the position isn't changing
     this is because the address of the cell is changing
     changing the way the currCellChanged signal is emitted could break things
+
+compositing index images is broken
+  it kind of gets weird if index 0 doesn't correspond to the color 0
+  i'm not really sure what the "correct" behaviour is

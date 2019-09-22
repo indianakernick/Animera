@@ -25,10 +25,6 @@ void eachImage(const Frame &frame, Func func) {
   for (auto c = frame.crbegin(); c != frame.crend(); ++c) {
     const Cell &cell = **c;
     if (cell) {
-      // TODO: remove
-      QImage dup = cell.image;
-      dup.fill(qRgba(127, 127, 127, 63));
-      func(dup);
       func(cell.image);
     }
   }
@@ -89,16 +85,19 @@ void compositeFrame(
   const Frame &frame,
   const Format format
 ) {
-  auto dstSurface = makeSurface<typename PxFmt::Pixel>(dst);
+  auto dstSurface = makeSurface<gfx::Pixel<PxFmt>>(dst);
   
   switch (format) {
     case Format::rgba:
+      gfx::overFill(dstSurface);
       compositeColor<PxFmt>(dstSurface, frame);
       break;
     case Format::index:
+      gfx::overFill(dstSurface);
       compositePalette<PxFmt>(dstSurface, frame, palette);
       break;
     case Format::gray:
+      gfx::overFill(dstSurface);
       compositeGray<PxFmt>(dstSurface, frame);
       break;
     default: Q_UNREACHABLE();
@@ -278,6 +277,15 @@ void optimizeCell(Cell &cell) {
   cell.image = std::move(image);
 }
 
-QRgb sampleCell(const Cell &cell, const QPoint pos) {
-  return cell.rect().contains(pos) ? cell.image.pixel(pos - cell.pos()) : 0;
+QRgb sampleCell(const Cell &cell, QPoint pos) {
+  if (cell.rect().contains(pos)) {
+    pos -= cell.pos();
+    const int depth = cell.image.depth() / 8;
+    const int idx = pos.y() * cell.image.bytesPerLine() + pos.x() * depth;
+    const uchar *bits = cell.image.bits() + idx;
+    QRgb pixel = 0;
+    std::memcpy(&pixel, bits, depth);
+    return pixel;
+  }
+  return 0;
 }

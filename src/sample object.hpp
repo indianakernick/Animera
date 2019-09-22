@@ -9,6 +9,7 @@
 #ifndef sample_object_hpp
 #define sample_object_hpp
 
+#include "image.hpp"
 #include <QtGui/qrgb.h>
 #include <QtCore/qpoint.h>
 #include <QtCore/qobject.h>
@@ -19,16 +20,19 @@ class SampleObject final : public QObject {
   Q_OBJECT
 
 public Q_SLOTS:
+  void initCanvas(Format);
   void setCell(const Cell *);
   void mouseMove(QPoint);
   void keyPress(Qt::Key);
 
 Q_SIGNALS:
-  void colorChanged(QRgb);
+  void shouldSetColor(QRgb);
+  void shouldSetIndex(int);
   
 private:
   const Cell *cell = nullptr;
   QPoint pos;
+  Format format;
 };
 
 #endif
