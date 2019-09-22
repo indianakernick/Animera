@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_TimelineWidget_t {
-    QByteArrayData data[30];
-    char stringdata0[380];
+    QByteArrayData data[32];
+    char stringdata0[402];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -51,17 +51,19 @@ QT_MOC_LITERAL(15, 186, 12), // "endSelection"
 QT_MOC_LITERAL(16, 199, 14), // "clearSelection"
 QT_MOC_LITERAL(17, 214, 14), // "currPosChanged"
 QT_MOC_LITERAL(18, 229, 7), // "CellPos"
-QT_MOC_LITERAL(19, 237, 10), // "setCurrPos"
-QT_MOC_LITERAL(20, 248, 12), // "setSelection"
-QT_MOC_LITERAL(21, 261, 8), // "CellRect"
-QT_MOC_LITERAL(22, 270, 13), // "setVisibility"
-QT_MOC_LITERAL(23, 284, 7), // "setName"
-QT_MOC_LITERAL(24, 292, 8), // "setLayer"
-QT_MOC_LITERAL(25, 301, 25), // "std::span<const CellSpan>"
-QT_MOC_LITERAL(26, 327, 13), // "setFrameCount"
-QT_MOC_LITERAL(27, 341, 8), // "FrameIdx"
-QT_MOC_LITERAL(28, 350, 13), // "setLayerCount"
-QT_MOC_LITERAL(29, 364, 15) // "toggleAnimation"
+QT_MOC_LITERAL(19, 237, 12), // "delayChanged"
+QT_MOC_LITERAL(20, 250, 10), // "setCurrPos"
+QT_MOC_LITERAL(21, 261, 12), // "setSelection"
+QT_MOC_LITERAL(22, 274, 8), // "CellRect"
+QT_MOC_LITERAL(23, 283, 13), // "setVisibility"
+QT_MOC_LITERAL(24, 297, 7), // "setName"
+QT_MOC_LITERAL(25, 305, 8), // "setLayer"
+QT_MOC_LITERAL(26, 314, 25), // "std::span<const CellSpan>"
+QT_MOC_LITERAL(27, 340, 13), // "setFrameCount"
+QT_MOC_LITERAL(28, 354, 8), // "FrameIdx"
+QT_MOC_LITERAL(29, 363, 13), // "setLayerCount"
+QT_MOC_LITERAL(30, 377, 15), // "toggleAnimation"
+QT_MOC_LITERAL(31, 393, 8) // "setDelay"
 
     },
     "TimelineWidget\0visibilityChanged\0\0"
@@ -70,10 +72,11 @@ QT_MOC_LITERAL(29, 364, 15) // "toggleAnimation"
     "moveLayerUp\0moveLayerDown\0extendCell\0"
     "splitCell\0beginSelection\0continueSelection\0"
     "endSelection\0clearSelection\0currPosChanged\0"
-    "CellPos\0setCurrPos\0setSelection\0"
-    "CellRect\0setVisibility\0setName\0setLayer\0"
-    "std::span<const CellSpan>\0setFrameCount\0"
-    "FrameIdx\0setLayerCount\0toggleAnimation"
+    "CellPos\0delayChanged\0setCurrPos\0"
+    "setSelection\0CellRect\0setVisibility\0"
+    "setName\0setLayer\0std::span<const CellSpan>\0"
+    "setFrameCount\0FrameIdx\0setLayerCount\0"
+    "toggleAnimation\0setDelay"
 };
 #undef QT_MOC_LITERAL
 
@@ -83,38 +86,40 @@ static const uint qt_meta_data_TimelineWidget[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-      22,   14, // methods
+      24,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-      14,       // signalCount
+      15,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    2,  124,    2, 0x06 /* Public */,
-       4,    2,  129,    2, 0x06 /* Public */,
-       6,    0,  134,    2, 0x06 /* Public */,
-       7,    0,  135,    2, 0x06 /* Public */,
-       8,    0,  136,    2, 0x06 /* Public */,
-       9,    0,  137,    2, 0x06 /* Public */,
-      10,    0,  138,    2, 0x06 /* Public */,
-      11,    0,  139,    2, 0x06 /* Public */,
-      12,    0,  140,    2, 0x06 /* Public */,
-      13,    0,  141,    2, 0x06 /* Public */,
-      14,    0,  142,    2, 0x06 /* Public */,
-      15,    0,  143,    2, 0x06 /* Public */,
-      16,    0,  144,    2, 0x06 /* Public */,
-      17,    1,  145,    2, 0x06 /* Public */,
+       1,    2,  134,    2, 0x06 /* Public */,
+       4,    2,  139,    2, 0x06 /* Public */,
+       6,    0,  144,    2, 0x06 /* Public */,
+       7,    0,  145,    2, 0x06 /* Public */,
+       8,    0,  146,    2, 0x06 /* Public */,
+       9,    0,  147,    2, 0x06 /* Public */,
+      10,    0,  148,    2, 0x06 /* Public */,
+      11,    0,  149,    2, 0x06 /* Public */,
+      12,    0,  150,    2, 0x06 /* Public */,
+      13,    0,  151,    2, 0x06 /* Public */,
+      14,    0,  152,    2, 0x06 /* Public */,
+      15,    0,  153,    2, 0x06 /* Public */,
+      16,    0,  154,    2, 0x06 /* Public */,
+      17,    1,  155,    2, 0x06 /* Public */,
+      19,    1,  158,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      19,    1,  148,    2, 0x0a /* Public */,
-      20,    1,  151,    2, 0x0a /* Public */,
-      22,    2,  154,    2, 0x0a /* Public */,
-      23,    2,  159,    2, 0x0a /* Public */,
-      24,    2,  164,    2, 0x0a /* Public */,
-      26,    1,  169,    2, 0x0a /* Public */,
-      28,    1,  172,    2, 0x0a /* Public */,
-      29,    0,  175,    2, 0x0a /* Public */,
+      20,    1,  161,    2, 0x0a /* Public */,
+      21,    1,  164,    2, 0x0a /* Public */,
+      23,    2,  167,    2, 0x0a /* Public */,
+      24,    2,  172,    2, 0x0a /* Public */,
+      25,    2,  177,    2, 0x0a /* Public */,
+      27,    1,  182,    2, 0x0a /* Public */,
+      29,    1,  185,    2, 0x0a /* Public */,
+      30,    0,  188,    2, 0x0a /* Public */,
+      31,    1,  189,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, 0x80000000 | 3, QMetaType::Bool,    2,    2,
@@ -131,16 +136,18 @@ static const uint qt_meta_data_TimelineWidget[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void, 0x80000000 | 18,    2,
+    QMetaType::Void, QMetaType::Int,    2,
 
  // slots: parameters
     QMetaType::Void, 0x80000000 | 18,    2,
-    QMetaType::Void, 0x80000000 | 21,    2,
+    QMetaType::Void, 0x80000000 | 22,    2,
     QMetaType::Void, 0x80000000 | 3, QMetaType::Bool,    2,    2,
     QMetaType::Void, 0x80000000 | 3, 0x80000000 | 5,    2,    2,
-    QMetaType::Void, 0x80000000 | 3, 0x80000000 | 25,    2,    2,
-    QMetaType::Void, 0x80000000 | 27,    2,
+    QMetaType::Void, 0x80000000 | 3, 0x80000000 | 26,    2,    2,
+    QMetaType::Void, 0x80000000 | 28,    2,
     QMetaType::Void, 0x80000000 | 3,    2,
     QMetaType::Void,
+    QMetaType::Void, QMetaType::Int,    2,
 
        0        // eod
 };
@@ -165,14 +172,16 @@ void TimelineWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
         case 11: _t->endSelection(); break;
         case 12: _t->clearSelection(); break;
         case 13: _t->currPosChanged((*reinterpret_cast< CellPos(*)>(_a[1]))); break;
-        case 14: _t->setCurrPos((*reinterpret_cast< CellPos(*)>(_a[1]))); break;
-        case 15: _t->setSelection((*reinterpret_cast< CellRect(*)>(_a[1]))); break;
-        case 16: _t->setVisibility((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
-        case 17: _t->setName((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< std::string_view(*)>(_a[2]))); break;
-        case 18: _t->setLayer((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< std::span<const CellSpan>(*)>(_a[2]))); break;
-        case 19: _t->setFrameCount((*reinterpret_cast< FrameIdx(*)>(_a[1]))); break;
-        case 20: _t->setLayerCount((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;
-        case 21: _t->toggleAnimation(); break;
+        case 14: _t->delayChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 15: _t->setCurrPos((*reinterpret_cast< CellPos(*)>(_a[1]))); break;
+        case 16: _t->setSelection((*reinterpret_cast< CellRect(*)>(_a[1]))); break;
+        case 17: _t->setVisibility((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
+        case 18: _t->setName((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< std::string_view(*)>(_a[2]))); break;
+        case 19: _t->setLayer((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< std::span<const CellSpan>(*)>(_a[2]))); break;
+        case 20: _t->setFrameCount((*reinterpret_cast< FrameIdx(*)>(_a[1]))); break;
+        case 21: _t->setLayerCount((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;
+        case 22: _t->toggleAnimation(); break;
+        case 23: _t->setDelay((*reinterpret_cast< int(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -275,6 +284,13 @@ void TimelineWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
                 return;
             }
         }
+        {
+            using _t = void (TimelineWidget::*)(int );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::delayChanged)) {
+                *result = 14;
+                return;
+            }
+        }
     }
 }
 
@@ -307,13 +323,13 @@ int TimelineWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 22)
+        if (_id < 24)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 22;
+        _id -= 24;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 22)
+        if (_id < 24)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 22;
+        _id -= 24;
     }
     return _id;
 }
@@ -403,6 +419,13 @@ void TimelineWidget::currPosChanged(CellPos _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 13, _a);
+}
+
+// SIGNAL 14
+void TimelineWidget::delayChanged(int _t1)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    QMetaObject::activate(this, &staticMetaObject, 14, _a);
 }
 QT_WARNING_POP
 QT_END_MOC_NAMESPACE

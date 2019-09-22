@@ -345,6 +345,9 @@ Error readAHDR(QIODevice &dev, SpriteInfo &info) try {
   info.frames = static_cast<FrameIdx>(reader.readInt());
   if (+info.frames < 0) return "Negative frame count";
   info.delay = reader.readInt();
+  if (info.delay < ctrl_delay.min || info.delay > ctrl_delay.max) {
+    return "Out-of-range animation delay";
+  }
   const uint8_t readFormat = reader.readByte();
   switch (readFormat) {
     case formatByte(Format::rgba):

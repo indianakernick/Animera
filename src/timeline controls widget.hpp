@@ -28,9 +28,11 @@ Q_SIGNALS:
   void moveLayerDown();
   void extendCell();
   void splitCell();
+  void delayChanged(int);
 
 public Q_SLOTS:
   void toggleAnimation();
+  void setDelay(int);
 
 private:
   QTimer animTimer;
@@ -44,7 +46,7 @@ private:
   NumberInputWidget *delayBox;
   
   void toggleTimer();
-  void setInterval(int);
+  void changeDelay(int);
   
   IconPushButtonWidget *makePushButton(QPixmap, const QString &);
   IconRadioButtonWidget *makeRadioButton(QPixmap, const QString &, const QString &);

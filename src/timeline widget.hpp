@@ -33,6 +33,7 @@ public Q_SLOTS:
   void setFrameCount(FrameIdx);
   void setLayerCount(LayerIdx);
   void toggleAnimation();
+  void setDelay(int);
 
 Q_SIGNALS:
   void visibilityChanged(LayerIdx, bool);
@@ -51,6 +52,7 @@ Q_SIGNALS:
   void endSelection();
   void clearSelection();
   void currPosChanged(CellPos);
+  void delayChanged(int);
   
 private:
   ControlsWidget *controls = nullptr;

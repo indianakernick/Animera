@@ -243,6 +243,7 @@ void Window::connectSignals() {
   CONNECT(sprite.timeline, layerChanged,        timeline,        setLayer);
   CONNECT(sprite.timeline, frameCountChanged,   timeline,        setFrameCount);
   CONNECT(sprite.timeline, layerCountChanged,   timeline,        setLayerCount);
+  CONNECT(sprite.timeline, delayChanged,        timeline,        setDelay);
   CONNECT(sprite.timeline, modified,            this,            modify);
   
   CONNECT(timeline,        visibilityChanged,   sprite.timeline, setVisibility);
@@ -259,6 +260,7 @@ void Window::connectSignals() {
   CONNECT(timeline,        endSelection,        sprite.timeline, endSelection);
   CONNECT(timeline,        clearSelection,      sprite.timeline, clearSelection);
   CONNECT(timeline,        currPosChanged,      sprite.timeline, setCurrPos);
+  CONNECT(timeline,        delayChanged,        sprite.timeline, setDelay);
   
   CONNECT(sprite,          canvasInitialized,   colorPicker,     initCanvas);
   CONNECT(sprite,          canvasInitialized,   colors,          initCanvas);

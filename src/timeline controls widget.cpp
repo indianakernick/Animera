@@ -19,12 +19,16 @@ ControlsWidget::ControlsWidget(QWidget *parent)
   createWidgets();
   setupLayout();
   connectSignals();
-  animTimer.setInterval(ctrl_delay.def);
   animTimer.setTimerType(Qt::PreciseTimer);
 }
 
 void ControlsWidget::toggleAnimation() {
   playButton->toggle();
+}
+
+void ControlsWidget::setDelay(const int delay) {
+  animTimer.setInterval(delay);
+  delayBox->changeValue(delay);
 }
 
 void ControlsWidget::toggleTimer() {
@@ -35,8 +39,9 @@ void ControlsWidget::toggleTimer() {
   }
 }
 
-void ControlsWidget::setInterval(const int interval) {
-  animTimer.setInterval(interval);
+void ControlsWidget::changeDelay(const int delay) {
+  animTimer.setInterval(delay);
+  Q_EMIT delayChanged(delay);
 }
 
 IconPushButtonWidget *ControlsWidget::makePushButton(QPixmap base, const QString &path) {
@@ -99,8 +104,7 @@ void ControlsWidget::connectSignals() {
   CONNECT(splitButton,         pressed,      this, splitCell);
   CONNECT(playButton,          toggled,      this, toggleTimer);
   CONNECT(animTimer,           timeout,      this, nextFrame);
-  CONNECT(delayBox,            valueChanged, this, setInterval);
-  // TODO: store delay in Sprite
+  CONNECT(delayBox,            valueChanged, this, changeDelay);
 }
 
 #include "timeline controls widget.moc"

@@ -46,6 +46,7 @@ TimelineWidget::TimelineWidget(QWidget *parent)
   CONNECT(controls, moveLayerDown,     this, moveLayerDown);
   CONNECT(controls, extendCell,        this, extendCell);
   CONNECT(controls, splitCell,         this, splitCell);
+  CONNECT(controls, delayChanged,      this, delayChanged);
   
   CONNECT(cells,    beginSelection,    this, beginSelection);
   CONNECT(cells,    continueSelection, this, continueSelection);
@@ -95,6 +96,10 @@ void TimelineWidget::setLayerCount(const LayerIdx count) {
 
 void TimelineWidget::toggleAnimation() {
   controls->toggleAnimation();
+}
+
+void TimelineWidget::setDelay(const int delay) {
+  controls->setDelay(delay);
 }
 
 #include "timeline widget.moc"

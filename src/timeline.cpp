@@ -33,11 +33,13 @@ void Timeline::initDefault() {
   layer.name = "Layer 0";
   layers.push_back(std::move(layer));
   selection = empty_rect;
+  delay = ctrl_delay.def;
   changeLayerCount();
   changeFrame();
   changePos();
   Q_EMIT selectionChanged(selection);
   changeLayers(LayerIdx{0}, LayerIdx{1});
+  Q_EMIT delayChanged(delay);
 }
 
 void Timeline::optimize() {
@@ -60,7 +62,7 @@ Error Timeline::serializeHead(QIODevice &dev) const {
   info.height = canvasSize.height();
   info.layers = layerCount();
   info.frames = frameCount;
-  info.delay = 100;
+  info.delay = delay;
   info.format = canvasFormat;
   return writeAHDR(dev, info);
 }
@@ -91,6 +93,7 @@ Error Timeline::deserializeHead(QIODevice &dev, Format &format, QSize &size) {
   layers.resize(+info.layers);
   frameCount = info.frames;
   canvasFormat = format = info.format;
+  delay = info.delay;
   return {};
 }
 
@@ -118,6 +121,7 @@ Error Timeline::deserializeTail(QIODevice &dev) {
   changePos();
   Q_EMIT selectionChanged(selection);
   changeLayers(LayerIdx{0}, layerCount());
+  Q_EMIT delayChanged(delay);
   return {};
 }
 
@@ -483,8 +487,13 @@ void Timeline::setName(const LayerIdx idx, const std::string_view name) {
   assert(LayerIdx{0} <= idx);
   assert(idx < layerCount());
   layers[+idx].name = name;
-  // TODO: Emit signal when layer name changed?
-  // Q_EMIT nameChanged(idx, name);
+  Q_EMIT modified();
+}
+
+void Timeline::setDelay(const int newDelay) {
+  assert(ctrl_delay.min <= newDelay);
+  assert(newDelay <= ctrl_delay.max);
+  delay = newDelay;
   Q_EMIT modified();
 }
 

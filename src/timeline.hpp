@@ -91,6 +91,7 @@ public Q_SLOTS:
   void setCurrPos(CellPos);
   void setVisibility(LayerIdx, bool);
   void setName(LayerIdx, std::string_view);
+  void setDelay(int);
   
   void clearSelected();
   void copySelected();
@@ -110,6 +111,8 @@ Q_SIGNALS:
   void frameCountChanged(FrameIdx);
   void layerCountChanged(LayerIdx);
   
+  void delayChanged(int);
+  
   void modified();
   
 private:
@@ -120,6 +123,7 @@ private:
   QSize canvasSize;
   Format canvasFormat;
   std::vector<LayerCells> clipboard;
+  int delay;
   
   Cell *getCell(CellPos);
   Frame getFrame(FrameIdx) const;
