@@ -40,4 +40,12 @@ inline LabelWidget *makeLabel(QWidget *parent, const QString &text) {
   return new LabelWidget{parent, textBoxRect(text.size()), text};
 }
 
+QSize wrapToWidth(QString &, int);
+WidgetRect wrappedTextBoxRect(QSize);
+
+inline LabelWidget *makeWrappedLabel(QWidget *parent, const int width, QString text) {
+  const WidgetRect rect = wrappedTextBoxRect(wrapToWidth(text, width));
+  return new LabelWidget{parent, rect, text};
+}
+
 #endif

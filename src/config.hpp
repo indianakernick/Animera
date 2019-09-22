@@ -82,10 +82,18 @@ constexpr WidgetRect basicRect(
   return {widget, outer, inner, inner.topLeft() + pos};
 }
 
+constexpr int textBoxWidth(const int chars) {
+  return chars * glob_font_stride_px - glob_font_kern_px + 2 * glob_text_margin;
+}
+
+constexpr int textBoxHeight(const int lines) {
+  return lines * (glob_font_px + glob_text_margin) + glob_text_margin;
+}
+
 constexpr QSize textBoxSize(const int chars, const int offsetX = 0) {
   return {
-    chars * glob_font_stride_px - glob_font_kern_px + 2 * glob_text_margin + offsetX,
-    glob_font_px + 2 * glob_text_margin
+    textBoxWidth(chars) + offsetX,
+    textBoxHeight(1)
   };
 }
 
@@ -258,7 +266,7 @@ constexpr WidgetRect timelineTextBox(const int chars) {
     cell_height - glob_border_width - glob_text_margin - glob_font_px
   };
   const QSize innerSize = {
-    textBoxSize(chars).width(),
+    textBoxWidth(chars),
     cell_height - glob_border_width
   };
   const QSize outerSize = innerSize + toSize(glob_border_width);
@@ -279,6 +287,10 @@ constexpr WidgetRect init_button_rect = textBoxRect(8);
 
 constexpr IntRange   expt_stride = {-100, 100, 1};
 constexpr IntRange   expt_offset = {-100, 100, 0};
+
+// -------------------------------- error dialog ---------------------------- //
+
+constexpr int        erro_wrap_width = 40;
 
 // -------------------------------- file format ----------------------------- //
 
