@@ -128,3 +128,6 @@ lto
     769,856 bytes
   monolithic
     722,208 bytes
+
+keys for info.plist
+  https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html

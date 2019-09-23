@@ -12,21 +12,15 @@
 				<string>animera</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>../Resources/Document.icns</string>
+			<string>Document</string>
 			<key>CFBundleTypeName</key>
 			<string>Animera Sprite</string>
-			<key>CFBundleTypeOSTypes</key>
-			<array>
-				<string>????</string>
-			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
-	<key>CFBundleIconFile</key>
-	<string></string>
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>

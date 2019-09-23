@@ -14,7 +14,6 @@
 		4513144A22D1828D00D66262 /* sprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4513144822D1828D00D66262 /* sprite.cpp */; };
 		4513144D22D1B06F00D66262 /* timeline controls widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4513144B22D1B06F00D66262 /* timeline controls widget.cpp */; };
 		4513145022D1BF8700D66262 /* palette.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4513144E22D1BF8700D66262 /* palette.cpp */; };
-		4513145222D4B61100D66262 /* Document.icns in Resources */ = {isa = PBXBuildFile; fileRef = 4513145122D4B61100D66262 /* Document.icns */; };
 		4513145522D59EA300D66262 /* color picker impl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4513145322D59EA300D66262 /* color picker impl.cpp */; };
 		4513145822D5A29800D66262 /* picker impl rgba.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4513145622D5A29800D66262 /* picker impl rgba.cpp */; };
 		4513145B22D5A2A500D66262 /* picker impl gray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4513145922D5A2A500D66262 /* picker impl gray.cpp */; };
@@ -122,7 +121,6 @@
 		4513144C22D1B06F00D66262 /* timeline controls widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "timeline controls widget.hpp"; sourceTree = "<group>"; };
 		4513144E22D1BF8700D66262 /* palette.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = palette.cpp; sourceTree = "<group>"; };
 		4513144F22D1BF8700D66262 /* palette.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = palette.hpp; sourceTree = "<group>"; };
-		4513145122D4B61100D66262 /* Document.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = Document.icns; path = Assets.xcassets/Document.icns; sourceTree = "<group>"; };
 		4513145322D59EA300D66262 /* color picker impl.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "color picker impl.cpp"; sourceTree = "<group>"; };
 		4513145422D59EA300D66262 /* color picker impl.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "color picker impl.hpp"; sourceTree = "<group>"; };
 		4513145622D5A29800D66262 /* picker impl rgba.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "picker impl rgba.cpp"; sourceTree = "<group>"; };
@@ -647,7 +645,6 @@
 		455F2848220688FC00C73F39 = {
 			isa = PBXGroup;
 			children = (
-				4513145122D4B61100D66262 /* Document.icns */,
 				45DC255F224A034200F40116 /* README.md */,
 				455F285B2206890300C73F39 /* Assets.xcassets */,
 				455F28602206890300C73F39 /* Info.plist */,
@@ -955,7 +952,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4513145222D4B61100D66262 /* Document.icns in Resources */,
 				453C787D2235D70D00818B19 /* resources.rcc in Resources */,
 				455F285C2206890300C73F39 /* Assets.xcassets in Resources */,
 			);
