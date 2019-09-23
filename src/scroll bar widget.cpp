@@ -10,7 +10,6 @@
 
 #include "config.hpp"
 #include <QtGui/qpainter.h>
-#include <QtWidgets/qabstractscrollarea.h>
 
 namespace {
 

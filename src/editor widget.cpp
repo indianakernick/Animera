@@ -14,7 +14,6 @@
 #include "composite.hpp"
 #include <QtGui/qevent.h>
 #include <QtGui/qpainter.h>
-#include <QtWidgets/qlabel.h>
 #include "surface factory.hpp"
 #include <QtWidgets/qgesture.h>
 #include <Graphics/iterator.hpp>

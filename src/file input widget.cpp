@@ -18,7 +18,7 @@
 #include <QtWidgets/qcompleter.h>
 #include <QtWidgets/qfiledialog.h>
 #include <QtWidgets/qabstractbutton.h>
-#include <Qtwidgets/qfilesystemmodel.h>
+#include <QtWidgets/qfilesystemmodel.h>
 
 class FileInputButton final : public QAbstractButton {
 public:

@@ -11,7 +11,7 @@
 
 #include <string_view>
 #include <QtCore/qtimer.h>
-#include <QtWidgets/qlabel.h>
+#include <QtWidgets/qwidget.h>
 
 class StatusBarWidget final : public QWidget {
   Q_OBJECT

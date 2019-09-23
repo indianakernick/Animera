@@ -9,7 +9,7 @@
 #ifndef dialog_hpp
 #define dialog_hpp
 
-#include <QtWidgets/qdialog>
+#include <QtWidgets/qdialog.h>
 
 class Dialog : public QDialog {
 public:
