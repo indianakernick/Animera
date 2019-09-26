@@ -14,6 +14,7 @@ I would have been better off choosing this trio at the beginning of the project
 https://stackoverflow.com/questions/25232756/sdl2-rendering-into-qwidget
 https://stackoverflow.com/questions/43335291/smooth-inertial-scrolling-with-sdl2
 https://github.com/NoAvailableAlias/nano-signal-slot
+https://github.com/nemequ/hedley
 
 @Paolo-Oliverio Suggested I look into choosing a color palette
 
@@ -131,3 +132,10 @@ lto
 
 keys for info.plist
   https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+
+window destructor
+  setAttribute(Qt::WA_DeleteOnClose) causes crash
+
+editor scaling is sometimes a pixel off
+  this might be due to QPainter using floats
+  might have to do scaling myself

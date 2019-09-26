@@ -12,6 +12,7 @@
 #include "geometry.hpp"
 
 namespace gfx {
+
 /*
 
 struct Policy {

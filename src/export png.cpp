@@ -143,6 +143,7 @@ Error exportPng(
     return errorMessage;
   }
   png_set_rows(png, info, rows.data());
+  // TODO: png_write_row maybe?
   png_write_png(png, info, transforms, nullptr);
   
   /*
