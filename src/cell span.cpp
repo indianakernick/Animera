@@ -58,7 +58,7 @@ const Cell *LayerCells::ConstIterator::operator*() const {
 void LayerCells::optimize() {
   FrameIdx prevNull{0};
   for (auto s = spans.begin(); s != spans.end(); ++s) {
-    if (!*s->cell) {
+    if (s->cell->isNull()) {
       if (prevNull > FrameIdx{0}) {
         auto prev = std::prev(s);
         s->len += prev->len;
@@ -102,7 +102,7 @@ void LayerCells::insertCopy(FrameIdx idx) {
 
 void LayerCells::insertNew(FrameIdx idx) {
   Spans::iterator span = findSpan(spans, idx);
-  if (!*span->cell) {
+  if (span->cell->isNull()) {
     ++span->len;
   } else if (idx < span->len - FrameIdx{1}) {
     const FrameIdx leftSize = idx;
@@ -118,9 +118,9 @@ void LayerCells::insertNew(FrameIdx idx) {
 
 void LayerCells::replaceNew(FrameIdx idx) {
   Spans::iterator span = findSpan(spans, idx);
-  if (!*span->cell) return;
+  if (span->cell->isNull()) return;
   if (span->len == FrameIdx{1}) {
-    span->cell->image = {};
+    *span->cell = {};
     return;
   }
   const FrameIdx leftSize = idx;

@@ -10,6 +10,7 @@
 #define drag_paint_tools_hpp
 
 #include "tool.hpp"
+#include "cell.hpp"
 
 template <typename Derived>
 class DragPaintTool : public Tool {
@@ -29,7 +30,7 @@ protected:
 
 private:
   QPoint startPos = no_point;
-  QImage cleanImage;
+  Cell cleanCell;
   QRgb color = 0;
   
   Derived *that();

@@ -10,10 +10,10 @@
 #define undo_hpp
 
 #include <vector>
-#include "image.hpp"
+#include "cell.hpp"
 
 struct UndoState {
-  QImage img;
+  Cell cell;
   bool undid;
 };
 
@@ -23,13 +23,13 @@ public:
 
   bool empty() const;
   void clear();
-  void reset(QImage);
-  void modify(QImage);
+  void reset(Cell);
+  void modify(Cell);
   UndoState undo();
   UndoState redo();
   
 private:
-  std::vector<QImage> stack;
+  std::vector<Cell> stack;
   size_t top;
 };
 

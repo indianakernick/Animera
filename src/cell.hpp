@@ -21,16 +21,17 @@ using CellPtr = std::unique_ptr<Cell>;
 
 class Cell {
 public:
-  QImage image;
+  QImage img;
+  QPoint pos;
   
   explicit operator bool() const {
-    return !image.isNull();
+    return !img.isNull();
   }
-  QPoint pos() const {
-    return image.offset();
+  bool isNull() const {
+    return img.isNull();
   }
   QRect rect() const {
-    return {image.offset(), image.size()};
+    return {pos, img.size()};
   }
 };
 

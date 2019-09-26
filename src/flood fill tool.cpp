@@ -33,7 +33,10 @@ void FloodFillTool::mouseDown(const ToolMouseEvent &event) {
   } else {
     rect = rect.intersected(ctx->cell->rect());
   }
-  ctx->emitChanges(drawFloodFill(ctx->cell->image, color, event.pos, rect));
+  QImage &img = ctx->cell->img;
+  const QPoint pos = ctx->cell->pos;
+  rect.translate(-pos);
+  ctx->emitChanges(drawFloodFill(img, color, event.pos - pos, rect));
   ctx->finishChange();
 }
 

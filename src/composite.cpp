@@ -25,7 +25,7 @@ void eachImage(const Frame &frame, Func func) {
   for (auto c = frame.crbegin(); c != frame.crend(); ++c) {
     const Cell &cell = **c;
     if (cell) {
-      func(cell.image);
+      func(cell);
     }
   }
 }
@@ -35,14 +35,14 @@ using Surface = gfx::Surface<gfx::Pixel<Format>>;
 
 template <typename Format>
 void compositeColor(Surface<Format> output, const Frame &frame) {
-  eachImage(frame, [output](const QImage &image) {
+  eachImage(frame, [output](const Cell &cell) {
     gfx::porterDuffRegion(
       gfx::mode_src_over,
       output,
-      makeCSurface<PixelRgba>(image),
+      makeCSurface<PixelRgba>(cell.img),
       Format{},
       gfx::ARGB{},
-      convert(image.offset())
+      convert(cell.pos)
     );
   });
 }
@@ -50,28 +50,28 @@ void compositeColor(Surface<Format> output, const Frame &frame) {
 template <typename Format>
 void compositePalette(Surface<Format> output, const Frame &frame, PaletteCSpan palette) {
   gfx::I<> format{palette.data()};
-  eachImage(frame, [output, format](const QImage &image) {
+  eachImage(frame, [output, format](const Cell &cell) {
     gfx::porterDuffRegion(
       gfx::mode_src_over,
       output,
-      makeCSurface<PixelIndex>(image),
+      makeCSurface<PixelIndex>(cell.img),
       Format{},
       format,
-      convert(image.offset())
+      convert(cell.pos)
     );
   });
 }
 
 template <typename Format>
 void compositeGray(Surface<Format> output, const Frame &frame) {
-  eachImage(frame, [output](const QImage &image) {
+  eachImage(frame, [output](const Cell &cell) {
     gfx::porterDuffRegion(
       gfx::mode_src_over,
       output,
-      makeCSurface<PixelGray>(image),
+      makeCSurface<PixelGray>(cell.img),
       Format{},
       gfx::YA{},
-      convert(image.offset())
+      convert(cell.pos)
     );
   });
 }
@@ -230,19 +230,19 @@ void writeOverlay(
 
 void growCell(Cell &cell, const Format format, const QRect rect) {
   if (!cell) {
-    cell.image = {rect.size(), qimageFormat(format)};
-    cell.image.setOffset(rect.topLeft());
-    clearImage(cell.image);
+    cell.img = {rect.size(), qimageFormat(format)};
+    cell.pos = rect.topLeft();
+    clearImage(cell.img);
     return;
   }
-  const QRect cellRect = {cell.image.offset(), cell.image.size()};
+  const QRect cellRect = cell.rect();
   if (!cellRect.contains(rect)) {
     const QRect newRect = cellRect.united(rect);
-    QImage newImage{newRect.size(), cell.image.format()};
+    QImage newImage{newRect.size(), cell.img.format()};
     clearImage(newImage);
-    blitImage(newImage, cell.image, cellRect.topLeft() - newRect.topLeft());
-    newImage.setOffset(newRect.topLeft());
-    cell.image = std::move(newImage);
+    blitImage(newImage, cell.img, cellRect.topLeft() - newRect.topLeft());
+    cell.img = std::move(newImage);
+    cell.pos = newRect.topLeft();
   }
 }
 
@@ -250,7 +250,7 @@ void optimizeCell(Cell &cell) {
   if (!cell) return;
   QPoint min = toPoint(std::numeric_limits<int>::max());
   QPoint max = toPoint(std::numeric_limits<int>::min());
-  visitSurface(cell.image, [&min, &max](auto image) {
+  visitSurface(cell.img, [&min, &max](auto image) {
     int y = 0;
     for (auto row : gfx::range(image)) {
       int x = 0;
@@ -268,21 +268,21 @@ void optimizeCell(Cell &cell) {
   });
   const QRect rect{min, max};
   if (rect.isEmpty()) {
-    cell.image = {};
+    cell = {};
     return;
   }
-  QImage image{rect.size(), cell.image.format()};
-  blitImage(image, cell.image, -rect.topLeft());
-  image.setOffset(rect.topLeft() + cell.image.offset());
-  cell.image = std::move(image);
+  QImage image{rect.size(), cell.img.format()};
+  blitImage(image, cell.img, -rect.topLeft());
+  cell.img = std::move(image);
+  cell.pos += rect.topLeft();
 }
 
 QRgb sampleCell(const Cell &cell, QPoint pos) {
   if (cell.rect().contains(pos)) {
-    pos -= cell.pos();
-    const int depth = cell.image.depth() / 8;
-    const int idx = pos.y() * cell.image.bytesPerLine() + pos.x() * depth;
-    const uchar *bits = cell.image.bits() + idx;
+    pos -= cell.pos;
+    const int depth = cell.img.depth() / 8;
+    const int idx = pos.y() * cell.img.bytesPerLine() + pos.x() * depth;
+    const uchar *bits = cell.img.bits() + idx;
     QRgb pixel = 0;
     std::memcpy(&pixel, bits, depth);
     return pixel;

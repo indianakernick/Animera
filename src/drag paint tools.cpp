@@ -9,7 +9,6 @@
 #include "drag paint tools.hpp"
 
 #include <cmath>
-#include "cell.hpp"
 #include "painting.hpp"
 #include "graphics convert.hpp"
 
@@ -43,8 +42,10 @@ void DragPaintTool<Derived>::mouseDown(const ToolMouseEvent &event) {
   startPos = event.pos;
   color = ctx->selectColor(event.button);
   ctx->requireCell(that()->pointRect(startPos));
-  cleanImage = ctx->cell->image;
-  ctx->emitChanges(that()->drawPoint(ctx->cell->image, startPos));
+  cleanCell = *ctx->cell;
+  QImage &img = ctx->cell->img;
+  const QPoint pos = ctx->cell->pos;
+  ctx->emitChanges(that()->drawPoint(img, startPos - pos));
 }
 
 template <typename Derived>
@@ -58,18 +59,22 @@ void DragPaintTool<Derived>::mouseMove(const ToolMouseEvent &event) {
   StatusMsg status;
   that()->updateStatus(status, startPos, event.pos);
   ctx->showStatus(status);
-  ctx->cell->image = cleanImage;
+  *ctx->cell = cleanCell;
   ctx->growCell(that()->dragRect(startPos, event.pos));
-  ctx->emitChanges(that()->drawDrag(ctx->cell->image, startPos, event.pos));
+  QImage &img = ctx->cell->img;
+  const QPoint pos = ctx->cell->pos;
+  ctx->emitChanges(that()->drawDrag(img, startPos - pos, event.pos - pos));
 }
 
 template <typename Derived>
 void DragPaintTool<Derived>::mouseUp(const ToolMouseEvent &event) {
   clearImage(*ctx->overlay);
   that()->drawOverlay(*ctx->overlay, event.pos);
-  ctx->cell->image = cleanImage;
+  *ctx->cell = cleanCell;
   ctx->growCell(that()->dragRect(startPos, event.pos));
-  ctx->emitChanges(that()->drawDrag(ctx->cell->image, startPos, event.pos));
+  QImage &img = ctx->cell->img;
+  const QPoint pos = ctx->cell->pos;
+  ctx->emitChanges(that()->drawDrag(img, startPos - pos, event.pos - pos));
   ctx->finishChange();
   startPos = no_point;
 }

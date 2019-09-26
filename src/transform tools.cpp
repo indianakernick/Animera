@@ -70,7 +70,7 @@ QPoint arrowToDir(const Qt::Key key) {
 }
 
 void TranslateTool::keyPress(const ToolKeyEvent &event) {
-  if (!*ctx->cell) return;
+  if (ctx->cell->isNull()) return;
   QPoint move = arrowToDir(event.key);
   if (move == QPoint{0, 0}) return;
   translate(move);
@@ -80,11 +80,11 @@ void TranslateTool::keyPress(const ToolKeyEvent &event) {
 }
 
 void TranslateTool::translate(const QPoint move) {
-  ctx->cell->image.setOffset(ctx->cell->image.offset() + move);
+  ctx->cell->pos += move;
 }
 
 void TranslateTool::updateStatus() {
-  ctx->showStatus(StatusMsg{}.appendLabeled(ctx->cell->image.offset()));
+  ctx->showStatus(StatusMsg{}.appendLabeled(ctx->cell->pos));
 }
 
 void FlipTool::attachCell() {
@@ -125,26 +125,22 @@ void FlipTool::mouseMove(const ToolMouseEvent &) {
 }
 
 void FlipTool::keyPress(const ToolKeyEvent &event) {
-  if (!*ctx->cell) return;
+  if (ctx->cell->isNull()) return;
   if (flipXChanged(event.key, flipX)) {
-    QImage &src = ctx->cell->image;
+    QImage &src = ctx->cell->img;
     QImage flipped{src.size(), src.format()};
     visitSurfaces(flipped, src, [](auto flipped, auto src) {
       gfx::flipHori(flipped, src);
     });
-    QPoint offset = src.offset();
-    offset.setX(ctx->size.width() - (offset.x() + src.width()));
-    flipped.setOffset(offset);
+    ctx->cell->pos.setX(ctx->size.width() - (ctx->cell->pos.x() + src.width()));
     src = std::move(flipped);
   } else if (flipYChanged(event.key, flipY)) {
-    QImage &src = ctx->cell->image;
+    QImage &src = ctx->cell->img;
     QImage flipped{src.size(), src.format()};
     visitSurfaces(flipped, src, [](auto flipped, auto src) {
       gfx::flipVert(flipped, src);
     });
-    QPoint offset = src.offset();
-    offset.setY(ctx->size.height() - (offset.y() + src.height()));
-    flipped.setOffset(offset);
+    ctx->cell->pos.setY(ctx->size.height() - (ctx->cell->pos.y() + src.height()));
     src = std::move(flipped);
   } else {
     return;
@@ -195,11 +191,11 @@ void RotateTool::mouseMove(const ToolMouseEvent &) {
 }
 
 void RotateTool::keyPress(const ToolKeyEvent &event) {
-  if (!*ctx->cell) return;
+  if (ctx->cell->isNull()) return;
   const int rot = arrowToRot(event.key);
   if (rot == 0) return;
   angle = (angle + rot) & 3;
-  QImage &src = ctx->cell->image;
+  QImage &src = ctx->cell->img;
   QImage rotated{src.size().transposed(), src.format()};
   visitSurfaces(rotated, src, [rot](auto rotated, auto src) {
     gfx::rotate(rotated, src, rot);
@@ -210,17 +206,17 @@ void RotateTool::keyPress(const ToolKeyEvent &event) {
   } else if (size.width() % 2 < size.height() % 2) {
     size = {size.width(), size.height() - 1};
   }
-  const QPoint offset = src.offset();
+  const QPoint pos = ctx->cell->pos;
   if (rot == 1) {
-    rotated.setOffset({
-      size.width() / 2 + (size.height() + 1) / 2 - offset.y() - src.height(),
-      (size.height() + 1) / 2 - (size.width() + 1) / 2 + offset.x()
-    });
+    ctx->cell->pos = {
+      size.width() / 2 + (size.height() + 1) / 2 - pos.y() - src.height(),
+      (size.height() + 1) / 2 - (size.width() + 1) / 2 + pos.x()
+    };
   } else if (rot == 3) {
-    rotated.setOffset({
-      (size.width() + 1) / 2 - (size.height() + 1) / 2 + offset.y(),
-      size.height() / 2 + (size.width() + 1) / 2 - offset.x() - src.width()
-    });
+    ctx->cell->pos = {
+      (size.width() + 1) / 2 - (size.height() + 1) / 2 + pos.y(),
+      size.height() / 2 + (size.width() + 1) / 2 - pos.x() - src.width()
+    };
   } else Q_UNREACHABLE();
   src = std::move(rotated);
   updateStatus();

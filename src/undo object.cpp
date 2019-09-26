@@ -12,7 +12,7 @@
 
 void UndoObject::setCell(Cell *newCell) {
   if (cell != newCell) {
-    stack.reset(newCell->image);
+    stack.reset(*newCell);
   }
   cell = newCell;
 }
@@ -28,13 +28,13 @@ void UndoObject::keyPress(const Qt::Key key) {
 void UndoObject::cellModified() {
   // TODO: not notified of cells being cleared or pasted onto
   // maybe we could listen to the timeline.modified signal?
-  stack.modify(cell->image);
+  stack.modify(*cell);
 }
 
 void UndoObject::undo() {
   UndoState state = stack.undo();
   if (state.undid) {
-    restore(state.img);
+    restore(state.cell);
   } else {
     Q_EMIT shouldShowTemp("Cannot undo any further");
   }
@@ -43,21 +43,21 @@ void UndoObject::undo() {
 void UndoObject::redo() {
   UndoState state = stack.redo();
   if (state.undid) {
-    restore(state.img);
+    restore(state.cell);
   } else {
     Q_EMIT shouldShowTemp("Cannot redo any further");
   }
 }
 
-void UndoObject::restore(const QImage &image) {
-  if (cell->image.isNull() > image.isNull()) {
-    Q_EMIT shouldGrowCell({image.offset(), image.size()});
-    copyImage(cell->image, image);
+void UndoObject::restore(const Cell &newCell) {
+  if (cell->isNull() > newCell.isNull()) {
+    Q_EMIT shouldGrowCell(newCell.rect());
+    copyImage(cell->img, newCell.img);
     Q_EMIT cellReverted();
-  } else if (cell->image.isNull() < image.isNull()) {
+  } else if (cell->isNull() < newCell.isNull()) {
     Q_EMIT shouldClearCell();
   } else {
-    cell->image = image;
+    *cell = newCell;
     Q_EMIT cellReverted();
   }
 }

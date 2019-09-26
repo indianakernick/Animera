@@ -36,11 +36,15 @@ bool SelectTool<Derived>::resizeImages() {
 template <typename Derived>
 void SelectTool<Derived>::copy(const QPoint pos) {
   QImage overlayView = view(overlay, bounds);
-  if (ctx->cell->image.isNull()) {
+  if (ctx->cell->isNull()) {
     writeOverlay(ctx->palette, ctx->format, overlayView);
   } else {
-    const QRect offsetRect = bounds.translated(-ctx->cell->pos());
-    blitImage(selection, cview(ctx->cell->image, offsetRect), bounds.topLeft());
+    const QRect rect = bounds.intersected(ctx->cell->rect());
+    blitImage(
+      selection,
+      cview(ctx->cell->img, rect.translated(-ctx->cell->pos)),
+      rect.topLeft()
+    );
     writeOverlay(
       ctx->palette,
       ctx->format,
@@ -56,12 +60,13 @@ void SelectTool<Derived>::copyWithMask(
   const QPoint pos,
   const QImage &mask
 ) {
-  if (!*ctx->cell) {
+  if (*ctx->cell) {
+    const QRect rect = bounds.intersected(ctx->cell->rect());
     blitMaskImage(
       selection,
-      cview(ctx->cell->image, bounds.translated(-ctx->cell->pos())),
-      cview(mask, bounds),
-      bounds.topLeft()
+      cview(mask, rect),
+      cview(ctx->cell->img, rect.translated(-ctx->cell->pos)),
+      rect.topLeft()
     );
   }
   QImage overlayView = view(overlay, bounds);
@@ -85,11 +90,12 @@ void SelectTool<Derived>::paste(
   }
   const QRect rect{pos + offset, bounds.size()};
   ctx->requireCell(rect);
-  const QPoint offsetPos = rect.topLeft() - ctx->cell->pos();
+  const QPoint cellPos = ctx->cell->pos;
+  const QPoint offsetPos = rect.topLeft() - cellPos;
   if (button == ButtonType::primary) {
-    blitImage(ctx->cell->image, cview(selection, bounds), offsetPos);
+    blitImage(ctx->cell->img, cview(selection, bounds), offsetPos);
   } else if (button == ButtonType::erase) {
-    drawFilledRect(ctx->cell->image, ctx->colors.erase, rect);
+    drawFilledRect(ctx->cell->img, ctx->colors.erase, rect.translated(-cellPos));
   }
   ctx->emitChanges(ToolChanges::cell_overlay);
   ctx->finishChange();
@@ -106,11 +112,11 @@ void SelectTool<Derived>::pasteWithMask(
   }
   const QRect rect = {pos + offset, bounds.size()};
   ctx->requireCell(rect);
-  const QPoint offsetPos = rect.topLeft() - ctx->cell->pos();
+  const QPoint offsetPos = rect.topLeft() - ctx->cell->pos;
   if (button == ButtonType::primary) {
-    blitMaskImage(ctx->cell->image, cview(mask, bounds), cview(selection, bounds), offsetPos);
+    blitMaskImage(ctx->cell->img, cview(mask, bounds), cview(selection, bounds), offsetPos);
   } else if (button == ButtonType::erase) {
-    fillMaskImage(ctx->cell->image, cview(mask, bounds), ctx->colors.erase, offsetPos);
+    fillMaskImage(ctx->cell->img, cview(mask, bounds), ctx->colors.erase, offsetPos);
   }
   ctx->emitChanges(ToolChanges::cell_overlay);
   ctx->finishChange();
@@ -453,11 +459,11 @@ void WandSelectTool::addToSelection(const ToolMouseEvent &event) {
   const gfx::Surface overlaySurface = makeSurface<PixelRgba>(*ctx->overlay).view(convert(rect));
   const gfx::Surface maskSurface = makeSurface<PixelMask>(mask).view(convert(rect));
   const gfx::Point cellPos = convert(event.pos - rect.topLeft());
-  const gfx::Rect cellRect = convert(rect.translated(-ctx->cell->pos()));
+  const gfx::Rect cellRect = convert(rect.translated(-ctx->cell->pos));
 
   switch (ctx->format) {
     case Format::rgba: {
-      gfx::Surface surface = makeCSurface<PixelRgba>(ctx->cell->image).view(cellRect);
+      gfx::Surface surface = makeCSurface<PixelRgba>(ctx->cell->img).view(cellRect);
       WandPolicy policy{
         overlaySurface,
         maskSurface,
@@ -468,7 +474,7 @@ void WandSelectTool::addToSelection(const ToolMouseEvent &event) {
       break;
     }
     case Format::index: {
-      gfx::Surface surface = makeCSurface<PixelIndex>(ctx->cell->image).view(cellRect);
+      gfx::Surface surface = makeCSurface<PixelIndex>(ctx->cell->img).view(cellRect);
       WandPolicy policy{
         overlaySurface,
         maskSurface,
@@ -479,7 +485,7 @@ void WandSelectTool::addToSelection(const ToolMouseEvent &event) {
       break;
     }
     case Format::gray: {
-      gfx::Surface surface = makeCSurface<PixelGray>(ctx->cell->image).view(cellRect);
+      gfx::Surface surface = makeCSurface<PixelGray>(ctx->cell->img).view(cellRect);
       WandPolicy policy{
         overlaySurface,
         maskSurface,

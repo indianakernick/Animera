@@ -34,7 +34,7 @@ private:
   
   void undo();
   void redo();
-  void restore(const QImage &);
+  void restore(const Cell &);
 };
 
 #endif

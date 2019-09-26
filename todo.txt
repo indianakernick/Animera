@@ -103,13 +103,6 @@ scale tool
 proper undo/redo system
   an application-wide undo system would be cool
 
-using the offset property of QImage could be a mistake
-  Cells should have positions
-  images should not
-  if we're dealing with an image that has a position,
-    we're actually dealing with a cell but it looks like an image
-  perhaps using isNull() directly on an image is a mistake too?
-
 optimize LayerCells
   we need stable pointers to Cells
   std::deque keeps pointers stable if you insert or erase from either end

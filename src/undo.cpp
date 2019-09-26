@@ -24,14 +24,14 @@ void UndoStack::clear() {
   top = -1;
 }
 
-void UndoStack::reset(QImage img) {
+void UndoStack::reset(Cell cell) {
   stack.clear();
-  img.detach();
-  stack.push_back(img);
+  cell.img.detach();
+  stack.push_back(std::move(cell));
   top = 0;
 }
 
-void UndoStack::modify(QImage img) {
+void UndoStack::modify(Cell cell) {
   assert(!stack.empty());
   stack.erase(stack.begin() + top + 1, stack.end());
   if (stack.size() >= edit_undo_stack) {
@@ -39,8 +39,8 @@ void UndoStack::modify(QImage img) {
     stack.erase(stack.begin(), stack.begin() + oldImages);
     top -= oldImages;
   }
-  img.detach();
-  stack.push_back(img);
+  cell.img.detach();
+  stack.push_back(std::move(cell));
   ++top;
 }
 

@@ -258,10 +258,11 @@ Error writeCHDR(QIODevice &dev, const CellSpan &span) try {
   writer.begin(chunk_cell_header);
   writer.writeInt(static_cast<uint32_t>(span.len));
   if (*span.cell) {
-    writer.writeInt(span.cell->image.offset().x());
-    writer.writeInt(span.cell->image.offset().y());
-    writer.writeInt(span.cell->image.width());
-    writer.writeInt(span.cell->image.height());
+    const QRect rect = span.cell->rect();
+    writer.writeInt(rect.x());
+    writer.writeInt(rect.y());
+    writer.writeInt(rect.width());
+    writer.writeInt(rect.height());
   }
   writer.end();
   return {};
@@ -431,8 +432,8 @@ Error readCHDR(QIODevice &dev, CellSpan &span, const Format format) try {
     if (width <= 0) return "Negative cell width";
     const int height = reader.readInt();
     if (height <= 0) return "Negative cell height";
-    span.cell->image = {width, height, qimageFormat(format)};
-    span.cell->image.setOffset({x, y});
+    span.cell->img = {width, height, qimageFormat(format)};
+    span.cell->pos = {x, y};
   }
   if (Error err = reader.end(); err) return err;
   return {};

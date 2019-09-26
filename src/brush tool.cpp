@@ -29,7 +29,8 @@ void BrushTool::mouseDown(const ToolMouseEvent &event) {
   lastPos = event.pos;
   color = ctx->selectColor(event.button);
   ctx->requireCell(symPointRect(lastPos));
-  ctx->emitChanges(symPoint(ctx->cell->image, color, lastPos));
+  const QPoint pos = ctx->cell->pos;
+  ctx->emitChanges(symPoint(ctx->cell->img, color, lastPos - pos));
 }
 
 void BrushTool::mouseMove(const ToolMouseEvent &event) {
@@ -40,14 +41,18 @@ void BrushTool::mouseMove(const ToolMouseEvent &event) {
     return ctx->emitChanges(ToolChanges::overlay);
   }
   ctx->growCell(symPointRect(event.pos));
-  ctx->emitChanges(symLine(ctx->cell->image, color, {lastPos, event.pos}));
+  QImage &img = ctx->cell->img;
+  const QPoint pos = ctx->cell->pos;
+  ctx->emitChanges(symLine(img, color, {lastPos - pos, event.pos - pos}));
   lastPos = event.pos;
 }
 
 void BrushTool::mouseUp(const ToolMouseEvent &event) {
   symPointStatus(event.pos);
   ctx->growCell(symPointRect(event.pos));
-  ctx->emitChanges(symLine(ctx->cell->image, color, {lastPos, event.pos}));
+  QImage &img = ctx->cell->img;
+  const QPoint pos = ctx->cell->pos;
+  ctx->emitChanges(symLine(img, color, {lastPos - pos, event.pos - pos}));
   ctx->finishChange();
 }
 
