@@ -21,7 +21,7 @@ TEST_CASE("transform") {
   SECTION("pixelTransform") {
     gfx::Surface<Px> dst{&dstArr[0][0], width, width, height};
     gfx::CSurface<Px> src{&srcArr[0][0], width, width, height};
-    gfx::pixelTransform(dst, src, [](Px px) {
+    gfx::pureEach(dst, src, [](Px px) {
       return px + 42;
     });
     for (int y = 0; y != height; ++y) {

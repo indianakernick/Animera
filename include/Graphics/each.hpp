@@ -84,6 +84,18 @@ bool eachRegion(
   });
 }
 
+template <typename DstPixel, typename SrcPixel, typename Func>
+void pureEach(Surface<DstPixel> dst, CSurface<SrcPixel> src, Func func) {
+  each(dst, src, [func](DstPixel &dst, const SrcPixel &src) {
+    dst = func(src);
+  });
+}
+
+template <typename Pixel>
+void copyFunc(Pixel &dst, const Pixel src) noexcept {
+  dst = src;
+}
+
 }
 
 #endif

@@ -35,7 +35,7 @@ inline Color porterDuff(const Factor f, const Color a, const Color b) {
 }
 */
 
-inline Color porterDuff(const Factor f, const Color a, const Color b) {
+inline Color porterDuff(const Factor f, const Color a, const Color b) noexcept {
   const uint32_t cA = a.a*f.a + b.a*f.b;
   if (cA == 0) {
     return {0, 0, 0, 0};
@@ -80,7 +80,7 @@ MODE(      xor,                255 - b, 255 - a);
 #undef MODE
 
 template <typename Mode>
-Color porterDuff(const Mode mode, const Color a, const Color b) {
+Color porterDuff(const Mode mode, const Color a, const Color b) noexcept {
   return porterDuff(mode(a.a, b.a), a, b);
 }
 
@@ -94,6 +94,17 @@ struct Format {
 
 */
 
+template <typename Mode, typename DstFormat, typename SrcFormat>
+auto makePorterDuff(const Mode mode, const DstFormat dstFmt, const SrcFormat srcFmt) noexcept {
+  return [mode, dstFmt, srcFmt](auto &dst, const auto src) noexcept {
+    dst = dstFmt.pixel(porterDuff(
+      mode,
+      srcFmt.color(src),
+      dstFmt.color(dst)
+    ));
+  };
+}
+
 template <typename Mode, typename DstPixel, typename SrcPixel, typename DstFormat, typename SrcFormat>
 bool porterDuffRegion(
   const Mode mode,
@@ -102,10 +113,8 @@ bool porterDuffRegion(
   const DstFormat dstFmt,
   const SrcFormat srcFmt,
   const Point srcPos
-) {
-  return region(dst, src, srcPos, [mode, dstFmt, srcFmt](auto dstView, auto srcView) {
-    porterDuff(mode, dstView, srcView, dstFmt, srcFmt);
-  });
+) noexcept {
+  return eachRegion(dst, src, srcPos, makePorterDuff(mode, dstFmt, srcFmt));
 }
 
 template <typename Mode, typename DstPixel, typename SrcPixel, typename DstFormat, typename SrcFormat>
@@ -115,14 +124,8 @@ void porterDuff(
   const CSurface<SrcPixel> src,
   const DstFormat dstFmt,
   const SrcFormat srcFmt
-) {
-  each(dst, src, [mode, dstFmt, srcFmt](auto &dst, auto &src) {
-    dst = dstFmt.pixel(porterDuff(
-      mode,
-      srcFmt.color(src),
-      dstFmt.color(dst)
-    ));
-  });
+) noexcept {
+  each(dst, src, makePorterDuff(mode, dstFmt, srcFmt));
 }
 
 }

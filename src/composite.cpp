@@ -10,11 +10,11 @@
 
 #include <limits>
 #include "config.hpp"
+#include <Graphics/copy.hpp>
 #include <Graphics/fill.hpp>
 #include <Graphics/mask.hpp>
 #include "surface factory.hpp"
 #include "graphics convert.hpp"
-#include <Graphics/transform.hpp>
 #include <Graphics/porter duff.hpp>
 
 namespace {
@@ -108,7 +108,7 @@ template void compositeFrame<gfx::ARGB>(QImage &, PaletteCSpan, const Frame &, F
 template void compositeFrame<gfx::YA>(QImage &, PaletteCSpan, const Frame &, Format);
 
 void compositeOverlay(QImage &drawing, const QImage &overlay) {
-  porterDuff(
+  gfx::porterDuff(
     gfx::mode_src_over,
     makeSurface<PixelRgba>(drawing),
     makeSurface<PixelRgba>(overlay),
@@ -161,17 +161,17 @@ PixelRgba grayToOverlayPx(const PixelGray pixel) {
 }
 
 void rgbaToOverlay(gfx::Surface<PixelRgba> overlay, gfx::CSurface<PixelRgba> source) {
-  pixelTransform(overlay, source, rgbaToOverlayPx);
+  gfx::pureEach(overlay, source, rgbaToOverlayPx);
 }
 
 void paletteToOverlay(gfx::Surface<PixelRgba> overlay, gfx::CSurface<PixelIndex> source, PaletteCSpan palette) {
-  pixelTransform(overlay, source, [palette](const PixelIndex pixel) {
+  gfx::pureEach(overlay, source, [palette](const PixelIndex pixel) {
     return paletteToOverlayPx(palette, pixel);
   });
 }
 
 void grayToOverlay(gfx::Surface<PixelRgba> overlay, gfx::CSurface<PixelGray> source) {
-  pixelTransform(overlay, source, grayToOverlayPx);
+  gfx::pureEach(overlay, source, grayToOverlayPx);
 }
 
 }
