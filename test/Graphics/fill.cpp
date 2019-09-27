@@ -6,18 +6,13 @@
 //  Copyright © 2019 Indi Kernick. All rights reserved.
 //
 
-#include "../catch.hpp"
+#include "common.hpp"
 #include <Graphics/fill.hpp>
 
 namespace {
 
 constexpr uint32_t init_px32 = 0xFEDCBA98;
 constexpr uint32_t fill_px32 = 0x76543210;
-
-template <typename Element, size_t Rows, size_t Columns>
-gfx::Surface<Element> makeSurface(Element (&array)[Rows][Columns]) noexcept {
-  return {&array[0][0], Columns, Columns, Rows};
-}
 
 }
 
@@ -28,11 +23,7 @@ TEMPLATE_TEST_CASE("fillRow", "", uint8_t, uint16_t, uint32_t) {
   constexpr TestType fill_px = TestType(fill_px32);
   
   TestType dstArr[height][width];
-  for (int y = 0; y != height; ++y) {
-    for (int x = 0; x != width; ++x) {
-      dstArr[y][x] = init_px;
-    }
-  }
+  fill_value(dstArr, init_px);
   
   SECTION("one") {
     const gfx::Point pos = {2, 3};
@@ -73,11 +64,7 @@ TEMPLATE_TEST_CASE("fillCol", "", uint8_t, uint16_t, uint32_t) {
   constexpr TestType fill_px = TestType(fill_px32);
   
   TestType dstArr[height][width];
-  for (int y = 0; y != height; ++y) {
-    for (int x = 0; x != width; ++x) {
-      dstArr[y][x] = init_px;
-    }
-  }
+  fill_value(dstArr, init_px);
   
   SECTION("one") {
     const gfx::Point pos = {3, 4};
@@ -118,11 +105,7 @@ TEMPLATE_TEST_CASE("fillRegion", "", uint8_t, uint16_t, uint32_t) {
   constexpr TestType fill_px = TestType(fill_px32);
   
   TestType dstArr[height][width];
-  for (int y = 0; y != height; ++y) {
-    for (int x = 0; x != width; ++x) {
-      dstArr[y][x] = init_px;
-    }
-  }
+  fill_value(dstArr, init_px);
   
   SECTION("no overlap pixel") {
     REQUIRE_FALSE(gfx::fillRegion(makeSurface(dstArr), fill_px, {{width, height}, {1, 1}}));
@@ -210,11 +193,7 @@ TEMPLATE_TEST_CASE("fill", "", uint8_t, uint16_t, uint32_t) {
   constexpr TestType fill_px = TestType(fill_px32);
   
   TestType dstArr[height][width];
-  for (int y = 0; y != height; ++y) {
-    for (int x = 0; x != width; ++x) {
-      dstArr[y][x] = init_px;
-    }
-  }
+  fill_value(dstArr, init_px);
   
   SECTION("whole pixel") {
     gfx::fill(makeSurface(dstArr), fill_px);
@@ -274,14 +253,10 @@ TEMPLATE_TEST_CASE("overFill", "", uint8_t, uint16_t, uint32_t) {
   constexpr TestType fill_px = TestType(fill_px32);
   
   TestType dstArr[height][width];
-  for (int y = 0; y != height; ++y) {
-    for (int x = 0; x != width; ++x) {
-      dstArr[y][x] = init_px;
-    }
-  }
+  fill_value(dstArr, init_px);
   
   SECTION("pixel") {
-    gfx::overFill(makeSurface(dstArr).view(gfx::Size{width - 2, height}), fill_px);
+    gfx::overFill(makeSurface(dstArr).view(width - 2, height), fill_px);
     for (int y = 0; y != height; ++y) {
       for (int x = 0; x != width; ++x) {
         INFO("(" << x << ", " << y << ")");
@@ -291,7 +266,7 @@ TEMPLATE_TEST_CASE("overFill", "", uint8_t, uint16_t, uint32_t) {
   }
   
   SECTION("zero") {
-    gfx::overFill(makeSurface(dstArr).view(gfx::Size{width - 2, height}));
+    gfx::overFill(makeSurface(dstArr).view(width - 2, height));
     for (int y = 0; y != height; ++y) {
       for (int x = 0; x != width; ++x) {
         INFO("(" << x << ", " << y << ")");

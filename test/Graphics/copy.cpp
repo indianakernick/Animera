@@ -6,20 +6,8 @@
 //  Copyright © 2019 Indi Kernick. All rights reserved.
 //
 
-#include "../catch.hpp"
+#include "common.hpp"
 #include <Graphics/copy.hpp>
-
-namespace {
-
-using Px = uint16_t;
-
-constexpr Px init = 0xFEDC;
-
-Px fn(const int x, const int y) {
-  return static_cast<Px>((x + 1) * 3 + (y + 3) * 5);
-}
-
-}
 
 TEST_CASE("copyRegion") {
   constexpr int width = 10;
@@ -27,16 +15,8 @@ TEST_CASE("copyRegion") {
   
   Px dstArr[height][width];
   Px srcArr[height][width];
-  for (int y = 0; y != height; ++y) {
-    for (int x = 0; x != width; ++x) {
-      dstArr[y][x] = init;
-    }
-  }
-  for (int y = 0; y != height; ++y) {
-    for (int x = 0; x != width; ++x) {
-      srcArr[y][x] = fn(x, y);
-    }
-  }
+  fill_init(dstArr);
+  fill_fn(srcArr);
   
   SECTION("no overlap") {
     gfx::Surface<Px> dst{&dstArr[0][0], width, width, height};
@@ -96,16 +76,8 @@ TEST_CASE("copy") {
   
   Px dstArr[height][width];
   Px srcArr[height][width];
-  for (int y = 0; y != height; ++y) {
-    for (int x = 0; x != width; ++x) {
-      dstArr[y][x] = init;
-    }
-  }
-  for (int y = 0; y != height; ++y) {
-    for (int x = 0; x != width; ++x) {
-      srcArr[y][x] = fn(x, y);
-    }
-  }
+  fill_init(dstArr);
+  fill_fn(srcArr);
   
   SECTION("whole") {
     gfx::Surface<Px> dst{&dstArr[0][0], width, width, height};
@@ -195,16 +167,8 @@ TEST_CASE("overCopy") {
   
   Px dstArr[height][width];
   Px srcArr[height][width];
-  for (int y = 0; y != height; ++y) {
-    for (int x = 0; x != width; ++x) {
-      dstArr[y][x] = init;
-    }
-  }
-  for (int y = 0; y != height; ++y) {
-    for (int x = 0; x != width; ++x) {
-      srcArr[y][x] = fn(x, y);
-    }
-  }
+  fill_init(dstArr);
+  fill_fn(srcArr);
   
   SECTION("whole") {
     gfx::Surface<Px> dst{&dstArr[0][0], width, width - 2, height};

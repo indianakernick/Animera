@@ -188,6 +188,7 @@
 		453D28D42277129800D0E5F9 /* connect.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = connect.hpp; sourceTree = "<group>"; };
 		453D28D52278134200D0E5F9 /* color handle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "color handle.cpp"; sourceTree = "<group>"; };
 		453D28D62278134200D0E5F9 /* color handle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "color handle.hpp"; sourceTree = "<group>"; };
+		45548661233DA2B8001D5611 /* common.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = common.hpp; sourceTree = "<group>"; };
 		455F2851220688FD00C73F39 /* Animera.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Animera.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		455F285B2206890300C73F39 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		455F28602206890300C73F39 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -766,6 +767,7 @@
 			children = (
 				45F0431323247BFE00E99F95 /* odr.cpp */,
 				45BB5F6423239AB900E42371 /* main.cpp */,
+				45548661233DA2B8001D5611 /* common.hpp */,
 				45BB5F6A23239CB700E42371 /* copy.cpp */,
 				45F043172324833400E99F95 /* fill.cpp */,
 				4520A828232B424B009FCD1F /* transform.cpp */,

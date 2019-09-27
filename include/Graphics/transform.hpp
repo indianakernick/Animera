@@ -110,6 +110,43 @@ void rotate(Surface<Pixel> dst, CSurface<identity_t<Pixel>> src, const int dir) 
   }
 }
 
+template <typename Pixel>
+void scale(Surface<Pixel> dst, CSurface<identity_t<Pixel>> src) noexcept {
+  assert(dst.width() >= src.width());
+  assert(dst.height() >= src.height());
+  assert(dst.width() % src.width() == 0);
+  assert(dst.height() % src.height() == 0);
+  if (dst.size() == src.size()) {
+    return copy(dst, src);
+  }
+  const Point factor = {dst.width() / src.width(), dst.height() / src.height()};
+  auto iterate = [&](auto x1, auto y1) {
+    Point skip = {};
+    auto srcRowIter = begin(src);
+    for (auto dstRow : range(dst)) {
+      const Pixel *srcColIter = srcRowIter.begin();
+      for (Pixel &dstPixel : dstRow) {
+        dstPixel = *srcColIter;
+        if (x1 || ++skip.x == factor.x) {
+          skip.x = 0;
+          ++srcColIter;
+        }
+      }
+      if (y1 || ++skip.y == factor.y) {
+        skip.y = 0;
+        ++srcRowIter;
+      }
+    }
+  };
+  if (factor.x == 1) {
+    iterate(std::bool_constant<true>{}, std::bool_constant<false>{});
+  } else if (factor.y == 1) {
+    iterate(std::bool_constant<false>{}, std::bool_constant<true>{});
+  } else {
+    iterate(std::bool_constant<false>{}, std::bool_constant<false>{});
+  }
+}
+
 }
 
 #endif

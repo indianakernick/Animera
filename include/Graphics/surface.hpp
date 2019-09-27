@@ -117,9 +117,12 @@ public:
     assert(contains(rect));
     return {ptr(rect.p), pitch_, rect.s};
   }
+  Surface view(const int w, const int h) const noexcept {
+    assert(contains(w - 1, h - 1));
+    return {data_, pitch_, w, h};
+  }
   Surface view(const Size size) const noexcept {
-    assert(contains({{}, size}));
-    return {data_, pitch_, size};
+    return view(size.w, size.h);
   }
 
 private:

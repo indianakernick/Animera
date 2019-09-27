@@ -6,21 +6,8 @@
 //  Copyright © 2019 Indi Kernick. All rights reserved.
 //
 
-#define CATCH_CONFIG_ENABLE_BENCHMARKING
-#include "../catch.hpp"
+#include "common.hpp"
 #include <Graphics/transform.hpp>
-
-namespace {
-
-using Px = uint16_t;
-
-constexpr Px init = 0xFEDC;
-
-Px fn(const int x, const int y) {
-  return static_cast<Px>((x + 1) * 3 + (y + 3) * 5);
-}
-
-}
 
 TEST_CASE("transform") {
   constexpr int width = 7;
@@ -28,16 +15,8 @@ TEST_CASE("transform") {
   
   Px dstArr[height][width];
   Px srcArr[height][width];
-  for (int y = 0; y != height; ++y) {
-    for (int x = 0; x != width; ++x) {
-      dstArr[y][x] = init;
-    }
-  }
-  for (int y = 0; y != height; ++y) {
-    for (int x = 0; x != width; ++x) {
-      srcArr[y][x] = fn(x, y);
-    }
-  }
+  fill_init(dstArr);
+  fill_fn(srcArr);
   
   SECTION("pixelTransform") {
     gfx::Surface<Px> dst{&dstArr[0][0], width, width, height};
@@ -188,6 +167,31 @@ TEST_CASE("transform") {
         INFO("(" << x << ", " << y << ")");
         REQUIRE(srcArr[y][x] == fn(x, y));
       }
+    }
+  }
+}
+
+TEMPLATE_TEST_CASE_SIG("scale", "", ((int X, int Y), X, Y),
+  (1, 1), (1, 3), (3, 1), (3, 3), (3, 2), (2, 3)
+) {
+  constexpr int width = 3;
+  constexpr int height = 4;
+  
+  Px srcArr[height][width];
+  fill_fn(srcArr);
+  Px dstArr[height * Y][width * X];
+  fill_init(dstArr);
+  gfx::scale(makeSurface(dstArr), makeSurface(srcArr));
+  for (int y = 0; y != height * Y; ++y) {
+    for (int x = 0; x != width * X; ++x) {
+      INFO("(" << x << ", " << y << ")");
+      REQUIRE(dstArr[y][x] == fn(x / X, y / Y));
+    }
+  }
+  for (int y = 0; y != height; ++y) {
+    for (int x = 0; x != width; ++x) {
+      INFO("(" << x << ", " << y << ")");
+      REQUIRE(srcArr[y][x] == fn(x, y));
     }
   }
 }
