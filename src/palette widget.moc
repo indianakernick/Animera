@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_PaletteWidget_t {
-    QByteArrayData data[13];
-    char stringdata0[154];
+    QByteArrayData data[14];
+    char stringdata0[168];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -44,14 +44,15 @@ QT_MOC_LITERAL(8, 101, 10), // "initCanvas"
 QT_MOC_LITERAL(9, 112, 6), // "Format"
 QT_MOC_LITERAL(10, 119, 10), // "setPalette"
 QT_MOC_LITERAL(11, 130, 11), // "PaletteSpan"
-QT_MOC_LITERAL(12, 142, 11) // "attachIndex"
+QT_MOC_LITERAL(12, 142, 11), // "attachIndex"
+QT_MOC_LITERAL(13, 154, 13) // "updatePalette"
 
     },
     "PaletteWidget\0shouldAttachColor\0\0"
     "ColorHandle*\0shouldSetColor\0QRgb\0"
     "shouldSetIndex\0paletteColorChanged\0"
     "initCanvas\0Format\0setPalette\0PaletteSpan\0"
-    "attachIndex"
+    "attachIndex\0updatePalette"
 };
 #undef QT_MOC_LITERAL
 
@@ -61,7 +62,7 @@ static const uint qt_meta_data_PaletteWidget[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-       7,   14, // methods
+       8,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -69,15 +70,16 @@ static const uint qt_meta_data_PaletteWidget[] = {
        4,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    1,   49,    2, 0x06 /* Public */,
-       4,    1,   52,    2, 0x06 /* Public */,
-       6,    1,   55,    2, 0x06 /* Public */,
-       7,    0,   58,    2, 0x06 /* Public */,
+       1,    1,   54,    2, 0x06 /* Public */,
+       4,    1,   57,    2, 0x06 /* Public */,
+       6,    1,   60,    2, 0x06 /* Public */,
+       7,    0,   63,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       8,    1,   59,    2, 0x0a /* Public */,
-      10,    1,   62,    2, 0x0a /* Public */,
-      12,    1,   65,    2, 0x0a /* Public */,
+       8,    1,   64,    2, 0x0a /* Public */,
+      10,    1,   67,    2, 0x0a /* Public */,
+      12,    1,   70,    2, 0x0a /* Public */,
+      13,    0,   73,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, 0x80000000 | 3,    2,
@@ -89,6 +91,7 @@ static const uint qt_meta_data_PaletteWidget[] = {
     QMetaType::Void, 0x80000000 | 9,    2,
     QMetaType::Void, 0x80000000 | 11,    2,
     QMetaType::Void, QMetaType::Int,    2,
+    QMetaType::Void,
 
        0        // eod
 };
@@ -106,6 +109,7 @@ void PaletteWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _i
         case 4: _t->initCanvas((*reinterpret_cast< Format(*)>(_a[1]))); break;
         case 5: _t->setPalette((*reinterpret_cast< PaletteSpan(*)>(_a[1]))); break;
         case 6: _t->attachIndex((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 7: _t->updatePalette(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -170,13 +174,13 @@ int PaletteWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 7)
+        if (_id < 8)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 7;
+        _id -= 8;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 7)
+        if (_id < 8)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 7;
+        _id -= 8;
     }
     return _id;
 }
@@ -410,8 +414,8 @@ void PaletteColorWidget::paletteColorChanged()
     QMetaObject::activate(this, &staticMetaObject, 3, nullptr);
 }
 struct qt_meta_stringdata_PaletteTableWidget_t {
-    QByteArrayData data[14];
-    char stringdata0[170];
+    QByteArrayData data[15];
+    char stringdata0[184];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -433,14 +437,15 @@ QT_MOC_LITERAL(9, 113, 19), // "paletteColorChanged"
 QT_MOC_LITERAL(10, 133, 10), // "setPalette"
 QT_MOC_LITERAL(11, 144, 7), // "palette"
 QT_MOC_LITERAL(12, 152, 11), // "attachIndex"
-QT_MOC_LITERAL(13, 164, 5) // "index"
+QT_MOC_LITERAL(13, 164, 5), // "index"
+QT_MOC_LITERAL(14, 170, 13) // "updatePalette"
 
     },
     "PaletteTableWidget\0shouldAttachColor\0"
     "\0ColorHandle*\0shouldSetColor\0QRgb\0"
     "shouldSetIndex\0paletteChanged\0PaletteSpan\0"
     "paletteColorChanged\0setPalette\0palette\0"
-    "attachIndex\0index"
+    "attachIndex\0index\0updatePalette"
 };
 #undef QT_MOC_LITERAL
 
@@ -450,7 +455,7 @@ static const uint qt_meta_data_PaletteTableWidget[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-       7,   14, // methods
+       8,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -458,15 +463,16 @@ static const uint qt_meta_data_PaletteTableWidget[] = {
        5,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    1,   49,    2, 0x06 /* Public */,
-       4,    1,   52,    2, 0x06 /* Public */,
-       6,    1,   55,    2, 0x06 /* Public */,
-       7,    1,   58,    2, 0x06 /* Public */,
-       9,    0,   61,    2, 0x06 /* Public */,
+       1,    1,   54,    2, 0x06 /* Public */,
+       4,    1,   57,    2, 0x06 /* Public */,
+       6,    1,   60,    2, 0x06 /* Public */,
+       7,    1,   63,    2, 0x06 /* Public */,
+       9,    0,   66,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      10,    1,   62,    2, 0x0a /* Public */,
-      12,    1,   65,    2, 0x0a /* Public */,
+      10,    1,   67,    2, 0x0a /* Public */,
+      12,    1,   70,    2, 0x0a /* Public */,
+      14,    0,   73,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, 0x80000000 | 3,    2,
@@ -478,6 +484,7 @@ static const uint qt_meta_data_PaletteTableWidget[] = {
  // slots: parameters
     QMetaType::Void, 0x80000000 | 8,   11,
     QMetaType::Void, QMetaType::Int,   13,
+    QMetaType::Void,
 
        0        // eod
 };
@@ -495,6 +502,7 @@ void PaletteTableWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, i
         case 4: _t->paletteColorChanged(); break;
         case 5: _t->setPalette((*reinterpret_cast< const PaletteSpan(*)>(_a[1]))); break;
         case 6: _t->attachIndex((*reinterpret_cast< const int(*)>(_a[1]))); break;
+        case 7: _t->updatePalette(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -566,13 +574,13 @@ int PaletteTableWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 7)
+        if (_id < 8)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 7;
+        _id -= 8;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 7)
+        if (_id < 8)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 7;
+        _id -= 8;
     }
     return _id;
 }

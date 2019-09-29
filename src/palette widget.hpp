@@ -26,6 +26,7 @@ public Q_SLOTS:
   void initCanvas(Format);
   void setPalette(PaletteSpan);
   void attachIndex(int);
+  void updatePalette();
   
 Q_SIGNALS:
   void shouldAttachColor(ColorHandle *);

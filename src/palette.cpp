@@ -9,6 +9,7 @@
 #include "palette.hpp"
 
 #include "serial.hpp"
+#include "export png.hpp"
 #include "sprite file.hpp"
 #include <Graphics/format.hpp>
 
@@ -86,9 +87,18 @@ constexpr std::array<QRgb, 9> gray_palette = {
   quantGray(8, 8),
 };
 
+PaletteCSpan getUsedSpan(const PaletteCSpan colors) {
+  for (PaletteCSpan::index_type i = colors.size(); i != 0; --i) {
+    if (colors[i - 1] != 0) {
+      return {colors.data(), i};
+    }
+  }
+  return {};
 }
 
-void Palette::initDefault() {
+}
+
+void Palette::reset() {
   auto iter = colors.begin();
   switch (canvasFormat) {
     case Format::index:
@@ -104,6 +114,10 @@ void Palette::initDefault() {
       iter = std::copy(gray_palette.cbegin(), gray_palette.cend(), iter);
   }
   std::fill(iter, colors.end(), 0);
+}
+
+void Palette::initDefault() {
+  reset();
   Q_EMIT paletteChanged({colors.data(), pal_colors});
 }
 
@@ -138,13 +152,21 @@ namespace {
 }
 
 Error Palette::serialize(QIODevice &dev) const {
-  return writePLTE(dev, colors, canvasFormat);
+  return writePLTE(dev, getUsedSpan(colors), canvasFormat);
 }
 
 Error Palette::deserialize(QIODevice &dev) {
   if (Error err = readPLTE(dev, colors, canvasFormat); err) return err;
   Q_EMIT paletteChanged({colors.data(), pal_colors});
   return {};
+}
+
+Error Palette::save(const QString &path) const {
+  return exportPng(path, getUsedSpan(colors), canvasFormat);
+}
+
+Error Palette::open(const QString &path) {
+  return importPng(path, colors, canvasFormat);
 }
 
 PaletteCSpan Palette::getPalette() const {

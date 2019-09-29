@@ -53,7 +53,7 @@ private:
   StatusBarWidget statusBar;
   ColorPickerWidget colorPicker;
   QMenuBar menubar;
-  ExportDialog *exportDialog = nullptr;
+  ExportDialog *exporter = nullptr;
   
   void setupLayouts();
   void initStyles();
@@ -62,9 +62,14 @@ private:
   
   void saveToPath(const QString &);
   void saveFile();
-  void openSaveFileDialog();
+  void saveFileDialog();
   void exportSprite(const ExportOptions &);
-  void openExportDialog();
+  void exportDialog();
+  void openPalette(const QString &);
+  void savePalette(const QString &);
+  void openPaletteDialog();
+  void savePaletteDialog();
+  void resetPalette();
   
   void closeEvent(QCloseEvent *) override;
 };

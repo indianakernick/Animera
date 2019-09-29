@@ -46,10 +46,6 @@ There's a lot to learn
 Should probably be calling update() instead of repaint() in most places
 Should probably be using mouse release instead of mouse press in some places
 
-Palette import and export
-  export as png
-  does the palette need to have a size?
-
 remove layer button appears when hovering layer name
   would this be more intuitive than a button that removes the current layer?
 
@@ -132,3 +128,8 @@ window destructor
 editor scaling is sometimes a pixel off
   this might be due to QPainter using floats
   might have to do scaling myself
+
+fixed byte order image formats
+  remove qRgb calls
+  use RGBA_8888
+  measure the speed increase

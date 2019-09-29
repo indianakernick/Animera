@@ -161,7 +161,18 @@ public Q_SLOTS:
     connectSignals();
   }
   void attachIndex(const int index) {
-    colors[index]->QAbstractButton::click();
+    colors[index]->click();
+  }
+  void updatePalette() {
+    for (PaletteColorWidget *colorWidget : colors) {
+      if (colorWidget->isChecked()) {
+        Q_EMIT shouldAttachColor(nullptr);
+        colorWidget->click();
+        break;
+      }
+    }
+    repaint();
+    Q_EMIT paletteColorChanged();
   }
 
 Q_SIGNALS:
@@ -242,6 +253,10 @@ void PaletteWidget::setPalette(PaletteSpan palette) {
 
 void PaletteWidget::attachIndex(const int index) {
   table->attachIndex(index);
+}
+
+void PaletteWidget::updatePalette() {
+  table->updatePalette();
 }
 
 #include "palette widget.moc"

@@ -183,8 +183,8 @@ void Window::populateMenubar() {
   ADD_ACTION(file, "New", QKeySequence::New, *app, newFileDialog);
   ADD_ACTION(file, "Open", QKeySequence::Open, *app, openFileDialog);
   ADD_ACTION(file, "Save", QKeySequence::Save, *this, saveFile);
-  ADD_ACTION(file, "Save As", QKeySequence::SaveAs, *this, openSaveFileDialog);
-  ADD_ACTION(file, "Export", Qt::CTRL + Qt::Key_E, *this, openExportDialog);
+  ADD_ACTION(file, "Save As", QKeySequence::SaveAs, *this, saveFileDialog);
+  ADD_ACTION(file, "Export", Qt::CTRL + Qt::Key_E, *this, exportDialog);
   
   QMenu *layer = menubar.addMenu("Layer");
   layer->setFont(getGlobalFont());
@@ -225,6 +225,12 @@ void Window::populateMenubar() {
   ADD_ACTION(selection, "Clear", Qt::CTRL + Qt::Key_X, sprite.timeline, clearSelected);
   ADD_ACTION(selection, "Copy", Qt::CTRL + Qt::Key_C, sprite.timeline, copySelected);
   ADD_ACTION(selection, "Paste", Qt::CTRL + Qt::Key_V, sprite.timeline, pasteSelected);
+  
+  QMenu *palette = menubar.addMenu("Palette");
+  palette->setFont(getGlobalFont());
+  ADD_ACTION(palette, "Reset", {}, *this, resetPalette);
+  ADD_ACTION(palette, "Open", {}, *this, openPaletteDialog);
+  ADD_ACTION(palette, "Save", {}, *this, savePaletteDialog);
   
   menubar.adjustSize();
 }
@@ -308,7 +314,7 @@ void Window::connectSignals() {
   CONNECT(palette,         shouldAttachColor,   colorPicker,     attach);
   CONNECT(palette,         shouldSetColor,      colorPicker,     setColor);
   CONNECT(palette,         shouldSetIndex,      colors,          setIndex);
-  CONNECT(palette,         paletteColorChanged, editor,          composite);
+  CONNECT(palette,         paletteColorChanged, editor,          compositePalette);
   CONNECT(palette,         paletteColorChanged, colors,          changePaletteColors);
   CONNECT(palette,         paletteColorChanged, this,            modify);
 }
@@ -327,13 +333,13 @@ void Window::saveToPath(const QString &path) {
 void Window::saveFile() {
   const QString path = windowFilePath();
   if (path.isEmpty()) {
-    openSaveFileDialog();
+    saveFileDialog();
   } else {
     saveToPath(path);
   }
 }
 
-void Window::openSaveFileDialog() {
+void Window::saveFileDialog() {
   auto *dialog = new QFileDialog{this};
   dialog->setAcceptMode(QFileDialog::AcceptSave);
   dialog->setNameFilter("Animera Sprite (*.animera)");
@@ -351,12 +357,54 @@ void Window::exportSprite(const ExportOptions &options) {
   }
 }
 
-void Window::openExportDialog() {
-  if (!exportDialog) {
-    exportDialog = new ExportDialog{this, sprite.getFormat()};
-    CONNECT(exportDialog, exportSprite, this, exportSprite);
+void Window::exportDialog() {
+  if (!exporter) {
+    exporter = new ExportDialog{this, sprite.getFormat()};
+    CONNECT(exporter, exportSprite, this, exportSprite);
   }
-  exportDialog->open();
+  exporter->open();
+}
+
+void Window::openPalette(const QString &path) {
+  if (Error err = sprite.palette.open(path); err) {
+    (new ErrorDialog{this, "Palette open error", err.msg()})->open();
+  } else {
+    setWindowModified(true);
+    palette.updatePalette();
+  }
+}
+
+void Window::savePalette(const QString &path) {
+  if (Error err = sprite.palette.save(path); err) {
+    (new ErrorDialog{this, "Palette save error", err.msg()})->open();
+  } else {
+    statusBar.showTemp("Palette Saved!");
+  }
+}
+
+void Window::openPaletteDialog() {
+  auto *dialog = new QFileDialog{this};
+  dialog->setAcceptMode(QFileDialog::AcceptOpen);
+  dialog->setNameFilter("PNG Image (*.png)");
+  dialog->setFileMode(QFileDialog::ExistingFile);
+  dialog->setDirectory(QDir::homePath());
+  CONNECT(dialog, fileSelected, this, openPalette);
+  dialog->open();
+}
+
+void Window::savePaletteDialog() {
+  auto *dialog = new QFileDialog{this};
+  dialog->setAcceptMode(QFileDialog::AcceptSave);
+  dialog->setNameFilter("PNG Image (*.png)");
+  dialog->setDefaultSuffix("png");
+  dialog->setDirectory(QDir::homePath() + "/my palette.png");
+  CONNECT(dialog, fileSelected, this, savePalette);
+  dialog->open();
+}
+
+void Window::resetPalette() {
+  sprite.palette.reset();
+  palette.updatePalette();
 }
 
 void Window::closeEvent(QCloseEvent *) {

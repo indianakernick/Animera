@@ -19,9 +19,12 @@ class Palette final : public QObject {
   Q_OBJECT
 
 public:
+  void reset();
   void initDefault();
   Error serialize(QIODevice &) const;
   Error deserialize(QIODevice &);
+  Error save(const QString &) const;
+  Error open(const QString &);
 
   PaletteCSpan getPalette() const;
 

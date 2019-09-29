@@ -118,20 +118,10 @@ void copyFromByteOrder(
   }
 }
 
-size_t getUsedSize(const PaletteCSpan colors) {
-  for (size_t i = colors.size(); i != 0; --i) {
-    if (colors[i - 1] != 0) {
-      return i;
-    }
-  }
-  return 0;
-}
-
 Error writeRgba(QIODevice &dev, const PaletteCSpan colors) try {
-  const size_t used = getUsedSize(colors);
   ChunkWriter writer{dev};
-  writer.begin(static_cast<uint32_t>(used) * 4, chunk_palette);
-  for (size_t i = 0; i != used; ++i) {
+  writer.begin(static_cast<uint32_t>(colors.size()) * 4, chunk_palette);
+  for (size_t i = 0; i != colors.size(); ++i) {
     const gfx::Color color = gfx::ARGB::color(colors[i]);
     writer.writeByte(color.r);
     writer.writeByte(color.g);
@@ -145,10 +135,9 @@ Error writeRgba(QIODevice &dev, const PaletteCSpan colors) try {
 }
 
 Error writeGray(QIODevice &dev, const PaletteCSpan colors) try {
-  const size_t used = getUsedSize(colors);
   ChunkWriter writer{dev};
-  writer.begin(static_cast<uint32_t>(used) * 2, chunk_palette);
-  for (size_t i = 0; i != used; ++i) {
+  writer.begin(static_cast<uint32_t>(colors.size()) * 2, chunk_palette);
+  for (size_t i = 0; i != colors.size(); ++i) {
     const gfx::Color color = gfx::YA::color(colors[i]);
     writer.writeByte(color.r);
     writer.writeByte(color.a);
