@@ -118,10 +118,25 @@ private:
     checkMouseLeave();
   }
   
+  QPoint getViewPos() const {
+    QScrollBar *hbar = parent->horizontalScrollBar();
+    QScrollBar *vbar = parent->verticalScrollBar();
+    return {hbar->value(), vbar->value()};
+  }
+  
+  QSize getViewSize() const {
+    const QSize port = parent->viewport()->size();
+    return {std::min(width(), port.width()), std::min(height(), port.height())};
+  }
+  
+  QRect getViewRect() const {
+    return {getViewPos(), getViewSize()};
+  }
+  
   void updateCheckers() {
-    QSize size = rect().intersected(parent->viewport()->rect()).size();
-    size.setWidth(size.width() - size.width() % scale + 4 * scale);
-    size.setHeight(size.height() - size.height() % scale + 4 * scale);
+    QSize size = getViewSize();
+    size.rwidth() += 3 * scale - size.width() % scale;
+    size.rheight() += 3 * scale - size.height() % scale;
     updateCheckers(size);
   }
   
@@ -159,11 +174,11 @@ private:
   
   void paintEvent(QPaintEvent *) override {
     QPainter painter{this};
-    QScrollBar *hbar = parent->horizontalScrollBar();
-    QScrollBar *vbar = parent->verticalScrollBar();
-    const QPoint viewPos = {hbar->value(), vbar->value()};
-    const QSize viewSize = rect().intersected(parent->viewport()->rect()).size();
-    painter.drawImage({viewPos, viewSize}, checkers, QRect{{viewPos.x() % (scale * 2), viewPos.y() % (scale * 2)}, viewSize});
+    const QRect viewRect = getViewRect();
+    painter.drawImage(viewRect, checkers, QRect{
+      {viewRect.x() % (scale * 2), viewRect.y() % (scale * 2)},
+      viewRect.size()
+    });
     painter.drawImage(rect(), editor);
     painter.drawImage(rect(), overlay);
   }
