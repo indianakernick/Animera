@@ -71,18 +71,23 @@ private:
     return QColor{color.r, color.g, color.b, color.a};
   }
   
-  QColor getQColor() const {
+  gfx::Color getGColor() const {
     switch (format) {
       case Format::index:
       case Format::rgba:
-        return toQColor(gfx::ARGB::color(color));
+        return gfx::ARGB::color(color);
       case Format::gray:
-        return toQColor(gfx::YA::color(color));
+        return gfx::YA::color(color);
     }
   }
   
+  bool useWhiteSelect() const {
+    const gfx::Color gColor = getGColor();
+    return gfx::gray(gColor) < 128 && gColor.a >= 128;
+  }
+  
   void paintColor(QPainter &painter) {
-    painter.setBrush(getQColor());
+    painter.setBrush(toQColor(getGColor()));
     painter.drawRect(
       glob_border_width, glob_border_width,
       pal_tile_size - glob_border_width, pal_tile_size - glob_border_width
@@ -97,7 +102,7 @@ private:
   
   void paintSelect(QPainter &painter) {
     if (isChecked()) {
-      if (qGray(color) < 128 && qAlpha(color) >= 128) {
+      if (useWhiteSelect()) {
         painter.drawPixmap(glob_border_width, glob_border_width, selectWhite);
       } else {
         painter.drawPixmap(glob_border_width, glob_border_width, selectBlack);
