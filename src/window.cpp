@@ -226,11 +226,11 @@ void Window::populateMenubar() {
   ADD_ACTION(selection, "Copy", Qt::CTRL + Qt::Key_C, sprite.timeline, copySelected);
   ADD_ACTION(selection, "Paste", Qt::CTRL + Qt::Key_V, sprite.timeline, pasteSelected);
   
-  QMenu *palette = menubar.addMenu("Palette");
-  palette->setFont(getGlobalFont());
-  ADD_ACTION(palette, "Reset", {}, *this, resetPalette);
-  ADD_ACTION(palette, "Open", {}, *this, openPaletteDialog);
-  ADD_ACTION(palette, "Save", {}, *this, savePaletteDialog);
+  QMenu *pal = menubar.addMenu("Palette");
+  pal->setFont(getGlobalFont());
+  ADD_ACTION(pal, "Reset", {}, *this, resetPalette);
+  ADD_ACTION(pal, "Open", {}, *this, openPaletteDialog);
+  ADD_ACTION(pal, "Save", {}, *this, savePaletteDialog);
   
   menubar.adjustSize();
 }

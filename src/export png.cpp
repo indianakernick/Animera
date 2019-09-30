@@ -297,73 +297,71 @@ Error exportPng(const QString &path, const PaletteCSpan palette, const Format fo
 Error importPng(const QString &path, const PaletteSpan palette, const Format format) {
   ReadContext ctx;
   if (Error err = initRead(ctx, path)) return err;
+  std::unique_ptr<png_byte[]> imageData;
+  std::unique_ptr<png_bytep[]> rows;
   
   if (setjmp(png_jmpbuf(ctx.png))) {
     return destroyRead(ctx);
   }
   
-  png_read_png(ctx.png, ctx.info, PNG_TRANSFORM_BGR | PNG_TRANSFORM_EXPAND, nullptr);
-  const png_byte channels = png_get_channels(ctx.png, ctx.info);
-  const size_t width = png_get_image_width(ctx.png, ctx.info);
-  const size_t height = png_get_image_height(ctx.png, ctx.info);
+  png_read_info(ctx.png, ctx.info);
+  png_uint_32 width, height;
+  int depth, colorType;
+  png_get_IHDR(ctx.png, ctx.info, &width, &height, &depth, &colorType, nullptr, nullptr, nullptr);
+  png_set_interlace_handling(ctx.png);
+  if (depth == 16) {
+    png_set_strip_16(ctx.png);
+  }
+  png_set_expand(ctx.png);
+  if (colorType & PNG_COLOR_MASK_COLOR && format == Format::gray) {
+    png_set_rgb_to_gray(ctx.png, PNG_ERROR_ACTION_NONE, PNG_RGB_TO_GRAY_DEFAULT, PNG_RGB_TO_GRAY_DEFAULT);
+  } else if (!(colorType & PNG_COLOR_MASK_COLOR) && format != Format::gray) {
+    png_set_gray_to_rgb(ctx.png);
+  }
+  if (!(colorType & PNG_COLOR_MASK_ALPHA)) {
+    png_set_filler(ctx.png, 255, PNG_FILLER_AFTER);
+  }
+  png_set_bgr(ctx.png);
+  png_read_update_info(ctx.png, ctx.info);
+  
+  const size_t rowbytes = png_get_rowbytes(ctx.png, ctx.info);
+  imageData = std::make_unique<png_byte[]>(rowbytes * height);
+  rows = std::make_unique<png_bytep[]>(height);
+  png_bytepp rowPtr = rows.get();
+  png_bytep row = imageData.get();
+  const png_bytep endRow = row + rowbytes * height;
+  while (row != endRow) {
+    *rowPtr = row;
+    ++rowPtr;
+    row += rowbytes;
+  }
+  
+  png_read_image(ctx.png, rows.get());
+  
   const size_t length = std::min(
     static_cast<size_t>(palette.size()),
-    width * height
+    size_t{width} * height
   );
   
-  auto copy = [&ctx, palette, width, length](auto bytes) {
+  auto copy = [palette, length, &imageData](auto bytes) {
     auto dst = palette.begin();
     const auto dstEnd = dst + length;
-    png_bytepp rowIter = png_get_rows(ctx.png, ctx.info);;
-    png_bytep colIter = *rowIter;
-    png_bytep colEnd = colIter + width * bytes;
-    
+    png_bytep src = imageData.get();
     while (dst != dstEnd) {
-      if constexpr (bytes == 1) {
-        *dst = gfx::YA::pixel(*colIter, 255);
-      } else if constexpr (bytes == 3) {
-        *dst = gfx::ARGB::pixel(colIter[2], colIter[1], colIter[0], 255);
-      } else {
-        std::memcpy(&(*dst), colIter, bytes);
-      }
-      colIter += bytes;
-      if (colIter == colEnd) {
-        ++rowIter;
-        colIter = *rowIter;
-        colEnd = colIter + width * bytes;
-      }
+      std::memcpy(&(*dst), src, bytes);
+      src += bytes;
       ++dst;
     }
     std::fill(dst, palette.end(), 0);
   };
   
   if (format == Format::gray) {
-    /*png_set_expand_gray_1_2_4_to_8(ctx.png);
-    png_set_add_alpha(ctx.png, 255, PNG_FILLER_BEFORE);*/
-    if (channels == 1) {
-      copy(std::integral_constant<size_t, 1>{});
-    } else if (channels == 2) {
-      copy(std::integral_constant<size_t, 2>{});
-    } else {
-      if (Error err = destroyRead(ctx); err) return err;
-      return "Expected grayscale image";
-    }
+    copy(std::integral_constant<size_t, 2>{});
   } else if (format == Format::rgba || format == Format::index) {
-    /*png_set_add_alpha(ctx.png, 255, PNG_FILLER_BEFORE);
-    png_set_bgr(ctx.png);
-    png_set_expand(ctx.png);
-    png_set_palette_to_rgb(ctx.png);
-    png_set_tRNS_to_alpha(ctx.png);
-    png_set_gray_to_rgb(ctx.png);*/
-    if (channels == 3) {
-      copy(std::integral_constant<size_t, 3>{});
-    } else if (channels == 4) {
-      copy(std::integral_constant<size_t, 4>{});
-    } else {
-      if (Error err = destroyRead(ctx); err) return err;
-      return "Expected color image";
-    }
+    copy(std::integral_constant<size_t, 4>{});
   }
+  
+  png_read_end(ctx.png, ctx.info);
   
   return destroyRead(ctx);
 }

@@ -12,7 +12,6 @@
 #include "connect.hpp"
 #include <QtGui/qpainter.h>
 #include "color handle.hpp"
-#include "color convert.hpp"
 #include <Graphics/format.hpp>
 #include "widget painting.hpp"
 #include <QtWidgets/qboxlayout.h>
