@@ -27,19 +27,13 @@ Timeline::Timeline()
 
 void Timeline::initDefault() {
   frameCount = FrameIdx{1};
-  changeFrameCount();
   Layer layer;
   layer.spans.pushNull(frameCount);
   layer.name = "Layer 0";
   layers.push_back(std::move(layer));
   selection = empty_rect;
   delay = ctrl_delay.def;
-  changeLayerCount();
-  changeFrame();
-  changePos();
-  Q_EMIT selectionChanged(selection);
-  changeLayers(LayerIdx{0}, LayerIdx{1});
-  Q_EMIT delayChanged(delay);
+  change();
 }
 
 void Timeline::optimize() {
@@ -54,6 +48,38 @@ void Timeline::optimize() {
   }
   changeFrame();
   changePos();
+}
+
+void Timeline::change() {
+  changeFrameCount();
+  changeLayerCount();
+  changeFrame();
+  changePos();
+  Q_EMIT selectionChanged(selection);
+  changeLayers(LayerIdx{0}, LayerIdx{1});
+  Q_EMIT delayChanged(delay);
+}
+
+Error Timeline::openImage(
+  const QString &path,
+  const PaletteSpan palette,
+  Format &format,
+  QSize &size
+) {
+  QImage image;
+  if (Error err = importPng(path, palette, image, format); err) return err;
+  canvasFormat = format;
+  canvasSize = size = image.size();
+  
+  frameCount = FrameIdx{1};
+  Layer layer;
+  layer.spans.pushNull(frameCount);
+  layer.spans.begin()->cell->img = std::move(image);
+  layer.name = "Layer 0";
+  layers.push_back(std::move(layer));
+  selection = empty_rect;
+  delay = ctrl_delay.def;
+  return {};
 }
 
 Error Timeline::serializeHead(QIODevice &dev) const {
@@ -115,13 +141,7 @@ Error Timeline::deserializeBody(QIODevice &dev) {
 Error Timeline::deserializeTail(QIODevice &dev) {
   if (Error err = readAEND(dev); err) return err;
   selection = empty_rect;
-  changeFrameCount();
-  changeLayerCount();
-  changeFrame();
-  changePos();
-  Q_EMIT selectionChanged(selection);
-  changeLayers(LayerIdx{0}, layerCount());
-  Q_EMIT delayChanged(delay);
+  change();
   return {};
 }
 

@@ -14,6 +14,7 @@
 #include "export options.hpp"
 
 Error exportPng(const QString &, PaletteCSpan, QImage, Format, ExportFormat);
+Error importPng(const QString &, PaletteSpan, QImage &, Format &);
 Error exportPng(const QString &, PaletteCSpan, Format);
 Error importPng(const QString &, PaletteSpan, Format);
 

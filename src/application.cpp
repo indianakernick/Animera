@@ -36,7 +36,7 @@ void Application::newFileDialog() {
 void Application::openFileDialog() {
   auto *dialog = new QFileDialog{desktop()};
   dialog->setAcceptMode(QFileDialog::AcceptOpen);
-  dialog->setNameFilter("Animera Sprite (*.animera)");
+  dialog->setNameFilter("*.animera *.png");
   dialog->setFileMode(QFileDialog::ExistingFile);
   dialog->setDirectory(QDir::homePath());
   CONNECT(dialog, fileSelected, this, openFile);
@@ -63,6 +63,9 @@ void raiseWindow(QMainWindow *window) {
 }
 
 void Application::openFile(const QString &path) {
+  if (path.endsWith(QLatin1String{".png"}, Qt::CaseInsensitive)) {
+    return makeWindow()->openImage(path);
+  }
   for (Window *window : windows) {
     if (window->windowFilePath() == path) {
       return raiseWindow(window);

@@ -26,7 +26,10 @@ public:
   Error save(const QString &) const;
   Error open(const QString &);
 
+  PaletteSpan getPalette();
   PaletteCSpan getPalette() const;
+
+  void change();
 
 public Q_SLOTS:
   void initCanvas(Format);

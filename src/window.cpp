@@ -65,6 +65,16 @@ void Window::openFile(const QString &path) {
   }
 }
 
+void Window::openImage(const QString &path) {
+  if (Error err = sprite.openImage(path); err) {
+    QDesktopWidget *desktop = static_cast<Application *>(QApplication::instance())->desktop();
+    (new ErrorDialog{desktop, "Image open error", err.msg()})->open();
+  } else {
+    setWindowModified(true);
+    show();
+  }
+}
+
 void Window::modify() {
   setWindowModified(true);
 }

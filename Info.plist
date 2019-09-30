@@ -11,12 +11,24 @@
 			<array>
 				<string>animera</string>
 			</array>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
 			<key>CFBundleTypeIconFile</key>
 			<string>Document</string>
 			<key>CFBundleTypeName</key>
 			<string>Animera Sprite</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>png</string>
+			</array>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
 			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
+			<string>Viewer</string>
 		</dict>
 	</array>
 	<key>CFBundleExecutable</key>

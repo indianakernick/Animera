@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_Sprite_t {
-    QByteArrayData data[11];
-    char stringdata0[101];
+    QByteArrayData data[12];
+    char stringdata0[111];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -41,13 +41,15 @@ QT_MOC_LITERAL(5, 42, 7), // "newFile"
 QT_MOC_LITERAL(6, 50, 8), // "saveFile"
 QT_MOC_LITERAL(7, 59, 5), // "Error"
 QT_MOC_LITERAL(8, 65, 8), // "openFile"
-QT_MOC_LITERAL(9, 74, 12), // "exportSprite"
-QT_MOC_LITERAL(10, 87, 13) // "ExportOptions"
+QT_MOC_LITERAL(9, 74, 9), // "openImage"
+QT_MOC_LITERAL(10, 84, 12), // "exportSprite"
+QT_MOC_LITERAL(11, 97, 13) // "ExportOptions"
 
     },
     "Sprite\0canvasInitialized\0\0Format\0"
     "optimize\0newFile\0saveFile\0Error\0"
-    "openFile\0exportSprite\0ExportOptions"
+    "openFile\0openImage\0exportSprite\0"
+    "ExportOptions"
 };
 #undef QT_MOC_LITERAL
 
@@ -57,7 +59,7 @@ static const uint qt_meta_data_Sprite[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-       6,   14, // methods
+       7,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -65,14 +67,15 @@ static const uint qt_meta_data_Sprite[] = {
        1,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    2,   44,    2, 0x06 /* Public */,
+       1,    2,   49,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       4,    0,   49,    2, 0x0a /* Public */,
-       5,    2,   50,    2, 0x0a /* Public */,
-       6,    1,   55,    2, 0x0a /* Public */,
-       8,    1,   58,    2, 0x0a /* Public */,
-       9,    1,   61,    2, 0x0a /* Public */,
+       4,    0,   54,    2, 0x0a /* Public */,
+       5,    2,   55,    2, 0x0a /* Public */,
+       6,    1,   60,    2, 0x0a /* Public */,
+       8,    1,   63,    2, 0x0a /* Public */,
+       9,    1,   66,    2, 0x0a /* Public */,
+      10,    1,   69,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, 0x80000000 | 3, QMetaType::QSize,    2,    2,
@@ -82,7 +85,8 @@ static const uint qt_meta_data_Sprite[] = {
     QMetaType::Void, 0x80000000 | 3, QMetaType::QSize,    2,    2,
     0x80000000 | 7, QMetaType::QString,    2,
     0x80000000 | 7, QMetaType::QString,    2,
-    0x80000000 | 7, 0x80000000 | 10,    2,
+    0x80000000 | 7, QMetaType::QString,    2,
+    0x80000000 | 7, 0x80000000 | 11,    2,
 
        0        // eod
 };
@@ -100,7 +104,9 @@ void Sprite::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
             if (_a[0]) *reinterpret_cast< Error*>(_a[0]) = std::move(_r); }  break;
         case 4: { Error _r = _t->openFile((*reinterpret_cast< const QString(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< Error*>(_a[0]) = std::move(_r); }  break;
-        case 5: { Error _r = _t->exportSprite((*reinterpret_cast< const ExportOptions(*)>(_a[1])));
+        case 5: { Error _r = _t->openImage((*reinterpret_cast< const QString(*)>(_a[1])));
+            if (_a[0]) *reinterpret_cast< Error*>(_a[0]) = std::move(_r); }  break;
+        case 6: { Error _r = _t->exportSprite((*reinterpret_cast< const ExportOptions(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< Error*>(_a[0]) = std::move(_r); }  break;
         default: ;
         }
@@ -145,13 +151,13 @@ int Sprite::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 6)
+        if (_id < 7)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 6;
+        _id -= 7;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 6)
+        if (_id < 7)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 6;
+        _id -= 7;
     }
     return _id;
 }

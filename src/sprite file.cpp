@@ -202,6 +202,13 @@ Error readGray(QIODevice &dev, const PaletteSpan colors) try {
 
 }
 
+Error writeSignature(QIODevice &dev) {
+  if (dev.write(file_sig, file_sig_len) != file_sig_len) {
+    return FileIOError{}.what();
+  }
+  return {};
+}
+
 Error writeAHDR(QIODevice &dev, const SpriteInfo &info) try {
   ChunkWriter writer{dev};
   writer.begin(5 * file_int_size + 1, chunk_anim_header);
@@ -320,6 +327,17 @@ Error writeAEND(QIODevice &dev) try {
   return {};
 } catch (FileIOError &e) {
   return e.what();
+}
+
+Error readSignature(QIODevice &dev) {
+  char signature[file_sig_len];
+  if (dev.read(signature, file_sig_len) != file_sig_len) {
+    return FileIOError{}.what();
+  }
+  if (std::memcmp(signature, file_sig, file_sig_len) != 0) {
+    return "Signature mismatch";
+  }
+  return {};
 }
 
 Error readAHDR(QIODevice &dev, SpriteInfo &info) try {

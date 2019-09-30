@@ -8,8 +8,8 @@
 
 #include "sprite.hpp"
 
-#include "serial.hpp"
 #include <QtCore/qfile.h>
+#include "sprite file.hpp"
 
 void Sprite::newFile(const Format newFormat, const QSize newSize) {
   format = newFormat;
@@ -71,9 +71,7 @@ Error Sprite::saveFile(const QString &path) const {
   if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
     return "Failed to open file for writing";
   }
-  if (file.write(file_sig, file_sig_len) != file_sig_len) {
-    return FileIOError{}.what();
-  }
+  if (Error err = writeSignature(file); err) return err;
   if (Error err = timeline.serializeHead(file); err) return err;
   if (Error err = palette.serialize(file); err) return err;
   if (Error err = timeline.serializeBody(file); err) return err;
@@ -86,22 +84,27 @@ Error Sprite::openFile(const QString &path) {
   if (!file.open(QIODevice::ReadOnly)) {
     return "Failed to open file for reading";
   }
-  char sig[file_sig_len];
-  if (file.read(sig, file_sig_len) != file_sig_len) {
-    return FileIOError{}.what();
-  }
-  if (std::memcmp(sig, file_sig, file_sig_len) != 0) {
-    return "Signature mismatch";
-  }
-  
+  if (Error err = readSignature(file); err) return err;
   if (Error err = timeline.deserializeHead(file, format, size); err) return err;
   Q_EMIT canvasInitialized(format, size);
   palette.initCanvas(format);
-  timeline.initCanvas(format, size);
+  // timeline.initCanvas(format, size);
   if (Error err = palette.deserialize(file); err) return err;
   if (Error err = timeline.deserializeBody(file); err) return err;
   if (Error err = timeline.deserializeTail(file); err) return err;
-  
+  return {};
+}
+
+Error Sprite::openImage(const QString &path) {
+  if (Error err = timeline.openImage(path, palette.getPalette(), format, size); err) return err;
+  Q_EMIT canvasInitialized(format, size);
+  palette.initCanvas(format);
+  // timeline.initCanvas(format, size);
+  if (format != Format::index) {
+    palette.reset();
+  }
+  palette.change();
+  timeline.change();
   return {};
 }
 

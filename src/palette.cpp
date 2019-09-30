@@ -118,7 +118,7 @@ void Palette::reset() {
 
 void Palette::initDefault() {
   reset();
-  Q_EMIT paletteChanged({colors.data(), pal_colors});
+  change();
 }
 
 namespace {
@@ -157,7 +157,7 @@ Error Palette::serialize(QIODevice &dev) const {
 
 Error Palette::deserialize(QIODevice &dev) {
   if (Error err = readPLTE(dev, colors, canvasFormat); err) return err;
-  Q_EMIT paletteChanged({colors.data(), pal_colors});
+  change();
   return {};
 }
 
@@ -169,8 +169,16 @@ Error Palette::open(const QString &path) {
   return importPng(path, colors, canvasFormat);
 }
 
+PaletteSpan Palette::getPalette() {
+  return {colors.data(), pal_colors};
+}
+
 PaletteCSpan Palette::getPalette() const {
   return {colors.data(), pal_colors};
+}
+
+void Palette::change() {
+  Q_EMIT paletteChanged({colors.data(), pal_colors});
 }
 
 void Palette::initCanvas(const Format format) {

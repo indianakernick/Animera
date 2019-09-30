@@ -45,6 +45,20 @@ int getPaletteColorType(const Format format) {
   }
 }
 
+Format getFormat(const int colorType) {
+  switch (colorType) {
+    case PNG_COLOR_TYPE_GRAY:
+    case PNG_COLOR_TYPE_GRAY_ALPHA:
+      return Format::gray;
+    case PNG_COLOR_TYPE_PALETTE:
+      return Format::index;
+    case PNG_COLOR_TYPE_RGB:
+    case PNG_COLOR_TYPE_RGB_ALPHA:
+      return Format::rgba;
+    default: Q_UNREACHABLE();
+  }
+}
+
 template <typename Func>
 void eachRow(QImage &image, Func func) {
   png_bytep row = image.bits();
@@ -179,6 +193,43 @@ Error initRead(ReadContext &ctx, const QString &path) {
   return {};
 }
 
+void readPalette(ReadContext &ctx, PaletteSpan palette) {
+  png_color *plte;
+  int plteSize;
+  if (png_get_PLTE(ctx.png, ctx.info, &plte, &plteSize) != PNG_INFO_PLTE) {
+    plteSize = 0;
+  }
+  png_byte *trns;
+  int trnsSize;
+  if (png_get_tRNS(ctx.png, ctx.info, &trns, &trnsSize, nullptr) != PNG_INFO_tRNS) {
+    trnsSize = 0;
+  }
+  size_t i = 0;
+  for (; i != static_cast<size_t>(trnsSize); ++i) {
+    palette[i] = gfx::ARGB::pixel(plte[i].red, plte[i].green, plte[i].blue, trns[i]);
+  }
+  for (; i != static_cast<size_t>(plteSize); ++i) {
+    palette[i] = gfx::ARGB::pixel(plte[i].red, plte[i].green, plte[i].blue);
+  }
+  for (; i != pal_colors; ++i) {
+    palette[i] = 0;
+  }
+}
+
+void fillRows(
+  png_bytepp rowPtr,
+  png_bytep row,
+  const ptrdiff_t pitch,
+  const size_t height
+) {
+  const png_bytep endRow = row + pitch * height;
+  while (row != endRow) {
+    *rowPtr = row;
+    ++rowPtr;
+    row += pitch;
+  }
+}
+
 }
 
 Error exportPng(
@@ -256,7 +307,53 @@ Error exportPng(
   return destroyWrite(ctx);
 }
 
-Error exportPng(const QString &path, const PaletteCSpan palette, const Format format) {
+Error importPng(
+  const QString &path,
+  const PaletteSpan palette,
+  QImage &image,
+  Format &format
+) {
+  ReadContext ctx;
+  if (Error err = initRead(ctx, path)) return err;
+  std::unique_ptr<png_bytep[]> rows;
+  
+  if (setjmp(png_jmpbuf(ctx.png))) {
+    return destroyRead(ctx);
+  }
+  
+  png_read_info(ctx.png, ctx.info);
+  png_uint_32 width, height;
+  int colorType;
+  png_get_IHDR(ctx.png, ctx.info, &width, &height, 0, &colorType, 0, 0, 0);
+  png_set_interlace_handling(ctx.png);
+  png_set_strip_16(ctx.png);
+  png_set_packing(ctx.png);
+  if (!(colorType & PNG_COLOR_MASK_PALETTE) && !(colorType & PNG_COLOR_MASK_ALPHA)) {
+    png_set_filler(ctx.png, 255, PNG_FILLER_AFTER);
+  }
+  png_set_bgr(ctx.png);
+  png_read_update_info(ctx.png, ctx.info);
+  
+  format = getFormat(colorType);
+  if (format == Format::index) {
+    readPalette(ctx, palette);
+  }
+  image = {static_cast<int>(width), static_cast<int>(height), qimageFormat(format)};
+  
+  rows = std::make_unique<png_bytep[]>(height);
+  fillRows(rows.get(), image.bits(), image.bytesPerLine(), height);
+  png_read_image(ctx.png, rows.get());
+  
+  png_read_end(ctx.png, ctx.info);
+  
+  return destroyRead(ctx);
+}
+
+Error exportPng(
+  const QString &path,
+  const PaletteCSpan palette,
+  const Format format
+) {
   WriteContext ctx;
   if (Error err = initWrite(ctx, path)) return err;
   
@@ -294,7 +391,11 @@ Error exportPng(const QString &path, const PaletteCSpan palette, const Format fo
   return destroyWrite(ctx);
 }
 
-Error importPng(const QString &path, const PaletteSpan palette, const Format format) {
+Error importPng(
+  const QString &path,
+  const PaletteSpan palette,
+  const Format format
+) {
   ReadContext ctx;
   if (Error err = initRead(ctx, path)) return err;
   std::unique_ptr<png_byte[]> imageData;
@@ -306,12 +407,10 @@ Error importPng(const QString &path, const PaletteSpan palette, const Format for
   
   png_read_info(ctx.png, ctx.info);
   png_uint_32 width, height;
-  int depth, colorType;
-  png_get_IHDR(ctx.png, ctx.info, &width, &height, &depth, &colorType, nullptr, nullptr, nullptr);
+  int colorType;
+  png_get_IHDR(ctx.png, ctx.info, &width, &height, 0, &colorType, 0, 0, 0);
   png_set_interlace_handling(ctx.png);
-  if (depth == 16) {
-    png_set_strip_16(ctx.png);
-  }
+  png_set_strip_16(ctx.png);
   png_set_expand(ctx.png);
   if (colorType & PNG_COLOR_MASK_COLOR && format == Format::gray) {
     png_set_rgb_to_gray(ctx.png, PNG_ERROR_ACTION_NONE, PNG_RGB_TO_GRAY_DEFAULT, PNG_RGB_TO_GRAY_DEFAULT);
@@ -324,18 +423,10 @@ Error importPng(const QString &path, const PaletteSpan palette, const Format for
   png_set_bgr(ctx.png);
   png_read_update_info(ctx.png, ctx.info);
   
-  const size_t rowbytes = png_get_rowbytes(ctx.png, ctx.info);
-  imageData = std::make_unique<png_byte[]>(rowbytes * height);
+  const size_t pitch = png_get_rowbytes(ctx.png, ctx.info);
+  imageData = std::make_unique<png_byte[]>(pitch * height);
   rows = std::make_unique<png_bytep[]>(height);
-  png_bytepp rowPtr = rows.get();
-  png_bytep row = imageData.get();
-  const png_bytep endRow = row + rowbytes * height;
-  while (row != endRow) {
-    *rowPtr = row;
-    ++rowPtr;
-    row += rowbytes;
-  }
-  
+  fillRows(rows.get(), imageData.get(), pitch, height);
   png_read_image(ctx.png, rows.get());
   
   const size_t length = std::min(

@@ -133,3 +133,7 @@ fixed byte order image formats
   remove qRgb calls
   use RGBA_8888
   measure the speed increase
+
+export frame
+  export current frame using all the defaults
+  just open file dialog

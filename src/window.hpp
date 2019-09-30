@@ -33,6 +33,7 @@ public:
   
   void newFile(Format, QSize);
   void openFile(const QString &);
+  void openImage(const QString &);
 
 private Q_SLOTS:
   void modify();

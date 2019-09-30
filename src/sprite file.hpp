@@ -27,6 +27,7 @@ struct SpriteInfo {
   Format format;
 };
 
+Error writeSignature(QIODevice &);
 Error writeAHDR(QIODevice &, const SpriteInfo &);
 Error writePLTE(QIODevice &, PaletteCSpan, Format);
 Error writeLHDR(QIODevice &, const Layer &);
@@ -34,6 +35,7 @@ Error writeCHDR(QIODevice &, const CellSpan &);
 Error writeCDAT(QIODevice &, const QImage &, Format);
 Error writeAEND(QIODevice &);
 
+Error readSignature(QIODevice &);
 Error readAHDR(QIODevice &, SpriteInfo &);
 Error readPLTE(QIODevice &, PaletteSpan, Format);
 Error readLHDR(QIODevice &, Layer &);
