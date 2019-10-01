@@ -207,14 +207,12 @@ Error Timeline::exportFile(
   const Frame &frame,
   const CellPos pos
 ) const {
-  // TODO: don't allocate every time this is called
-  QImage result{canvasSize, qimageFormat(canvasFormat)};
   if (canvasFormat == Format::gray) {
-    compositeFrame<gfx::YA>(result, palette, frame, canvasFormat);
+    compositeFrame<gfx::YA>(exportImage, palette, frame, canvasFormat);
   } else {
-    compositeFrame<gfx::ARGB>(result, palette, frame, canvasFormat);
+    compositeFrame<gfx::ARGB>(exportImage, palette, frame, canvasFormat);
   }
-  return exportFile(options, palette, result, pos);
+  return exportFile(options, palette, exportImage, pos);
 }
 
 Error Timeline::exportCompRect(
@@ -251,7 +249,6 @@ Error Timeline::exportRect(
   const PaletteCSpan palette,
   const CellRect rect
 ) const {
-  QImage result{canvasSize, qimageFormat(canvasFormat)};
   for (LayerIdx l = rect.minL; l <= rect.maxL; ++l) {
     const Layer &layer = layers[+l];
     // TODO: does the user want to skip invisible layers?
@@ -263,9 +260,9 @@ Error Timeline::exportRect(
         if (cell->rect() == QRect{{}, canvasSize}) {
           img = &cell->img;
         } else {
-          img = &result;
-          clearImage(result);
-          blitImage(result, cell->img, cell->pos);
+          img = &exportImage;
+          clearImage(exportImage);
+          blitImage(exportImage, cell->img, cell->pos);
         }
         if (Error err = exportFile(options, palette, *img, {l, f}); err) {
           return err;
@@ -289,6 +286,7 @@ Error Timeline::exportTimeline(const ExportOptions &options, const PaletteCSpan 
 void Timeline::initCanvas(const Format format, const QSize size) {
   canvasFormat = format;
   canvasSize = size;
+  exportImage = {size, qimageFormat(format)};
 }
 
 void Timeline::nextFrame() {

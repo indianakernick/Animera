@@ -119,12 +119,13 @@ Q_SIGNALS:
   
 private:
   std::vector<Layer> layers;
+  std::vector<LayerCells> clipboard;
+  mutable QImage exportImage;
   CellPos currPos;
   CellRect selection;
   FrameIdx frameCount;
   QSize canvasSize;
   Format canvasFormat;
-  std::vector<LayerCells> clipboard;
   int delay;
   
   Cell *getCell(CellPos);

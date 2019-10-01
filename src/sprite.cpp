@@ -88,7 +88,7 @@ Error Sprite::openFile(const QString &path) {
   if (Error err = timeline.deserializeHead(file, format, size); err) return err;
   Q_EMIT canvasInitialized(format, size);
   palette.initCanvas(format);
-  // timeline.initCanvas(format, size);
+  timeline.initCanvas(format, size);
   if (Error err = palette.deserialize(file); err) return err;
   if (Error err = timeline.deserializeBody(file); err) return err;
   if (Error err = timeline.deserializeTail(file); err) return err;
@@ -99,7 +99,7 @@ Error Sprite::openImage(const QString &path) {
   if (Error err = timeline.openImage(path, palette.getPalette(), format, size); err) return err;
   Q_EMIT canvasInitialized(format, size);
   palette.initCanvas(format);
-  // timeline.initCanvas(format, size);
+  timeline.initCanvas(format, size);
   if (format != Format::index) {
     palette.reset();
   }

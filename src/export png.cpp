@@ -283,9 +283,7 @@ Error exportPng(
     PNG_COMPRESSION_TYPE_DEFAULT,
     PNG_FILTER_TYPE_DEFAULT
   );
-  // TODO: avoid doing a bunch of allocations for each image
-  // allocate one image at the very beginning of the export and reuse it
-  // would this be as simple as making the variable static?
+  
   switch (exportFormat) {
     case ExportFormat::rgba:
       // TODO: Make ARGB endian aware so that we don't need to do this
