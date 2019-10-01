@@ -10,6 +10,9 @@
 
 #include "config.hpp"
 
+UndoObject::UndoObject(QObject *parent)
+  : QObject{parent} {}
+
 void UndoObject::setCell(Cell *newCell) {
   if (cell != newCell) {
     stack.reset(*newCell);

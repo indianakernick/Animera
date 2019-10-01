@@ -51,6 +51,7 @@ private:
 
 InitCanvasDialog::InitCanvasDialog(QWidget *parent)
   : Dialog{parent} {
+  setAttribute(Qt::WA_DeleteOnClose);
   setWindowTitle("New File");
   setStyleSheet("background-color:" + glob_main.name());
   createWidgets();

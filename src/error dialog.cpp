@@ -19,6 +19,7 @@ ErrorDialog::ErrorDialog(
   const QString &title,
   const QString &message
 ) : Dialog{parent} {
+  setAttribute(Qt::WA_DeleteOnClose);
   setWindowTitle("Error");
   setStyleSheet("background-color:" + glob_main.name());
   auto *layout = new QVBoxLayout{this};

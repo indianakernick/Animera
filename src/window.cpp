@@ -12,27 +12,30 @@
 #include "connect.hpp"
 #include "application.hpp"
 #include "global font.hpp"
+#include "undo object.hpp"
 #include "error dialog.hpp"
+#include "export dialog.hpp"
+#include "sample object.hpp"
+#include "editor widget.hpp"
 #include <QtWidgets/qstyle.h>
+#include "palette widget.hpp"
+#include "timeline widget.hpp"
 #include "separator widget.hpp"
+#include <QtWidgets/qmenubar.h>
+#include "status bar widget.hpp"
+#include <QtWidgets/qsplitter.h>
 #include <QtWidgets/qboxlayout.h>
+#include "init canvas dialog.hpp"
+#include "tool colors widget.hpp"
+#include "tool select widget.hpp"
+#include "color picker widget.hpp"
 #include <QtWidgets/qfiledialog.h>
 #include <QtWidgets/qdesktopwidget.h>
 
 Window::Window(QWidget *parent, const QRect desktop)
-  : QMainWindow{parent},
-    central{this},
-    bottom{this},
-    right{this},
-    splitter{this},
-    editor{this},
-    palette{&right},
-    colors{&right},
-    tools{this},
-    timeline{&bottom},
-    statusBar{&bottom},
-    colorPicker{&right},
-    menubar{this} {
+  : QMainWindow{parent} {
+  setAttribute(Qt::WA_DeleteOnClose);
+  createWidgets();
   resize(glob_window_size);
   setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
   setFocusPolicy(Qt::StrongFocus);
@@ -79,26 +82,43 @@ void Window::modify() {
   setWindowModified(true);
 }
 
+void Window::createWidgets() {
+  central = new QWidget{this};
+  bottom = new QWidget{this};
+  right = new QWidget{this};
+  splitter = new QSplitter{this};
+  undo = new UndoObject{this};
+  sample = new SampleObject{this};
+  editor = new EditorWidget{this};
+  palette = new PaletteWidget{right};
+  colors = new ToolColorsWidget{right};
+  tools = new ToolSelectWidget{this};
+  timeline = new TimelineWidget{bottom};
+  statusBar = new StatusBarWidget{bottom};
+  colorPicker = new ColorPickerWidget{right};
+  menubar = new QMenuBar{this};
+}
+
 void Window::setupLayouts() {
-  auto *bottomLayout = new QVBoxLayout{&bottom};
+  auto *bottomLayout = new QVBoxLayout{bottom};
   bottomLayout->setContentsMargins(0, 0, 0, 0);
   bottomLayout->setSpacing(0);
-  bottomLayout->addWidget(&timeline);
-  bottomLayout->addWidget(new HoriSeparator{&bottom});
-  bottomLayout->addWidget(&statusBar);
+  bottomLayout->addWidget(timeline);
+  bottomLayout->addWidget(new HoriSeparator{bottom});
+  bottomLayout->addWidget(statusBar);
   bottomLayout->setAlignment(Qt::AlignBottom);
   
-  auto *rightLayout = new QVBoxLayout{&right};
+  auto *rightLayout = new QVBoxLayout{right};
   rightLayout->setContentsMargins(0, 0, 0, 0);
   rightLayout->setSpacing(glob_margin);
-  rightLayout->addWidget(&colorPicker);
-  rightLayout->addWidget(new HoriSeparator{&right});
-  rightLayout->addWidget(&colors);
-  rightLayout->addWidget(new HoriSeparator{&right});
-  rightLayout->addWidget(&palette);
+  rightLayout->addWidget(colorPicker);
+  rightLayout->addWidget(new HoriSeparator{right});
+  rightLayout->addWidget(colors);
+  rightLayout->addWidget(new HoriSeparator{right});
+  rightLayout->addWidget(palette);
   rightLayout->addSpacing(glob_margin);
-  right.setStyleSheet("background-color: " + glob_main.name());
-  right.setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+  right->setStyleSheet("background-color: " + glob_main.name());
+  right->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
   
   /*
   Unfortunately, we can't use QDockWidget.
@@ -111,30 +131,30 @@ void Window::setupLayouts() {
   seems to be bypassing docks altogether.
   */
   
-  auto *centralLayout = new QGridLayout{&central};
+  auto *centralLayout = new QGridLayout{central};
   centralLayout->setContentsMargins(0, 0, 0, 0);
   centralLayout->setSpacing(0);
-  centralLayout->addWidget(&menubar, 0, 0, 1, 5);
-  centralLayout->addWidget(new HoriSeparator{&central}, 1, 0, 1, 5);
-  centralLayout->addWidget(&tools, 2, 0);
-  centralLayout->addWidget(new VertSeparator{&central}, 2, 1);
-  centralLayout->addWidget(&editor, 2, 2);
-  centralLayout->addWidget(new VertSeparator{&central}, 2, 3);
-  centralLayout->addWidget(&right, 2, 4);
+  centralLayout->addWidget(menubar, 0, 0, 1, 5);
+  centralLayout->addWidget(new HoriSeparator{central}, 1, 0, 1, 5);
+  centralLayout->addWidget(tools, 2, 0);
+  centralLayout->addWidget(new VertSeparator{central}, 2, 1);
+  centralLayout->addWidget(editor, 2, 2);
+  centralLayout->addWidget(new VertSeparator{central}, 2, 3);
+  centralLayout->addWidget(right, 2, 4);
   
-  splitter.setStyleSheet(
+  splitter->setStyleSheet(
     "QSplitter::handle {"
       "background-color: " + glob_border_color.name() + ";"
     "}"
   );
-  splitter.setOrientation(Qt::Vertical);
-  splitter.setHandleWidth(glob_border_width);
-  splitter.setOpaqueResize(true);
-  splitter.addWidget(&central);
-  splitter.addWidget(&bottom);
-  splitter.setCollapsible(0, false);
-  splitter.setCollapsible(1, false);
-  setCentralWidget(&splitter);
+  splitter->setOrientation(Qt::Vertical);
+  splitter->setHandleWidth(glob_border_width);
+  splitter->setOpaqueResize(true);
+  splitter->addWidget(central);
+  splitter->addWidget(bottom);
+  splitter->setCollapsible(0, false);
+  splitter->setCollapsible(1, false);
+  setCentralWidget(splitter);
 }
 
 void Window::initStyles() {
@@ -184,11 +204,11 @@ void Window::initStyles() {
 } while (0)
 
 void Window::populateMenubar() {
-  menubar.setFont(getGlobalFont());
-  menubar.setNativeMenuBar(false);
+  menubar->setFont(getGlobalFont());
+  menubar->setNativeMenuBar(false);
   
   auto *app = static_cast<Application *>(QApplication::instance());
-  QMenu *file = menubar.addMenu("File");
+  QMenu *file = menubar->addMenu("File");
   file->setFont(getGlobalFont());
   ADD_ACTION(file, "New", QKeySequence::New, *app, newFileDialog);
   ADD_ACTION(file, "Open", QKeySequence::Open, *app, openFileDialog);
@@ -196,7 +216,7 @@ void Window::populateMenubar() {
   ADD_ACTION(file, "Save As", QKeySequence::SaveAs, *this, saveFileDialog);
   ADD_ACTION(file, "Export", Qt::CTRL + Qt::Key_E, *this, exportDialog);
   
-  QMenu *layer = menubar.addMenu("Layer");
+  QMenu *layer = menubar->addMenu("Layer");
   layer->setFont(getGlobalFont());
   ADD_ACTION(layer, "New Layer", Qt::SHIFT + Qt::Key_N, sprite.timeline, insertLayer);
   ADD_ACTION(layer, "Delete Layer", Qt::SHIFT + Qt::Key_Backspace, sprite.timeline, removeLayer);
@@ -216,7 +236,7 @@ void Window::populateMenubar() {
   ADD_ACTION(layer, "Layer Above", Qt::Key_W, sprite.timeline, layerAbove);
   ADD_ACTION(layer, "Layer Below", Qt::Key_S, sprite.timeline, layerBelow);
   
-  QMenu *frame = menubar.addMenu("Frame");
+  QMenu *frame = menubar->addMenu("Frame");
   frame->setFont(getGlobalFont());
   ADD_ACTION(frame, "New Frame", Qt::ALT + Qt::Key_N, sprite.timeline, insertFrame);
   ADD_ACTION(frame, "New Empty Frame", Qt::ALT + Qt::Key_E, sprite.timeline, insertNullFrame);
@@ -228,21 +248,21 @@ void Window::populateMenubar() {
   frame->addSeparator();
   ADD_ACTION(frame, "Next Frame", Qt::Key_D, sprite.timeline, nextFrame);
   ADD_ACTION(frame, "Previous Frame", Qt::Key_A, sprite.timeline, prevFrame);
-  ADD_ACTION(frame, "Play Animation", Qt::Key_Space, timeline, toggleAnimation);
+  ADD_ACTION(frame, "Play Animation", Qt::Key_Space, *timeline, toggleAnimation);
   
-  QMenu *selection = menubar.addMenu("Selection");
+  QMenu *selection = menubar->addMenu("Selection");
   selection->setFont(getGlobalFont());
   ADD_ACTION(selection, "Clear", Qt::CTRL + Qt::Key_X, sprite.timeline, clearSelected);
   ADD_ACTION(selection, "Copy", Qt::CTRL + Qt::Key_C, sprite.timeline, copySelected);
   ADD_ACTION(selection, "Paste", Qt::CTRL + Qt::Key_V, sprite.timeline, pasteSelected);
   
-  QMenu *pal = menubar.addMenu("Palette");
+  QMenu *pal = menubar->addMenu("Palette");
   pal->setFont(getGlobalFont());
   ADD_ACTION(pal, "Reset", {}, *this, resetPalette);
   ADD_ACTION(pal, "Open", {}, *this, openPaletteDialog);
   ADD_ACTION(pal, "Save", {}, *this, savePaletteDialog);
   
-  menubar.adjustSize();
+  menubar->adjustSize();
 }
 
 #undef ADD_ACTION
@@ -336,7 +356,7 @@ void Window::saveToPath(const QString &path) {
   } else {
     setWindowFilePath(path);
     setWindowModified(false);
-    statusBar.showTemp("Saved!");
+    statusBar->showTemp("Saved!");
   }
 }
 
@@ -363,7 +383,7 @@ void Window::exportSprite(const ExportOptions &options) {
   if (Error err = sprite.exportSprite(options); err) {
     (new ErrorDialog{this, "Export error", err.msg()})->open();
   } else {
-    statusBar.showTemp("Exported!");
+    statusBar->showTemp("Exported!");
   }
 }
 
@@ -380,7 +400,7 @@ void Window::openPalette(const QString &path) {
     (new ErrorDialog{this, "Palette open error", err.msg()})->open();
   } else {
     setWindowModified(true);
-    palette.updatePalette();
+    palette->updatePalette();
   }
 }
 
@@ -388,7 +408,7 @@ void Window::savePalette(const QString &path) {
   if (Error err = sprite.palette.save(path); err) {
     (new ErrorDialog{this, "Palette save error", err.msg()})->open();
   } else {
-    statusBar.showTemp("Palette Saved!");
+    statusBar->showTemp("Palette Saved!");
   }
 }
 
@@ -414,7 +434,7 @@ void Window::savePaletteDialog() {
 
 void Window::resetPalette() {
   sprite.palette.reset();
-  palette.updatePalette();
+  palette->updatePalette();
 }
 
 void Window::closeEvent(QCloseEvent *) {

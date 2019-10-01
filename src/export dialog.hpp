@@ -34,18 +34,17 @@ private Q_SLOTS:
 
 private:
   Format format;
-  TextInputWidget *name;
-  FileInputWidget *dir;
-  NumberInputWidget *layerStride;
-  NumberInputWidget *layerOffset;
-  NumberInputWidget *frameStride;
-  NumberInputWidget *frameOffset;
-  ComboBoxWidget *layerSelect;
-  ComboBoxWidget *frameSelect;
-  ComboBoxWidget *formatSelect;
-  
-  TextPushButtonWidget *ok;
-  TextPushButtonWidget *cancel;
+  TextInputWidget *name = nullptr;
+  FileInputWidget *dir = nullptr;
+  NumberInputWidget *layerStride = nullptr;
+  NumberInputWidget *layerOffset = nullptr;
+  NumberInputWidget *frameStride = nullptr;
+  NumberInputWidget *frameOffset = nullptr;
+  ComboBoxWidget *layerSelect = nullptr;
+  ComboBoxWidget *frameSelect = nullptr;
+  ComboBoxWidget *formatSelect = nullptr;
+  TextPushButtonWidget *ok = nullptr;
+  TextPushButtonWidget *cancel = nullptr;
   
   void addFormatOptions();
   void createWidgets();

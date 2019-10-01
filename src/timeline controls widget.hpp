@@ -36,14 +36,14 @@ public Q_SLOTS:
 
 private:
   QTimer animTimer;
-  IconPushButtonWidget *insertLayerButton;
-  IconPushButtonWidget *removeLayerButton;
-  IconPushButtonWidget *moveLayerUpButton;
-  IconPushButtonWidget *moveLayerDownButton;
-  IconPushButtonWidget *extendButton;
-  IconPushButtonWidget *splitButton;
-  IconRadioButtonWidget *playButton;
-  NumberInputWidget *delayBox;
+  IconPushButtonWidget *insertLayerButton = nullptr;
+  IconPushButtonWidget *removeLayerButton = nullptr;
+  IconPushButtonWidget *moveLayerUpButton = nullptr;
+  IconPushButtonWidget *moveLayerDownButton = nullptr;
+  IconPushButtonWidget *extendButton = nullptr;
+  IconPushButtonWidget *splitButton = nullptr;
+  IconRadioButtonWidget *playButton = nullptr;
+  NumberInputWidget *delayBox = nullptr;
   
   void toggleTimer();
   void changeDelay(int);

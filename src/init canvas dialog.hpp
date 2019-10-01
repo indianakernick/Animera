@@ -29,11 +29,11 @@ private Q_SLOTS:
   void submit();
 
 private:
-  NumberInputWidget *width;
-  NumberInputWidget *height;
+  NumberInputWidget *width = nullptr;
+  NumberInputWidget *height = nullptr;
   std::vector<FormatWidget *> formats;
-  TextPushButtonWidget *ok;
-  TextPushButtonWidget *cancel;
+  TextPushButtonWidget *ok = nullptr;
+  TextPushButtonWidget *cancel = nullptr;
   
   void createWidgets();
   void setupLayout();

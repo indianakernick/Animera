@@ -10,20 +10,21 @@
 #define window_hpp
 
 #include "sprite.hpp"
-#include "undo object.hpp"
-#include "export dialog.hpp"
-#include "sample object.hpp"
-#include "editor widget.hpp"
-#include "palette widget.hpp"
-#include "timeline widget.hpp"
-#include <QtWidgets/qmenubar.h>
-#include "status bar widget.hpp"
-#include <QtWidgets/qsplitter.h>
-#include "init canvas dialog.hpp"
-#include "tool colors widget.hpp"
-#include "tool select widget.hpp"
-#include "color picker widget.hpp"
 #include <QtWidgets/qmainwindow.h>
+
+class QWidget;
+class QSplitter;
+class UndoObject;
+class SampleObject;
+class EditorWidget;
+class PaletteWidget;
+class ToolColorsWidget;
+class ToolSelectWidget;
+class TimelineWidget;
+class StatusBarWidget;
+class ColorPickerWidget;
+class QMenuBar;
+class ExportDialog;
 
 class Window final : public QMainWindow {
   Q_OBJECT
@@ -39,23 +40,24 @@ private Q_SLOTS:
   void modify();
 
 private:
-  QWidget central;
-  QWidget bottom;
-  QWidget right;
-  QSplitter splitter;
   Sprite sprite;
-  UndoObject undo;
-  SampleObject sample;
-  EditorWidget editor;
-  PaletteWidget palette;
-  ToolColorsWidget colors;
-  ToolSelectWidget tools;
-  TimelineWidget timeline;
-  StatusBarWidget statusBar;
-  ColorPickerWidget colorPicker;
-  QMenuBar menubar;
+  QWidget *central = nullptr;
+  QWidget *bottom = nullptr;
+  QWidget *right = nullptr;
+  QSplitter *splitter = nullptr;
+  UndoObject *undo = nullptr;
+  SampleObject *sample = nullptr;
+  EditorWidget *editor = nullptr;
+  PaletteWidget *palette = nullptr;
+  ToolColorsWidget *colors = nullptr;
+  ToolSelectWidget *tools = nullptr;
+  TimelineWidget *timeline = nullptr;
+  StatusBarWidget *statusBar = nullptr;
+  ColorPickerWidget *colorPicker = nullptr;
+  QMenuBar *menubar = nullptr;
   ExportDialog *exporter = nullptr;
   
+  void createWidgets();
   void setupLayouts();
   void initStyles();
   void populateMenubar();

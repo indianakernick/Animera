@@ -12,6 +12,9 @@
 #include "config.hpp"
 #include "composite.hpp"
 
+SampleObject::SampleObject(QObject *parent)
+  : QObject{parent} {}
+
 void SampleObject::initCanvas(const Format newFormat) {
   format = newFormat;
 }

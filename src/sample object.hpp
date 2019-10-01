@@ -19,6 +19,9 @@ class Cell;
 class SampleObject final : public QObject {
   Q_OBJECT
 
+public:
+  explicit SampleObject(QObject *);
+  
 public Q_SLOTS:
   void initCanvas(Format);
   void setCell(const Cell *);

@@ -122,10 +122,8 @@ lto
 keys for info.plist
   https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 
-window destructor
-  setAttribute(Qt::WA_DeleteOnClose) causes crash
-  are there resources than can be shared between windows?
-    global resource cache might be useful
+are there resources than can be shared between windows?
+  global resource cache might be useful
 
 editor scaling is sometimes a pixel off
   this might be due to QPainter using floats

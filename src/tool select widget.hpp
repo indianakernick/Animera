@@ -47,7 +47,7 @@ private Q_SLOTS:
   void changeTool(ToolWidget *, Tool *);
   
 private:
-  QWidget *box;
+  QWidget *box = nullptr;
   std::vector<ToolWidget *> tools;
   CurrentTool currTool;
   // currWidget only exists to accomodate future changes (tool settings)

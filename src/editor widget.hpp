@@ -39,7 +39,7 @@ public Q_SLOTS:
   void initCanvas(Format, QSize);
 
 private:
-  EditorImage *view;
+  EditorImage *view = nullptr;
   Frame frame;
   PaletteCSpan palette;
   QSize size;

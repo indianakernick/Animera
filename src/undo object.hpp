@@ -17,6 +17,9 @@
 class UndoObject final : public QObject {
   Q_OBJECT
 
+public:
+  explicit UndoObject(QObject *);
+  
 public Q_SLOTS:
   void setCell(Cell *);
   void keyPress(Qt::Key);
