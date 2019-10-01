@@ -251,6 +251,7 @@ Error Timeline::exportRect(
   const PaletteCSpan palette,
   const CellRect rect
 ) const {
+  QImage result{canvasSize, qimageFormat(canvasFormat)};
   for (LayerIdx l = rect.minL; l <= rect.maxL; ++l) {
     const Layer &layer = layers[+l];
     // TODO: does the user want to skip invisible layers?
@@ -258,7 +259,15 @@ Error Timeline::exportRect(
     LayerCells::ConstIterator iter = layer.spans.find(rect.minF);
     for (FrameIdx f = rect.minF; f <= rect.maxF; ++f) {
       if (const Cell *cell = *iter; *cell) {
-        if (Error err = exportFile(options, palette, cell->img, {l, f}); err) {
+        const QImage *img = nullptr;
+        if (cell->rect() == QRect{{}, canvasSize}) {
+          img = &cell->img;
+        } else {
+          img = &result;
+          clearImage(result);
+          blitImage(result, cell->img, cell->pos);
+        }
+        if (Error err = exportFile(options, palette, *img, {l, f}); err) {
           return err;
         }
       }

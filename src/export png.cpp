@@ -71,20 +71,6 @@ void eachRow(QImage &image, Func func) {
   }
 }
 
-void set_PLTE_tRNS(png_structp png, png_infop info, PaletteCSpan palette) {
-  png_color plte[pal_colors];
-  png_byte trns[pal_colors];
-  for (size_t i = 0; i != pal_colors; ++i) {
-    const gfx::Color color = gfx::ARGB::color(palette[i]);
-    plte[i].red = color.r;
-    plte[i].green = color.g;
-    plte[i].blue = color.b;
-    trns[i] = color.a;
-  }
-  png_set_PLTE(png, info, plte, pal_colors);
-  png_set_tRNS(png, info, trns, pal_colors, nullptr);
-}
-
 struct WriteContext {
   QString msg;
   QFile file;
@@ -142,6 +128,46 @@ Error initWrite(WriteContext &ctx, const QString &path) {
   if (Error err = initWriteInfo(ctx)) return err;
   if (Error err = initWriteFile(ctx, path)) return err;
   return {};
+}
+
+png_color toPngColor(const gfx::Color color) {
+  return {color.r, color.g, color.b};
+}
+
+void writePalette(WriteContext &ctx, PaletteCSpan palette) {
+  png_color plte[pal_colors];
+  png_byte trns[pal_colors];
+  
+  int i = pal_colors - 1;
+  for (; i != -1; --i) {
+    if (palette[i] != 0) break;
+  }
+  if (i == -1) {
+    plte[0] = {0, 0, 0};
+    trns[0] = 0;
+    png_set_PLTE(ctx.png, ctx.info, plte, 1);
+    png_set_tRNS(ctx.png, ctx.info, trns, 1, nullptr);
+    return;
+  }
+  
+  const int plteSize = i + 1;
+  for (; i != -1; --i) {
+    const gfx::Color color = gfx::ARGB::color(palette[i]);
+    if (color.a != 255) break;
+    plte[i] = toPngColor(color);
+  }
+  
+  const int trnsSize = i + 1;
+  for (; i != -1; --i) {
+    const gfx::Color color = gfx::ARGB::color(palette[i]);
+    plte[i] = toPngColor(color);
+    trns[i] = color.a;
+  }
+  
+  png_set_PLTE(ctx.png, ctx.info, plte, plteSize);
+  if (trnsSize != 0) {
+    png_set_tRNS(ctx.png, ctx.info, trns, trnsSize, nullptr);
+  }
 }
 
 Error initReadPng(ReadContext &ctx) {
@@ -266,7 +292,7 @@ Error exportPng(
       png_set_bgr(ctx.png);
       break;
     case ExportFormat::index:
-      set_PLTE_tRNS(ctx.png, ctx.info, palette);
+      writePalette(ctx, palette);
       break;
     case ExportFormat::gray:
       if (canvasFormat == Format::gray) {

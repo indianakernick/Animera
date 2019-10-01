@@ -124,6 +124,8 @@ keys for info.plist
 
 window destructor
   setAttribute(Qt::WA_DeleteOnClose) causes crash
+  are there resources than can be shared between windows?
+    global resource cache might be useful
 
 editor scaling is sometimes a pixel off
   this might be due to QPainter using floats
@@ -137,3 +139,7 @@ fixed byte order image formats
 export frame
   export current frame using all the defaults
   just open file dialog
+
+palette index out of range
+  we currently get an error from libpng and an incomplete png file (no IEND)
+  need to handle this properly
