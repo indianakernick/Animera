@@ -404,13 +404,10 @@
 		453C78222234CB5500818B19 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				45DC2563224A0AEA00F40116 /* title@4x.png */,
-				45DC2562224A0AEA00F40116 /* title.png */,
-				45B284972219003B00D6D055 /* icon.png */,
 				457DC0C322EA78910000777B /* icon.px2 */,
-				452926E222BB607E00B17E0D /* screenshot.png */,
 				453C78792235D4B500818B19 /* resources.qrc */,
 				453C787C2235D70D00818B19 /* resources.rcc */,
+				4554868F23433711001D5611 /* Logo */,
 				457DC0B422E6DD940000777B /* General */,
 				45F3EB6F22CC5D4F00F9F93E /* Formats */,
 				452926E322BB607E00B17E0D /* Timeline */,
@@ -641,6 +638,17 @@
 				45C447F322F56E6100B65AD3 /* dialog.hpp */,
 			);
 			name = General;
+			sourceTree = "<group>";
+		};
+		4554868F23433711001D5611 /* Logo */ = {
+			isa = PBXGroup;
+			children = (
+				45DC2563224A0AEA00F40116 /* title@4x.png */,
+				45DC2562224A0AEA00F40116 /* title.png */,
+				45B284972219003B00D6D055 /* icon.png */,
+				452926E222BB607E00B17E0D /* screenshot.png */,
+			);
+			path = Logo;
 			sourceTree = "<group>";
 		};
 		455F2848220688FC00C73F39 = {
