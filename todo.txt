@@ -141,3 +141,5 @@ export frame
 palette index out of range
   we currently get an error from libpng and an incomplete png file (no IEND)
   need to handle this properly
+
+store paths in QSettings (for file dialogs)
