@@ -28,8 +28,8 @@ ColorSliderWidget<Derived>::ColorSliderWidget(QWidget *parent)
 template <typename Derived>
 void ColorSliderWidget<Derived>::initBar() {
   bar = bakeColoredBitmaps(
-    ":/Color Picker/slider bar p.pbm",
-    ":/Color Picker/slider bar s.pbm",
+    ":/Color Picker/slider bar p.png",
+    ":/Color Picker/slider bar s.png",
     pick_primary_color,
     pick_secondary_color
   );

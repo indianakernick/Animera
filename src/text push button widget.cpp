@@ -18,7 +18,7 @@ TextPushButtonWidget::TextPushButtonWidget(
   setFixedSize(rect.widget().size());
   setCursor(Qt::PointingHandCursor);
  
-  QBitmap bitmap = QBitmap{":/General/text button.pbm"};
+  QBitmap bitmap = QBitmap{":/General/text button.png"};
   bitmap = bitmap.scaled(bitmap.size() * glob_scale);
   assert(bitmap.size() == rect.outer().size());
   

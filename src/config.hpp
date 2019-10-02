@@ -252,30 +252,30 @@ inline const QColor cell_curr_color = glob_light_1;
 inline const QColor cell_select_color = glob_dark_1;
 
 constexpr int       cell_icon_pad = 1_px;
-constexpr int       cell_icon_size = 8_px;
+constexpr int       cell_icon_size = 7_px;
 constexpr int       cell_width = 2 * cell_icon_pad + cell_icon_size + glob_border_width;
 constexpr int       cell_height = cell_width;
 constexpr int       cell_border_offset = cell_icon_pad + glob_border_width;
 constexpr int       frame_incr = 5;
-constexpr int       layer_width = 97_px;
 constexpr int       layer_name_max_len = 256;
 
-constexpr WidgetRect timelineTextBox(const int chars) {
+constexpr WidgetRect timelineTextBox(const int innerWidth) {
   const QPoint pos = {
     glob_text_margin,
     cell_height - glob_border_width - glob_text_margin - glob_font_px
   };
   const QSize innerSize = {
-    textBoxWidth(chars),
+    innerWidth,
     cell_height - glob_border_width
   };
   const QSize outerSize = innerSize + toSize(glob_border_width);
   return {toRect(outerSize), toRect(outerSize), toRect(innerSize), pos};
 }
 
-constexpr WidgetRect layer_text_rect = timelineTextBox(14);
-constexpr WidgetRect ctrl_text_rect = timelineTextBox(3);
 constexpr IntRange   ctrl_delay = {1, 999, 100};
+constexpr WidgetRect ctrl_text_rect = timelineTextBox(textBoxWidth(3));
+constexpr int        layer_width = 7 * cell_width + ctrl_text_rect.widget().width();
+constexpr WidgetRect layer_text_rect = timelineTextBox(layer_width - cell_width - glob_border_width);
 
 // ---------------------------- init canvas dialog -------------------------- //
 

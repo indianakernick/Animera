@@ -25,7 +25,7 @@ public:
   FormatWidget(QWidget *parent, const QString &name, const Format format)
     : RadioButtonWidget{parent}, icon{name}, fmt{format} {
     setFixedSize(tool_button_size);
-    back = QBitmap{":/Tools/base.pbm"}.scaled(tool_icon_size);
+    back = QBitmap{":/Tools/base.png"}.scaled(tool_icon_size);
   }
 
   Format format() const {

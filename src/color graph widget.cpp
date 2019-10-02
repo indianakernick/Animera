@@ -66,8 +66,8 @@ void SVGraphWidget::plotGraph(const int hue) {
 
 void SVGraphWidget::initCircle() {
   circle = bakeColoredBitmaps(
-    ":/Color Picker/sv circle p.pbm",
-    ":/Color Picker/sv circle s.pbm",
+    ":/Color Picker/graph circle p.png",
+    ":/Color Picker/graph circle s.png",
     pick_primary_color,
     pick_secondary_color
   );

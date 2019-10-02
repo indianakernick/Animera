@@ -50,7 +50,7 @@ private:
 
   void loadPixmaps() {
     // TODO: cache
-    QBitmap bitmap{":/Color Picker/palette select.pbm"};
+    QBitmap bitmap{":/Color Picker/palette select.png"};
     bitmap = bitmap.scaled(bitmap.size() * glob_scale);
     selectBlack = bakeColoredBitmap(bitmap, QColor{0, 0, 0});
     selectWhite = bakeColoredBitmap(bitmap, QColor{255, 255, 255});

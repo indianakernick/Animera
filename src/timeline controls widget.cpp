@@ -63,13 +63,13 @@ IconRadioButtonWidget *ControlsWidget::makeRadioButton(
 void ControlsWidget::createWidgets() {
   QPixmap baseIcon{cell_width, cell_width};
   paintTimelineButtonBack(baseIcon);
-  insertLayerButton = makePushButton(baseIcon, ":/Timeline/add.pbm");
-  removeLayerButton = makePushButton(baseIcon, ":/Timeline/remove.pbm");
-  moveLayerUpButton = makePushButton(baseIcon, ":/Timeline/move up.pbm");
-  moveLayerDownButton = makePushButton(baseIcon, ":/Timeline/move down.pbm");
-  extendButton = makePushButton(baseIcon, ":/Timeline/link.pbm");
-  splitButton = makePushButton(baseIcon, ":/Timeline/unlink.pbm");
-  playButton = makeRadioButton(baseIcon, ":/Timeline/pause.pbm", ":/Timeline/play.pbm");
+  insertLayerButton = makePushButton(baseIcon, ":/Timeline/add.png");
+  removeLayerButton = makePushButton(baseIcon, ":/Timeline/remove.png");
+  moveLayerUpButton = makePushButton(baseIcon, ":/Timeline/move up.png");
+  moveLayerDownButton = makePushButton(baseIcon, ":/Timeline/move down.png");
+  extendButton = makePushButton(baseIcon, ":/Timeline/link.png");
+  splitButton = makePushButton(baseIcon, ":/Timeline/unlink.png");
+  playButton = makeRadioButton(baseIcon, ":/Timeline/pause.png", ":/Timeline/play.png");
   delayBox = new NumberInputWidget{this, ctrl_text_rect, ctrl_delay};
   insertLayerButton->setToolTip("Insert Layer");
   removeLayerButton->setToolTip("Remove Layer");

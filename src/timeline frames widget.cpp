@@ -47,7 +47,7 @@ void FramesWidget::paintEvent(QPaintEvent *) {
   for (int f = 0; f <= roundUpFrames(); f += frame_incr) {
     painter.drawText(
       glob_text_margin + x,
-      2 * glob_text_margin + glob_font_accent_px,
+      glob_text_margin + glob_font_accent_px,
       QString::number(f)
     );
     painter.fillRect(

@@ -1,45 +1,44 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource>
   <file>./resources.qrc</file>
-  <file>./Tools/base.pbm</file>
-  <file>./Tools/brush.pbm</file>
-  <file>./Tools/flood fill.pbm</file>
-  <file>./Tools/rectangle select.pbm</file>
-  <file>./Tools/polygon select.pbm</file>
-  <file>./Tools/wand select.pbm</file>
-  <file>./Tools/line.pbm</file>
-  <file>./Tools/stroked circle.pbm</file>
-  <file>./Tools/filled circle.pbm</file>
-  <file>./Tools/stroked rectangle.pbm</file>
-  <file>./Tools/filled rectangle.pbm</file>
-  <file>./Tools/translate.pbm</file>
-  <file>./Tools/flip.pbm</file>
-  <file>./Tools/rotate.pbm</file>
+  <file>./Tools/base.png</file>
+  <file>./Tools/brush.png</file>
+  <file>./Tools/flood fill.png</file>
+  <file>./Tools/rectangle select.png</file>
+  <file>./Tools/polygon select.png</file>
+  <file>./Tools/wand select.png</file>
+  <file>./Tools/line.png</file>
+  <file>./Tools/stroked circle.png</file>
+  <file>./Tools/filled circle.png</file>
+  <file>./Tools/stroked rectangle.png</file>
+  <file>./Tools/filled rectangle.png</file>
+  <file>./Tools/translate.png</file>
+  <file>./Tools/flip.png</file>
+  <file>./Tools/rotate.png</file>
   <file>./Fonts/5x7ascii.ttf</file>
-  <file>./Color Picker/sv circle p.pbm</file>
-  <file>./Color Picker/sv circle s.pbm</file>
-  <file>./Color Picker/slider bar p.pbm</file>
-  <file>./Color Picker/slider bar s.pbm</file>
-  <file>./Color Picker/palette select.pbm</file>
-  <file>./Timeline/add.pbm</file>
-  <file>./Timeline/begin linked cell.pbm</file>
-  <file>./Timeline/cell.pbm</file>
-  <file>./Timeline/end linked cell.pbm</file>
-  <file>./Timeline/hidden.pbm</file>
-  <file>./Timeline/link.pbm</file>
-  <file>./Timeline/move down.pbm</file>
-  <file>./Timeline/move up.pbm</file>
-  <file>./Timeline/move.pbm</file>
-  <file>./Timeline/pause.pbm</file>
-  <file>./Timeline/play.pbm</file>
-  <file>./Timeline/remove.pbm</file>
-  <file>./Timeline/shown.pbm</file>
-  <file>./Timeline/unlink.pbm</file>
+  <file>./Color Picker/graph circle p.png</file>
+  <file>./Color Picker/graph circle s.png</file>
+  <file>./Color Picker/slider bar p.png</file>
+  <file>./Color Picker/slider bar s.png</file>
+  <file>./Color Picker/palette select.png</file>
+  <file>./Timeline/cell.png</file>
+  <file>./Timeline/begin linked cell.png</file>
+  <file>./Timeline/end linked cell.png</file>
+  <file>./Timeline/add.png</file>
+  <file>./Timeline/remove.png</file>
+  <file>./Timeline/link.png</file>
+  <file>./Timeline/unlink.png</file>
+  <file>./Timeline/move up.png</file>
+  <file>./Timeline/move down.png</file>
+  <file>./Timeline/play.png</file>
+  <file>./Timeline/pause.png</file>
+  <file>./Timeline/shown.png</file>
+  <file>./Timeline/hidden.png</file>
   <file>./Formats/rgba.png</file>
   <file>./Formats/gray.png</file>
   <file>./Formats/index.png</file>
-  <file>./General/up down arrow.pbm</file>
-  <file>./General/down arrow.pbm</file>
-  <file>./General/text button.pbm</file>
+  <file>./General/up down arrow.png</file>
+  <file>./General/down arrow.png</file>
+  <file>./General/text button.png</file>
 </qresource>
 </RCC>

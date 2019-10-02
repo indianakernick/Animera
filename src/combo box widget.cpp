@@ -156,7 +156,7 @@ ComboBoxWidget::ComboBoxWidget(QWidget *parent, const int chars)
   outer = rects.text.outer();
   outer.setWidth(outer.width() + rects.icon.outer().width());
   setMask(QRegion{outer});
-  arrow = bakeColoredBitmap(":/General/up down arrow.pbm", glob_light_2);
+  arrow = bakeColoredBitmap(":/General/up down arrow.png", glob_light_2);
 }
 
 void ComboBoxWidget::clear() {

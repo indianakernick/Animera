@@ -38,9 +38,9 @@ CellsWidget::CellsWidget(QWidget *parent)
   currPosImg{0, 0, QImage::Format_ARGB32_Premultiplied},
   selectionImg{0, 0, QImage::Format_ARGB32_Premultiplied},
   layersImg{0, 0, QImage::Format_ARGB32_Premultiplied} {
-  cellPix = bakeColoredBitmap(":/Timeline/cell.pbm", cell_icon_color);
-  beginLinkPix = bakeColoredBitmap(":/Timeline/begin linked cell.pbm", cell_icon_color);
-  endLinkPix = bakeColoredBitmap(":/Timeline/end linked cell.pbm", cell_icon_color);
+  cellPix = bakeColoredBitmap(":/Timeline/cell.png", cell_icon_color);
+  beginLinkPix = bakeColoredBitmap(":/Timeline/begin linked cell.png", cell_icon_color);
+  endLinkPix = bakeColoredBitmap(":/Timeline/end linked cell.png", cell_icon_color);
   setFocusPolicy(Qt::ClickFocus);
 }
 

@@ -25,7 +25,7 @@ public:
   FileInputButton(QWidget *parent, const WidgetRect rect)
     : QAbstractButton{parent}, rect{rect} {
     setCursor(Qt::PointingHandCursor);
-    arrow = bakeColoredBitmap(":/General/down arrow.pbm", glob_light_2);
+    arrow = bakeColoredBitmap(":/General/down arrow.png", glob_light_2);
     setFixedSize(rect.widget().size());
     setMask(QRegion{rect.outer()});
   }

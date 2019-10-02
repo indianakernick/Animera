@@ -45,8 +45,8 @@ void LayerNameWidget::createWidgets() {
   QPixmap onPix{cell_width, cell_width};
   paintTimelineButtonBack(onPix);
   QPixmap offPix = onPix;
-  paintTimelineButtonIcon(onPix, ":/Timeline/shown.pbm");
-  paintTimelineButtonIcon(offPix, ":/Timeline/hidden.pbm");
+  paintTimelineButtonIcon(onPix, ":/Timeline/shown.png");
+  paintTimelineButtonIcon(offPix, ":/Timeline/hidden.png");
   visible = new IconRadioButtonWidget{this, onPix, offPix};
   visible->setToolTip("Toggle Visibility");
   name = new TextInputWidget{this, layer_text_rect};
