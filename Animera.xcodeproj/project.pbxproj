@@ -38,6 +38,7 @@
 		453D28D02276A9DF00D0E5F9 /* color convert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453D28CE2276A9DF00D0E5F9 /* color convert.cpp */; };
 		453D28D32276F0FE00D0E5F9 /* label widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453D28D12276F0FD00D0E5F9 /* label widget.cpp */; };
 		453D28D72278134200D0E5F9 /* color handle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453D28D52278134200D0E5F9 /* color handle.cpp */; };
+		455486BF23449254001D5611 /* native mac.mm in Sources */ = {isa = PBXBuildFile; fileRef = 455486BE23449254001D5611 /* native mac.mm */; };
 		455F285C2206890300C73F39 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 455F285B2206890300C73F39 /* Assets.xcassets */; };
 		455F2868220690A600C73F39 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 455F2867220690A600C73F39 /* main.cpp */; };
 		455F2879220691DE00C73F39 /* QtCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455F286E220691DD00C73F39 /* QtCore.framework */; };
@@ -219,6 +220,8 @@
 		455486BB234466C2001D5611 /* slider bar s.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider bar s.png"; sourceTree = "<group>"; };
 		455486BC234466F6001D5611 /* palette select.animera */ = {isa = PBXFileReference; lastKnownFileType = file; path = "palette select.animera"; sourceTree = "<group>"; };
 		455486BD234466F6001D5611 /* slider bar.animera */ = {isa = PBXFileReference; lastKnownFileType = file; path = "slider bar.animera"; sourceTree = "<group>"; };
+		455486BE23449254001D5611 /* native mac.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "native mac.mm"; sourceTree = "<group>"; };
+		455486C123449E70001D5611 /* native mac.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "native mac.hpp"; sourceTree = "<group>"; };
 		455F2851220688FD00C73F39 /* Animera.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Animera.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		455F285B2206890300C73F39 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		455F28602206890300C73F39 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -639,6 +642,15 @@
 			path = Sprites;
 			sourceTree = "<group>";
 		};
+		455486C023449E43001D5611 /* Native */ = {
+			isa = PBXGroup;
+			children = (
+				455486BE23449254001D5611 /* native mac.mm */,
+				455486C123449E70001D5611 /* native mac.hpp */,
+			);
+			name = Native;
+			sourceTree = "<group>";
+		};
 		455F2848220688FC00C73F39 = {
 			isa = PBXGroup;
 			children = (
@@ -673,6 +685,7 @@
 			children = (
 				458F84032249CB7C005F91D0 /* config.hpp */,
 				455F2867220690A600C73F39 /* main.cpp */,
+				455486C023449E43001D5611 /* Native */,
 				458F84052249DF97005F91D0 /* Utilities */,
 				453B7C76227ECF62003BB799 /* Graphics */,
 				453C783C2234DECE00818B19 /* Cells */,
@@ -1634,6 +1647,7 @@
 				45B284AD221A59EB00D6D055 /* undo.cpp in Sources */,
 				453D28D02276A9DF00D0E5F9 /* color convert.cpp in Sources */,
 				45B284B0221A83C300D6D055 /* composite.cpp in Sources */,
+				455486BF23449254001D5611 /* native mac.mm in Sources */,
 				453A20C6231A078100F055BA /* sprite file.cpp in Sources */,
 				453D28C3227698F200D0E5F9 /* widget painting.cpp in Sources */,
 				457DC0C222E9518A0000777B /* cell span.cpp in Sources */,

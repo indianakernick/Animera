@@ -14,6 +14,10 @@
 #include <QtGui/qpainter.h>
 #include "widget painting.hpp"
 
+#ifdef Q_OS_MACOS
+#include "native mac.hpp"
+#endif
+
 TextInputWidget::TextInputWidget(QWidget *parent, const WidgetRect rect)
   : QLineEdit{parent},
     rect{rect},
@@ -56,25 +60,6 @@ void TextInputWidget::hideCursor() {
   cursorBlinkStatus = false;
   cursorBlinkTimer.stop();
   cursorBlinkTimer.start();
-  repaint();
-}
-
-void TextInputWidget::focusInEvent(QFocusEvent *event) {
-  // TODO: this is a little jittery
-  QLineEdit::focusInEvent(event);
-  hideCursor();
-  QTimer::singleShot(0, this, &QLineEdit::selectAll);
-}
-
-void TextInputWidget::focusOutEvent(QFocusEvent *event) {
-  offset = 0;
-  QLineEdit::focusOutEvent(event);
-}
-
-void TextInputWidget::wheelEvent(QWheelEvent *event) {
-  offset += event->pixelDelta().x();
-  constrainOffset();
-  updateMargins();
   repaint();
 }
 
@@ -166,6 +151,35 @@ void TextInputWidget::paintSelection(QPainter &painter) {
     selectionLength() * glob_font_stride_px + glob_font_kern_px,
     rect.inner().height()
   );
+}
+
+void TextInputWidget::keyPressEvent(QKeyEvent *event) {
+  QLineEdit::keyPressEvent(event);
+  
+  // TODO: remove bug workaround
+  // https://bugreports.qt.io/browse/QTBUG-78933
+  #ifdef Q_OS_MACOS
+  hideMouseUntilMouseMoves();
+  #endif
+}
+
+void TextInputWidget::focusInEvent(QFocusEvent *event) {
+  // TODO: this is a little jittery
+  QLineEdit::focusInEvent(event);
+  hideCursor();
+  QTimer::singleShot(0, this, &QLineEdit::selectAll);
+}
+
+void TextInputWidget::focusOutEvent(QFocusEvent *event) {
+  offset = 0;
+  QLineEdit::focusOutEvent(event);
+}
+
+void TextInputWidget::wheelEvent(QWheelEvent *event) {
+  offset += event->pixelDelta().x();
+  constrainOffset();
+  updateMargins();
+  repaint();
 }
 
 void TextInputWidget::paintEvent(QPaintEvent *) {

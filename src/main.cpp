@@ -1706,7 +1706,31 @@ void blitImageOld(QImage &dst, const QImage &src, const QPoint pos) {
 
 #if BUG_TEST
 
-#include <csetjmp>
+/*#include "native mac.hpp"
+#include <QtWidgets/qlineedit.h>
+#include <QtWidgets/qmainwindow.h>
+#include <QtWidgets/qapplication.h>
+
+class LineEdit final : public QLineEdit {
+public:
+  using QLineEdit::QLineEdit;
+    
+private:
+  void keyPressEvent(QKeyEvent *event) override {
+    QLineEdit::keyPressEvent(event);
+    hideMouseUntilMouseMoves();
+  }
+};
+
+int main(int argc, char **argv) {
+  QApplication app{argc, argv};
+  QMainWindow window;
+  LineEdit box{&window};
+  window.show();
+  return app.exec();
+}*/
+
+/*#include <csetjmp>
 #include <iostream>
 
 struct Dtor {
@@ -1731,7 +1755,7 @@ int main() {
     return 0;
   }
   longjmp(buf, 1);
-}
+}*/
 
 /*#include <QtCore/qtimer.h>
 #include <QtWidgets/qmainwindow.h>

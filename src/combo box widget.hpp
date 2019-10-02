@@ -18,7 +18,6 @@ class ComboBoxPopup;
 QComboBox has some wierd positioning issues
 It seems to shift itself by a few pixels
 https://forum.qt.io/topic/105191/why-isn-t-a-qcombobox-positioned-correctly-in-a-layout
-Making a custom combobox that doesn't have these issues is really easy
 */
 
 class ComboBoxWidget final : public QWidget {
@@ -43,7 +42,7 @@ private:
   TextIconRects rects;
   QRect outer;
   QPixmap arrow;
-  ComboBoxPopup *popup;
+  ComboBoxPopup *popup = nullptr;
   std::vector<QString> items;
   int current = -1;
 

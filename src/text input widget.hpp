@@ -31,10 +31,6 @@ private:
   int offset = 0;
   QTimer cursorBlinkTimer;
   bool cursorBlinkStatus = true;
-  
-  void focusInEvent(QFocusEvent *) override;
-  void focusOutEvent(QFocusEvent *) override;
-  void wheelEvent(QWheelEvent *) override;
 
   int getCursorPos(int) const;
   int getMinCursorPos() const;
@@ -49,6 +45,11 @@ private:
   void paintCursor(QPainter &);
   void paintSelection(QPainter &);
 
+protected:
+  void keyPressEvent(QKeyEvent *) override;
+  void focusInEvent(QFocusEvent *) override;
+  void focusOutEvent(QFocusEvent *) override;
+  void wheelEvent(QWheelEvent *) override;
   void paintEvent(QPaintEvent *) override;
 };
 

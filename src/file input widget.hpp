@@ -32,9 +32,9 @@ private Q_SLOTS:
   void changePath();
 
 private:
-  TextInputWidget *text;
-  FileInputButton *icon;
-  DirValidator *validator;
+  TextInputWidget *text = nullptr;
+  FileInputButton *icon = nullptr;
+  DirValidator *validator = nullptr;
 
   void initText();
   void connectSignals();
