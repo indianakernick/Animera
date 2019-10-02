@@ -111,7 +111,7 @@ void copyFromByteOrder(
         gfx::Color color;
         color.r = *src++;
         color.a = *src++;
-        *dstPx = gfx::YA::pixel(color);
+        *dstPx++ = gfx::YA::pixel(color);
       }
       break;
     }

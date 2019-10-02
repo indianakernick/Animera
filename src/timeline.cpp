@@ -56,7 +56,7 @@ void Timeline::change() {
   changeFrame();
   changePos();
   Q_EMIT selectionChanged(selection);
-  changeLayers(LayerIdx{0}, LayerIdx{1});
+  changeLayers(LayerIdx{0}, layerCount());
   Q_EMIT delayChanged(delay);
 }
 
