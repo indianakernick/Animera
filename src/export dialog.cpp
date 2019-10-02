@@ -113,7 +113,7 @@ namespace {
 
 template <typename Layout>
 Layout *makeLayout(QBoxLayout *parent) {
-  auto layout = new Layout;
+  auto *layout = new Layout;
   parent->addLayout(layout);
   layout->setSpacing(0);
   layout->setContentsMargins(0, 0, 0, 0);

@@ -45,6 +45,7 @@ private:
   QSize size;
   Format format;
   int startScale;
+  bool shown = false;
 
   bool event(QEvent *) override;
   void showEvent(QShowEvent *) override;

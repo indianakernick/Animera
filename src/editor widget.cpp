@@ -350,7 +350,9 @@ bool EditorWidget::event(QEvent *event) {
 }
 
 void EditorWidget::showEvent(QShowEvent *) {
-  view->adjustScale();
+  if (!std::exchange(shown, true)) {
+    view->adjustScale();
+  }
 }
 
 void EditorWidget::resizeEvent(QResizeEvent *event) {
