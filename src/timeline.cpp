@@ -403,19 +403,7 @@ void Timeline::insertFrame() {
   ++frameCount;
   changeFrameCount();
   for (LayerIdx l = {}; l != layerCount(); ++l) {
-    layers[+l].spans.insertCopy(currPos.f);
-    changeSpan(l);
-  }
-  Q_EMIT selectionChanged(selection);
-  nextFrame();
-  Q_EMIT modified();
-}
-
-void Timeline::insertNullFrame() {
-  ++frameCount;
-  changeFrameCount();
-  for (LayerIdx l = {}; l != layerCount(); ++l) {
-    layers[+l].spans.insertNew(currPos.f);
+    layers[+l].spans.insert(currPos.f);
     changeSpan(l);
   }
   Q_EMIT selectionChanged(selection);
@@ -445,7 +433,7 @@ void Timeline::removeFrame() {
 }
 
 void Timeline::clearCell() {
-  layers[+currPos.l].spans.replaceNew(currPos.f);
+  layers[+currPos.l].spans.replace(currPos.f, false);
   changeSpan(currPos.l);
   changeFrame();
   changePos();
@@ -473,8 +461,8 @@ void Timeline::growCell(const QRect rect) {
     ::growCell(cell, canvasFormat, rect);
     return;
   }
-  layers[+currPos.l].spans.replaceNew(currPos.f);
-  ::growCell(cell, canvasFormat, rect);
+  layers[+currPos.l].spans.replace(currPos.f, true);
+  ::growCell(*getCell(currPos), canvasFormat, rect);
   changeSpan(currPos.l);
   changeFrame();
   changePos();

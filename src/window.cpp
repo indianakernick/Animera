@@ -239,11 +239,10 @@ void Window::populateMenubar() {
   QMenu *frame = menubar->addMenu("Frame");
   frame->setFont(getGlobalFont());
   ADD_ACTION(frame, "New Frame", Qt::ALT + Qt::Key_N, sprite.timeline, insertFrame);
-  ADD_ACTION(frame, "New Empty Frame", Qt::ALT + Qt::Key_E, sprite.timeline, insertNullFrame);
   ADD_ACTION(frame, "Delete Frame", Qt::ALT + Qt::Key_Backspace, sprite.timeline, removeFrame);
   frame->addSeparator();
   ADD_ACTION(frame, "Clear Cell", Qt::ALT + Qt::Key_C, sprite.timeline, clearCell);
-  ADD_ACTION(frame, "Extend Linked Cell", Qt::ALT + Qt::Key_L, sprite.timeline, extendCell);
+  ADD_ACTION(frame, "Extend Linked Cell", Qt::ALT + Qt::Key_E, sprite.timeline, extendCell);
   ADD_ACTION(frame, "Split Linked Cell", Qt::ALT + Qt::Key_S, sprite.timeline, splitCell);
   frame->addSeparator();
   ADD_ACTION(frame, "Next Frame", Qt::Key_D, sprite.timeline, nextFrame);

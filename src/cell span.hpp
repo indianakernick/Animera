@@ -66,14 +66,10 @@ public:
   /// Get a constant cell
   const Cell *get(FrameIdx) const;
   
-  /// Insert a copy of the previous cell after the index
-  /// If the index refers to the last cell of a span, the span is copied
-  /// otherwise the span is extended
-  void insertCopy(FrameIdx);
   /// Insert a new cell after the index
-  void insertNew(FrameIdx);
+  void insert(FrameIdx);
   /// Replace a cell with a new cell
-  void replaceNew(FrameIdx);
+  void replace(FrameIdx, bool);
 
   /// Extend the span at the index and shrink the following span
   /// The span will not be extended past the end

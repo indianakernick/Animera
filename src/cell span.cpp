@@ -86,21 +86,7 @@ const Cell *LayerCells::get(FrameIdx idx) const {
   return findSpan(spans, idx)->cell.get();
 }
 
-void LayerCells::insertCopy(FrameIdx idx) {
-  Spans::iterator span = findSpan(spans, idx);
-  if (idx < span->len - FrameIdx{1}) {
-    ++span->len;
-  } else {
-    if (*span->cell) {
-      CellPtr copy = std::make_unique<Cell>(*span->cell);
-      spans.insert(++span, {std::move(copy)});
-    } else {
-      ++span->len;
-    }
-  }
-}
-
-void LayerCells::insertNew(FrameIdx idx) {
+void LayerCells::insert(FrameIdx idx) {
   Spans::iterator span = findSpan(spans, idx);
   if (span->cell->isNull()) {
     ++span->len;
@@ -116,9 +102,9 @@ void LayerCells::insertNew(FrameIdx idx) {
   }
 }
 
-void LayerCells::replaceNew(FrameIdx idx) {
+void LayerCells::replace(FrameIdx idx, const bool isolate) {
   Spans::iterator span = findSpan(spans, idx);
-  if (span->cell->isNull()) return;
+  if (!isolate && span->cell->isNull()) return;
   if (span->len == FrameIdx{1}) {
     *span->cell = {};
     return;
@@ -160,7 +146,7 @@ void LayerCells::split(FrameIdx idx) {
 
 namespace {
 
-Spans::iterator insert(Spans &dst, Spans::iterator pos, Spans &src) {
+Spans::iterator insertSpan(Spans &dst, Spans::iterator pos, Spans &src) {
   return dst.insert(
     pos,
     std::make_move_iterator(src.begin()),
@@ -188,29 +174,29 @@ void LayerCells::replaceSpan(FrameIdx idx, LayerCells &newCells) {
   Spans::iterator span = findSpan(spans, idx);
   if (idx == FrameIdx{0}) {
     if (span->len < len) {
-      span = insert(spans, span, newSpans) + newSpans.size();
+      span = insertSpan(spans, span, newSpans) + newSpans.size();
       removeSpan(spans, span, len - span->len);
     } else if (span->len > len) {
       CellPtr copy = std::move(span->cell);
-      span = insert(spans, span, newSpans) + newSpans.size();
+      span = insertSpan(spans, span, newSpans) + newSpans.size();
       spans.insert(span, {std::move(copy), span->len - len});
     } else {
       span = spans.erase(span);
-      insert(spans, span, newSpans);
+      insertSpan(spans, span, newSpans);
     }
   } else {
     const FrameIdx leftSize = idx;
     const FrameIdx rightSize = span->len - idx - len;
     span->len = leftSize;
     if (rightSize < FrameIdx{0}) {
-      span = insert(spans, ++span, newSpans) + newSpans.size();
+      span = insertSpan(spans, ++span, newSpans) + newSpans.size();
       removeSpan(spans, span, -rightSize);
     } else if (rightSize > FrameIdx{0}) {
       CellPtr copy = std::make_unique<Cell>(*span->cell);
-      span = insert(spans, ++span, newSpans) + newSpans.size();
+      span = insertSpan(spans, ++span, newSpans) + newSpans.size();
       span = spans.insert(span, {std::move(copy), rightSize});
     } else {
-      insert(spans, ++span, newSpans);
+      insertSpan(spans, ++span, newSpans);
     }
   }
 }

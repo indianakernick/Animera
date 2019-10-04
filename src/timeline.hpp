@@ -82,7 +82,6 @@ public Q_SLOTS:
   void moveLayerDown();
   
   void insertFrame();
-  void insertNullFrame();
   void removeFrame();
   
   void clearCell();
