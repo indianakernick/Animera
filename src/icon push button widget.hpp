@@ -11,7 +11,7 @@
 
 #include <QtWidgets/qabstractbutton.h>
 
-class IconPushButtonWidget final : public QAbstractButton {
+class IconPushButtonWidget : public QAbstractButton {
 public:
   IconPushButtonWidget(QWidget *, QPixmap);
 

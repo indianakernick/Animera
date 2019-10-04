@@ -11,7 +11,7 @@
 
 #include "radio button widget.hpp"
 
-class IconRadioButtonWidget final : public RadioButtonWidget {
+class IconRadioButtonWidget : public RadioButtonWidget {
 public:
   IconRadioButtonWidget(QWidget *, QPixmap, QPixmap);
 

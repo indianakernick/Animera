@@ -12,7 +12,7 @@
 #include "config.hpp"
 #include <QtWidgets/qabstractbutton.h>
 
-class TextPushButtonWidget final : public QAbstractButton {
+class TextPushButtonWidget : public QAbstractButton {
 public:
   TextPushButtonWidget(QWidget *, WidgetRect, const QString &);
 

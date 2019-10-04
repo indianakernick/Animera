@@ -10,11 +10,32 @@
 
 #include "config.hpp"
 #include "connect.hpp"
+#include <QtGui/qevent.h>
 #include <QtGui/qpainter.h>
 #include "widget painting.hpp"
 #include "timeline painting.hpp"
 #include "text input widget.hpp"
 #include <QtWidgets/qboxlayout.h>
+#include "icon radio button widget.hpp"
+
+class VisibleWidget final : public IconRadioButtonWidget {
+  Q_OBJECT
+  
+public:
+  using IconRadioButtonWidget::IconRadioButtonWidget;
+  
+Q_SIGNALS:
+  void isolated();
+
+private:
+  void mousePressEvent(QMouseEvent *event) override {
+    if (event->button() == Qt::RightButton) {
+      Q_EMIT isolated();
+    } else {
+      IconRadioButtonWidget::mousePressEvent(event);
+    }
+  }
+};
 
 LayerNameWidget::LayerNameWidget(QWidget *parent, const LayerIdx layer)
   : QWidget{parent}, idx{layer} {
@@ -22,6 +43,7 @@ LayerNameWidget::LayerNameWidget(QWidget *parent, const LayerIdx layer)
   createWidgets();
   setupLayout();
   CONNECT(visible, toggled, this, changeVisibility);
+  CONNECT(visible, isolated, this, isolate);
   CONNECT(name, textEdited, this, changeName);
 }
 
@@ -37,6 +59,10 @@ void LayerNameWidget::changeVisibility(const bool visibility) {
   Q_EMIT visibilityChanged(idx, visibility);
 }
 
+void LayerNameWidget::isolate() {
+  Q_EMIT visibilityIsolated(idx);
+}
+
 void LayerNameWidget::changeName(const QString &text) {
   Q_EMIT nameChanged(idx, text.toStdString());
 }
@@ -47,7 +73,7 @@ void LayerNameWidget::createWidgets() {
   QPixmap offPix = onPix;
   paintTimelineButtonIcon(onPix, ":/Timeline/shown.png");
   paintTimelineButtonIcon(offPix, ":/Timeline/hidden.png");
-  visible = new IconRadioButtonWidget{this, onPix, offPix};
+  visible = new VisibleWidget{this, onPix, offPix};
   visible->setToolTip("Toggle Visibility");
   name = new TextInputWidget{this, layer_text_rect};
   name->setMaxLength(layer_name_max_len);
@@ -78,6 +104,13 @@ void LayersWidget::setVisibility(const LayerIdx idx, const bool visible) {
   layers[+idx]->setVisibility(visible);
 }
 
+void LayersWidget::isolate(const LayerIdx idx) {
+  for (LayerIdx l = {}; l != layerCount(); ++l) {
+    layers[+l]->setVisibility(l == idx);
+    Q_EMIT visibilityChanged(l, l == idx);
+  }
+}
+
 void LayersWidget::setName(const LayerIdx idx, const std::string_view name) {
   layers[+idx]->setName(name);
 }
@@ -89,8 +122,9 @@ void LayersWidget::setLayerCount(const LayerIdx count) {
   }
   while (layerCount() < count) {
     auto *layerName = new LayerNameWidget{this, layerCount()};
-    CONNECT(layerName, visibilityChanged, this, visibilityChanged);
-    CONNECT(layerName, nameChanged,       this, nameChanged);
+    CONNECT(layerName, visibilityChanged,  this, visibilityChanged);
+    CONNECT(layerName, visibilityIsolated, this, isolate);
+    CONNECT(layerName, nameChanged,        this, nameChanged);
     layout->addWidget(layerName);
     layers.push_back(layerName);
   }

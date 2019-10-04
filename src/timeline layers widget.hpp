@@ -11,8 +11,8 @@
 
 #include "cell.hpp"
 #include <QtWidgets/qscrollarea.h>
-#include "icon radio button widget.hpp"
 
+class VisibleWidget;
 class TextInputWidget;
 class QVBoxLayout;
 
@@ -24,6 +24,7 @@ public:
   
 Q_SIGNALS:
   void visibilityChanged(LayerIdx, bool);
+  void visibilityIsolated(LayerIdx);
   void nameChanged(LayerIdx, std::string_view);
 
 public Q_SLOTS:
@@ -32,10 +33,11 @@ public Q_SLOTS:
 
 private Q_SLOTS:
   void changeVisibility(bool);
+  void isolate();
   void changeName(const QString &);
 
 private:
-  IconRadioButtonWidget *visible = nullptr;
+  VisibleWidget *visible = nullptr;
   TextInputWidget *name = nullptr;
   LayerIdx idx;
   
@@ -56,6 +58,7 @@ Q_SIGNALS:
 public Q_SLOTS:
   void setMargin(int);
   void setVisibility(LayerIdx, bool);
+  void isolate(LayerIdx);
   void setName(LayerIdx, std::string_view);
   void setLayerCount(LayerIdx);
   
