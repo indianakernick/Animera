@@ -58,17 +58,6 @@ use the status bar for more than just tools
   it could make sense to use it for the color picker
   at the moment it seems underappreciated
 
-differentiate between indexed with full alpha and indexed with transparent entry
-  if there is a single fully transparent entry then it will be possible to
-  composite indexed images into indexed images
-
-optimize the palette carefully
-  if we only export part of the palette we must make sure that there aren't any
-  indicies in the image that are out of range
-  we could determine the maximum index in the image and export all entries up to
-  that index
-  we could provide a button that optimizes the palette
-
 Could be useful
   https://stackoverflow.com/questions/53771040/how-do-you-use-file-lists-xcfilelist-within-xcode-10-script-build-phases
 
@@ -106,10 +95,6 @@ optimize LayerCells
     this is because the address of the cell is changing
     changing the way the currCellChanged signal is emitted could break things
 
-compositing index images is broken
-  it kind of gets weird if index 0 doesn't correspond to the color 0
-  i'm not really sure what the "correct" behaviour is
-
 lto
   99fb460bb1d36e6dab434940a0ea62ddbeecc69c
   none
@@ -137,9 +122,24 @@ fixed byte order image formats
   use RGBA_8888
   measure the speed increase
 
+differentiate between indexed with full alpha and indexed with transparent entry
+  if there is a single fully transparent entry then it will be possible to
+  composite indexed images into indexed images
+
+optimize the palette carefully
+  if we only export part of the palette we must make sure that there aren't any
+  indicies in the image that are out of range
+  we could determine the maximum index in the image and export all entries up to
+  that index
+  we could provide a button that optimizes the palette
+
 palette index out of range
   we currently get an error from libpng and an incomplete png file (no IEND)
   need to handle this properly
+  
+compositing index images is broken
+  it kind of gets weird if index 0 doesn't correspond to the color 0
+  i'm not really sure what the "correct" behaviour is
 
 make exporting less tedious
   store paths in QSettings
