@@ -164,10 +164,8 @@ void TextInputWidget::keyPressEvent(QKeyEvent *event) {
 }
 
 void TextInputWidget::focusInEvent(QFocusEvent *event) {
-  // TODO: this is a little jittery
   QLineEdit::focusInEvent(event);
-  hideCursor();
-  QTimer::singleShot(0, this, &QLineEdit::selectAll);
+  showCursor();
 }
 
 void TextInputWidget::focusOutEvent(QFocusEvent *event) {
