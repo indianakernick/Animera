@@ -62,6 +62,8 @@ struct CellRect {
   FrameIdx maxF;
 };
 
+constexpr CellRect empty_rect = {LayerIdx{0}, FrameIdx{0}, LayerIdx{-1}, FrameIdx{-1}};
+
 struct CellSpan {
   CellPtr cell;
   FrameIdx len{1};

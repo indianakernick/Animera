@@ -38,6 +38,7 @@
 		453D28D02276A9DF00D0E5F9 /* color convert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453D28CE2276A9DF00D0E5F9 /* color convert.cpp */; };
 		453D28D32276F0FE00D0E5F9 /* label widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453D28D12276F0FD00D0E5F9 /* label widget.cpp */; };
 		453D28D72278134200D0E5F9 /* color handle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453D28D52278134200D0E5F9 /* color handle.cpp */; };
+		454E990B2348200B0059274C /* sprite export.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 454E99092348200B0059274C /* sprite export.cpp */; };
 		455486BF23449254001D5611 /* native mac.mm in Sources */ = {isa = PBXBuildFile; fileRef = 455486BE23449254001D5611 /* native mac.mm */; };
 		455F285C2206890300C73F39 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 455F285B2206890300C73F39 /* Assets.xcassets */; };
 		455F2868220690A600C73F39 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 455F2867220690A600C73F39 /* main.cpp */; };
@@ -174,6 +175,8 @@
 		453D28D42277129800D0E5F9 /* connect.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = connect.hpp; sourceTree = "<group>"; };
 		453D28D52278134200D0E5F9 /* color handle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "color handle.cpp"; sourceTree = "<group>"; };
 		453D28D62278134200D0E5F9 /* color handle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "color handle.hpp"; sourceTree = "<group>"; };
+		454E99092348200B0059274C /* sprite export.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "sprite export.cpp"; sourceTree = "<group>"; };
+		454E990A2348200B0059274C /* sprite export.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "sprite export.hpp"; sourceTree = "<group>"; };
 		45548661233DA2B8001D5611 /* common.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = common.hpp; sourceTree = "<group>"; };
 		45548691234432AA001D5611 /* icon.animera */ = {isa = PBXFileReference; lastKnownFileType = file; path = icon.animera; sourceTree = "<group>"; };
 		4554869223443B97001D5611 /* formats.animera */ = {isa = PBXFileReference; lastKnownFileType = file; path = formats.animera; sourceTree = "<group>"; };
@@ -456,21 +459,20 @@
 				4513144622D0503700D66262 /* timeline.hpp */,
 				4513144E22D1BF8700D66262 /* palette.cpp */,
 				4513144F22D1BF8700D66262 /* palette.hpp */,
+				453A20C7231A139100F055BA /* palette span.hpp */,
 				4513144822D1828D00D66262 /* sprite.cpp */,
 				4513144922D1828D00D66262 /* sprite.hpp */,
-				457DC0BF22E94EC00000777B /* export options.hpp */,
 				457DC0C022E9518A0000777B /* cell span.cpp */,
 				457DC0C122E9518A0000777B /* cell span.hpp */,
+				457DC0BF22E94EC00000777B /* export options.hpp */,
 				457DC0C422EA93FC0000777B /* export pattern.cpp */,
 				457DC0C522EA93FC0000777B /* export pattern.hpp */,
-				45C447F922F6B57000B65AD3 /* png.cpp */,
-				45C447FA22F6B57000B65AD3 /* png.hpp */,
-				453A20C8231A161E00F055BA /* zlib.hpp */,
 				45A61041230BE989000A0BD6 /* export png.cpp */,
 				45A61042230BE989000A0BD6 /* export png.hpp */,
 				453A20C4231A078100F055BA /* sprite file.cpp */,
 				453A20C5231A078100F055BA /* sprite file.hpp */,
-				453A20C7231A139100F055BA /* palette span.hpp */,
+				454E99092348200B0059274C /* sprite export.cpp */,
+				454E990A2348200B0059274C /* sprite export.hpp */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -740,6 +742,9 @@
 				45D1098F22DAAFAC00D1F1CB /* enum operators.hpp */,
 				457DC0BE22E7FB2B0000777B /* widget rect.hpp */,
 				45A61039230775CE000A0BD6 /* error.hpp */,
+				45C447F922F6B57000B65AD3 /* png.cpp */,
+				45C447FA22F6B57000B65AD3 /* png.hpp */,
+				453A20C8231A161E00F055BA /* zlib.hpp */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -1669,6 +1674,7 @@
 				453D28BD22768D9900D0E5F9 /* text input widget.cpp in Sources */,
 				4513145B22D5A2A500D66262 /* picker impl gray.cpp in Sources */,
 				45161F0622F1399A0036BBED /* timeline painting.cpp in Sources */,
+				454E990B2348200B0059274C /* sprite export.cpp in Sources */,
 				45D109AF22E2D88500D1F1CB /* export dialog.cpp in Sources */,
 				45D1099822DAFD7000D1F1CB /* select tools.cpp in Sources */,
 				453C781F22349F0100818B19 /* tool select widget.cpp in Sources */,

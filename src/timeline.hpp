@@ -53,14 +53,6 @@ public:
   Error deserializeBody(QIODevice &);
   Error deserializeTail(QIODevice &);
 
-private:
-  CellRect selectCells(const ExportOptions &) const;
-  Error exportFile(const ExportOptions &, PaletteCSpan, const QImage &, CellPos) const;
-  Error exportFile(const ExportOptions &, PaletteCSpan, const Frame &, CellPos) const;
-  Error exportCompRect(const ExportOptions &, PaletteCSpan, CellRect) const;
-  Error exportRect(const ExportOptions &, PaletteCSpan, CellRect) const;
-
-public:
   Error exportTimeline(const ExportOptions &, PaletteCSpan) const;
 
 public Q_SLOTS:

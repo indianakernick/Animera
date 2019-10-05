@@ -8,19 +8,10 @@
 
 #include "timeline.hpp"
 
-#include "cell span.hpp"
 #include "composite.hpp"
-#include <QtCore/qdir.h>
 #include "export png.hpp"
 #include "sprite file.hpp"
-#include "export pattern.hpp"
-#include <Graphics/format.hpp>
-
-namespace {
-
-constexpr CellRect empty_rect = {LayerIdx{0}, FrameIdx{0}, LayerIdx{-1}, FrameIdx{-1}};
-
-}
+#include "sprite export.hpp"
 
 Timeline::Timeline()
   : currPos{LayerIdx{0}, FrameIdx{0}}, frameCount{0} {}
@@ -145,142 +136,10 @@ Error Timeline::deserializeTail(QIODevice &dev) {
   return {};
 }
 
-CellRect Timeline::selectCells(const ExportOptions &options) const {
-  CellRect rect;
-  switch (options.layerSelect) {
-    case LayerSelect::all_composited:
-    case LayerSelect::all:
-      rect.minL = LayerIdx{0};
-      rect.maxL = layerCount() - LayerIdx{1};
-      break;
-    case LayerSelect::current:
-      rect.minL = rect.maxL = currPos.l;
-      break;
-    default: Q_UNREACHABLE();
-  }
-  switch (options.frameSelect) {
-    case FrameSelect::all:
-      rect.minF = FrameIdx{0};
-      rect.maxF = frameCount - FrameIdx{1};
-      break;
-    case FrameSelect::current:
-      rect.minF = rect.maxF = currPos.f;
-      break;
-    default: Q_UNREACHABLE();
-  }
-  return rect;
-}
-
-namespace {
-
-template <typename Idx>
-Idx apply(const Line<Idx> line, const Idx value) {
-  return value * line.stride + line.offset;
-}
-
-QString getPath(const ExportOptions &options, CellPos pos) {
-  QString path = options.directory;
-  if (path.back() != QDir::separator()) {
-    path.push_back(QDir::separator());
-  }
-  pos.l = apply(options.layerLine, pos.l);
-  pos.f = apply(options.frameLine, pos.f);
-  path += evalExportPattern(options.name, pos.l, pos.f);
-  path += ".png";
-  return path;
-}
-
-}
-
-Error Timeline::exportFile(
-  const ExportOptions &options,
-  const PaletteCSpan palette,
-  const QImage &image,
-  const CellPos pos
-) const {
-  return exportPng(getPath(options, pos), palette, image, canvasFormat, options.format);
-}
-
-Error Timeline::exportFile(
-  const ExportOptions &options,
-  const PaletteCSpan palette,
-  const Frame &frame,
-  const CellPos pos
-) const {
-  if (canvasFormat == Format::gray) {
-    compositeFrame<gfx::YA>(exportImage, palette, frame, canvasFormat);
-  } else {
-    compositeFrame<gfx::ARGB>(exportImage, palette, frame, canvasFormat);
-  }
-  return exportFile(options, palette, exportImage, pos);
-}
-
-Error Timeline::exportCompRect(
-  const ExportOptions &options,
-  const PaletteCSpan palette,
-  const CellRect rect
-) const {
-  const LayerIdx rectLayers = rect.maxL - rect.minL + LayerIdx{1};
-  Frame frame;
-  frame.reserve(+rectLayers);
-  std::vector<LayerCells::ConstIterator> iterators;
-  iterators.reserve(+rectLayers);
-  for (LayerIdx l = rect.minL; l <= rect.maxL; ++l) {
-    iterators.push_back(layers[+l].spans.find(rect.minF));
-  }
-  for (FrameIdx f = rect.minF; f <= rect.maxF; ++f) {
-    frame.clear();
-    for (LayerIdx l = {}; l != rectLayers; ++l) {
-      if (!layers[+(l + rect.minL)].visible) continue;
-      if (const Cell *cell = *iterators[+l]; *cell) {
-        frame.push_back(*iterators[+l]);
-      }
-      ++iterators[+l];
-    }
-    if (Error err = exportFile(options, palette, frame, {rect.minL, f}); err) {
-      return err;
-    }
-  }
-  return {};
-}
-
-Error Timeline::exportRect(
-  const ExportOptions &options,
-  const PaletteCSpan palette,
-  const CellRect rect
-) const {
-  for (LayerIdx l = rect.minL; l <= rect.maxL; ++l) {
-    const Layer &layer = layers[+l];
-    // TODO: does the user want to skip invisible layers?
-    if (!layer.visible) continue;
-    LayerCells::ConstIterator iter = layer.spans.find(rect.minF);
-    for (FrameIdx f = rect.minF; f <= rect.maxF; ++f) {
-      if (const Cell *cell = *iter; *cell) {
-        const QImage *img = nullptr;
-        if (cell->rect() == QRect{{}, canvasSize}) {
-          img = &cell->img;
-        } else {
-          img = &exportImage;
-          clearImage(exportImage);
-          blitImage(exportImage, cell->img, cell->pos);
-        }
-        if (Error err = exportFile(options, palette, *img, {l, f}); err) {
-          return err;
-        }
-      }
-      ++iter;
-    }
-  }
-  return {};
-}
-
 Error Timeline::exportTimeline(const ExportOptions &options, const PaletteCSpan palette) const {
-  const CellRect rect = selectCells(options);
-  if (composited(options.layerSelect)) {
-    return exportCompRect(options, palette, rect);
-  } else {
-    return exportRect(options, palette, rect);
-  }
+  Exporter exporter{options, palette, canvasFormat, canvasSize};
+  exporter.setRect(layerCount(), frameCount, currPos);
+  return exporter.exportSprite(layers);
 }
 
 void Timeline::initCanvas(const Format format, const QSize size) {
