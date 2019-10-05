@@ -120,6 +120,11 @@ lto
 keys for info.plist
   https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 
+scripting interface
+  maybe applescript
+    https://www.raywenderlich.com/1033-making-a-mac-app-scriptable-tutorial
+  command-line interface is probably much easier
+
 are there resources than can be shared between windows?
   global resource cache might be useful
 
@@ -131,10 +136,6 @@ fixed byte order image formats
   remove qRgb calls
   use RGBA_8888
   measure the speed increase
-
-export frame
-  export current frame using all the defaults
-  just open file dialog
 
 palette index out of range
   we currently get an error from libpng and an incomplete png file (no IEND)

@@ -215,6 +215,7 @@ void Window::populateMenubar() {
   ADD_ACTION(file, "Save", QKeySequence::Save, *this, saveFile);
   ADD_ACTION(file, "Save As", QKeySequence::SaveAs, *this, saveFileDialog);
   ADD_ACTION(file, "Export", Qt::CTRL + Qt::Key_E, *this, exportDialog);
+  ADD_ACTION(file, "Export Frame", Qt::CTRL + Qt::SHIFT + Qt::Key_E, *this, exportFrameDialog);
   
   QMenu *layer = menubar->addMenu("Layer");
   layer->setFont(getGlobalFont());
@@ -392,6 +393,20 @@ void Window::exportDialog() {
     CONNECT(exporter, exportSprite, this, exportSprite);
   }
   exporter->open();
+}
+
+void Window::exportFrame(const QString &path) {
+  exportSprite(exportFrameOptions(path, sprite.getFormat()));
+}
+
+void Window::exportFrameDialog() {
+  auto *dialog = new QFileDialog{this};
+  dialog->setAcceptMode(QFileDialog::AcceptSave);
+  dialog->setNameFilter("PNG Image (*.png)");
+  dialog->setDefaultSuffix("png");
+  dialog->setDirectory(QDir::homePath() + "/sprite.png");
+  CONNECT(dialog, fileSelected, this, exportFrame);
+  dialog->open();
 }
 
 void Window::openPalette(const QString &path) {

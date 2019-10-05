@@ -42,4 +42,6 @@ private:
   QSize size;
 };
 
+ExportOptions exportFrameOptions(const QString &, Format);
+
 #endif

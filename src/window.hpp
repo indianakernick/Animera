@@ -68,6 +68,8 @@ private:
   void saveFileDialog();
   void exportSprite(const ExportOptions &);
   void exportDialog();
+  void exportFrame(const QString &);
+  void exportFrameDialog();
   void openPalette(const QString &);
   void savePalette(const QString &);
   void openPaletteDialog();

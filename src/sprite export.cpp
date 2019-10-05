@@ -139,7 +139,6 @@ Error Exporter::exportImage(const CellPos pos) {
 Error Exporter::exportCells(const std::vector<Layer> &layers) {
   for (LayerIdx l = rect.minL; l <= rect.maxL; ++l) {
     const Layer &layer = layers[+l];
-    // TODO: does the user want to skip invisible layers?
     if (!layer.visible) continue;
     LayerCells::ConstIterator iter = layer.spans.find(rect.minF);
     for (FrameIdx f = rect.minF; f <= rect.maxF; ++f) {
