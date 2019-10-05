@@ -12,11 +12,22 @@
 #include "connect.hpp"
 #include <QtGui/qevent.h>
 
-NumberValidator::NumberValidator(QWidget *parent, const IntRange range)
-  : QIntValidator{range.min, range.max, parent} {}
+#ifdef Q_OS_MACOS
+#include "native mac.hpp"
+#endif
+
+NumberValidator::NumberValidator(QWidget *parent, const IntRange range, const bool skipZero)
+  : QIntValidator{range.min, range.max, parent}, skipZero{skipZero} {}
 
 void NumberValidator::fixup(QString &input) const {
   input = lastValidValue;
+}
+
+QValidator::State NumberValidator::validate(QString &input, int &pos) const {
+  if (skipZero && input == "0") {
+    return State::Invalid;
+  }
+  return QIntValidator::validate(input, pos);
 }
 
 void NumberValidator::updateValidValue(const QString &value) {
@@ -75,8 +86,13 @@ void HexValidator::updateValidValue(const QString &value) {
 }
 
 NumberInputWidget::NumberInputWidget(
-  QWidget *parent, const WidgetRect rect, const IntRange range
-) : TextInputWidget{parent, rect}, boxValidator{parent, range} {
+  QWidget *parent,
+  const WidgetRect rect,
+  const IntRange range,
+  const bool skipZero
+) : TextInputWidget{parent, rect},
+    boxValidator{parent, range, skipZero},
+    skipZero{skipZero} {
   setValidator(&boxValidator);
   changeValue(range.def);
   CONNECT(this, textEdited,      this, textChanged);
@@ -111,14 +127,32 @@ void NumberInputWidget::newValidValue() {
 
 void NumberInputWidget::keyPressEvent(QKeyEvent *event) {
   if (event->key() == Qt::Key_Up) {
-    setText(QString::number(std::min(val + 1, boxValidator.top())));
+    int newVal;
+    if (skipZero && val == -1) {
+      newVal = 1;
+    } else {
+      newVal = val + 1;
+    }
+    setText(QString::number(std::min(newVal, boxValidator.top())));
     textChanged();
   } else if (event->key() == Qt::Key_Down) {
-    setText(QString::number(std::max(val - 1, boxValidator.bottom())));
+    int newVal;
+    if (skipZero && val == 1) {
+      newVal = -1;
+    } else {
+      newVal = val - 1;
+    }
+    setText(QString::number(std::max(newVal, boxValidator.bottom())));
     textChanged();
   } else {
-    TextInputWidget::keyPressEvent(event);
+    return TextInputWidget::keyPressEvent(event);
   }
+  
+  // TODO: remove bug workaround
+  // https://bugreports.qt.io/browse/QTBUG-78933
+  #ifdef Q_OS_MACOS
+  hideMouseUntilMouseMoves();
+  #endif
 }
 
 HexInputWidget::HexInputWidget(

@@ -51,6 +51,9 @@ struct ExportOptions {
   LayerSelect layerSelect;
   FrameSelect frameSelect;
   ExportFormat format;
+  int scaleX;
+  int scaleY;
+  int angle;
 };
 
 #endif

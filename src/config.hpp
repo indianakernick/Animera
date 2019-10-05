@@ -287,6 +287,7 @@ constexpr WidgetRect init_button_rect = textBoxRect(8);
 
 constexpr IntRange   expt_stride = {-100, 100, 1};
 constexpr IntRange   expt_offset = {-100, 100, 0};
+constexpr IntRange   expt_scale = {-32, 32, 1};
 
 // -------------------------------- error dialog ---------------------------- //
 

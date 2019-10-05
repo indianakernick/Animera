@@ -43,6 +43,9 @@ private:
   ComboBoxWidget *layerSelect = nullptr;
   ComboBoxWidget *frameSelect = nullptr;
   ComboBoxWidget *formatSelect = nullptr;
+  NumberInputWidget *scaleX = nullptr;
+  NumberInputWidget *scaleY = nullptr;
+  ComboBoxWidget *rotate = nullptr;
   TextPushButtonWidget *ok = nullptr;
   TextPushButtonWidget *cancel = nullptr;
   

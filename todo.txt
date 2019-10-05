@@ -143,8 +143,6 @@ palette index out of range
 make exporting less tedious
   store paths in QSettings
   assign names to each frame
-  scale up when exporting
-    regenerate title@4x
   would it be useful to copy export settings to and from the clipboard?
   should export settings be kept in the sprite file?
 

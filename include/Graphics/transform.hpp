@@ -15,6 +15,25 @@
 namespace gfx {
 
 template <typename Pixel, typename Func>
+void flipHori(Surface<Pixel> dst, CSurface<identity_t<Pixel>> src, Func func) noexcept {
+  assert(dst.size() == src.size());
+  auto srcRowIter = begin(src);
+  for (auto dstRow : range(dst)) {
+    const Pixel *srcPixelIter = srcRowIter.end();
+    for (Pixel &dstPixel : dstRow) {
+      --srcPixelIter;
+      func(dstPixel, *srcPixelIter);
+    }
+    ++srcRowIter;
+  }
+}
+
+template <typename Pixel>
+void flipHori(Surface<Pixel> dst, CSurface<identity_t<Pixel>> src) noexcept {
+  flipHori(dst, src, copyFunc<Pixel>);
+}
+
+template <typename Pixel, typename Func>
 void flipVert(Surface<Pixel> dst, CSurface<identity_t<Pixel>> src, Func func) noexcept {
   assert(dst.size() == src.size());
   auto srcRowIter = end(src);
@@ -37,25 +56,6 @@ void flipVert(Surface<Pixel> dst, CSurface<identity_t<Pixel>> src) noexcept {
     --srcRowIter;
     std::memcpy(dstRow.begin(), srcRowIter.begin(), width);
   }
-}
-
-template <typename Pixel, typename Func>
-void flipHori(Surface<Pixel> dst, CSurface<identity_t<Pixel>> src, Func func) noexcept {
-  assert(dst.size() == src.size());
-  auto srcRowIter = begin(src);
-  for (auto dstRow : range(dst)) {
-    const Pixel *srcPixelIter = srcRowIter.end();
-    for (Pixel &dstPixel : dstRow) {
-      --srcPixelIter;
-      func(dstPixel, *srcPixelIter);
-    }
-    ++srcRowIter;
-  }
-}
-
-template <typename Pixel>
-void flipHori(Surface<Pixel> dst, CSurface<identity_t<Pixel>> src) noexcept {
-  flipHori(dst, src, copyFunc<Pixel>);
 }
 
 constexpr Size rotateSize(const Size srcSize, const int dir) noexcept {
@@ -183,6 +183,53 @@ void scale(Surface<Pixel> dst, CSurface<identity_t<Pixel>> src) noexcept {
   scale(dst, src, [](auto &dst, const auto src) {
     dst = src;
   });
+}
+
+template <typename Pixel, typename Func>
+void spatialTransform(Surface<Pixel> dst, CSurface<identity_t<Pixel>> src, Func func) noexcept {
+  int y = 0;
+  for (auto dstRow : range(dst)) {
+    int x = 0;
+    for (Pixel &dstPixel : dstRow) {
+      dstPixel = src.ref(func(Point{x, y}));
+      ++x;
+    }
+    ++y;
+  }
+}
+
+inline Point flipHori(const Size dstSize, const Point dstPos) noexcept {
+  return {dstSize.w - 1 - dstPos.x, dstPos.y};
+}
+
+inline Point flipVert(const Size dstSize, const Point dstPos) noexcept {
+  return {dstPos.x, dstSize.h - 1 - dstPos.y};
+}
+
+inline Point rotate1(const Size dstSize, const Point dstPos) noexcept {
+  return {dstPos.y, dstSize.w - 1 - dstPos.x};
+}
+
+inline Point rotate2(const Size dstSize, const Point dstPos) noexcept {
+  return {dstSize.w - 1 - dstPos.x, dstSize.h - 1 - dstPos.y};
+}
+
+inline Point rotate3(const Size dstSize, const Point dstPos) noexcept {
+  return {dstSize.h - 1 - dstPos.y, dstPos.x};
+}
+
+inline Point rotate(const int dir, const Size dstSize, const Point dstPos) noexcept {
+  switch (dir & 3) {
+    case 0: return dstPos;
+    case 1: return rotate1(dstSize, dstPos);
+    case 2: return rotate2(dstSize, dstPos);
+    case 3: return rotate3(dstSize, dstPos);
+    default: return {-1, -1}; // compiler doesn't realise this is impossible
+  }
+}
+
+inline Point scale(const Point scale, const Point dstPos) noexcept {
+  return {dstPos.x / scale.x, dstPos.y / scale.y};
 }
 
 }

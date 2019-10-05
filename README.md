@@ -1,4 +1,4 @@
-![Title](https://i.imgur.com/mbZDVLa.png)
+![Title](https://i.imgur.com/52ERsiu.png)
 
 ### If a picture is a thousand words then a gif is what, a million words?
 

@@ -52,6 +52,9 @@ void ExportDialog::submit() {
   } else if (formatStr == "Monochrome") {
     options.format = ExportFormat::monochrome;
   } else Q_UNREACHABLE();
+  options.scaleX = scaleX->value();
+  options.scaleY = scaleY->value();
+  options.angle = rotate->currentIndex();
   Q_EMIT exportSprite(options);
 }
 
@@ -92,9 +95,9 @@ void ExportDialog::createWidgets() {
   name->setValidator(validator);
   name->setText(validator->defaultText());
   dir = new FileInputWidget{this, 40};
-  layerStride = new NumberInputWidget{this, textBoxRect(3), expt_stride};
+  layerStride = new NumberInputWidget{this, textBoxRect(3), expt_stride, true};
   layerOffset = new NumberInputWidget{this, textBoxRect(3), expt_offset};
-  frameStride = new NumberInputWidget{this, textBoxRect(3), expt_stride};
+  frameStride = new NumberInputWidget{this, textBoxRect(3), expt_stride, true};
   frameOffset = new NumberInputWidget{this, textBoxRect(3), expt_offset};
   layerSelect = new ComboBoxWidget{this, 14};
   layerSelect->addItem("All (composed)");
@@ -103,6 +106,13 @@ void ExportDialog::createWidgets() {
   frameSelect = new ComboBoxWidget{this, 14};
   frameSelect->addItem("All");
   frameSelect->addItem("Current");
+  scaleX = new NumberInputWidget{this, textBoxRect(3), expt_scale, true};
+  scaleY = new NumberInputWidget{this, textBoxRect(3), expt_scale, true};
+  rotate = new ComboBoxWidget{this, 14};
+  rotate->addItem("0");
+  rotate->addItem("90");
+  rotate->addItem("180");
+  rotate->addItem("270");
   formatSelect = new ComboBoxWidget{this, 14};
   addFormatOptions();
   ok = new TextPushButtonWidget{this, textBoxRect(8), "Export"};
@@ -158,6 +168,15 @@ void ExportDialog::setupLayout() {
   frameLayout->addStretch();
   frameLayout->addWidget(makeLabel(this, "Frames: "));
   frameLayout->addWidget(frameSelect);
+  
+  auto *transformLayout = makeLayout<QHBoxLayout>(layout);
+  transformLayout->addWidget(makeLabel(this, "Scale - X: "));
+  transformLayout->addWidget(scaleX);
+  transformLayout->addWidget(makeLabel(this, " Y: "));
+  transformLayout->addWidget(scaleY);
+  transformLayout->addStretch();
+  transformLayout->addWidget(makeLabel(this, "Rotate: "));
+  transformLayout->addWidget(rotate);
   
   auto *buttonLayout = makeLayout<QHBoxLayout>(layout);
   buttonLayout->addStretch();

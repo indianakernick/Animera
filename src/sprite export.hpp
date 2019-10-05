@@ -26,11 +26,14 @@ private:
   PaletteCSpan palette;
   Format format;
   QImage image;
+  QImage xformed;
   CellRect rect;
   
+  QSize getXformedSize() const;
   void setImageFrom(const Cell &);
   void setImageFrom(const Frame &);
-  QString getPath(CellPos);
+  QString getPath(CellPos) const;
+  void applyTransform();
   Error exportImage(CellPos);
   Error exportCells(const std::vector<Layer> &);
   Error exportFrames(const std::vector<Layer> &);

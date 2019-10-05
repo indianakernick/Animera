@@ -33,19 +33,6 @@ TEST_CASE("transform") {
     }
   }
   
-  SECTION("flipVert") {
-    gfx::Surface<Px> dst{&dstArr[0][0], width, width, height};
-    gfx::CSurface<Px> src{&srcArr[0][0], width, width, height};
-    gfx::flipVert(dst, src);
-    for (int y = 0; y != height; ++y) {
-      for (int x = 0; x != width; ++x) {
-        INFO("(" << x << ", " << y << ")");
-        REQUIRE(dstArr[y][x] == fn(x, height - 1 - y));
-        REQUIRE(srcArr[y][x] == fn(x, y));
-      }
-    }
-  }
-  
   SECTION("flipHori") {
     gfx::Surface<Px> dst{&dstArr[0][0], width, width, height};
     gfx::CSurface<Px> src{&srcArr[0][0], width, width, height};
@@ -54,6 +41,19 @@ TEST_CASE("transform") {
       for (int x = 0; x != width; ++x) {
         INFO("(" << x << ", " << y << ")");
         REQUIRE(dstArr[y][x] == fn(width - 1 - x, y));
+        REQUIRE(srcArr[y][x] == fn(x, y));
+      }
+    }
+  }
+  
+  SECTION("flipVert") {
+    gfx::Surface<Px> dst{&dstArr[0][0], width, width, height};
+    gfx::CSurface<Px> src{&srcArr[0][0], width, width, height};
+    gfx::flipVert(dst, src);
+    for (int y = 0; y != height; ++y) {
+      for (int x = 0; x != width; ++x) {
+        INFO("(" << x << ", " << y << ")");
+        REQUIRE(dstArr[y][x] == fn(x, height - 1 - y));
         REQUIRE(srcArr[y][x] == fn(x, y));
       }
     }

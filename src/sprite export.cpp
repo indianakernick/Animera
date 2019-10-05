@@ -12,6 +12,9 @@
 #include "composite.hpp"
 #include "export png.hpp"
 #include "export pattern.hpp"
+#include "surface factory.hpp"
+#include "graphics convert.hpp"
+#include <Graphics/transform.hpp>
 
 Exporter::Exporter(
   const ExportOptions &options,
@@ -22,6 +25,7 @@ Exporter::Exporter(
     palette{palette},
     format{format},
     image{size, qimageFormat(format)},
+    xformed{getXformedSize(), qimageFormat(format)},
     rect{empty_rect} {}
 
 void Exporter::setRect(
@@ -66,6 +70,17 @@ Error Exporter::exportSprite(const std::vector<Layer> &layers) {
   }
 }
 
+QSize Exporter::getXformedSize() const {
+  if (options.scaleX == 1 && options.scaleY == 1 && options.angle == 0) {
+    return {0, 0};
+  }
+  QSize size;
+  size.setWidth(image.width() * std::abs(options.scaleX));
+  size.setHeight(image.height() * std::abs(options.scaleY));
+  size = convert(gfx::rotateSize(convert(size), options.angle));
+  return size;
+}
+
 void Exporter::setImageFrom(const Cell &cell) {
   clearImage(image);
   blitImage(image, cell.img, cell.pos);
@@ -88,7 +103,7 @@ Idx apply(const Line<Idx> line, const Idx value) {
 
 }
 
-QString Exporter::getPath(CellPos pos) {
+QString Exporter::getPath(CellPos pos) const {
   QString path = options.directory;
   if (path.back() != QDir::separator()) {
     path.push_back(QDir::separator());
@@ -100,8 +115,25 @@ QString Exporter::getPath(CellPos pos) {
   return path;
 }
 
+void Exporter::applyTransform() {
+  visitSurface(xformed, [this](const auto dst) {
+    const auto src = makeCSurface<typename decltype(dst)::Pixel>(image);
+    gfx::spatialTransform(dst, src, [this, &dst](const gfx::Point dstPos) noexcept {
+      gfx::Point srcPos = gfx::rotate(options.angle, dst.size(), dstPos);
+      srcPos = options.scaleX < 0 ? gfx::flipHori(dst.size(), srcPos) : srcPos;
+      srcPos = options.scaleY < 0 ? gfx::flipVert(dst.size(), srcPos) : srcPos;
+      return gfx::scale({std::abs(options.scaleX), std::abs(options.scaleY)}, srcPos);
+    });
+  });
+}
+
 Error Exporter::exportImage(const CellPos pos) {
-  return exportPng(getPath(pos), palette, image, format, options.format);
+  if (xformed.isNull()) {
+    return exportPng(getPath(pos), palette, image, format, options.format);
+  } else {
+    applyTransform();
+    return exportPng(getPath(pos), palette, xformed, format, options.format);
+  }
 }
 
 Error Exporter::exportCells(const std::vector<Layer> &layers) {

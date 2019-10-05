@@ -15,13 +15,15 @@
 
 class NumberValidator final : public QIntValidator {
 public:
-  NumberValidator(QWidget *, IntRange);
+  NumberValidator(QWidget *, IntRange, bool);
   
   void fixup(QString &) const override;
+  State validate(QString &, int &) const override;
   void updateValidValue(const QString &);
 
 private:
   QString lastValidValue;
+  bool skipZero;
 };
 
 class HexValidator final : public QValidator {
@@ -39,7 +41,7 @@ private:
 class NumberInputWidget final : public TextInputWidget {
   Q_OBJECT
 public:
-  NumberInputWidget(QWidget *, WidgetRect, IntRange);
+  NumberInputWidget(QWidget *, WidgetRect, IntRange, bool = false);
   
   int value() const;
   
@@ -56,6 +58,7 @@ private Q_SLOTS:
 private:
   NumberValidator boxValidator;
   int val;
+  bool skipZero;
   
   void keyPressEvent(QKeyEvent *) override;
 };
