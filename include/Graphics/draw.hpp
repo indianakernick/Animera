@@ -206,9 +206,9 @@ bool drawStrokedCircle(
   assert(0 <= outerRadius);
   assert(innerRadius <= outerRadius);
   if (innerRadius <= 0) {
-    return drawFilledCircle(dst, pixel, ctr, outerRadius);
+    return drawFilledCircle(dst, pixel, ctr, outerRadius, shape);
   } else if (outerRadius == innerRadius) {
-    return drawStrokedCircle(dst, pixel, ctr, outerRadius);
+    return drawStrokedCircle(dst, pixel, ctr, outerRadius, shape);
   }
   
   int innerX = innerRadius;
