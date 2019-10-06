@@ -392,6 +392,44 @@ bool drawFloodFill(
   return false;
 }
 
+template <typename Pixel, typename Func>
+bool drawHoriGradient(
+  const Surface<Pixel> dst,
+  const Rect rect,
+  Func func
+) noexcept {
+  if (rect.empty()) return false;
+  const int bottom = rect.p.y + rect.s.h - 1;
+  const int size = rect.s.w == 1 ? 1 : rect.s.w - 1;
+  bool drawn = false;
+  
+  for (int x = 0; x != rect.s.w; ++x) {
+    const Pixel pixel = func(x, size);
+    drawn |= fillColRegion(dst, pixel, {rect.p.x + x, rect.p.y}, bottom);
+  }
+  
+  return drawn;
+}
+
+template <typename Pixel, typename Func>
+bool drawVertGradient(
+  const Surface<Pixel> dst,
+  const Rect rect,
+  Func func
+) noexcept {
+  if (rect.empty()) return false;
+  const int right = rect.p.x + rect.s.w - 1;
+  const int size = rect.s.h == 1 ? 1 : rect.s.h - 1;
+  bool drawn = false;
+  
+  for (int y = 0; y != rect.s.h; ++y) {
+    const Pixel pixel = func(y, size);
+    drawn |= fillRowRegion(dst, pixel, {rect.p.x, rect.p.y + y}, right);
+  }
+  
+  return drawn;
+}
+
 }
 
 #endif

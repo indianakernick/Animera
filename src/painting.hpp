@@ -23,6 +23,9 @@ bool drawStrokedCircle(QImage &, QRgb, QPoint, int, int = 1, gfx::CircleShape = 
 bool drawFilledRect   (QImage &, QRgb, QRect);
 bool drawStrokedRect  (QImage &, QRgb, QRect, int = 1);
 
+bool drawHoriGradient (QImage &, QRgb, QRgb, QRect);
+bool drawVertGradient (QImage &, QRgb, QRgb, QRect);
+
 bool drawLine         (QImage &, QRgb, QLine, int = 1);
 
 bool drawFilledPolygon(QImage &, QRgb, const std::vector<QPoint> &);

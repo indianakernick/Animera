@@ -11,6 +11,7 @@
 #include "geometry.hpp"
 #include <QtGui/qpainter.h>
 #include <Graphics/draw.hpp>
+#include <Graphics/format.hpp>
 #include "surface factory.hpp"
 #include "graphics convert.hpp"
 
@@ -92,6 +93,77 @@ bool drawStrokedRect(
   return visitSurface(img, [rect, thickness, color](auto surface) {
     const QRect inner = rect.marginsRemoved({thickness, thickness, thickness, thickness});
     return gfx::drawStrokedRect(surface, color, convert(rect), convert(inner));
+  });
+}
+
+namespace {
+
+// TODO: Should we use the canvas format instead of the pixel type?
+
+template <typename Pixel>
+struct PixelFormat;
+
+template <>
+struct PixelFormat<uint8_t> {
+  // TODO: Interpolating indexed colors. Is this the best we can do?
+  using type = gfx::Y;
+};
+
+template <>
+struct PixelFormat<uint16_t> {
+  using type = gfx::YA;
+};
+
+template <>
+struct PixelFormat<uint32_t> {
+  using type = gfx::ARGB;
+};
+
+uint8_t interpolate(const uint8_t a, const uint8_t b, const int index, const double size) {
+  return a + (b - a) * index / size + 0.5;
+}
+
+template <typename Pixel>
+auto makeInterpolator(const Pixel first, const Pixel second) {
+  using Format = typename PixelFormat<Pixel>::type;
+  return [first, second](const int index, const int size) noexcept {
+    const gfx::Color firstColor = Format::color(first);
+    const gfx::Color secondColor = Format::color(second);
+    const gfx::Color middleColor = {
+      interpolate(firstColor.r, secondColor.r, index, size),
+      interpolate(firstColor.g, secondColor.g, index, size),
+      interpolate(firstColor.b, secondColor.b, index, size),
+      interpolate(firstColor.a, secondColor.a, index, size),
+    };
+    return Format::pixel(middleColor);
+  };
+}
+
+}
+
+bool drawHoriGradient(
+  QImage &img,
+  const QRgb left,
+  const QRgb right,
+  const QRect rect
+) {
+  return visitSurface(img, [left, right, rect](auto surface) {
+    using Pixel = typename decltype(surface)::Pixel;
+    auto func = makeInterpolator<Pixel>(left, right);
+    return gfx::drawHoriGradient(surface, convert(rect), func);
+  });
+}
+
+bool drawVertGradient(
+  QImage &img,
+  const QRgb top,
+  const QRgb bottom,
+  const QRect rect
+) {
+  return visitSurface(img, [top, bottom, rect](auto surface) {
+    using Pixel = typename decltype(surface)::Pixel;
+    auto func = makeInterpolator<Pixel>(top, bottom);
+    return gfx::drawVertGradient(surface, convert(rect), func);
   });
 }
 

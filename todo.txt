@@ -147,8 +147,13 @@ make exporting less tedious
   would it be useful to copy export settings to and from the clipboard?
   should export settings be kept in the sprite file?
 
-gradient tool would be nice
-  primary click to start
-  secondary click to stop
-  line from primary to secondary
-  maybe something similar with circles but might not be as useful
+gradient tool
+  radial gradient?
+  bayer matrix?
+
+would the user ever want to automatically adjust the scale of the editor?
+
+status bar is inconsistent in mouseDown events
+  drag paint tools show start and end
+  select tools show start
+  drag paint tools don't show status when cell is null

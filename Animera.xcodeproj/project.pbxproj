@@ -39,6 +39,7 @@
 		453D28D32276F0FE00D0E5F9 /* label widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453D28D12276F0FD00D0E5F9 /* label widget.cpp */; };
 		453D28D72278134200D0E5F9 /* color handle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453D28D52278134200D0E5F9 /* color handle.cpp */; };
 		454E990B2348200B0059274C /* sprite export.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 454E99092348200B0059274C /* sprite export.cpp */; };
+		454E990F2349A9B40059274C /* gradient tool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 454E990D2349A9B40059274C /* gradient tool.cpp */; };
 		455486BF23449254001D5611 /* native mac.mm in Sources */ = {isa = PBXBuildFile; fileRef = 455486BE23449254001D5611 /* native mac.mm */; };
 		455F285C2206890300C73F39 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 455F285B2206890300C73F39 /* Assets.xcassets */; };
 		455F2868220690A600C73F39 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 455F2867220690A600C73F39 /* main.cpp */; };
@@ -177,6 +178,9 @@
 		453D28D62278134200D0E5F9 /* color handle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "color handle.hpp"; sourceTree = "<group>"; };
 		454E99092348200B0059274C /* sprite export.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "sprite export.cpp"; sourceTree = "<group>"; };
 		454E990A2348200B0059274C /* sprite export.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "sprite export.hpp"; sourceTree = "<group>"; };
+		454E990C234992BD0059274C /* linear gradient.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "linear gradient.png"; sourceTree = "<group>"; };
+		454E990D2349A9B40059274C /* gradient tool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "gradient tool.cpp"; sourceTree = "<group>"; };
+		454E990E2349A9B40059274C /* gradient tool.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "gradient tool.hpp"; sourceTree = "<group>"; };
 		45548661233DA2B8001D5611 /* common.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = common.hpp; sourceTree = "<group>"; };
 		45548691234432AA001D5611 /* icon.animera */ = {isa = PBXFileReference; lastKnownFileType = file; path = icon.animera; sourceTree = "<group>"; };
 		4554869223443B97001D5611 /* formats.animera */ = {isa = PBXFileReference; lastKnownFileType = file; path = formats.animera; sourceTree = "<group>"; };
@@ -440,6 +444,8 @@
 				45D1099722DAFD7000D1F1CB /* select tools.hpp */,
 				45D1099922DB075A00D1F1CB /* drag paint tools.cpp */,
 				45D1099A22DB075A00D1F1CB /* drag paint tools.hpp */,
+				454E990D2349A9B40059274C /* gradient tool.cpp */,
+				454E990E2349A9B40059274C /* gradient tool.hpp */,
 				45D1099C22DB09C100D1F1CB /* transform tools.cpp */,
 				45D1099D22DB09C100D1F1CB /* transform tools.hpp */,
 			);
@@ -508,6 +514,7 @@
 				4554869623444DDC001D5611 /* filled circle.png */,
 				4554869B23444DDD001D5611 /* stroked rectangle.png */,
 				4554869823444DDC001D5611 /* filled rectangle.png */,
+				454E990C234992BD0059274C /* linear gradient.png */,
 				4554869F23444DDD001D5611 /* translate.png */,
 				4554869E23444DDD001D5611 /* flip.png */,
 				4554869D23444DDD001D5611 /* rotate.png */,
@@ -1695,6 +1702,7 @@
 				45B284932218E38800D6D055 /* image.cpp in Sources */,
 				45054F732259C9AB0078350B /* color picker widget.cpp in Sources */,
 				45D1099222DAF70000D1F1CB /* brush tool.cpp in Sources */,
+				454E990F2349A9B40059274C /* gradient tool.cpp in Sources */,
 				4595D48F22C061DF00607D64 /* timeline layers widget.cpp in Sources */,
 				45D1099522DAFA1D00D1F1CB /* flood fill tool.cpp in Sources */,
 				45A61043230BE989000A0BD6 /* export png.cpp in Sources */,

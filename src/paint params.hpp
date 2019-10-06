@@ -33,7 +33,16 @@ enum class SelectMode {
 };
 
 constexpr SelectMode opposite(const SelectMode mode) {
-  return static_cast<SelectMode>(static_cast<std::underlying_type_t<SelectMode>>(mode) ^ 1);
+  return static_cast<SelectMode>(static_cast<int>(mode) ^ 1);
+}
+
+enum class LineGradMode {
+  hori,
+  vert
+};
+
+constexpr LineGradMode opposite(const LineGradMode mode) {
+  return static_cast<LineGradMode>(static_cast<int>(mode) ^ 1);
 }
 
 #endif

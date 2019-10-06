@@ -146,6 +146,7 @@ void ToolSelectWidget::createTools() {
   pushToolWidget<FilledCircleToolWidget>();
   pushToolWidget<StrokedRectangleToolWidget>();
   pushToolWidget<FilledRectangleToolWidget>();
+  pushToolWidget<LinearGradientToolWidget>();
   pushToolWidget<TranslateToolWidget>();
   pushToolWidget<FlipToolWidget>();
   pushToolWidget<RotateToolWidget>();

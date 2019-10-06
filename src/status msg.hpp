@@ -23,6 +23,7 @@ public:
   StatusMsg &append(QPoint);
   StatusMsg &append(QSize);
   StatusMsg &append(SelectMode);
+  StatusMsg &append(LineGradMode);
   StatusMsg &append(bool);
   StatusMsg &append(char);
   StatusMsg &append(int);
@@ -36,6 +37,7 @@ public:
   StatusMsg &appendLabeled(QPoint);
   StatusMsg &appendLabeled(QRect);
   StatusMsg &appendLabeled(SelectMode);
+  StatusMsg &appendLabeled(LineGradMode);
 
 private:
   std::string msg;

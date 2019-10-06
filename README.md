@@ -6,6 +6,8 @@
 
 ---
 
+![Linear Gradient](https://i.imgur.com/uu6057W.gif)
+
 ![Palette Mode](https://i.imgur.com/9zZOte3.gif)
 
 ![Magic Wand](https://i.imgur.com/kmQziuq.gif)

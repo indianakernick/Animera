@@ -43,6 +43,14 @@ StatusMsg &StatusMsg::append(const SelectMode mode) {
   }
 }
 
+StatusMsg &StatusMsg::append(const LineGradMode mode) {
+  switch (mode) {
+    case LineGradMode::hori: return append("HORI");
+    case LineGradMode::vert: return append("VERT");
+    default: Q_UNREACHABLE();
+  }
+}
+
 StatusMsg &StatusMsg::append(const bool b) {
   msg += b ? "YES" : "NO";
   return *this;
@@ -73,6 +81,12 @@ StatusMsg &StatusMsg::appendLabeled(const QRect rect) {
 }
 
 StatusMsg &StatusMsg::appendLabeled(const SelectMode mode) {
+  append(mode);
+  append(" - ");
+  return *this;
+}
+
+StatusMsg &StatusMsg::appendLabeled(const LineGradMode mode) {
   append(mode);
   append(" - ");
   return *this;

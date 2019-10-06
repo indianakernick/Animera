@@ -11,6 +11,7 @@
 
 #include "brush tool.hpp"
 #include "select tools.hpp"
+#include "gradient tool.hpp"
 #include "transform tools.hpp"
 #include "flood fill tool.hpp"
 #include <QtWidgets/qwidget.h>
@@ -90,6 +91,13 @@ public:
   using impl = FilledRectangleTool;
   static constexpr const char icon_name[] = "filled rectangle";
   static constexpr const char tooltip[] = "Filled Rectangle Tool";
+};
+
+class LinearGradientToolWidget final : public QWidget {
+public:
+  using impl = LinearGradientTool;
+  static constexpr const char icon_name[] = "linear gradient";
+  static constexpr const char tooltip[] = "Linear Gradient Tool";
 };
 
 class TranslateToolWidget final : public QWidget {
