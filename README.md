@@ -37,3 +37,42 @@
 ![Flip](https://i.imgur.com/HJnQuiK.gif)
 
 ![Rotate](https://i.imgur.com/Xj1AG30.gif)
+
+<!---
+
+Github doesn't support GIFV 😢
+https://github.com/github/markup/issues/458
+
+![Linear Gradient](https://i.imgur.com/uJXPxyp.gifv)
+
+![Palette Mode](https://i.imgur.com/8dp9qSG.gifv)
+
+![Magic Wand](https://i.imgur.com/yF523XG.gifv)
+
+![Color Picker](https://i.imgur.com/FJQVTtp.gifv)
+
+![Brush](https://i.imgur.com/ZEfGkeF.gifv)
+
+![Fill](https://i.imgur.com/2EjjJ4P.gifv)
+
+![Rect Select](https://i.imgur.com/pP5YH8R.gifv)
+
+![Poly Select](https://i.imgur.com/1jMaUPd.gifv)
+
+![Filled Circle](https://i.imgur.com/eQYiDMz.gifv)
+
+![Stroked Circle](https://i.imgur.com/CY7iUie.gifv)
+
+![Filled Rect](https://i.imgur.com/bYr05ah.gifv)
+
+![Stroked Rect](https://i.imgur.com/vwx6fcz.gifv)
+
+![Line](https://i.imgur.com/py3nnfw.gifv)
+
+![Translate](https://i.imgur.com/tH005ko.gifv)
+
+![Flip](https://i.imgur.com/u3WhXM8.gifv)
+
+![Rotate](https://i.imgur.com/JR9r62o.gifv)
+
+--->
