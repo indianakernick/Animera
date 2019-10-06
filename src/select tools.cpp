@@ -36,10 +36,10 @@ bool SelectTool<Derived>::resizeImages() {
 template <typename Derived>
 void SelectTool<Derived>::copy(const QPoint pos) {
   QImage overlayView = view(overlay, bounds);
-  if (ctx->cell->isNull()) {
+  const QRect rect = bounds.intersected(ctx->cell->rect());
+  if (rect.isEmpty()) {
     writeOverlay(ctx->palette, ctx->format, overlayView);
   } else {
-    const QRect rect = bounds.intersected(ctx->cell->rect());
     blitImage(
       selection,
       cview(ctx->cell->img, rect.translated(-ctx->cell->pos)),
@@ -60,8 +60,8 @@ void SelectTool<Derived>::copyWithMask(
   const QPoint pos,
   const QImage &mask
 ) {
-  if (*ctx->cell) {
-    const QRect rect = bounds.intersected(ctx->cell->rect());
+  const QRect rect = bounds.intersected(ctx->cell->rect());
+  if (!rect.isEmpty()) {
     blitMaskImage(
       selection,
       cview(mask, rect),
