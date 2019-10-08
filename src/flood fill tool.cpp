@@ -12,8 +12,10 @@
 #include "painting.hpp"
 #include "composite.hpp"
 
-void FloodFillTool::detachCell() {
-  ctx->clearStatus();
+void FloodFillTool::detachCell(const DetachReason reason) {
+  if (reason == DetachReason::tool) {
+    ctx->clearStatus();
+  }
 }
 
 void FloodFillTool::mouseLeave(const ToolLeaveEvent &) {
@@ -25,14 +27,14 @@ void FloodFillTool::mouseLeave(const ToolLeaveEvent &) {
 void FloodFillTool::mouseDown(const ToolMouseEvent &event) {
   clearImage(*ctx->overlay);
   drawSquarePoint(*ctx->overlay, tool_overlay_color, event.pos);
-  ctx->showStatus(StatusMsg{}.appendLabeled(event.pos));
-  const QRgb color = ctx->selectColor(event.button);
   QRect rect = toRect(ctx->size);
   if (sampleCell(*ctx->cell, event.pos) == 0) {
-    ctx->requireCell(rect);
+    ctx->growCell(rect);
   } else {
     rect = rect.intersected(ctx->cell->rect());
   }
+  ctx->showStatus(StatusMsg{}.appendLabeled(event.pos));
+  const QRgb color = ctx->selectColor(event.button);
   QImage &img = ctx->cell->img;
   const QPoint pos = ctx->cell->pos;
   rect.translate(-pos);

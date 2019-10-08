@@ -10,13 +10,13 @@
 
 void CurrentTool::changeTool(Tool *newTool) {
   assert(newTool);
-  detach();
+  detach(DetachReason::tool);
   tool = newTool;
   attach();
 }
 
 void CurrentTool::changeCell(Cell *newCell) {
-  detach();
+  detach(DetachReason::cell);
   cell = newCell;
   attach();
 }
@@ -43,6 +43,13 @@ void CurrentTool::mouseMove(const QPoint ePos) {
   }
 }
 
+void CurrentTool::mouseMove() {
+  assert(tool);
+  if (button == ButtonType::none) {
+    tool->mouseMove({lastPos, ButtonType::none});
+  }
+}
+
 void CurrentTool::mouseUp(const QPoint ePos, const ButtonType eButton) {
   assert(tool);
   if (eButton == button) {
@@ -61,6 +68,6 @@ void CurrentTool::attach() {
   if (cell) tool->attachCell();
 }
 
-void CurrentTool::detach() {
-  if (cell) tool->detachCell();
+void CurrentTool::detach(const DetachReason reason) {
+  if (cell) tool->detachCell(reason);
 }

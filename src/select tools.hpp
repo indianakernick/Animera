@@ -35,7 +35,7 @@ protected:
 class RectangleSelectTool final : public SelectTool<RectangleSelectTool> {
 public:
   void attachCell() override;
-  void detachCell() override;
+  void detachCell(DetachReason) override;
   void mouseLeave(const ToolLeaveEvent &) override;
   void mouseDown(const ToolMouseEvent &) override;
   void mouseMove(const ToolMouseEvent &) override;
@@ -49,7 +49,7 @@ private:
 class PolygonSelectTool final : public SelectTool<PolygonSelectTool> {
 public:
   void attachCell() override;
-  void detachCell() override;
+  void detachCell(DetachReason) override;
   void mouseLeave(const ToolLeaveEvent &) override;
   void mouseDown(const ToolMouseEvent &) override;
   void mouseMove(const ToolMouseEvent &) override;
@@ -67,11 +67,10 @@ private:
 class WandSelectTool final : public SelectTool<WandSelectTool> {
 public:
   void attachCell() override;
-  void detachCell() override;
+  void detachCell(DetachReason) override;
   void mouseLeave(const ToolLeaveEvent &) override;
   void mouseDown(const ToolMouseEvent &) override;
   void mouseMove(const ToolMouseEvent &) override;
-  void mouseUp(const ToolMouseEvent &) override;
 
 private:
   QImage mask;

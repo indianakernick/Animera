@@ -21,7 +21,7 @@ template <typename Derived>
 void DragPaintTool<Derived>::attachCell() {}
 
 template <typename Derived>
-void DragPaintTool<Derived>::detachCell() {
+void DragPaintTool<Derived>::detachCell(DetachReason) {
   ctx->clearStatus();
 }
 
@@ -36,16 +36,17 @@ template <typename Derived>
 void DragPaintTool<Derived>::mouseDown(const ToolMouseEvent &event) {
   clearImage(*ctx->overlay);
   that()->drawOverlay(*ctx->overlay, event.pos);
+  ctx->growCell(that()->pointRect(event.pos));
   StatusMsg status;
   that()->updateStatus(status, event.pos, event.pos);
   ctx->showStatus(status);
   startPos = event.pos;
   color = ctx->selectColor(event.button);
-  ctx->requireCell(that()->pointRect(startPos));
   cleanCell = *ctx->cell;
   QImage &img = ctx->cell->img;
   const QPoint pos = ctx->cell->pos;
   ctx->emitChanges(that()->drawPoint(img, startPos - pos));
+  ctx->lock();
 }
 
 template <typename Derived>
@@ -56,11 +57,11 @@ void DragPaintTool<Derived>::mouseMove(const ToolMouseEvent &event) {
     ctx->showStatus(StatusMsg{}.appendLabeled(event.pos));
     return ctx->emitChanges(ToolChanges::overlay);
   }
+  *ctx->cell = cleanCell;
+  ctx->growCell(that()->dragRect(startPos, event.pos));
   StatusMsg status;
   that()->updateStatus(status, startPos, event.pos);
   ctx->showStatus(status);
-  *ctx->cell = cleanCell;
-  ctx->growCell(that()->dragRect(startPos, event.pos));
   QImage &img = ctx->cell->img;
   const QPoint pos = ctx->cell->pos;
   ctx->emitChanges(that()->drawDrag(img, startPos - pos, event.pos - pos));
@@ -68,10 +69,13 @@ void DragPaintTool<Derived>::mouseMove(const ToolMouseEvent &event) {
 
 template <typename Derived>
 void DragPaintTool<Derived>::mouseUp(const ToolMouseEvent &event) {
+  // should probably set overlay to mouse position
+  ctx->unlock();
   clearImage(*ctx->overlay);
   that()->drawOverlay(*ctx->overlay, event.pos);
   *ctx->cell = cleanCell;
   ctx->growCell(that()->dragRect(startPos, event.pos));
+  ctx->showStatus(StatusMsg{}.appendLabeled(event.pos));
   QImage &img = ctx->cell->img;
   const QPoint pos = ctx->cell->pos;
   ctx->emitChanges(that()->drawDrag(img, startPos - pos, event.pos - pos));

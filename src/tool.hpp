@@ -30,6 +30,11 @@ enum class ToolChanges {
   cell_overlay
 };
 
+enum class DetachReason {
+  cell,
+  tool
+};
+
 struct ToolColors {
   QRgb primary;
   QRgb secondary;
@@ -58,6 +63,8 @@ Q_SIGNALS:
   void shouldShowPerm(std::string_view) const;
   void changingAction() const;
   void cellRequested(QRect) const;
+  void lockRequested() const;
+  void unlockRequested() const;
 
 public:
   Cell *cell = nullptr;
@@ -69,12 +76,13 @@ public:
   
   void emitChanges(ToolChanges) const;
   void emitChanges(bool) const;
-  void requireCell(QRect) const;
   void growCell(QRect) const;
   QRgb selectColor(ButtonType) const;
   void showStatus(const StatusMsg &) const;
   void clearStatus() const;
   void finishChange() const;
+  void lock() const;
+  void unlock() const;
 };
 
 class Tool {
@@ -82,7 +90,7 @@ public:
   virtual ~Tool() = default;
 
   virtual void attachCell() {}
-  virtual void detachCell() {}
+  virtual void detachCell(DetachReason) {}
   virtual void mouseLeave(const ToolLeaveEvent &) {}
   virtual void mouseDown(const ToolMouseEvent &) {}
   virtual void mouseMove(const ToolMouseEvent &) {}

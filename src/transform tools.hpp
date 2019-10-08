@@ -14,7 +14,7 @@
 class TranslateTool final : public Tool {
 public:
   void attachCell() override;
-  void detachCell() override;
+  void detachCell(DetachReason) override;
   void mouseLeave(const ToolLeaveEvent &) override;
   void mouseDown(const ToolMouseEvent &) override;
   void mouseMove(const ToolMouseEvent &) override;
@@ -32,7 +32,7 @@ private:
 class FlipTool final : public Tool {
 public:
   void attachCell() override;
-  void detachCell() override;
+  void detachCell(DetachReason) override;
   void mouseLeave(const ToolLeaveEvent &) override;
   void mouseMove(const ToolMouseEvent &) override;
   void keyPress(const ToolKeyEvent &) override;
@@ -47,7 +47,7 @@ private:
 class RotateTool final : public Tool {
 public:
   void attachCell() override;
-  void detachCell() override;
+  void detachCell(DetachReason) override;
   void mouseLeave(const ToolLeaveEvent &) override;
   void mouseMove(const ToolMouseEvent &) override;
   void keyPress(const ToolKeyEvent &) override;

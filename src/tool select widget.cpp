@@ -85,6 +85,7 @@ ToolSelectWidget::ToolSelectWidget(QWidget *parent)
 
 void ToolSelectWidget::mouseLeave() {
   currTool.mouseLeave();
+  mouseIn = false;
 }
 
 void ToolSelectWidget::mouseDown(const QPoint pos, const ButtonType button) {
@@ -93,6 +94,7 @@ void ToolSelectWidget::mouseDown(const QPoint pos, const ButtonType button) {
 
 void ToolSelectWidget::mouseMove(const QPoint pos) {
   currTool.mouseMove(pos);
+  mouseIn = true;
 }
 
 void ToolSelectWidget::mouseUp(const QPoint pos, const ButtonType button) {
@@ -110,6 +112,7 @@ void ToolSelectWidget::setOverlay(QImage *overlay) {
 void ToolSelectWidget::setCell(Cell *cell) {
   ctx.cell = cell;
   currTool.changeCell(cell);
+  if (mouseIn) currTool.mouseMove();
 }
 
 void ToolSelectWidget::setColors(const ToolColors colors) {
@@ -128,6 +131,7 @@ void ToolSelectWidget::initCanvas(const Format format, const QSize size) {
 void ToolSelectWidget::changeTool(ToolWidget *widget, Tool *tool) {
   currWidget = widget;
   currTool.changeTool(tool);
+  if (mouseIn) currTool.mouseMove();
 }
 
 template <typename WidgetClass>
@@ -169,6 +173,8 @@ void ToolSelectWidget::connectSignals() {
   CONNECT(ctx, shouldShowPerm,  this, shouldShowPerm);
   CONNECT(ctx, changingAction,  this, changingAction);
   CONNECT(ctx, cellRequested,   this, cellRequested);
+  CONNECT(ctx, lockRequested,   this, lockRequested);
+  CONNECT(ctx, unlockRequested, this, unlockRequested);
   for (ToolWidget *tool : tools) {
     CONNECT(tool, shouldChangeTool, this, changeTool);
   }

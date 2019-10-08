@@ -29,6 +29,8 @@ Q_SIGNALS:
   void shouldShowPerm(std::string_view);
   void changingAction();
   void cellRequested(QRect);
+  void lockRequested();
+  void unlockRequested();
 
 public Q_SLOTS:
   void mouseLeave();
@@ -53,6 +55,7 @@ private:
   // currWidget only exists to accomodate future changes (tool settings)
   ToolWidget *currWidget = nullptr;
   ToolCtx ctx;
+  bool mouseIn = false;
   
   template <typename WidgetClass>
   void pushToolWidget();

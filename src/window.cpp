@@ -316,6 +316,8 @@ void Window::connectSignals() {
   CONNECT(tools,           cellRequested,       sprite.timeline, growCell);
   CONNECT(tools,           changingAction,      undo,            cellModified);
   CONNECT(tools,           changingAction,      this,            modify);
+  CONNECT(tools,           lockRequested,       sprite.timeline, lockCell);
+  CONNECT(tools,           unlockRequested,     sprite.timeline, unlockCell);
   
   CONNECT(editor,          overlayChanged,      tools,           setOverlay);
   CONNECT(editor,          mouseLeave,          tools,           mouseLeave);

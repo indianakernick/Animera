@@ -10,8 +10,10 @@
 
 #include "painting.hpp"
 
-void LinearGradientTool::detachCell() {
-  ctx->clearStatus();
+void LinearGradientTool::detachCell(const DetachReason reason) {
+  if (reason == DetachReason::tool) {
+    ctx->clearStatus();
+  }
 }
 
 void LinearGradientTool::mouseLeave(const ToolLeaveEvent &) {
@@ -28,33 +30,41 @@ void LinearGradientTool::mouseDown(const ToolMouseEvent &event) {
     mode = opposite(mode);
   }
   
-  updateStatus(event, {event.pos, QSize{1, 1}});
+  StatusMsg status;
+  status.appendLabeled(mode);
   
   if (event.button != ButtonType::primary) {
+    ctx->showStatus(status.appendLabeled(event.pos));
     return ctx->emitChanges(ToolChanges::overlay);
   }
   
   startPos = event.pos;
-  ctx->requireCell(toRect(startPos));
+  ctx->growCell(toRect(startPos));
+  ctx->showStatus(status.appendLabeled({event.pos, QSize{1, 1}}));
   cleanCell = *ctx->cell;
   const QPoint pos = ctx->cell->pos;
   drawSquarePoint(ctx->cell->img, ctx->colors.primary, startPos - pos);
   ctx->emitChanges(ToolChanges::cell_overlay);
+  ctx->lock();
 }
 
 void LinearGradientTool::mouseMove(const ToolMouseEvent &event) {
   clearImage(*ctx->overlay);
   drawSquarePoint(*ctx->overlay, tool_overlay_color, event.pos);
   
-  QRect rect = unite(startPos, event.pos);
-  updateStatus(event, rect);
+  StatusMsg status;
+  status.appendLabeled(mode);
   
   if (event.button != ButtonType::primary) {
+    ctx->showStatus(status.appendLabeled(event.pos));
     return ctx->emitChanges(ToolChanges::overlay);
   }
   
+  ctx->unlock();
   *ctx->cell = cleanCell;
+  QRect rect = unite(startPos, event.pos);
   ctx->growCell(rect);
+  ctx->showStatus(status.appendLabeled(rect));
   drawGradient(rect, event.pos);
 }
 
@@ -69,17 +79,6 @@ void LinearGradientTool::mouseUp(const ToolMouseEvent &event) {
   ctx->growCell(rect);
   drawGradient(rect, event.pos);
   ctx->finishChange();
-}
-
-void LinearGradientTool::updateStatus(const ToolMouseEvent &event, const QRect rect) {
-  StatusMsg status;
-  status.appendLabeled(mode);
-  if (event.button != ButtonType::primary) {
-    status.appendLabeled(event.pos);
-  } else {
-    status.appendLabeled(rect);
-  }
-  ctx->showStatus(status);
 }
 
 void LinearGradientTool::drawGradient(QRect rect, const QPoint endPos) {

@@ -19,6 +19,7 @@ public:
   void mouseLeave();
   void mouseDown(QPoint, ButtonType);
   void mouseMove(QPoint);
+  void mouseMove();
   void mouseUp(QPoint, ButtonType);
   void keyPress(Qt::Key);
   
@@ -29,7 +30,7 @@ private:
   ButtonType button = ButtonType::none;
   
   void attach();
-  void detach();
+  void detach(DetachReason);
 };
 
 #endif

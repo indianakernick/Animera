@@ -13,7 +13,7 @@
 
 class FloodFillTool final : public Tool {
 public:
-  void detachCell() override;
+  void detachCell(DetachReason) override;
   void mouseLeave(const ToolLeaveEvent &) override;
   void mouseDown(const ToolMouseEvent &) override;
   void mouseMove(const ToolMouseEvent &) override;

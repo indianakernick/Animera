@@ -153,7 +153,37 @@ gradient tool
 
 would the user ever want to automatically adjust the scale of the editor?
 
-status bar is inconsistent in mouseDown events
-  drag paint tools show start and end
-  select tools show start
-  drag paint tools don't show status when cell is null
+make the timeline locking mechinism more bullet proof
+  locking the timeline means "I don't want the current cell to be changed"
+  also lock the tool if it ever becomes possible to change tools with keys
+  should we emit a signal when the lock stops an operation?
+    show status message
+  perhaps locking could be more broad (simple)
+    lock the whole timeline
+
+invesigate focus gain/loss and mouse events
+  do we always get a mouseUp after a mouseDown?
+  if we don't, the timeline might not get unlocked
+
+what's up the the height of the timeline?
+  reduce to min then go fullscreen
+
+keys for changing tools up and down
+
+think about where you rest your fingers on the keyboard
+  use this to influence common key bindings
+  think about trackpad users and mouse users
+  think about people with fancy mice that have extra buttons
+
+more abstract tool interface
+  use QImage::cacheKey to avoid emitChanges
+  states, state transitions and state updates
+    can all tools fit into this restricted model?
+  mouseLeave event handlers seem to all be the same
+
+more efficient status message updates
+  there are situations where the status bar is updated multiple times and only
+  the last update is seen
+
+is DetachReason necessary?
+  do we really need to clearStatus in detachCell?

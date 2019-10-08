@@ -15,13 +15,11 @@
 #include "graphics convert.hpp"
 #include <Graphics/transform.hpp>
 
-// TODO: do we need to know the difference between switching tools and switching cells?
-
 void TranslateTool::attachCell() {
-  //updateStatus();
+  // updateStatus();
 }
 
-void TranslateTool::detachCell() {
+void TranslateTool::detachCell(DetachReason) {
   ctx->clearStatus();
 }
 
@@ -32,7 +30,8 @@ void TranslateTool::mouseLeave(const ToolLeaveEvent &) {
 void TranslateTool::mouseDown(const ToolMouseEvent &event) {
   if (event.button != ButtonType::primary) return;
   lastPos = event.pos;
-  drag = bool{*ctx->cell};
+  drag = !ctx->cell->isNull();
+  if (drag) ctx->lock();
 }
 
 void TranslateTool::mouseMove(const ToolMouseEvent &event) {
@@ -47,6 +46,7 @@ void TranslateTool::mouseMove(const ToolMouseEvent &event) {
 
 void TranslateTool::mouseUp(const ToolMouseEvent &event) {
   if (event.button != ButtonType::primary || !drag) return;
+  ctx->unlock();
   translate(event.pos - lastPos);
   updateStatus();
   lastPos = event.pos;
@@ -89,10 +89,10 @@ void TranslateTool::updateStatus() {
 
 void FlipTool::attachCell() {
   flipX = flipY = false;
-  //updateStatus();
+  // updateStatus();
 }
 
-void FlipTool::detachCell() {
+void FlipTool::detachCell(DetachReason) {
   ctx->clearStatus();
 }
 
@@ -161,11 +161,13 @@ void FlipTool::updateStatus() {
 
 void RotateTool::attachCell() {
   angle = 0;
-  //updateStatus();
+  // updateStatus();
 }
 
-void RotateTool::detachCell() {
-  ctx->clearStatus();
+void RotateTool::detachCell(const DetachReason reason) {
+  if (reason == DetachReason::tool) {
+    ctx->clearStatus();
+  }
 }
 
 void RotateTool::mouseLeave(const ToolLeaveEvent &) {

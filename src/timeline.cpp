@@ -145,27 +145,30 @@ Error Timeline::exportTimeline(const ExportOptions &options, const PaletteCSpan 
 void Timeline::initCanvas(const Format format, const QSize size) {
   canvasFormat = format;
   canvasSize = size;
-  exportImage = {size, qimageFormat(format)};
 }
 
 void Timeline::nextFrame() {
+  if (locked) return;
   currPos.f = (currPos.f + FrameIdx{1}) % frameCount;
   changeFrame();
   changePos();
 }
 
 void Timeline::prevFrame() {
+  if (locked) return;
   currPos.f = (currPos.f - FrameIdx{1} + frameCount) % frameCount;
   changeFrame();
   changePos();
 }
 
 void Timeline::layerBelow() {
+  if (locked) return;
   currPos.l = std::min(currPos.l + LayerIdx{1}, layerCount() - LayerIdx{1});
   changePos();
 }
 
 void Timeline::layerAbove() {
+  if (locked) return;
   currPos.l = std::max(currPos.l - LayerIdx{1}, LayerIdx{0});
   changePos();
 }
@@ -223,6 +226,7 @@ void Timeline::insertLayer() {
 }
 
 void Timeline::removeLayer() {
+  if (locked) return;
   if (layers.size() == 1) {
     layers.front().spans.clear(frameCount);
     layers.front().name = "Layer 0";
@@ -241,6 +245,7 @@ void Timeline::removeLayer() {
 }
 
 void Timeline::moveLayerUp() {
+  if (locked) return;
   if (currPos.l == LayerIdx{0}) return;
   std::swap(layers[+(currPos.l - LayerIdx{1})], layers[+currPos.l]);
   changeLayers(currPos.l - LayerIdx{1}, currPos.l + LayerIdx{1});
@@ -250,6 +255,7 @@ void Timeline::moveLayerUp() {
 }
 
 void Timeline::moveLayerDown() {
+  if (locked) return;
   if (currPos.l == layerCount() - LayerIdx{1}) return;
   std::swap(layers[+currPos.l], layers[+(currPos.l + LayerIdx{1})]);
   changeLayers(currPos.l, currPos.l + LayerIdx{2});
@@ -292,6 +298,7 @@ void Timeline::removeFrame() {
 }
 
 void Timeline::clearCell() {
+  if (locked) return;
   layers[+currPos.l].spans.replace(currPos.f, false);
   changeSpan(currPos.l);
   changeFrame();
@@ -320,6 +327,7 @@ void Timeline::growCell(const QRect rect) {
     ::growCell(cell, canvasFormat, rect);
     return;
   }
+  if (locked) return;
   layers[+currPos.l].spans.replace(currPos.f, true);
   ::growCell(*getCell(currPos), canvasFormat, rect);
   changeSpan(currPos.l);
@@ -333,6 +341,7 @@ void Timeline::setCurrPos(const CellPos pos) {
   assert(pos.l < layerCount());
   assert(FrameIdx{0} <= pos.f);
   assert(pos.f < frameCount);
+  if (locked) return;
   if (currPos.f != pos.f) {
     currPos = pos;
     changeFrame();
@@ -405,6 +414,16 @@ void Timeline::pasteSelected() {
   changeFrame();
   changePos();
   Q_EMIT modified();
+}
+
+void Timeline::lockCell() {
+  assert(!locked);
+  locked = true;
+}
+
+void Timeline::unlockCell() {
+  assert(locked);
+  locked = false;
 }
 
 Cell *Timeline::getCell(const CellPos pos) {

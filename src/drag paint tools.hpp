@@ -18,7 +18,7 @@ public:
   ~DragPaintTool();
   
   void attachCell() override final;
-  void detachCell() override final;
+  void detachCell(DetachReason) override final;
   void mouseLeave(const ToolLeaveEvent &) override final;
   void mouseDown(const ToolMouseEvent &) override final;
   void mouseMove(const ToolMouseEvent &) override final;

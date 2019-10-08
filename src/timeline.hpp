@@ -89,6 +89,9 @@ public Q_SLOTS:
   void clearSelected();
   void copySelected();
   void pasteSelected();
+  
+  void lockCell();
+  void unlockCell();
 
 Q_SIGNALS:
   void currPosChanged(CellPos);
@@ -111,13 +114,13 @@ Q_SIGNALS:
 private:
   std::vector<Layer> layers;
   std::vector<LayerCells> clipboard;
-  mutable QImage exportImage;
   CellPos currPos;
   CellRect selection;
   FrameIdx frameCount;
   QSize canvasSize;
   Format canvasFormat;
   int delay;
+  bool locked = false;
   
   Cell *getCell(CellPos);
   Frame getFrame(FrameIdx) const;

@@ -14,7 +14,7 @@
 
 class LinearGradientTool final : public Tool {
 public:
-  void detachCell() override;
+  void detachCell(DetachReason) override;
   void mouseLeave(const ToolLeaveEvent &) override;
   void mouseDown(const ToolMouseEvent &) override;
   void mouseMove(const ToolMouseEvent &) override;
@@ -25,7 +25,6 @@ private:
   Cell cleanCell;
   LineGradMode mode = LineGradMode::hori;
   
-  void updateStatus(const ToolMouseEvent &, QRect);
   void drawGradient(QRect, QPoint);
 };
 

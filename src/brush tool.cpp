@@ -12,8 +12,10 @@
 #include "painting.hpp"
 #include "graphics convert.hpp"
 
-void BrushTool::detachCell() {
-  ctx->clearStatus();
+void BrushTool::detachCell(const DetachReason reason) {
+  if (reason == DetachReason::tool) {
+    ctx->clearStatus();
+  }
 }
 
 void BrushTool::mouseLeave(const ToolLeaveEvent &) {
@@ -25,12 +27,13 @@ void BrushTool::mouseLeave(const ToolLeaveEvent &) {
 void BrushTool::mouseDown(const ToolMouseEvent &event) {
   clearImage(*ctx->overlay);
   symPoint(*ctx->overlay, tool_overlay_color, event.pos);
+  ctx->growCell(symPointRect(event.pos));
   symPointStatus(event.pos);
   lastPos = event.pos;
   color = ctx->selectColor(event.button);
-  ctx->requireCell(symPointRect(lastPos));
   const QPoint pos = ctx->cell->pos;
   ctx->emitChanges(symPoint(ctx->cell->img, color, lastPos - pos));
+  ctx->lock();
 }
 
 void BrushTool::mouseMove(const ToolMouseEvent &event) {
@@ -48,6 +51,7 @@ void BrushTool::mouseMove(const ToolMouseEvent &event) {
 }
 
 void BrushTool::mouseUp(const ToolMouseEvent &event) {
+  ctx->unlock();
   symPointStatus(event.pos);
   ctx->growCell(symPointRect(event.pos));
   QImage &img = ctx->cell->img;
