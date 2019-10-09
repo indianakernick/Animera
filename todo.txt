@@ -180,6 +180,7 @@ more abstract tool interface
   states, state transitions and state updates
     can all tools fit into this restricted model?
   mouseLeave event handlers seem to all be the same
+  something similar to DragPaintTool but for all tools
 
 more efficient status message updates
   there are situations where the status bar is updated multiple times and only
