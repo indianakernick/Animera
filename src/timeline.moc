@@ -23,7 +23,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_Timeline_t {
     QByteArrayData data[50];
-    char stringdata0[600];
+    char stringdata0[592];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -80,8 +80,8 @@ QT_MOC_LITERAL(44, 530, 8), // "setDelay"
 QT_MOC_LITERAL(45, 539, 13), // "clearSelected"
 QT_MOC_LITERAL(46, 553, 12), // "copySelected"
 QT_MOC_LITERAL(47, 566, 13), // "pasteSelected"
-QT_MOC_LITERAL(48, 580, 8), // "lockCell"
-QT_MOC_LITERAL(49, 589, 10) // "unlockCell"
+QT_MOC_LITERAL(48, 580, 4), // "lock"
+QT_MOC_LITERAL(49, 585, 6) // "unlock"
 
     },
     "Timeline\0currPosChanged\0\0CellPos\0"
@@ -99,7 +99,7 @@ QT_MOC_LITERAL(49, 589, 10) // "unlockCell"
     "extendCell\0splitCell\0growCell\0setCurrPos\0"
     "setVisibility\0setName\0setDelay\0"
     "clearSelected\0copySelected\0pasteSelected\0"
-    "lockCell\0unlockCell"
+    "lock\0unlock"
 };
 #undef QT_MOC_LITERAL
 
@@ -248,8 +248,8 @@ void Timeline::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, vo
         case 34: _t->clearSelected(); break;
         case 35: _t->copySelected(); break;
         case 36: _t->pasteSelected(); break;
-        case 37: _t->lockCell(); break;
-        case 38: _t->unlockCell(); break;
+        case 37: _t->lock(); break;
+        case 38: _t->unlock(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {

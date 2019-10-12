@@ -90,8 +90,8 @@ public Q_SLOTS:
   void copySelected();
   void pasteSelected();
   
-  void lockCell();
-  void unlockCell();
+  void lock();
+  void unlock();
 
 Q_SIGNALS:
   void currPosChanged(CellPos);

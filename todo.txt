@@ -153,14 +153,6 @@ gradient tool
 
 would the user ever want to automatically adjust the scale of the editor?
 
-make the timeline locking mechinism more bullet proof
-  locking the timeline means "I don't want the current cell to be changed"
-  also lock the tool if it ever becomes possible to change tools with keys
-  should we emit a signal when the lock stops an operation?
-    show status message
-  perhaps locking could be more broad (simple)
-    lock the whole timeline
-
 invesigate focus gain/loss and mouse events
   do we always get a mouseUp after a mouseDown?
   if we don't, the timeline might not get unlocked

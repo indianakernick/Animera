@@ -187,6 +187,7 @@ CellRect normalize(const CellRect rect) {
 }
 
 void Timeline::beginSelection() {
+  if (locked) return;
   selection.minL = currPos.l;
   selection.minF = currPos.f;
   selection.maxL = currPos.l;
@@ -195,12 +196,14 @@ void Timeline::beginSelection() {
 }
 
 void Timeline::continueSelection() {
+  if (locked) return;
   selection.maxL = currPos.l;
   selection.maxF = currPos.f;
   Q_EMIT selectionChanged(normalize(selection));
 }
 
 void Timeline::endSelection() {
+  if (locked) return;
   selection.maxL = currPos.l;
   selection.maxF = currPos.f;
   selection = normalize(selection);
@@ -208,11 +211,13 @@ void Timeline::endSelection() {
 }
 
 void Timeline::clearSelection() {
+  if (locked) return;
   selection = empty_rect;
   Q_EMIT selectionChanged(selection);
 }
 
 void Timeline::insertLayer() {
+  if (locked) return;
   Layer layer;
   layer.spans.pushNull(frameCount);
   layer.name = "Layer " + std::to_string(layers.size());
@@ -265,6 +270,7 @@ void Timeline::moveLayerDown() {
 }
 
 void Timeline::insertFrame() {
+  if (locked) return;
   ++frameCount;
   changeFrameCount();
   for (LayerIdx l = {}; l != layerCount(); ++l) {
@@ -277,6 +283,7 @@ void Timeline::insertFrame() {
 }
 
 void Timeline::removeFrame() {
+  if (locked) return;
   if (frameCount == FrameIdx{1}) {
     for (LayerIdx l = {}; l != layerCount(); ++l) {
       layers[+l].spans.clear(FrameIdx{1});
@@ -307,6 +314,7 @@ void Timeline::clearCell() {
 }
 
 void Timeline::extendCell() {
+  if (locked) return;
   layers[+currPos.l].spans.extend(currPos.f);
   changeSpan(currPos.l);
   nextFrame();
@@ -314,6 +322,7 @@ void Timeline::extendCell() {
 }
 
 void Timeline::splitCell() {
+  if (locked) return;
   layers[+currPos.l].spans.split(currPos.f);
   changeSpan(currPos.l);
   changeFrame();
@@ -380,6 +389,7 @@ void Timeline::setDelay(const int newDelay) {
 }
 
 void Timeline::clearSelected() {
+  if (locked) return;
   LayerCells nullSpans;
   nullSpans.pushNull(selection.maxF - selection.minF + FrameIdx{1});
   for (LayerIdx l = selection.minL; l <= selection.maxL; ++l) {
@@ -392,6 +402,7 @@ void Timeline::clearSelected() {
 }
 
 void Timeline::copySelected() {
+  if (locked) return;
   clipboard.clear();
   for (LayerIdx l = selection.minL; l <= selection.maxL; ++l) {
     const FrameIdx idx = selection.minF;
@@ -401,6 +412,7 @@ void Timeline::copySelected() {
 }
 
 void Timeline::pasteSelected() {
+  if (locked) return;
   if (selection.minL > selection.maxL) return;
   const LayerIdx endLayer = std::min(
     layerCount(), selection.minL + static_cast<LayerIdx>(clipboard.size())
@@ -416,12 +428,12 @@ void Timeline::pasteSelected() {
   Q_EMIT modified();
 }
 
-void Timeline::lockCell() {
+void Timeline::lock() {
   assert(!locked);
   locked = true;
 }
 
-void Timeline::unlockCell() {
+void Timeline::unlock() {
   assert(locked);
   locked = false;
 }
