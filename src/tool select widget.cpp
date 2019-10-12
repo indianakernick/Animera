@@ -102,7 +102,23 @@ void ToolSelectWidget::mouseUp(const QPoint pos, const ButtonType button) {
 }
 
 void ToolSelectWidget::keyPress(const Qt::Key key) {
-  currTool.keyPress(key);
+  if (key == key_tool_up) {
+    for (auto t = tools.begin(); t != std::prev(tools.end()); ++t) {
+      if (*std::next(t) == currWidget) {
+        (*t)->click();
+        break;
+      }
+    }
+  } else if (key == key_tool_down) {
+    for (auto t = std::next(tools.begin()); t != tools.end(); ++t) {
+      if (*std::prev(t) == currWidget) {
+        (*t)->click();
+        break;
+      }
+    }
+  } else {
+    currTool.keyPress(key);
+  }
 }
 
 void ToolSelectWidget::setOverlay(QImage *overlay) {
@@ -132,6 +148,18 @@ void ToolSelectWidget::changeTool(ToolWidget *widget, Tool *tool) {
   currWidget = widget;
   currTool.changeTool(tool);
   if (mouseIn) currTool.mouseMove();
+}
+
+void ToolSelectWidget::lockTool() {
+  for (ToolWidget *tool : tools) {
+    tool->setEnabled(false);
+  }
+}
+
+void ToolSelectWidget::unlockTool() {
+  for (ToolWidget *tool : tools) {
+    tool->setEnabled(true);
+  }
 }
 
 template <typename WidgetClass>
@@ -175,6 +203,8 @@ void ToolSelectWidget::connectSignals() {
   CONNECT(ctx, cellRequested,   this, cellRequested);
   CONNECT(ctx, lockRequested,   this, lockRequested);
   CONNECT(ctx, unlockRequested, this, unlockRequested);
+  CONNECT(ctx, lockRequested,   this, lockTool);
+  CONNECT(ctx, unlockRequested, this, unlockTool);
   for (ToolWidget *tool : tools) {
     CONNECT(tool, shouldChangeTool, this, changeTool);
   }

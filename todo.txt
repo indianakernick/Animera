@@ -168,8 +168,6 @@ invesigate focus gain/loss and mouse events
 what's up the the height of the timeline?
   reduce to min then go fullscreen
 
-keys for changing tools up and down
-
 think about where you rest your fingers on the keyboard
   use this to influence common key bindings
   think about trackpad users and mouse users

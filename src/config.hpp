@@ -324,6 +324,8 @@ constexpr Qt::MouseButton mouse_tertiary = Qt::MiddleButton;
 constexpr Qt::Key   key_primary = Qt::Key_Z;
 constexpr Qt::Key   key_secondary = Qt::Key_X;
 constexpr Qt::Key   key_tertiary = Qt::Key_C;
+constexpr Qt::Key   key_tool_up = Qt::Key_R;
+constexpr Qt::Key   key_tool_down = Qt::Key_F;
 
 // editor
 constexpr Qt::Key   key_zoom_out = Qt::Key_Q;

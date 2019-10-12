@@ -47,12 +47,13 @@ public Q_SLOTS:
   
 private Q_SLOTS:
   void changeTool(ToolWidget *, Tool *);
+  void lockTool();
+  void unlockTool();
   
 private:
   QWidget *box = nullptr;
   std::vector<ToolWidget *> tools;
   CurrentTool currTool;
-  // currWidget only exists to accomodate future changes (tool settings)
   ToolWidget *currWidget = nullptr;
   ToolCtx ctx;
   bool mouseIn = false;
