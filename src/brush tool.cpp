@@ -12,12 +12,6 @@
 #include "painting.hpp"
 #include "graphics convert.hpp"
 
-void BrushTool::detachCell(const DetachReason reason) {
-  if (reason == DetachReason::tool) {
-    ctx->clearStatus();
-  }
-}
-
 void BrushTool::mouseLeave(const ToolLeaveEvent &) {
   clearImage(*ctx->overlay);
   ctx->emitChanges(ToolChanges::overlay);

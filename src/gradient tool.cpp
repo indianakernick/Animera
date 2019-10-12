@@ -10,12 +10,6 @@
 
 #include "painting.hpp"
 
-void LinearGradientTool::detachCell(const DetachReason reason) {
-  if (reason == DetachReason::tool) {
-    ctx->clearStatus();
-  }
-}
-
 void LinearGradientTool::mouseLeave(const ToolLeaveEvent &) {
   clearImage(*ctx->overlay);
   ctx->emitChanges(ToolChanges::overlay);

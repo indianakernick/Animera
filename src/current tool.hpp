@@ -30,7 +30,7 @@ private:
   ButtonType button = ButtonType::none;
   
   void attach();
-  void detach(DetachReason);
+  void detach();
 };
 
 #endif

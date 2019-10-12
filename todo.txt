@@ -181,8 +181,5 @@ more abstract tool interface
   something similar to DragPaintTool but for all tools
 
 more efficient status message updates
-  there are situations where the status bar is updated multiple times and only
-  the last update is seen
-
-is DetachReason necessary?
-  do we really need to clearStatus in detachCell?
+  there might be situations where the status bar is updated multiple times and
+  only the last update is seen

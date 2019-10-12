@@ -14,7 +14,6 @@
 
 class LinearGradientTool final : public Tool {
 public:
-  void detachCell(DetachReason) override;
   void mouseLeave(const ToolLeaveEvent &) override;
   void mouseDown(const ToolMouseEvent &) override;
   void mouseMove(const ToolMouseEvent &) override;

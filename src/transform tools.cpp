@@ -16,11 +16,8 @@
 #include <Graphics/transform.hpp>
 
 void TranslateTool::attachCell() {
-  // updateStatus();
-}
-
-void TranslateTool::detachCell(DetachReason) {
-  ctx->clearStatus();
+  clearImage(*ctx->overlay);
+  ctx->emitChanges(ToolChanges::overlay);
 }
 
 void TranslateTool::mouseLeave(const ToolLeaveEvent &) {
@@ -89,11 +86,8 @@ void TranslateTool::updateStatus() {
 
 void FlipTool::attachCell() {
   flipX = flipY = false;
-  // updateStatus();
-}
-
-void FlipTool::detachCell(DetachReason) {
-  ctx->clearStatus();
+  clearImage(*ctx->overlay);
+  ctx->emitChanges(ToolChanges::overlay);
 }
 
 void FlipTool::mouseLeave(const ToolLeaveEvent &) {
@@ -161,13 +155,8 @@ void FlipTool::updateStatus() {
 
 void RotateTool::attachCell() {
   angle = 0;
-  // updateStatus();
-}
-
-void RotateTool::detachCell(const DetachReason reason) {
-  if (reason == DetachReason::tool) {
-    ctx->clearStatus();
-  }
+  clearImage(*ctx->overlay);
+  ctx->emitChanges(ToolChanges::overlay);
 }
 
 void RotateTool::mouseLeave(const ToolLeaveEvent &) {

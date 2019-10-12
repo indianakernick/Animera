@@ -10,13 +10,14 @@
 
 void CurrentTool::changeTool(Tool *newTool) {
   assert(newTool);
-  detach(DetachReason::tool);
+  detach();
   tool = newTool;
   attach();
 }
 
 void CurrentTool::changeCell(Cell *newCell) {
-  detach(DetachReason::cell);
+  assert(newCell);
+  detach();
   cell = newCell;
   attach();
 }
@@ -68,6 +69,6 @@ void CurrentTool::attach() {
   if (cell) tool->attachCell();
 }
 
-void CurrentTool::detach(const DetachReason reason) {
-  if (cell) tool->detachCell(reason);
+void CurrentTool::detach() {
+  if (cell) tool->detachCell();
 }

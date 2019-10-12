@@ -12,12 +12,6 @@
 #include "painting.hpp"
 #include "composite.hpp"
 
-void FloodFillTool::detachCell(const DetachReason reason) {
-  if (reason == DetachReason::tool) {
-    ctx->clearStatus();
-  }
-}
-
 void FloodFillTool::mouseLeave(const ToolLeaveEvent &) {
   clearImage(*ctx->overlay);
   ctx->emitChanges(ToolChanges::overlay);

@@ -140,12 +140,6 @@ void RectangleSelectTool::attachCell() {
   resizeImages();
 }
 
-void RectangleSelectTool::detachCell(DetachReason reason) {
-  if (reason == DetachReason::tool) {
-    ctx->clearStatus();
-  }
-}
-
 void RectangleSelectTool::mouseLeave(const ToolLeaveEvent &) {
   clearImage(*ctx->overlay);
   ctx->emitChanges(ToolChanges::overlay);
@@ -218,12 +212,6 @@ void RectangleSelectTool::mouseUp(const ToolMouseEvent &event) {
 void PolygonSelectTool::attachCell() {
   if (resizeImages()) {
     mask = {ctx->size, mask_format};
-  }
-}
-
-void PolygonSelectTool::detachCell(const DetachReason reason) {
-  if (reason == DetachReason::tool) {
-    ctx->clearStatus();
   }
 }
 
@@ -319,12 +307,9 @@ void WandSelectTool::attachCell() {
   clearImage(mask);
 }
 
-void WandSelectTool::detachCell(const DetachReason reason) {
+void WandSelectTool::detachCell() {
   clearImage(*ctx->overlay);
   ctx->emitChanges(ToolChanges::overlay);
-  if (reason == DetachReason::tool) {
-    ctx->clearStatus();
-  }
 }
 
 void WandSelectTool::mouseLeave(const ToolLeaveEvent &) {

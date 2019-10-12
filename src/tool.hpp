@@ -30,11 +30,6 @@ enum class ToolChanges {
   cell_overlay
 };
 
-enum class DetachReason {
-  cell,
-  tool
-};
-
 struct ToolColors {
   QRgb primary;
   QRgb secondary;
@@ -90,7 +85,7 @@ public:
   virtual ~Tool() = default;
 
   virtual void attachCell() {}
-  virtual void detachCell(DetachReason) {}
+  virtual void detachCell() {}
   virtual void mouseLeave(const ToolLeaveEvent &) {}
   virtual void mouseDown(const ToolMouseEvent &) {}
   virtual void mouseMove(const ToolMouseEvent &) {}

@@ -21,9 +21,7 @@ template <typename Derived>
 void DragPaintTool<Derived>::attachCell() {}
 
 template <typename Derived>
-void DragPaintTool<Derived>::detachCell(DetachReason) {
-  ctx->clearStatus();
-}
+void DragPaintTool<Derived>::detachCell() {}
 
 template <typename Derived>
 void DragPaintTool<Derived>::mouseLeave(const ToolLeaveEvent &) {
