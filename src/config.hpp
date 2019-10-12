@@ -359,39 +359,39 @@ constexpr Qt::Key   key_rot_ccw_a = Qt::Key_Left;
 constexpr Qt::Key   key_rot_ccw_b = Qt::Key_Up;
 
 // file
-inline const QKeySequence key_new_file = QKeySequence::New;
-inline const QKeySequence key_open_file = QKeySequence::Open;
-inline const QKeySequence key_save_file = QKeySequence::Save;
-inline const QKeySequence key_save_file_as = QKeySequence::SaveAs;
-inline const QKeySequence key_export_file = Qt::CTRL + Qt::Key_E;
-inline const QKeySequence key_export_frame = Qt::CTRL + Qt::SHIFT + Qt::Key_E;
+constexpr auto       key_new_file = QKeySequence::New;
+constexpr auto       key_open_file = QKeySequence::Open;
+constexpr auto       key_save_file = QKeySequence::Save;
+constexpr auto       key_save_file_as = QKeySequence::SaveAs;
+inline const QString key_export_file = "CTRL+E";
+inline const QString key_export_frame = "CTRL+SHIFT+E";
 
 // layer
-inline const QKeySequence key_new_layer = Qt::SHIFT + Qt::Key_N;
-inline const QKeySequence key_delete_layer = Qt::SHIFT + Qt::Key_Backspace;
-inline const QKeySequence key_move_layer_up = Qt::SHIFT + Qt::Key_Up;
-inline const QKeySequence key_move_layer_down = Qt::SHIFT + Qt::Key_Down;
-inline const QKeySequence key_layer_above = Qt::Key_W;
-inline const QKeySequence key_layer_below = Qt::Key_S;
+inline const QString key_new_layer = "SHIFT+N";
+inline const QString key_delete_layer = "SHIFT+BACKSPACE";
+inline const QString key_move_layer_up = "SHIFT+UP";
+inline const QString key_move_layer_down = "SHIFT+DOWN";
+constexpr Qt::Key    key_layer_above = Qt::Key_W;
+constexpr Qt::Key    key_layer_below = Qt::Key_S;
 
 // frame
-inline const QKeySequence key_new_frame = Qt::ALT + Qt::Key_N;
-inline const QKeySequence key_delete_frame = Qt::ALT + Qt::Key_Backspace;
-inline const QKeySequence key_clear_cell = Qt::ALT + Qt::Key_C;
-inline const QKeySequence key_extend_cell = Qt::ALT + Qt::Key_E;
-inline const QKeySequence key_split_cell = Qt::ALT + Qt::Key_S;
-inline const QKeySequence key_next_frame = Qt::Key_D;
-inline const QKeySequence key_prev_frame = Qt::Key_A;
-inline const QKeySequence key_play_anim = Qt::Key_Space;
+inline const QString key_new_frame = "ALT+N";
+inline const QString key_delete_frame = "ALT+BACKSPACE";
+inline const QString key_clear_cell = "ALT+C";
+inline const QString key_extend_cell = "ALT+E";
+inline const QString key_split_cell = "ALT+S";
+constexpr Qt::Key    key_next_frame = Qt::Key_D;
+constexpr Qt::Key    key_prev_frame = Qt::Key_A;
+constexpr Qt::Key    key_play_anim = Qt::Key_Space;
 
 // selection
-inline const QKeySequence key_clear_selection = Qt::CTRL + Qt::Key_X;
-inline const QKeySequence key_copy_selection = QKeySequence::Copy;
-inline const QKeySequence key_paste_selection = QKeySequence::Paste;
+inline const QString key_clear_selection = "CTRL+X";
+constexpr auto       key_copy_selection = QKeySequence::Copy;
+constexpr auto       key_paste_selection = QKeySequence::Paste;
 
 // palette
-inline const QKeySequence key_reset_palette = {};
-inline const QKeySequence key_open_palette = {};
-inline const QKeySequence key_save_palette = {};
+inline const QString key_reset_palette = {};
+inline const QString key_open_palette = {};
+inline const QString key_save_palette = {};
 
 #endif
