@@ -210,19 +210,19 @@ void Window::populateMenubar() {
   auto *app = static_cast<Application *>(QApplication::instance());
   QMenu *file = menubar->addMenu("File");
   file->setFont(getGlobalFont());
-  ADD_ACTION(file, "New", QKeySequence::New, *app, newFileDialog);
-  ADD_ACTION(file, "Open", QKeySequence::Open, *app, openFileDialog);
-  ADD_ACTION(file, "Save", QKeySequence::Save, *this, saveFile);
-  ADD_ACTION(file, "Save As", QKeySequence::SaveAs, *this, saveFileDialog);
-  ADD_ACTION(file, "Export", Qt::CTRL + Qt::Key_E, *this, exportDialog);
-  ADD_ACTION(file, "Export Frame", Qt::CTRL + Qt::SHIFT + Qt::Key_E, *this, exportFrameDialog);
+  ADD_ACTION(file, "New", key_new_file, *app, newFileDialog);
+  ADD_ACTION(file, "Open", key_open_file, *app, openFileDialog);
+  ADD_ACTION(file, "Save", key_save_file, *this, saveFile);
+  ADD_ACTION(file, "Save As", key_save_file_as, *this, saveFileDialog);
+  ADD_ACTION(file, "Export", key_export_file, *this, exportDialog);
+  ADD_ACTION(file, "Export Frame", key_export_frame, *this, exportFrameDialog);
   
   QMenu *layer = menubar->addMenu("Layer");
   layer->setFont(getGlobalFont());
-  ADD_ACTION(layer, "New Layer", Qt::SHIFT + Qt::Key_N, sprite.timeline, insertLayer);
-  ADD_ACTION(layer, "Delete Layer", Qt::SHIFT + Qt::Key_Backspace, sprite.timeline, removeLayer);
-  ADD_ACTION(layer, "Move Layer Up", Qt::SHIFT + Qt::Key_Up, sprite.timeline, moveLayerUp);
-  ADD_ACTION(layer, "Move Layer Down", Qt::SHIFT + Qt::Key_Down, sprite.timeline, moveLayerDown);
+  ADD_ACTION(layer, "New Layer", key_new_layer, sprite.timeline, insertLayer);
+  ADD_ACTION(layer, "Delete Layer", key_delete_layer, sprite.timeline, removeLayer);
+  ADD_ACTION(layer, "Move Layer Up", key_move_layer_up, sprite.timeline, moveLayerUp);
+  ADD_ACTION(layer, "Move Layer Down", key_move_layer_down, sprite.timeline, moveLayerDown);
   //ADD_ACTION(layer, "Toggle Visibility", Qt::SHIFT + Qt::Key_V, sprite.timeline, toggleLayerVisible);
   // TODO: Maybe consider this
   // We have to keep the action in sync with the timeline
@@ -234,33 +234,33 @@ void Window::populateMenubar() {
     CONNECT(action, triggered, &timeline, toggleLayerVisible);
   }*/
   layer->addSeparator();
-  ADD_ACTION(layer, "Layer Above", Qt::Key_W, sprite.timeline, layerAbove);
-  ADD_ACTION(layer, "Layer Below", Qt::Key_S, sprite.timeline, layerBelow);
+  ADD_ACTION(layer, "Layer Above", key_layer_above, sprite.timeline, layerAbove);
+  ADD_ACTION(layer, "Layer Below", key_layer_below, sprite.timeline, layerBelow);
   
   QMenu *frame = menubar->addMenu("Frame");
   frame->setFont(getGlobalFont());
-  ADD_ACTION(frame, "New Frame", Qt::ALT + Qt::Key_N, sprite.timeline, insertFrame);
-  ADD_ACTION(frame, "Delete Frame", Qt::ALT + Qt::Key_Backspace, sprite.timeline, removeFrame);
+  ADD_ACTION(frame, "New Frame", key_new_frame, sprite.timeline, insertFrame);
+  ADD_ACTION(frame, "Delete Frame", key_delete_frame, sprite.timeline, removeFrame);
   frame->addSeparator();
-  ADD_ACTION(frame, "Clear Cell", Qt::ALT + Qt::Key_C, sprite.timeline, clearCell);
-  ADD_ACTION(frame, "Extend Linked Cell", Qt::ALT + Qt::Key_E, sprite.timeline, extendCell);
-  ADD_ACTION(frame, "Split Linked Cell", Qt::ALT + Qt::Key_S, sprite.timeline, splitCell);
+  ADD_ACTION(frame, "Clear Cell", key_clear_cell, sprite.timeline, clearCell);
+  ADD_ACTION(frame, "Extend Linked Cell", key_extend_cell, sprite.timeline, extendCell);
+  ADD_ACTION(frame, "Split Linked Cell", key_split_cell, sprite.timeline, splitCell);
   frame->addSeparator();
-  ADD_ACTION(frame, "Next Frame", Qt::Key_D, sprite.timeline, nextFrame);
-  ADD_ACTION(frame, "Previous Frame", Qt::Key_A, sprite.timeline, prevFrame);
-  ADD_ACTION(frame, "Play Animation", Qt::Key_Space, *timeline, toggleAnimation);
+  ADD_ACTION(frame, "Next Frame", key_next_frame, sprite.timeline, nextFrame);
+  ADD_ACTION(frame, "Previous Frame", key_prev_frame, sprite.timeline, prevFrame);
+  ADD_ACTION(frame, "Play Animation", key_play_anim, *timeline, toggleAnimation);
   
   QMenu *selection = menubar->addMenu("Selection");
   selection->setFont(getGlobalFont());
-  ADD_ACTION(selection, "Clear", Qt::CTRL + Qt::Key_X, sprite.timeline, clearSelected);
-  ADD_ACTION(selection, "Copy", Qt::CTRL + Qt::Key_C, sprite.timeline, copySelected);
-  ADD_ACTION(selection, "Paste", Qt::CTRL + Qt::Key_V, sprite.timeline, pasteSelected);
+  ADD_ACTION(selection, "Clear", key_clear_selection, sprite.timeline, clearSelected);
+  ADD_ACTION(selection, "Copy", key_copy_selection, sprite.timeline, copySelected);
+  ADD_ACTION(selection, "Paste", key_paste_selection, sprite.timeline, pasteSelected);
   
   QMenu *pal = menubar->addMenu("Palette");
   pal->setFont(getGlobalFont());
-  ADD_ACTION(pal, "Reset", {}, *this, resetPalette);
-  ADD_ACTION(pal, "Open", {}, *this, openPaletteDialog);
-  ADD_ACTION(pal, "Save", {}, *this, savePaletteDialog);
+  ADD_ACTION(pal, "Reset", key_reset_palette, *this, resetPalette);
+  ADD_ACTION(pal, "Open", key_open_palette, *this, openPaletteDialog);
+  ADD_ACTION(pal, "Save", key_save_palette, *this, savePaletteDialog);
   
   menubar->adjustSize();
 }
