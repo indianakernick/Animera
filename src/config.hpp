@@ -323,19 +323,18 @@ constexpr Qt::MouseButton mouse_primary = Qt::LeftButton;
 constexpr Qt::MouseButton mouse_secondary = Qt::RightButton;
 constexpr Qt::MouseButton mouse_tertiary = Qt::MiddleButton;
 
-constexpr Qt::Key   key_primary = Qt::Key_Z;
-constexpr Qt::Key   key_secondary = Qt::Key_X;
-constexpr Qt::Key   key_tertiary = Qt::Key_C;
-constexpr Qt::Key   key_tool_up = Qt::Key_R;
-constexpr Qt::Key   key_tool_down = Qt::Key_F;
+constexpr Qt::Key   key_primary = Qt::Key_V;
+constexpr Qt::Key   key_secondary = Qt::Key_C;
+constexpr Qt::Key   key_tertiary = Qt::Key_X;
+constexpr Qt::Key   key_tool_up = Qt::Key_Q;
+constexpr Qt::Key   key_tool_down = Qt::Key_A;
 
 // editor
-constexpr Qt::Key   key_zoom_out = Qt::Key_Q;
-constexpr Qt::Key   key_zoom_in = Qt::Key_E;
-constexpr Qt::Key   key_clear = Qt::Key_V;
-constexpr Qt::Key   key_sample = Qt::Key_B;
-constexpr Qt::Key   key_undo = Qt::Key_N;
-constexpr Qt::Key   key_redo = Qt::Key_M;
+constexpr Qt::Key   key_zoom_out = Qt::Key_W;
+constexpr Qt::Key   key_zoom_in = Qt::Key_R;
+constexpr Qt::Key   key_sample = Qt::Key_Z;
+constexpr Qt::Key   key_undo = Qt::Key_G;
+constexpr Qt::Key   key_redo = Qt::Key_B;
 
 // brush
 constexpr IntRange  brsh_radius = {0, 64, 0};
@@ -371,8 +370,8 @@ inline const QString key_new_layer = "SHIFT+N";
 inline const QString key_delete_layer = "SHIFT+BACKSPACE";
 inline const QString key_move_layer_up = "SHIFT+UP";
 inline const QString key_move_layer_down = "SHIFT+DOWN";
-constexpr Qt::Key    key_layer_above = Qt::Key_W;
-constexpr Qt::Key    key_layer_below = Qt::Key_S;
+constexpr Qt::Key    key_layer_above = Qt::Key_E;
+constexpr Qt::Key    key_layer_below = Qt::Key_D;
 
 // frame
 inline const QString key_new_frame = "ALT+N";
@@ -380,8 +379,8 @@ inline const QString key_delete_frame = "ALT+BACKSPACE";
 inline const QString key_clear_cell = "ALT+C";
 inline const QString key_extend_cell = "ALT+E";
 inline const QString key_split_cell = "ALT+S";
-constexpr Qt::Key    key_next_frame = Qt::Key_D;
-constexpr Qt::Key    key_prev_frame = Qt::Key_A;
+constexpr Qt::Key    key_next_frame = Qt::Key_F;
+constexpr Qt::Key    key_prev_frame = Qt::Key_S;
 constexpr Qt::Key    key_play_anim = Qt::Key_Space;
 
 // selection

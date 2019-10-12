@@ -160,11 +160,6 @@ invesigate focus gain/loss and mouse events
 what's up the the height of the timeline?
   reduce to min then go fullscreen
 
-think about where you rest your fingers on the keyboard
-  use this to influence common key bindings
-  think about trackpad users and mouse users
-  think about people with fancy mice that have extra buttons
-
 more abstract tool interface
   use QImage::cacheKey to avoid emitChanges
   states, state transitions and state updates
