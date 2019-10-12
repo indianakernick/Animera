@@ -160,10 +160,6 @@ gradient tool
 
 would the user ever want to automatically adjust the scale of the editor?
 
-invesigate focus gain/loss and mouse events
-  do we always get a mouseUp after a mouseDown?
-  if we don't, the timeline might not get unlocked
-
 what's up the the height of the timeline?
   reduce to min then go fullscreen
 
