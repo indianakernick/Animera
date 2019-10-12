@@ -136,6 +136,13 @@ optimize the palette carefully
 palette index out of range
   we currently get an error from libpng and an incomplete png file (no IEND)
   need to handle this properly
+  maybe the palette should be resizable?
+    this would make it possible to export a small palette while preventing out
+    of range indicies
+  
+palette manipulation
+  reordering the palette could be useful
+  inserting or removing transparent blank from the start is especially useful
   
 compositing index images is broken
   it kind of gets weird if index 0 doesn't correspond to the color 0
@@ -170,3 +177,9 @@ more abstract tool interface
 more efficient status message updates
   there might be situations where the status bar is updated multiple times and
   only the last update is seen
+
+editor cursor update issues
+  it seems like the cursor will only update after a mouseMove event
+  cursor doesn't update when
+    zooming out of editor and mouse leaves
+    mouse enters editor while dragging
