@@ -107,8 +107,9 @@ private:
   }
   
   void checkMouseLeave() {
-    if (!rect().contains(pos)) {
+    if (!editor.rect().contains(pos)) {
       Q_EMIT mouseLeave();
+      clearFocus();
     }
   }
   
