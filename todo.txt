@@ -90,6 +90,7 @@ optimize LayerCells
   we need stable pointers to Cells
   std::deque keeps pointers stable if you insert or erase from either end
   are these guarantees enough?
+    how about using std::vector and emitting currCellChanged more often?
   in Timeline
     in a lot of places, we call changePos even through the position isn't changing
     this is because the address of the cell is changing
@@ -179,3 +180,12 @@ editor cursor update issues
   cursor doesn't update when
     zooming out of editor and mouse leaves
     mouse enters editor while dragging
+
+this is cool
+  https://github.com/plasma-umass/Mesh
+
+change -> set
+
+README
+  probably does what you need
+  it's free so why not give it a try
