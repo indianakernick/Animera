@@ -280,7 +280,7 @@ constexpr WidgetRect layer_text_rect = timelineTextBox(layer_width - cell_width 
 
 // ---------------------------- init canvas dialog -------------------------- //
 
-constexpr IntRange   init_size_range = {1, 65536, 128};
+constexpr IntRange   init_size_range = {1, 32768, 128};
 constexpr WidgetRect init_size_rect = textBoxRect(5);
 constexpr WidgetRect init_button_rect = textBoxRect(8);
 

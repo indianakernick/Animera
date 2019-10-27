@@ -28,7 +28,7 @@ void ControlsWidget::toggleAnimation() {
 
 void ControlsWidget::setDelay(const int delay) {
   animTimer.setInterval(delay);
-  delayBox->changeValue(delay);
+  delayBox->setValue(delay);
 }
 
 void ControlsWidget::toggleTimer() {

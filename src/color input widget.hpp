@@ -49,7 +49,7 @@ Q_SIGNALS:
   void valueChanged(int);
 
 public Q_SLOTS:
-  void changeValue(int);
+  void setValue(int);
 
 private Q_SLOTS:
   void textChanged();
@@ -72,7 +72,7 @@ Q_SIGNALS:
   void rgbaChanged(RGB, int);
 
 public Q_SLOTS:
-  void changeRgba(RGB, int);
+  void setRgba(RGB, int);
 
 private Q_SLOTS:
   void textChanged();

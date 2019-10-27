@@ -50,9 +50,9 @@ Q_SIGNALS:
   void hueChanged(int);
 
 public Q_SLOTS:
-  void changeHue(int);
-  void changeSV(int, int);
-  void changeHSV(HSV);
+  void setHue(int);
+  void setSV(int, int);
+  void setHSV(HSV);
   
 private:
   HSV color;
@@ -79,10 +79,10 @@ Q_SIGNALS:
   void alphaChanged(int);
 
 public Q_SLOTS:
-  void changeAlpha(int);
-  void changeHue(int);
-  void changeSV(int, int);
-  void changeHSV(HSV);
+  void setAlpha(int);
+  void setHue(int);
+  void setSV(int, int);
+  void setHSV(HSV);
   
 private:
   HSV color;
@@ -110,7 +110,7 @@ Q_SIGNALS:
   void grayChanged(int);
 
 public Q_SLOTS:
-  void changeGray(int);
+  void setGray(int);
 
 private:
   int gray;

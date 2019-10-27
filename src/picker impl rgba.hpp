@@ -27,15 +27,15 @@ public:
   void setColor(QRgb) override;
 
 private Q_SLOTS:
-  void changeSVfromGraph(int, int);
-  void changeSVfromBoxS(int);
-  void changeSVfromBoxV(int);
-  void changeAlpha(int);
-  void changeHue(int);
-  void changeRGBA(RGB, int);
-  void changeRed(int);
-  void changeGreen(int);
-  void changeBlue(int);
+  void setSVfromGraph(int, int);
+  void setSVfromBoxS(int);
+  void setSVfromBoxV(int);
+  void setAlpha(int);
+  void setHue(int);
+  void setRGBA(RGB, int);
+  void setRed(int);
+  void setGreen(int);
+  void setBlue(int);
 
 private:
   void changeRGB();

@@ -23,7 +23,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_ToolSelectWidget_t {
     QByteArrayData data[32];
-    char stringdata0[350];
+    char stringdata0[347];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -59,11 +59,11 @@ QT_MOC_LITERAL(23, 259, 10), // "setPalette"
 QT_MOC_LITERAL(24, 270, 12), // "PaletteCSpan"
 QT_MOC_LITERAL(25, 283, 10), // "initCanvas"
 QT_MOC_LITERAL(26, 294, 6), // "Format"
-QT_MOC_LITERAL(27, 301, 10), // "changeTool"
-QT_MOC_LITERAL(28, 312, 11), // "ToolWidget*"
-QT_MOC_LITERAL(29, 324, 5), // "Tool*"
-QT_MOC_LITERAL(30, 330, 8), // "lockTool"
-QT_MOC_LITERAL(31, 339, 10) // "unlockTool"
+QT_MOC_LITERAL(27, 301, 7), // "setTool"
+QT_MOC_LITERAL(28, 309, 11), // "ToolWidget*"
+QT_MOC_LITERAL(29, 321, 5), // "Tool*"
+QT_MOC_LITERAL(30, 327, 8), // "lockTool"
+QT_MOC_LITERAL(31, 336, 10) // "unlockTool"
 
     },
     "ToolSelectWidget\0cellModified\0\0"
@@ -74,9 +74,8 @@ QT_MOC_LITERAL(31, 339, 10) // "unlockTool"
     "mouseMove\0mouseUp\0keyPress\0Qt::Key\0"
     "setOverlay\0QImage*\0setCell\0Cell*\0"
     "setColors\0ToolColors\0setPalette\0"
-    "PaletteCSpan\0initCanvas\0Format\0"
-    "changeTool\0ToolWidget*\0Tool*\0lockTool\0"
-    "unlockTool"
+    "PaletteCSpan\0initCanvas\0Format\0setTool\0"
+    "ToolWidget*\0Tool*\0lockTool\0unlockTool"
 };
 #undef QT_MOC_LITERAL
 
@@ -167,7 +166,7 @@ void ToolSelectWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
         case 14: _t->setColors((*reinterpret_cast< ToolColors(*)>(_a[1]))); break;
         case 15: _t->setPalette((*reinterpret_cast< PaletteCSpan(*)>(_a[1]))); break;
         case 16: _t->initCanvas((*reinterpret_cast< Format(*)>(_a[1])),(*reinterpret_cast< QSize(*)>(_a[2]))); break;
-        case 17: _t->changeTool((*reinterpret_cast< ToolWidget*(*)>(_a[1])),(*reinterpret_cast< Tool*(*)>(_a[2]))); break;
+        case 17: _t->setTool((*reinterpret_cast< ToolWidget*(*)>(_a[1])),(*reinterpret_cast< Tool*(*)>(_a[2]))); break;
         case 18: _t->lockTool(); break;
         case 19: _t->unlockTool(); break;
         default: ;

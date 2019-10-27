@@ -134,7 +134,7 @@ private:
   QRgb getInitialColor() const override {
     return color;
   }
-  void changeColor(const QRgb newColor) override {
+  void setColor(const QRgb newColor) override {
     color = newColor;
     repaint();
     Q_EMIT paletteColorChanged();

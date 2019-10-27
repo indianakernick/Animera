@@ -94,7 +94,7 @@ NumberInputWidget::NumberInputWidget(
     boxValidator{parent, range, skipZero},
     skipZero{skipZero} {
   setValidator(&boxValidator);
-  changeValue(range.def);
+  setValue(range.def);
   CONNECT(this, textEdited,      this, textChanged);
   CONNECT(this, editingFinished, this, newValidValue);
 }
@@ -103,7 +103,7 @@ int NumberInputWidget::value() const {
   return val;
 }
 
-void NumberInputWidget::changeValue(const int num) {
+void NumberInputWidget::setValue(const int num) {
   val = num;
   setText(QString::number(val));
   boxValidator.updateValidValue(text());
@@ -159,7 +159,7 @@ HexInputWidget::HexInputWidget(
   QWidget *parent, const WidgetRect rect, const RGB rgb, const int a
 ) : TextInputWidget{parent, rect}, boxValidator{parent} {
   setValidator(&boxValidator);
-  changeRgba(rgb, a);
+  setRgba(rgb, a);
   CONNECT(this, textEdited,      this, textChanged);
   CONNECT(this, editingFinished, this, newValidValue);
 }
@@ -188,7 +188,7 @@ void fromString(const QString &string, RGB &rgb, int &a) {
 
 }
 
-void HexInputWidget::changeRgba(const RGB newRgb, const int newAlpha) {
+void HexInputWidget::setRgba(const RGB newRgb, const int newAlpha) {
   rgb = newRgb;
   alpha = newAlpha;
   setText(toString(rgb, alpha));

@@ -184,8 +184,6 @@ editor cursor update issues
 this is cool
   https://github.com/plasma-umass/Mesh
 
-change -> set
-
 README
   probably does what you need
   it's free so why not give it a try

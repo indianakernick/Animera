@@ -66,36 +66,36 @@ void PickerImplRGBA::setupLayout(QGridLayout *layout) {
 }
 
 void PickerImplRGBA::connectSignals() {
-  CONNECT(svGraph,     svChanged,    hueSlider,   changeSV);
-  CONNECT(hueSlider,   hueChanged,   svGraph,     changeHue);
-  CONNECT(boxH,        valueChanged, svGraph,     changeHue);
-  CONNECT(hueSlider,   hueChanged,   alphaSlider, changeHue);
-  CONNECT(svGraph,     svChanged,    alphaSlider, changeSV);
+  CONNECT(svGraph,     svChanged,    hueSlider,   setSV);
+  CONNECT(hueSlider,   hueChanged,   svGraph,     setHue);
+  CONNECT(boxH,        valueChanged, svGraph,     setHue);
+  CONNECT(hueSlider,   hueChanged,   alphaSlider, setHue);
+  CONNECT(svGraph,     svChanged,    alphaSlider, setSV);
 
-  CONNECT(hueSlider,   hueChanged,   alphaSlider, changeHue);
-  CONNECT(svGraph,     svChanged,    alphaSlider, changeSV);
+  CONNECT(hueSlider,   hueChanged,   alphaSlider, setHue);
+  CONNECT(svGraph,     svChanged,    alphaSlider, setSV);
   
-  CONNECT(alphaSlider, alphaChanged, boxA,        changeValue);
-  CONNECT(boxA,        valueChanged, alphaSlider, changeAlpha);
+  CONNECT(alphaSlider, alphaChanged, boxA,        setValue);
+  CONNECT(boxA,        valueChanged, alphaSlider, setAlpha);
   
-  CONNECT(hueSlider,   hueChanged,   boxH,        changeValue);
-  CONNECT(boxH,        valueChanged, hueSlider,   changeHue);
+  CONNECT(hueSlider,   hueChanged,   boxH,        setValue);
+  CONNECT(boxH,        valueChanged, hueSlider,   setHue);
   
-  CONNECT(hueSlider,   hueChanged,   this,        changeHue);
-  CONNECT(boxH,        valueChanged, this,        changeHue);
+  CONNECT(hueSlider,   hueChanged,   this,        setHue);
+  CONNECT(boxH,        valueChanged, this,        setHue);
   
-  CONNECT(svGraph,     svChanged,    this,        changeSVfromGraph);
-  CONNECT(boxS,        valueChanged, this,        changeSVfromBoxS);
-  CONNECT(boxV,        valueChanged, this,        changeSVfromBoxV);
+  CONNECT(svGraph,     svChanged,    this,        setSVfromGraph);
+  CONNECT(boxS,        valueChanged, this,        setSVfromBoxS);
+  CONNECT(boxV,        valueChanged, this,        setSVfromBoxV);
   
-  CONNECT(alphaSlider, alphaChanged, this,        changeAlpha);
-  CONNECT(boxA,        valueChanged, this,        changeAlpha);
+  CONNECT(alphaSlider, alphaChanged, this,        setAlpha);
+  CONNECT(boxA,        valueChanged, this,        setAlpha);
   
-  CONNECT(boxR,        valueChanged, this,        changeRed);
-  CONNECT(boxG,        valueChanged, this,        changeGreen);
-  CONNECT(boxB,        valueChanged, this,        changeBlue);
+  CONNECT(boxR,        valueChanged, this,        setRed);
+  CONNECT(boxG,        valueChanged, this,        setGreen);
+  CONNECT(boxB,        valueChanged, this,        setBlue);
   
-  CONNECT(boxHex,      rgbaChanged,  this,        changeRGBA);
+  CONNECT(boxHex,      rgbaChanged,  this,        setRGBA);
 }
 
 void PickerImplRGBA::setColor(const QRgb color) {
@@ -103,97 +103,97 @@ void PickerImplRGBA::setColor(const QRgb color) {
   colorRgb.g = qGreen(color);
   colorRgb.b = qBlue(color);
   alpha = qAlpha(color);
-  changeRGBA(colorRgb, alpha);
-  boxHex->changeRgba(colorRgb, alpha);
+  setRGBA(colorRgb, alpha);
+  boxHex->setRgba(colorRgb, alpha);
 }
 
-void PickerImplRGBA::changeSVfromGraph(const int sat, const int val) {
+void PickerImplRGBA::setSVfromGraph(const int sat, const int val) {
   colorHsv.s = sat;
   colorHsv.v = val;
-  Q_EMIT hueSlider->changeSV(sat, val);
-  Q_EMIT alphaSlider->changeSV(sat, val);
-  Q_EMIT boxS->changeValue(sat);
-  Q_EMIT boxV->changeValue(val);
+  Q_EMIT hueSlider->setSV(sat, val);
+  Q_EMIT alphaSlider->setSV(sat, val);
+  Q_EMIT boxS->setValue(sat);
+  Q_EMIT boxV->setValue(val);
   changeRGB();
 }
 
-void PickerImplRGBA::changeSVfromBoxS(const int sat) {
+void PickerImplRGBA::setSVfromBoxS(const int sat) {
   colorHsv.s = sat;
-  Q_EMIT hueSlider->changeSV(sat, colorHsv.v);
-  Q_EMIT alphaSlider->changeSV(sat, colorHsv.v);
-  Q_EMIT svGraph->changeSV(sat, colorHsv.v);
+  Q_EMIT hueSlider->setSV(sat, colorHsv.v);
+  Q_EMIT alphaSlider->setSV(sat, colorHsv.v);
+  Q_EMIT svGraph->setSV(sat, colorHsv.v);
   changeRGB();
 }
 
-void PickerImplRGBA::changeSVfromBoxV(const int val) {
+void PickerImplRGBA::setSVfromBoxV(const int val) {
   colorHsv.v = val;
-  Q_EMIT hueSlider->changeSV(colorHsv.s, val);
-  Q_EMIT alphaSlider->changeSV(colorHsv.s, val);
-  Q_EMIT svGraph->changeSV(colorHsv.s, val);
+  Q_EMIT hueSlider->setSV(colorHsv.s, val);
+  Q_EMIT alphaSlider->setSV(colorHsv.s, val);
+  Q_EMIT svGraph->setSV(colorHsv.s, val);
   changeRGB();
 }
 
-void PickerImplRGBA::changeAlpha(const int alp) {
+void PickerImplRGBA::setAlpha(const int alp) {
   alpha = alp;
-  Q_EMIT boxHex->changeRgba(colorRgb, alp);
+  Q_EMIT boxHex->setRgba(colorRgb, alp);
   changeColor();
 }
 
-void PickerImplRGBA::changeHue(const int hue) {
+void PickerImplRGBA::setHue(const int hue) {
   colorHsv.h = hue;
   changeRGB();
 }
 
-void PickerImplRGBA::changeRGBA(const RGB rgb, const int alp) {
+void PickerImplRGBA::setRGBA(const RGB rgb, const int alp) {
   colorRgb = rgb;
   alpha = alp;
   changeHSV();
-  Q_EMIT alphaSlider->changeAlpha(alp);
-  Q_EMIT boxA->changeValue(alp);
-  Q_EMIT boxR->changeValue(rgb.r);
-  Q_EMIT boxG->changeValue(rgb.g);
-  Q_EMIT boxB->changeValue(rgb.b);
+  Q_EMIT alphaSlider->setAlpha(alp);
+  Q_EMIT boxA->setValue(alp);
+  Q_EMIT boxR->setValue(rgb.r);
+  Q_EMIT boxG->setValue(rgb.g);
+  Q_EMIT boxB->setValue(rgb.b);
   changeColor();
 }
 
-void PickerImplRGBA::changeRed(const int red) {
+void PickerImplRGBA::setRed(const int red) {
   colorRgb.r = red;
   changeHSV();
-  Q_EMIT boxHex->changeRgba(colorRgb, alpha);
+  Q_EMIT boxHex->setRgba(colorRgb, alpha);
   changeColor();
 }
 
-void PickerImplRGBA::changeGreen(const int green) {
+void PickerImplRGBA::setGreen(const int green) {
   colorRgb.g = green;
   changeHSV();
-  Q_EMIT boxHex->changeRgba(colorRgb, alpha);
+  Q_EMIT boxHex->setRgba(colorRgb, alpha);
   changeColor();
 }
 
-void PickerImplRGBA::changeBlue(const int blue) {
+void PickerImplRGBA::setBlue(const int blue) {
   colorRgb.b = blue;
   changeHSV();
-  Q_EMIT boxHex->changeRgba(colorRgb, alpha);
+  Q_EMIT boxHex->setRgba(colorRgb, alpha);
   changeColor();
 }
 
 void PickerImplRGBA::changeRGB() {
   colorRgb = hsv2rgb(colorHsv);
-  Q_EMIT boxR->changeValue(colorRgb.r);
-  Q_EMIT boxG->changeValue(colorRgb.g);
-  Q_EMIT boxB->changeValue(colorRgb.b);
-  Q_EMIT boxHex->changeRgba(colorRgb, alpha);
+  Q_EMIT boxR->setValue(colorRgb.r);
+  Q_EMIT boxG->setValue(colorRgb.g);
+  Q_EMIT boxB->setValue(colorRgb.b);
+  Q_EMIT boxHex->setRgba(colorRgb, alpha);
   changeColor();
 }
 
 void PickerImplRGBA::changeHSV() {
   colorHsv = rgb2hsv(colorRgb);
-  Q_EMIT boxH->changeValue(colorHsv.h);
-  Q_EMIT boxS->changeValue(colorHsv.s);
-  Q_EMIT boxV->changeValue(colorHsv.v);
-  Q_EMIT hueSlider->changeHSV(colorHsv);
-  Q_EMIT alphaSlider->changeHSV(colorHsv);
-  Q_EMIT svGraph->changeHSV(colorHsv);
+  Q_EMIT boxH->setValue(colorHsv.h);
+  Q_EMIT boxS->setValue(colorHsv.s);
+  Q_EMIT boxV->setValue(colorHsv.v);
+  Q_EMIT hueSlider->setHSV(colorHsv);
+  Q_EMIT alphaSlider->setHSV(colorHsv);
+  Q_EMIT svGraph->setHSV(colorHsv);
 }
 
 void PickerImplRGBA::changeColor() {

@@ -43,7 +43,7 @@ void ColorPickerWidget::setColor(const QRgb color) {
 
 void ColorPickerWidget::setHandleColor(const QRgb color) {
   if (handle) {
-    handle->changeColor(color);
+    handle->setColor(color);
   }
 }
 

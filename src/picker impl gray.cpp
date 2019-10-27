@@ -33,7 +33,7 @@ void PickerImplGray::init(QWidget *parent) {
   const int value = toValue(gray);
   graySlider = new GraySliderWidget{parent};
   alphaSlider = new AlphaSliderWidget{parent};
-  alphaSlider->changeHSV({0, 0, value});
+  alphaSlider->setHSV({0, 0, value});
   boxA = new NumberInputWidget{parent, pick_number_rect, {0, 255, alpha}};
   boxY = new NumberInputWidget{parent, pick_number_rect, {0, 255, gray}};
   boxV = new NumberInputWidget{parent, pick_number_rect, {0, 100, value}};
@@ -54,14 +54,14 @@ void PickerImplGray::setupLayout(QGridLayout *layout) {
 }
 
 void PickerImplGray::connectSignals() {
-  CONNECT(graySlider,  grayChanged,  boxY,        changeValue);
-  CONNECT(boxY,        valueChanged, graySlider,  changeGray);
+  CONNECT(graySlider,  grayChanged,  boxY,        setValue);
+  CONNECT(boxY,        valueChanged, graySlider,  setGray);
 
   CONNECT(graySlider,  grayChanged,  this,        setGray);
   CONNECT(boxY,        valueChanged, this,        setGray);
   
-  CONNECT(alphaSlider, alphaChanged, boxA,        changeValue);
-  CONNECT(boxA,        valueChanged, alphaSlider, changeAlpha);
+  CONNECT(alphaSlider, alphaChanged, boxA,        setValue);
+  CONNECT(boxA,        valueChanged, alphaSlider, setAlpha);
   
   CONNECT(alphaSlider, alphaChanged, this,        setAlpha);
   CONNECT(boxA,        valueChanged, this,        setAlpha);
@@ -72,27 +72,27 @@ void PickerImplGray::connectSignals() {
 void PickerImplGray::setColor(const QRgb color) {
   gray = gfx::YA::gray(color);
   alpha = gfx::YA::alpha(color);
-  graySlider->changeGray(gray);
-  alphaSlider->changeAlpha(alpha);
-  boxA->changeValue(alpha);
-  boxY->changeValue(gray);
-  boxV->changeValue(toValue(gray));
+  graySlider->setGray(gray);
+  alphaSlider->setAlpha(alpha);
+  boxA->setValue(alpha);
+  boxY->setValue(gray);
+  boxV->setValue(toValue(gray));
   changeColor();
 }
 
 void PickerImplGray::setValue(const int newValue) {
   gray = toGray(newValue);
-  graySlider->changeGray(gray);
-  alphaSlider->changeHSV({0, 0, newValue});
-  boxY->changeValue(gray);
+  graySlider->setGray(gray);
+  alphaSlider->setHSV({0, 0, newValue});
+  boxY->setValue(gray);
   changeColor();
 }
 
 void PickerImplGray::setGray(const int newGray) {
   gray = newGray;
   const int value = toValue(gray);
-  boxV->changeValue(value);
-  alphaSlider->changeHSV({0, 0, value});
+  boxV->setValue(value);
+  alphaSlider->setHSV({0, 0, value});
   changeColor();
 }
 

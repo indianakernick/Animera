@@ -104,19 +104,19 @@ HueSliderWidget::HueSliderWidget(QWidget *parent)
   plotGraph();
 }
 
-void HueSliderWidget::changeHue(const int hue) {
+void HueSliderWidget::setHue(const int hue) {
   color.h = hue;
   repaint();
 }
 
-void HueSliderWidget::changeSV(const int sat, const int val) {
+void HueSliderWidget::setSV(const int sat, const int val) {
   color.s = sat;
   color.v = val;
   plotGraph();
   repaint();
 }
 
-void HueSliderWidget::changeHSV(const HSV hsv) {
+void HueSliderWidget::setHSV(const HSV hsv) {
   color = hsv;
   plotGraph();
   repaint();
@@ -176,25 +176,25 @@ AlphaSliderWidget::AlphaSliderWidget(QWidget *parent)
   plotGraph();
 }
 
-void AlphaSliderWidget::changeAlpha(const int newAlpha) {
+void AlphaSliderWidget::setAlpha(const int newAlpha) {
   alpha = newAlpha;
   repaint();
 }
 
-void AlphaSliderWidget::changeHue(const int hue) {
+void AlphaSliderWidget::setHue(const int hue) {
   color.h = hue;
   plotGraph();
   repaint();
 }
 
-void AlphaSliderWidget::changeSV(const int sat, const int val) {
+void AlphaSliderWidget::setSV(const int sat, const int val) {
   color.s = sat;
   color.v = val;
   plotGraph();
   repaint();
 }
 
-void AlphaSliderWidget::changeHSV(const HSV hsv) {
+void AlphaSliderWidget::setHSV(const HSV hsv) {
   color = hsv;
   plotGraph();
   repaint();
@@ -202,7 +202,7 @@ void AlphaSliderWidget::changeHSV(const HSV hsv) {
 
 namespace {
 
-QRgb setAlpha(const QRgb color, const int alpha) {
+QRgb setColorAlpha(const QRgb color, const int alpha) {
   return qPremultiply(qRgba(qRed(color), qGreen(color), qBlue(color), alpha));
 }
 
@@ -214,7 +214,7 @@ void AlphaSliderWidget::plotGraph() {
   for (QRgb &pixel : *gfx::begin(makeSurface<QRgb>(graph))) {
     // can't use alp2pix here
     const int alp = qRound(idx++ * 255.0 / (pick_slider_rect.inner().width() - 1));
-    pixel = setAlpha(rgb, alp);
+    pixel = setColorAlpha(rgb, alp);
   }
 }
 
@@ -265,7 +265,7 @@ GraySliderWidget::GraySliderWidget(QWidget *parent)
   plotGraph();
 }
 
-void GraySliderWidget::changeGray(const int newGray) {
+void GraySliderWidget::setGray(const int newGray) {
   gray = newGray;
   repaint();
 }

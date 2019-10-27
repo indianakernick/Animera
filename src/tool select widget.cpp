@@ -127,7 +127,7 @@ void ToolSelectWidget::setOverlay(QImage *overlay) {
 
 void ToolSelectWidget::setCell(Cell *cell) {
   ctx.cell = cell;
-  currTool.changeCell(cell);
+  currTool.setCell(cell);
   if (mouseIn) currTool.mouseMove();
 }
 
@@ -144,9 +144,9 @@ void ToolSelectWidget::initCanvas(const Format format, const QSize size) {
   ctx.size = size;
 }
 
-void ToolSelectWidget::changeTool(ToolWidget *widget, Tool *tool) {
+void ToolSelectWidget::setTool(ToolWidget *widget, Tool *tool) {
   currWidget = widget;
-  currTool.changeTool(tool);
+  currTool.setTool(tool);
   if (mouseIn) currTool.mouseMove();
 }
 
@@ -206,7 +206,7 @@ void ToolSelectWidget::connectSignals() {
   CONNECT(ctx, lockRequested,   this, lockTool);
   CONNECT(ctx, unlockRequested, this, unlockTool);
   for (ToolWidget *tool : tools) {
-    CONNECT(tool, shouldChangeTool, this, changeTool);
+    CONNECT(tool, shouldChangeTool, this, setTool);
   }
   tools[0]->click();
 }

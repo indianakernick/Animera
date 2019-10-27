@@ -23,7 +23,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_NumberInputWidget_t {
     QByteArrayData data[6];
-    char stringdata0[70];
+    char stringdata0[67];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -35,13 +35,13 @@ static const qt_meta_stringdata_NumberInputWidget_t qt_meta_stringdata_NumberInp
 QT_MOC_LITERAL(0, 0, 17), // "NumberInputWidget"
 QT_MOC_LITERAL(1, 18, 12), // "valueChanged"
 QT_MOC_LITERAL(2, 31, 0), // ""
-QT_MOC_LITERAL(3, 32, 11), // "changeValue"
-QT_MOC_LITERAL(4, 44, 11), // "textChanged"
-QT_MOC_LITERAL(5, 56, 13) // "newValidValue"
+QT_MOC_LITERAL(3, 32, 8), // "setValue"
+QT_MOC_LITERAL(4, 41, 11), // "textChanged"
+QT_MOC_LITERAL(5, 53, 13) // "newValidValue"
 
     },
     "NumberInputWidget\0valueChanged\0\0"
-    "changeValue\0textChanged\0newValidValue"
+    "setValue\0textChanged\0newValidValue"
 };
 #undef QT_MOC_LITERAL
 
@@ -84,7 +84,7 @@ void NumberInputWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, in
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->valueChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 1: _t->changeValue((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 1: _t->setValue((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 2: _t->textChanged(); break;
         case 3: _t->newValidValue(); break;
         default: ;
@@ -149,7 +149,7 @@ void NumberInputWidget::valueChanged(int _t1)
 }
 struct qt_meta_stringdata_HexInputWidget_t {
     QByteArrayData data[7];
-    char stringdata0[69];
+    char stringdata0[66];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -162,13 +162,13 @@ QT_MOC_LITERAL(0, 0, 14), // "HexInputWidget"
 QT_MOC_LITERAL(1, 15, 11), // "rgbaChanged"
 QT_MOC_LITERAL(2, 27, 0), // ""
 QT_MOC_LITERAL(3, 28, 3), // "RGB"
-QT_MOC_LITERAL(4, 32, 10), // "changeRgba"
-QT_MOC_LITERAL(5, 43, 11), // "textChanged"
-QT_MOC_LITERAL(6, 55, 13) // "newValidValue"
+QT_MOC_LITERAL(4, 32, 7), // "setRgba"
+QT_MOC_LITERAL(5, 40, 11), // "textChanged"
+QT_MOC_LITERAL(6, 52, 13) // "newValidValue"
 
     },
-    "HexInputWidget\0rgbaChanged\0\0RGB\0"
-    "changeRgba\0textChanged\0newValidValue"
+    "HexInputWidget\0rgbaChanged\0\0RGB\0setRgba\0"
+    "textChanged\0newValidValue"
 };
 #undef QT_MOC_LITERAL
 
@@ -211,7 +211,7 @@ void HexInputWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->rgbaChanged((*reinterpret_cast< RGB(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
-        case 1: _t->changeRgba((*reinterpret_cast< RGB(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
+        case 1: _t->setRgba((*reinterpret_cast< RGB(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
         case 2: _t->textChanged(); break;
         case 3: _t->newValidValue(); break;
         default: ;

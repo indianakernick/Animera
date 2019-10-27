@@ -121,36 +121,6 @@ void Palette::initDefault() {
   change();
 }
 
-namespace {
-
-/*void read_PLTE_tRNS(png_structp png, png_infop info, PaletteSpan colors) {
-  png_color *plte;
-  int plteSize;
-  if (png_get_PLTE(png, info, &plte, &plteSize) != PNG_INFO_PLTE) {
-    pngError(png, "Missing PLTE chunk");
-  }
-  png_byte *trns;
-  int trnsSize;
-  if (png_get_tRNS(png, info, &trns, &trnsSize, nullptr) != PNG_INFO_tRNS) {
-    pngError(png, "Missing tRNS chunk");
-  }
-  if (plteSize != trnsSize) {
-    pngError(png, "Differing PLTE and tRNS chunk sizes");
-  }
-  if (plteSize < 1 || plteSize > pal_colors) {
-    pngError(png, "PLTE chunk size out of range");
-  }
-  for (size_t i = 0; i != static_cast<size_t>(plteSize); ++i) {
-    const Color color = {plte[i].red, plte[i].green, plte[i].blue, trns[i]};
-    colors[i] = ARGB::pixel(color);
-  }
-  for (size_t i = plteSize; i != pal_colors; ++i) {
-    colors[i] = 0;
-  }
-}*/
-
-}
-
 Error Palette::serialize(QIODevice &dev) const {
   return writePLTE(dev, getUsedSpan(colors), canvasFormat);
 }

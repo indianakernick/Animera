@@ -46,7 +46,7 @@ public Q_SLOTS:
   void initCanvas(Format, QSize);
   
 private Q_SLOTS:
-  void changeTool(ToolWidget *, Tool *);
+  void setTool(ToolWidget *, Tool *);
   void lockTool();
   void unlockTool();
   

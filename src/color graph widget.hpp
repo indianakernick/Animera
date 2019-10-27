@@ -22,9 +22,9 @@ Q_SIGNALS:
   void svChanged(int, int);
 
 public Q_SLOTS:
-  void changeHue(int);
-  void changeSV(int, int);
-  void changeHSV(HSV);
+  void setHue(int);
+  void setSV(int, int);
+  void setHSV(HSV);
 
 private:
   QImage graph;

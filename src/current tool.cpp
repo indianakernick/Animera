@@ -8,14 +8,14 @@
 
 #include "current tool.hpp"
 
-void CurrentTool::changeTool(Tool *newTool) {
+void CurrentTool::setTool(Tool *newTool) {
   assert(newTool);
   detach();
   tool = newTool;
   attach();
 }
 
-void CurrentTool::changeCell(Cell *newCell) {
+void CurrentTool::setCell(Cell *newCell) {
   assert(newCell);
   detach();
   cell = newCell;

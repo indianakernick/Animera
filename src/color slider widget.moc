@@ -23,7 +23,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_HueSliderWidget_t {
     QByteArrayData data[7];
-    char stringdata0[61];
+    char stringdata0[52];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -35,14 +35,14 @@ static const qt_meta_stringdata_HueSliderWidget_t qt_meta_stringdata_HueSliderWi
 QT_MOC_LITERAL(0, 0, 15), // "HueSliderWidget"
 QT_MOC_LITERAL(1, 16, 10), // "hueChanged"
 QT_MOC_LITERAL(2, 27, 0), // ""
-QT_MOC_LITERAL(3, 28, 9), // "changeHue"
-QT_MOC_LITERAL(4, 38, 8), // "changeSV"
-QT_MOC_LITERAL(5, 47, 9), // "changeHSV"
-QT_MOC_LITERAL(6, 57, 3) // "HSV"
+QT_MOC_LITERAL(3, 28, 6), // "setHue"
+QT_MOC_LITERAL(4, 35, 5), // "setSV"
+QT_MOC_LITERAL(5, 41, 6), // "setHSV"
+QT_MOC_LITERAL(6, 48, 3) // "HSV"
 
     },
-    "HueSliderWidget\0hueChanged\0\0changeHue\0"
-    "changeSV\0changeHSV\0HSV"
+    "HueSliderWidget\0hueChanged\0\0setHue\0"
+    "setSV\0setHSV\0HSV"
 };
 #undef QT_MOC_LITERAL
 
@@ -85,9 +85,9 @@ void HueSliderWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int 
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->hueChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 1: _t->changeHue((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 2: _t->changeSV((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
-        case 3: _t->changeHSV((*reinterpret_cast< HSV(*)>(_a[1]))); break;
+        case 1: _t->setHue((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 2: _t->setSV((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
+        case 3: _t->setHSV((*reinterpret_cast< HSV(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -150,7 +150,7 @@ void HueSliderWidget::hueChanged(int _t1)
 }
 struct qt_meta_stringdata_AlphaSliderWidget_t {
     QByteArrayData data[8];
-    char stringdata0[77];
+    char stringdata0[65];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -162,16 +162,15 @@ static const qt_meta_stringdata_AlphaSliderWidget_t qt_meta_stringdata_AlphaSlid
 QT_MOC_LITERAL(0, 0, 17), // "AlphaSliderWidget"
 QT_MOC_LITERAL(1, 18, 12), // "alphaChanged"
 QT_MOC_LITERAL(2, 31, 0), // ""
-QT_MOC_LITERAL(3, 32, 11), // "changeAlpha"
-QT_MOC_LITERAL(4, 44, 9), // "changeHue"
-QT_MOC_LITERAL(5, 54, 8), // "changeSV"
-QT_MOC_LITERAL(6, 63, 9), // "changeHSV"
-QT_MOC_LITERAL(7, 73, 3) // "HSV"
+QT_MOC_LITERAL(3, 32, 8), // "setAlpha"
+QT_MOC_LITERAL(4, 41, 6), // "setHue"
+QT_MOC_LITERAL(5, 48, 5), // "setSV"
+QT_MOC_LITERAL(6, 54, 6), // "setHSV"
+QT_MOC_LITERAL(7, 61, 3) // "HSV"
 
     },
     "AlphaSliderWidget\0alphaChanged\0\0"
-    "changeAlpha\0changeHue\0changeSV\0changeHSV\0"
-    "HSV"
+    "setAlpha\0setHue\0setSV\0setHSV\0HSV"
 };
 #undef QT_MOC_LITERAL
 
@@ -216,10 +215,10 @@ void AlphaSliderWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, in
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->alphaChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 1: _t->changeAlpha((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 2: _t->changeHue((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 3: _t->changeSV((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
-        case 4: _t->changeHSV((*reinterpret_cast< HSV(*)>(_a[1]))); break;
+        case 1: _t->setAlpha((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 2: _t->setHue((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 3: _t->setSV((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
+        case 4: _t->setHSV((*reinterpret_cast< HSV(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -282,7 +281,7 @@ void AlphaSliderWidget::alphaChanged(int _t1)
 }
 struct qt_meta_stringdata_GraySliderWidget_t {
     QByteArrayData data[4];
-    char stringdata0[41];
+    char stringdata0[38];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -294,10 +293,10 @@ static const qt_meta_stringdata_GraySliderWidget_t qt_meta_stringdata_GraySlider
 QT_MOC_LITERAL(0, 0, 16), // "GraySliderWidget"
 QT_MOC_LITERAL(1, 17, 11), // "grayChanged"
 QT_MOC_LITERAL(2, 29, 0), // ""
-QT_MOC_LITERAL(3, 30, 10) // "changeGray"
+QT_MOC_LITERAL(3, 30, 7) // "setGray"
 
     },
-    "GraySliderWidget\0grayChanged\0\0changeGray"
+    "GraySliderWidget\0grayChanged\0\0setGray"
 };
 #undef QT_MOC_LITERAL
 
@@ -336,7 +335,7 @@ void GraySliderWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->grayChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 1: _t->changeGray((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 1: _t->setGray((*reinterpret_cast< int(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {

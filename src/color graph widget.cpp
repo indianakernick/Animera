@@ -26,19 +26,19 @@ SVGraphWidget::SVGraphWidget(QWidget *parent)
   show();
 }
 
-void SVGraphWidget::changeHue(const int hue) {
+void SVGraphWidget::setHue(const int hue) {
   color.h = hue;
   plotGraph(hue);
   repaint();
 }
 
-void SVGraphWidget::changeSV(const int sat, const int val) {
+void SVGraphWidget::setSV(const int sat, const int val) {
   color.s = sat;
   color.v = val;
   repaint();
 }
 
-void SVGraphWidget::changeHSV(const HSV hsv) {
+void SVGraphWidget::setHSV(const HSV hsv) {
   color = hsv;
   plotGraph(hsv.h);
   repaint();

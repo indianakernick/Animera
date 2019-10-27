@@ -13,8 +13,8 @@
 
 class CurrentTool {
 public:
-  void changeTool(Tool *);
-  void changeCell(Cell *);
+  void setTool(Tool *);
+  void setCell(Cell *);
   
   void mouseLeave();
   void mouseDown(QPoint, ButtonType);

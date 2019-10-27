@@ -18,7 +18,7 @@ protected:
 
 public:
   virtual QRgb getInitialColor() const = 0;
-  virtual void changeColor(QRgb) = 0;
+  virtual void setColor(QRgb) = 0;
   virtual QString getName() const = 0;
   virtual void detach() = 0;
 };

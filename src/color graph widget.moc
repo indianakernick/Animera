@@ -23,7 +23,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_SVGraphWidget_t {
     QByteArrayData data[7];
-    char stringdata0[58];
+    char stringdata0[49];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -35,14 +35,14 @@ static const qt_meta_stringdata_SVGraphWidget_t qt_meta_stringdata_SVGraphWidget
 QT_MOC_LITERAL(0, 0, 13), // "SVGraphWidget"
 QT_MOC_LITERAL(1, 14, 9), // "svChanged"
 QT_MOC_LITERAL(2, 24, 0), // ""
-QT_MOC_LITERAL(3, 25, 9), // "changeHue"
-QT_MOC_LITERAL(4, 35, 8), // "changeSV"
-QT_MOC_LITERAL(5, 44, 9), // "changeHSV"
-QT_MOC_LITERAL(6, 54, 3) // "HSV"
+QT_MOC_LITERAL(3, 25, 6), // "setHue"
+QT_MOC_LITERAL(4, 32, 5), // "setSV"
+QT_MOC_LITERAL(5, 38, 6), // "setHSV"
+QT_MOC_LITERAL(6, 45, 3) // "HSV"
 
     },
-    "SVGraphWidget\0svChanged\0\0changeHue\0"
-    "changeSV\0changeHSV\0HSV"
+    "SVGraphWidget\0svChanged\0\0setHue\0setSV\0"
+    "setHSV\0HSV"
 };
 #undef QT_MOC_LITERAL
 
@@ -85,9 +85,9 @@ void SVGraphWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _i
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->svChanged((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
-        case 1: _t->changeHue((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 2: _t->changeSV((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
-        case 3: _t->changeHSV((*reinterpret_cast< HSV(*)>(_a[1]))); break;
+        case 1: _t->setHue((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 2: _t->setSV((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
+        case 3: _t->setHSV((*reinterpret_cast< HSV(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
