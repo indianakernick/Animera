@@ -290,7 +290,7 @@ Error writeCDAT(QIODevice &dev, const QImage &image, const Format format) try {
   writer.begin(chunk_cell_data);
   
   int rowIdx = 0;
-  uint32_t remainingChunk = max_chunk_size;
+  uint32_t remainingChunk = ~uint32_t{};
   
   do {
     if (stream.avail_in == 0 && rowIdx < image.height()) {
@@ -300,17 +300,10 @@ Error writeCDAT(QIODevice &dev, const QImage &image, const Format format) try {
       ++rowIdx;
     }
     if (stream.avail_out == 0) {
-      if (remainingChunk < outBuffSize) {
-        static_assert(max_chunk_size > file_buff_size);
-        writer.writeString(outBuff.data(), remainingChunk);
-        writer.end();
-        writer.begin(chunk_cell_data);
-        writer.writeString(outBuff.data() + remainingChunk, outBuffSize - remainingChunk);
-        remainingChunk = max_chunk_size - outBuffSize + remainingChunk;
-      } else {
-        writer.writeString(outBuff.data(), outBuffSize);
-        remainingChunk -= outBuffSize;
-      }
+      // This situation is near impossible. This might as well be an assert
+      if (remainingChunk < outBuffSize) return "Chunk overflow";
+      writer.writeString(outBuff.data(), outBuffSize);
+      remainingChunk -= outBuffSize;
       stream.next_out = outBuff.data();
       stream.avail_out = outBuffSize;
     }
@@ -485,7 +478,7 @@ Error readCDAT(QIODevice &dev, QImage &image, const Format format) try {
   stream.avail_out = outBuffSize;
   
   ChunkReader reader{dev};
-  ChunkStart start = reader.begin();
+  const ChunkStart start = reader.begin();
   if (Error err = expectedName(start, chunk_cell_data); err) {
     return err;
   }
@@ -494,21 +487,11 @@ Error readCDAT(QIODevice &dev, QImage &image, const Format format) try {
   uint32_t remainingChunk = start.length;
   
   do {
-    if (stream.avail_in == 0) {
-      if (remainingChunk == 0 && (stream.avail_out > 0 || rowIdx < image.height())) {
-        if (Error err = reader.end(); err) return err;
-        start = reader.begin();
-        if (Error err = expectedName(start, chunk_cell_data); err) {
-          return err;
-        }
-        remainingChunk = start.length;
-      }
-      if (remainingChunk != 0) {
-        stream.next_in = inBuff.data();
-        stream.avail_in = std::min(inBuffSize, remainingChunk);
-        remainingChunk -= stream.avail_in;
-        reader.readString(inBuff.data(), stream.avail_in);
-      }
+    if (stream.avail_in == 0 && remainingChunk != 0) {
+      stream.next_in = inBuff.data();
+      stream.avail_in = std::min(inBuffSize, remainingChunk);
+      remainingChunk -= stream.avail_in;
+      reader.readString(inBuff.data(), stream.avail_in);
     }
     if (stream.avail_out == 0 && rowIdx < image.height()) {
       copyFromByteOrder(image.scanLine(rowIdx), outBuff.data(), outBuffSize, format);

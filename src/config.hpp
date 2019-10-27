@@ -315,7 +315,6 @@ constexpr char chunk_anim_end[chunk_name_len] = NAME("AEND");
 
 constexpr size_t file_buff_size = 1 << 15;
 constexpr size_t file_int_size = 4;
-constexpr uint32_t max_chunk_size = ~uint32_t{};
 
 static_assert(sizeof(int) >= sizeof(uint32_t));
 
