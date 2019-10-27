@@ -28,7 +28,9 @@ private:
   QImage image;
   QImage xformed;
   CellRect rect;
+  QSize size;
   
+  void initImages();
   QSize getXformedSize() const;
   void setImageFrom(const Cell &);
   void setImageFrom(const Frame &);

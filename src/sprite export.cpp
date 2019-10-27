@@ -25,9 +25,8 @@ Exporter::Exporter(
 ) : options{options},
     palette{palette},
     format{format},
-    image{size, qimageFormat(format)},
-    xformed{getXformedSize(), qimageFormat(format)},
-    rect{empty_rect} {}
+    rect{empty_rect},
+    size{size} {}
 
 void Exporter::setRect(
   const LayerIdx layerCount,
@@ -64,6 +63,7 @@ Error Exporter::exportSprite(const std::vector<Layer> &layers) {
     rect.maxL != empty_rect.maxL ||
     rect.maxF != empty_rect.maxF
   );
+  initImages();
   if (composited(options.layerSelect)) {
     return exportFrames(layers);
   } else {
@@ -71,15 +71,24 @@ Error Exporter::exportSprite(const std::vector<Layer> &layers) {
   }
 }
 
+void Exporter::initImages() {
+  Format imageFormat = format;
+  if (composited(options.layerSelect) && format != Format::gray) {
+    imageFormat = Format::rgba;
+  }
+  image = {size, qimageFormat(imageFormat)};
+  xformed = {getXformedSize(), qimageFormat(imageFormat)};
+}
+
 QSize Exporter::getXformedSize() const {
   if (options.scaleX == 1 && options.scaleY == 1 && options.angle == 0) {
     return {0, 0};
   }
-  QSize size;
-  size.setWidth(image.width() * std::abs(options.scaleX));
-  size.setHeight(image.height() * std::abs(options.scaleY));
-  size = convert(gfx::rotateSize(convert(size), options.angle));
-  return size;
+  QSize xformedSize;
+  xformedSize.setWidth(image.width() * std::abs(options.scaleX));
+  xformedSize.setHeight(image.height() * std::abs(options.scaleY));
+  xformedSize = convert(gfx::rotateSize(convert(xformedSize), options.angle));
+  return xformedSize;
 }
 
 void Exporter::setImageFrom(const Cell &cell) {
