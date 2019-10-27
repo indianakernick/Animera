@@ -148,7 +148,7 @@ Error writeGray(QIODevice &dev, const PaletteCSpan colors) try {
   return e.what();
 }
 
-Error checkStart(ChunkStart start, const int multiple) {
+Error checkPaletteStart(ChunkStart start, const int multiple) {
   if (Error err = expectedName(start, chunk_palette); err) return err;
   if (start.length % multiple != 0 || start.length / multiple > pal_colors) {
     QString msg = "Invalid ";
@@ -163,7 +163,7 @@ Error checkStart(ChunkStart start, const int multiple) {
 Error readRgba(QIODevice &dev, const PaletteSpan colors) try {
   ChunkReader reader{dev};
   const ChunkStart start = reader.begin();
-  if (Error err = checkStart(start, 4); err) return err;
+  if (Error err = checkPaletteStart(start, 4); err) return err;
   auto iter = colors.begin();
   const auto end = colors.begin() + start.length / 4;
   for (; iter != end; ++iter) {
@@ -184,7 +184,7 @@ Error readRgba(QIODevice &dev, const PaletteSpan colors) try {
 Error readGray(QIODevice &dev, const PaletteSpan colors) try {
   ChunkReader reader{dev};
   const ChunkStart start = reader.begin();
-  if (Error err = checkStart(start, 2); err) return err;
+  if (Error err = checkPaletteStart(start, 2); err) return err;
   auto iter = colors.begin();
   const auto end = colors.begin() + start.length / 2;
   for (; iter != end; ++iter) {
@@ -267,15 +267,13 @@ Error writeCHDR(QIODevice &dev, const CellSpan &span) try {
 }
 
 Error writeCDAT(QIODevice &dev, const QImage &image, const Format format) try {
+  static_assert(sizeof(uInt) >= sizeof(uint32_t));
+  
   assert(!image.isNull());
   const uint32_t outBuffSize = file_buff_size;
   std::vector<Bytef> outBuff(outBuffSize);
   const uint32_t inBuffSize = image.width() * byteDepth(format);
   std::vector<Bytef> inBuff(inBuffSize);
-  
-  // TODO: avoid overflowing uint32_t
-  // might need to reduce maximum image size
-  // or split the image data into multiple chunks
   
   z_stream stream;
   stream.zalloc = nullptr;
@@ -292,6 +290,7 @@ Error writeCDAT(QIODevice &dev, const QImage &image, const Format format) try {
   writer.begin(chunk_cell_data);
   
   int rowIdx = 0;
+  uint32_t remainingChunk = max_chunk_size;
   
   do {
     if (stream.avail_in == 0 && rowIdx < image.height()) {
@@ -301,7 +300,17 @@ Error writeCDAT(QIODevice &dev, const QImage &image, const Format format) try {
       ++rowIdx;
     }
     if (stream.avail_out == 0) {
-      writer.writeString(outBuff.data(), outBuffSize);
+      if (remainingChunk < outBuffSize) {
+        static_assert(max_chunk_size > file_buff_size);
+        writer.writeString(outBuff.data(), remainingChunk);
+        writer.end();
+        writer.begin(chunk_cell_data);
+        writer.writeString(outBuff.data() + remainingChunk, outBuffSize - remainingChunk);
+        remainingChunk = max_chunk_size - outBuffSize + remainingChunk;
+      } else {
+        writer.writeString(outBuff.data(), outBuffSize);
+        remainingChunk -= outBuffSize;
+      }
       stream.next_out = outBuff.data();
       stream.avail_out = outBuffSize;
     }
@@ -345,17 +354,25 @@ Error readAHDR(QIODevice &dev, SpriteInfo &info) try {
   const ChunkStart start = reader.begin();
   if (Error err = expectedName(start, chunk_anim_header); err) return err;
   if (Error err = expectedLength(start, 5 * file_int_size + 1); err) return err;
+  
   info.width = reader.readInt();
-  if (info.width <= 0) return "Negative canvas width";
-  info.height = reader.readInt();
-  if (info.height <= 0) return "Negative canvas height";
-  info.layers = static_cast<LayerIdx>(reader.readInt());
-  info.frames = static_cast<FrameIdx>(reader.readInt());
-  if (+info.frames < 0) return "Negative frame count";
-  info.delay = reader.readInt();
-  if (info.delay < ctrl_delay.min || info.delay > ctrl_delay.max) {
-    return "Out-of-range animation delay";
+  if (info.width <= 0 || max_image_width < info.width) {
+    return "Canvas width is out-of-range";
   }
+  info.height = reader.readInt();
+  if (info.height <= 0 || max_image_height < info.height) {
+    return "Canvas height is out-of-range";
+  }
+  
+  info.layers = static_cast<LayerIdx>(reader.readInt());
+  if (+info.layers < 0) return "Layer count is out-of-range";
+  info.frames = static_cast<FrameIdx>(reader.readInt());
+  if (+info.frames < 0) return "Frame count is out-of-range";
+  info.delay = reader.readInt();
+  if (info.delay < ctrl_delay.min || ctrl_delay.max < info.delay) {
+    return "Animation delay is out-of-range";
+  }
+  
   const uint8_t readFormat = reader.readByte();
   switch (readFormat) {
     case formatByte(Format::rgba):
@@ -370,6 +387,7 @@ Error readAHDR(QIODevice &dev, SpriteInfo &info) try {
     default:
       return "Invalid canvas format " + QString::number(readFormat);
   }
+  
   if (Error err = reader.end(); err) return err;
   return {};
 } catch (FileIOError &e) {
@@ -436,9 +454,9 @@ Error readCHDR(QIODevice &dev, CellSpan &span, const Format format) try {
     const int x = reader.readInt();
     const int y = reader.readInt();
     const int width = reader.readInt();
-    if (width <= 0) return "Negative cell width";
+    if (width <= 0 || max_image_width < width) return "Cell width out-of-range";
     const int height = reader.readInt();
-    if (height <= 0) return "Negative cell height";
+    if (height <= 0 || max_image_height < height) return "Cell height out-of-range";
     span.cell->img = {width, height, qimageFormat(format)};
     span.cell->pos = {x, y};
   }
@@ -467,7 +485,7 @@ Error readCDAT(QIODevice &dev, QImage &image, const Format format) try {
   stream.avail_out = outBuffSize;
   
   ChunkReader reader{dev};
-  const ChunkStart start = reader.begin();
+  ChunkStart start = reader.begin();
   if (Error err = expectedName(start, chunk_cell_data); err) {
     return err;
   }
@@ -476,11 +494,21 @@ Error readCDAT(QIODevice &dev, QImage &image, const Format format) try {
   uint32_t remainingChunk = start.length;
   
   do {
-    if (stream.avail_in == 0 && remainingChunk != 0) {
-      stream.next_in = inBuff.data();
-      stream.avail_in = std::min(inBuffSize, remainingChunk);
-      remainingChunk -= stream.avail_in;
-      reader.readString(inBuff.data(), stream.avail_in);
+    if (stream.avail_in == 0) {
+      if (remainingChunk == 0 && (stream.avail_out > 0 || rowIdx < image.height())) {
+        if (Error err = reader.end(); err) return err;
+        start = reader.begin();
+        if (Error err = expectedName(start, chunk_cell_data); err) {
+          return err;
+        }
+        remainingChunk = start.length;
+      }
+      if (remainingChunk != 0) {
+        stream.next_in = inBuff.data();
+        stream.avail_in = std::min(inBuffSize, remainingChunk);
+        remainingChunk -= stream.avail_in;
+        reader.readString(inBuff.data(), stream.avail_in);
+      }
     }
     if (stream.avail_out == 0 && rowIdx < image.height()) {
       copyFromByteOrder(image.scanLine(rowIdx), outBuff.data(), outBuffSize, format);
@@ -499,15 +527,15 @@ Error readCDAT(QIODevice &dev, QImage &image, const Format format) try {
   
   if (rowIdx == image.height() - 1) {
     if (stream.avail_out != 0) {
-      return "Invalid image data";
+      return "Extra image data";
     }
     copyFromByteOrder(image.scanLine(rowIdx), outBuff.data(), outBuffSize, format);
   } else if (rowIdx == image.height()) {
     if (stream.avail_out != outBuffSize) {
-      return "Invalid image data";
+      return "Extra image data";
     }
   } else {
-    return "Invalid image data";
+    return "Truncated image data";
   }
   
   if (Error err = reader.end(); err) return err;
