@@ -54,7 +54,6 @@ void LinearGradientTool::mouseMove(const ToolMouseEvent &event) {
     return ctx->emitChanges(ToolChanges::overlay);
   }
   
-  ctx->unlock();
   *ctx->cell = cleanCell;
   QRect rect = unite(startPos, event.pos);
   ctx->growCell(rect);
@@ -65,9 +64,12 @@ void LinearGradientTool::mouseMove(const ToolMouseEvent &event) {
 void LinearGradientTool::mouseUp(const ToolMouseEvent &event) {
   clearImage(*ctx->overlay);
   drawSquarePoint(*ctx->overlay, tool_overlay_color, event.pos);
+  
   if (event.button != ButtonType::primary) {
     return ctx->emitChanges(ToolChanges::overlay);
   }
+  
+  ctx->unlock();
   *ctx->cell = cleanCell;
   QRect rect = unite(startPos, event.pos);
   ctx->growCell(rect);
