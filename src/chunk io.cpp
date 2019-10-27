@@ -6,15 +6,11 @@
 //  Copyright © 2019 Indi Kernick. All rights reserved.
 //
 
-#include "serial.hpp"
+#include "chunk io.hpp"
 
 #include "zlib.hpp"
 #include <QtCore/qendian.h>
 #include <QtCore/qiodevice.h>
-
-const char *FileIOError::what() const noexcept {
-  return "File IO error";
-}
 
 ChunkWriter::ChunkWriter(QIODevice &dev)
   : dev{dev} {}

@@ -38,6 +38,7 @@
 		453D28D02276A9DF00D0E5F9 /* color convert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453D28CE2276A9DF00D0E5F9 /* color convert.cpp */; };
 		453D28D32276F0FE00D0E5F9 /* label widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453D28D12276F0FD00D0E5F9 /* label widget.cpp */; };
 		453D28D72278134200D0E5F9 /* color handle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453D28D52278134200D0E5F9 /* color handle.cpp */; };
+		453E8E4B236572250070B841 /* file io.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453E8E49236572250070B841 /* file io.cpp */; };
 		454E990B2348200B0059274C /* sprite export.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 454E99092348200B0059274C /* sprite export.cpp */; };
 		454E990F2349A9B40059274C /* gradient tool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 454E990D2349A9B40059274C /* gradient tool.cpp */; };
 		455486BF23449254001D5611 /* native mac.mm in Sources */ = {isa = PBXBuildFile; fileRef = 455486BE23449254001D5611 /* native mac.mm */; };
@@ -63,7 +64,7 @@
 		45A61043230BE989000A0BD6 /* export png.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45A61041230BE989000A0BD6 /* export png.cpp */; };
 		45B284932218E38800D6D055 /* image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45B284912218E38800D6D055 /* image.cpp */; };
 		45B284962218E39300D6D055 /* cell.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45B284942218E39300D6D055 /* cell.cpp */; };
-		45B284AA221A331500D6D055 /* serial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45B284A8221A331500D6D055 /* serial.cpp */; };
+		45B284AA221A331500D6D055 /* chunk io.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45B284A8221A331500D6D055 /* chunk io.cpp */; };
 		45B284AD221A59EB00D6D055 /* undo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45B284AB221A59EB00D6D055 /* undo.cpp */; };
 		45B284B0221A83C300D6D055 /* composite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45B284AE221A83C300D6D055 /* composite.cpp */; };
 		45B284B3221A919000D6D055 /* tool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45B284B1221A919000D6D055 /* tool.cpp */; };
@@ -176,6 +177,9 @@
 		453D28D42277129800D0E5F9 /* connect.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = connect.hpp; sourceTree = "<group>"; };
 		453D28D52278134200D0E5F9 /* color handle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "color handle.cpp"; sourceTree = "<group>"; };
 		453D28D62278134200D0E5F9 /* color handle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "color handle.hpp"; sourceTree = "<group>"; };
+		453E8E49236572250070B841 /* file io.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "file io.cpp"; sourceTree = "<group>"; };
+		453E8E4A236572250070B841 /* file io.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "file io.hpp"; sourceTree = "<group>"; };
+		453E8E4C236578720070B841 /* file io error.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "file io error.hpp"; sourceTree = "<group>"; };
 		454E99092348200B0059274C /* sprite export.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "sprite export.cpp"; sourceTree = "<group>"; };
 		454E990A2348200B0059274C /* sprite export.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "sprite export.hpp"; sourceTree = "<group>"; };
 		454E990C234992BD0059274C /* linear gradient.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "linear gradient.png"; sourceTree = "<group>"; };
@@ -276,8 +280,8 @@
 		45B284942218E39300D6D055 /* cell.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = cell.cpp; sourceTree = "<group>"; };
 		45B284952218E39300D6D055 /* cell.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = cell.hpp; sourceTree = "<group>"; };
 		45B284972219003B00D6D055 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
-		45B284A8221A331500D6D055 /* serial.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = serial.cpp; sourceTree = "<group>"; };
-		45B284A9221A331500D6D055 /* serial.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = serial.hpp; sourceTree = "<group>"; };
+		45B284A8221A331500D6D055 /* chunk io.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "chunk io.cpp"; sourceTree = "<group>"; };
+		45B284A9221A331500D6D055 /* chunk io.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "chunk io.hpp"; sourceTree = "<group>"; };
 		45B284AB221A59EB00D6D055 /* undo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = undo.cpp; sourceTree = "<group>"; };
 		45B284AC221A59EB00D6D055 /* undo.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = undo.hpp; sourceTree = "<group>"; };
 		45B284AE221A83C300D6D055 /* composite.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = composite.cpp; sourceTree = "<group>"; };
@@ -459,8 +463,8 @@
 				45B284922218E38800D6D055 /* image.hpp */,
 				45B284942218E39300D6D055 /* cell.cpp */,
 				45B284952218E39300D6D055 /* cell.hpp */,
-				45B284A8221A331500D6D055 /* serial.cpp */,
-				45B284A9221A331500D6D055 /* serial.hpp */,
+				45B284A8221A331500D6D055 /* chunk io.cpp */,
+				45B284A9221A331500D6D055 /* chunk io.hpp */,
 				4513144522D0503700D66262 /* timeline.cpp */,
 				4513144622D0503700D66262 /* timeline.hpp */,
 				4513144E22D1BF8700D66262 /* palette.cpp */,
@@ -752,6 +756,9 @@
 				45C447F922F6B57000B65AD3 /* png.cpp */,
 				45C447FA22F6B57000B65AD3 /* png.hpp */,
 				453A20C8231A161E00F055BA /* zlib.hpp */,
+				453E8E49236572250070B841 /* file io.cpp */,
+				453E8E4A236572250070B841 /* file io.hpp */,
+				453E8E4C236578720070B841 /* file io error.hpp */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -1692,6 +1699,7 @@
 				45DC2566224B137C00F40116 /* status msg.cpp in Sources */,
 				45F065F22222998300BCE863 /* current tool.cpp in Sources */,
 				45D109AC22E2D4FD00D1F1CB /* text push button widget.cpp in Sources */,
+				453E8E4B236572250070B841 /* file io.cpp in Sources */,
 				4595D48C22C05E5400607D64 /* timeline cells widget.cpp in Sources */,
 				453C78432234E13E00818B19 /* window.cpp in Sources */,
 				45A6103C2307E1EF000A0BD6 /* error dialog.cpp in Sources */,
@@ -1719,7 +1727,7 @@
 				457DC0BD22E7D6160000777B /* file input widget.cpp in Sources */,
 				4576DFE82298DB2D00FDECA3 /* separator widget.cpp in Sources */,
 				453D28D32276F0FE00D0E5F9 /* label widget.cpp in Sources */,
-				45B284AA221A331500D6D055 /* serial.cpp in Sources */,
+				45B284AA221A331500D6D055 /* chunk io.cpp in Sources */,
 				45C447FB22F6B57000B65AD3 /* png.cpp in Sources */,
 				45F3EB6E22CC430F00F9F93E /* init canvas dialog.cpp in Sources */,
 				4513144A22D1828D00D66262 /* sprite.cpp in Sources */,

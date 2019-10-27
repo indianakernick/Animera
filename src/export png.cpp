@@ -73,14 +73,14 @@ void eachRow(QImage &image, Func func) {
 
 struct WriteContext {
   QString msg;
-  QFile file;
+  QIODevice *dev;
   png_structp png = nullptr;
   png_infop info = nullptr;
 };
 
 struct ReadContext {
   QString msg;
-  QFile file;
+  QIODevice *dev;
   png_structp png = nullptr;
   png_infop info = nullptr;
   png_infop endInfo = nullptr;
@@ -111,22 +111,18 @@ Error destroyWrite(WriteContext &ctx) {
   return ctx.msg;
 }
 
-Error initWriteFile(WriteContext &ctx, const QString &path) {
-  ctx.file.setFileName(path);
-  if (!ctx.file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-    return "Failed to open file for writing";
-  }
+Error initWriteFile(WriteContext &ctx) {
   if (setjmp(png_jmpbuf(ctx.png))) {
     return destroyWrite(ctx);
   }
-  png_set_write_fn(ctx.png, &ctx.file, &pngWrite, &pngFlush);
+  png_set_write_fn(ctx.png, ctx.dev, &pngWrite, &pngFlush);
   return {};
 }
 
-Error initWrite(WriteContext &ctx, const QString &path) {
+Error initWrite(WriteContext &ctx) {
   if (Error err = initWritePng(ctx)) return err;
   if (Error err = initWriteInfo(ctx)) return err;
-  if (Error err = initWriteFile(ctx, path)) return err;
+  if (Error err = initWriteFile(ctx)) return err;
   return {};
 }
 
@@ -200,22 +196,18 @@ Error destroyRead(ReadContext &ctx) {
   return ctx.msg;
 }
 
-Error initReadFile(ReadContext &ctx, const QString &path) {
-  ctx.file.setFileName(path);
-  if (!ctx.file.open(QIODevice::ReadOnly | QIODevice::ExistingOnly)) {
-    return "Failed to open file for reading";
-  }
+Error initReadFile(ReadContext &ctx) {
   if (setjmp(png_jmpbuf(ctx.png))) {
     return destroyRead(ctx);
   }
-  png_set_read_fn(ctx.png, &ctx.file, &pngRead);
+  png_set_read_fn(ctx.png, ctx.dev, &pngRead);
   return {};
 }
 
-Error initRead(ReadContext &ctx, const QString &path) {
+Error initRead(ReadContext &ctx) {
   if (Error err = initReadPng(ctx)) return err;
   if (Error err = initReadInfo(ctx)) return err;
-  if (Error err = initReadFile(ctx, path)) return err;
+  if (Error err = initReadFile(ctx)) return err;
   return {};
 }
 
@@ -259,14 +251,15 @@ void fillRows(
 }
 
 Error exportPng(
-  const QString &path,
+  QIODevice &dev,
   const PaletteCSpan palette,
   QImage image,
   const Format canvasFormat,
   const ExportFormat exportFormat
 ) {
   WriteContext ctx;
-  if (Error err = initWrite(ctx, path)) return err;
+  ctx.dev = &dev;
+  if (Error err = initWrite(ctx)) return err;
   
   if (setjmp(png_jmpbuf(ctx.png))) {
     return destroyWrite(ctx);
@@ -332,13 +325,14 @@ Error exportPng(
 }
 
 Error importPng(
-  const QString &path,
+  QIODevice &dev,
   const PaletteSpan palette,
   QImage &image,
   Format &format
 ) {
   ReadContext ctx;
-  if (Error err = initRead(ctx, path)) return err;
+  ctx.dev = &dev;
+  if (Error err = initRead(ctx)) return err;
   std::unique_ptr<png_bytep[]> rows;
   
   if (setjmp(png_jmpbuf(ctx.png))) {
@@ -374,12 +368,13 @@ Error importPng(
 }
 
 Error exportPng(
-  const QString &path,
+  QIODevice &dev,
   const PaletteCSpan palette,
   const Format format
 ) {
   WriteContext ctx;
-  if (Error err = initWrite(ctx, path)) return err;
+  ctx.dev = &dev;
+  if (Error err = initWrite(ctx)) return err;
   
   if (setjmp(png_jmpbuf(ctx.png))) {
     return destroyWrite(ctx);
@@ -416,12 +411,13 @@ Error exportPng(
 }
 
 Error importPng(
-  const QString &path,
+  QIODevice &dev,
   const PaletteSpan palette,
   const Format format
 ) {
   ReadContext ctx;
-  if (Error err = initRead(ctx, path)) return err;
+  ctx.dev = &dev;
+  if (Error err = initRead(ctx)) return err;
   std::unique_ptr<png_byte[]> imageData;
   std::unique_ptr<png_bytep[]> rows;
   

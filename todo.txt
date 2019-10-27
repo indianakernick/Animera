@@ -135,7 +135,7 @@ optimize the palette carefully
   we could provide a button that optimizes the palette
 
 palette index out of range
-  we currently get an error from libpng and an incomplete png file (no IEND)
+  we currently get an error from libpng
   need to handle this properly
   maybe the palette should be resizable?
     this would make it possible to export a small palette while preventing out
@@ -187,13 +187,6 @@ this is cool
 README
   probably does what you need
   it's free so why not give it a try
-  
-delete output file on error
-  if output is overwriting another file,
-    we need to restore the old file if there was an error writing the new file
-  write output to temp file
-  delete old file if exists
-  move temp file to output
 
 panels can be nested
   download file in chrome then CMD+SHIFT+G

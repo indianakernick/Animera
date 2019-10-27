@@ -13,9 +13,9 @@
 #include "palette span.hpp"
 #include "export options.hpp"
 
-Error exportPng(const QString &, PaletteCSpan, QImage, Format, ExportFormat);
-Error importPng(const QString &, PaletteSpan, QImage &, Format &);
-Error exportPng(const QString &, PaletteCSpan, Format);
-Error importPng(const QString &, PaletteSpan, Format);
+Error exportPng(QIODevice &, PaletteCSpan, QImage, Format, ExportFormat);
+Error importPng(QIODevice &, PaletteSpan, QImage &, Format &);
+Error exportPng(QIODevice &, PaletteCSpan, Format);
+Error importPng(QIODevice &, PaletteSpan, Format);
 
 #endif

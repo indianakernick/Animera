@@ -8,7 +8,8 @@
 
 #include "palette.hpp"
 
-#include "serial.hpp"
+#include "file io.hpp"
+#include "chunk io.hpp"
 #include "export png.hpp"
 #include "sprite file.hpp"
 #include <Graphics/format.hpp>
@@ -132,11 +133,17 @@ Error Palette::deserialize(QIODevice &dev) {
 }
 
 Error Palette::save(const QString &path) const {
-  return exportPng(path, getUsedSpan(colors), canvasFormat);
+  FileWriter writer;
+  if (Error err = writer.open(path); err) return err;
+  if (Error err = exportPng(writer.dev(), getUsedSpan(colors), canvasFormat); err) return err;
+  return writer.flush();
 }
 
 Error Palette::open(const QString &path) {
-  return importPng(path, colors, canvasFormat);
+  FileReader reader;
+  if (Error err = reader.open(path); err) return err;
+  if (Error err = importPng(reader.dev(), colors, canvasFormat); err) return err;
+  return reader.flush();
 }
 
 PaletteSpan Palette::getPalette() {

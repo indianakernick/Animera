@@ -8,6 +8,7 @@
 
 #include "timeline.hpp"
 
+#include "file io.hpp"
 #include "composite.hpp"
 #include "export png.hpp"
 #include "sprite file.hpp"
@@ -58,7 +59,10 @@ Error Timeline::openImage(
   QSize &size
 ) {
   QImage image;
-  if (Error err = importPng(path, palette, image, format); err) return err;
+  FileReader reader;
+  if (Error err = reader.open(path); err) return err;
+  if (Error err = importPng(reader.dev(), palette, image, format); err) return err;
+  if (Error err = reader.flush(); err) return err;
   canvasFormat = format;
   canvasSize = size = image.size();
   

@@ -8,6 +8,7 @@
 
 #include "sprite export.hpp"
 
+#include "file io.hpp"
 #include <QtCore/qdir.h>
 #include "composite.hpp"
 #include "export png.hpp"
@@ -128,12 +129,15 @@ void Exporter::applyTransform() {
 }
 
 Error Exporter::exportImage(const CellPos pos) {
+  FileWriter writer;
+  if (Error err = writer.open(getPath(pos)); err) return err;
   if (xformed.isNull()) {
-    return exportPng(getPath(pos), palette, image, format, options.format);
+    if (Error err = exportPng(writer.dev(), palette, image, format, options.format); err) return err;
   } else {
     applyTransform();
-    return exportPng(getPath(pos), palette, xformed, format, options.format);
+    if (Error err = exportPng(writer.dev(), palette, xformed, format, options.format); err) return err;
   }
+  return writer.flush();
 }
 
 Error Exporter::exportCells(const std::vector<Layer> &layers) {

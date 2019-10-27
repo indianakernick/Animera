@@ -9,8 +9,8 @@
 #include "png.hpp"
 
 #include <iostream>
-#include <QtCore/qfile.h>
 #include <QtCore/qstring.h>
+#include <QtCore/qiodevice.h>
 
 void pngError(png_structp png, png_const_charp msg) {
   reinterpret_cast<QString *>(png_get_error_ptr(png))->append(msg);
@@ -22,24 +22,19 @@ void pngWarning(png_structp, png_const_charp msg) {
 }
 
 void pngWrite(png_structp png, png_bytep data, size_t size) {
-  auto *file = reinterpret_cast<QFile *>(png_get_io_ptr(png));
-  const size_t written = file->write(reinterpret_cast<const char *>(data), size);
+  auto *dev = reinterpret_cast<QIODevice *>(png_get_io_ptr(png));
+  const size_t written = dev->write(reinterpret_cast<const char *>(data), size);
   if (written < size) {
     pngError(png, "Failed to write to output file");
   }
 }
 
 void pngRead(png_structp png, png_bytep data, size_t size) {
-  auto *file = reinterpret_cast<QFile *>(png_get_io_ptr(png));
-  const size_t read = file->read(reinterpret_cast<char *>(data), size);
+  auto *dev = reinterpret_cast<QIODevice *>(png_get_io_ptr(png));
+  const size_t read = dev->read(reinterpret_cast<char *>(data), size);
   if (read < size) {
     pngError(png, "Truncated or invalid input file");
   }
 }
 
-void pngFlush(png_structp png) {
-  auto *file = reinterpret_cast<QFile *>(png_get_io_ptr(png));
-  if (!file->flush()) {
-    pngError(png, "Failed to flush output file");
-  }
-}
+void pngFlush(png_structp) {}

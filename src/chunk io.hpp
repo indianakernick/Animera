@@ -1,23 +1,19 @@
 //
-//  serial.hpp
+//  chunk io.hpp
 //  Animera
 //
 //  Created by Indi Kernick on 18/2/19.
 //  Copyright © 2019 Indi Kernick. All rights reserved.
 //
 
-#ifndef serial_hpp
-#define serial_hpp
+#ifndef chunk_io_hpp
+#define chunk_io_hpp
 
 #include "error.hpp"
 #include "config.hpp"
+#include "file io error.hpp"
 
 class QIODevice;
-
-class FileIOError final : public std::exception {
-public:
-  const char *what() const noexcept override;
-};
 
 class ChunkWriter {
 public:
