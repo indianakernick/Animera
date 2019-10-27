@@ -189,20 +189,6 @@ change -> set
 README
   probably does what you need
   it's free so why not give it a try
-
-filtering
-  http://www.libpng.org/pub/png/book/chapter09.html
-  http://www.libpng.org/pub/png/spec/1.2/PNG-Encoders.html#E.Filter-selection
-  does it make a difference in compression?
-    does the difference really matter?
-    does anyone actually care if the files are a bit smaller?
-  compression without filtering is already better than aseprite
-    329 vs 589 bytes
-    rgba 128x128
-    red rectangle Pos: [12, 24] Size: [100, 100]
-  improves compression
-  reduces speed
-  increases memory usage
   
 delete output file on error
   if output is overwriting another file,
@@ -215,8 +201,10 @@ panels can be nested
   download file in chrome then CMD+SHIFT+G
   what's up with the file dialog in export dialog?
 
-shrink when erasing
-  reduces speed but is the user really going to notice or care?
+growCell overflows
+  could overflow cell pos
+  could exceed max image size
+  check for other places where this could be a problem
 
 build from commandline
   xcodebuild
