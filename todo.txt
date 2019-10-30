@@ -1,9 +1,3 @@
-Maybe an ellipse tool
-
-https://lospec.com/pixel-art-tutorials
-https://www.cosmigo.com/
-https://lospec.com/palette-list/importing-palettes
-
 Consider porting to SDL2 + Dear Imgui + Bgfx in the distant future
 Assess the benfits
 Overall performance will definitely improve but I will have to rewrite a
@@ -16,47 +10,32 @@ https://github.com/nemequ/hedley
 
 @Paolo-Oliverio Suggested I look into choosing a color palette
 
-Have a look at Pro Motion NG
-
-A builtin calculator?
-  just a text box and a label (below the palette maybe)
-  can sometimes be useful
-  is it really necessary?
-  how often will it be used?
-  if you find yourself needing to use a calculator then
-    maybe there is a feature missing
-
 image, view, sampler
 vulkan textures
 
-transform a layer or transform a frame
-  would it make sense to extend this concept to all tools?
-  bulk operations?
-  apply the actions of a tool on multiple cells
+----------------------------------- resources ----------------------------------
 
-set cursor and respond to clicks more precisely
-  setMask could help
-  https://doc.qt.io/qt-5/qwidget.html#setMask
+Have a look at Pro Motion NG
 
-Have a look at qtbase/examples/widgets/mainwindows/sdi
-There's a lot to learn
+this is cool
+  https://github.com/plasma-umass/Mesh
 
-Should probably be calling update() instead of repaint() in most places
-Should probably be using mouse release instead of mouse press in some places
+https://lospec.com/pixel-art-tutorials
+https://www.cosmigo.com/
+https://lospec.com/palette-list/importing-palettes
 
-remove layer button appears when hovering layer name
-  would this be more intuitive than a button that removes the current layer?
-
-there might be a few random constants that should be in config.hpp but aren't
+----------------------------------- community ----------------------------------
 
 should I make a post to r/gamedev?
   they might be interested in this
   could be a good place to get feedback
   laterforreddit.com
 
-use the status bar for more than just tools
-  it could make sense to use it for the color picker
-  at the moment it seems underappreciated
+README
+  probably does what you need
+  it's free so why not give it a try
+
+--------------------------------- build system ---------------------------------
 
 Could be useful
   https://stackoverflow.com/questions/53771040/how-do-you-use-file-lists-xcfilelist-within-xcode-10-script-build-phases
@@ -69,22 +48,15 @@ Build system
   https://cmake.org/cmake/help/latest/module/CPack.html
   https://cmake.org/cmake/help/latest/module/BundleUtilities.html
 
-generate a palette from a gradient
+build from commandline
+  xcodebuild
+  msbuild
 
-filled polygon
-  polygon to triangles (ear something)
-  even-odd fill rule
-  fill triangles
-  scanline algorithm for filling polygons
-  http://www.sunshine2k.de/coding/java/Polygon/Filling/FillPolygon.htm
-  http://www.sunshine2k.de/coding/java/TriangleRasterization/TriangleRasterization.html
+windows packaged app
+  Windows RunTime (WinRT)
+  Universal Windows Platform (UWP)
 
-scale tool
-  it's possible now that we have dynamically resizable cells
-  we could also allow the user to resize the canvas
-
-proper undo/redo system
-  an application-wide undo system would be cool
+--------------------------------- optimizations --------------------------------
 
 optimize LayerCells
   we need stable pointers to Cells
@@ -96,6 +68,14 @@ optimize LayerCells
     this is because the address of the cell is changing
     changing the way the currCellChanged signal is emitted could break things
 
+filled polygon
+  polygon to triangles (ear something)
+  even-odd fill rule
+  fill triangles
+  scanline algorithm for filling polygons
+  http://www.sunshine2k.de/coding/java/Polygon/Filling/FillPolygon.htm
+  http://www.sunshine2k.de/coding/java/TriangleRasterization/TriangleRasterization.html
+
 lto
   99fb460bb1d36e6dab434940a0ea62ddbeecc69c
   none
@@ -106,22 +86,38 @@ lto
 keys for info.plist
   https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 
-scripting interface
-  maybe applescript
-    https://www.raywenderlich.com/1033-making-a-mac-app-scriptable-tutorial
-  command-line interface is probably much easier
+fixed byte order image formats
+  remove qRgb calls
+  use RGBA_8888
+  measure the speed increase
 
 are there resources than can be shared between windows?
   global resource cache might be useful
+
+more efficient status message updates
+  there might be situations where the status bar is updated multiple times and
+  only the last update is seen
+
+----------------------------------- scripting ----------------------------------
+
+scripting interface
+  command-line interface
+  in-app scripting interface maybe
+  interactive command prompt accessible from ui perhaps
+  what are the potential use cases for this?
+    automatic export
+    bulk operations
+    
+transform a layer or transform a frame
+  would it make sense to extend this concept to all tools?
+  bulk operations?
+  apply the actions of a tool on multiple cells
 
 editor scaling is sometimes a pixel off
   this might be due to QPainter using floats
   might have to do scaling myself
 
-fixed byte order image formats
-  remove qRgb calls
-  use RGBA_8888
-  measure the speed increase
+----------------------------------- palette ------------------------------------
 
 differentiate between indexed with full alpha and indexed with transparent entry
   if there is a single fully transparent entry then it will be possible to
@@ -149,20 +145,37 @@ compositing index images is broken
   it kind of gets weird if index 0 doesn't correspond to the color 0
   i'm not really sure what the "correct" behaviour is
 
+generate a palette from a gradient
+
+---------------------------------- features ------------------------------------
+
 make exporting less tedious
   store paths in QSettings
   assign names to each frame
   would it be useful to copy export settings to and from the clipboard?
   should export settings be kept in the sprite file?
+    probably shouldn't store the directory
+  button to export the settings stored in the file (Quick Export)
 
-gradient tool
-  radial gradient?
-  bayer matrix?
+proper undo/redo system
+  an application-wide undo system would be cool
+  
+A builtin calculator?
+  just a text box and a label (below the palette maybe)
+  can sometimes be useful
+  is it really necessary?
+  how often will it be used?
+  if you find yourself needing to use a calculator then
+    maybe there is a feature missing
 
-would the user ever want to automatically adjust the scale of the editor?
+use the status bar for more than just tools
+  it could make sense to use it for the color picker
+  at the moment it seems underappreciated
 
-what's up the the height of the timeline?
-  reduce to min then go fullscreen
+behave like a proper Single Document Interface (SDI) application
+  qtbase/examples/widgets/mainwindows/sdi
+
+--------------------------------- refactoring ----------------------------------
 
 more abstract tool interface
   use QImage::cacheKey to avoid emitChanges
@@ -171,22 +184,38 @@ more abstract tool interface
   mouseLeave event handlers seem to all be the same
   something similar to DragPaintTool but for all tools
 
-more efficient status message updates
-  there might be situations where the status bar is updated multiple times and
-  only the last update is seen
+remove signals from tools (maybe?)
+  tools update a data structure
+  another system reads data structure and sends signals
+  not sure if this is a real improvement
+  probably ties in with making a more abstract tool interface
+
+------------------------------------- tools ------------------------------------
+
+gradient tool
+  radial gradient?
+  bayer matrix?
+  
+scale tool
+  it's possible now that we have dynamically resizable cells
+  we could also allow the user to resize the canvas
+  
+Maybe an ellipse tool
+
+---------------------------------- minor bugs ----------------------------------
+
+what's up the the height of the timeline?
+  reduce to min then go fullscreen
+  
+set cursor and respond to clicks more precisely
+  setMask could help
+  https://doc.qt.io/qt-5/qwidget.html#setMask
 
 editor cursor update issues
   it seems like the cursor will only update after a mouseMove event
   cursor doesn't update when
     zooming out of editor and mouse leaves
     mouse enters editor while dragging
-
-this is cool
-  https://github.com/plasma-umass/Mesh
-
-README
-  probably does what you need
-  it's free so why not give it a try
 
 panels can be nested
   download file in chrome then CMD+SHIFT+G
@@ -197,13 +226,20 @@ growCell overflows
   could exceed max image size
   check for other places where this could be a problem
 
-build from commandline
-  xcodebuild
-  msbuild
+-------------------------------- minor features --------------------------------
 
-windows packaged app
-  Windows RunTime (WinRT)
-  Universal Windows Platform (UWP)
+would the user ever want to automatically adjust the scale of the editor?
+
+remove layer button appears when hovering layer name
+  would this be more intuitive than a button that removes the current layer?
 
 A CRC error is a lot more informative than "animation delay is out-of-range"
   if possible, check the CRC before checking the content itself
+
+------------------------------- minor refactoring ------------------------------
+
+there might be a few random constants that should be in config.hpp but aren't
+
+Should probably be calling update() instead of repaint() in most places
+
+Should probably be using mouse release instead of mouse press in some places
