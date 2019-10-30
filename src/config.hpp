@@ -15,7 +15,7 @@
 #include <QtCore/qnamespace.h>
 #include <QtGui/qkeysequence.h>
 
-// ------------------------------- global ----------------------------------- //
+// --------------------------------- global --------------------------------- //
 
 constexpr int       glob_scale = 2;
 
@@ -38,7 +38,7 @@ constexpr int       glob_font_pt = 8_px; // 8 pt for 72 dpi. 6 pt for 96 dpi
 
 constexpr QSize     glob_window_size = {640_px, 360_px};
 
-// ------------------------ global color scheme ----------------------------- //
+// --------------------------- global color scheme -------------------------- //
 
 // https://coolors.co/49495b-2f395f-274690-5569a2-b8cdd7
 inline const QColor glob_dark_2  = {73, 73, 91};
@@ -55,7 +55,7 @@ inline const QColor glob_scroll_corner = glob_dark_1;
 inline const QColor glob_scroll_back = glob_dark_1;
 inline const QColor glob_scroll_handle = glob_light_1;
 
-// ----------------------------- global dimensions -------------------------- //
+// ---------------------------- global dimensions --------------------------- //
 
 constexpr int       glob_scroll_width = 4_px;
 constexpr int       glob_margin       = 1_px;
@@ -145,7 +145,7 @@ struct IntRange {
   int def = 0;
 };
 
-// -------------------------------- tools ----------------------------------- //
+// ---------------------------------- tools --------------------------------- //
 
 constexpr QSize     tool_icon_size = {24_px, 24_px};
 constexpr QSize     tool_icon_padding = {1_px, 1_px};
@@ -239,14 +239,14 @@ constexpr WidgetRect tool_colors_rect = basicRect(
   {}, {pick_svgraph_rect.inner().width(), 12_px}, 0_px, 3_px
 );
 
-// ------------------------------ palette colors ---------------------------- //
+// ----------------------------- palette colors ----------------------------- //
 
 constexpr int       pal_colors = 256;
 constexpr int       pal_width = 8;
 constexpr int       pal_height = pal_colors / pal_width;
 constexpr int       pal_tile_size = 13_px;
 
-// --------------------------------- timeline ------------------------------- //
+// -------------------------------- timeline -------------------------------- //
 
 inline const QColor cell_icon_color = glob_light_2;
 inline const QColor cell_curr_color = glob_light_1;
@@ -278,23 +278,23 @@ constexpr WidgetRect ctrl_text_rect = timelineTextBox(textBoxWidth(3));
 constexpr int        layer_width = 7 * cell_width + ctrl_text_rect.widget().width();
 constexpr WidgetRect layer_text_rect = timelineTextBox(layer_width - cell_width - glob_border_width);
 
-// ---------------------------- init canvas dialog -------------------------- //
+// --------------------------- init canvas dialog --------------------------- //
 
 constexpr IntRange   init_size_range = {1, 32768, 128};
 constexpr WidgetRect init_size_rect = textBoxRect(5);
 constexpr WidgetRect init_button_rect = textBoxRect(8);
 
-// ------------------------------- export dialog ---------------------------- //
+// ------------------------------ export dialog ----------------------------- //
 
 constexpr IntRange   expt_stride = {-100, 100, 1};
 constexpr IntRange   expt_offset = {-100, 100, 0};
 constexpr IntRange   expt_scale = {-32, 32, 1};
 
-// -------------------------------- error dialog ---------------------------- //
+// ------------------------------ error dialog ------------------------------ //
 
 constexpr int        erro_wrap_width = 40;
 
-// -------------------------------- file format ----------------------------- //
+// ------------------------------- file format ------------------------------ //
 
 constexpr size_t file_sig_len = 8;
 constexpr char file_sig[file_sig_len] = "animera";
