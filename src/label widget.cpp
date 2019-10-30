@@ -17,6 +17,7 @@ LabelWidget::LabelWidget(
   const QString &text
 ) : QWidget{parent}, text{text}, rect{rect} {
   setFixedSize(rect.widget().size());
+  setAttribute(Qt::WA_StaticContents);
 }
 
 void LabelWidget::setText(const QString &newText) {

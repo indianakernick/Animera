@@ -16,6 +16,7 @@ HoriSeparator::HoriSeparator(QWidget *parent)
   setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
   setMinimumWidth(glob_border_width);
   setFixedHeight(glob_border_width);
+  setAttribute(Qt::WA_StaticContents);
 }
 
 void HoriSeparator::paintEvent(QPaintEvent *) {
@@ -30,6 +31,7 @@ VertSeparator::VertSeparator(QWidget *parent)
   setSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
   setFixedWidth(glob_border_width);
   setMinimumHeight(glob_border_width);
+  setAttribute(Qt::WA_StaticContents);
 }
 
 void VertSeparator::paintEvent(QPaintEvent *) {
