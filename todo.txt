@@ -75,6 +75,7 @@ filled polygon
   scanline algorithm for filling polygons
   http://www.sunshine2k.de/coding/java/Polygon/Filling/FillPolygon.htm
   http://www.sunshine2k.de/coding/java/TriangleRasterization/TriangleRasterization.html
+  https://fgiesen.wordpress.com/2013/02/08/triangle-rasterization-in-practice/
 
 lto
   99fb460bb1d36e6dab434940a0ea62ddbeecc69c
@@ -97,6 +98,11 @@ are there resources than can be shared between windows?
 more efficient status message updates
   there might be situations where the status bar is updated multiple times and
   only the last update is seen
+
+thick line
+  https://stackoverflow.com/questions/11194876/clip-line-to-screen-coordinates/11195387
+  https://www.skytopia.com/project/articles/compsci/clipping.html
+  http://kt8216.unixcab.org/murphy/index.html
 
 ----------------------------------- scripting ----------------------------------
 
@@ -175,6 +181,10 @@ use the status bar for more than just tools
 behave like a proper Single Document Interface (SDI) application
   qtbase/examples/widgets/mainwindows/sdi
 
+quicklook plugin
+  https://fespinoza.github.io/creating-a-quicklook-plugin-for-a-document-based-macos-application
+  https://developer.apple.com/library/archive/documentation/UserExperience/Conceptual/Quicklook_Programming_Guide/Introduction/Introduction.html
+
 --------------------------------- refactoring ----------------------------------
 
 more abstract tool interface
@@ -225,6 +235,9 @@ growCell overflows
   could overflow cell pos
   could exceed max image size
   check for other places where this could be a problem
+
+" - edited" in the window title
+  https://bugreports.qt.io/browse/QTBUG-79677
 
 -------------------------------- minor features --------------------------------
 

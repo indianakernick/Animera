@@ -1702,9 +1702,31 @@ void blitImageOld(QImage &dst, const QImage &src, const QPoint pos) {
 
 #endif
 
-// TODO: reproduce the alignment issue when drawing upscaled images and pixmaps together
-
 #if BUG_TEST
+
+/*#include <QtWidgets/qshortcut.h>
+#include <QtWidgets/qmainwindow.h>
+#include <QtWidgets/qapplication.h>
+#include <QtWidgets/qplaintextedit.h>
+
+int main(int argc, char **argv) {
+  QApplication app{argc, argv};
+  QMainWindow window;
+  window.move(379, 206);
+  window.setFixedSize(640, 420);
+  QPlainTextEdit editor{&window};
+  editor.setFixedSize(640, 420);
+  window.setWindowFilePath("test.txt");
+  QObject::connect(&editor, &QPlainTextEdit::textChanged, [&window]{
+    window.setWindowModified(true);
+  });
+  QShortcut shortcut{QKeySequence::Save, &window};
+  QObject::connect(&shortcut, &QShortcut::activated, [&window]{
+    window.setWindowModified(false);
+  });
+  window.show();
+  return app.exec();
+}*/
 
 /*#include "native mac.hpp"
 #include <QtWidgets/qlineedit.h>
