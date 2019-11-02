@@ -21,9 +21,9 @@
 			<string>Animera Sprite</string>
 		</dict>
 		<dict>
-			<key>CFBundleTypeExtensions</key>
+			<key>LSItemContentTypes</key>
 			<array>
-				<string>png</string>
+				<string>public.png</string>
 			</array>
 			<key>LSHandlerRank</key>
 			<string>Alternate</string>

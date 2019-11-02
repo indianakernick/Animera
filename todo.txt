@@ -24,6 +24,25 @@ https://lospec.com/pixel-art-tutorials
 https://www.cosmigo.com/
 https://lospec.com/palette-list/importing-palettes
 
+UTI
+  there doesn't seem to be a good reason to declare a custom UTI
+  just use the dynamically generated one
+  
+  https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/understanding_utis/understand_utis_intro/understand_utis_intro.html
+  https://developer.apple.com/library/archive/documentation/Miscellaneous/Reference/UTIRef/Articles/System-DeclaredUniformTypeIdentifiers.html
+  https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+  https://alastairs-place.net/blog/2012/06/06/utis-are-better-than-you-think-and-heres-why/
+
+  function decode(input) {
+    const key = "abcdefghkmnpqrstuvwxyz0123456789"
+    const char2binary = char => key.indexOf(char).toString(2).padStart(5, "0");
+    const binary = Array.prototype.map.call(input, char2binary).join("");
+    const bytes = binary.match(/.{1,8}/g).map(str => parseInt(str, 2));
+    return bytes.map(byte => String.fromCharCode(byte)).join("");
+  }
+  
+  run mdls to get UTI of file
+
 ----------------------------------- community ----------------------------------
 
 should I make a post to r/gamedev?
