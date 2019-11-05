@@ -1704,7 +1704,7 @@ void blitImageOld(QImage &dst, const QImage &src, const QPoint pos) {
 
 #if BUG_TEST
 
-/*#include <QtWidgets/qshortcut.h>
+#include <QtWidgets/qshortcut.h>
 #include <QtWidgets/qmainwindow.h>
 #include <QtWidgets/qapplication.h>
 #include <QtWidgets/qplaintextedit.h>
@@ -1726,7 +1726,7 @@ int main(int argc, char **argv) {
   });
   window.show();
   return app.exec();
-}*/
+}
 
 /*#include "native mac.hpp"
 #include <QtWidgets/qlineedit.h>
