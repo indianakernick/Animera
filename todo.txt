@@ -219,6 +219,22 @@ remove signals from tools (maybe?)
   not sure if this is a real improvement
   probably ties in with making a more abstract tool interface
 
+define what the application does and use that to guide refactoring
+  similar amount of detail as the previous plans
+
+directory structure
+  tests
+  internal libraries
+  external libraries
+  core source
+    folders instead of groups maybe?
+  platform specific
+    that mouse thing
+    xcode stuff
+    visual studio stuff
+  git submodules maybe?
+    https://stackoverflow.com/questions/15844542/git-symlink-reference-to-a-file-in-an-external-repository/27770463#27770463
+
 ------------------------------------- tools ------------------------------------
 
 gradient tool
@@ -267,6 +283,7 @@ remove layer button appears when hovering layer name
 
 A CRC error is a lot more informative than "animation delay is out-of-range"
   if possible, check the CRC before checking the content itself
+  maybe defer the error somehow
 
 ------------------------------- minor refactoring ------------------------------
 
