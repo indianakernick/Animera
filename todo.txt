@@ -75,6 +75,19 @@ windows packaged app
   Windows RunTime (WinRT)
   Universal Windows Platform (UWP)
 
+directory structure
+  tests
+  internal libraries
+  external libraries
+  core source
+    folders instead of groups maybe?
+  platform specific
+    that mouse thing
+    xcode stuff
+    visual studio stuff
+  git submodules maybe?
+    https://stackoverflow.com/questions/15844542/git-symlink-reference-to-a-file-in-an-external-repository/27770463#27770463
+
 --------------------------------- optimizations --------------------------------
 
 optimize LayerCells
@@ -137,10 +150,6 @@ transform a layer or transform a frame
   would it make sense to extend this concept to all tools?
   bulk operations?
   apply the actions of a tool on multiple cells
-
-editor scaling is sometimes a pixel off
-  this might be due to QPainter using floats
-  might have to do scaling myself
 
 ----------------------------------- palette ------------------------------------
 
@@ -222,19 +231,6 @@ remove signals from tools (maybe?)
 define what the application does and use that to guide refactoring
   similar amount of detail as the previous plans
 
-directory structure
-  tests
-  internal libraries
-  external libraries
-  core source
-    folders instead of groups maybe?
-  platform specific
-    that mouse thing
-    xcode stuff
-    visual studio stuff
-  git submodules maybe?
-    https://stackoverflow.com/questions/15844542/git-symlink-reference-to-a-file-in-an-external-repository/27770463#27770463
-
 ------------------------------------- tools ------------------------------------
 
 gradient tool
@@ -274,16 +270,16 @@ growCell overflows
 " - edited" in the window title
   https://bugreports.qt.io/browse/QTBUG-79677
 
+editor scaling is sometimes a pixel off
+  this might be due to QPainter using floats
+  might have to do scaling myself
+
 -------------------------------- minor features --------------------------------
 
 would the user ever want to automatically adjust the scale of the editor?
 
 remove layer button appears when hovering layer name
   would this be more intuitive than a button that removes the current layer?
-
-A CRC error is a lot more informative than "animation delay is out-of-range"
-  if possible, check the CRC before checking the content itself
-  maybe defer the error somehow
 
 ------------------------------- minor refactoring ------------------------------
 

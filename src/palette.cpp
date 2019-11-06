@@ -89,7 +89,9 @@ constexpr std::array<QRgb, 9> gray_palette = {
 };
 
 PaletteCSpan getUsedSpan(const PaletteCSpan colors) {
-  for (PaletteCSpan::index_type i = colors.size(); i != 0; --i) {
+  // Reminder to use size_t when the standard library is updated
+  static_assert(std::is_same_v<PaletteCSpan::index_type, ptrdiff_t>);
+  for (ptrdiff_t i = colors.size(); i != 0; --i) {
     if (colors[i - 1] != 0) {
       return {colors.data(), i};
     }

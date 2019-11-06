@@ -118,6 +118,32 @@ void copyFromByteOrder(
   }
 }
 
+}
+
+Error writeSignature(QIODevice &dev) {
+  if (dev.write(file_sig, file_sig_len) != file_sig_len) {
+    return FileIOError{}.what();
+  }
+  return {};
+}
+
+Error writeAHDR(QIODevice &dev, const SpriteInfo &info) try {
+  ChunkWriter writer{dev};
+  writer.begin(5 * file_int_size + 1, chunk_anim_header);
+  writer.writeInt(info.width);
+  writer.writeInt(info.height);
+  writer.writeInt(static_cast<uint32_t>(info.layers));
+  writer.writeInt(static_cast<uint32_t>(info.frames));
+  writer.writeInt(info.delay);
+  writer.writeByte(formatByte(info.format));
+  writer.end();
+  return {};
+} catch (FileIOError &e) {
+  return e.what();
+}
+
+namespace {
+
 Error writeRgba(QIODevice &dev, const PaletteCSpan colors) try {
   ChunkWriter writer{dev};
   writer.begin(static_cast<uint32_t>(colors.size()) * 4, chunk_palette);
@@ -148,80 +174,6 @@ Error writeGray(QIODevice &dev, const PaletteCSpan colors) try {
   return e.what();
 }
 
-Error checkPaletteStart(ChunkStart start, const int multiple) {
-  if (Error err = expectedName(start, chunk_palette); err) return err;
-  if (start.length % multiple != 0 || start.length / multiple > pal_colors) {
-    QString msg = "Invalid ";
-    msg += chunk_palette;
-    msg += " chunk length ";
-    msg += QString::number(start.length);
-    return msg;
-  }
-  return {};
-}
-
-Error readRgba(QIODevice &dev, const PaletteSpan colors) try {
-  ChunkReader reader{dev};
-  const ChunkStart start = reader.begin();
-  if (Error err = checkPaletteStart(start, 4); err) return err;
-  auto iter = colors.begin();
-  const auto end = colors.begin() + start.length / 4;
-  for (; iter != end; ++iter) {
-    gfx::Color color;
-    color.r = reader.readByte();
-    color.g = reader.readByte();
-    color.b = reader.readByte();
-    color.a = reader.readByte();
-    *iter = gfx::ARGB::pixel(color);
-  }
-  if (Error err = reader.end(); err) return err;
-  std::fill(iter, colors.end(), 0);
-  return {};
-} catch (FileIOError &e) {
-  return e.what();
-}
-
-Error readGray(QIODevice &dev, const PaletteSpan colors) try {
-  ChunkReader reader{dev};
-  const ChunkStart start = reader.begin();
-  if (Error err = checkPaletteStart(start, 2); err) return err;
-  auto iter = colors.begin();
-  const auto end = colors.begin() + start.length / 2;
-  for (; iter != end; ++iter) {
-    gfx::Color color;
-    color.r = reader.readByte();
-    color.a = reader.readByte();
-    *iter = gfx::YA::pixel(color);
-  }
-  if (Error err = reader.end(); err) return err;
-  std::fill(iter, colors.end(), 0);
-  return {};
-} catch (FileIOError &e) {
-  return e.what();
-}
-
-}
-
-Error writeSignature(QIODevice &dev) {
-  if (dev.write(file_sig, file_sig_len) != file_sig_len) {
-    return FileIOError{}.what();
-  }
-  return {};
-}
-
-Error writeAHDR(QIODevice &dev, const SpriteInfo &info) try {
-  ChunkWriter writer{dev};
-  writer.begin(5 * file_int_size + 1, chunk_anim_header);
-  writer.writeInt(info.width);
-  writer.writeInt(info.height);
-  writer.writeInt(static_cast<uint32_t>(info.layers));
-  writer.writeInt(static_cast<uint32_t>(info.frames));
-  writer.writeInt(info.delay);
-  writer.writeByte(formatByte(info.format));
-  writer.end();
-  return {};
-} catch (FileIOError &e) {
-  return e.what();
 }
 
 Error writePLTE(QIODevice &dev, const PaletteCSpan colors, const Format format) try {
@@ -342,6 +294,27 @@ Error readSignature(QIODevice &dev) {
   return {};
 }
 
+namespace {
+
+Error readFormatByte(Format &format, const uint8_t byte) {
+  switch (byte) {
+    case formatByte(Format::rgba):
+      format = Format::rgba;
+      break;
+    case formatByte(Format::index):
+      format = Format::index;
+      break;
+    case formatByte(Format::gray):
+      format = Format::gray;
+      break;
+    default:
+      return "Invalid canvas format " + QString::number(byte);
+  }
+  return {};
+}
+
+}
+
 Error readAHDR(QIODevice &dev, SpriteInfo &info) try {
   ChunkReader reader{dev};
   const ChunkStart start = reader.begin();
@@ -349,42 +322,87 @@ Error readAHDR(QIODevice &dev, SpriteInfo &info) try {
   if (Error err = expectedLength(start, 5 * file_int_size + 1); err) return err;
   
   info.width = reader.readInt();
+  info.height = reader.readInt();
+  info.layers = static_cast<LayerIdx>(reader.readInt());
+  info.frames = static_cast<FrameIdx>(reader.readInt());
+  info.delay = reader.readInt();
+  const uint8_t format = reader.readByte();
+  
+  if (Error err = reader.end(); err) return err;
+  
   if (info.width <= 0 || max_image_width < info.width) {
     return "Canvas width is out-of-range";
   }
-  info.height = reader.readInt();
   if (info.height <= 0 || max_image_height < info.height) {
     return "Canvas height is out-of-range";
   }
-  
-  info.layers = static_cast<LayerIdx>(reader.readInt());
+  // TODO: upper bound for layers and frames?
   if (+info.layers < 0) return "Layer count is out-of-range";
-  info.frames = static_cast<FrameIdx>(reader.readInt());
   if (+info.frames < 0) return "Frame count is out-of-range";
-  info.delay = reader.readInt();
   if (info.delay < ctrl_delay.min || ctrl_delay.max < info.delay) {
     return "Animation delay is out-of-range";
   }
+  if (Error err = readFormatByte(info.format, format); err) return err;
   
-  const uint8_t readFormat = reader.readByte();
-  switch (readFormat) {
-    case formatByte(Format::rgba):
-      info.format = Format::rgba;
-      break;
-    case formatByte(Format::index):
-      info.format = Format::index;
-      break;
-    case formatByte(Format::gray):
-      info.format = Format::gray;
-      break;
-    default:
-      return "Invalid canvas format " + QString::number(readFormat);
-  }
-  
-  if (Error err = reader.end(); err) return err;
   return {};
 } catch (FileIOError &e) {
   return e.what();
+}
+
+namespace {
+
+Error checkPaletteStart(ChunkStart start, const int multiple) {
+  if (Error err = expectedName(start, chunk_palette); err) return err;
+  if (start.length % multiple != 0 || start.length / multiple > pal_colors) {
+    QString msg = "Invalid ";
+    msg += chunk_palette;
+    msg += " chunk length ";
+    msg += QString::number(start.length);
+    return msg;
+  }
+  return {};
+}
+
+Error readRgba(QIODevice &dev, const PaletteSpan colors) try {
+  ChunkReader reader{dev};
+  const ChunkStart start = reader.begin();
+  if (Error err = checkPaletteStart(start, 4); err) return err;
+  auto iter = colors.begin();
+  const auto end = colors.begin() + start.length / 4;
+  for (; iter != end; ++iter) {
+    gfx::Color color;
+    color.r = reader.readByte();
+    color.g = reader.readByte();
+    color.b = reader.readByte();
+    color.a = reader.readByte();
+    *iter = gfx::ARGB::pixel(color);
+  }
+  if (Error err = reader.end(); err) return err;
+  std::fill(iter, colors.end(), 0);
+  return {};
+} catch (FileIOError &e) {
+  return e.what();
+}
+
+Error readGray(QIODevice &dev, const PaletteSpan colors) try {
+  ChunkReader reader{dev};
+  const ChunkStart start = reader.begin();
+  if (Error err = checkPaletteStart(start, 2); err) return err;
+  auto iter = colors.begin();
+  const auto end = colors.begin() + start.length / 2;
+  for (; iter != end; ++iter) {
+    gfx::Color color;
+    color.r = reader.readByte();
+    color.a = reader.readByte();
+    *iter = gfx::YA::pixel(color);
+  }
+  if (Error err = reader.end(); err) return err;
+  std::fill(iter, colors.end(), 0);
+  return {};
+} catch (FileIOError &e) {
+  return e.what();
+}
+
 }
 
 Error readPLTE(QIODevice &dev, const PaletteSpan colors, const Format format) try {
@@ -402,6 +420,24 @@ Error readPLTE(QIODevice &dev, const PaletteSpan colors, const Format format) tr
   return e.what();
 }
 
+namespace {
+
+Error readVisibileByte(bool &visible, const uint8_t byte) {
+  switch (byte) {
+    case 0:
+      visible = false;
+      break;
+    case 1:
+      visible = true;
+      break;
+    default:
+      return "Invalid visibility " + QString::number(byte);
+  }
+  return {};
+}
+
+}
+
 Error readLHDR(QIODevice &dev, Layer &layer) try {
   ChunkReader reader{dev};
   const ChunkStart start = reader.begin();
@@ -409,25 +445,23 @@ Error readLHDR(QIODevice &dev, Layer &layer) try {
   if (start.length <= file_int_size + 1) {
     return QString{chunk_layer_header} + " chunk length too small";
   }
-  layer.spans.resize(reader.readInt());
-  const uint8_t visibleByte = reader.readByte();
-  switch (visibleByte) {
-    case 0:
-      layer.visible = false;
-      break;
-    case 1:
-      layer.visible = true;
-      break;
-    default:
-      return "Invalid visibility " + QString::number(visibleByte);
-  }
   const uint32_t nameLen = start.length - (file_int_size + 1);
   if (nameLen > layer_name_max_len) {
     return QString{chunk_layer_header} + " chunk length too big";
   }
+  
+  const uint32_t spans = reader.readInt();
+  const uint8_t visible = reader.readByte();
+  
   layer.name.resize(nameLen);
   reader.readString(layer.name.data(), nameLen);
+  
   if (Error err = reader.end(); err) return err;
+  
+  // TODO: range checking on spans?
+  layer.spans.resize(spans);
+  if (Error err = readVisibileByte(layer.visible, visible); err) return err;
+  
   return {};
 } catch (FileIOError &e) {
   return e.what();
@@ -440,20 +474,33 @@ Error readCHDR(QIODevice &dev, CellSpan &span, const Format format) try {
   if (start.length != file_int_size && start.length != 5 * file_int_size) {
     return QString{chunk_cell_header} + " chunk length invalid";
   }
+  
   span.len = static_cast<FrameIdx>(reader.readInt());
+  QPoint pos;
+  QSize size;
+  if (start.length == 5 * file_int_size) {
+    pos.setX(reader.readInt());
+    pos.setY(reader.readInt());
+    size.setWidth(reader.readInt());
+    size.setHeight(reader.readInt());
+  }
+  
+  if (Error err = reader.end(); err) return err;
+  
   if (+span.len <= 0) return "Negative cell span length";
   span.cell = std::make_unique<Cell>();
   if (start.length == 5 * file_int_size) {
-    const int x = reader.readInt();
-    const int y = reader.readInt();
-    const int width = reader.readInt();
-    if (width <= 0 || max_image_width < width) return "Cell width out-of-range";
-    const int height = reader.readInt();
-    if (height <= 0 || max_image_height < height) return "Cell height out-of-range";
-    span.cell->img = {width, height, qimageFormat(format)};
-    span.cell->pos = {x, y};
+    // TODO: range checking on pos?
+    if (size.width() <= 0 || max_image_width < size.width()) {
+      return "Cell width out-of-range";
+    }
+    if (size.height() <= 0 || max_image_height < size.height()) {
+      return "Cell height out-of-range";
+    }
+    span.cell->pos = pos;
+    span.cell->img = {size, qimageFormat(format)};
   }
-  if (Error err = reader.end(); err) return err;
+  
   return {};
 } catch (FileIOError &e) {
   return e.what();
