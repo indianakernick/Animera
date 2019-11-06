@@ -85,13 +85,17 @@ ChunkStart ChunkReader::begin() {
   start.length = readInt();
   crc = crc32(0, nullptr, 0);
   readString(start.name, chunk_name_len);
+  std::memcpy(name, start.name, chunk_name_len);
   return start;
 }
 
 Error ChunkReader::end() {
   const uint32_t finalCrc = static_cast<uint32_t>(crc);
   if (finalCrc != readInt()) {
-    return "CRC mismatch";
+    QString msg = "CRC mismatch in '";
+    msg += QLatin1String{name, chunk_name_len};
+    msg += "' chunk";
+    return msg;
   } else {
     return {};
   }

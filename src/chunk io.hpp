@@ -61,6 +61,7 @@ public:
 private:
   QIODevice &dev;
   unsigned long crc;
+  char name[chunk_name_len];
   
   template <typename T>
   void readData(T *, uint32_t);
