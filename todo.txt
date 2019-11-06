@@ -116,9 +116,6 @@ lto
   monolithic
     722,208 bytes
 
-keys for info.plist
-  https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-
 fixed byte order image formats
   remove qRgb calls
   use RGBA_8888
@@ -261,6 +258,7 @@ editor cursor update issues
 panels can be nested
   download file in chrome then CMD+SHIFT+G
   what's up with the file dialog in export dialog?
+  is this a bug?
 
 growCell overflows
   could overflow cell pos

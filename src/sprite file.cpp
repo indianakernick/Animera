@@ -9,6 +9,7 @@
 #include "sprite file.hpp"
 
 #include "zlib.hpp"
+#include "strings.hpp"
 #include "chunk io.hpp"
 #include "cell span.hpp"
 #include <Graphics/format.hpp>
@@ -354,9 +355,9 @@ namespace {
 Error checkPaletteStart(ChunkStart start, const int multiple) {
   if (Error err = expectedName(start, chunk_palette); err) return err;
   if (start.length % multiple != 0 || start.length / multiple > pal_colors) {
-    QString msg = "Invalid ";
-    msg += chunk_palette;
-    msg += " chunk length ";
+    QString msg = "Invalid '";
+    msg += toLatinString(chunk_palette);
+    msg += "' chunk length ";
     msg += QString::number(start.length);
     return msg;
   }
@@ -443,11 +444,11 @@ Error readLHDR(QIODevice &dev, Layer &layer) try {
   const ChunkStart start = reader.begin();
   if (Error err = expectedName(start, chunk_layer_header); err) return err;
   if (start.length <= file_int_size + 1) {
-    return QString{chunk_layer_header} + " chunk length too small";
+    return "'" + toLatinString(chunk_layer_header) + "' chunk length too small";
   }
   const uint32_t nameLen = start.length - (file_int_size + 1);
   if (nameLen > layer_name_max_len) {
-    return QString{chunk_layer_header} + " chunk length too big";
+    return "'" + toLatinString(chunk_layer_header) + "' chunk length too big";
   }
   
   const uint32_t spans = reader.readInt();
@@ -472,7 +473,7 @@ Error readCHDR(QIODevice &dev, CellSpan &span, const Format format) try {
   const ChunkStart start = reader.begin();
   if (Error err = expectedName(start, chunk_cell_header); err) return err;
   if (start.length != file_int_size && start.length != 5 * file_int_size) {
-    return QString{chunk_cell_header} + " chunk length invalid";
+    return "'" + toLatinString(chunk_cell_header) + "' chunk length invalid";
   }
   
   span.len = static_cast<FrameIdx>(reader.readInt());

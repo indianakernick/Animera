@@ -10,6 +10,7 @@
 
 #include "config.hpp"
 #include "connect.hpp"
+#include "strings.hpp"
 #include <QtGui/qevent.h>
 #include <QtGui/qpainter.h>
 #include "widget painting.hpp"
@@ -52,7 +53,7 @@ void LayerNameWidget::setVisibility(const bool visibility) {
 }
 
 void LayerNameWidget::setName(const std::string_view text) {
-  name->setText(QString{QLatin1String{text.data(), static_cast<int>(text.size())}});
+  name->setText(QString{toLatinString(text)});
 }
 
 void LayerNameWidget::changeVisibility(const bool visibility) {

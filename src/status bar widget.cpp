@@ -10,6 +10,7 @@
 
 #include "config.hpp"
 #include "connect.hpp"
+#include "strings.hpp"
 #include "global font.hpp"
 #include <QtGui/qpainter.h>
 
@@ -21,14 +22,6 @@ StatusBarWidget::StatusBarWidget(QWidget *parent)
   setMinimumWidth(stat_min_width);
   setFixedHeight(stat_height);
   setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
-}
-
-namespace {
-
-QLatin1String toLatinString(const std::string_view text) {
-  return QLatin1String{text.data(), static_cast<int>(text.size())};
-}
-
 }
 
 void StatusBarWidget::showTemp(const std::string_view text) {
