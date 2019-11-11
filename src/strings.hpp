@@ -17,8 +17,7 @@ constexpr QLatin1String toLatinString(const std::string_view text) {
 
 template <size_t Size>
 constexpr QLatin1String toLatinString(const char (&text)[Size]) {
-  return QLatin1String{text, Size};
+  return QLatin1String{text, Size - 1};
 }
-
 
 #endif

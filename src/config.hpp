@@ -299,19 +299,13 @@ constexpr int        erro_wrap_width = 40;
 constexpr size_t file_sig_len = 8;
 constexpr char file_sig[file_sig_len] = "animera";
 
-#define NAME(STR)                                                               \
-  {STR[0], STR[1], STR[2], STR[3]};                                             \
-  static_assert(sizeof(STR) == sizeof(char) * 5)
-
 constexpr size_t chunk_name_len = 4;
-constexpr char chunk_palette[chunk_name_len] = NAME("PLTE");
-constexpr char chunk_anim_header[chunk_name_len] = NAME("AHDR");
-constexpr char chunk_layer_header[chunk_name_len] = NAME("LHDR");
-constexpr char chunk_cell_header[chunk_name_len] = NAME("CHDR");
-constexpr char chunk_cell_data[chunk_name_len] = NAME("CDAT");
-constexpr char chunk_anim_end[chunk_name_len] = NAME("AEND");
-
-#undef NAME
+constexpr char chunk_palette[chunk_name_len + 1] = "PLTE";
+constexpr char chunk_anim_header[chunk_name_len + 1] = "AHDR";
+constexpr char chunk_layer_header[chunk_name_len + 1] = "LHDR";
+constexpr char chunk_cell_header[chunk_name_len + 1] = "CHDR";
+constexpr char chunk_cell_data[chunk_name_len + 1] = "CDAT";
+constexpr char chunk_anim_end[chunk_name_len + 1] = "AEND";
 
 constexpr size_t file_buff_size = 1 << 15;
 constexpr size_t file_int_size = 4;

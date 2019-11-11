@@ -187,6 +187,7 @@ make exporting less tedious
   should export settings be kept in the sprite file?
     probably shouldn't store the directory
   button to export the settings stored in the file (Quick Export)
+  key_export_frame might make more sense with ALT instead of SHIFT
 
 proper undo/redo system
   an application-wide undo system would be cool
