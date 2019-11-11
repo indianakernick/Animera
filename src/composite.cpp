@@ -145,8 +145,9 @@ void fillMaskImage(QImage &dst, const QImage &mask, const QRgb color, const QPoi
 namespace {
 
 PixelRgba rgbaToOverlayPx(const PixelRgba pixel) {
-  const int gray = qGray(pixel);
-  const int alpha = scaleOverlayAlpha(qAlpha(pixel));
+  const gfx::Color color = gfx::ARGB::color(pixel);
+  const uint8_t gray = gfx::gray(color);
+  const uint8_t alpha = scaleOverlayAlpha(color.a);
   return qRgba(gray, gray, gray, alpha);
 }
 
@@ -155,9 +156,9 @@ PixelRgba paletteToOverlayPx(const PaletteCSpan palette, const PixelIndex pixel)
 }
 
 PixelRgba grayToOverlayPx(const PixelGray pixel) {
-  const int gray = gfx::YA::gray(pixel);
-  const int alpha = gfx::YA::alpha(pixel);
-  return qRgba(0, 0, scaleOverlayGray(gray), scaleOverlayAlpha(alpha));
+  const int gray = scaleOverlayGray(gfx::YA::gray(pixel));
+  const int alpha = scaleOverlayAlpha(gfx::YA::alpha(pixel));
+  return qRgba(0, 0, gray, alpha);
 }
 
 void rgbaToOverlay(gfx::Surface<PixelRgba> overlay, gfx::CSurface<PixelRgba> source) {

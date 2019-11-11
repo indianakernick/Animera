@@ -11,6 +11,7 @@
 #include "config.hpp"
 #include "connect.hpp"
 #include "label widget.hpp"
+#include <Graphics/format.hpp>
 #include "color input widget.hpp"
 #include "color graph widget.hpp"
 #include "color slider widget.hpp"
@@ -197,5 +198,5 @@ void PickerImplRGBA::changeHSV() {
 }
 
 void PickerImplRGBA::changeColor() {
-  Q_EMIT colorChanged(qRgba(colorRgb.r, colorRgb.g, colorRgb.b, alpha));
+  Q_EMIT colorChanged(gfx::ARGB::pixel(colorRgb.r, colorRgb.g, colorRgb.b, alpha));
 }

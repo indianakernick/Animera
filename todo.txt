@@ -120,6 +120,8 @@ fixed byte order image formats
   remove qRgb calls
   use RGBA_8888
   measure the speed increase
+  qRgba pixel format and rgba fixed order pixel format can coexist
+  strongly typed pixel formats?
 
 are there resources than can be shared between windows?
   global resource cache might be useful

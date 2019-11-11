@@ -21,12 +21,12 @@ constexpr int quantColor(const double size, const int color) {
 }
 
 constexpr QRgb quantColor(const int size, const int r, const int g, const int b) {
-  return qRgb(quantColor(size, r), quantColor(size, g), quantColor(size, b));
+  return gfx::ARGB::pixel(quantColor(size, r), quantColor(size, g), quantColor(size, b));
 }
 
 constexpr QRgb quantGrayColor(const int size, const int y) {
   const int gray = quantColor(size, y);
-  return qRgb(gray, gray, gray);
+  return gfx::ARGB::pixel(gray, gray, gray);
 }
 
 constexpr QRgb quantGray(const int size, const int y) {
@@ -106,8 +106,8 @@ void Palette::reset() {
   switch (canvasFormat) {
     case Format::index:
       *iter++ = 0;
-      *iter++ = qRgb(0, 0, 0);
-      *iter++ = qRgb(255, 255, 255);
+      *iter++ = gfx::ARGB::pixel(0, 0, 0);
+      *iter++ = gfx::ARGB::pixel(255, 255, 255);
       break;
     case Format::rgba:
       iter = std::copy(hue_palette.cbegin(), hue_palette.cend(), iter);
