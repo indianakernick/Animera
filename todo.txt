@@ -277,8 +277,6 @@ editor scaling is sometimes a pixel off
 
 -------------------------------- minor features --------------------------------
 
-would the user ever want to automatically adjust the scale of the editor?
-
 remove layer button appears when hovering layer name
   would this be more intuitive than a button that removes the current layer?
 

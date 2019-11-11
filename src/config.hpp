@@ -332,6 +332,7 @@ constexpr Qt::Key   key_tool_down = Qt::Key_A;
 // editor
 constexpr Qt::Key   key_zoom_out = Qt::Key_W;
 constexpr Qt::Key   key_zoom_in = Qt::Key_R;
+constexpr Qt::Key   key_zoom_fit = Qt::Key_T;
 constexpr Qt::Key   key_sample = Qt::Key_Z;
 constexpr Qt::Key   key_undo = Qt::Key_G;
 constexpr Qt::Key   key_redo = Qt::Key_B;

@@ -250,6 +250,8 @@ public:
       zoom(-1);
     } else if (event->key() == key_zoom_in) {
       zoom(1);
+    } else if (event->key() == key_zoom_fit) {
+      adjustScale();
     } else if (ButtonType button = getButton(event); button != ButtonType::none) {
       if (!event->isAutoRepeat()) {
         if (buttonDown == ButtonType::none) {
