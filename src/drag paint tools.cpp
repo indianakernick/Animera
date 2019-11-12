@@ -232,7 +232,8 @@ void StrokedRectangleTool::drawOverlay(QImage &overlay, const QPoint pos) {
 }
 
 void StrokedRectangleTool::updateStatus(StatusMsg &status, const QPoint start, const QPoint end) {
-  status.appendLabeled(unite(start, end));
+  status.append("RECT: ");
+  status.append(unite(start, end));
 }
 
 QRect StrokedRectangleTool::pointRect(const QPoint pos) {
@@ -259,7 +260,8 @@ void FilledRectangleTool::drawOverlay(QImage &overlay, const QPoint pos) {
 }
 
 void FilledRectangleTool::updateStatus(StatusMsg &status, const QPoint start, const QPoint end) {
-  status.appendLabeled(unite(start, end));
+  status.append("SELECTION: ");
+  status.append(unite(start, end));
 }
 
 QRect FilledRectangleTool::pointRect(const QPoint pos) {

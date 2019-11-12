@@ -35,6 +35,13 @@ StatusMsg &StatusMsg::append(const QSize size) {
   return append(toPoint(size));
 }
 
+StatusMsg &StatusMsg::append(const QRect rect) {
+  append(rect.topLeft());
+  append(' ');
+  append(rect.size());
+  return *this;
+}
+
 StatusMsg &StatusMsg::append(const SelectMode mode) {
   switch (mode) {
     case SelectMode::copy:  return append("COPY");
@@ -69,14 +76,6 @@ StatusMsg &StatusMsg::append(const int i) {
 StatusMsg &StatusMsg::appendLabeled(const QPoint pos) {
   append("POS: ");
   append(pos);
-  return *this;
-}
-
-StatusMsg &StatusMsg::appendLabeled(const QRect rect) {
-  append("POS: ");
-  append(rect.topLeft());
-  append(" SIZE: ");
-  append(rect.size());
   return *this;
 }
 

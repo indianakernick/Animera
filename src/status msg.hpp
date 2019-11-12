@@ -22,6 +22,7 @@ public:
 
   StatusMsg &append(QPoint);
   StatusMsg &append(QSize);
+  StatusMsg &append(QRect);
   StatusMsg &append(SelectMode);
   StatusMsg &append(LineGradMode);
   StatusMsg &append(bool);
@@ -35,7 +36,6 @@ public:
   }
   
   StatusMsg &appendLabeled(QPoint);
-  StatusMsg &appendLabeled(QRect);
   StatusMsg &appendLabeled(SelectMode);
   StatusMsg &appendLabeled(LineGradMode);
 
