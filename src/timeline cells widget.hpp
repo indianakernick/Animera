@@ -11,6 +11,7 @@
 
 #include <span>
 #include "cell.hpp"
+#include <QtCore/qtimer.h>
 #include "scroll bar widget.hpp"
 
 class CellsWidget final : public QWidget {
@@ -30,6 +31,8 @@ Q_SIGNALS:
   
 public Q_SLOTS:
   void setSelection(CellRect);
+  void paintSelection();
+  void animate();
   void setCurrPos(CellPos);
   void setLayer(LayerIdx, std::span<const CellSpan>);
   void setFrameCount(FrameIdx);
@@ -42,6 +45,9 @@ private:
   QImage currPosImg;
   QImage selectionImg;
   QImage layersImg;
+  QTimer selectionTimer;
+  QRect selectionRect;
+  int selectionFrame;
 
   void paintEvent(QPaintEvent *) override;
   void focusOutEvent(QFocusEvent *) override;

@@ -31,6 +31,9 @@ void resizeCopyImage(QImage &image, const QSize newSize) {
   image = newImage;
 }
 
+constexpr int interval = 200;
+constexpr int frames = 4;
+
 }
 
 CellsWidget::CellsWidget(QWidget *parent)
@@ -42,6 +45,8 @@ CellsWidget::CellsWidget(QWidget *parent)
   beginLinkPix = bakeColoredBitmap(":/Timeline/begin linked cell.png", cell_icon_color);
   endLinkPix = bakeColoredBitmap(":/Timeline/end linked cell.png", cell_icon_color);
   setFocusPolicy(Qt::ClickFocus);
+  CONNECT(selectionTimer, timeout, this, animate);
+  selectionTimer.start(interval);
 }
 
 void CellsWidget::setSelection(const CellRect rect) {
@@ -51,30 +56,72 @@ void CellsWidget::setSelection(const CellRect rect) {
     // animate?
     // do we really need this at all?
     // what if we change the colors of the cells? Could be problematic
-    QRect selectRect = {
+    selectionRect = {
       +rect.minF * cell_width,
       +rect.minL * cell_height,
       +(rect.maxF - rect.minF + FrameIdx{1}) * cell_width - glob_border_width,
       +(rect.maxL - rect.minL + LayerIdx{1}) * cell_height - glob_border_width
     };
-    drawStrokedRect(
-      selectionImg,
-      cell_select_color.rgba(),
-      selectRect,
-      glob_border_width
-    );
-    selectRect.adjust(
-      -2 * glob_border_width, -2 * glob_border_width,
-      2 * glob_border_width, 2 * glob_border_width
-    );
-    drawStrokedRect(
-      selectionImg,
-      cell_select_color.rgba(),
-      selectRect,
-      glob_border_width
-    );
+  } else {
+    selectionRect = {};
   }
+  paintSelection();
+}
+
+namespace {
+
+template <typename Func>
+void visitPerimeter(QRect rect, const int scale, Func func) {
+  rect.adjust(0, 0, 1 - scale, 1 - scale);
+  for (int x = rect.left(); x <= rect.right(); x += scale) {
+    func(QPoint{x, rect.top()});
+  }
+  for (int y = rect.top() + scale; y <= rect.bottom(); y += scale) {
+    func(QPoint{rect.right(), y});
+  }
+  for (int x = rect.right() - scale; x >= rect.left(); x -= scale) {
+    func(QPoint{x, rect.bottom()});
+  }
+  for (int y = rect.bottom() - scale; y >= rect.top(); y -= scale) {
+    func(QPoint{rect.left(), y});
+  }
+}
+
+}
+
+void CellsWidget::paintSelection() {
+  static_assert(frames % 2 == 0);
+  if (selectionRect.isEmpty()) return;
+  int pos = selectionFrame;
+  constexpr int half_frames = frames / 2;
+  constexpr int bord = glob_border_width;
+  visitPerimeter(selectionRect, glob_border_width, [this, &pos](const QPoint point) {
+    const QRgb color = pos < half_frames ? cell_select_color.rgba() : 0;
+    drawFilledRect(selectionImg, color, {point, QSize{bord, bord}});
+    pos = (pos + 1) % frames;
+  });
+  /*drawStrokedRect(
+    selectionImg,
+    cell_select_color.rgba(),
+    selectionRect,
+    glob_border_width
+  );*/
+  /*const QRect rect = selectionRect.adjusted(
+    -2 * glob_border_width, -2 * glob_border_width,
+    2 * glob_border_width, 2 * glob_border_width
+  );
+  drawStrokedRect(
+    selectionImg,
+    cell_select_color.rgba(),
+    rect,
+    glob_border_width
+  );*/
   repaint();
+}
+
+void CellsWidget::animate() {
+  paintSelection();
+  selectionFrame = (selectionFrame + 1) % frames;
 }
 
 void CellsWidget::setCurrPos(const CellPos pos) {
