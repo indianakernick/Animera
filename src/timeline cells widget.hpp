@@ -31,8 +31,6 @@ Q_SIGNALS:
   
 public Q_SLOTS:
   void setSelection(CellRect);
-  void paintSelection();
-  void animate();
   void setCurrPos(CellPos);
   void setLayer(LayerIdx, std::span<const CellSpan>);
   void setFrameCount(FrameIdx);
@@ -42,12 +40,15 @@ private:
   QPixmap cellPix;
   QPixmap beginLinkPix;
   QPixmap endLinkPix;
+  
   QImage currPosImg;
   QImage selectionImg;
+  QImage bordersImg;
   QImage layersImg;
-  QTimer selectionTimer;
+  
   QRect selectionRect;
-  int selectionFrame;
+  
+  void updateSelectionImg();
 
   void paintEvent(QPaintEvent *) override;
   void focusOutEvent(QFocusEvent *) override;

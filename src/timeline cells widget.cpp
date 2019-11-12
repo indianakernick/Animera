@@ -31,9 +31,6 @@ void resizeCopyImage(QImage &image, const QSize newSize) {
   image = newImage;
 }
 
-constexpr int interval = 200;
-constexpr int frames = 4;
-
 }
 
 CellsWidget::CellsWidget(QWidget *parent)
@@ -45,17 +42,10 @@ CellsWidget::CellsWidget(QWidget *parent)
   beginLinkPix = bakeColoredBitmap(":/Timeline/begin linked cell.png", cell_icon_color);
   endLinkPix = bakeColoredBitmap(":/Timeline/end linked cell.png", cell_icon_color);
   setFocusPolicy(Qt::ClickFocus);
-  CONNECT(selectionTimer, timeout, this, animate);
-  selectionTimer.start(interval);
 }
 
 void CellsWidget::setSelection(const CellRect rect) {
-  selectionImg.fill(0);
   if (rect.minL <= rect.maxL && rect.minF <= rect.maxF) {
-    // TODO: this needs work
-    // animate?
-    // do we really need this at all?
-    // what if we change the colors of the cells? Could be problematic
     selectionRect = {
       +rect.minF * cell_width,
       +rect.minL * cell_height,
@@ -65,63 +55,8 @@ void CellsWidget::setSelection(const CellRect rect) {
   } else {
     selectionRect = {};
   }
-  paintSelection();
-}
-
-namespace {
-
-template <typename Func>
-void visitPerimeter(QRect rect, const int scale, Func func) {
-  rect.adjust(0, 0, 1 - scale, 1 - scale);
-  for (int x = rect.left(); x <= rect.right(); x += scale) {
-    func(QPoint{x, rect.top()});
-  }
-  for (int y = rect.top() + scale; y <= rect.bottom(); y += scale) {
-    func(QPoint{rect.right(), y});
-  }
-  for (int x = rect.right() - scale; x >= rect.left(); x -= scale) {
-    func(QPoint{x, rect.bottom()});
-  }
-  for (int y = rect.bottom() - scale; y >= rect.top(); y -= scale) {
-    func(QPoint{rect.left(), y});
-  }
-}
-
-}
-
-void CellsWidget::paintSelection() {
-  static_assert(frames % 2 == 0);
-  if (selectionRect.isEmpty()) return;
-  int pos = selectionFrame;
-  constexpr int half_frames = frames / 2;
-  constexpr int bord = glob_border_width;
-  visitPerimeter(selectionRect, glob_border_width, [this, &pos](const QPoint point) {
-    const QRgb color = pos < half_frames ? cell_select_color.rgba() : 0;
-    drawFilledRect(selectionImg, color, {point, QSize{bord, bord}});
-    pos = (pos + 1) % frames;
-  });
-  /*drawStrokedRect(
-    selectionImg,
-    cell_select_color.rgba(),
-    selectionRect,
-    glob_border_width
-  );*/
-  /*const QRect rect = selectionRect.adjusted(
-    -2 * glob_border_width, -2 * glob_border_width,
-    2 * glob_border_width, 2 * glob_border_width
-  );
-  drawStrokedRect(
-    selectionImg,
-    cell_select_color.rgba(),
-    rect,
-    glob_border_width
-  );*/
+  updateSelectionImg();
   repaint();
-}
-
-void CellsWidget::animate() {
-  paintSelection();
-  selectionFrame = (selectionFrame + 1) % frames;
 }
 
 void CellsWidget::setCurrPos(const CellPos pos) {
@@ -152,47 +87,71 @@ void paintBorder(QPainter &painter, const int x, const int y) {
   );
 }
 
+template <typename Func>
+void apply(QPainter &a, QPainter &b, Func func) {
+  func(a);
+  func(b);
+}
+
 }
 
 void CellsWidget::setLayer(const LayerIdx idx, std::span<const CellSpan> spans) {
-  QPainter painter{&layersImg};
-  painter.setCompositionMode(QPainter::CompositionMode_Source);
-  painter.fillRect(0, +idx * cell_height, width(), cell_height, QColor{0, 0, 0, 0});
+  QPainter layers{&layersImg};
+  layers.setCompositionMode(QPainter::CompositionMode_Source);
+  QPainter borders{&bordersImg};
+  borders.setCompositionMode(QPainter::CompositionMode_Source);
+  
+  apply(layers, borders, [this, idx](QPainter &painter) {
+    painter.fillRect(0, +idx * cell_height, width(), cell_height, QColor{0, 0, 0, 0});
+  });
+  
   int x = cell_icon_pad;
   const int y = +idx * cell_height;
   for (const CellSpan &span : spans) {
     if (*span.cell) {
       if (span.len == FrameIdx{1}) {
-        painter.drawPixmap(x, y + cell_icon_pad, cellPix);
+        apply(layers, borders, [this, x, y](QPainter &painter) {
+          painter.drawPixmap(x, y + cell_icon_pad, cellPix);
+        });
         x += cell_width;
-        paintBorder(painter, x, y);
+        paintBorder(borders, x, y);
       } else if (span.len > FrameIdx{1}) {
         const int between = +(span.len - FrameIdx{2}) * cell_width;
-        painter.drawPixmap(x, y + cell_icon_pad, beginLinkPix);
+        apply(layers, borders, [this, x, y](QPainter &painter) {
+          painter.drawPixmap(x, y + cell_icon_pad, beginLinkPix);
+        });
         x += cell_width;
-        painter.fillRect(
-          x - cell_icon_pad - cell_border_offset, y + cell_icon_pad,
-          between + cell_icon_pad + cell_border_offset, cell_icon_size,
-          cell_icon_color
-        );
+        apply(layers, borders, [between, x, y](QPainter &painter) {
+          painter.fillRect(
+            x - cell_icon_pad - cell_border_offset, y + cell_icon_pad,
+            between + cell_icon_pad + cell_border_offset, cell_icon_size,
+            cell_icon_color
+          );
+        });
         x += between;
-        painter.drawPixmap(x, y + cell_icon_pad, endLinkPix);
+        apply(layers, borders, [this, x, y](QPainter &painter) {
+          painter.drawPixmap(x, y + cell_icon_pad, endLinkPix);
+        });
         x += cell_width;
-        paintBorder(painter, x, y);
+        paintBorder(borders, x, y);
       } else Q_UNREACHABLE();
     } else {
       for (FrameIdx f = {}; f != span.len; ++f) {
         x += cell_width;
-        paintBorder(painter, x, y);
+        paintBorder(borders, x, y);
       }
     }
   }
-  painter.fillRect(
+  
+  borders.fillRect(
     0, y + cell_height - glob_border_width,
     x - cell_icon_pad, glob_border_width,
     glob_border_color
   );
-  painter.end();
+  
+  borders.end();
+  layers.end();
+  updateSelectionImg();
   repaint();
 }
 
@@ -201,6 +160,7 @@ void CellsWidget::setFrameCount(const FrameIdx count) {
   resizeImage(currPosImg, size());
   resizeImage(selectionImg, size());
   resizeImage(layersImg, size());
+  resizeImage(bordersImg, size());
   Q_EMIT resized();
 }
 
@@ -209,13 +169,32 @@ void CellsWidget::setLayerCount(const LayerIdx count) {
   resizeImage(currPosImg, size());
   resizeImage(selectionImg, size());
   resizeCopyImage(layersImg, size());
+  resizeCopyImage(bordersImg, size());
   Q_EMIT resized();
+}
+
+void CellsWidget::updateSelectionImg() {
+  if (selectionRect.isEmpty()) {
+    selectionImg.fill(0);
+    return;
+  }
+  copyImage(selectionImg, layersImg);
+  QPainter painter{&selectionImg};
+  painter.setCompositionMode(QPainter::CompositionMode_SourceIn);
+  painter.fillRect(selectionRect, cell_select_color);
+  drawStrokedRect(
+    selectionImg,
+    cell_select_border_color.rgba(),
+    selectionRect,
+    glob_border_width
+  );
 }
 
 void CellsWidget::paintEvent(QPaintEvent *) {
   QPainter painter{this};
   painter.drawImage(0, 0, currPosImg);
   painter.drawImage(0, 0, layersImg);
+  painter.drawImage(0, 0, bordersImg);
   painter.drawImage(0, 0, selectionImg);
 }
 
