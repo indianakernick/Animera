@@ -12,6 +12,8 @@
 #include "color convert.hpp"
 #include <QtWidgets/qwidget.h>
 
+class StatusMsg;
+
 template <typename Derived>
 class ColorSliderWidget : public QWidget {
 public:
@@ -35,6 +37,7 @@ private:
   void mousePressEvent(QMouseEvent *) override;
   void mouseReleaseEvent(QMouseEvent *) override;
   void mouseMoveEvent(QMouseEvent *) override;
+  void leaveEvent(QEvent *) override;
   void keyPressEvent(QKeyEvent *) override;
 };
 
@@ -44,18 +47,21 @@ class HueSliderWidget final : public ColorSliderWidget<HueSliderWidget> {
   friend class ColorSliderWidget<HueSliderWidget>;
 
 public:
-  explicit HueSliderWidget(QWidget *);
+  HueSliderWidget(QWidget *, int);
 
 Q_SIGNALS:
   void hueChanged(int);
+  void shouldShowNorm(std::string_view);
 
 public Q_SLOTS:
   void setHue(int);
   void setSV(int, int);
   void setHSV(HSV);
+  void setAlpha(int);
   
 private:
   HSV color;
+  int alpha;
   
   void plotGraph();
   void renderBackground(QPainter &);
@@ -65,6 +71,7 @@ private:
   void setColor(int);
   void incColor();
   void decColor();
+  void updateStatus(StatusMsg &, int);
 };
 
 class AlphaSliderWidget final : public ColorSliderWidget<AlphaSliderWidget> {
@@ -73,10 +80,11 @@ class AlphaSliderWidget final : public ColorSliderWidget<AlphaSliderWidget> {
   friend class ColorSliderWidget<AlphaSliderWidget>;
   
 public:
-  explicit AlphaSliderWidget(QWidget *);
+  AlphaSliderWidget(QWidget *, bool);
   
 Q_SIGNALS:
   void alphaChanged(int);
+  void shouldShowNorm(std::string_view);
 
 public Q_SLOTS:
   void setAlpha(int);
@@ -87,6 +95,7 @@ public Q_SLOTS:
 private:
   HSV color;
   int alpha;
+  bool grayMode;
   
   void plotGraph();
   void renderBackground(QPainter &);
@@ -96,6 +105,7 @@ private:
   void setColor(int);
   void incColor();
   void decColor();
+  void updateStatus(StatusMsg &, int);
 };
 
 class GraySliderWidget final : public ColorSliderWidget<GraySliderWidget> {
@@ -104,16 +114,19 @@ class GraySliderWidget final : public ColorSliderWidget<GraySliderWidget> {
   friend class ColorSliderWidget<GraySliderWidget>;
 
 public:
-  explicit GraySliderWidget(QWidget *);
+  GraySliderWidget(QWidget *, int);
 
 Q_SIGNALS:
   void grayChanged(int);
+  void shouldShowNorm(std::string_view);
 
 public Q_SLOTS:
   void setGray(int);
+  void setAlpha(int);
 
 private:
   int gray;
+  int alpha;
   
   void plotGraph();
   void renderBackground(QPainter &);
@@ -123,6 +136,7 @@ private:
   void setColor(int);
   void incColor();
   void decColor();
+  void updateStatus(StatusMsg &, int);
 };
 
 #endif

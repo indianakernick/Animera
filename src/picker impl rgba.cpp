@@ -21,8 +21,8 @@ void PickerImplRGBA::init(QWidget *parent) {
   colorRgb = color2rgb(pick_default_color);
   alpha = pick_default_color.alpha();
   svGraph = new SVGraphWidget{parent, alpha};
-  hueSlider = new HueSliderWidget{parent};
-  alphaSlider = new AlphaSliderWidget{parent};
+  hueSlider = new HueSliderWidget{parent, alpha};
+  alphaSlider = new AlphaSliderWidget{parent, false};
   boxR = new NumberInputWidget{parent, pick_number_rect, {0, 255, colorRgb.r}};
   boxG = new NumberInputWidget{parent, pick_number_rect, {0, 255, colorRgb.g}};
   boxB = new NumberInputWidget{parent, pick_number_rect, {0, 255, colorRgb.b}};
@@ -99,6 +99,8 @@ void PickerImplRGBA::connectSignals() {
   CONNECT(boxHex,      rgbaChanged,    this,        setRGBA);
   
   CONNECT(svGraph,     shouldShowNorm, this,        shouldShowNorm);
+  CONNECT(hueSlider,   shouldShowNorm, this,        shouldShowNorm);
+  CONNECT(alphaSlider, shouldShowNorm, this,        shouldShowNorm);
 }
 
 void PickerImplRGBA::setColor(const QRgb color) {
@@ -140,6 +142,7 @@ void PickerImplRGBA::setAlpha(const int alp) {
   alpha = alp;
   boxHex->setRgba(colorRgb, alp);
   svGraph->setAlpha(alp);
+  hueSlider->setAlpha(alp);
   changeColor();
 }
 

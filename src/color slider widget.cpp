@@ -9,6 +9,7 @@
 #include "color slider widget.hpp"
 
 #include "config.hpp"
+#include "status msg.hpp"
 #include <QtGui/qevent.h>
 #include <QtGui/qpainter.h>
 #include "widget painting.hpp"
@@ -19,6 +20,7 @@ template <typename Derived>
 ColorSliderWidget<Derived>::ColorSliderWidget(QWidget *parent)
   : QWidget{parent},
     graph{pick_slider_rect.inner().width(), 1, QImage::Format_ARGB32_Premultiplied} {
+  setMouseTracking(true);
   setFocusPolicy(Qt::ClickFocus);
   setFixedSize(pick_slider_rect.widget().size());
   initBar();
@@ -63,7 +65,8 @@ void ColorSliderWidget<Derived>::paintEvent(QPaintEvent *) {
 
 template <typename Derived>
 void ColorSliderWidget<Derived>::setColor(QMouseEvent *event) {
-  static_cast<Derived *>(this)->setColor(event->localPos().x() - pick_slider_rect.inner().x());
+  const int pointX = event->localPos().x() - pick_slider_rect.inner().x();
+  static_cast<Derived *>(this)->setColor(pointX);
 }
 
 template <typename Derived>
@@ -87,6 +90,15 @@ void ColorSliderWidget<Derived>::mouseMoveEvent(QMouseEvent *event) {
   if (mouseDown) {
     setColor(event);
   }
+  StatusMsg status;
+  const int pointX = event->localPos().x() - pick_slider_rect.inner().x();
+  static_cast<Derived *>(this)->updateStatus(status, pointX);
+  Q_EMIT static_cast<Derived *>(this)->shouldShowNorm(status.get());
+}
+
+template <typename Derived>
+void ColorSliderWidget<Derived>::leaveEvent(QEvent *) {
+  Q_EMIT static_cast<Derived *>(this)->shouldShowNorm("");
 }
 
 template <typename Derived>
@@ -98,9 +110,10 @@ void ColorSliderWidget<Derived>::keyPressEvent(QKeyEvent *event) {
   }
 }
 
-HueSliderWidget::HueSliderWidget(QWidget *parent)
+HueSliderWidget::HueSliderWidget(QWidget *parent, const int alpha)
   : ColorSliderWidget{parent},
-    color{color2hsv(pick_default_color)} {
+    color{color2hsv(pick_default_color)},
+    alpha{alpha} {
   plotGraph();
 }
 
@@ -120,6 +133,10 @@ void HueSliderWidget::setHSV(const HSV hsv) {
   color = hsv;
   plotGraph();
   repaint();
+}
+
+void HueSliderWidget::setAlpha(const int newAlpha) {
+  alpha = newAlpha;
 }
 
 void HueSliderWidget::plotGraph() {
@@ -169,10 +186,20 @@ void HueSliderWidget::decColor() {
   updateHue(std::max(color.h - 1, 0));
 }
 
-AlphaSliderWidget::AlphaSliderWidget(QWidget *parent)
+void HueSliderWidget::updateStatus(StatusMsg &status, const int pointX) {
+  const int hue = pix2hue(pointX);
+  status.append("HUE: ");
+  status.append(hue);
+  status.append(" COLOR: ");
+  const RGB rgbColor = hsv2rgb({hue, color.s, color.v});
+  status.append(rgbColor.r, rgbColor.g, rgbColor.b, alpha);
+}
+
+AlphaSliderWidget::AlphaSliderWidget(QWidget *parent, const bool grayMode)
   : ColorSliderWidget{parent},
     color{color2hsv(pick_default_color)},
-    alpha{pick_default_color.alpha()} {
+    alpha{pick_default_color.alpha()},
+    grayMode{grayMode} {
   plotGraph();
 }
 
@@ -259,9 +286,23 @@ void AlphaSliderWidget::decColor() {
   updateAlpha(std::max(alpha - 1, 0));
 }
 
-GraySliderWidget::GraySliderWidget(QWidget *parent)
+void AlphaSliderWidget::updateStatus(StatusMsg &status, const int pointX) {
+  const int alphaValue = pix2alp(pointX);
+  status.append("ALPHA: ");
+  status.append(alphaValue);
+  status.append(" COLOR: ");
+  if (grayMode) {
+    status.append((color.v * 255 + 50) / 100, alphaValue);
+  } else {
+    const RGB rgbColor = hsv2rgb(color);
+    status.append(rgbColor.r, rgbColor.g, rgbColor.b, alphaValue);
+  }
+}
+
+GraySliderWidget::GraySliderWidget(QWidget *parent, const int alpha)
   : ColorSliderWidget{parent},
-    gray{pick_default_gray} {
+    gray{pick_default_gray},
+    alpha{alpha} {
   plotGraph();
 }
 
@@ -270,10 +311,14 @@ void GraySliderWidget::setGray(const int newGray) {
   repaint();
 }
 
+void GraySliderWidget::setAlpha(const int newAlpha) {
+  alpha = newAlpha;
+}
+
 void GraySliderWidget::plotGraph() {
   int idx = 0;
   for (QRgb &pixel : *gfx::begin(makeSurface<QRgb>(graph))) {
-    // can't use alp2pix here
+    // can't use pix2alp here
     const int y = qRound(idx++ * 255.0 / (pick_slider_rect.inner().width() - 1));
     pixel = qRgb(y, y, y);
   }
@@ -303,6 +348,14 @@ void GraySliderWidget::incColor() {
 
 void GraySliderWidget::decColor() {
   updateGray(std::max(gray - 1, 0));
+}
+
+void GraySliderWidget::updateStatus(StatusMsg &status, const int pointX) {
+  const int grayValue = pix2alp(pointX);
+  status.append("GRAY: ");
+  status.append(grayValue);
+  status.append(" COLOR: ");
+  status.append(grayValue, alpha);
 }
 
 #include "color slider widget.moc"

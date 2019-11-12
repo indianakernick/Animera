@@ -31,8 +31,8 @@ void PickerImplGray::init(QWidget *parent) {
   gray = pick_default_gray;
   alpha = pick_default_color.alpha();
   const int value = toValue(gray);
-  graySlider = new GraySliderWidget{parent};
-  alphaSlider = new AlphaSliderWidget{parent};
+  graySlider = new GraySliderWidget{parent, alpha};
+  alphaSlider = new AlphaSliderWidget{parent, true};
   alphaSlider->setHSV({0, 0, value});
   boxA = new NumberInputWidget{parent, pick_number_rect, {0, 255, alpha}};
   boxY = new NumberInputWidget{parent, pick_number_rect, {0, 255, gray}};
@@ -54,19 +54,22 @@ void PickerImplGray::setupLayout(QGridLayout *layout) {
 }
 
 void PickerImplGray::connectSignals() {
-  CONNECT(graySlider,  grayChanged,  boxY,        setValue);
-  CONNECT(boxY,        valueChanged, graySlider,  setGray);
+  CONNECT(graySlider,  grayChanged,    boxY,        setValue);
+  CONNECT(boxY,        valueChanged,   graySlider,  setGray);
 
-  CONNECT(graySlider,  grayChanged,  this,        setGray);
-  CONNECT(boxY,        valueChanged, this,        setGray);
+  CONNECT(graySlider,  grayChanged,    this,        setGray);
+  CONNECT(boxY,        valueChanged,   this,        setGray);
   
-  CONNECT(alphaSlider, alphaChanged, boxA,        setValue);
-  CONNECT(boxA,        valueChanged, alphaSlider, setAlpha);
+  CONNECT(alphaSlider, alphaChanged,   boxA,        setValue);
+  CONNECT(boxA,        valueChanged,   alphaSlider, setAlpha);
   
-  CONNECT(alphaSlider, alphaChanged, this,        setAlpha);
-  CONNECT(boxA,        valueChanged, this,        setAlpha);
+  CONNECT(alphaSlider, alphaChanged,   this,        setAlpha);
+  CONNECT(boxA,        valueChanged,   this,        setAlpha);
   
-  CONNECT(boxV,        valueChanged, this,        setValue);
+  CONNECT(boxV,        valueChanged,   this,        setValue);
+  
+  CONNECT(graySlider,  shouldShowNorm, this,        shouldShowNorm);
+  CONNECT(alphaSlider, shouldShowNorm, this,        shouldShowNorm);
 }
 
 void PickerImplGray::setColor(const QRgb color) {
@@ -98,6 +101,7 @@ void PickerImplGray::setGray(const int newGray) {
 
 void PickerImplGray::setAlpha(const int newAlpha) {
   alpha = newAlpha;
+  graySlider->setAlpha(newAlpha);
   changeColor();
 }
 

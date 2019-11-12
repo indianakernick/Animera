@@ -298,3 +298,5 @@ there might be a few random constants that should be in config.hpp but aren't
 Should probably be calling update() instead of repaint() in most places
 
 Should probably be using mouse release instead of mouse press in some places
+
+Can probably remove a few qRound calls and use ints instead
