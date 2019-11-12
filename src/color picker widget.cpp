@@ -74,7 +74,8 @@ void ColorPickerWidget::setupLayout() {
 }
 
 void ColorPickerWidget::connectSignals() {
-  CONNECT(impl, colorChanged, this, setHandleColor);
+  CONNECT(impl, colorChanged,   this, setHandleColor);
+  CONNECT(impl, shouldShowNorm, this, shouldShowNorm);
   impl->connectSignals();
 }
 

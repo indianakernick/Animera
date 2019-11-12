@@ -26,6 +26,7 @@ public:
 
 Q_SIGNALS:
   void colorChanged(QRgb);
+  void shouldShowNorm(std::string_view);
 };
 
 #endif

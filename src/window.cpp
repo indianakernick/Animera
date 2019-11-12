@@ -352,6 +352,8 @@ void Window::connectSignals() {
   CONNECT(palette,         paletteColorChanged, colors,          changePaletteColors);
   CONNECT(palette,         paletteColorChanged, this,            modify);
   CONNECT(palette,         shouldShowNorm,      statusBar,       showNorm);
+  
+  CONNECT(colorPicker,     shouldShowNorm,      statusBar,       showNorm);
 }
 
 void Window::saveToPath(const QString &path) {

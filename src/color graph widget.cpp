@@ -9,16 +9,19 @@
 #include "color graph widget.hpp"
 
 #include "config.hpp"
+#include "status msg.hpp"
 #include <QtGui/qevent.h>
 #include <QtGui/qpainter.h>
 #include "widget painting.hpp"
 #include "surface factory.hpp"
 #include <Graphics/iterator.hpp>
 
-SVGraphWidget::SVGraphWidget(QWidget *parent)
+SVGraphWidget::SVGraphWidget(QWidget *parent, const int alpha)
   : QWidget{parent},
     graph{pick_svgraph_rect.inner().size(), QImage::Format_ARGB32_Premultiplied},
-    color{color2hsv(pick_default_color)} {
+    color{color2hsv(pick_default_color)},
+    alpha{alpha} {
+  setMouseTracking(true);
   setFocusPolicy(Qt::ClickFocus);
   setFixedSize(pick_svgraph_rect.widget().size());
   initCircle();
@@ -44,6 +47,10 @@ void SVGraphWidget::setHSV(const HSV hsv) {
   repaint();
 }
 
+void SVGraphWidget::setAlpha(const int alp) {
+  alpha = alp;
+}
+
 void SVGraphWidget::plotGraph(const int hue) {
   // x   - saturation
   // y   - value
@@ -54,7 +61,7 @@ void SVGraphWidget::plotGraph(const int hue) {
   for (auto row : gfx::range(makeSurface<QRgb>(graph))) {
     for (QRgb &pixel : row) {
       pixel = hsv2rgb(
-        hue, // can't use sat2pix and val2pix here
+        hue, // can't use pix2sat and pix2val here
         sat++ * 100.0 / (pick_svgraph_rect.inner().width() - 1),
         val * 100.0 / (pick_svgraph_rect.inner().height() - 1)
       );
@@ -130,6 +137,21 @@ void SVGraphWidget::setColor(QPointF point) {
   updateSV(pix2sat(point.x()), pix2val(point.y()));
 }
 
+void SVGraphWidget::updateStatus(QPointF point) {
+  point -= pick_svgraph_rect.inner().topLeft();
+  const int sat = pix2sat(point.x());
+  const int val = pix2val(point.y());
+  StatusMsg status;
+  status.append("SATURATION: ");
+  status.append(sat);
+  status.append(" VALUE: ");
+  status.append(val);
+  status.append(" COLOR: ");
+  const RGB rgbColor = hsv2rgb({color.h, sat, val});
+  status.append(rgbColor.r, rgbColor.g, rgbColor.b, alpha);
+  Q_EMIT shouldShowNorm(status.get());
+}
+
 void SVGraphWidget::mousePressEvent(QMouseEvent *event) {
   if (event->button() == Qt::LeftButton) {
     mouseDown = true;
@@ -148,6 +170,11 @@ void SVGraphWidget::mouseMoveEvent(QMouseEvent *event) {
   if (mouseDown) {
     setColor(event->localPos());
   }
+  updateStatus(event->localPos());
+}
+
+void SVGraphWidget::leaveEvent(QEvent *) {
+  Q_EMIT shouldShowNorm("");
 }
 
 void SVGraphWidget::keyPressEvent(QKeyEvent *event) {

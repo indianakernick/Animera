@@ -23,6 +23,9 @@ class ColorPickerWidget final : public QWidget {
 public:
   explicit ColorPickerWidget(QWidget *);
 
+Q_SIGNALS:
+  void shouldShowNorm(std::string_view);
+
 public Q_SLOTS:
   void initCanvas(Format);
   void attach(ColorHandle *);

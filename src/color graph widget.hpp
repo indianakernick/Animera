@@ -16,20 +16,23 @@ class SVGraphWidget final : public QWidget {
   Q_OBJECT
 
 public:
-  explicit SVGraphWidget(QWidget *);
+  SVGraphWidget(QWidget *, int);
 
 Q_SIGNALS:
   void svChanged(int, int);
+  void shouldShowNorm(std::string_view);
 
 public Q_SLOTS:
   void setHue(int);
   void setSV(int, int);
   void setHSV(HSV);
+  void setAlpha(int);
 
 private:
   QImage graph;
   QPixmap circle;
   HSV color;
+  int alpha;
   bool mouseDown = false;
   
   void plotGraph(int);
@@ -42,10 +45,12 @@ private:
   
   void updateSV(int, int);
   void setColor(QPointF);
+  void updateStatus(QPointF);
   
   void mousePressEvent(QMouseEvent *) override;
   void mouseReleaseEvent(QMouseEvent *) override;
   void mouseMoveEvent(QMouseEvent *) override;
+  void leaveEvent(QEvent *) override;
   void keyPressEvent(QKeyEvent *) override;
 };
 
