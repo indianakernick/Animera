@@ -145,7 +145,7 @@ struct IntRange {
   int def = 0;
 };
 
-// ---------------------------------- tools --------------------------------- //
+// ------------------------------- tool select ------------------------------ //
 
 constexpr QSize     tool_icon_size = {24_px, 24_px};
 constexpr QSize     tool_icon_padding = {1_px, 1_px};
@@ -316,6 +316,16 @@ static_assert(sizeof(int) >= sizeof(uint32_t));
 constexpr int max_image_width = ~uint32_t{} / 4;
 constexpr int max_image_height = max_image_width;
 
+// ---------------------------------- tools --------------------------------- //
+
+// brush
+constexpr IntRange  brsh_radius = {0, 64, 0};
+
+// wand
+constexpr int       wand_alpha = 128;
+constexpr int       wand_frames = 8;
+constexpr int       wand_interval = 100;
+
 // ---------------------------------- keys ---------------------------------- //
 
 // all tools
@@ -336,9 +346,6 @@ constexpr Qt::Key   key_zoom_fit = Qt::Key_T;
 constexpr Qt::Key   key_sample = Qt::Key_Z;
 constexpr Qt::Key   key_undo = Qt::Key_G;
 constexpr Qt::Key   key_redo = Qt::Key_B;
-
-// brush
-constexpr IntRange  brsh_radius = {0, 64, 0};
 
 // translate
 constexpr Qt::Key   key_mov_up = Qt::Key_Up;

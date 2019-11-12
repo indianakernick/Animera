@@ -9,6 +9,7 @@
 #include "select tools.hpp"
 
 #include "cell.hpp"
+#include "connect.hpp"
 #include "painting.hpp"
 #include "composite.hpp"
 #include "surface factory.hpp"
@@ -299,15 +300,23 @@ void PolygonSelectTool::pushPoly(const QPoint point) {
   bounds = bounds.united(toRect(point));
 }
 
+WandSelectTool::WandSelectTool() {
+  animFrame = 0;
+  animTimer.setInterval(wand_interval);
+  CONNECT_LAMBDA(animTimer, timeout, [this]{ animate(); });
+}
+
 void WandSelectTool::attachCell() {
   mode = SelectMode::copy;
   if (resizeImages()) {
     mask = {ctx->size, mask_format};
   }
   clearImage(mask);
+  animTimer.start();
 }
 
 void WandSelectTool::detachCell() {
+  animTimer.stop();
   clearImage(*ctx->overlay);
   ctx->emitChanges(ToolChanges::overlay);
 }
@@ -323,6 +332,7 @@ void WandSelectTool::mouseLeave(const ToolLeaveEvent &) {
 void WandSelectTool::mouseDown(const ToolMouseEvent &event) {
   if (event.button == ButtonType::secondary) {
     toggleMode(event);
+    ctx->emitChanges(ToolChanges::overlay);
   }
 
   StatusMsg status;
@@ -333,7 +343,6 @@ void WandSelectTool::mouseDown(const ToolMouseEvent &event) {
     if (event.button == ButtonType::primary) {
       addToSelection(event);
     }
-    ctx->emitChanges(ToolChanges::overlay);
   } else if (mode == SelectMode::paste) {
     clearImage(*ctx->overlay);
     showOverlay(event.pos);
@@ -365,7 +374,9 @@ void WandSelectTool::toggleMode(const ToolMouseEvent &event) {
     clearImage(overlay);
     clearImage(mask);
     bounds = {};
+    animTimer.start();
   } else if (mode == SelectMode::copy) {
+    animTimer.stop();
     if (bounds.isEmpty()) return;
     mode = SelectMode::paste;
     clearImage(selection);
@@ -378,26 +389,18 @@ namespace {
 template <typename Pixel>
 class WandPolicy {
 public:
-  WandPolicy(
-    gfx::Surface<PixelRgba> overlay,
-    gfx::Surface<PixelMask> mask,
-    gfx::CSurface<Pixel> source,
-    const PixelRgba constrastColor
-  ) : overlay{overlay},
-      mask{mask},
-      source{source},
-      constrastColor{constrastColor} {}
+  WandPolicy(gfx::Surface<PixelMask> mask, gfx::CSurface<Pixel> source)
+    : mask{mask}, source{source} {}
 
   bool start(const gfx::Point pos) {
     startColor = source.ref(pos);
     maskCheckColor = mask.ref(pos);
     maskColor = ~maskCheckColor;
-    if (maskColor == 0) {
-      overlayColor = 0;
-    } else {
-      overlayColor = constrastColor;
-    }
     return true;
+  }
+  
+  bool removed() const {
+    return maskColor == 0;
   }
   
   gfx::Size size() const {
@@ -410,34 +413,16 @@ public:
   }
   
   void set(const gfx::Point pos) const {
-    overlay.ref(pos) = overlayColor;
     mask.ref(pos) = maskColor;
   }
 
 private:
-  gfx::Surface<PixelRgba> overlay;
   gfx::Surface<PixelMask> mask;
   gfx::CSurface<Pixel> source;
   Pixel startColor;
-  PixelRgba constrastColor;
-  PixelRgba overlayColor;
   PixelMask maskColor;
   PixelMask maskCheckColor;
 };
-
-PixelRgba contrastColor(const PixelRgba pixel) {
-  // TODO: maybe the overlay could animate between semi-transparent black and white
-  const gfx::Color color = gfx::ARGB::color(pixel);
-  if (gfx::gray(color) < 128 && color.a >= 128) {
-    return gfx::ARGB::pixel(255, 255, 255);
-  } else {
-    return gfx::ARGB::pixel(0, 0, 0);
-  }
-}
-
-PixelRgba contrastGray(const PixelGray pixel) {
-  return gfx::ARGB::pixel(0, 0, scaleOverlayGray(gfx::YA::gray(pixel)));
-}
 
 }
 
@@ -448,44 +433,59 @@ void WandSelectTool::addToSelection(const ToolMouseEvent &event) {
   } else {
     rect = rect.intersected(ctx->cell->rect());
   }
-  const gfx::Surface overlaySurface = makeSurface<PixelRgba>(*ctx->overlay).view(convert(rect));
   const gfx::Surface maskSurface = makeSurface<PixelMask>(mask).view(convert(rect));
   const gfx::Point cellPos = convert(event.pos - rect.topLeft());
   const gfx::Rect cellRect = convert(rect.translated(-ctx->cell->pos));
+  bool removedFromSelection = false;
 
   switch (ctx->format) {
     case Format::rgba: {
       gfx::Surface surface = makeCSurface<PixelRgba>(ctx->cell->img).view(cellRect);
-      WandPolicy policy{
-        overlaySurface,
-        maskSurface,
-        surface,
-        contrastColor(surface.ref(cellPos))
-      };
+      WandPolicy policy{maskSurface, surface};
       bounds = bounds.united(convert(gfx::floodFill(policy, cellPos)).translated(rect.topLeft()));
+      removedFromSelection = policy.removed();
       break;
     }
     case Format::index: {
       gfx::Surface surface = makeCSurface<PixelIndex>(ctx->cell->img).view(cellRect);
-      WandPolicy policy{
-        overlaySurface,
-        maskSurface,
-        surface,
-        contrastColor(ctx->palette[surface.ref(cellPos)])
-      };
+      WandPolicy policy{maskSurface, surface};
       bounds = bounds.united(convert(gfx::floodFill(policy, cellPos)).translated(rect.topLeft()));
+      removedFromSelection = policy.removed();
       break;
     }
     case Format::gray: {
       gfx::Surface surface = makeCSurface<PixelGray>(ctx->cell->img).view(cellRect);
-      WandPolicy policy{
-        overlaySurface,
-        maskSurface,
-        surface,
-        contrastGray(surface.ref(cellPos))
-      };
+      WandPolicy policy{maskSurface, surface};
       bounds = bounds.united(convert(gfx::floodFill(policy, cellPos)).translated(rect.topLeft()));
+      removedFromSelection = policy.removed();
       break;
     }
   }
+  
+  if (removedFromSelection) {
+    // TODO: don't clear the whole overlay
+    // just clear rect
+    clearImage(*ctx->overlay);
+  }
+  paintOverlay();
+}
+
+QRgb WandSelectTool::getOverlayColor() const {
+  static_assert(wand_frames % 2 == 0);
+  constexpr int half_frames = wand_frames / 2;
+  constexpr int quarter_frames = wand_frames / 4;
+  const int mirroredFrame = animFrame > half_frames ? wand_frames - animFrame : animFrame;
+  const int gray = (mirroredFrame * 255 + quarter_frames) / half_frames;
+  return qRgba(gray, gray, gray, wand_alpha);
+}
+
+void WandSelectTool::paintOverlay() const {
+  const QRect rect = toRect(ctx->size).intersected(ctx->cell->rect());
+  fillMaskImage(*ctx->overlay, cview(mask, rect), getOverlayColor(), rect.topLeft());
+  ctx->emitChanges(ToolChanges::overlay);
+}
+
+void WandSelectTool::animate() {
+  paintOverlay();
+  animFrame = (animFrame + 1) % wand_frames;
 }

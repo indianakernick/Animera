@@ -122,6 +122,10 @@ fixed byte order image formats
   measure the speed increase
   qRgba pixel format and rgba fixed order pixel format can coexist
   strongly typed pixel formats?
+  might not actually be an optimization
+    qt is optimized for ARGB32 not RGBA8888
+    we'd be saving a few milliseconds on reading and writing
+    but compositing might slow down a bit
 
 are there resources than can be shared between windows?
   global resource cache might be useful
@@ -134,6 +138,10 @@ thick line
   https://stackoverflow.com/questions/11194876/clip-line-to-screen-coordinates/11195387
   https://www.skytopia.com/project/articles/compsci/clipping.html
   http://kt8216.unixcab.org/murphy/index.html
+
+don't clear the whole overlay
+  do we really need to clear the whole thing all the time
+  there are some places where we must clear the whole thing
 
 ----------------------------------- scripting ----------------------------------
 
@@ -279,6 +287,9 @@ editor scaling is sometimes a pixel off
 
 remove layer button appears when hovering layer name
   would this be more intuitive than a button that removes the current layer?
+  
+should the editor keys go in a menubar?
+  how else are users supposed to discover these keys?
 
 ------------------------------- minor refactoring ------------------------------
 

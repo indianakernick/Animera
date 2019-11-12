@@ -456,11 +456,15 @@ public:
     const auto diff = std::chrono::duration_cast<OutputDuration>(
       endTime - startTime
     );
-    std::cout.width(16);
-    std::cout << std::left << name << ' ';
-    std::cout.precision(3);
-    std::cout << diff.count() << "ms\n";
+    std::printf("%-16s %.3gms\n", name, diff.count());
     name = nullptr;
+  }
+  double get() const {
+    assert(name);
+    const auto endTime = Clock::now();
+    return std::chrono::duration_cast<OutputDuration>(
+      endTime - startTime
+    ).count();
   }
   void stopAndStart(const char *timerName) {
     stop();
@@ -471,6 +475,7 @@ private:
   const char *name = nullptr;
   Clock::time_point startTime;
 };
+
 /*
 #include <QtCore/qtimer.h>
 

@@ -10,6 +10,7 @@
 #define select_tools_hpp
 
 #include "tool.hpp"
+#include <QtCore/qtimer.h>
 
 template <typename Derived>
 class SelectTool : public Tool {
@@ -64,6 +65,8 @@ private:
 // TODO: What if you could remove from the selection by pressing undo?
 class WandSelectTool final : public SelectTool<WandSelectTool> {
 public:
+  WandSelectTool();
+  
   void attachCell() override;
   void detachCell() override;
   void mouseLeave(const ToolLeaveEvent &) override;
@@ -72,9 +75,14 @@ public:
 
 private:
   QImage mask;
+  QTimer animTimer;
+  int animFrame;
   
   void toggleMode(const ToolMouseEvent &);
   void addToSelection(const ToolMouseEvent &);
+  QRgb getOverlayColor() const;
+  void paintOverlay() const;
+  void animate();
 };
 
 #endif
