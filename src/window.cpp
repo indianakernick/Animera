@@ -333,6 +333,7 @@ void Window::connectSignals() {
   CONNECT(colors,          colorsChanged,       tools,           setColors);
   CONNECT(colors,          shouldAttachColor,   colorPicker,     attach);
   CONNECT(colors,          shouldAttachIndex,   palette,         attachIndex);
+  CONNECT(colors,          shouldShowNorm,      statusBar,       showNorm);
   
   CONNECT(sample,          shouldSetColor,      colorPicker,     setColor);
   CONNECT(sample,          shouldSetIndex,      colors,          setIndex);

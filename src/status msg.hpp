@@ -20,14 +20,16 @@ public:
   bool empty() const;
   std::string_view get() const;
 
+  StatusMsg &append(bool);
+  StatusMsg &append(char);
+  StatusMsg &append(int);
+  StatusMsg &append(int, int);
+  StatusMsg &append(int, int, int, int);
   StatusMsg &append(QPoint);
   StatusMsg &append(QSize);
   StatusMsg &append(QRect);
   StatusMsg &append(SelectMode);
   StatusMsg &append(LineGradMode);
-  StatusMsg &append(bool);
-  StatusMsg &append(char);
-  StatusMsg &append(int);
   
   template <size_t Size>
   StatusMsg &append(const char (&str)[Size]) {

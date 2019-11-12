@@ -32,6 +32,7 @@ Q_SIGNALS:
   void colorsChanged(ToolColors);
   void shouldAttachColor(ColorHandle *);
   void shouldAttachIndex(int);
+  void shouldShowNorm(std::string_view);
 
 private Q_SLOTS:
   void changeColors();

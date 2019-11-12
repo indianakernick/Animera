@@ -66,6 +66,7 @@ Q_SIGNALS:
   void colorChanged();
   void shouldAttachColor(ColorHandle *);
   void shouldAttachIndex(int);
+  void shouldShowNorm(std::string_view);
   
 private:
   QString name;
@@ -112,6 +113,34 @@ private:
   }
   void detach() override {
     uncheck();
+  }
+  
+  void enterEvent(QEvent *) override {
+    StatusMsg status;
+    gfx::Color gColor;
+    switch (format) {
+      case Format::rgba:
+        status.append("COLOR: ");
+        gColor = gfx::ARGB::color(color);
+        status.append(gColor.r, gColor.g, gColor.b, gColor.a);
+        break;
+      case Format::index:
+        status.append("INDEX: ");
+        status.append(static_cast<int>(color));
+        status.append(" COLOR: ");
+        gColor = gfx::ARGB::color(palette[color]);
+        status.append(gColor.r, gColor.g, gColor.b, gColor.a);
+        break;
+      case Format::gray:
+        status.append("COLOR: ");
+        gColor = gfx::YA::color(color);
+        status.append(gColor.r, gColor.a);
+        break;
+    }
+    Q_EMIT shouldShowNorm(status.get());
+  }
+  void leaveEvent(QEvent *) override {
+    Q_EMIT shouldShowNorm("");
   }
 };
 
@@ -186,6 +215,7 @@ void ToolColorsWidget::connectSignals() {
     CONNECT(widget, colorChanged,      this, changeColors);
     CONNECT(widget, shouldAttachColor, this, shouldAttachColor);
     CONNECT(widget, shouldAttachIndex, this, shouldAttachIndex);
+    CONNECT(widget, shouldShowNorm,    this, shouldShowNorm);
   }
 }
 

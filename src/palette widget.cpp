@@ -140,21 +140,9 @@ private:
     status.append(" COLOR: ");
     const gfx::Color gColor = getGColor();
     if (format == Format::gray) {
-      status.append('[');
-      status.append(gColor.r);
-      status.append(' ');
-      status.append(gColor.a);
-      status.append(']');
+      status.append(gColor.r, gColor.a);
     } else if (format == Format::rgba || format == Format::index) {
-      status.append('[');
-      status.append(gColor.r);
-      status.append(' ');
-      status.append(gColor.g);
-      status.append(' ');
-      status.append(gColor.b);
-      status.append(' ');
-      status.append(gColor.a);
-      status.append(']');
+      status.append(gColor.r, gColor.g, gColor.b, gColor.a);
     }
     Q_EMIT shouldShowNorm(status.get());
   }

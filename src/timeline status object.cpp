@@ -36,9 +36,9 @@ void StatusObject::setLayerCount(const LayerIdx newLayerCount) {
 void StatusObject::updateStatus() {
   StatusMsg status;
   status.append("CELLS: ");
-  status.append(QSize{+frameCount, +layerCount});
+  status.append(+frameCount, +layerCount);
   status.append(" CELL: ");
-  status.append(QPoint{+currPos.f, +currPos.l});
+  status.append(+currPos.f, +currPos.l);
   if (selection.minL <= selection.maxL && selection.minF <= selection.maxF) {
     status.append(" SELECTION: ");
     status.append({

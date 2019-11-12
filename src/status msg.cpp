@@ -8,8 +8,6 @@
 
 #include "status msg.hpp"
 
-#include "geometry.hpp"
-
 void StatusMsg::clear() {
   msg.clear();
 }
@@ -22,17 +20,49 @@ std::string_view StatusMsg::get() const {
   return msg;
 }
 
-StatusMsg &StatusMsg::append(const QPoint point) {
+StatusMsg &StatusMsg::append(const bool b) {
+  msg += b ? "YES" : "NO";
+  return *this;
+}
+
+StatusMsg &StatusMsg::append(const char c) {
+  msg += c;
+  return *this;
+}
+
+StatusMsg &StatusMsg::append(const int i) {
+  msg += std::to_string(i);
+  return *this;
+}
+
+StatusMsg &StatusMsg::append(const int a, const int b) {
   append('[');
-  append(point.x());
+  append(a);
   append(' ');
-  append(point.y());
+  append(b);
   append(']');
   return *this;
 }
 
+StatusMsg &StatusMsg::append(const int a, const int b, const int c, const int d) {
+  append('[');
+  append(a);
+  append(' ');
+  append(b);
+  append(' ');
+  append(c);
+  append(' ');
+  append(d);
+  append(']');
+  return *this;
+}
+
+StatusMsg &StatusMsg::append(const QPoint point) {
+  return append(point.x(), point.y());
+}
+
 StatusMsg &StatusMsg::append(const QSize size) {
-  return append(toPoint(size));
+  return append(size.width(), size.height());
 }
 
 StatusMsg &StatusMsg::append(const QRect rect) {
@@ -56,21 +86,6 @@ StatusMsg &StatusMsg::append(const LineGradMode mode) {
     case LineGradMode::vert: return append("VERT");
     default: Q_UNREACHABLE();
   }
-}
-
-StatusMsg &StatusMsg::append(const bool b) {
-  msg += b ? "YES" : "NO";
-  return *this;
-}
-
-StatusMsg &StatusMsg::append(const char c) {
-  msg += c;
-  return *this;
-}
-
-StatusMsg &StatusMsg::append(const int i) {
-  msg += std::to_string(i);
-  return *this;
 }
 
 StatusMsg &StatusMsg::appendLabeled(const QPoint pos) {
