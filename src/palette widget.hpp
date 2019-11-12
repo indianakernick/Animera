@@ -33,6 +33,7 @@ Q_SIGNALS:
   void shouldSetColor(QRgb);
   void shouldSetIndex(int);
   void paletteColorChanged();
+  void shouldShowNorm(std::string_view);
 
 private:
   PaletteTableWidget *table = nullptr;

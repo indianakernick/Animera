@@ -10,6 +10,7 @@
 
 #include "config.hpp"
 #include "connect.hpp"
+#include "status msg.hpp"
 #include <QtGui/qevent.h>
 #include <QtGui/qbitmap.h>
 #include <QtGui/qpainter.h>
@@ -35,6 +36,7 @@ Q_SIGNALS:
   void shouldSetColor(QRgb);
   void shouldSetIndex(int);
   void paletteColorChanged();
+  void shouldShowNorm(std::string_view);
 
 private Q_SLOTS:
   void attachColor() {
@@ -131,6 +133,35 @@ private:
     }
   }
   
+  void enterEvent(QEvent *) override {
+    StatusMsg status;
+    status.append("INDEX: ");
+    status.append(index);
+    status.append(" COLOR: ");
+    const gfx::Color gColor = getGColor();
+    if (format == Format::gray) {
+      status.append('[');
+      status.append(gColor.r);
+      status.append(' ');
+      status.append(gColor.a);
+      status.append(']');
+    } else if (format == Format::rgba || format == Format::index) {
+      status.append('[');
+      status.append(gColor.r);
+      status.append(' ');
+      status.append(gColor.g);
+      status.append(' ');
+      status.append(gColor.b);
+      status.append(' ');
+      status.append(gColor.a);
+      status.append(']');
+    }
+    Q_EMIT shouldShowNorm(status.get());
+  }
+  void leaveEvent(QEvent *) override {
+    Q_EMIT shouldShowNorm("");
+  }
+  
   QRgb getInitialColor() const override {
     return color;
   }
@@ -181,6 +212,7 @@ Q_SIGNALS:
   void shouldSetIndex(int);
   void paletteChanged(PaletteSpan);
   void paletteColorChanged();
+  void shouldShowNorm(std::string_view);
 
 private:
   std::vector<PaletteColorWidget *> colors;
@@ -216,6 +248,7 @@ private:
       CONNECT(colorWidget, shouldSetColor,      this, shouldSetColor);
       CONNECT(colorWidget, shouldSetIndex,      this, shouldSetIndex);
       CONNECT(colorWidget, paletteColorChanged, this, paletteColorChanged);
+      CONNECT(colorWidget, shouldShowNorm,      this, shouldShowNorm);
     }
   }
   
@@ -245,6 +278,7 @@ void PaletteWidget::initCanvas(const Format format) {
   CONNECT(table, shouldSetColor,      this, shouldSetColor);
   CONNECT(table, shouldSetIndex,      this, shouldSetIndex);
   CONNECT(table, paletteColorChanged, this, paletteColorChanged);
+  CONNECT(table, shouldShowNorm,      this, shouldShowNorm);
 }
 
 void PaletteWidget::setPalette(PaletteSpan palette) {
