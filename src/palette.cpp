@@ -16,8 +16,8 @@
 
 namespace {
 
-constexpr int quantColor(const double size, const int color) {
-  return 255 * color / size + 0.5;
+constexpr int quantColor(const int size, const int color) {
+  return (255 * color + size / 2) / size + 0.5;
 }
 
 constexpr QRgb quantColor(const int size, const int r, const int g, const int b) {

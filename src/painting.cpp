@@ -119,8 +119,8 @@ struct PixelFormat<uint32_t> {
   using type = gfx::ARGB;
 };
 
-uint8_t interpolate(const uint8_t a, const uint8_t b, const int index, const double size) {
-  return a + (b - a) * index / size + 0.5;
+uint8_t interpolate(const uint8_t a, const uint8_t b, const int index, const int size) {
+  return a + ((b - a) * index + size / 2) / size;
 }
 
 template <typename Pixel>

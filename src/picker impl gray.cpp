@@ -17,12 +17,12 @@
 
 namespace {
 
-constexpr int toValue(const double gray) {
-  return 100 * gray / 255 + 0.5;
+constexpr int toValue(const int gray) {
+  return (100 * gray + 127) / 255;
 }
 
-constexpr int toGray(const double value) {
-  return 255 * value / 100 + 0.5;
+constexpr int toGray(const int value) {
+  return (255 * value + 50) / 100;
 }
 
 }
