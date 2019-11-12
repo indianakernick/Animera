@@ -30,6 +30,11 @@ void StatusBarWidget::showTemp(const std::string_view text) {
   repaint();
 }
 
+void StatusBarWidget::showNorm(const std::string_view text) {
+  normText = toLatinString(text);
+  repaint();
+}
+
 void StatusBarWidget::showPerm(const std::string_view text) {
   permText = toLatinString(text);
   repaint();
@@ -44,12 +49,16 @@ void StatusBarWidget::paintEvent(QPaintEvent *) {
     glob_margin + glob_text_margin,
     glob_margin + glob_text_margin + glob_font_accent_px
   };
-  if (tempText.isEmpty()) {
-    painter.drawText(pos, permText);
-  } else if (permText.isEmpty()) {
+  if (!tempText.isEmpty()) {
     painter.drawText(pos, tempText);
-  } else {
-    painter.drawText(pos, permText + " | " + tempText);
+    return;
+  }
+  if (!normText.isEmpty()) {
+    painter.drawText(pos, normText);
+    return;
+  }
+  if (!permText.isEmpty()) {
+    painter.drawText(pos, permText);
   }
 }
 

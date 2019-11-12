@@ -17,6 +17,7 @@ class ControlsWidget;
 class LayersWidget;
 class FramesWidget;
 class CellsWidget;
+class StatusObject;
 
 class TimelineWidget final : public QWidget {
   Q_OBJECT
@@ -54,11 +55,14 @@ Q_SIGNALS:
   void currPosChanged(CellPos);
   void delayChanged(int);
   
+  void shouldShowPerm(std::string_view);
+  
 private:
   ControlsWidget *controls = nullptr;
   LayersWidget *layers = nullptr;
   FramesWidget *frames = nullptr;
   CellsWidget *cells = nullptr;
+  StatusObject *status = nullptr;
 };
 
 #endif

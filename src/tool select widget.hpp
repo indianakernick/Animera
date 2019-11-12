@@ -26,7 +26,7 @@ public:
 Q_SIGNALS:
   void cellModified();
   void overlayModified();
-  void shouldShowPerm(std::string_view);
+  void shouldShowNorm(std::string_view);
   void changingAction();
   void cellRequested(QRect);
   void lockRequested();

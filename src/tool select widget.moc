@@ -36,7 +36,7 @@ QT_MOC_LITERAL(0, 0, 16), // "ToolSelectWidget"
 QT_MOC_LITERAL(1, 17, 12), // "cellModified"
 QT_MOC_LITERAL(2, 30, 0), // ""
 QT_MOC_LITERAL(3, 31, 15), // "overlayModified"
-QT_MOC_LITERAL(4, 47, 14), // "shouldShowPerm"
+QT_MOC_LITERAL(4, 47, 14), // "shouldShowNorm"
 QT_MOC_LITERAL(5, 62, 16), // "std::string_view"
 QT_MOC_LITERAL(6, 79, 14), // "changingAction"
 QT_MOC_LITERAL(7, 94, 13), // "cellRequested"
@@ -67,7 +67,7 @@ QT_MOC_LITERAL(31, 336, 10) // "unlockTool"
 
     },
     "ToolSelectWidget\0cellModified\0\0"
-    "overlayModified\0shouldShowPerm\0"
+    "overlayModified\0shouldShowNorm\0"
     "std::string_view\0changingAction\0"
     "cellRequested\0lockRequested\0unlockRequested\0"
     "mouseLeave\0mouseDown\0ButtonType\0"
@@ -151,7 +151,7 @@ void ToolSelectWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
         switch (_id) {
         case 0: _t->cellModified(); break;
         case 1: _t->overlayModified(); break;
-        case 2: _t->shouldShowPerm((*reinterpret_cast< std::string_view(*)>(_a[1]))); break;
+        case 2: _t->shouldShowNorm((*reinterpret_cast< std::string_view(*)>(_a[1]))); break;
         case 3: _t->changingAction(); break;
         case 4: _t->cellRequested((*reinterpret_cast< QRect(*)>(_a[1]))); break;
         case 5: _t->lockRequested(); break;
@@ -189,7 +189,7 @@ void ToolSelectWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
         }
         {
             using _t = void (ToolSelectWidget::*)(std::string_view );
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ToolSelectWidget::shouldShowPerm)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ToolSelectWidget::shouldShowNorm)) {
                 *result = 2;
                 return;
             }
@@ -278,7 +278,7 @@ void ToolSelectWidget::overlayModified()
 }
 
 // SIGNAL 2
-void ToolSelectWidget::shouldShowPerm(std::string_view _t1)
+void ToolSelectWidget::shouldShowNorm(std::string_view _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 2, _a);

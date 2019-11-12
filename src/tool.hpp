@@ -55,7 +55,7 @@ class ToolCtx final : public QObject {
 Q_SIGNALS:
   void cellModified() const;
   void overlayModified() const;
-  void shouldShowPerm(std::string_view) const;
+  void shouldShowNorm(std::string_view) const;
   void changingAction() const;
   void cellRequested(QRect) const;
   void lockRequested() const;

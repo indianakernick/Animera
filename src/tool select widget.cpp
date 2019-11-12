@@ -198,7 +198,7 @@ void ToolSelectWidget::setupLayout() {
 void ToolSelectWidget::connectSignals() {
   CONNECT(ctx, cellModified,    this, cellModified);
   CONNECT(ctx, overlayModified, this, overlayModified);
-  CONNECT(ctx, shouldShowPerm,  this, shouldShowPerm);
+  CONNECT(ctx, shouldShowNorm,  this, shouldShowNorm);
   CONNECT(ctx, changingAction,  this, changingAction);
   CONNECT(ctx, cellRequested,   this, cellRequested);
   CONNECT(ctx, lockRequested,   this, lockRequested);

@@ -36,7 +36,7 @@ QT_MOC_LITERAL(0, 0, 7), // "ToolCtx"
 QT_MOC_LITERAL(1, 8, 12), // "cellModified"
 QT_MOC_LITERAL(2, 21, 0), // ""
 QT_MOC_LITERAL(3, 22, 15), // "overlayModified"
-QT_MOC_LITERAL(4, 38, 14), // "shouldShowPerm"
+QT_MOC_LITERAL(4, 38, 14), // "shouldShowNorm"
 QT_MOC_LITERAL(5, 53, 16), // "std::string_view"
 QT_MOC_LITERAL(6, 70, 14), // "changingAction"
 QT_MOC_LITERAL(7, 85, 13), // "cellRequested"
@@ -45,7 +45,7 @@ QT_MOC_LITERAL(9, 113, 15) // "unlockRequested"
 
     },
     "ToolCtx\0cellModified\0\0overlayModified\0"
-    "shouldShowPerm\0std::string_view\0"
+    "shouldShowNorm\0std::string_view\0"
     "changingAction\0cellRequested\0lockRequested\0"
     "unlockRequested"
 };
@@ -93,7 +93,7 @@ void ToolCtx::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, voi
         switch (_id) {
         case 0: _t->cellModified(); break;
         case 1: _t->overlayModified(); break;
-        case 2: _t->shouldShowPerm((*reinterpret_cast< std::string_view(*)>(_a[1]))); break;
+        case 2: _t->shouldShowNorm((*reinterpret_cast< std::string_view(*)>(_a[1]))); break;
         case 3: _t->changingAction(); break;
         case 4: _t->cellRequested((*reinterpret_cast< QRect(*)>(_a[1]))); break;
         case 5: _t->lockRequested(); break;
@@ -118,7 +118,7 @@ void ToolCtx::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, voi
         }
         {
             using _t = void (ToolCtx::*)(std::string_view ) const;
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ToolCtx::shouldShowPerm)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ToolCtx::shouldShowNorm)) {
                 *result = 2;
                 return;
             }
@@ -207,7 +207,7 @@ void ToolCtx::overlayModified()const
 }
 
 // SIGNAL 2
-void ToolCtx::shouldShowPerm(std::string_view _t1)const
+void ToolCtx::shouldShowNorm(std::string_view _t1)const
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(const_cast< ToolCtx *>(this), &staticMetaObject, 2, _a);

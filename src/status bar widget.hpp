@@ -21,11 +21,13 @@ public:
 
 public Q_SLOTS:
   void showTemp(std::string_view);
+  void showNorm(std::string_view);
   void showPerm(std::string_view);
   
 private:
-  QString permText;
   QString tempText;
+  QString normText;
+  QString permText;
   QTimer timer;
   
   void paintEvent(QPaintEvent *) override;

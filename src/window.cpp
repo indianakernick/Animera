@@ -297,6 +297,7 @@ void Window::connectSignals() {
   CONNECT(timeline,        clearSelection,      sprite.timeline, clearSelection);
   CONNECT(timeline,        currPosChanged,      sprite.timeline, setCurrPos);
   CONNECT(timeline,        delayChanged,        sprite.timeline, setDelay);
+  CONNECT(timeline,        shouldShowPerm,      statusBar,       showPerm);
   
   CONNECT(sprite,          canvasInitialized,   colorPicker,     initCanvas);
   CONNECT(sprite,          canvasInitialized,   colors,          initCanvas);
@@ -312,7 +313,7 @@ void Window::connectSignals() {
   
   CONNECT(tools,           cellModified,        editor,          composite);
   CONNECT(tools,           overlayModified,     editor,          compositeOverlay);
-  CONNECT(tools,           shouldShowPerm,      statusBar,       showPerm);
+  CONNECT(tools,           shouldShowNorm,      statusBar,       showNorm);
   CONNECT(tools,           cellRequested,       sprite.timeline, growCell);
   CONNECT(tools,           changingAction,      undo,            cellModified);
   CONNECT(tools,           changingAction,      this,            modify);

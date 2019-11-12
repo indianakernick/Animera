@@ -11,6 +11,7 @@
 #include "connect.hpp"
 #include <QtWidgets/qgridlayout.h>
 #include "timeline cells widget.hpp"
+#include "timeline status object.hpp"
 #include "timeline layers widget.hpp"
 #include "timeline frames widget.hpp"
 #include "timeline controls widget.hpp"
@@ -26,6 +27,7 @@ TimelineWidget::TimelineWidget(QWidget *parent)
   layers = layerScroll->getChild();
   frames = frameScroll->getChild();
   cells = cellScroll->getChild();
+  status = new StatusObject{this};
   
   CONNECT(layerScroll->verticalScrollBar(), valueChanged, cellScroll->verticalScrollBar(), setValue);
   CONNECT(cellScroll->verticalScrollBar(), valueChanged, layerScroll->verticalScrollBar(), setValue);
@@ -36,23 +38,25 @@ TimelineWidget::TimelineWidget(QWidget *parent)
   CONNECT(cellScroll, rightMarginChanged, frameScroll, shouldSetRightMargin);
   CONNECT(cellScroll, bottomMarginChanged, layerScroll, shouldSetBottomMargin);
   
-  CONNECT(layers,   visibilityChanged, this, visibilityChanged);
-  CONNECT(layers,   nameChanged,       this, nameChanged);
+  CONNECT(layers,   visibilityChanged, this,   visibilityChanged);
+  CONNECT(layers,   nameChanged,       this,   nameChanged);
   
-  CONNECT(controls, nextFrame,         this, nextFrame);
-  CONNECT(controls, insertLayer,       this, insertLayer);
-  CONNECT(controls, removeLayer,       this, removeLayer);
-  CONNECT(controls, moveLayerUp,       this, moveLayerUp);
-  CONNECT(controls, moveLayerDown,     this, moveLayerDown);
-  CONNECT(controls, extendCell,        this, extendCell);
-  CONNECT(controls, splitCell,         this, splitCell);
-  CONNECT(controls, delayChanged,      this, delayChanged);
+  CONNECT(controls, nextFrame,         this,   nextFrame);
+  CONNECT(controls, insertLayer,       this,   insertLayer);
+  CONNECT(controls, removeLayer,       this,   removeLayer);
+  CONNECT(controls, moveLayerUp,       this,   moveLayerUp);
+  CONNECT(controls, moveLayerDown,     this,   moveLayerDown);
+  CONNECT(controls, extendCell,        this,   extendCell);
+  CONNECT(controls, splitCell,         this,   splitCell);
+  CONNECT(controls, delayChanged,      this,   delayChanged);
   
-  CONNECT(cells,    beginSelection,    this, beginSelection);
-  CONNECT(cells,    continueSelection, this, continueSelection);
-  CONNECT(cells,    endSelection,      this, endSelection);
-  CONNECT(cells,    clearSelection,    this, clearSelection);
-  CONNECT(cells,    currPosChanged,    this, currPosChanged);
+  CONNECT(cells,    beginSelection,    this,   beginSelection);
+  CONNECT(cells,    continueSelection, this,   continueSelection);
+  CONNECT(cells,    endSelection,      this,   endSelection);
+  CONNECT(cells,    clearSelection,    this,   clearSelection);
+  CONNECT(cells,    currPosChanged,    this,   currPosChanged);
+  
+  CONNECT(status,   shouldShowPerm,    this,   shouldShowPerm);
   
   auto *grid = new QGridLayout{this};
   grid->setSpacing(0);
@@ -66,10 +70,12 @@ TimelineWidget::TimelineWidget(QWidget *parent)
 
 void TimelineWidget::setCurrPos(const CellPos pos) {
   cells->setCurrPos(pos);
+  status->setCurrPos(pos);
 }
 
 void TimelineWidget::setSelection(const CellRect rect) {
   cells->setSelection(rect);
+  status->setSelection(rect);
 }
 
 void TimelineWidget::setVisibility(const LayerIdx layer, const bool visible) {
@@ -87,11 +93,13 @@ void TimelineWidget::setLayer(const LayerIdx layer, std::span<const CellSpan> sp
 void TimelineWidget::setFrameCount(const FrameIdx count) {
   frames->setFrameCount(count);
   cells->setFrameCount(count);
+  status->setFrameCount(count);
 }
 
 void TimelineWidget::setLayerCount(const LayerIdx count) {
   layers->setLayerCount(count);
   cells->setLayerCount(count);
+  status->setLayerCount(count);
 }
 
 void TimelineWidget::toggleAnimation() {

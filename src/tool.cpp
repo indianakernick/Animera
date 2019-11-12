@@ -38,11 +38,11 @@ QRgb ToolCtx::selectColor(const ButtonType button) const {
 }
 
 void ToolCtx::showStatus(const StatusMsg &status) const {
-  Q_EMIT shouldShowPerm(status.get());
+  Q_EMIT shouldShowNorm(status.get());
 }
 
 void ToolCtx::clearStatus() const {
-  Q_EMIT shouldShowPerm("");
+  Q_EMIT shouldShowNorm("");
 }
 
 void ToolCtx::finishChange() const {
