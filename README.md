@@ -2,7 +2,7 @@
 
 ### If a picture is a thousand words then a gif is what, a million words?
 
-![Screenshot](https://i.imgur.com/ACNXpMT.png)
+![Screenshot](https://i.imgur.com/CSyzwp3.png)
 
 ---
 
