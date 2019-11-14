@@ -13,7 +13,7 @@
 
 class ErrorDialog final : public Dialog {
 public:
-  ErrorDialog(QWidget *, const QString &, const QString &);
+  ErrorDialog(QWidget *, const QString &, QString);
 };
 
 #endif

@@ -50,7 +50,7 @@ QSize wrapToWidth(QString &text, const int width) {
       white = i;
       continue;
     }
-    while (i - line > width) {
+    while (i - line >= width) {
       int firstWhite = white;
       if (firstWhite > 0) {
         while (text[firstWhite - 1] == QChar::Space) --firstWhite;
@@ -71,11 +71,4 @@ QSize wrapToWidth(QString &text, const int width) {
   }
   size.setWidth(std::max(size.width(), text.size() - line));
   return size;
-}
-
-WidgetRect wrappedTextBoxRect(const QSize size) {
-  return basicRect(
-    toPoint(glob_text_margin),
-    {textBoxWidth(size.width()), textBoxHeight(size.height())}
-  );
 }

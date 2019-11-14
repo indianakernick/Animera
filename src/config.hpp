@@ -99,10 +99,21 @@ constexpr QSize textBoxSize(const int chars, const int offsetX = 0) {
   };
 }
 
+constexpr QSize textBoxSize(const QSize chars) {
+  return {textBoxWidth(chars.width()), textBoxHeight(chars.height())};
+}
+
 constexpr WidgetRect textBoxRect(const int chars, const int offsetX = 0) {
   return basicRect(
     {glob_text_margin + offsetX, glob_text_margin},
     textBoxSize(chars, offsetX)
+  );
+}
+
+constexpr WidgetRect textBoxRect(const QSize chars) {
+  return basicRect(
+    toPoint(glob_text_margin),
+    textBoxSize(chars)
   );
 }
 
@@ -138,6 +149,41 @@ constexpr TextIconRects textBoxIconRect(const int chars) {
     {textWidget, text.outer(), text.inner(), text.pos()},
     {iconWidget, iconOuter, iconInner, iconPos}
   };
+}
+
+constexpr WidgetRect addMargins(
+  const WidgetRect rect,
+  const int left,
+  const int top,
+  const int right,
+  const int bottom
+) {
+  const QSize widgetSize = rect.widget().size() + QSize{left + right, top + bottom};
+  const QPoint outerPos = rect.outer().topLeft() + QPoint{left, top};
+  const QPoint innerPos = rect.inner().topLeft() + QPoint{left, top};
+  const QPoint pos = rect.pos() + QPoint{left, top};
+  return {
+    {rect.widget().topLeft(), widgetSize},
+    {outerPos, rect.outer().size()},
+    {innerPos, rect.inner().size()},
+    pos
+  };
+}
+
+constexpr WidgetRect addMargins(
+  const WidgetRect rect,
+  const bool left,
+  const bool top,
+  const bool right,
+  const bool bottom
+) {
+  return addMargins(
+    rect,
+    left * glob_margin,
+    top * glob_margin,
+    right * glob_margin,
+    bottom * glob_margin
+  );
 }
 
 struct IntRange {
