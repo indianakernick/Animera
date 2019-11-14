@@ -9,6 +9,7 @@
 #ifndef config_hpp
 #define config_hpp
 
+#include "math.hpp"
 #include "geometry.hpp"
 #include <QtGui/qcolor.h>
 #include "widget rect.hpp"
@@ -169,7 +170,7 @@ constexpr QRgb      tool_overlay_color = qRgba(
 );
 
 constexpr int scaleOverlay(const IntRange range, const int value) {
-  return value * (range.max - range.min) / 255 + range.min;
+  return scale(value, 0, 255, range.min, range.max);
 }
 constexpr int scaleOverlayGray(const int gray) {
   return scaleOverlay(tool_overlay_gray, gray);

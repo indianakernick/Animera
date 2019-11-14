@@ -308,6 +308,7 @@
 		45C5C8B723729C880056CEE7 /* strings.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = strings.hpp; sourceTree = "<group>"; };
 		45C5C8B8237A65820056CEE7 /* timeline status object.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "timeline status object.cpp"; sourceTree = "<group>"; };
 		45C5C8B9237A65820056CEE7 /* timeline status object.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "timeline status object.hpp"; sourceTree = "<group>"; };
+		45C5C8BC237CC2950056CEE7 /* math.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = math.hpp; sourceTree = "<group>"; };
 		45CAC92722CC7B5800F945BF /* sample object.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "sample object.cpp"; sourceTree = "<group>"; };
 		45CAC92822CC7B5800F945BF /* sample object.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "sample object.hpp"; sourceTree = "<group>"; };
 		45CFA7CD22A4C1C40059DB41 /* palette widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "palette widget.cpp"; sourceTree = "<group>"; };
@@ -766,6 +767,7 @@
 				453E8E4A236572250070B841 /* file io.hpp */,
 				453E8E4C236578720070B841 /* file io error.hpp */,
 				45C5C8B723729C880056CEE7 /* strings.hpp */,
+				45C5C8BC237CC2950056CEE7 /* math.hpp */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";

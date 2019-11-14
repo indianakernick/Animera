@@ -18,11 +18,11 @@
 namespace {
 
 constexpr int toValue(const int gray) {
-  return (100 * gray + 127) / 255;
+  return scale(gray, 255, 100);
 }
 
 constexpr int toGray(const int value) {
-  return (255 * value + 50) / 100;
+  return scale(value, 100, 255);
 }
 
 }

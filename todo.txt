@@ -210,10 +210,6 @@ A builtin calculator?
   if you find yourself needing to use a calculator then
     maybe there is a feature missing
 
-use the status bar for more than just tools
-  it could make sense to use it for the color picker
-  at the moment it seems underappreciated
-
 behave like a proper Single Document Interface (SDI) application
   qtbase/examples/widgets/mainwindows/sdi
 

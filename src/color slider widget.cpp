@@ -16,10 +16,16 @@
 #include "surface factory.hpp"
 #include <Graphics/iterator.hpp>
 
+namespace {
+
+constexpr int slider_width = pick_slider_rect.inner().width();
+
+}
+
 template <typename Derived>
 ColorSliderWidget<Derived>::ColorSliderWidget(QWidget *parent)
   : QWidget{parent},
-    graph{pick_slider_rect.inner().width(), 1, QImage::Format_ARGB32_Premultiplied} {
+    graph{slider_width, 1, QImage::Format_ARGB32_Premultiplied} {
   setMouseTracking(true);
   setFocusPolicy(Qt::ClickFocus);
   setFixedSize(pick_slider_rect.widget().size());
@@ -142,8 +148,8 @@ void HueSliderWidget::setAlpha(const int newAlpha) {
 void HueSliderWidget::plotGraph() {
   int idx = 0;
   for (QRgb &pixel : *gfx::begin(makeSurface<QRgb>(graph))) {
-    // can't use hue2pix here
-    const qreal hue = idx++ * 360.0 / pick_slider_rect.inner().width();
+    // can't use pix2hue here
+    const qreal hue = idx++ * 360.0 / slider_width;
     pixel = hsv2rgb(hue, color.s, color.v);
   }
 }
@@ -153,11 +159,11 @@ void HueSliderWidget::renderBackground(QPainter &) {}
 namespace {
 
 int hue2pix(const int hue) {
-  return qRound(hue / 359.0 * (pick_slider_rect.inner().width() - 1_px));
+  return scale(hue, 359, slider_width - 1_px);
 }
 
 int pix2hue(const int pix) {
-  return std::clamp(qRound(pix * 359.0 / (pick_slider_rect.inner().width() - 1_px)), 0, 359);
+  return std::clamp(scale(pix, slider_width - 1_px, 359), 0, 359);
 }
 
 }
@@ -239,8 +245,8 @@ void AlphaSliderWidget::plotGraph() {
   const QRgb rgb = hsv2rgb(color.h, color.s, color.v);
   int idx = 0;
   for (QRgb &pixel : *gfx::begin(makeSurface<QRgb>(graph))) {
-    // can't use alp2pix here
-    const int alp = qRound(idx++ * 255.0 / (pick_slider_rect.inner().width() - 1));
+    // can't use pix2alp here
+    const int alp = scale(idx++, slider_width - 1, 255);
     pixel = setColorAlpha(rgb, alp);
   }
 }
@@ -253,11 +259,11 @@ void AlphaSliderWidget::renderBackground(QPainter &painter) {
 namespace {
 
 int alp2pix(const int alp) {
-  return qRound(alp / 255.0 * (pick_slider_rect.inner().width() - 1_px));
+  return scale(alp, 255, slider_width - 1_px);
 }
 
 int pix2alp(const int pix) {
-  return std::clamp(qRound(pix * 255.0 / (pick_slider_rect.inner().width() - 1_px)), 0, 255);
+  return std::clamp(scale(pix, slider_width - 1_px, 255), 0, 255);
 }
 
 }
@@ -291,8 +297,9 @@ void AlphaSliderWidget::updateStatus(StatusMsg &status, const int pointX) {
   status.append("ALPHA: ");
   status.append(alphaValue);
   status.append(" COLOR: ");
+  // TODO: avoid converting HSV to RGB here
   if (grayMode) {
-    status.append((color.v * 255 + 50) / 100, alphaValue);
+    status.append(scale(color.v, 100, 255), alphaValue);
   } else {
     const RGB rgbColor = hsv2rgb(color);
     status.append(rgbColor.r, rgbColor.g, rgbColor.b, alphaValue);
@@ -319,7 +326,7 @@ void GraySliderWidget::plotGraph() {
   int idx = 0;
   for (QRgb &pixel : *gfx::begin(makeSurface<QRgb>(graph))) {
     // can't use pix2alp here
-    const int y = qRound(idx++ * 255.0 / (pick_slider_rect.inner().width() - 1));
+    const int y = scale(idx++, slider_width - 1, 255);
     pixel = qRgb(y, y, y);
   }
 }

@@ -484,9 +484,8 @@ void WandSelectTool::addToSelection(const ToolMouseEvent &event) {
 QRgb WandSelectTool::getOverlayColor() const {
   static_assert(wand_frames % 2 == 0);
   constexpr int half_frames = wand_frames / 2;
-  constexpr int quarter_frames = wand_frames / 4;
   const int mirroredFrame = animFrame > half_frames ? wand_frames - animFrame : animFrame;
-  const int gray = (mirroredFrame * 255 + quarter_frames) / half_frames;
+  const int gray = scale(mirroredFrame, half_frames, 255);
   return qRgba(gray, gray, gray, wand_alpha);
 }
 

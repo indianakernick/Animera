@@ -16,6 +16,13 @@
 #include "surface factory.hpp"
 #include <Graphics/iterator.hpp>
 
+namespace {
+
+constexpr int graph_width = pick_svgraph_rect.inner().width();
+constexpr int graph_height = pick_svgraph_rect.inner().height();
+
+}
+
 SVGraphWidget::SVGraphWidget(QWidget *parent, const int alpha)
   : QWidget{parent},
     graph{pick_svgraph_rect.inner().size(), QImage::Format_ARGB32_Premultiplied},
@@ -62,8 +69,8 @@ void SVGraphWidget::plotGraph(const int hue) {
     for (QRgb &pixel : row) {
       pixel = hsv2rgb(
         hue, // can't use pix2sat and pix2val here
-        sat++ * 100.0 / (pick_svgraph_rect.inner().width() - 1),
-        val * 100.0 / (pick_svgraph_rect.inner().height() - 1)
+        sat++ * 100.0 / (graph_width - 1),
+        val * 100.0 / (graph_height - 1)
       );
     }
     --val;
@@ -87,19 +94,19 @@ void SVGraphWidget::renderGraph(QPainter &painter) {
 namespace {
 
 int sat2pix(const int sat) {
-  return qRound(sat / 100.0 * (pick_svgraph_rect.inner().width() - 1_px));
+  return scale(sat, 100, graph_width - 1_px);
 }
 
 int val2pix(const int val) {
-  return qRound((100 - val) / 100.0 * (pick_svgraph_rect.inner().height() - 1_px));
+  return scale(100 - val, 100, graph_height - 1_px);
 }
 
 int pix2sat(const int pix) {
-  return std::clamp(qRound(pix * 100.0 / (pick_svgraph_rect.inner().width() - 1_px)), 0, 100);
+  return std::clamp(scale(pix, graph_width - 1_px, 100), 0, 100);
 }
 
 int pix2val(const int pix) {
-  return 100 - std::clamp(qRound(pix * 100.0 / (pick_svgraph_rect.inner().height() - 1_px)), 0, 100);
+  return 100 - std::clamp(scale(pix, graph_height - 1_px, 100), 0, 100);
 }
 
 }

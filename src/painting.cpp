@@ -8,6 +8,7 @@
 
 #include "painting.hpp"
 
+#include "math.hpp"
 #include "geometry.hpp"
 #include <QtGui/qpainter.h>
 #include <Graphics/draw.hpp>
@@ -120,7 +121,12 @@ struct PixelFormat<uint32_t> {
 };
 
 uint8_t interpolate(const uint8_t a, const uint8_t b, const int index, const int size) {
-  return a + ((b - a) * index + size / 2) / size;
+  // TODO: remove the if
+  if (a > b) {
+    return scale(size - index, 0, size, b, a);
+  } else {
+    return scale(index, 0, size, a, b);
+  }
 }
 
 template <typename Pixel>
