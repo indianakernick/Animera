@@ -16,7 +16,7 @@ class SVGraphWidget final : public QWidget {
   Q_OBJECT
 
 public:
-  SVGraphWidget(QWidget *, int);
+  SVGraphWidget(QWidget *, HSV, int);
 
 Q_SIGNALS:
   void svChanged(int, int);

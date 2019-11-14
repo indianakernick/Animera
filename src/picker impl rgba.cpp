@@ -20,9 +20,9 @@ void PickerImplRGBA::init(QWidget *parent) {
   colorHsv = color2hsv(pick_default_color);
   colorRgb = color2rgb(pick_default_color);
   alpha = pick_default_color.alpha();
-  svGraph = new SVGraphWidget{parent, alpha};
-  hueSlider = new HueSliderWidget{parent, alpha};
-  alphaSlider = new AlphaSliderWidget{parent, false};
+  svGraph = new SVGraphWidget{parent, colorHsv, alpha};
+  hueSlider = new HueSliderWidget{parent, colorHsv, alpha};
+  alphaSlider = new AlphaSliderWidget{parent, colorRgb, alpha, false};
   boxR = new NumberInputWidget{parent, pick_number_rect, {0, 255, colorRgb.r}};
   boxG = new NumberInputWidget{parent, pick_number_rect, {0, 255, colorRgb.g}};
   boxB = new NumberInputWidget{parent, pick_number_rect, {0, 255, colorRgb.b}};
@@ -70,11 +70,6 @@ void PickerImplRGBA::connectSignals() {
   CONNECT(svGraph,     svChanged,      hueSlider,   setSV);
   CONNECT(hueSlider,   hueChanged,     svGraph,     setHue);
   CONNECT(boxH,        valueChanged,   svGraph,     setHue);
-  CONNECT(hueSlider,   hueChanged,     alphaSlider, setHue);
-  CONNECT(svGraph,     svChanged,      alphaSlider, setSV);
-
-  CONNECT(hueSlider,   hueChanged,     alphaSlider, setHue);
-  CONNECT(svGraph,     svChanged,      alphaSlider, setSV);
   
   CONNECT(alphaSlider, alphaChanged,   boxA,        setValue);
   CONNECT(boxA,        valueChanged,   alphaSlider, setAlpha);
@@ -116,7 +111,6 @@ void PickerImplRGBA::setSVfromGraph(const int sat, const int val) {
   colorHsv.s = sat;
   colorHsv.v = val;
   hueSlider->setSV(sat, val);
-  alphaSlider->setSV(sat, val);
   boxS->setValue(sat);
   boxV->setValue(val);
   changeRGB();
@@ -125,7 +119,6 @@ void PickerImplRGBA::setSVfromGraph(const int sat, const int val) {
 void PickerImplRGBA::setSVfromBoxS(const int sat) {
   colorHsv.s = sat;
   hueSlider->setSV(sat, colorHsv.v);
-  alphaSlider->setSV(sat, colorHsv.v);
   svGraph->setSV(sat, colorHsv.v);
   changeRGB();
 }
@@ -133,7 +126,6 @@ void PickerImplRGBA::setSVfromBoxS(const int sat) {
 void PickerImplRGBA::setSVfromBoxV(const int val) {
   colorHsv.v = val;
   hueSlider->setSV(colorHsv.s, val);
-  alphaSlider->setSV(colorHsv.s, val);
   svGraph->setSV(colorHsv.s, val);
   changeRGB();
 }
@@ -155,7 +147,7 @@ void PickerImplRGBA::setRGBA(const RGB rgb, const int alp) {
   colorRgb = rgb;
   alpha = alp;
   changeHSV();
-  alphaSlider->setAlpha(alp);
+  alphaSlider->setRgba(rgb, alp);
   boxA->setValue(alp);
   boxR->setValue(rgb.r);
   boxG->setValue(rgb.g);
@@ -167,6 +159,7 @@ void PickerImplRGBA::setRed(const int red) {
   colorRgb.r = red;
   changeHSV();
   boxHex->setRgba(colorRgb, alpha);
+  alphaSlider->setRgba(colorRgb, alpha);
   changeColor();
 }
 
@@ -174,6 +167,7 @@ void PickerImplRGBA::setGreen(const int green) {
   colorRgb.g = green;
   changeHSV();
   boxHex->setRgba(colorRgb, alpha);
+  alphaSlider->setRgba(colorRgb, alpha);
   changeColor();
 }
 
@@ -181,6 +175,7 @@ void PickerImplRGBA::setBlue(const int blue) {
   colorRgb.b = blue;
   changeHSV();
   boxHex->setRgba(colorRgb, alpha);
+  alphaSlider->setRgba(colorRgb, alpha);
   changeColor();
 }
 
@@ -190,6 +185,7 @@ void PickerImplRGBA::changeRGB() {
   boxG->setValue(colorRgb.g);
   boxB->setValue(colorRgb.b);
   boxHex->setRgba(colorRgb, alpha);
+  alphaSlider->setRgba(colorRgb, alpha);
   changeColor();
 }
 
@@ -199,7 +195,6 @@ void PickerImplRGBA::changeHSV() {
   boxS->setValue(colorHsv.s);
   boxV->setValue(colorHsv.v);
   hueSlider->setHSV(colorHsv);
-  alphaSlider->setHSV(colorHsv);
   svGraph->setHSV(colorHsv);
 }
 

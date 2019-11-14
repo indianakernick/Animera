@@ -116,9 +116,9 @@ void ColorSliderWidget<Derived>::keyPressEvent(QKeyEvent *event) {
   }
 }
 
-HueSliderWidget::HueSliderWidget(QWidget *parent, const int alpha)
+HueSliderWidget::HueSliderWidget(QWidget *parent, const HSV color, const int alpha)
   : ColorSliderWidget{parent},
-    color{color2hsv(pick_default_color)},
+    color{color},
     alpha{alpha} {
   plotGraph();
 }
@@ -201,10 +201,14 @@ void HueSliderWidget::updateStatus(StatusMsg &status, const int pointX) {
   status.append(rgbColor.r, rgbColor.g, rgbColor.b, alpha);
 }
 
-AlphaSliderWidget::AlphaSliderWidget(QWidget *parent, const bool grayMode)
-  : ColorSliderWidget{parent},
-    color{color2hsv(pick_default_color)},
-    alpha{pick_default_color.alpha()},
+AlphaSliderWidget::AlphaSliderWidget(
+  QWidget *parent,
+  const RGB color,
+  const int alpha,
+  const bool grayMode
+) : ColorSliderWidget{parent},
+    color{color},
+    alpha{alpha},
     grayMode{grayMode} {
   plotGraph();
 }
@@ -214,40 +218,19 @@ void AlphaSliderWidget::setAlpha(const int newAlpha) {
   repaint();
 }
 
-void AlphaSliderWidget::setHue(const int hue) {
-  color.h = hue;
+void AlphaSliderWidget::setRgba(const RGB rgb, const int alp) {
+  color = rgb;
+  alpha = alp;
   plotGraph();
   repaint();
-}
-
-void AlphaSliderWidget::setSV(const int sat, const int val) {
-  color.s = sat;
-  color.v = val;
-  plotGraph();
-  repaint();
-}
-
-void AlphaSliderWidget::setHSV(const HSV hsv) {
-  color = hsv;
-  plotGraph();
-  repaint();
-}
-
-namespace {
-
-QRgb setColorAlpha(const QRgb color, const int alpha) {
-  return qPremultiply(qRgba(qRed(color), qGreen(color), qBlue(color), alpha));
-}
-
 }
 
 void AlphaSliderWidget::plotGraph() {
-  const QRgb rgb = hsv2rgb(color.h, color.s, color.v);
   int idx = 0;
   for (QRgb &pixel : *gfx::begin(makeSurface<QRgb>(graph))) {
     // can't use pix2alp here
     const int alp = scale(idx++, slider_width - 1, 255);
-    pixel = setColorAlpha(rgb, alp);
+    pixel = qPremultiply(qRgba(color.r, color.g, color.b, alp));
   }
 }
 
@@ -297,18 +280,16 @@ void AlphaSliderWidget::updateStatus(StatusMsg &status, const int pointX) {
   status.append("ALPHA: ");
   status.append(alphaValue);
   status.append(" COLOR: ");
-  // TODO: avoid converting HSV to RGB here
   if (grayMode) {
-    status.append(scale(color.v, 100, 255), alphaValue);
+    status.append(color.r, alphaValue);
   } else {
-    const RGB rgbColor = hsv2rgb(color);
-    status.append(rgbColor.r, rgbColor.g, rgbColor.b, alphaValue);
+    status.append(color.r, color.g, color.b, alphaValue);
   }
 }
 
-GraySliderWidget::GraySliderWidget(QWidget *parent, const int alpha)
+GraySliderWidget::GraySliderWidget(QWidget *parent, const int gray, const int alpha)
   : ColorSliderWidget{parent},
-    gray{pick_default_gray},
+    gray{gray},
     alpha{alpha} {
   plotGraph();
 }

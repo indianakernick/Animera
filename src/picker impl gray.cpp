@@ -30,13 +30,11 @@ constexpr int toGray(const int value) {
 void PickerImplGray::init(QWidget *parent) {
   gray = pick_default_gray;
   alpha = pick_default_color.alpha();
-  const int value = toValue(gray);
-  graySlider = new GraySliderWidget{parent, alpha};
-  alphaSlider = new AlphaSliderWidget{parent, true};
-  alphaSlider->setHSV({0, 0, value});
+  graySlider = new GraySliderWidget{parent, gray, alpha};
+  alphaSlider = new AlphaSliderWidget{parent, {gray, gray, gray}, alpha, true};
   boxA = new NumberInputWidget{parent, pick_number_rect, {0, 255, alpha}};
   boxY = new NumberInputWidget{parent, pick_number_rect, {0, 255, gray}};
-  boxV = new NumberInputWidget{parent, pick_number_rect, {0, 100, value}};
+  boxV = new NumberInputWidget{parent, pick_number_rect, {0, 100, toValue(gray)}};
   labelA = new LabelWidget{parent, pick_label_rect, "A"};
   labelY = new LabelWidget{parent, pick_label_rect, "Y"};
   labelV = new LabelWidget{parent, pick_label_rect, "V"};
@@ -76,7 +74,7 @@ void PickerImplGray::setColor(const QRgb color) {
   gray = gfx::YA::gray(color);
   alpha = gfx::YA::alpha(color);
   graySlider->setGray(gray);
-  alphaSlider->setAlpha(alpha);
+  alphaSlider->setRgba({gray, gray, gray}, alpha);
   boxA->setValue(alpha);
   boxY->setValue(gray);
   boxV->setValue(toValue(gray));
@@ -86,16 +84,15 @@ void PickerImplGray::setColor(const QRgb color) {
 void PickerImplGray::setValue(const int newValue) {
   gray = toGray(newValue);
   graySlider->setGray(gray);
-  alphaSlider->setHSV({0, 0, newValue});
+  alphaSlider->setRgba({gray, gray, gray}, alpha);
   boxY->setValue(gray);
   changeColor();
 }
 
 void PickerImplGray::setGray(const int newGray) {
   gray = newGray;
-  const int value = toValue(gray);
-  boxV->setValue(value);
-  alphaSlider->setHSV({0, 0, value});
+  boxV->setValue(toValue(gray));
+  alphaSlider->setRgba({gray, gray, gray}, alpha);
   changeColor();
 }
 

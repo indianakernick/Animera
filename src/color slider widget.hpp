@@ -47,7 +47,7 @@ class HueSliderWidget final : public ColorSliderWidget<HueSliderWidget> {
   friend class ColorSliderWidget<HueSliderWidget>;
 
 public:
-  HueSliderWidget(QWidget *, int);
+  HueSliderWidget(QWidget *, HSV, int);
 
 Q_SIGNALS:
   void hueChanged(int);
@@ -80,7 +80,7 @@ class AlphaSliderWidget final : public ColorSliderWidget<AlphaSliderWidget> {
   friend class ColorSliderWidget<AlphaSliderWidget>;
   
 public:
-  AlphaSliderWidget(QWidget *, bool);
+  AlphaSliderWidget(QWidget *, RGB, int, bool);
   
 Q_SIGNALS:
   void alphaChanged(int);
@@ -88,12 +88,10 @@ Q_SIGNALS:
 
 public Q_SLOTS:
   void setAlpha(int);
-  void setHue(int);
-  void setSV(int, int);
-  void setHSV(HSV);
+  void setRgba(RGB, int);
   
 private:
-  HSV color;
+  RGB color;
   int alpha;
   bool grayMode;
   
@@ -114,7 +112,7 @@ class GraySliderWidget final : public ColorSliderWidget<GraySliderWidget> {
   friend class ColorSliderWidget<GraySliderWidget>;
 
 public:
-  GraySliderWidget(QWidget *, int);
+  GraySliderWidget(QWidget *, int, int);
 
 Q_SIGNALS:
   void grayChanged(int);

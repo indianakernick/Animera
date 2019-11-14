@@ -23,10 +23,10 @@ constexpr int graph_height = pick_svgraph_rect.inner().height();
 
 }
 
-SVGraphWidget::SVGraphWidget(QWidget *parent, const int alpha)
+SVGraphWidget::SVGraphWidget(QWidget *parent, const HSV color, const int alpha)
   : QWidget{parent},
     graph{pick_svgraph_rect.inner().size(), QImage::Format_ARGB32_Premultiplied},
-    color{color2hsv(pick_default_color)},
+    color{color},
     alpha{alpha} {
   setMouseTracking(true);
   setFocusPolicy(Qt::ClickFocus);
