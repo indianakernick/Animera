@@ -255,9 +255,10 @@ void CellScrollWidget::changeMargins() {
 }
 
 void CellScrollWidget::ensureVisible(const QPoint pos) {
-  // TODO: Why do I have to add 1 here? Bug?
+  // TODO: remove bug workaround
+  // https://bugreports.qt.io/browse/QTBUG-80093
   rect->setGeometry(pos.x(), pos.y(), cell_width + 1, cell_height + 1);
-  QScrollArea::ensureWidgetVisible(rect, 0, 0);
+  ensureWidgetVisible(rect, 0, 0);
 }
 
 void CellScrollWidget::resizeEvent(QResizeEvent *event) {

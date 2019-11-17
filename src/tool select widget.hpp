@@ -58,6 +58,7 @@ private:
   ToolCtx ctx;
   bool mouseIn = false;
   
+  void ensureVisible(ToolWidget *);
   template <typename WidgetClass>
   void pushToolWidget();
   void createTools();

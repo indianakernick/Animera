@@ -15,6 +15,7 @@
 #include <QtGui/qpainter.h>
 #include "widget painting.hpp"
 #include <QtWidgets/qboxlayout.h>
+#include <QtWidgets/qscrollbar.h>
 #include "radio button widget.hpp"
 
 template <typename T>
@@ -106,6 +107,7 @@ void ToolSelectWidget::keyPress(const Qt::Key key) {
     for (auto t = tools.begin(); t != std::prev(tools.end()); ++t) {
       if (*std::next(t) == currWidget) {
         (*t)->click();
+        ensureVisible(*t);
         break;
       }
     }
@@ -113,6 +115,7 @@ void ToolSelectWidget::keyPress(const Qt::Key key) {
     for (auto t = std::next(tools.begin()); t != tools.end(); ++t) {
       if (*std::prev(t) == currWidget) {
         (*t)->click();
+        ensureVisible(*t);
         break;
       }
     }
@@ -160,6 +163,19 @@ void ToolSelectWidget::unlockTool() {
   for (ToolWidget *tool : tools) {
     tool->setEnabled(true);
   }
+}
+
+void ToolSelectWidget::ensureVisible(ToolWidget *tool) {
+  // TODO: remove bug workaround
+  // https://bugreports.qt.io/browse/QTBUG-80093
+  QScrollBar *vbar = verticalScrollBar();
+  const int before = vbar->value();
+  ensureWidgetVisible(tool, 0, 0);
+  const int now = vbar->value();
+  if (now > before) {
+    vbar->setValue(now + 1);
+  }
+  repaint();
 }
 
 template <typename WidgetClass>
