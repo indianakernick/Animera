@@ -21,11 +21,12 @@ class Application : public QApplication {
 public:
   Application(int &, char **);
 
+  void waitForOpenEvent();
   void newFileDialog();
   void openFileDialog();
   void windowClosed(Window *);
 
-private Q_SLOTS:
+public Q_SLOTS:
   void newFile(Format, QSize);
   void openFile(const QString &);
 

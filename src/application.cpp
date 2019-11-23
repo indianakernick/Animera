@@ -22,6 +22,9 @@ Application::Application(int &argc, char **argv)
   : QApplication{argc, argv} {
   loadResources();
   initStyles();
+}
+
+void Application::waitForOpenEvent() {
   CONNECT(noFileTimer, timeout, this, newFileDialog);
   noFileTimer.setSingleShot(true);
   noFileTimer.start(0);

@@ -7,11 +7,365 @@
 //
 
 #define BUG_TEST 0
-#define BENCHMARK 0
+#define BENCHMARK 1
+#define APP 2
 
-#if !BUG_TEST
+#define EXECUTE APP
 
-#include "application.hpp"
+#if EXECUTE == BUG_TEST
+
+/*#include <QtWidgets/qshortcut.h>
+#include <QtWidgets/qmainwindow.h>
+#include <QtWidgets/qapplication.h>
+#include <QtWidgets/qplaintextedit.h>
+
+int main(int argc, char **argv) {
+  QApplication app{argc, argv};
+  QMainWindow window;
+  window.move(379, 206);
+  window.setFixedSize(640, 420);
+  QPlainTextEdit editor{&window};
+  editor.setFixedSize(640, 420);
+  window.setWindowFilePath("test.txt");
+  QObject::connect(&editor, &QPlainTextEdit::textChanged, [&window]{
+    window.setWindowModified(true);
+  });
+  QShortcut shortcut{QKeySequence::Save, &window};
+  QObject::connect(&shortcut, &QShortcut::activated, [&window]{
+    window.setWindowModified(false);
+  });
+  window.show();
+  return app.exec();
+}*/
+
+/*#include "native mac.hpp"
+#include <QtWidgets/qlineedit.h>
+#include <QtWidgets/qmainwindow.h>
+#include <QtWidgets/qapplication.h>
+
+class LineEdit final : public QLineEdit {
+public:
+  using QLineEdit::QLineEdit;
+    
+private:
+  void keyPressEvent(QKeyEvent *event) override {
+    QLineEdit::keyPressEvent(event);
+    hideMouseUntilMouseMoves();
+  }
+};
+
+int main(int argc, char **argv) {
+  QApplication app{argc, argv};
+  QMainWindow window;
+  LineEdit box{&window};
+  window.show();
+  return app.exec();
+}*/
+
+/*#include <csetjmp>
+#include <iostream>
+
+struct Dtor {
+  int i;
+
+  ~Dtor() {
+    std::cout << "Dtor " << i << '\n';
+  }
+};
+
+jmp_buf buf;
+
+int main() {
+  Dtor a{0};
+  if (setjmp(buf)) {
+    std::cout << "Returning\n";
+    return 0;
+  }
+  Dtor b{1};
+  if (setjmp(buf)) {
+    std::cout << "Returning\n";
+    return 0;
+  }
+  longjmp(buf, 1);
+}*/
+
+/*#include <QtCore/qtimer.h>
+#include <QtWidgets/qmainwindow.h>
+#include <QtWidgets/qapplication.h>
+#include <QtWidgets/qdesktopwidget.h>
+
+int main(int argc, char **argv) {
+  QApplication app{argc, argv};
+  QMainWindow a{app.desktop()};
+  QWidget aChild{&a};
+  aChild.setFixedSize(400, 400);
+  a.show();
+  QTimer::singleShot(5000, [&a]{
+    auto *b = new QMainWindow{&a};
+    auto *bChild = new QWidget{b};
+    bChild->setFixedSize(400, 400);
+    b->show();
+  });
+  return app.exec();
+}*/
+
+/*#include <QtCore/qdebug.h>
+#include <QtGui/qpainter.h>
+#include <QtWidgets/qcombobox.h>
+#include <QtWidgets/qboxlayout.h>
+#include <QtWidgets/qmainwindow.h>
+#include <QtWidgets/qapplication.h>
+
+template <typename Base>
+class Rectangle : public Base {
+public:
+  explicit Rectangle(QColor color)
+    : color{color} {
+    Base::setFixedSize(100, 20);
+  }
+
+private:
+  QColor color;
+  
+  void paintEvent(QPaintEvent *) override {
+    qDebug() << color << '\t' << Base::geometry() << '\n';
+    QPainter{this}.fillRect(Base::rect(), color);
+  }
+};
+
+int main(int argc, char **argv) {
+  QApplication app{argc, argv};
+  QMainWindow window;
+  QWidget central;
+  window.setCentralWidget(&central);
+  QHBoxLayout layout{&central};
+  layout.setSpacing(0);
+  layout.setContentsMargins(0, 0, 0, 0);
+  layout.addWidget(new Rectangle<QWidget>{Qt::red});
+  auto *blue = new Rectangle<QComboBox>{Qt::blue};
+  layout.addWidget(blue);
+  blue->setGeometry(101, 39, 100, 20);
+  window.show();
+  return app.exec();
+}*/
+
+/*#include <QtWidgets/qmenubar.h>
+#include <QtWidgets/qmainwindow.h>
+#include <QtWidgets/qapplication.h>
+
+void disable() {
+  QApplication::setDesktopSettingsAware(false);
+  QApplication::setEffectEnabled(Qt::UI_FadeMenu, false);
+}
+
+int main(int argc, char **argv) {
+  disable();
+  QApplication app{argc, argv};
+  disable();
+  QMainWindow window;
+  disable();
+  QMenuBar menubar{&window};
+  disable();
+  menubar.setNativeMenuBar(false);
+  QMenu *file = menubar.addMenu("File");
+  file->setStyleSheet("border: none; outline: none");
+  disable();
+  file->addAction("Open");
+  file->addAction("Save");
+  window.show();
+  disable();
+  return app.exec();
+}*/
+
+/*#include <QtGui/qevent.h>
+#include <QtGui/qpainter.h>
+#include <QtWidgets/qscrollbar.h>
+#include <QtWidgets/qscrollarea.h>
+#include <QtWidgets/qmainwindow.h>
+#include <QtWidgets/qapplication.h>
+
+class MyScrollBar final : public QScrollBar {
+public:
+  MyScrollBar(Qt::Orientation orient, QWidget *parent)
+    : QScrollBar{orient, parent} {
+    setStyleSheet("width: 8px; height: 8px");
+  }
+  
+private:
+  int pagePixels(const int length) const {
+    return (length * pageStep()) / (maximum() - minimum() + pageStep());
+  }
+  int valuePixels(const int length) const {
+    if (minimum() == maximum()) {
+      return 0;
+    } else {
+      return (length - pagePixels(length)) * value() / (maximum() - minimum());
+    }
+  }
+
+  void paintEvent(QPaintEvent *) override {
+    QPainter painter{this};
+    painter.fillRect(rect(), QColor{255, 0, 255, 127});
+    if (orientation() == Qt::Horizontal) {
+      painter.fillRect(QRect{
+        valuePixels(width()),
+        0,
+        pagePixels(width()),
+        height()
+      }, QColor{0, 127, 127, 127});
+    } else if (orientation() == Qt::Vertical) {
+      painter.fillRect(QRect{
+        0,
+        valuePixels(height()),
+        width(),
+        pagePixels(height())
+      }, QColor{0, 127, 127, 127});
+    } else {
+      Q_UNREACHABLE();
+    }
+  }
+};
+
+class MyCorner final : public QWidget {
+public:
+  explicit MyCorner(QWidget *parent)
+    : QWidget{parent} {}
+
+private:
+  void paintEvent(QPaintEvent *) override {
+    QPainter painter{this};
+    painter.fillRect(rect(), QColor{255, 0, 255, 127});
+  }
+};
+
+class MyContents final : public QWidget {
+  Q_OBJECT
+  
+public:
+  explicit MyContents(QWidget *parent)
+    : QWidget{parent} {
+    setFixedSize(100, 100);
+    setFocusPolicy(Qt::StrongFocus);
+  }
+
+Q_SIGNALS:
+  void resized();
+
+private:
+  int scale = 1;
+
+  void paintEvent(QPaintEvent *) override {
+    QPainter painter{this};
+    
+    painter.setPen(Qt::NoPen);
+    painter.setBrush(Qt::darkGray);
+    painter.drawRect(rect());
+    
+    painter.setPen(QPen{Qt::red, 4.0});
+    painter.setBrush(Qt::NoBrush);
+    painter.drawRect(2, 2, width() - 4, height() - 4);
+  }
+  
+  void keyPressEvent(QKeyEvent *event) override {
+    if (event->key() == Qt::Key_Z) {
+      scale++;
+    } else if (event->key() == Qt::Key_X) {
+      scale = std::max(scale - 1, 1);
+    }
+    setFixedSize(100 * scale, 100 * scale);
+  }
+  
+  void resizeEvent(QResizeEvent *) override {
+    Q_EMIT resized();
+  }
+};
+
+class MyArea final : public QScrollArea {
+public:
+  explicit MyArea(QWidget *parent)
+    : QScrollArea{parent} {
+    setAlignment(Qt::AlignCenter);
+    setVerticalScrollBar(new MyScrollBar{Qt::Vertical, this});
+    setHorizontalScrollBar(new MyScrollBar{Qt::Horizontal, this});
+    setCornerWidget(new MyCorner{this});
+    auto *contents = new MyContents{this};
+    connect(contents, &MyContents::resized, this, &MyArea::adjustMargins);
+    setWidget(contents);
+  }
+
+private:
+  void adjustMargins() {
+    if (widget()->width() < width() && widget()->height() < height()) {
+      setViewportMargins(0, 0, 0, 0);
+    }
+    const QMargins margins = viewportMargins();
+    const int right = height() < widget()->height() + margins.bottom() ? 8 : 0;
+    const int bottom = width() < widget()->width() + margins.right() ? 8 : 0;
+    setViewportMargins(0, 0, right, bottom);
+  }
+
+  void resizeEvent(QResizeEvent *event) override {
+    adjustMargins();
+    QScrollArea::resizeEvent(event);
+  }
+};
+
+int main(int argc, char **argv) {
+  QApplication app{argc, argv};
+  QMainWindow window;
+  window.setMinimumSize(200, 200);
+  MyArea area{&window};
+  window.setCentralWidget(&area);
+  window.show();
+  return app.exec();
+}*/
+
+/*#include <QtWidgets/qdockwidget.h>
+#include <QtWidgets/qmainwindow.h>
+#include <QtWidgets/qapplication.h>
+
+void addDock(QMainWindow *window, Qt::DockWidgetArea area, QWidget *widget) {
+  QDockWidget *dock = new QDockWidget{window};
+  dock->setFeatures(QDockWidget::NoDockWidgetFeatures);
+  dock->setAllowedAreas(area);
+  dock->setWidget(widget);
+  dock->setTitleBarWidget(new QWidget{dock});
+  window->addDockWidget(area, dock);
+}
+
+int main(int argc, char **argv) {
+  QApplication app{argc, argv};
+  QMainWindow window;
+  
+  window.setStyleSheet(R"(
+    QMainWindow::separator {
+      width: 10px;
+      height: 10px;
+      background-color: #F00;
+    }
+  )");
+  
+  QWidget bottom{&window};
+  bottom.setMinimumHeight(100);
+  bottom.setStyleSheet("background-color: #0F0");
+  addDock(&window, Qt::BottomDockWidgetArea, &bottom);
+  
+  QWidget left{&window};
+  left.setFixedWidth(100);
+  left.setStyleSheet("background-color: #00F");
+  addDock(&window, Qt::LeftDockWidgetArea, &left);
+  
+  QWidget center{&window};
+  center.setMinimumSize(300, 300);
+  center.setStyleSheet("background-color: #0FF");
+  window.setCentralWidget(&center);
+  
+  window.show();
+  
+  return app.exec();
+}*/
+
+#elif EXECUTE == BENCHMARK
 
 #include <iostream>
 #include <QtGui/qevent.h>
@@ -1705,368 +2059,7 @@ void blitImageOld(QImage &dst, const QImage &src, const QPoint pos) {
   painter.drawImage(pos, src);
 }
 
-#endif
-
-#if BUG_TEST
-
-#include <QtWidgets/qshortcut.h>
-#include <QtWidgets/qmainwindow.h>
-#include <QtWidgets/qapplication.h>
-#include <QtWidgets/qplaintextedit.h>
-
 int main(int argc, char **argv) {
-  QApplication app{argc, argv};
-  QMainWindow window;
-  window.move(379, 206);
-  window.setFixedSize(640, 420);
-  QPlainTextEdit editor{&window};
-  editor.setFixedSize(640, 420);
-  window.setWindowFilePath("test.txt");
-  QObject::connect(&editor, &QPlainTextEdit::textChanged, [&window]{
-    window.setWindowModified(true);
-  });
-  QShortcut shortcut{QKeySequence::Save, &window};
-  QObject::connect(&shortcut, &QShortcut::activated, [&window]{
-    window.setWindowModified(false);
-  });
-  window.show();
-  return app.exec();
-}
-
-/*#include "native mac.hpp"
-#include <QtWidgets/qlineedit.h>
-#include <QtWidgets/qmainwindow.h>
-#include <QtWidgets/qapplication.h>
-
-class LineEdit final : public QLineEdit {
-public:
-  using QLineEdit::QLineEdit;
-    
-private:
-  void keyPressEvent(QKeyEvent *event) override {
-    QLineEdit::keyPressEvent(event);
-    hideMouseUntilMouseMoves();
-  }
-};
-
-int main(int argc, char **argv) {
-  QApplication app{argc, argv};
-  QMainWindow window;
-  LineEdit box{&window};
-  window.show();
-  return app.exec();
-}*/
-
-/*#include <csetjmp>
-#include <iostream>
-
-struct Dtor {
-  int i;
-
-  ~Dtor() {
-    std::cout << "Dtor " << i << '\n';
-  }
-};
-
-jmp_buf buf;
-
-int main() {
-  Dtor a{0};
-  if (setjmp(buf)) {
-    std::cout << "Returning\n";
-    return 0;
-  }
-  Dtor b{1};
-  if (setjmp(buf)) {
-    std::cout << "Returning\n";
-    return 0;
-  }
-  longjmp(buf, 1);
-}*/
-
-/*#include <QtCore/qtimer.h>
-#include <QtWidgets/qmainwindow.h>
-#include <QtWidgets/qapplication.h>
-#include <QtWidgets/qdesktopwidget.h>
-
-int main(int argc, char **argv) {
-  QApplication app{argc, argv};
-  QMainWindow a{app.desktop()};
-  QWidget aChild{&a};
-  aChild.setFixedSize(400, 400);
-  a.show();
-  QTimer::singleShot(5000, [&a]{
-    auto *b = new QMainWindow{&a};
-    auto *bChild = new QWidget{b};
-    bChild->setFixedSize(400, 400);
-    b->show();
-  });
-  return app.exec();
-}*/
-
-/*#include <QtCore/qdebug.h>
-#include <QtGui/qpainter.h>
-#include <QtWidgets/qcombobox.h>
-#include <QtWidgets/qboxlayout.h>
-#include <QtWidgets/qmainwindow.h>
-#include <QtWidgets/qapplication.h>
-
-template <typename Base>
-class Rectangle : public Base {
-public:
-  explicit Rectangle(QColor color)
-    : color{color} {
-    Base::setFixedSize(100, 20);
-  }
-
-private:
-  QColor color;
-  
-  void paintEvent(QPaintEvent *) override {
-    qDebug() << color << '\t' << Base::geometry() << '\n';
-    QPainter{this}.fillRect(Base::rect(), color);
-  }
-};
-
-int main(int argc, char **argv) {
-  QApplication app{argc, argv};
-  QMainWindow window;
-  QWidget central;
-  window.setCentralWidget(&central);
-  QHBoxLayout layout{&central};
-  layout.setSpacing(0);
-  layout.setContentsMargins(0, 0, 0, 0);
-  layout.addWidget(new Rectangle<QWidget>{Qt::red});
-  auto *blue = new Rectangle<QComboBox>{Qt::blue};
-  layout.addWidget(blue);
-  blue->setGeometry(101, 39, 100, 20);
-  window.show();
-  return app.exec();
-}*/
-
-/*#include <QtWidgets/qmenubar.h>
-#include <QtWidgets/qmainwindow.h>
-#include <QtWidgets/qapplication.h>
-
-void disable() {
-  QApplication::setDesktopSettingsAware(false);
-  QApplication::setEffectEnabled(Qt::UI_FadeMenu, false);
-}
-
-int main(int argc, char **argv) {
-  disable();
-  QApplication app{argc, argv};
-  disable();
-  QMainWindow window;
-  disable();
-  QMenuBar menubar{&window};
-  disable();
-  menubar.setNativeMenuBar(false);
-  QMenu *file = menubar.addMenu("File");
-  file->setStyleSheet("border: none; outline: none");
-  disable();
-  file->addAction("Open");
-  file->addAction("Save");
-  window.show();
-  disable();
-  return app.exec();
-}*/
-
-/*#include <QtGui/qevent.h>
-#include <QtGui/qpainter.h>
-#include <QtWidgets/qscrollbar.h>
-#include <QtWidgets/qscrollarea.h>
-#include <QtWidgets/qmainwindow.h>
-#include <QtWidgets/qapplication.h>
-
-class MyScrollBar final : public QScrollBar {
-public:
-  MyScrollBar(Qt::Orientation orient, QWidget *parent)
-    : QScrollBar{orient, parent} {
-    setStyleSheet("width: 8px; height: 8px");
-  }
-  
-private:
-  int pagePixels(const int length) const {
-    return (length * pageStep()) / (maximum() - minimum() + pageStep());
-  }
-  int valuePixels(const int length) const {
-    if (minimum() == maximum()) {
-      return 0;
-    } else {
-      return (length - pagePixels(length)) * value() / (maximum() - minimum());
-    }
-  }
-
-  void paintEvent(QPaintEvent *) override {
-    QPainter painter{this};
-    painter.fillRect(rect(), QColor{255, 0, 255, 127});
-    if (orientation() == Qt::Horizontal) {
-      painter.fillRect(QRect{
-        valuePixels(width()),
-        0,
-        pagePixels(width()),
-        height()
-      }, QColor{0, 127, 127, 127});
-    } else if (orientation() == Qt::Vertical) {
-      painter.fillRect(QRect{
-        0,
-        valuePixels(height()),
-        width(),
-        pagePixels(height())
-      }, QColor{0, 127, 127, 127});
-    } else {
-      Q_UNREACHABLE();
-    }
-  }
-};
-
-class MyCorner final : public QWidget {
-public:
-  explicit MyCorner(QWidget *parent)
-    : QWidget{parent} {}
-
-private:
-  void paintEvent(QPaintEvent *) override {
-    QPainter painter{this};
-    painter.fillRect(rect(), QColor{255, 0, 255, 127});
-  }
-};
-
-class MyContents final : public QWidget {
-  Q_OBJECT
-  
-public:
-  explicit MyContents(QWidget *parent)
-    : QWidget{parent} {
-    setFixedSize(100, 100);
-    setFocusPolicy(Qt::StrongFocus);
-  }
-
-Q_SIGNALS:
-  void resized();
-
-private:
-  int scale = 1;
-
-  void paintEvent(QPaintEvent *) override {
-    QPainter painter{this};
-    
-    painter.setPen(Qt::NoPen);
-    painter.setBrush(Qt::darkGray);
-    painter.drawRect(rect());
-    
-    painter.setPen(QPen{Qt::red, 4.0});
-    painter.setBrush(Qt::NoBrush);
-    painter.drawRect(2, 2, width() - 4, height() - 4);
-  }
-  
-  void keyPressEvent(QKeyEvent *event) override {
-    if (event->key() == Qt::Key_Z) {
-      scale++;
-    } else if (event->key() == Qt::Key_X) {
-      scale = std::max(scale - 1, 1);
-    }
-    setFixedSize(100 * scale, 100 * scale);
-  }
-  
-  void resizeEvent(QResizeEvent *) override {
-    Q_EMIT resized();
-  }
-};
-
-class MyArea final : public QScrollArea {
-public:
-  explicit MyArea(QWidget *parent)
-    : QScrollArea{parent} {
-    setAlignment(Qt::AlignCenter);
-    setVerticalScrollBar(new MyScrollBar{Qt::Vertical, this});
-    setHorizontalScrollBar(new MyScrollBar{Qt::Horizontal, this});
-    setCornerWidget(new MyCorner{this});
-    auto *contents = new MyContents{this};
-    connect(contents, &MyContents::resized, this, &MyArea::adjustMargins);
-    setWidget(contents);
-  }
-
-private:
-  void adjustMargins() {
-    if (widget()->width() < width() && widget()->height() < height()) {
-      setViewportMargins(0, 0, 0, 0);
-    }
-    const QMargins margins = viewportMargins();
-    const int right = height() < widget()->height() + margins.bottom() ? 8 : 0;
-    const int bottom = width() < widget()->width() + margins.right() ? 8 : 0;
-    setViewportMargins(0, 0, right, bottom);
-  }
-
-  void resizeEvent(QResizeEvent *event) override {
-    adjustMargins();
-    QScrollArea::resizeEvent(event);
-  }
-};
-
-int main(int argc, char **argv) {
-  QApplication app{argc, argv};
-  QMainWindow window;
-  window.setMinimumSize(200, 200);
-  MyArea area{&window};
-  window.setCentralWidget(&area);
-  window.show();
-  return app.exec();
-}*/
-
-/*#include <QtWidgets/qdockwidget.h>
-#include <QtWidgets/qmainwindow.h>
-#include <QtWidgets/qapplication.h>
-
-void addDock(QMainWindow *window, Qt::DockWidgetArea area, QWidget *widget) {
-  QDockWidget *dock = new QDockWidget{window};
-  dock->setFeatures(QDockWidget::NoDockWidgetFeatures);
-  dock->setAllowedAreas(area);
-  dock->setWidget(widget);
-  dock->setTitleBarWidget(new QWidget{dock});
-  window->addDockWidget(area, dock);
-}
-
-int main(int argc, char **argv) {
-  QApplication app{argc, argv};
-  QMainWindow window;
-  
-  window.setStyleSheet(R"(
-    QMainWindow::separator {
-      width: 10px;
-      height: 10px;
-      background-color: #F00;
-    }
-  )");
-  
-  QWidget bottom{&window};
-  bottom.setMinimumHeight(100);
-  bottom.setStyleSheet("background-color: #0F0");
-  addDock(&window, Qt::BottomDockWidgetArea, &bottom);
-  
-  QWidget left{&window};
-  left.setFixedWidth(100);
-  left.setStyleSheet("background-color: #00F");
-  addDock(&window, Qt::LeftDockWidgetArea, &left);
-  
-  QWidget center{&window};
-  center.setMinimumSize(300, 300);
-  center.setStyleSheet("background-color: #0FF");
-  window.setCentralWidget(&center);
-  
-  window.show();
-  
-  return app.exec();
-}*/
-
-#endif
-
-#if !BUG_TEST
-
-int main(int argc, char **argv) {
-
-#if BENCHMARK
 
   /*Image img;
   img.data.load("/Users/indikernick/Library/Developer/Xcode/DerivedData/Pixel_2-gqoblrlhvynmicgniivandqktune/Build/Products/Debug/Pixel 2.app/Contents/Resources/icon.png");
@@ -2493,14 +2486,15 @@ int main(int argc, char **argv) {
   drawing.save("/Users/indikernick/Desktop/Test/overlay_7.png");
   
   source.image.save("/Users/indikernick/Desktop/Test/brush.png");*/
+}
 
-#else
+#elif EXECUTE == APP
   
-  Application app{argc, argv};
-  return app.exec();
-  
-#endif
+#include "cli.hpp"
 
+int main(int argc, char **argv) {
+  CLI cli{argc, argv};
+  return cli.exec();
 }
 
 #endif

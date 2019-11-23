@@ -57,8 +57,8 @@ static const uint qt_meta_data_Application[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    2,   24,    2, 0x08 /* Private */,
-       4,    1,   29,    2, 0x08 /* Private */,
+       1,    2,   24,    2, 0x0a /* Public */,
+       4,    1,   29,    2, 0x0a /* Public */,
 
  // slots: parameters
     QMetaType::Void, 0x80000000 | 3, QMetaType::QSize,    2,    2,
