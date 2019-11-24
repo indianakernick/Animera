@@ -9,7 +9,7 @@
 #ifndef common_hpp
 #define common_hpp
 
-#include "../catch.hpp"
+#include "catch.hpp"
 #include <Graphics/surface.hpp>
 
 using Px = uint16_t;

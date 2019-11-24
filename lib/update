@@ -1,0 +1,6 @@
+#!/bin/sh
+
+GH=https://raw.githubusercontent.com
+LIB=$(dirname $0)
+
+curl $GH/catchorg/Catch2/master/single_include/catch2/catch.hpp > $LIB/Catch2/catch.hpp

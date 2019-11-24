@@ -305,7 +305,6 @@
 		45B284BB221E252300D6D055 /* paint params.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "paint params.hpp"; sourceTree = "<group>"; };
 		45BADA75224714A3000D095C /* tool widgets.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "tool widgets.cpp"; sourceTree = "<group>"; };
 		45BADA76224714A3000D095C /* tool widgets.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "tool widgets.hpp"; sourceTree = "<group>"; };
-		45BB5F5923239A1D00E42371 /* catch.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = catch.hpp; sourceTree = "<group>"; };
 		45BB5F6223239AB900E42371 /* Graphics-Test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Graphics-Test"; sourceTree = BUILT_PRODUCTS_DIR; };
 		45BB5F6423239AB900E42371 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		45BB5F6A23239CB700E42371 /* copy.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = copy.cpp; sourceTree = "<group>"; };
@@ -696,6 +695,7 @@
 				45C2A2562207BC4000E989C2 /* plan r0.txt */,
 				45C2A280220E821200E989C2 /* plan r1.txt */,
 				45161F0022F11EB60036BBED /* todo.txt */,
+				45C5CA7B238A25690056CEE7 /* lib */,
 				4554869023443256001D5611 /* Sprites */,
 				453C78222234CB5500818B19 /* Resources */,
 				45BB5F57232399B100E42371 /* test */,
@@ -810,7 +810,6 @@
 		45BB5F57232399B100E42371 /* test */ = {
 			isa = PBXGroup;
 			children = (
-				45BB5F5923239A1D00E42371 /* catch.hpp */,
 				45BB5F5D23239A8500E42371 /* Graphics */,
 			);
 			path = test;
@@ -840,6 +839,13 @@
 				455486B8234466C2001D5611 /* palette select.png */,
 			);
 			path = "Color Picker";
+			sourceTree = "<group>";
+		};
+		45C5CA7B238A25690056CEE7 /* lib */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = lib;
 			sourceTree = "<group>";
 		};
 		45F3EB6B22CC42ED00F9F93E /* Dialogs */ = {
@@ -2048,7 +2054,10 @@
 					CATCH_CONFIG_FAST_COMPILE,
 					CATCH_CONFIG_DISABLE_MATCHERS,
 				);
-				HEADER_SEARCH_PATHS = $PROJECT_DIR/include;
+				HEADER_SEARCH_PATHS = (
+					$PROJECT_DIR/include,
+					$PROJECT_DIR/lib/Catch2,
+				);
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-Wall",
@@ -2080,7 +2089,10 @@
 					CATCH_CONFIG_FAST_COMPILE,
 					CATCH_CONFIG_DISABLE_MATCHERS,
 				);
-				HEADER_SEARCH_PATHS = $PROJECT_DIR/include;
+				HEADER_SEARCH_PATHS = (
+					$PROJECT_DIR/include,
+					$PROJECT_DIR/lib/Catch2,
+				);
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-Wall",
