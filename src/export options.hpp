@@ -56,4 +56,6 @@ struct ExportOptions {
   int angle;
 };
 
+ExportOptions exportFrameOptions(const QString &, Format);
+
 #endif

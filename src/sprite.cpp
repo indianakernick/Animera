@@ -9,7 +9,6 @@
 #include "sprite.hpp"
 
 #include "file io.hpp"
-#include <QtCore/qdir.h>
 #include "sprite file.hpp"
 
 void Sprite::newFile(const Format newFormat, const QSize newSize) {
@@ -115,41 +114,6 @@ Format Sprite::getFormat() const {
 
 QSize Sprite::getSize() const {
   return size;
-}
-
-// TODO: Does this function belong here?
-// I don't really know where to put it
-ExportOptions exportFrameOptions(const QString &path, const Format canvasFormat) {
-  ExportFormat format;
-  switch (canvasFormat) {
-    case Format::rgba:
-      format = ExportFormat::rgba;
-      break;
-    case Format::index:
-      format = ExportFormat::rgba;
-      break;
-    case Format::gray:
-      format = ExportFormat::gray_alpha;
-      break;
-  }
-  QString dir = path;
-  dir.chop(dir.size() - dir.lastIndexOf('.'));
-  const int lastSlash = dir.lastIndexOf(QDir::separator());
-  const int nameLen = dir.size() - lastSlash - 1;
-  QString name{dir.data() + lastSlash + 1, nameLen};
-  dir.chop(nameLen);
-  return {
-    std::move(name),
-    std::move(dir),
-    {LayerIdx{1}, LayerIdx{0}},
-    {FrameIdx{1}, FrameIdx{0}},
-    LayerSelect::all_composited,
-    FrameSelect::current,
-    format,
-    1,
-    1,
-    0
-  };
 }
 
 #include "sprite.moc"

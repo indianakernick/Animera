@@ -143,6 +143,12 @@ don't clear the whole overlay
   do we really need to clear the whole thing all the time
   there are some places where we must clear the whole thing
 
+why is drawing on large images (screenshots) so slow?
+  just moving the mouse around is slow
+  maybe it's compositing
+  optimize compositing just one layer
+  use a profiler!
+
 ----------------------------------- scripting ----------------------------------
 
 scripting interface
@@ -293,5 +299,3 @@ there might be a few random constants that should be in config.hpp but aren't
 Should probably be calling update() instead of repaint() in most places
 
 Should probably be using mouse release instead of mouse press in some places
-
-Can probably remove a few qRound calls and use ints instead
