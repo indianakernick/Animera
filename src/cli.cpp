@@ -9,22 +9,56 @@
 #include "cli.hpp"
 
 #include "sprite.hpp"
+#include "strings.hpp"
 #include "application.hpp"
 #include <QtCore/qtextstream.h>
-#include <QtCore/qcommandlineparser.h>
 
 CLI::CLI(int &argc, char **argv)
   : argc{argc}, argv{argv} {}
 
 namespace {
 
-const char helpText[] =
+// We can't use help_text because help_text is too fancy
+// This is still a million times better than QCommandLineParser though!
+
+const char doc_text[] =
 R"(Usage:
-    Animera [-h]
+  Animera [--help]
+  Animera open <file>
+  Animera export [--name=<pattern> --directory=<path>]
+                 [--layer-stride=<integer> --layer-offset=<integer>]
+                 [--frame-stride=<integer> --frame-offset=<integer>]
+                 [--no-composite --layer=<range> --frame=<range>]
+                 [--format=<format>]
+                 [(--scale-x=<integer> --scale-y=<integer>) | --scale=<integer>]
+                 [--angle=<integer>] <file>
+
+Options:
+  -n, --name <pattern>  Desc.
+  -d, --directory <path>  Desc.
+  --layer-stride <integer>  Desc.
+  --layer-offset <integer>  Desc.
+  --frame-stride <integer>  Desc.
+  --frame-offset <integer>  Desc.
+  -c, --no-composite  Desc.
+  -l, --layer <range>  Desc.
+  -f, --frame <range>  Desc.
+  -F, --format <format>  Desc.
+  --scale-x <integer>  Desc.
+  --scale-y <integer>  Desc.
+  --scale <integer>  Desc.
+  -a, --angle <integer>  Desc.
+  -h, --help  Desc.
+)";
+
+const char help_text[] =
+R"(Usage:
+    Animera [--help]
     Animera open <file>
-    Animera export [-n -d --layer-stride --layer-offset]
-                   [--frame-stride --frame-offset -c -l -f -F]
-                   [(--scale-x --scale-y | -s) -a] <file>
+    Animera export [--name --directory]
+                   [--layer-stride --layer-offset --frame-stride --frame-offset]
+                   [--no-composite --layer --frame --format]
+                   [(--scale-x --scale-y) | --scale] [--angle] <file>
 
 Options:
     -n, --name <pattern>
@@ -48,6 +82,7 @@ Options:
         
     --layer-stride <integer>
         This is similar to the --frame-stride option but for layers.
+        
     --layer-offset <integer>
         This is similar to the --frame-offset option but for layers.
     
@@ -129,63 +164,40 @@ Options:
     
     -h, --help
         Displays this help.)";
-
-}
-
-int CLI::exec() {
-  QCommandLineParser parser;
-
-  const QCommandLineOption name{"name", "", "name"};
-  const QCommandLineOption dir{"directory", "", "directory"};
-  parser.addOption(name);
-  parser.addOption(dir);
-  const QCommandLineOption help = parser.addHelpOption();
-  
-  if (!parser.parse(getArguments())) {
-    console() << parser.errorText() << '\n';
-    return 1;
-  }
-  
-  if (parser.isSet(help)) {
-    console() << helpText;
-    return 0;
-  }
-  
-  const QStringList &args = parser.positionalArguments();
-  if (args.size() == 1) {
-    console() << "Missing file argument\n";
-    return 1;
-  }
-  if (args.size() > 2) {
-    console() << "Too many arguments\n";
-    return 1;
-  }
-  
-  if (args.isEmpty()) {
-    return execDefault();
-  }
-  if (args.front() == "open") {
-    return execOpen(args.back());
-  }
-  if (args.front() == "export") {
-    return execExport(args.back(), parser.value(name), parser.value(dir));
-  }
-  
-  console() << "Invalid arguments\n";
-  return 1;
-}
-
-QStringList CLI::getArguments() const {
-  QStringList arguments;
-  for (int a = 0; a != argc; ++a) {
-    arguments.append(argv[a]);
-  }
-  return arguments;
-}
-
-QTextStream &CLI::console() {
+        
+QTextStream &console() {
   static QTextStream stream{stdout};
   return stream;
+}
+
+}
+
+#include <iostream>
+
+int CLI::exec() {
+  std::map<std::string, docopt::value> flags;
+  try {
+    flags = docopt::docopt_parse(doc_text, {argv + 1, argv + argc}, true);
+  } catch (docopt::DocoptExitHelp &) {
+    console() << help_text;
+    return 0;
+  } catch (docopt::DocoptArgumentError &e) {
+    console() << "Command line error\n";
+    console() << e.what();
+    return 1;
+  }
+  
+  for (const auto &flag : flags) {
+    std::cout << flag.first << " = " << flag.second << '\n';
+  }
+  
+  if (flags.at("open").asBool()) {
+    return execOpen(flags);
+  } else if (flags.at("export").asBool()) {
+    return execExport(flags);
+  } else {
+    return execDefault();
+  }
 }
 
 int CLI::execDefault() const {
@@ -194,23 +206,33 @@ int CLI::execDefault() const {
   return app.exec();
 }
 
-int CLI::execOpen(const QString &file) const {
+int CLI::execOpen(const std::map<std::string, docopt::value> &flags) const {
   Application app{argc, argv};
-  app.openFile(file);
+  app.openFile(toLatinString(flags.at("<file>").asString()));
   return app.exec();
 }
 
-int CLI::execExport(const QString &file, const QString &name, const QString &dir) const {
+int CLI::execExport(const std::map<std::string, docopt::value> &flags) const {
   QCoreApplication app{argc, argv};
   Sprite sprite;
-  if (Error err = sprite.openFile(file); err) {
+  if (Error err = sprite.openFile(toLatinString(flags.at("<file>").asString())); err) {
     console() << "File open error\n";
     console() << err.msg() << '\n';
+    return 1;
   }
-  const ExportOptions options = exportFrameOptions(dir + "/" + name + ".png", sprite.getFormat());
+  ExportOptions options;
+  CellPos current = {};
+  initDefaultOptions(options, sprite.getFormat());
+  if (Error err = readExportOptions(options, current, sprite.getFormat(), flags); err) {
+    console() << "Configuration error\n";
+    console() << err.msg() << '\n';
+    return 1;
+  }
+  sprite.timeline.setCurrPos(current);
   if (Error err = sprite.exportSprite(options); err) {
     console() << "Export error\n";
     console() << err.msg() << '\n';
+    return 1;
   }
   return 0;
 }

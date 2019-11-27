@@ -9,9 +9,7 @@
 #ifndef cli_hpp
 #define cli_hpp
 
-class QString;
-class QStringList;
-class QTextStream;
+#include "docopt.h"
 
 class CLI {
 public:
@@ -23,13 +21,9 @@ private:
   int &argc;
   char **argv;
   
-  void printHelp() const;
-  QStringList getArguments() const;
-  static QTextStream &console();
-  
   int execDefault() const;
-  int execOpen(const QString &) const;
-  int execExport(const QString &, const QString &, const QString &) const;
+  int execOpen(const std::map<std::string, docopt::value> &) const;
+  int execExport(const std::map<std::string, docopt::value> &) const;
 };
 
 #endif

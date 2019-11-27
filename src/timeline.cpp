@@ -142,7 +142,7 @@ Error Timeline::deserializeTail(QIODevice &dev) {
 
 Error Timeline::exportTimeline(const ExportOptions &options, const PaletteCSpan palette) const {
   Exporter exporter{options, palette, canvasFormat, canvasSize};
-  exporter.setRect(layerCount(), frameCount, currPos);
+  exporter.setRect({layerCount(), frameCount, currPos});
   return exporter.exportSprite(layers);
 }
 

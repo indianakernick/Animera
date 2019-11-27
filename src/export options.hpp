@@ -10,6 +10,8 @@
 #define export_options_hpp
 
 #include "cell.hpp"
+#include "docopt.h"
+#include "error.hpp"
 #include <QtCore/qstring.h>
 
 enum class LayerSelect {
@@ -56,6 +58,25 @@ struct ExportOptions {
   int angle;
 };
 
+/// State used to evaluate sprite name pattern
+struct ExportState {
+  CellPos currPos;
+  // Could add layer name to this
+};
+
+/// Info used to select a rectangle of cells
+struct ExportSpriteInfo {
+  LayerIdx layers;
+  FrameIdx frames;
+  CellPos currPos;
+  // Could add selection rect
+};
+
+QString getExportPath(const ExportOptions &, ExportState);
+CellRect getExportRect(const ExportOptions &, const ExportSpriteInfo &);
+
+void initDefaultOptions(ExportOptions &, Format);
 ExportOptions exportFrameOptions(const QString &, Format);
+Error readExportOptions(ExportOptions &, CellPos &, Format, const std::map<std::string, docopt::value> &);
 
 #endif

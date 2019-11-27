@@ -198,11 +198,7 @@ generate a palette from a gradient
 
 make exporting less tedious
   store paths in QSettings
-  assign names to each frame
   would it be useful to copy export settings to and from the clipboard?
-  should export settings be kept in the sprite file?
-    probably shouldn't store the directory
-  button to export the settings stored in the file (Quick Export)
   key_export_frame might make more sense with ALT instead of SHIFT
 
 proper undo/redo system
@@ -221,6 +217,13 @@ are frame tags useful?
     i think that's what I used to do with the old pixel animator
   another way would be to split it into multiple files (file for each tag)
   how would the interface look?
+    a table of tags above timeline
+      table would contain the names and a visual
+      takes a lot of space
+    a space for horizontal lines
+      the lines would stack on top of each other if tags are overlapping
+      tooltip would show the name
+      uses signficantly less space
 
 --------------------------------- refactoring ----------------------------------
 
@@ -291,6 +294,7 @@ remove layer button appears when hovering layer name
   
 should the editor keys go in a menubar?
   how else are users supposed to discover these keys?
+  could put them in a help menu
 
 ------------------------------- minor refactoring ------------------------------
 

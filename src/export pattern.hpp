@@ -12,16 +12,9 @@
 #include "cell.hpp"
 #include <QtCore/qstring.h>
 #include <QtGui/qvalidator.h>
+#include "export options.hpp"
 
-/*
-TODO: do we need more parameters for name patterns?
-an object with setters to set parameters
-then a function to parse the info
-maybe this object should have functions for validation and fixing that are called by the validator
-layer name could be useful as well as the layer index
-*/
-
-QString evalExportPattern(const QString &, LayerIdx, FrameIdx);
+QString evalExportPattern(const QString &, ExportState);
 
 class ExportPatternValidator final : public QValidator {
 public:

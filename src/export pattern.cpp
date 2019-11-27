@@ -42,8 +42,7 @@ int countZeros(QString::const_iterator &begin, QString::const_iterator end) {
 
 QString evalExportPattern(
   const QString &pattern,
-  const LayerIdx layer,
-  const FrameIdx frame
+  const ExportState state
 ) {
   QString output;
   output.reserve(pattern.size());
@@ -54,9 +53,9 @@ QString evalExportPattern(
       const int zeros = countZeros(c, pattern.cend());
       assert(c != pattern.cend());
       if (*c == 'L') {
-        output.push_back(paddedNumber(zeros, +layer));
+        output.push_back(paddedNumber(zeros, +state.currPos.l));
       } else if (*c == 'F') {
-        output.push_back(paddedNumber(zeros, +frame));
+        output.push_back(paddedNumber(zeros, +state.currPos.f));
       } else Q_UNREACHABLE();
     } else {
       assert(validFileNameChar(*c));

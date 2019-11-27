@@ -12,7 +12,6 @@
 #include <QtCore/qdir.h>
 #include "composite.hpp"
 #include "export png.hpp"
-#include "export pattern.hpp"
 #include "surface factory.hpp"
 #include "graphics convert.hpp"
 #include <Graphics/transform.hpp>
@@ -28,32 +27,8 @@ Exporter::Exporter(
     rect{empty_rect},
     size{size} {}
 
-void Exporter::setRect(
-  const LayerIdx layerCount,
-  const FrameIdx frameCount,
-  const CellPos currPos
-) {
-  switch (options.layerSelect) {
-    case LayerSelect::all_composited:
-    case LayerSelect::all:
-      rect.minL = LayerIdx{0};
-      rect.maxL = layerCount - LayerIdx{1};
-      break;
-    case LayerSelect::current:
-      rect.minL = rect.maxL = currPos.l;
-      break;
-    default: Q_UNREACHABLE();
-  }
-  switch (options.frameSelect) {
-    case FrameSelect::all:
-      rect.minF = FrameIdx{0};
-      rect.maxF = frameCount - FrameIdx{1};
-      break;
-    case FrameSelect::current:
-      rect.minF = rect.maxF = currPos.f;
-      break;
-    default: Q_UNREACHABLE();
-  }
+void Exporter::setRect(const ExportSpriteInfo &info) {
+  rect = getExportRect(options, info);
 }
 
 Error Exporter::exportSprite(const std::vector<Layer> &layers) {
@@ -104,27 +79,6 @@ void Exporter::setImageFrom(const Frame &frame) {
   }
 }
 
-namespace {
-
-template <typename Idx>
-Idx apply(const Line<Idx> line, const Idx value) {
-  return value * line.stride + line.offset;
-}
-
-}
-
-QString Exporter::getPath(CellPos pos) const {
-  QString path = options.directory;
-  if (path.back() != QDir::separator()) {
-    path.push_back(QDir::separator());
-  }
-  pos.l = apply(options.layerLine, pos.l);
-  pos.f = apply(options.frameLine, pos.f);
-  path += evalExportPattern(options.name, pos.l, pos.f);
-  path += ".png";
-  return path;
-}
-
 void Exporter::applyTransform() {
   visitSurface(xformed, [this](const auto dst) {
     const auto src = makeCSurface<typename decltype(dst)::Pixel>(image);
@@ -137,9 +91,9 @@ void Exporter::applyTransform() {
   });
 }
 
-Error Exporter::exportImage(const CellPos pos) {
+Error Exporter::exportImage(const ExportState state) {
   FileWriter writer;
-  if (Error err = writer.open(getPath(pos)); err) return err;
+  if (Error err = writer.open(getExportPath(options, state)); err) return err;
   if (xformed.isNull()) {
     if (Error err = exportPng(writer.dev(), palette, image, format, options.format); err) return err;
   } else {
