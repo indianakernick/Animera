@@ -60,7 +60,7 @@ void ExportDialog::submit() {
 
 void ExportDialog::updateFormatItems(const int layerIdx) {
   if (format == Format::index) {
-    if (layerIdx == static_cast<int>(LayerSelect::all_composited) && formatSelect->count() == 2) {
+    if (layerIdx == static_cast<int>(LayerSelect::all_composited) && formatSelect->count() == 3) {
       formatSelect->clear();
       formatSelect->addItem("RGBA");
     } else if (formatSelect->count() == 1) {
