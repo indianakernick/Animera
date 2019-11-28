@@ -43,7 +43,7 @@ CellRect getExportRect(const ExportOptions &options, const ExportSpriteInfo &inf
       rect.maxL = info.layers - LayerIdx{1};
       break;
     case LayerSelect::current:
-      rect.minL = rect.maxL = info.currPos.l;
+      rect.minL = rect.maxL = info.current.l;
       break;
     default: Q_UNREACHABLE();
   }
@@ -53,7 +53,7 @@ CellRect getExportRect(const ExportOptions &options, const ExportSpriteInfo &inf
       rect.maxF = info.frames - FrameIdx{1};
       break;
     case FrameSelect::current:
-      rect.minF = rect.maxF = info.currPos.f;
+      rect.minF = rect.maxF = info.current.f;
       break;
     default: Q_UNREACHABLE();
   }
@@ -323,7 +323,7 @@ Error setScale(ExportOptions &options, const std::map<std::string, docopt::value
 
 Error readExportOptions(
   ExportOptions &options,
-  CellPos &current,
+  ExportSpriteInfo &info,
   const Format format,
   const std::map<std::string, docopt::value> &flags
 ) {

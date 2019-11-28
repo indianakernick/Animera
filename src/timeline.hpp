@@ -55,6 +55,9 @@ public:
 
   Error exportTimeline(const ExportOptions &, PaletteCSpan) const;
 
+  LayerIdx getLayers() const;
+  FrameIdx getFrames() const;
+
 public Q_SLOTS:
   void initCanvas(Format, QSize);
 

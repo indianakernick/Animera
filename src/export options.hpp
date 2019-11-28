@@ -67,10 +67,10 @@ struct ExportState {
 
 /// Info used to select a rectangle of cells
 struct ExportSpriteInfo {
-  LayerIdx layers;
-  FrameIdx frames;
-  CellPos currPos;
-  // Could add selection rect
+  const LayerIdx layers;
+  const FrameIdx frames;
+  CellPos current;
+  CellRect selection;
 };
 
 QString getExportPath(const ExportOptions &, ExportState);
@@ -78,6 +78,6 @@ CellRect getExportRect(const ExportOptions &, const ExportSpriteInfo &);
 
 void initDefaultOptions(ExportOptions &, Format);
 ExportOptions exportFrameOptions(const QString &, Format);
-Error readExportOptions(ExportOptions &, CellPos &, Format, const std::map<std::string, docopt::value> &);
+Error readExportOptions(ExportOptions &, ExportSpriteInfo &, Format, const std::map<std::string, docopt::value> &);
 
 #endif

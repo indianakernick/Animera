@@ -223,14 +223,21 @@ int CLI::execExport(const std::map<std::string, docopt::value> &flags) const {
     return 1;
   }
   ExportOptions options;
-  CellPos current = {};
-  initDefaultOptions(options, sprite.getFormat());
-  if (Error err = readExportOptions(options, current, sprite.getFormat(), flags); err) {
+  ExportSpriteInfo info = {
+    sprite.timeline.getLayers(), sprite.timeline.getFrames(), {}, {}
+  };
+  const Format format = sprite.getFormat();
+  initDefaultOptions(options, format);
+  if (Error err = readExportOptions(options, info, format, flags); err) {
     console() << "Configuration error\n";
     console() << err.msg() << '\n';
     return 1;
   }
-  sprite.timeline.setCurrPos(current);
+  sprite.timeline.setCurrPos({info.selection.minL, info.selection.minF});
+  sprite.timeline.beginSelection();
+  sprite.timeline.setCurrPos({info.selection.maxL, info.selection.maxF});
+  sprite.timeline.endSelection();
+  sprite.timeline.setCurrPos(info.current);
   if (Error err = sprite.exportSprite(options); err) {
     console() << "Export error\n";
     console() << err.msg() << '\n';
