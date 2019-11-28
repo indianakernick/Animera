@@ -30,7 +30,7 @@ R"(Usage:
                  [--frame-stride=<integer> --frame-offset=<integer>]
                  [--no-composite --layer=<range> --frame=<range>]
                  [--format=<format>]
-                 [(--scale-x=<integer> --scale-y=<integer>) | --scale=<integer>]
+                 [--scale-x=<integer> --scale-y=<integer> --scale=<integer>]
                  [--angle=<integer>] <file>
 
 Options:
@@ -50,6 +50,8 @@ Options:
   -a, --angle <integer>  Desc.
   -h, --help  Desc.
 )";
+
+// TODO: Long help and short help
 
 const char help_text[] =
 R"(Usage:

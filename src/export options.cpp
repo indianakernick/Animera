@@ -8,6 +8,7 @@
 
 #include "export options.hpp"
 
+#include "config.hpp"
 #include "strings.hpp"
 #include <QtCore/qdir.h>
 #include "export pattern.hpp"
@@ -96,6 +97,143 @@ ExportOptions exportFrameOptions(const QString &path, const Format canvasFormat)
   return options;
 }
 
+namespace {
+
+Error setInt(long &number, const docopt::value &value, const QString &name) {
+  try {
+    number = value.asLong();
+  } catch (std::exception &) {
+    return name + " must be an integer";
+  }
+  return {};
+}
+
+QString nonZeroRangeStr(const IntRange range) {
+  QString str = "\nValid range is: [";
+  str += QString::number(range.min);
+  str += ", -1] U [1, ";
+  str += QString::number(range.max);
+  str += ']';
+  return str;
+}
+
+QString rangeStr(const IntRange range) {
+  QString str = "\nValid range is: [";
+  str += QString::number(range.min);
+  str += ", ";
+  str += QString::number(range.max);
+  str += ']';
+  return str;
+}
+
+Error setInt(
+  int &number,
+  const docopt::value &value,
+  const QString &name,
+  const IntRange range
+) {
+  long longNumber;
+  if (Error err = setInt(longNumber, value, name); err) return err;
+  if (longNumber < range.min || longNumber > range.max) {
+    return name + " is out of range" + rangeStr(range);
+  }
+  number = static_cast<int>(longNumber);
+  return {};
+}
+
+Error setNonZeroInt(
+  int &number,
+  const docopt::value &value,
+  const QString &name,
+  const IntRange range
+) {
+  long longNumber;
+  if (Error err = setInt(longNumber, value, name); err) return err;
+  if (longNumber == 0) {
+    return name + " cannot be 0" + nonZeroRangeStr(range);
+  }
+  if (longNumber < expt_stride.min || longNumber > expt_stride.max) {
+    return name + " is out of range" + nonZeroRangeStr(range);
+  }
+  number = static_cast<int>(longNumber);
+  return {};
+}
+
+template <typename Idx>
+const QString idxName;
+template <>
+const QString idxName<LayerIdx> = "Layer";
+template <>
+const QString idxName<FrameIdx> = "Frame";
+
+template <typename Idx>
+Error setStride(Line<Idx> &line, const docopt::value &strideValue) {
+  const QString name = idxName<Idx> + " stride";
+  int stride;
+  if (Error err = setNonZeroInt(stride, strideValue, name, expt_stride); err) {
+    return err;
+  }
+  line.stride = Idx{stride};
+  return {};
+}
+
+template <typename Idx>
+Error setOffset(Line<Idx> &line, const docopt::value &offsetValue) {
+  const QString name = idxName<Idx> + " offset";
+  int offset;
+  if (Error err = setInt(offset, offsetValue, name, expt_offset); err) {
+    return err;
+  }
+  line.offset = static_cast<Idx>(offset);
+  return {};
+}
+
+Error setStrideOffset(ExportOptions &options, const std::map<std::string, docopt::value> &flags) {
+  if (const docopt::value &stride = flags.at("--layer-stride"); stride) {
+    if (Error err = setStride(options.layerLine, stride); err) return err;
+  }
+  if (const docopt::value &offset = flags.at("--layer-offset"); offset) {
+    if (Error err = setOffset(options.layerLine, offset); err) return err;
+  }
+  if (const docopt::value &stride = flags.at("--frame-stride"); stride) {
+    if (Error err = setStride(options.frameLine, stride); err) return err;
+  }
+  if (const docopt::value &offset = flags.at("--frame-offset"); offset) {
+    if (Error err = setOffset(options.frameLine, offset); err) return err;
+  }
+  return {};
+}
+
+Error setScale(ExportOptions &options, const std::map<std::string, docopt::value> &flags) {
+  bool scaleXorY = false;
+  if (const docopt::value &scaleX = flags.at("--scale-x"); scaleX) {
+    if (Error err = setNonZeroInt(options.scaleX, scaleX, "scale-x", expt_scale); err) {
+      return err;
+    }
+    scaleXorY = true;
+  }
+  if (const docopt::value &scaleY = flags.at("--scale-y"); scaleY) {
+    if (Error err = setNonZeroInt(options.scaleY, scaleY, "scale-y", expt_scale); err) {
+      return err;
+    }
+    scaleXorY = true;
+  }
+  if (const docopt::value &scale = flags.at("--scale"); scale) {
+    if (scaleXorY) {
+      // The error message from docopt is useless
+      return "scale-x and scale-y are mutually exclusive with scale";
+    }
+    int scaleXY;
+    if (Error err = setNonZeroInt(scaleXY, scale, "scale", expt_scale); err) {
+      return err;
+    }
+    options.scaleX = options.scaleY = scaleXY;
+  }
+  return {};
+}
+
+}
+
 Error readExportOptions(
   ExportOptions &options,
   CellPos &current,
@@ -103,17 +241,25 @@ Error readExportOptions(
   const std::map<std::string, docopt::value> &flags
 ) {
   if (const docopt::value &name = flags.at("--name"); name) {
-    // TODO: ensure that name is a string
-    // TODO: validate pattern
     options.name = toLatinString(name.asString());
   }
+  
   if (const docopt::value &dir = flags.at("--directory"); dir) {
-    // TODO: ensure that dir is a string
-    // TODO: ensure this is a valid directory
     options.directory = toLatinString(dir.asString());
   }
   
-  // TODO: check for unknown flags
+  if (Error err = setStrideOffset(options, flags); err) return err;
+  
+  const bool composite = !flags.at("--no-composite").asBool();
+  
+  if (Error err = setScale(options, flags); err) return err;
+  
+  if (const docopt::value &angle = flags.at("--angle"); angle) {
+    long angleLong;
+    if (Error err = setInt(angleLong, angle, "angle"); err) return err;
+    angleLong &= 3;
+    options.angle = static_cast<int>(angleLong);
+  }
   
   return {};
 }
