@@ -188,6 +188,93 @@ Error setOffset(Line<Idx> &line, const docopt::value &offsetValue) {
   return {};
 }
 
+const char *formatNames[] = {
+  "rgba",
+  "index",
+  "gray",
+  "gray-alpha",
+  "monochrome"
+};
+
+QString formatNamesList(std::initializer_list<ExportFormat> formats) {
+  QString str = "\nValid formats are: {";
+  bool first = true;
+  for (ExportFormat format : formats) {
+    if (!std::exchange(first, false)) str += ", ";
+    str += formatNames[static_cast<size_t>(format)];
+  }
+  str += '}';
+  return str;
+}
+
+QString formatNamesList() {
+  return formatNamesList({
+    ExportFormat::rgba,
+    ExportFormat::index,
+    ExportFormat::gray,
+    ExportFormat::gray_alpha,
+    ExportFormat::monochrome
+  });
+}
+
+void toLowerStr(std::string &str) {
+  std::transform(str.begin(), str.end(), str.begin(), [](unsigned char ch) {
+    return std::tolower(ch);
+  });
+}
+
+Error setExportFormat(ExportFormat &format, const docopt::value &formatValue) {
+  if (formatValue.isStringList()) {
+    return "format must only appear once";
+  }
+  // Is there any chance of it being a long or bool?
+  assert(formatValue.isString());
+  std::string formatStr = formatValue.asString();
+  toLowerStr(formatStr);
+  for (size_t i = 0; i != std::size(formatNames); ++i) {
+    if (formatStr == formatNames[i]) {
+      format = static_cast<ExportFormat>(i);
+      return {};
+    }
+  }
+  return "Invalid export format" + formatNamesList();
+}
+
+Error checkFormat(
+  const ExportFormat format,
+  const QString &canvasFormat,
+  std::initializer_list<ExportFormat> formats
+) {
+  if (std::find(formats.begin(), formats.end(), format) == formats.end()) {
+    QString msg = "Invalid export format for ";
+    msg += canvasFormat;
+    msg += " sprite format";
+    msg += formatNamesList(formats);
+    return msg;
+  }
+  return {};
+}
+
+Error checkFormat(
+  const ExportFormat format,
+  const Format canvasFormat,
+  const bool composite
+) {
+  switch (canvasFormat) {
+    case Format::rgba:
+      return checkFormat(format, "rgba", {ExportFormat::rgba});
+    case Format::index:
+      if (composite) {
+        return checkFormat(format, "index", {ExportFormat::rgba});
+      } else {
+        return checkFormat(format, "index", {ExportFormat::index, ExportFormat::gray, ExportFormat::monochrome});
+      }
+    case Format::gray:
+      return checkFormat(format, "gray", {ExportFormat::gray_alpha, ExportFormat::gray, ExportFormat::monochrome});
+  }
+  return {};
+}
+
 Error setStrideOffset(ExportOptions &options, const std::map<std::string, docopt::value> &flags) {
   if (const docopt::value &stride = flags.at("--layer-stride"); stride) {
     if (Error err = setStride(options.layerLine, stride); err) return err;
@@ -251,6 +338,15 @@ Error readExportOptions(
   if (Error err = setStrideOffset(options, flags); err) return err;
   
   const bool composite = !flags.at("--no-composite").asBool();
+  
+  if (const docopt::value &value = flags.at("--format"); value) {
+    if (Error err = setExportFormat(options.format, value); err) {
+      return err;
+    }
+    if (Error err = checkFormat(options.format, format, composite); err) {
+      return err;
+    }
+  }
   
   if (Error err = setScale(options, flags); err) return err;
   

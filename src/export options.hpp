@@ -32,6 +32,7 @@ enum class FrameSelect {
 };
 
 enum class ExportFormat {
+  // export options.cpp depends on order
   rgba,
   index,
   gray,
