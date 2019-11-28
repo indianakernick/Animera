@@ -8,6 +8,7 @@
 
 #include "export options.hpp"
 
+#include <charconv>
 #include "config.hpp"
 #include "strings.hpp"
 #include <QtCore/qdir.h>
@@ -224,10 +225,6 @@ void toLowerStr(std::string &str) {
 }
 
 Error setExportFormat(ExportFormat &format, const docopt::value &formatValue) {
-  if (formatValue.isStringList()) {
-    return "format must only appear once";
-  }
-  // Is there any chance of it being a long or bool?
   assert(formatValue.isString());
   std::string formatStr = formatValue.asString();
   toLowerStr(formatStr);
@@ -273,6 +270,113 @@ Error checkFormat(
       return checkFormat(format, "gray", {ExportFormat::gray_alpha, ExportFormat::gray, ExportFormat::monochrome});
   }
   return {};
+}
+
+const QString rangeFormats = "\nValid range formats are: {n, n..n, ..n, n.., ..}";
+
+template <typename Idx>
+Error setRange(IntRange &range, const Idx length, const docopt::value &value) {
+  // TODO: should we use long here?
+  // For consistency of error messages
+  // if we use long
+  //   3'000'000'000 is out of range
+  // if we use int
+  //   3'000'000'000 is not an integer
+  assert(value.isString());
+  const std::string &str = value.asString();
+  if (str.empty()) {
+    return idxName<Idx> + " range is empty" + rangeFormats;
+  }
+  const char *pos = str.data();
+  const char *const strEnd = pos + str.size();
+  if (pos[0] != '.') {
+    const auto [end, err] = std::from_chars(pos, strEnd, range.min);
+    if (err != std::errc{}) {
+      return idxName<Idx> + " range min must be an integer" + rangeFormats;
+    }
+    pos = end;
+    if (pos == strEnd) {
+      range.max = range.min;
+      if (range.min < 0 || range.min >= +length) {
+        return idxName<Idx> + " is out of range" + rangeStr({0, +length - 1});
+      }
+      return {};
+    }
+  } else {
+    range.min = 0;
+  }
+  if (pos[0] != '.' || pos + 1 == strEnd || pos[1] != '.') {
+    return idxName<Idx> + " range separator must be .." + rangeFormats;
+  }
+  pos += 2;
+  if (pos == strEnd) {
+    range.max = +length - 1;
+  } else {
+    const auto [end, err] = std::from_chars(pos, strEnd, range.max);
+    pos = end;
+    if (err != std::errc{} || pos != strEnd) {
+      return idxName<Idx> + " range max must be an integer" + rangeFormats;
+    }
+  }
+  if (range.min > range.max) {
+    return idxName<Idx> + " range min must be <= max";
+  }
+  if (range.min < 0 || range.min >= +length) {
+    return idxName<Idx> + " range min is out of range" + rangeStr({0, +length - 1});
+  }
+  if (range.max < 0 || range.max >= +length) {
+    return idxName<Idx> + " range max is out of range" + rangeStr({0, +length - 1});
+  }
+  return {};
+}
+
+Error setLayer(
+  LayerSelect &select,
+  ExportSpriteInfo &info,
+  const docopt::value &value,
+  const bool composite
+) {
+  IntRange range;
+  if (Error err = setRange(range, info.layers, value); err) {
+    return err;
+  }
+  if (range.min == range.max) {
+    select = LayerSelect::current;
+    info.current.l = LayerIdx{range.min};
+    return {};
+  }
+  if (range.min == 0 && range.max == +info.layers - 1) {
+    select = composite ? LayerSelect::all_composited : LayerSelect::all;
+    return {};
+  }
+  // select = LayerSelect::selection;
+  // info.selection.minL = LayerIdx{range.min};
+  // info.selection.maxL = LayerIdx{range.max};
+  return "I haven't implemented that yet";
+}
+
+Error setFrame(
+  FrameSelect &select,
+  ExportSpriteInfo &info,
+  const docopt::value &value
+) {
+  IntRange range;
+  if (Error err = setRange(range, info.frames, value); err) {
+    return err;
+  }
+  if (range.min == range.max) {
+    select = FrameSelect::current;
+    info.current.f = FrameIdx{range.min};
+    return {};
+  }
+  if (range.min == 0 && range.max == +info.frames - 1) {
+    select = FrameSelect::all;
+    return {};
+  }
+  // select = FrameSelect::selection;
+  // info.selection.minF = FrameIdx{range.min};
+  // info.selection.maxF = FrameIdx{range.max};
+  return "I haven't implemented that yet";
 }
 
 Error setStrideOffset(ExportOptions &options, const std::map<std::string, docopt::value> &flags) {
@@ -338,6 +442,17 @@ Error readExportOptions(
   if (Error err = setStrideOffset(options, flags); err) return err;
   
   const bool composite = !flags.at("--no-composite").asBool();
+  
+  if (const docopt::value &layer = flags.at("--layer"); layer) {
+    if (Error err = setLayer(options.layerSelect, info, layer, composite); err) {
+      return err;
+    }
+  }
+  if (const docopt::value &frame = flags.at("--frame"); frame) {
+    if (Error err = setFrame(options.frameSelect, info, frame); err) {
+      return err;
+    }
+  }
   
   if (const docopt::value &value = flags.at("--format"); value) {
     if (Error err = setExportFormat(options.format, value); err) {
