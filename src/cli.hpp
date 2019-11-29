@@ -10,6 +10,7 @@
 #define cli_hpp
 
 #include "docopt.h"
+#include "error.hpp"
 
 class CLI {
 public:
@@ -21,6 +22,7 @@ private:
   int &argc;
   char **argv;
   
+  Error parseArgs(std::map<std::string, docopt::value> &) const;
   int execDefault() const;
   int execOpen(const std::map<std::string, docopt::value> &) const;
   int execExport(const std::map<std::string, docopt::value> &) const;

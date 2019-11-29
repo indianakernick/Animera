@@ -18,51 +18,59 @@ CLI::CLI(int &argc, char **argv)
 
 namespace {
 
-// We can't use help_text because help_text is too fancy
-// This is still a million times better than QCommandLineParser though!
+// docopt has terrible error messages for the | operator
 
-const char doc_text[] =
+const char docopt_usage[] =
 R"(Usage:
-  Animera [--help]
-  Animera open <file>
-  Animera export [--name=<pattern> --directory=<path>]
-                 [--layer-stride=<integer> --layer-offset=<integer>]
-                 [--frame-stride=<integer> --frame-offset=<integer>]
-                 [--no-composite --layer=<range> --frame=<range>]
-                 [--format=<format>]
-                 [--scale-x=<integer> --scale-y=<integer> --scale=<integer>]
-                 [--angle=<integer>] <file>
-
-Options:
-  -n, --name <pattern>  Desc.
-  -d, --directory <path>  Desc.
-  --layer-stride <integer>  Desc.
-  --layer-offset <integer>  Desc.
-  --frame-stride <integer>  Desc.
-  --frame-offset <integer>  Desc.
-  -c, --no-composite  Desc.
-  -l, --layer <range>  Desc.
-  -f, --frame <range>  Desc.
-  -F, --format <format>  Desc.
-  --scale-x <integer>  Desc.
-  --scale-y <integer>  Desc.
-  --scale <integer>  Desc.
-  -a, --angle <integer>  Desc.
-  -h, --help  Desc.
-)";
-
-// TODO: Long help and short help
-
-const char help_text[] =
-R"(Usage:
-    Animera [--help]
+    Animera [--help --long-help]
     Animera open <file>
-    Animera export [--name --directory]
-                   [--layer-stride --layer-offset --frame-stride --frame-offset]
-                   [--no-composite --layer --frame --format]
-                   [(--scale-x --scale-y) | --scale] [--angle] <file>
+    Animera export [--name=<pattern> --directory=<path>]
+                   [--layer-stride=<int> --layer-offset=<int>]
+                   [--frame-stride=<int> --frame-offset=<int>]
+                   [--layer=<range> --frame=<range>]
+                   [--no-composite --format=<format>]
+                   [--scale-x=<int> --scale-y=<int> --scale=<int>]
+                   [--angle=<int>] <file>)";
 
-Options:
+const char usage[] =
+R"(Usage:
+    Animera [--help | --long-help]
+    Animera open <file>
+    Animera export [--name=<pattern> --directory=<path>]
+                   [--layer-stride=<int> --layer-offset=<int>]
+                   [--frame-stride=<int> --frame-offset=<int>]
+                   [--layer=<range> --frame=<range>]
+                   [--no-composite --format=<format>]
+                   [[--scale-x=<int> --scale-y=<int>] | --scale=<int>]
+                   [--angle=<int>] <file>)";
+
+const char short_options[] =
+R"(Options:
+    -h, --help                Display this help message.
+    --long-help               Display a detailed help message.
+    -n, --name <pattern>      Name pattern for the sprite.
+    -d, --directory <path>    Directory to write files to.
+    --layer-stride <int>      Stride multiplied by layer number.
+    --layer-offset <int>      Offset added to layer number.
+    --frame-stride <int>      Stride multiplied by frame number.
+    --frame-offset <int>      Offset added to frame number.
+    -l, --layer <range>       Range of layers to export.
+    -f, --frame <range>       Range of frames to export.
+    -c, --no-composite        Don't composite layers.
+    -F, --format <format>     Format of the output files.
+    --scale-x <int>           Horizontal scale factor applied to output images.
+    --scale-y <int>           Vertical scale factor applied to output images.
+    --scale <int>             Scale factor applied to output images.
+    -a, --angle <int>         Angle of rotation applied to output images.)";
+
+const char long_options[] =
+R"(Options:
+    -h, --help
+        Display a brief help message.
+    
+    --long-help
+        Display this help message.
+    
     -n, --name <pattern>
         Name pattern for the sprite. By default this is "sprite_%000F".
         This pattern may contain format sequences.
@@ -101,13 +109,7 @@ Options:
         pattern. Examples assuming that "e.animera" contains 2 frames:
             Animera export -n "a_%F" --frame-offset 2 e.animera   a_2 a_3
             Animera export -n "b_%F" --frame-offset -1 e.animera  b_-1 b_0
-    
-    -c, --no-composite
-        By default, the cells that make up a frame are composited so that each
-        frame is exported as a single image. If this option is present, layers
-        are not composited and the cells that make up a frame are exported
-        individually. The presence or absence of this option can affect the
-        output formats available.
+        The offset is applied after the stride is applied.
     
     -l, --layer <range>
         This is similar to the --frame option but for layers.
@@ -122,6 +124,13 @@ Options:
             1..   or  1..3  frames 1, 2 and 3
             ..    or  0..3  frames 0, 1, 2 and 3
             1     or  1..1  frame 1
+    
+    -c, --no-composite
+        By default, the cells that make up a frame are composited so that each
+        frame is exported as a single image. If this option is present, layers
+        are not composited and the cells that make up a frame are exported
+        individually. The presence or absence of this option can affect the
+        output formats available.
     
     -F, --format <format>
         The resulting output files are always PNGs. This option corresponds to
@@ -162,11 +171,19 @@ Options:
         be rotated in 90 degree increments. This means that --angle 1 will
         rotate clockwise by 90 degrees. The angle doesn't need to be within
         [0, 4]. This means that --angle -3, --angle 1 and --angle 5 are all
-        equivalent. The rotation is applied after the scale is applied.
-    
-    -h, --help
-        Displays this help.)";
-        
+        equivalent. The rotation is applied after the scale is applied.)";
+
+Error checkMutuallyExclusive(const std::map<std::string, docopt::value> &flags) {
+  if (flags.at("--help").asBool() && flags.at("--long-help").asBool()) {
+    return "--help must be mutually exclusive with --long-help";
+  }
+  const bool scaleXorY = flags.at("--scale-x") || flags.at("--scale-y");
+  if (scaleXorY && flags.at("--scale")) {
+    return "--scale-x and --scale-y must be mutually exclusive with --scale";
+  }
+  return {};
+}
+
 QTextStream &console() {
   static QTextStream stream{stdout};
   return stream;
@@ -174,23 +191,21 @@ QTextStream &console() {
 
 }
 
-#include <iostream>
-
 int CLI::exec() {
   std::map<std::string, docopt::value> flags;
-  try {
-    flags = docopt::docopt_parse(doc_text, {argv + 1, argv + argc}, true);
-  } catch (docopt::DocoptExitHelp &) {
-    console() << help_text;
-    return 0;
-  } catch (docopt::DocoptArgumentError &e) {
-    console() << "Command line error\n";
-    console() << e.what();
+  if (Error err = parseArgs(flags); err) {
+    console() << "Command line error\n" << err.msg() << '\n';
+    console() << usage;
     return 1;
   }
   
-  for (const auto &flag : flags) {
-    std::cout << flag.first << " = " << flag.second << '\n';
+  if (flags.at("--help").asBool()) {
+    console() << usage << "\n\n" << short_options;
+    return 0;
+  }
+  if (flags.at("--long-help").asBool()) {
+    console() << usage << "\n\n" << long_options;
+    return 0;
   }
   
   if (flags.at("open").asBool()) {
@@ -200,6 +215,18 @@ int CLI::exec() {
   } else {
     return execDefault();
   }
+}
+
+Error CLI::parseArgs(std::map<std::string, docopt::value> &flags) const {
+  try {
+    std::string doc = docopt_usage;
+    doc += "\n\n";
+    doc += short_options;
+    flags = docopt::docopt_parse(doc, {argv + 1, argv + argc}, false, false);
+  } catch (docopt::DocoptArgumentError &e) {
+    return e.what();
+  }
+  return checkMutuallyExclusive(flags);
 }
 
 int CLI::execDefault() const {

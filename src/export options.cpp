@@ -396,24 +396,17 @@ Error setStrideOffset(ExportOptions &options, const std::map<std::string, docopt
 }
 
 Error setScale(ExportOptions &options, const std::map<std::string, docopt::value> &flags) {
-  bool scaleXorY = false;
   if (const docopt::value &scaleX = flags.at("--scale-x"); scaleX) {
     if (Error err = setNonZeroInt(options.scaleX, scaleX, "scale-x", expt_scale); err) {
       return err;
     }
-    scaleXorY = true;
   }
   if (const docopt::value &scaleY = flags.at("--scale-y"); scaleY) {
     if (Error err = setNonZeroInt(options.scaleY, scaleY, "scale-y", expt_scale); err) {
       return err;
     }
-    scaleXorY = true;
   }
   if (const docopt::value &scale = flags.at("--scale"); scale) {
-    if (scaleXorY) {
-      // The error message from docopt is useless
-      return "scale-x and scale-y are mutually exclusive with scale";
-    }
     int scaleXY;
     if (Error err = setNonZeroInt(scaleXY, scale, "scale", expt_scale); err) {
       return err;
