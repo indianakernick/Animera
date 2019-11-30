@@ -418,7 +418,11 @@ Error readExportOptions(
   }
   
   if (const docopt::value &dir = flags.at("--directory"); dir) {
-    options.directory = toLatinString(dir.asString());
+    QString dirStr = toLatinString(dir.asString());
+    if (!QDir{dirStr}.exists()) {
+      return "Invalid directory";
+    }
+    options.directory = std::move(dirStr);
   }
   
   if (Error err = setStrideOffset(options, flags); err) return err;
