@@ -23,6 +23,13 @@ enum class ExportFormat {
   monochrome
 };
 
+enum class ExportVis {
+  // export options.cpp depends on order
+  visible,
+  hidden,
+  all
+};
+
 template <typename Idx>
 struct Line {
   Idx stride;
@@ -36,6 +43,7 @@ struct ExportOptions {
   Line<FrameIdx> frameLine;
   CellRect selection;
   ExportFormat format;
+  ExportVis visibility;
   int scaleX;
   int scaleY;
   int angle;

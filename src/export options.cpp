@@ -60,6 +60,7 @@ void initDefaultOptions(ExportOptions &options, const ExportSpriteInfo info) {
       options.format = ExportFormat::gray_alpha;
       break;
   }
+  options.visibility = ExportVis::visible;
   options.scaleX = 1;
   options.scaleY = 1;
   options.angle = 0;
@@ -206,13 +207,12 @@ void toLowerStr(std::string &str) {
   });
 }
 
-Error setExportFormat(ExportFormat &format, const docopt::value &formatValue) {
-  assert(formatValue.isString());
+Error setFormat(ExportFormat &format, const docopt::value &formatValue) {
   std::string formatStr = formatValue.asString();
   toLowerStr(formatStr);
-  for (size_t i = 0; i != std::size(formatNames); ++i) {
-    if (formatStr == formatNames[i]) {
-      format = static_cast<ExportFormat>(i);
+  for (size_t f = 0; f != std::size(formatNames); ++f) {
+    if (formatStr == formatNames[f]) {
+      format = static_cast<ExportFormat>(f);
       return {};
     }
   }
@@ -252,6 +252,35 @@ Error checkFormat(const ExportOptions &options, const Format canvasFormat) {
       });
   }
   return {};
+}
+
+const char *visNames[] = {
+  "visible",
+  "hidden",
+  "all"
+};
+
+QString visNamesList() {
+  QString str = "\nValid modes are: {";
+  bool first = true;
+  for (const char *vis : visNames) {
+    if (!std::exchange(first, false)) str += ", ";
+    str += vis;
+  }
+  str += '}';
+  return str;
+}
+
+Error setVisibility(ExportVis &visibility, const docopt::value &visValue) {
+  std::string visStr = visValue.asString();
+  toLowerStr(visStr);
+  for (size_t v = 0; v != std::size(visNames); ++v) {
+    if (visStr == visNames[v]) {
+      visibility = static_cast<ExportVis>(v);
+      return {};
+    }
+  }
+  return "Invalid visibility mode" + visNamesList();
 }
 
 const QString rangeFormats = "\nValid range formats are: {n, n..n, ..n, n.., ..}";
@@ -408,10 +437,16 @@ Error readExportOptions(
   options.composite = !flags.at("--no-composite").asBool();
   
   if (const docopt::value &value = flags.at("--format"); value) {
-    if (Error err = setExportFormat(options.format, value); err) {
+    if (Error err = setFormat(options.format, value); err) {
       return err;
     }
     if (Error err = checkFormat(options, info.format); err) {
+      return err;
+    }
+  }
+  
+  if (const docopt::value &value = flags.at("--visibility"); value) {
+    if (Error err = setVisibility(options.visibility, value); err) {
       return err;
     }
   }

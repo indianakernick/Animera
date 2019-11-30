@@ -34,6 +34,7 @@ private:
   void setImageFrom(const Frame &);
   void applyTransform();
   Error exportImage(ExportState);
+  bool shouldInclude(const Layer &) const;
   Error exportCells(const std::vector<Layer> &);
   Error exportFrames(const std::vector<Layer> &);
 };

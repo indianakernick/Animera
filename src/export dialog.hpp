@@ -54,6 +54,7 @@ private:
   ComboBoxWidget *frameSelect = nullptr;
   ComboBoxWidget *formatSelect = nullptr;
   ComboBoxWidget *composite = nullptr;
+  ComboBoxWidget *visibility = nullptr;
   NumberInputWidget *scaleX = nullptr;
   NumberInputWidget *scaleY = nullptr;
   ComboBoxWidget *rotate = nullptr;

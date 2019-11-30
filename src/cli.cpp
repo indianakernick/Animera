@@ -28,7 +28,7 @@ R"(Usage:
                    [--layer-stride=<int> --layer-offset=<int>]
                    [--frame-stride=<int> --frame-offset=<int>]
                    [--layer=<range> --frame=<range>]
-                   [--no-composite --format=<format>]
+                   [--no-composite --format=<format> --visibility=<mode>]
                    [--scale-x=<int> --scale-y=<int> --scale=<int>]
                    [--angle=<int>] <file>)";
 
@@ -40,7 +40,7 @@ R"(Usage:
                    [--layer-stride=<int> --layer-offset=<int>]
                    [--frame-stride=<int> --frame-offset=<int>]
                    [--layer=<range> --frame=<range>]
-                   [--no-composite --format=<format>]
+                   [--no-composite --format=<format> --visibility=<mode>]
                    [[--scale-x=<int> --scale-y=<int>] | --scale=<int>]
                    [--angle=<int>] <file>)";
 
@@ -58,6 +58,7 @@ R"(Options:
     -f, --frame <range>       Range of frames to export.
     -c, --no-composite        Don't composite layers.
     -F, --format <format>     Format of the output files.
+    --visibility <mode>       Mode for handling layer visibility.
     --scale-x <int>           Horizontal scale factor applied to output images.
     --scale-y <int>           Vertical scale factor applied to output images.
     --scale <int>             Scale factor applied to output images.
@@ -149,6 +150,15 @@ R"(Options:
                 gray-alpha  (8-bit Grayscale with alpha)
                 gray        (8-bit Grayscale)
                 monochrome  (1-bit Grayscale)
+    
+    --visibility <mode>
+        The visibility of a layer in the range (defined by the --layer option)
+        affects whether it will be included in the export. This option defines
+        how the visibility affects inclusion. There are three possible values:
+            visible  Visible layers are included
+            hidden   Hidden layers are included
+            all      All layers are included
+        By default, this is in "visible" mode.
     
     --scale-x <integer>
         The horizontal scale factor applied to each output image. The scale

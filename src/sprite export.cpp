@@ -92,10 +92,18 @@ Error Exporter::exportImage(const ExportState state) {
   return writer.flush();
 }
 
+bool Exporter::shouldInclude(const Layer &layer) const {
+  switch (options.visibility) {
+    case ExportVis::visible: return layer.visible;
+    case ExportVis::hidden: return !layer.visible;
+    case ExportVis::all: return true;
+  }
+}
+
 Error Exporter::exportCells(const std::vector<Layer> &layers) {
   for (LayerIdx l = options.selection.minL; l <= options.selection.maxL; ++l) {
     const Layer &layer = layers[+l];
-    if (!layer.visible) continue;
+    if (!shouldInclude(layer)) continue;
     LayerCells::ConstIterator iter = layer.spans.find(options.selection.minF);
     for (FrameIdx f = options.selection.minF; f <= options.selection.maxF; ++f) {
       if (const Cell *cell = *iter; *cell) {
@@ -122,7 +130,7 @@ Error Exporter::exportFrames(const std::vector<Layer> &layers) {
   for (FrameIdx f = options.selection.minF; f <= options.selection.maxF; ++f) {
     frame.clear();
     for (LayerIdx l = {}; l != rectLayers; ++l) {
-      if (!layers[+(l + options.selection.minL)].visible) continue;
+      if (!shouldInclude(layers[+(l + options.selection.minL)])) continue;
       if (const Cell *cell = *iterators[+l]; *cell) {
         frame.push_back(*iterators[+l]);
       }

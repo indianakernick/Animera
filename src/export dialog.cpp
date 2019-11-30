@@ -91,9 +91,9 @@ void ExportDialog::submit() {
          if (frameStr == "All") {
     options.selection.minF = FrameIdx{};
     options.selection.maxF = frames - FrameIdx{1};
-  } else if (layerStr == "Current") {
+  } else if (frameStr == "Current") {
     options.selection.minF = options.selection.maxF = current.f;
-  } else if (layerStr == "Selected") {
+  } else if (frameStr == "Selected") {
     options.selection.minF = selection.minF;
     options.selection.maxF = selection.maxF;
   } else Q_UNREACHABLE();
@@ -103,16 +103,18 @@ void ExportDialog::submit() {
   options.frameLine.stride = FrameIdx{frameStride->value()};
   options.frameLine.offset = FrameIdx{frameOffset->value()};
   options.format = formatFromString(formatSelect->currentText());
+  options.visibility = ExportVis{visibility->currentIndex()};
   options.scaleX = scaleX->value();
   options.scaleY = scaleY->value();
   options.angle = rotate->currentIndex();
+  options.composite = composite->currentText() == "Enabled";
   
   Q_EMIT exportSprite(options);
 }
 
 void ExportDialog::updateFormatItems(const QString &compositeStr) {
   if (format == Format::index) {
-    if (compositeStr == "Yes" && formatSelect->count() == 3) {
+    if (compositeStr == "Enabled" && formatSelect->count() == 3) {
       formatSelect->clearWithItem(formatToString(ExportFormat::rgba));
     } else if (formatSelect->count() == 1) {
       formatSelect->clearWithItem(formatToString(ExportFormat::index));
@@ -158,8 +160,12 @@ void ExportDialog::createWidgets() {
   frameSelect->addItem("Current");
   frameSelect->addItem("Selected");
   composite = new ComboBoxWidget{this, 10};
-  composite->addItem("Yes");
-  composite->addItem("No");
+  composite->addItem("Enabled");
+  composite->addItem("Disabled");
+  visibility = new ComboBoxWidget{this, 10};
+  visibility->addItem("Visible");
+  visibility->addItem("Hidden");
+  visibility->addItem("All");
   scaleX = new NumberInputWidget{this, textBoxRect(3), expt_scale, true};
   scaleY = new NumberInputWidget{this, textBoxRect(3), expt_scale, true};
   rotate = new ComboBoxWidget{this, 14};
@@ -206,7 +212,7 @@ void ExportDialog::setupLayout() {
   nameLayout->addWidget(formatSelect);
   
   auto *layerLayout = makeLayout<QHBoxLayout>(layout);
-  layerLayout->addWidget(makeLabel(this, "L = layer * "));
+  layerLayout->addWidget(makeLabel(this, QString{"L = layer × "}));
   layerLayout->addWidget(layerStride);
   layerLayout->addWidget(makeLabel(this, " + "));
   layerLayout->addWidget(layerOffset);
@@ -215,7 +221,7 @@ void ExportDialog::setupLayout() {
   layerLayout->addWidget(layerSelect);
   
   auto *frameLayout = makeLayout<QHBoxLayout>(layout);
-  frameLayout->addWidget(makeLabel(this, "F = frame * "));
+  frameLayout->addWidget(makeLabel(this, QString{"F = frame × "}));
   frameLayout->addWidget(frameStride);
   frameLayout->addWidget(makeLabel(this, " + "));
   frameLayout->addWidget(frameOffset);
@@ -224,9 +230,9 @@ void ExportDialog::setupLayout() {
   frameLayout->addWidget(frameSelect);
   
   auto *transformLayout = makeLayout<QHBoxLayout>(layout);
-  transformLayout->addWidget(makeLabel(this, "Scale - X: "));
+  transformLayout->addWidget(makeLabel(this, "Scale by: X "));
   transformLayout->addWidget(scaleX);
-  transformLayout->addWidget(makeLabel(this, " Y: "));
+  transformLayout->addWidget(makeLabel(this, " Y "));
   transformLayout->addWidget(scaleY);
   transformLayout->addStretch();
   transformLayout->addWidget(makeLabel(this, "Rotate: "));
@@ -237,6 +243,8 @@ void ExportDialog::setupLayout() {
   compositeLayout->addSpacing(2_px);
   compositeLayout->addWidget(composite);
   compositeLayout->addStretch();
+  compositeLayout->addWidget(makeLabel(this, "Visibility: "));
+  compositeLayout->addWidget(visibility);
   
   auto *buttonLayout = makeLayout<QHBoxLayout>(layout);
   buttonLayout->addStretch();
