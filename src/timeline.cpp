@@ -157,7 +157,7 @@ CellPos Timeline::getCurrent() const {
   return currPos;
 }
 
-CellRect Timeline::getSelect() const {
+CellRect Timeline::getSelection() const {
   return selection;
 }
 

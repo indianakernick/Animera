@@ -63,7 +63,7 @@ void initDefaultOptions(ExportOptions &options, const ExportSpriteInfo info) {
   options.scaleX = 1;
   options.scaleY = 1;
   options.angle = 0;
-  options.composited = true;
+  options.composite = true;
 }
 
 ExportOptions exportFrameOptions(const QString &path, const ExportSpriteInfo info) {
@@ -239,7 +239,7 @@ Error checkFormat(const ExportOptions &options, const Format canvasFormat) {
     case Format::rgba:
       return checkFormat(options.format, "rgba", {ExportFormat::rgba});
     case Format::index:
-      if (options.composited) {
+      if (options.composite) {
         return checkFormat(options.format, "index", {ExportFormat::rgba});
       } else {
         return checkFormat(options.format, "index", {
@@ -405,7 +405,7 @@ Error readExportOptions(
     }
   }
   
-  options.composited = !flags.at("--no-composite").asBool();
+  options.composite = !flags.at("--no-composite").asBool();
   
   if (const docopt::value &value = flags.at("--format"); value) {
     if (Error err = setExportFormat(options.format, value); err) {

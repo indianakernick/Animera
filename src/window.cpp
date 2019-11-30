@@ -396,11 +396,13 @@ void Window::exportSprite(const ExportOptions &options) {
 
 void Window::exportDialog() {
   if (!exporter) {
-    exporter = new ExportDialog{this, getSpriteInfo(sprite)};
+    exporter = new ExportDialog{this, sprite.getFormat()};
     CONNECT(exporter, exportSprite, this, exportSprite);
   }
+  exporter->setLayers(sprite.timeline.getLayers());
+  exporter->setFrames(sprite.timeline.getFrames());
   exporter->setCurrent(sprite.timeline.getCurrent());
-  exporter->setSelection(sprite.timeline.getSelect());
+  exporter->setSelection(sprite.timeline.getSelection());
   exporter->open();
 }
 

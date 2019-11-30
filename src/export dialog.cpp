@@ -21,13 +21,21 @@
 #include <QtWidgets/qgridlayout.h>
 #include "text push button widget.hpp"
 
-ExportDialog::ExportDialog(QWidget *parent, const ExportSpriteInfo info)
-  : Dialog{parent}, info{info} {
+ExportDialog::ExportDialog(QWidget *parent, const Format format)
+  : Dialog{parent}, format{format} {
   setWindowTitle("Export");
   setStyleSheet("background-color:" + glob_main.name());
   createWidgets();
   setupLayout();
   connectSignals();
+}
+
+void ExportDialog::setLayers(const LayerIdx count) {
+  layers = count;
+}
+
+void ExportDialog::setFrames(const FrameIdx count) {
+  frames = count;
 }
 
 void ExportDialog::setCurrent(const CellPos pos) {
@@ -40,18 +48,25 @@ void ExportDialog::setSelection(const CellRect rect) {
 
 namespace {
 
+const char *formatNames[] = {
+  "RGBA",
+  "Indexed",
+  "Gray",
+  "Gray-Alpha",
+  "Monochrome"
+};
+
 ExportFormat formatFromString(const QString &format) {
-         if (format == "RGBA") {
-    return ExportFormat::rgba;
-  } else if (format == "Indexed") {
-    return ExportFormat::index;
-  } else if (format == "Gray") {
-    return ExportFormat::gray;
-  } else if (format == "Gray Alpha") {
-    return ExportFormat::gray_alpha;
-  } else if (format == "Monochrome") {
-    return ExportFormat::monochrome;
-  } else Q_UNREACHABLE();
+  for (size_t f = 0; f != std::size(formatNames); ++f) {
+    if (format == formatNames[f]) {
+      return static_cast<ExportFormat>(f);
+    }
+  }
+  Q_UNREACHABLE();
+}
+
+QString formatToString(const ExportFormat format) {
+  return formatNames[static_cast<size_t>(format)];
 }
 
 }
@@ -64,7 +79,7 @@ void ExportDialog::submit() {
   const QString layerStr = layerSelect->currentText();
          if (layerStr == "All") {
     options.selection.minL = LayerIdx{};
-    options.selection.maxL = info.layers - LayerIdx{1};
+    options.selection.maxL = layers - LayerIdx{1};
   } else if (layerStr == "Current") {
     options.selection.minL = options.selection.maxL = current.l;
   } else if (layerStr == "Selected") {
@@ -75,7 +90,7 @@ void ExportDialog::submit() {
   const QString frameStr = frameSelect->currentText();
          if (frameStr == "All") {
     options.selection.minF = FrameIdx{};
-    options.selection.maxF = info.frames - FrameIdx{1};
+    options.selection.maxF = frames - FrameIdx{1};
   } else if (layerStr == "Current") {
     options.selection.minF = options.selection.maxF = current.f;
   } else if (layerStr == "Selected") {
@@ -91,33 +106,34 @@ void ExportDialog::submit() {
   options.scaleX = scaleX->value();
   options.scaleY = scaleY->value();
   options.angle = rotate->currentIndex();
+  
   Q_EMIT exportSprite(options);
 }
 
 void ExportDialog::updateFormatItems(const QString &compositeStr) {
-  if (info.format == Format::index) {
+  if (format == Format::index) {
     if (compositeStr == "Yes" && formatSelect->count() == 3) {
-      formatSelect->clearWithItem("RGBA");
+      formatSelect->clearWithItem(formatToString(ExportFormat::rgba));
     } else if (formatSelect->count() == 1) {
-      formatSelect->clearWithItem("Indexed");
-      formatSelect->addItem("Gray");
-      formatSelect->addItem("Monochrome");
+      formatSelect->clearWithItem(formatToString(ExportFormat::index));
+      formatSelect->addItem(formatToString(ExportFormat::gray));
+      formatSelect->addItem(formatToString(ExportFormat::monochrome));
     }
   }
 }
 
 void ExportDialog::addFormatOptions() {
-  switch (info.format) {
+  switch (format) {
     case Format::rgba:
-      formatSelect->addItem("RGBA");
+      formatSelect->addItem(formatToString(ExportFormat::rgba));
       break;
     case Format::index:
-      formatSelect->addItem("RGBA");
+      formatSelect->addItem(formatToString(ExportFormat::rgba));
       break;
     case Format::gray:
-      formatSelect->addItem("Gray Alpha");
-      formatSelect->addItem("Gray");
-      formatSelect->addItem("Monochrome");
+      formatSelect->addItem(formatToString(ExportFormat::gray_alpha));
+      formatSelect->addItem(formatToString(ExportFormat::gray));
+      formatSelect->addItem(formatToString(ExportFormat::monochrome));
       break;
     default: Q_UNREACHABLE();
   }

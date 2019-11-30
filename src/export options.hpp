@@ -15,7 +15,7 @@
 #include <QtCore/qstring.h>
 
 enum class ExportFormat {
-  // export options.cpp depends on order
+  // export options.cpp and export dialog.cpp depend on order
   rgba,
   index,
   gray,
@@ -39,7 +39,7 @@ struct ExportOptions {
   int scaleX;
   int scaleY;
   int angle;
-  bool composited;
+  bool composite;
 };
 
 /// State used to evaluate sprite name pattern

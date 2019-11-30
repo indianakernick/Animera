@@ -28,7 +28,7 @@ Exporter::Exporter(
 
 Error Exporter::exportSprite(const std::vector<Layer> &layers) {
   initImages();
-  if (options.composited) {
+  if (options.composite) {
     return exportFrames(layers);
   } else {
     return exportCells(layers);
@@ -37,7 +37,7 @@ Error Exporter::exportSprite(const std::vector<Layer> &layers) {
 
 void Exporter::initImages() {
   Format imageFormat = format;
-  if (options.composited && format != Format::gray) {
+  if (options.composite && format != Format::gray) {
     imageFormat = Format::rgba;
   }
   image = {size, qimageFormat(imageFormat)};

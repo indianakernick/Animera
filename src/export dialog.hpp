@@ -23,8 +23,10 @@ class ExportDialog final : public Dialog {
   Q_OBJECT
   
 public:
-  ExportDialog(QWidget *, ExportSpriteInfo);
+  ExportDialog(QWidget *, Format);
   
+  void setLayers(LayerIdx);
+  void setFrames(FrameIdx);
   void setCurrent(CellPos);
   void setSelection(CellRect);
   
@@ -36,9 +38,12 @@ private Q_SLOTS:
   void updateFormatItems(const QString &);
 
 private:
-  ExportSpriteInfo info;
+  Format format;
+  LayerIdx layers;
+  FrameIdx frames;
   CellPos current;
   CellRect selection;
+  
   TextInputWidget *name = nullptr;
   FileInputWidget *dir = nullptr;
   NumberInputWidget *layerStride = nullptr;

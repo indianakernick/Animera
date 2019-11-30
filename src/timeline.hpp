@@ -58,7 +58,7 @@ public:
   LayerIdx getLayers() const;
   FrameIdx getFrames() const;
   CellPos getCurrent() const;
-  CellRect getSelect() const;
+  CellRect getSelection() const;
 
 public Q_SLOTS:
   void initCanvas(Format, QSize);
