@@ -15,11 +15,6 @@ Dialog::Dialog(QWidget *parent)
   setFocusPolicy(Qt::ClickFocus);
 }
 
-void Dialog::open() {
-  QDialog::open();
-  setFocus();
-}
-
 void Dialog::keyPressEvent(QKeyEvent *event) {
   if (event->key() == Qt::Key_Return) {
     accept();

@@ -15,8 +15,6 @@ class Dialog : public QDialog {
 public:
   explicit Dialog(QWidget *);
 
-  void open() override;
-
 private:
   void keyPressEvent(QKeyEvent *) override;
 };
