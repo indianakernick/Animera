@@ -9,10 +9,15 @@
 #include "export options.hpp"
 
 #include <charconv>
+#include "sprite.hpp"
 #include "config.hpp"
 #include "strings.hpp"
 #include <QtCore/qdir.h>
 #include "export pattern.hpp"
+
+ExportSpriteInfo getSpriteInfo(const Sprite &sprite) {
+  return {sprite.timeline.getLayers(), sprite.timeline.getFrames(), sprite.getFormat()};
+}
 
 namespace {
 
@@ -35,40 +40,16 @@ QString getExportPath(const ExportOptions &options, ExportState state) {
   return path;
 }
 
-CellRect getExportRect(const ExportOptions &options, const ExportSpriteInfo &info) {
-  CellRect rect;
-  switch (options.layerSelect) {
-    case LayerSelect::all_composited:
-    case LayerSelect::all:
-      rect.minL = LayerIdx{0};
-      rect.maxL = info.layers - LayerIdx{1};
-      break;
-    case LayerSelect::current:
-      rect.minL = rect.maxL = info.current.l;
-      break;
-    default: Q_UNREACHABLE();
-  }
-  switch (options.frameSelect) {
-    case FrameSelect::all:
-      rect.minF = FrameIdx{0};
-      rect.maxF = info.frames - FrameIdx{1};
-      break;
-    case FrameSelect::current:
-      rect.minF = rect.maxF = info.current.f;
-      break;
-    default: Q_UNREACHABLE();
-  }
-  return rect;
-}
-
-void initDefaultOptions(ExportOptions &options, const Format canvasFormat) {
+void initDefaultOptions(ExportOptions &options, const ExportSpriteInfo info) {
   options.name = "sprite_%000F";
   options.directory = ".";
   options.layerLine = {LayerIdx{1}, LayerIdx{0}};
   options.frameLine = {FrameIdx{1}, FrameIdx{0}};
-  options.layerSelect = LayerSelect::all_composited;
-  options.frameSelect = FrameSelect::all;
-  switch (canvasFormat) {
+  options.selection.minL = LayerIdx{};
+  options.selection.minF = FrameIdx{};
+  options.selection.maxL = info.layers - LayerIdx{1};
+  options.selection.maxF = info.frames - FrameIdx{1};
+  switch (info.format) {
     case Format::rgba:
       options.format = ExportFormat::rgba;
       break;
@@ -82,9 +63,10 @@ void initDefaultOptions(ExportOptions &options, const Format canvasFormat) {
   options.scaleX = 1;
   options.scaleY = 1;
   options.angle = 0;
+  options.composited = true;
 }
 
-ExportOptions exportFrameOptions(const QString &path, const Format canvasFormat) {
+ExportOptions exportFrameOptions(const QString &path, const ExportSpriteInfo info) {
   QString dir = path;
   dir.chop(dir.size() - dir.lastIndexOf('.'));
   const int lastSlash = dir.lastIndexOf(QDir::separator());
@@ -92,7 +74,7 @@ ExportOptions exportFrameOptions(const QString &path, const Format canvasFormat)
   QString name{dir.data() + lastSlash + 1, nameLen};
   dir.chop(nameLen);
   ExportOptions options;
-  initDefaultOptions(options, canvasFormat);
+  initDefaultOptions(options, info);
   options.name = std::move(name);
   options.directory = std::move(dir);
   return options;
@@ -252,22 +234,22 @@ Error checkFormat(
   return {};
 }
 
-Error checkFormat(
-  const ExportFormat format,
-  const Format canvasFormat,
-  const bool composite
-) {
+Error checkFormat(const ExportOptions &options, const Format canvasFormat) {
   switch (canvasFormat) {
     case Format::rgba:
-      return checkFormat(format, "rgba", {ExportFormat::rgba});
+      return checkFormat(options.format, "rgba", {ExportFormat::rgba});
     case Format::index:
-      if (composite) {
-        return checkFormat(format, "index", {ExportFormat::rgba});
+      if (options.composited) {
+        return checkFormat(options.format, "index", {ExportFormat::rgba});
       } else {
-        return checkFormat(format, "index", {ExportFormat::index, ExportFormat::gray, ExportFormat::monochrome});
+        return checkFormat(options.format, "index", {
+          ExportFormat::index, ExportFormat::gray, ExportFormat::monochrome
+        });
       }
     case Format::gray:
-      return checkFormat(format, "gray", {ExportFormat::gray_alpha, ExportFormat::gray, ExportFormat::monochrome});
+      return checkFormat(options.format, "gray", {
+        ExportFormat::gray_alpha, ExportFormat::gray, ExportFormat::monochrome
+      });
   }
   return {};
 }
@@ -331,52 +313,31 @@ Error setRange(IntRange &range, const Idx length, const docopt::value &value) {
 }
 
 Error setLayer(
-  LayerSelect &select,
-  ExportSpriteInfo &info,
-  const docopt::value &value,
-  const bool composite
+  CellRect &selection,
+  const ExportSpriteInfo info,
+  const docopt::value &value
 ) {
   IntRange range;
   if (Error err = setRange(range, info.layers, value); err) {
     return err;
   }
-  if (range.min == range.max) {
-    select = LayerSelect::current;
-    info.current.l = LayerIdx{range.min};
-    return {};
-  }
-  if (range.min == 0 && range.max == +info.layers - 1) {
-    select = composite ? LayerSelect::all_composited : LayerSelect::all;
-    return {};
-  }
-  // select = LayerSelect::selection;
-  // info.selection.minL = LayerIdx{range.min};
-  // info.selection.maxL = LayerIdx{range.max};
-  return "I haven't implemented that yet";
+  selection.minL = LayerIdx{range.min};
+  selection.maxL = LayerIdx{range.max};
+  return {};
 }
 
 Error setFrame(
-  FrameSelect &select,
-  ExportSpriteInfo &info,
+  CellRect &selection,
+  const ExportSpriteInfo info,
   const docopt::value &value
 ) {
   IntRange range;
   if (Error err = setRange(range, info.frames, value); err) {
     return err;
   }
-  if (range.min == range.max) {
-    select = FrameSelect::current;
-    info.current.f = FrameIdx{range.min};
-    return {};
-  }
-  if (range.min == 0 && range.max == +info.frames - 1) {
-    select = FrameSelect::all;
-    return {};
-  }
-  // select = FrameSelect::selection;
-  // info.selection.minF = FrameIdx{range.min};
-  // info.selection.maxF = FrameIdx{range.max};
-  return "I haven't implemented that yet";
+  selection.minF = FrameIdx{range.min};
+  selection.maxF = FrameIdx{range.max};
+  return {};
 }
 
 Error setStrideOffset(ExportOptions &options, const std::map<std::string, docopt::value> &flags) {
@@ -420,8 +381,7 @@ Error setScale(ExportOptions &options, const std::map<std::string, docopt::value
 
 Error readExportOptions(
   ExportOptions &options,
-  ExportSpriteInfo &info,
-  const Format format,
+  const ExportSpriteInfo info,
   const std::map<std::string, docopt::value> &flags
 ) {
   if (const docopt::value &name = flags.at("--name"); name) {
@@ -434,24 +394,24 @@ Error readExportOptions(
   
   if (Error err = setStrideOffset(options, flags); err) return err;
   
-  const bool composite = !flags.at("--no-composite").asBool();
-  
   if (const docopt::value &layer = flags.at("--layer"); layer) {
-    if (Error err = setLayer(options.layerSelect, info, layer, composite); err) {
+    if (Error err = setLayer(options.selection, info, layer); err) {
       return err;
     }
   }
   if (const docopt::value &frame = flags.at("--frame"); frame) {
-    if (Error err = setFrame(options.frameSelect, info, frame); err) {
+    if (Error err = setFrame(options.selection, info, frame); err) {
       return err;
     }
   }
+  
+  options.composited = !flags.at("--no-composite").asBool();
   
   if (const docopt::value &value = flags.at("--format"); value) {
     if (Error err = setExportFormat(options.format, value); err) {
       return err;
     }
-    if (Error err = checkFormat(options.format, format, composite); err) {
+    if (Error err = checkFormat(options, info.format); err) {
       return err;
     }
   }

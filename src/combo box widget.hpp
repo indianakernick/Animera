@@ -26,7 +26,7 @@ class ComboBoxWidget final : public QWidget {
 public:
   ComboBoxWidget(QWidget *, int);
 
-  void clear();
+  void clearWithItem(const QString &);
   void addItem(const QString &);
   void setCurrentIndex(int);
   
@@ -37,6 +37,7 @@ public:
 
 Q_SIGNALS:
   void currentIndexChanged(int);
+  void currentTextChanged(const QString &);
 
 private:
   TextIconRects rects;

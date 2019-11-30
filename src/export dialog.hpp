@@ -11,8 +11,8 @@
 
 #include "image.hpp"
 #include "dialog.hpp"
+#include "export options.hpp"
 
-struct ExportOptions;
 class ComboBoxWidget;
 class FileInputWidget;
 class TextInputWidget;
@@ -23,17 +23,22 @@ class ExportDialog final : public Dialog {
   Q_OBJECT
   
 public:
-  ExportDialog(QWidget *, Format);
+  ExportDialog(QWidget *, ExportSpriteInfo);
+  
+  void setCurrent(CellPos);
+  void setSelection(CellRect);
   
 Q_SIGNALS:
   void exportSprite(const ExportOptions &);
 
 private Q_SLOTS:
   void submit();
-  void updateFormatItems(int);
+  void updateFormatItems(const QString &);
 
 private:
-  Format format;
+  ExportSpriteInfo info;
+  CellPos current;
+  CellRect selection;
   TextInputWidget *name = nullptr;
   FileInputWidget *dir = nullptr;
   NumberInputWidget *layerStride = nullptr;
@@ -43,6 +48,7 @@ private:
   ComboBoxWidget *layerSelect = nullptr;
   ComboBoxWidget *frameSelect = nullptr;
   ComboBoxWidget *formatSelect = nullptr;
+  ComboBoxWidget *composite = nullptr;
   NumberInputWidget *scaleX = nullptr;
   NumberInputWidget *scaleY = nullptr;
   ComboBoxWidget *rotate = nullptr;

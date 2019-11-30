@@ -18,7 +18,6 @@ class Exporter {
 public:
   Exporter(const ExportOptions &, PaletteCSpan, Format, QSize);
   
-  void setRect(const ExportSpriteInfo &);
   Error exportSprite(const std::vector<Layer> &);
 
 private:
@@ -27,7 +26,6 @@ private:
   Format format;
   QImage image;
   QImage xformed;
-  CellRect rect;
   QSize size;
   
   void initImages();

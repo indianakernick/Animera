@@ -21,8 +21,8 @@
 #include <QtWidgets/qgridlayout.h>
 #include "text push button widget.hpp"
 
-ExportDialog::ExportDialog(QWidget *parent, const Format format)
-  : Dialog{parent}, format{format} {
+ExportDialog::ExportDialog(QWidget *parent, const ExportSpriteInfo info)
+  : Dialog{parent}, info{info} {
   setWindowTitle("Export");
   setStyleSheet("background-color:" + glob_main.name());
   createWidgets();
@@ -30,42 +30,76 @@ ExportDialog::ExportDialog(QWidget *parent, const Format format)
   connectSignals();
 }
 
+void ExportDialog::setCurrent(const CellPos pos) {
+  current = pos;
+}
+
+void ExportDialog::setSelection(const CellRect rect) {
+  selection = rect;
+}
+
+namespace {
+
+ExportFormat formatFromString(const QString &format) {
+         if (format == "RGBA") {
+    return ExportFormat::rgba;
+  } else if (format == "Indexed") {
+    return ExportFormat::index;
+  } else if (format == "Gray") {
+    return ExportFormat::gray;
+  } else if (format == "Gray Alpha") {
+    return ExportFormat::gray_alpha;
+  } else if (format == "Monochrome") {
+    return ExportFormat::monochrome;
+  } else Q_UNREACHABLE();
+}
+
+}
+
 void ExportDialog::submit() {
   ExportOptions options;
   options.name = name->text();
   options.directory = dir->path();
-  options.layerSelect = LayerSelect{layerSelect->currentIndex()};
-  options.frameSelect = FrameSelect{frameSelect->currentIndex()};
+  
+  const QString layerStr = layerSelect->currentText();
+         if (layerStr == "All") {
+    options.selection.minL = LayerIdx{};
+    options.selection.maxL = info.layers - LayerIdx{1};
+  } else if (layerStr == "Current") {
+    options.selection.minL = options.selection.maxL = current.l;
+  } else if (layerStr == "Selected") {
+    options.selection.minL = selection.minL;
+    options.selection.maxL = selection.maxL;
+  } else Q_UNREACHABLE();
+  
+  const QString frameStr = frameSelect->currentText();
+         if (frameStr == "All") {
+    options.selection.minF = FrameIdx{};
+    options.selection.maxF = info.frames - FrameIdx{1};
+  } else if (layerStr == "Current") {
+    options.selection.minF = options.selection.maxF = current.f;
+  } else if (layerStr == "Selected") {
+    options.selection.minF = selection.minF;
+    options.selection.maxF = selection.maxF;
+  } else Q_UNREACHABLE();
+  
   options.layerLine.stride = LayerIdx{layerStride->value()};
   options.layerLine.offset = LayerIdx{layerOffset->value()};
   options.frameLine.stride = FrameIdx{frameStride->value()};
   options.frameLine.offset = FrameIdx{frameOffset->value()};
-  const QString formatStr = formatSelect->currentText();
-         if (formatStr == "RGBA") {
-    options.format = ExportFormat::rgba;
-  } else if (formatStr == "Indexed") {
-    options.format = ExportFormat::index;
-  } else if (formatStr == "Gray") {
-    options.format = ExportFormat::gray;
-  } else if (formatStr == "Gray Alpha") {
-    options.format = ExportFormat::gray_alpha;
-  } else if (formatStr == "Monochrome") {
-    options.format = ExportFormat::monochrome;
-  } else Q_UNREACHABLE();
+  options.format = formatFromString(formatSelect->currentText());
   options.scaleX = scaleX->value();
   options.scaleY = scaleY->value();
   options.angle = rotate->currentIndex();
   Q_EMIT exportSprite(options);
 }
 
-void ExportDialog::updateFormatItems(const int layerIdx) {
-  if (format == Format::index) {
-    if (layerIdx == static_cast<int>(LayerSelect::all_composited) && formatSelect->count() == 3) {
-      formatSelect->clear();
-      formatSelect->addItem("RGBA");
+void ExportDialog::updateFormatItems(const QString &compositeStr) {
+  if (info.format == Format::index) {
+    if (compositeStr == "Yes" && formatSelect->count() == 3) {
+      formatSelect->clearWithItem("RGBA");
     } else if (formatSelect->count() == 1) {
-      formatSelect->clear();
-      formatSelect->addItem("Indexed");
+      formatSelect->clearWithItem("Indexed");
       formatSelect->addItem("Gray");
       formatSelect->addItem("Monochrome");
     }
@@ -73,7 +107,7 @@ void ExportDialog::updateFormatItems(const int layerIdx) {
 }
 
 void ExportDialog::addFormatOptions() {
-  switch (format) {
+  switch (info.format) {
     case Format::rgba:
       formatSelect->addItem("RGBA");
       break;
@@ -100,12 +134,16 @@ void ExportDialog::createWidgets() {
   frameStride = new NumberInputWidget{this, textBoxRect(3), expt_stride, true};
   frameOffset = new NumberInputWidget{this, textBoxRect(3), expt_offset};
   layerSelect = new ComboBoxWidget{this, 14};
-  layerSelect->addItem("All (composed)");
   layerSelect->addItem("All");
   layerSelect->addItem("Current");
+  layerSelect->addItem("Selected");
   frameSelect = new ComboBoxWidget{this, 14};
   frameSelect->addItem("All");
   frameSelect->addItem("Current");
+  frameSelect->addItem("Selected");
+  composite = new ComboBoxWidget{this, 10};
+  composite->addItem("Yes");
+  composite->addItem("No");
   scaleX = new NumberInputWidget{this, textBoxRect(3), expt_scale, true};
   scaleY = new NumberInputWidget{this, textBoxRect(3), expt_scale, true};
   rotate = new ComboBoxWidget{this, 14};
@@ -178,6 +216,12 @@ void ExportDialog::setupLayout() {
   transformLayout->addWidget(makeLabel(this, "Rotate: "));
   transformLayout->addWidget(rotate);
   
+  auto *compositeLayout = makeLayout<QHBoxLayout>(layout);
+  compositeLayout->addWidget(makeLabel(this, "Composite: "));
+  compositeLayout->addSpacing(2_px);
+  compositeLayout->addWidget(composite);
+  compositeLayout->addStretch();
+  
   auto *buttonLayout = makeLayout<QHBoxLayout>(layout);
   buttonLayout->addStretch();
   buttonLayout->addWidget(ok);
@@ -186,10 +230,10 @@ void ExportDialog::setupLayout() {
 }
 
 void ExportDialog::connectSignals() {
-  CONNECT(layerSelect,  currentIndexChanged, this, updateFormatItems);
-  CONNECT(ok,           pressed,             this, accept);
-  CONNECT(cancel,       pressed,             this, reject);
-  CONNECT(this,         accepted,            this, submit);
+  CONNECT(composite, currentTextChanged, this, updateFormatItems);
+  CONNECT(ok,        pressed,            this, accept);
+  CONNECT(cancel,    pressed,            this, reject);
+  CONNECT(this,      accepted,           this, submit);
 }
 
 #include "export dialog.moc"

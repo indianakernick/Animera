@@ -51,7 +51,7 @@ private:
   void leaveEvent(QEvent *) override {
     // Yes, I actually have to do this.
     // Can't use underMouse.
-    // Bug?
+    // TODO: Bug?
     if (!rect().contains(mapFromGlobal(QCursor::pos()))) {
       hover = false;
       update();
@@ -159,22 +159,23 @@ ComboBoxWidget::ComboBoxWidget(QWidget *parent, const int chars)
   arrow = bakeColoredBitmap(":/General/up down arrow.png", glob_light_2);
 }
 
-void ComboBoxWidget::clear() {
-  items.clear();
-  setCurrentIndex(-1);
+void ComboBoxWidget::clearWithItem(const QString &text) {
+  items.resize(1);
+  items[0] = text;
+  setCurrentIndex(0);
 }
 
 void ComboBoxWidget::addItem(const QString &text) {
   items.push_back(text);
-  if (items.size() == 1) {
-    setCurrentIndex(0);
-  }
+  if (items.size() == 1) setCurrentIndex(0);
   update();
 }
 
 void ComboBoxWidget::setCurrentIndex(const int index) {
+  assert(0 <= index && index < count());
   current = index;
-  Q_EMIT currentIndexChanged(index);
+  Q_EMIT currentIndexChanged(current);
+  Q_EMIT currentTextChanged(items[current]);
   update();
 }
 
@@ -183,7 +184,7 @@ int ComboBoxWidget::count() const {
 }
 
 QString ComboBoxWidget::itemText(const int index) const {
-  assert(0 <= index && index < static_cast<int>(items.size()));
+  assert(0 <= index && index < count());
   return items[index];
 }
 
@@ -192,7 +193,7 @@ int ComboBoxWidget::currentIndex() const {
 }
 
 QString ComboBoxWidget::currentText() const {
-  assert(0 <= current && current < static_cast<int>(items.size()));
+  assert(0 <= current && current < count());
   return items[current];
 }
 

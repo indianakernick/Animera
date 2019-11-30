@@ -396,14 +396,16 @@ void Window::exportSprite(const ExportOptions &options) {
 
 void Window::exportDialog() {
   if (!exporter) {
-    exporter = new ExportDialog{this, sprite.getFormat()};
+    exporter = new ExportDialog{this, getSpriteInfo(sprite)};
     CONNECT(exporter, exportSprite, this, exportSprite);
   }
+  exporter->setCurrent(sprite.timeline.getCurrent());
+  exporter->setSelection(sprite.timeline.getSelect());
   exporter->open();
 }
 
 void Window::exportFrame(const QString &path) {
-  exportSprite(exportFrameOptions(path, sprite.getFormat()));
+  exportSprite(exportFrameOptions(path, getSpriteInfo(sprite)));
 }
 
 void Window::exportFrameDialog() {

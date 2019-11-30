@@ -70,7 +70,7 @@ static const uint qt_meta_data_ExportDialog[] = {
 
  // slots: parameters
     QMetaType::Void,
-    QMetaType::Void, QMetaType::Int,    2,
+    QMetaType::Void, QMetaType::QString,    2,
 
        0        // eod
 };
@@ -83,7 +83,7 @@ void ExportDialog::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         switch (_id) {
         case 0: _t->exportSprite((*reinterpret_cast< const ExportOptions(*)>(_a[1]))); break;
         case 1: _t->submit(); break;
-        case 2: _t->updateFormatItems((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 2: _t->updateFormatItems((*reinterpret_cast< const QString(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {

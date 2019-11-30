@@ -14,23 +14,6 @@
 #include "error.hpp"
 #include <QtCore/qstring.h>
 
-enum class LayerSelect {
-  // export dialog.cpp depends on order
-  all_composited,
-  all,
-  current
-};
-
-constexpr bool composited(const LayerSelect layer) {
-  return layer == LayerSelect::all_composited;
-}
-
-enum class FrameSelect {
-  // export dialog.cpp depends on order
-  all,
-  current
-};
-
 enum class ExportFormat {
   // export options.cpp depends on order
   rgba,
@@ -51,12 +34,12 @@ struct ExportOptions {
   QString directory;
   Line<LayerIdx> layerLine;
   Line<FrameIdx> frameLine;
-  LayerSelect layerSelect;
-  FrameSelect frameSelect;
+  CellRect selection;
   ExportFormat format;
   int scaleX;
   int scaleY;
   int angle;
+  bool composited;
 };
 
 /// State used to evaluate sprite name pattern
@@ -65,19 +48,29 @@ struct ExportState {
   // Could add layer name to this
 };
 
-/// Info used to select a rectangle of cells
+
+// This is quite similar to SpriteInfo in sprite file.hpp
 struct ExportSpriteInfo {
-  const LayerIdx layers;
-  const FrameIdx frames;
-  CellPos current;
-  CellRect selection;
+  LayerIdx layers;
+  FrameIdx frames;
+  Format format;
 };
 
-QString getExportPath(const ExportOptions &, ExportState);
-CellRect getExportRect(const ExportOptions &, const ExportSpriteInfo &);
+class Sprite;
 
-void initDefaultOptions(ExportOptions &, Format);
-ExportOptions exportFrameOptions(const QString &, Format);
-Error readExportOptions(ExportOptions &, ExportSpriteInfo &, Format, const std::map<std::string, docopt::value> &);
+ExportSpriteInfo getSpriteInfo(const Sprite &);
+
+QString getExportPath(const ExportOptions &, ExportState);
+
+// if we end up fixing up pattern then we should definitely tell the user
+// "did you actually mean this?"
+// That's a pretty good error message!
+
+// Would Utils::ParseString be useful?
+//   QString might make that annoying
+
+void initDefaultOptions(ExportOptions &, ExportSpriteInfo);
+ExportOptions exportFrameOptions(const QString &, ExportSpriteInfo);
+Error readExportOptions(ExportOptions &, ExportSpriteInfo, const std::map<std::string, docopt::value> &);
 
 #endif

@@ -62,7 +62,7 @@
       <CommandLineArguments>
          <CommandLineArgument
             argument = "open /Users/indikernick/Desktop/Test/sprites/test.animera"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
    </LaunchAction>

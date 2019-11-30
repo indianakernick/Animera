@@ -24,22 +24,11 @@ Exporter::Exporter(
 ) : options{options},
     palette{palette},
     format{format},
-    rect{empty_rect},
     size{size} {}
 
-void Exporter::setRect(const ExportSpriteInfo &info) {
-  rect = getExportRect(options, info);
-}
-
 Error Exporter::exportSprite(const std::vector<Layer> &layers) {
-  assert(
-    rect.minL != empty_rect.minL ||
-    rect.minF != empty_rect.minF ||
-    rect.maxL != empty_rect.maxL ||
-    rect.maxF != empty_rect.maxF
-  );
   initImages();
-  if (composited(options.layerSelect)) {
+  if (options.composited) {
     return exportFrames(layers);
   } else {
     return exportCells(layers);
@@ -48,7 +37,7 @@ Error Exporter::exportSprite(const std::vector<Layer> &layers) {
 
 void Exporter::initImages() {
   Format imageFormat = format;
-  if (composited(options.layerSelect) && format != Format::gray) {
+  if (options.composited && format != Format::gray) {
     imageFormat = Format::rgba;
   }
   image = {size, qimageFormat(imageFormat)};
@@ -104,11 +93,11 @@ Error Exporter::exportImage(const ExportState state) {
 }
 
 Error Exporter::exportCells(const std::vector<Layer> &layers) {
-  for (LayerIdx l = rect.minL; l <= rect.maxL; ++l) {
+  for (LayerIdx l = options.selection.minL; l <= options.selection.maxL; ++l) {
     const Layer &layer = layers[+l];
     if (!layer.visible) continue;
-    LayerCells::ConstIterator iter = layer.spans.find(rect.minF);
-    for (FrameIdx f = rect.minF; f <= rect.maxF; ++f) {
+    LayerCells::ConstIterator iter = layer.spans.find(options.selection.minF);
+    for (FrameIdx f = options.selection.minF; f <= options.selection.maxF; ++f) {
       if (const Cell *cell = *iter; *cell) {
         setImageFrom(*cell);
         if (Error err = exportImage({l, f}); err) {
@@ -122,25 +111,25 @@ Error Exporter::exportCells(const std::vector<Layer> &layers) {
 }
 
 Error Exporter::exportFrames(const std::vector<Layer> &layers) {
-  const LayerIdx rectLayers = rect.maxL - rect.minL + LayerIdx{1};
+  const LayerIdx rectLayers = options.selection.maxL - options.selection.minL + LayerIdx{1};
   Frame frame;
   frame.reserve(+rectLayers);
   std::vector<LayerCells::ConstIterator> iterators;
   iterators.reserve(+rectLayers);
-  for (LayerIdx l = rect.minL; l <= rect.maxL; ++l) {
-    iterators.push_back(layers[+l].spans.find(rect.minF));
+  for (LayerIdx l = options.selection.minL; l <= options.selection.maxL; ++l) {
+    iterators.push_back(layers[+l].spans.find(options.selection.minF));
   }
-  for (FrameIdx f = rect.minF; f <= rect.maxF; ++f) {
+  for (FrameIdx f = options.selection.minF; f <= options.selection.maxF; ++f) {
     frame.clear();
     for (LayerIdx l = {}; l != rectLayers; ++l) {
-      if (!layers[+(l + rect.minL)].visible) continue;
+      if (!layers[+(l + options.selection.minL)].visible) continue;
       if (const Cell *cell = *iterators[+l]; *cell) {
         frame.push_back(*iterators[+l]);
       }
       ++iterators[+l];
     }
     setImageFrom(frame);
-    if (Error err = exportImage({rect.minL, f}); err) {
+    if (Error err = exportImage({options.selection.minL, f}); err) {
       return err;
     }
   }
