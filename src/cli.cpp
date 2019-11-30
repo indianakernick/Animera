@@ -78,11 +78,10 @@ R"(Options:
         The available format sequences are:
             %F  frame number
             %L  layer number
-            %%  percent sign
         Zeros may appear after the % character to pad the number with zeros.
         Examples assuming that "e.animera" contains 2 layers and 2 frames:
             Animera export -n "a_%F" e.animera        a_0 a_1
-            Animera export -n "b%%_%000F" e.animera   b%_000 b%_001
+            Animera export -n "b_%000F" e.animera     b_000 b_001
             Animera export -c -n "c_%L_%F" e.animera  c_0_0 c_0_1 c_1_0 c_1_1
     
     -d, --directory <path>

@@ -15,6 +15,7 @@
 #include "export options.hpp"
 
 QString evalExportPattern(const QString &, ExportState);
+Error checkExportPattern(const QString &);
 
 class ExportPatternValidator final : public QValidator {
 public:

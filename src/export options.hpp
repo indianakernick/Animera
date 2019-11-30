@@ -67,16 +67,7 @@ struct ExportSpriteInfo {
 class Sprite;
 
 ExportSpriteInfo getSpriteInfo(const Sprite &);
-
 QString getExportPath(const ExportOptions &, ExportState);
-
-// if we end up fixing up pattern then we should definitely tell the user
-// "did you actually mean this?"
-// That's a pretty good error message!
-
-// Would Utils::ParseString be useful?
-//   QString might make that annoying
-
 void initDefaultOptions(ExportOptions &, ExportSpriteInfo);
 ExportOptions exportFrameOptions(const QString &, ExportSpriteInfo);
 Error readExportOptions(ExportOptions &, ExportSpriteInfo, const std::map<std::string, docopt::value> &);

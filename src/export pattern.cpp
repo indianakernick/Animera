@@ -40,10 +40,7 @@ int countZeros(QString::const_iterator &begin, QString::const_iterator end) {
 
 }
 
-QString evalExportPattern(
-  const QString &pattern,
-  const ExportState state
-) {
+QString evalExportPattern(const QString &pattern, const ExportState state) {
   QString output;
   output.reserve(pattern.size());
   for (auto c = pattern.cbegin(); c != pattern.cend(); ++c) {
@@ -65,6 +62,44 @@ QString evalExportPattern(
   return output;
 }
 
+namespace {
+
+Error checkExportPattern(const QString &pattern, bool &truncated) {
+  if (pattern.isEmpty()) {
+    truncated = true;
+    return "Name pattern must not be empty";
+  }
+  for (auto c = pattern.cbegin(); c != pattern.cend(); ++c) {
+    if (*c == '%') {
+      ++c;
+      if (c == pattern.cend()) {
+        truncated = true;
+        return "Name pattern contains truncated format sequence";
+      }
+      countZeros(c, pattern.cend());
+      if (c == pattern.cend()) {
+        truncated = true;
+        return "Name pattern contains truncated format sequence";
+      }
+      if (*c != 'L' && *c != 'F') {
+        return "Name pattern contains invalid format sequence";
+      }
+    } else {
+      if (!validFileNameChar(*c)) {
+        return QString{"Invalid character in name pattern ("} + *c + ")";
+      }
+    }
+  }
+  return {};
+}
+
+}
+
+Error checkExportPattern(const QString &pattern) {
+  bool truncated;
+  return checkExportPattern(pattern, truncated);
+}
+
 ExportPatternValidator::ExportPatternValidator(QObject *parent)
   : QValidator{parent} {}
 
@@ -73,19 +108,9 @@ QString ExportPatternValidator::defaultText() const {
 }
 
 QValidator::State ExportPatternValidator::validate(QString &input, int &) const {
-  if (input.isEmpty()) return State::Intermediate;
-  for (auto c = input.cbegin(); c != input.cend(); ++c) {
-    if (*c == '%') {
-      ++c;
-      if (c == input.cend()) return State::Intermediate;
-      countZeros(c, input.cend());
-      if (c == input.cend()) return State::Intermediate;
-      if (*c != 'L' && *c != 'F') {
-        return State::Invalid;
-      }
-    } else {
-      if (!validFileNameChar(*c)) return State::Invalid;
-    }
+  bool truncated;
+  if (checkExportPattern(input, truncated)) {
+    return truncated ? State::Intermediate : State::Invalid;
   }
   return State::Acceptable;
 }

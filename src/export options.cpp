@@ -414,11 +414,18 @@ Error readExportOptions(
   const std::map<std::string, docopt::value> &flags
 ) {
   if (const docopt::value &name = flags.at("--name"); name) {
-    options.name = toLatinString(name.asString());
+    QString nameStr = toLatinString(name.asString());
+    if (Error err = checkExportPattern(nameStr); err) {
+      return err;
+    }
+    options.name = std::move(nameStr);
   }
   
   if (const docopt::value &dir = flags.at("--directory"); dir) {
     QString dirStr = toLatinString(dir.asString());
+    if (dirStr.isEmpty()) {
+      return "Directory must not be empty";
+    }
     if (!QDir{dirStr}.exists()) {
       return "Invalid directory";
     }
