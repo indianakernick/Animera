@@ -317,6 +317,8 @@ WandSelectTool::WandSelectTool() {
 }
 
 void WandSelectTool::attachCell() {
+  clearImage(*ctx->overlay);
+  ctx->emitChanges(ToolChanges::overlay);
   mode = SelectMode::copy;
   if (resizeImages()) {
     mask = {ctx->size, mask_format};
