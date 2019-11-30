@@ -369,6 +369,27 @@ Error setFrame(
   return {};
 }
 
+Error setNameDir(ExportOptions &options, const std::map<std::string, docopt::value> &flags) {
+  if (const docopt::value &name = flags.at("--name"); name) {
+    QString nameStr = toLatinString(name.asString());
+    if (Error err = checkExportPattern(nameStr); err) {
+      return err;
+    }
+    options.name = std::move(nameStr);
+  }
+  if (const docopt::value &dir = flags.at("--directory"); dir) {
+    QString dirStr = toLatinString(dir.asString());
+    if (dirStr.isEmpty()) {
+      return "Directory must not be empty";
+    }
+    if (!QDir{dirStr}.exists()) {
+      return "Invalid directory";
+    }
+    options.directory = std::move(dirStr);
+  }
+  return {};
+}
+
 Error setStrideOffset(ExportOptions &options, const std::map<std::string, docopt::value> &flags) {
   if (const docopt::value &stride = flags.at("--layer-stride"); stride) {
     if (Error err = setStride(options.layerLine, stride); err) return err;
@@ -385,7 +406,50 @@ Error setStrideOffset(ExportOptions &options, const std::map<std::string, docopt
   return {};
 }
 
-Error setScale(ExportOptions &options, const std::map<std::string, docopt::value> &flags) {
+Error setLayerFrame(
+  ExportOptions &options,
+  const ExportSpriteInfo info,
+  const std::map<std::string, docopt::value> &flags
+) {
+  if (const docopt::value &layer = flags.at("--layer"); layer) {
+    if (Error err = setLayer(options.selection, info, layer); err) {
+      return err;
+    }
+  }
+  if (const docopt::value &frame = flags.at("--frame"); frame) {
+    if (Error err = setFrame(options.selection, info, frame); err) {
+      return err;
+    }
+  }
+  return {};
+}
+
+Error setFormat(
+  ExportOptions &options,
+  const ExportSpriteInfo info,
+  const std::map<std::string, docopt::value> &flags
+) {
+  if (const docopt::value &value = flags.at("--format"); value) {
+    if (Error err = setFormat(options.format, value); err) {
+      return err;
+    }
+    if (Error err = checkFormat(options, info.format); err) {
+      return err;
+    }
+  }
+  return {};
+}
+
+Error setVisibility(ExportOptions &options, const std::map<std::string, docopt::value> &flags) {
+  if (const docopt::value &value = flags.at("--visibility"); value) {
+    if (Error err = setVisibility(options.visibility, value); err) {
+      return err;
+    }
+  }
+  return {};
+}
+
+Error setScaleAngle(ExportOptions &options, const std::map<std::string, docopt::value> &flags) {
   if (const docopt::value &scaleX = flags.at("--scale-x"); scaleX) {
     if (Error err = setNonZeroInt(options.scaleX, scaleX, "scale-x", expt_scale); err) {
       return err;
@@ -403,6 +467,12 @@ Error setScale(ExportOptions &options, const std::map<std::string, docopt::value
     }
     options.scaleX = options.scaleY = scaleXY;
   }
+  if (const docopt::value &angle = flags.at("--angle"); angle) {
+    long angleLong;
+    if (Error err = setInt(angleLong, angle, "angle"); err) return err;
+    angleLong &= 3;
+    options.angle = static_cast<int>(angleLong);
+  }
   return {};
 }
 
@@ -413,63 +483,12 @@ Error readExportOptions(
   const ExportSpriteInfo info,
   const std::map<std::string, docopt::value> &flags
 ) {
-  if (const docopt::value &name = flags.at("--name"); name) {
-    QString nameStr = toLatinString(name.asString());
-    if (Error err = checkExportPattern(nameStr); err) {
-      return err;
-    }
-    options.name = std::move(nameStr);
-  }
-  
-  if (const docopt::value &dir = flags.at("--directory"); dir) {
-    QString dirStr = toLatinString(dir.asString());
-    if (dirStr.isEmpty()) {
-      return "Directory must not be empty";
-    }
-    if (!QDir{dirStr}.exists()) {
-      return "Invalid directory";
-    }
-    options.directory = std::move(dirStr);
-  }
-  
+  if (Error err = setNameDir(options, flags); err) return err;
   if (Error err = setStrideOffset(options, flags); err) return err;
-  
-  if (const docopt::value &layer = flags.at("--layer"); layer) {
-    if (Error err = setLayer(options.selection, info, layer); err) {
-      return err;
-    }
-  }
-  if (const docopt::value &frame = flags.at("--frame"); frame) {
-    if (Error err = setFrame(options.selection, info, frame); err) {
-      return err;
-    }
-  }
-  
+  if (Error err = setLayerFrame(options, info, flags); err) return err;
   options.composite = !flags.at("--no-composite").asBool();
-  
-  if (const docopt::value &value = flags.at("--format"); value) {
-    if (Error err = setFormat(options.format, value); err) {
-      return err;
-    }
-    if (Error err = checkFormat(options, info.format); err) {
-      return err;
-    }
-  }
-  
-  if (const docopt::value &value = flags.at("--visibility"); value) {
-    if (Error err = setVisibility(options.visibility, value); err) {
-      return err;
-    }
-  }
-  
-  if (Error err = setScale(options, flags); err) return err;
-  
-  if (const docopt::value &angle = flags.at("--angle"); angle) {
-    long angleLong;
-    if (Error err = setInt(angleLong, angle, "angle"); err) return err;
-    angleLong &= 3;
-    options.angle = static_cast<int>(angleLong);
-  }
-  
+  if (Error err = setFormat(options, info, flags); err) return err;
+  if (Error err = setVisibility(options, flags); err) return err;
+  if (Error err = setScaleAngle(options, flags); err) return err;
   return {};
 }
