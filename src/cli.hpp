@@ -23,7 +23,8 @@ private:
   char **argv;
   
   Error parseArgs(std::map<std::string, docopt::value> &) const;
-  int execDefault() const;
+  int execDefault(const std::map<std::string, docopt::value> &) const;
+  int execNew(const std::map<std::string, docopt::value> &) const;
   int execOpen(const std::map<std::string, docopt::value> &) const;
   int execExport(const std::map<std::string, docopt::value> &) const;
 };

@@ -12,6 +12,7 @@
 #include <QtGui/qimage.h>
 
 enum class Format : uint8_t {
+  // cli.cpp depends on the order
   rgba,
   index,
   gray

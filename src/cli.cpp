@@ -11,6 +11,7 @@
 #include "sprite.hpp"
 #include "strings.hpp"
 #include "application.hpp"
+#include "docopt helpers.hpp"
 #include <QtCore/qtextstream.h>
 
 CLI::CLI(int &argc, char **argv)
@@ -23,6 +24,7 @@ namespace {
 const char docopt_usage[] =
 R"(Usage:
     Animera [--help --long-help]
+    Animera new <width> <height> [<format>]
     Animera open <file>
     Animera export [--name=<pattern> --directory=<path>]
                    [--layer-stride=<int> --layer-offset=<int>]
@@ -35,6 +37,7 @@ R"(Usage:
 const char usage[] =
 R"(Usage:
     Animera [--help | --long-help]
+    Animera new <width> <height> [<format>]
     Animera open <file>
     Animera export [--name=<pattern> --directory=<path>]
                    [--layer-stride=<int> --layer-offset=<int>]
@@ -48,6 +51,9 @@ const char short_options[] =
 R"(Options:
     -h, --help                Display this help message.
     --long-help               Display a detailed help message.
+    <width>                   Width of the sprite to create.
+    <height>                  Height of the sprite to create.
+    <format>                  Format of the sprite to create.
     -n, --name <pattern>      Name pattern for the sprite.
     -d, --directory <path>    Directory to write files to.
     --layer-stride <int>      Stride multiplied by layer number.
@@ -71,6 +77,19 @@ R"(Options:
     
     --long-help
         Display this help message.
+    
+    <width>
+        Width (in pixels) of the sprite to create.
+    
+    <height>
+        Height (in pixels) of the sprite to create.
+    
+    <format>
+        Format of the sprite to create. Valid formats are:
+            rgba   (8-bit RGBA)
+            index  (8-bit Indexed)
+            gray   (8-bit Grayscale with alpha)
+        This is "rgba" by default.
     
     -n, --name <pattern>
         Name pattern for the sprite. By default this is "sprite_%000F".
@@ -179,8 +198,8 @@ R"(Options:
         The angle of rotation applied to each output image. The image can only
         be rotated in 90 degree increments. This means that --angle 1 will
         rotate clockwise by 90 degrees. The angle doesn't need to be within
-        [0, 4]. This means that --angle -3, --angle 1 and --angle 5 are all
-        equivalent. The rotation is applied after the scale is applied.)";
+        [0, 4] so --angle -3, --angle 1 and --angle 5 are all equivalent.
+        The rotation is applied after the scale is applied.)";
 
 Error checkMutuallyExclusive(const std::map<std::string, docopt::value> &flags) {
   if (flags.at("--help").asBool() && flags.at("--long-help").asBool()) {
@@ -208,21 +227,14 @@ int CLI::exec() {
     return 1;
   }
   
-  if (flags.at("--help").asBool()) {
-    console() << usage << "\n\n" << short_options;
-    return 0;
-  }
-  if (flags.at("--long-help").asBool()) {
-    console() << usage << "\n\n" << long_options;
-    return 0;
-  }
-  
-  if (flags.at("open").asBool()) {
+  if (flags.at("new").asBool()) {
+    return execNew(flags);
+  } else if (flags.at("open").asBool()) {
     return execOpen(flags);
   } else if (flags.at("export").asBool()) {
     return execExport(flags);
   } else {
-    return execDefault();
+    return execDefault(flags);
   }
 }
 
@@ -238,9 +250,57 @@ Error CLI::parseArgs(std::map<std::string, docopt::value> &flags) const {
   return checkMutuallyExclusive(flags);
 }
 
-int CLI::execDefault() const {
+int CLI::execDefault(const std::map<std::string, docopt::value> &flags) const {
+  if (flags.at("--help").asBool()) {
+    console() << usage << "\n\n" << short_options;
+    return 0;
+  }
+  if (flags.at("--long-help").asBool()) {
+    console() << usage << "\n\n" << long_options;
+    return 0;
+  }
   Application app{argc, argv};
   app.waitForOpenEvent();
+  return app.exec();
+}
+
+namespace {
+
+const char *formatNames[] = {
+  "rgba",
+  "index",
+  "gray"
+};
+
+Error setFormatSize(Format &format, QSize &size, const std::map<std::string, docopt::value> &flags) {
+  if (Error err = setInt(size.rwidth(), flags.at("<width>"), "width", init_size_range); err) {
+    return err;
+  }
+  if (Error err = setInt(size.rheight(), flags.at("<height>"), "height", init_size_range); err) {
+    return err;
+  }
+  if (const docopt::value &value = flags.at("<format>"); value) {
+    if (!setEnum(format, value.asString(), formatNames)) {
+      return "Invalid format" + validListStr("formats", formatNames);
+    }
+  } else {
+    format = Format::rgba;
+  }
+  return {};
+}
+
+}
+
+int CLI::execNew(const std::map<std::string, docopt::value> &flags) const {
+  Format format;
+  QSize size;
+  if (Error err = setFormatSize(format, size, flags); err) {
+    console() << "Configuration error\n";
+    console() << err.msg() << '\n';
+    return 1;
+  }
+  Application app{argc, argv};
+  app.newFile(format, size);
   return app.exec();
 }
 

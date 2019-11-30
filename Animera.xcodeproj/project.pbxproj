@@ -23,6 +23,7 @@
 		45288B6122FA8AAD008FB52D /* libz.1.2.11.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 45288B6022FA8AAC008FB52D /* libz.1.2.11.dylib */; };
 		45288B6222FA8AB8008FB52D /* libz.1.2.11.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 45288B6022FA8AAC008FB52D /* libz.1.2.11.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		4529A9FA238E22660034A014 /* docopt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4529A9F7238E22660034A014 /* docopt.cpp */; };
+		4529A9FD239263110034A014 /* docopt helpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4529A9FB239263110034A014 /* docopt helpers.cpp */; };
 		453A20C6231A078100F055BA /* sprite file.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453A20C4231A078100F055BA /* sprite file.cpp */; };
 		453C78192234935000818B19 /* timeline widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C78172234935000818B19 /* timeline widget.cpp */; };
 		453C781C22349BBD00818B19 /* editor widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C781A22349BBD00818B19 /* editor widget.cpp */; };
@@ -161,6 +162,8 @@
 		4529A9F6238E22660034A014 /* docopt_util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = docopt_util.h; sourceTree = "<group>"; };
 		4529A9F7238E22660034A014 /* docopt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = docopt.cpp; sourceTree = "<group>"; };
 		4529A9F8238E22660034A014 /* docopt_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = docopt_private.h; sourceTree = "<group>"; };
+		4529A9FB239263110034A014 /* docopt helpers.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "docopt helpers.cpp"; sourceTree = "<group>"; };
+		4529A9FC239263110034A014 /* docopt helpers.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "docopt helpers.hpp"; sourceTree = "<group>"; };
 		453A20C4231A078100F055BA /* sprite file.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "sprite file.cpp"; sourceTree = "<group>"; };
 		453A20C5231A078100F055BA /* sprite file.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "sprite file.hpp"; sourceTree = "<group>"; };
 		453A20C7231A139100F055BA /* palette span.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "palette span.hpp"; sourceTree = "<group>"; };
@@ -813,6 +816,8 @@
 				45C5C8BC237CC2950056CEE7 /* math.hpp */,
 				45C5C8D02389219C0056CEE7 /* cli.cpp */,
 				45C5C8D12389219C0056CEE7 /* cli.hpp */,
+				4529A9FB239263110034A014 /* docopt helpers.cpp */,
+				4529A9FC239263110034A014 /* docopt helpers.hpp */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -1783,6 +1788,7 @@
 				453D28D72278134200D0E5F9 /* color handle.cpp in Sources */,
 				453C78192234935000818B19 /* timeline widget.cpp in Sources */,
 				45D109B222E304A300D1F1CB /* combo box widget.cpp in Sources */,
+				4529A9FD239263110034A014 /* docopt helpers.cpp in Sources */,
 				45DC2566224B137C00F40116 /* status msg.cpp in Sources */,
 				45F065F22222998300BCE863 /* current tool.cpp in Sources */,
 				45D109AC22E2D4FD00D1F1CB /* text push button widget.cpp in Sources */,

@@ -13,6 +13,7 @@
 #include "config.hpp"
 #include "strings.hpp"
 #include <QtCore/qdir.h>
+#include "docopt helpers.hpp"
 #include "export pattern.hpp"
 
 ExportSpriteInfo getSpriteInfo(const Sprite &sprite) {
@@ -83,66 +84,6 @@ ExportOptions exportFrameOptions(const QString &path, const ExportSpriteInfo inf
 
 namespace {
 
-Error setInt(long &number, const docopt::value &value, const QString &name) {
-  try {
-    number = value.asLong();
-  } catch (std::exception &) {
-    return name + " must be an integer";
-  }
-  return {};
-}
-
-QString nonZeroRangeStr(const IntRange range) {
-  QString str = "\nValid range is: [";
-  str += QString::number(range.min);
-  str += ", -1] U [1, ";
-  str += QString::number(range.max);
-  str += ']';
-  return str;
-}
-
-QString rangeStr(const IntRange range) {
-  QString str = "\nValid range is: [";
-  str += QString::number(range.min);
-  str += ", ";
-  str += QString::number(range.max);
-  str += ']';
-  return str;
-}
-
-Error setInt(
-  int &number,
-  const docopt::value &value,
-  const QString &name,
-  const IntRange range
-) {
-  long longNumber;
-  if (Error err = setInt(longNumber, value, name); err) return err;
-  if (longNumber < range.min || longNumber > range.max) {
-    return name + " is out of range" + rangeStr(range);
-  }
-  number = static_cast<int>(longNumber);
-  return {};
-}
-
-Error setNonZeroInt(
-  int &number,
-  const docopt::value &value,
-  const QString &name,
-  const IntRange range
-) {
-  long longNumber;
-  if (Error err = setInt(longNumber, value, name); err) return err;
-  if (longNumber == 0) {
-    return name + " cannot be 0" + nonZeroRangeStr(range);
-  }
-  if (longNumber < expt_stride.min || longNumber > expt_stride.max) {
-    return name + " is out of range" + nonZeroRangeStr(range);
-  }
-  number = static_cast<int>(longNumber);
-  return {};
-}
-
 template <typename Idx>
 const QString idxName;
 template <>
@@ -181,42 +122,16 @@ const char *formatNames[] = {
 };
 
 QString formatNamesList(std::initializer_list<ExportFormat> formats) {
-  QString str = "\nValid formats are: {";
-  bool first = true;
-  for (ExportFormat format : formats) {
-    if (!std::exchange(first, false)) str += ", ";
-    str += formatNames[static_cast<size_t>(format)];
-  }
-  str += '}';
-  return str;
-}
-
-QString formatNamesList() {
-  return formatNamesList({
-    ExportFormat::rgba,
-    ExportFormat::index,
-    ExportFormat::gray,
-    ExportFormat::gray_alpha,
-    ExportFormat::monochrome
-  });
-}
-
-void toLowerStr(std::string &str) {
-  std::transform(str.begin(), str.end(), str.begin(), [](unsigned char ch) {
-    return std::tolower(ch);
+  return validListStr("formats", formats.size(), [formats](QString &str, size_t i) {
+    str += formatNames[static_cast<size_t>(formats.begin()[i])];
   });
 }
 
 Error setFormat(ExportFormat &format, const docopt::value &formatValue) {
-  std::string formatStr = formatValue.asString();
-  toLowerStr(formatStr);
-  for (size_t f = 0; f != std::size(formatNames); ++f) {
-    if (formatStr == formatNames[f]) {
-      format = static_cast<ExportFormat>(f);
-      return {};
-    }
+  if (!setEnum(format, formatValue.asString(), formatNames)) {
+    return "Invalid export format" + validListStr("formats", formatNames);
   }
-  return "Invalid export format" + formatNamesList();
+  return {};
 }
 
 Error checkFormat(
@@ -260,27 +175,11 @@ const char *visNames[] = {
   "all"
 };
 
-QString visNamesList() {
-  QString str = "\nValid modes are: {";
-  bool first = true;
-  for (const char *vis : visNames) {
-    if (!std::exchange(first, false)) str += ", ";
-    str += vis;
-  }
-  str += '}';
-  return str;
-}
-
 Error setVisibility(ExportVis &visibility, const docopt::value &visValue) {
-  std::string visStr = visValue.asString();
-  toLowerStr(visStr);
-  for (size_t v = 0; v != std::size(visNames); ++v) {
-    if (visStr == visNames[v]) {
-      visibility = static_cast<ExportVis>(v);
-      return {};
-    }
+  if (!setEnum(visibility, visValue.asString(), visNames)) {
+    return "Invalid visibility mode" + validListStr("modes", visNames);
   }
-  return "Invalid visibility mode" + visNamesList();
+  return {};
 }
 
 const QString rangeFormats = "\nValid range formats are: {n, n..n, ..n, n.., ..}";
