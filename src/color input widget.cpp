@@ -148,7 +148,7 @@ void NumberInputWidget::keyPressEvent(QKeyEvent *event) {
     return TextInputWidget::keyPressEvent(event);
   }
   
-  // TODO: remove bug workaround
+  // TODO: Qt bug
   // https://bugreports.qt.io/browse/QTBUG-78933
   #ifdef Q_OS_MACOS
   hideMouseUntilMouseMoves();

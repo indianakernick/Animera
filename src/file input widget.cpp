@@ -112,7 +112,8 @@ void FileInputWidget::changePath() {
 void FileInputWidget::initText() {
   auto *completer = new QCompleter{text};
   auto *model = new QFileSystemModel{completer};
-  // TODO: bug workaround. should be QDir::rootPath()
+  // TODO: Qt bug
+  // should be model->setRootPath(QDir::rootPath())
   // https://forum.qt.io/topic/105279/update-the-qcompleter-when-calling-qlineedit-settext
   // TODO: completer suggests trailing slashes
   // these are later removed by cleanPath.

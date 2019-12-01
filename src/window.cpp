@@ -121,6 +121,7 @@ void Window::setupLayouts() {
   right->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
   
   /*
+  TODO: Qt bug
   Unfortunately, we can't use QDockWidget.
   When the title bar is removed with setTitleBar(new QWidget{this}),
   the contents of the dock is shifted up by one pixel.
