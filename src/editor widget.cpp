@@ -35,11 +35,7 @@ public:
   void adjustScale() {
     const QSize size = overlay.size();
     const QSize viewSize = parent->viewport()->size();
-    scale = std::min(viewSize.width() / size.width(), viewSize.height() / size.height());
-    scale = std::clamp(scale, edit_min_scale, edit_max_scale);
-    setFixedSize(size * scale);
-    updateCheckers();
-    Q_EMIT resized();
+    setScale(std::min(viewSize.width() / size.width(), viewSize.height() / size.height()));
   }
   
   void setSize(const QSize size) {
