@@ -319,8 +319,8 @@ Error readFormatByte(Format &format, const uint8_t byte) {
 Error readAHDR(QIODevice &dev, SpriteInfo &info) try {
   ChunkReader reader{dev};
   const ChunkStart start = reader.begin();
-  if (Error err = expectedName(start, chunk_anim_header); err) return err;
-  if (Error err = expectedLength(start, 5 * file_int_size + 1); err) return err;
+  TRY(expectedName(start, chunk_anim_header));
+  TRY(expectedLength(start, 5 * file_int_size + 1));
   
   info.width = reader.readInt();
   info.height = reader.readInt();
@@ -329,7 +329,7 @@ Error readAHDR(QIODevice &dev, SpriteInfo &info) try {
   info.delay = reader.readInt();
   const uint8_t format = reader.readByte();
   
-  if (Error err = reader.end(); err) return err;
+  TRY(reader.end());
   
   if (info.width <= 0 || max_image_width < info.width) {
     return "Canvas width is out-of-range";
@@ -343,7 +343,7 @@ Error readAHDR(QIODevice &dev, SpriteInfo &info) try {
   if (info.delay < ctrl_delay.min || ctrl_delay.max < info.delay) {
     return "Animation delay is out-of-range";
   }
-  if (Error err = readFormatByte(info.format, format); err) return err;
+  TRY(readFormatByte(info.format, format));
   
   return {};
 } catch (FileIOError &e) {
@@ -353,7 +353,7 @@ Error readAHDR(QIODevice &dev, SpriteInfo &info) try {
 namespace {
 
 Error checkPaletteStart(ChunkStart start, const int multiple) {
-  if (Error err = expectedName(start, chunk_palette); err) return err;
+  TRY(expectedName(start, chunk_palette));
   if (start.length % multiple != 0 || start.length / multiple > pal_colors) {
     QString msg = "Invalid '";
     msg += toLatinString(chunk_palette);
@@ -367,7 +367,7 @@ Error checkPaletteStart(ChunkStart start, const int multiple) {
 Error readRgba(QIODevice &dev, const PaletteSpan colors) try {
   ChunkReader reader{dev};
   const ChunkStart start = reader.begin();
-  if (Error err = checkPaletteStart(start, 4); err) return err;
+  TRY(checkPaletteStart(start, 4));
   auto iter = colors.begin();
   const auto end = colors.begin() + start.length / 4;
   for (; iter != end; ++iter) {
@@ -378,7 +378,7 @@ Error readRgba(QIODevice &dev, const PaletteSpan colors) try {
     color.a = reader.readByte();
     *iter = gfx::ARGB::pixel(color);
   }
-  if (Error err = reader.end(); err) return err;
+  TRY(reader.end());
   std::fill(iter, colors.end(), 0);
   return {};
 } catch (FileIOError &e) {
@@ -388,7 +388,7 @@ Error readRgba(QIODevice &dev, const PaletteSpan colors) try {
 Error readGray(QIODevice &dev, const PaletteSpan colors) try {
   ChunkReader reader{dev};
   const ChunkStart start = reader.begin();
-  if (Error err = checkPaletteStart(start, 2); err) return err;
+  TRY(checkPaletteStart(start, 2));
   auto iter = colors.begin();
   const auto end = colors.begin() + start.length / 2;
   for (; iter != end; ++iter) {
@@ -397,7 +397,7 @@ Error readGray(QIODevice &dev, const PaletteSpan colors) try {
     color.a = reader.readByte();
     *iter = gfx::YA::pixel(color);
   }
-  if (Error err = reader.end(); err) return err;
+  TRY(reader.end());
   std::fill(iter, colors.end(), 0);
   return {};
 } catch (FileIOError &e) {
@@ -410,10 +410,10 @@ Error readPLTE(QIODevice &dev, const PaletteSpan colors, const Format format) tr
   switch (format) {
     case Format::rgba:
     case Format::index:
-      if (Error err = readRgba(dev, colors); err) return err;
+      TRY(readRgba(dev, colors));
       break;
     case Format::gray:
-      if (Error err = readGray(dev, colors); err) return err;
+      TRY(readGray(dev, colors));
       break;
   }
   return {};
@@ -442,7 +442,7 @@ Error readVisibileByte(bool &visible, const uint8_t byte) {
 Error readLHDR(QIODevice &dev, Layer &layer) try {
   ChunkReader reader{dev};
   const ChunkStart start = reader.begin();
-  if (Error err = expectedName(start, chunk_layer_header); err) return err;
+  TRY(expectedName(start, chunk_layer_header));
   if (start.length <= file_int_size + 1) {
     return "'" + toLatinString(chunk_layer_header) + "' chunk length too small";
   }
@@ -457,11 +457,11 @@ Error readLHDR(QIODevice &dev, Layer &layer) try {
   layer.name.resize(nameLen);
   reader.readString(layer.name.data(), nameLen);
   
-  if (Error err = reader.end(); err) return err;
+  TRY(reader.end());
   
   // TODO: range checking on spans?
   layer.spans.resize(spans);
-  if (Error err = readVisibileByte(layer.visible, visible); err) return err;
+  TRY(readVisibileByte(layer.visible, visible));
   
   return {};
 } catch (FileIOError &e) {
@@ -471,7 +471,7 @@ Error readLHDR(QIODevice &dev, Layer &layer) try {
 Error readCHDR(QIODevice &dev, CellSpan &span, const Format format) try {
   ChunkReader reader{dev};
   const ChunkStart start = reader.begin();
-  if (Error err = expectedName(start, chunk_cell_header); err) return err;
+  TRY(expectedName(start, chunk_cell_header));
   if (start.length != file_int_size && start.length != 5 * file_int_size) {
     return "'" + toLatinString(chunk_cell_header) + "' chunk length invalid";
   }
@@ -486,7 +486,7 @@ Error readCHDR(QIODevice &dev, CellSpan &span, const Format format) try {
     size.setHeight(reader.readInt());
   }
   
-  if (Error err = reader.end(); err) return err;
+  TRY(reader.end());
   
   if (+span.len <= 0) return "Negative cell span length";
   span.cell = std::make_unique<Cell>();
@@ -527,9 +527,7 @@ Error readCDAT(QIODevice &dev, QImage &image, const Format format) try {
   
   ChunkReader reader{dev};
   const ChunkStart start = reader.begin();
-  if (Error err = expectedName(start, chunk_cell_data); err) {
-    return err;
-  }
+  TRY(expectedName(start, chunk_cell_data));
   
   int rowIdx = 0;
   uint32_t remainingChunk = start.length;
@@ -569,7 +567,7 @@ Error readCDAT(QIODevice &dev, QImage &image, const Format format) try {
     return "Truncated image data";
   }
   
-  if (Error err = reader.end(); err) return err;
+  TRY(reader.end());
   
   return {};
 } catch (FileIOError &e) {
@@ -579,9 +577,9 @@ Error readCDAT(QIODevice &dev, QImage &image, const Format format) try {
 Error readAEND(QIODevice &dev) try {
   ChunkReader reader{dev};
   const ChunkStart start = reader.begin();
-  if (Error err = expectedName(start, chunk_anim_end); err) return err;
-  if (Error err = expectedLength(start, 0); err) return err;
-  if (Error err = reader.end(); err) return err;
+  TRY(expectedName(start, chunk_anim_end));
+  TRY(expectedLength(start, 0));
+  TRY(reader.end());
   return {};
 } catch (FileIOError &e) {
   return e.what();

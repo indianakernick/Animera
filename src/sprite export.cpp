@@ -82,12 +82,12 @@ void Exporter::applyTransform() {
 
 Error Exporter::exportImage(const ExportState state) {
   FileWriter writer;
-  if (Error err = writer.open(getExportPath(options, state)); err) return err;
+  TRY(writer.open(getExportPath(options, state)));
   if (xformed.isNull()) {
-    if (Error err = exportPng(writer.dev(), palette, image, format, options.format); err) return err;
+    TRY(exportPng(writer.dev(), palette, image, format, options.format));
   } else {
     applyTransform();
-    if (Error err = exportPng(writer.dev(), palette, xformed, format, options.format); err) return err;
+    TRY(exportPng(writer.dev(), palette, xformed, format, options.format));
   }
   return writer.flush();
 }
@@ -108,9 +108,7 @@ Error Exporter::exportCells(const std::vector<Layer> &layers) {
     for (FrameIdx f = options.selection.minF; f <= options.selection.maxF; ++f) {
       if (const Cell *cell = *iter; *cell) {
         setImageFrom(*cell);
-        if (Error err = exportImage({l, f}); err) {
-          return err;
-        }
+        TRY(exportImage({l, f}));
       }
       ++iter;
     }
@@ -137,9 +135,7 @@ Error Exporter::exportFrames(const std::vector<Layer> &layers) {
       ++iterators[+l];
     }
     setImageFrom(frame);
-    if (Error err = exportImage({options.selection.minL, f}); err) {
-      return err;
-    }
+    TRY(exportImage({options.selection.minL, f}));
   }
   return {};
 }

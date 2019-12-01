@@ -68,31 +68,31 @@ void Sprite::optimize() {
 
 Error Sprite::saveFile(const QString &path) const {
   FileWriter writer;
-  if (Error err = writer.open(path); err) return err;
-  if (Error err = writeSignature(writer.dev()); err) return err;
-  if (Error err = timeline.serializeHead(writer.dev()); err) return err;
-  if (Error err = palette.serialize(writer.dev()); err) return err;
-  if (Error err = timeline.serializeBody(writer.dev()); err) return err;
-  if (Error err = timeline.serializeTail(writer.dev()); err) return err;
+  TRY(writer.open(path));
+  TRY(writeSignature(writer.dev()));
+  TRY(timeline.serializeHead(writer.dev()));
+  TRY(palette.serialize(writer.dev()));
+  TRY(timeline.serializeBody(writer.dev()));
+  TRY(timeline.serializeTail(writer.dev()));
   return writer.flush();
 }
 
 Error Sprite::openFile(const QString &path) {
   FileReader reader;
-  if (Error err = reader.open(path); err) return err;
-  if (Error err = readSignature(reader.dev()); err) return err;
-  if (Error err = timeline.deserializeHead(reader.dev(), format, size); err) return err;
+  TRY(reader.open(path));
+  TRY(readSignature(reader.dev()));
+  TRY(timeline.deserializeHead(reader.dev(), format, size));
   Q_EMIT canvasInitialized(format, size);
   palette.initCanvas(format);
   timeline.initCanvas(format, size);
-  if (Error err = palette.deserialize(reader.dev()); err) return err;
-  if (Error err = timeline.deserializeBody(reader.dev()); err) return err;
-  if (Error err = timeline.deserializeTail(reader.dev()); err) return err;
+  TRY(palette.deserialize(reader.dev()));
+  TRY(timeline.deserializeBody(reader.dev()));
+  TRY(timeline.deserializeTail(reader.dev()));
   return reader.flush();
 }
 
 Error Sprite::openImage(const QString &path) {
-  if (Error err = timeline.openImage(path, palette.getPalette(), format, size); err) return err;
+  TRY(timeline.openImage(path, palette.getPalette(), format, size));
   Q_EMIT canvasInitialized(format, size);
   palette.initCanvas(format);
   timeline.initCanvas(format, size);

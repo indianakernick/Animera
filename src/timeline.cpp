@@ -60,9 +60,9 @@ Error Timeline::openImage(
 ) {
   QImage image;
   FileReader reader;
-  if (Error err = reader.open(path); err) return err;
-  if (Error err = importPng(reader.dev(), palette, image, format); err) return err;
-  if (Error err = reader.flush(); err) return err;
+  TRY(reader.open(path));
+  TRY(importPng(reader.dev(), palette, image, format));
+  TRY(reader.flush());
   canvasFormat = format;
   canvasSize = size = image.size();
   
@@ -90,14 +90,10 @@ Error Timeline::serializeHead(QIODevice &dev) const {
 
 Error Timeline::serializeBody(QIODevice &dev) const {
   for (const Layer &layer : layers) {
-    if (Error err = writeLHDR(dev, layer); err) return err;
+    TRY(writeLHDR(dev, layer));
     for (const CellSpan &span : layer.spans) {
-      if (Error err = writeCHDR(dev, span); err) return err;
-      if (*span.cell) {
-        if (Error err = writeCDAT(dev, span.cell->img, canvasFormat); err) {
-          return err;
-        }
-      }
+      TRY(writeCHDR(dev, span));
+      if (*span.cell) TRY(writeCDAT(dev, span.cell->img, canvasFormat));
     }
   }
   return {};
@@ -109,7 +105,7 @@ Error Timeline::serializeTail(QIODevice &dev) const {
 
 Error Timeline::deserializeHead(QIODevice &dev, Format &format, QSize &size) {
   SpriteInfo info;
-  if (Error err = readAHDR(dev, info); err) return err;
+  TRY(readAHDR(dev, info));
   canvasSize = size = {info.width, info.height};
   layers.resize(+info.layers);
   frameCount = info.frames;
@@ -120,21 +116,17 @@ Error Timeline::deserializeHead(QIODevice &dev, Format &format, QSize &size) {
 
 Error Timeline::deserializeBody(QIODevice &dev) {
   for (Layer &layer : layers) {
-    if (Error err = readLHDR(dev, layer); err) return err;
+    TRY(readLHDR(dev, layer));
     for (CellSpan &span : layer.spans) {
-      if (Error err = readCHDR(dev, span, canvasFormat); err) return err;
-      if (*span.cell) {
-        if (Error err = readCDAT(dev, span.cell->img, canvasFormat); err) {
-          return err;
-        }
-      }
+      TRY(readCHDR(dev, span, canvasFormat));
+      if (*span.cell) TRY(readCDAT(dev, span.cell->img, canvasFormat));
     }
   }
   return {};
 }
 
 Error Timeline::deserializeTail(QIODevice &dev) {
-  if (Error err = readAEND(dev); err) return err;
+  TRY(readAEND(dev));
   selection = empty_rect;
   change();
   return {};

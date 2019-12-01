@@ -273,12 +273,8 @@ const char *formatNames[] = {
 };
 
 Error setFormatSize(Format &format, QSize &size, const std::map<std::string, docopt::value> &flags) {
-  if (Error err = setInt(size.rwidth(), flags.at("<width>"), "width", init_size_range); err) {
-    return err;
-  }
-  if (Error err = setInt(size.rheight(), flags.at("<height>"), "height", init_size_range); err) {
-    return err;
-  }
+  TRY(setInt(size.rwidth(), flags.at("<width>"), "width", init_size_range));
+  TRY(setInt(size.rheight(), flags.at("<height>"), "height", init_size_range));
   if (const docopt::value &value = flags.at("<format>"); value) {
     if (!setEnum(format, value.asString(), formatNames)) {
       return "Invalid format" + validListStr("formats", formatNames);

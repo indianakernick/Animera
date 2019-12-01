@@ -41,4 +41,6 @@ private:
   QString m;
 };
 
+#define TRY(...) if (Error _error = (__VA_ARGS__)) return _error
+
 #endif

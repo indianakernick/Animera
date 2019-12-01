@@ -129,22 +129,22 @@ Error Palette::serialize(QIODevice &dev) const {
 }
 
 Error Palette::deserialize(QIODevice &dev) {
-  if (Error err = readPLTE(dev, colors, canvasFormat); err) return err;
+  TRY(readPLTE(dev, colors, canvasFormat));
   change();
   return {};
 }
 
 Error Palette::save(const QString &path) const {
   FileWriter writer;
-  if (Error err = writer.open(path); err) return err;
-  if (Error err = exportPng(writer.dev(), getUsedSpan(colors), canvasFormat); err) return err;
+  TRY(writer.open(path));
+  TRY(exportPng(writer.dev(), getUsedSpan(colors), canvasFormat));
   return writer.flush();
 }
 
 Error Palette::open(const QString &path) {
   FileReader reader;
-  if (Error err = reader.open(path); err) return err;
-  if (Error err = importPng(reader.dev(), colors, canvasFormat); err) return err;
+  TRY(reader.open(path));
+  TRY(importPng(reader.dev(), colors, canvasFormat));
   return reader.flush();
 }
 

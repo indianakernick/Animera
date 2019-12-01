@@ -45,7 +45,7 @@ Error setInt(
   const IntRange range
 ) {
   long longNumber;
-  if (Error err = setInt(longNumber, value, name); err) return err;
+  TRY(setInt(longNumber, value, name));
   if (longNumber < range.min || longNumber > range.max) {
     return name + " is out of range" + rangeStr(range);
   }
@@ -60,7 +60,7 @@ Error setNonZeroInt(
   const IntRange range
 ) {
   long longNumber;
-  if (Error err = setInt(longNumber, value, name); err) return err;
+  TRY(setInt(longNumber, value, name));
   if (longNumber == 0) {
     return name + " cannot be 0" + nonZeroRangeStr(range);
   }

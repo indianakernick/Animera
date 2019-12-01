@@ -95,9 +95,7 @@ template <typename Idx>
 Error setStride(Line<Idx> &line, const docopt::value &strideValue) {
   const QString name = idxName<Idx> + " stride";
   int stride;
-  if (Error err = setNonZeroInt(stride, strideValue, name, expt_stride); err) {
-    return err;
-  }
+  TRY(setNonZeroInt(stride, strideValue, name, expt_stride));
   line.stride = Idx{stride};
   return {};
 }
@@ -106,9 +104,7 @@ template <typename Idx>
 Error setOffset(Line<Idx> &line, const docopt::value &offsetValue) {
   const QString name = idxName<Idx> + " offset";
   int offset;
-  if (Error err = setInt(offset, offsetValue, name, expt_offset); err) {
-    return err;
-  }
+  TRY(setInt(offset, offsetValue, name, expt_offset));
   line.offset = static_cast<Idx>(offset);
   return {};
 }
@@ -246,9 +242,7 @@ Error setLayer(
   const docopt::value &value
 ) {
   IntRange range;
-  if (Error err = setRange(range, info.layers, value); err) {
-    return err;
-  }
+  TRY(setRange(range, info.layers, value));
   selection.minL = LayerIdx{range.min};
   selection.maxL = LayerIdx{range.max};
   return {};
@@ -260,9 +254,7 @@ Error setFrame(
   const docopt::value &value
 ) {
   IntRange range;
-  if (Error err = setRange(range, info.frames, value); err) {
-    return err;
-  }
+  TRY(setRange(range, info.frames, value));
   selection.minF = FrameIdx{range.min};
   selection.maxF = FrameIdx{range.max};
   return {};
@@ -271,9 +263,7 @@ Error setFrame(
 Error setNameDir(ExportOptions &options, const std::map<std::string, docopt::value> &flags) {
   if (const docopt::value &name = flags.at("--name"); name) {
     QString nameStr = toLatinString(name.asString());
-    if (Error err = checkExportPattern(nameStr); err) {
-      return err;
-    }
+    TRY(checkExportPattern(nameStr));
     options.name = std::move(nameStr);
   }
   if (const docopt::value &dir = flags.at("--directory"); dir) {
@@ -291,16 +281,16 @@ Error setNameDir(ExportOptions &options, const std::map<std::string, docopt::val
 
 Error setStrideOffset(ExportOptions &options, const std::map<std::string, docopt::value> &flags) {
   if (const docopt::value &stride = flags.at("--layer-stride"); stride) {
-    if (Error err = setStride(options.layerLine, stride); err) return err;
+    TRY(setStride(options.layerLine, stride));
   }
   if (const docopt::value &offset = flags.at("--layer-offset"); offset) {
-    if (Error err = setOffset(options.layerLine, offset); err) return err;
+    TRY(setOffset(options.layerLine, offset));
   }
   if (const docopt::value &stride = flags.at("--frame-stride"); stride) {
-    if (Error err = setStride(options.frameLine, stride); err) return err;
+    TRY(setStride(options.frameLine, stride));
   }
   if (const docopt::value &offset = flags.at("--frame-offset"); offset) {
-    if (Error err = setOffset(options.frameLine, offset); err) return err;
+    TRY(setOffset(options.frameLine, offset));
   }
   return {};
 }
@@ -311,14 +301,10 @@ Error setLayerFrame(
   const std::map<std::string, docopt::value> &flags
 ) {
   if (const docopt::value &layer = flags.at("--layer"); layer) {
-    if (Error err = setLayer(options.selection, info, layer); err) {
-      return err;
-    }
+    TRY(setLayer(options.selection, info, layer));
   }
   if (const docopt::value &frame = flags.at("--frame"); frame) {
-    if (Error err = setFrame(options.selection, info, frame); err) {
-      return err;
-    }
+    TRY(setFrame(options.selection, info, frame));
   }
   return {};
 }
@@ -329,46 +315,34 @@ Error setFormat(
   const std::map<std::string, docopt::value> &flags
 ) {
   if (const docopt::value &value = flags.at("--format"); value) {
-    if (Error err = setFormat(options.format, value); err) {
-      return err;
-    }
-    if (Error err = checkFormat(options, info.format); err) {
-      return err;
-    }
+    TRY(setFormat(options.format, value));
+    TRY(checkFormat(options, info.format));
   }
   return {};
 }
 
 Error setVisibility(ExportOptions &options, const std::map<std::string, docopt::value> &flags) {
   if (const docopt::value &value = flags.at("--visibility"); value) {
-    if (Error err = setVisibility(options.visibility, value); err) {
-      return err;
-    }
+    TRY(setVisibility(options.visibility, value));
   }
   return {};
 }
 
 Error setScaleAngle(ExportOptions &options, const std::map<std::string, docopt::value> &flags) {
   if (const docopt::value &scaleX = flags.at("--scale-x"); scaleX) {
-    if (Error err = setNonZeroInt(options.scaleX, scaleX, "scale-x", expt_scale); err) {
-      return err;
-    }
+    TRY(setNonZeroInt(options.scaleX, scaleX, "scale-x", expt_scale));
   }
   if (const docopt::value &scaleY = flags.at("--scale-y"); scaleY) {
-    if (Error err = setNonZeroInt(options.scaleY, scaleY, "scale-y", expt_scale); err) {
-      return err;
-    }
+    TRY(setNonZeroInt(options.scaleY, scaleY, "scale-y", expt_scale));
   }
   if (const docopt::value &scale = flags.at("--scale"); scale) {
     int scaleXY;
-    if (Error err = setNonZeroInt(scaleXY, scale, "scale", expt_scale); err) {
-      return err;
-    }
+    TRY(setNonZeroInt(scaleXY, scale, "scale", expt_scale));
     options.scaleX = options.scaleY = scaleXY;
   }
   if (const docopt::value &angle = flags.at("--angle"); angle) {
     long angleLong;
-    if (Error err = setInt(angleLong, angle, "angle"); err) return err;
+    TRY(setInt(angleLong, angle, "angle"));
     angleLong &= 3;
     options.angle = static_cast<int>(angleLong);
   }
@@ -382,12 +356,12 @@ Error readExportOptions(
   const ExportSpriteInfo info,
   const std::map<std::string, docopt::value> &flags
 ) {
-  if (Error err = setNameDir(options, flags); err) return err;
-  if (Error err = setStrideOffset(options, flags); err) return err;
-  if (Error err = setLayerFrame(options, info, flags); err) return err;
+  TRY(setNameDir(options, flags));
+  TRY(setStrideOffset(options, flags));
+  TRY(setLayerFrame(options, info, flags));
   options.composite = !flags.at("--no-composite").asBool();
-  if (Error err = setFormat(options, info, flags); err) return err;
-  if (Error err = setVisibility(options, flags); err) return err;
-  if (Error err = setScaleAngle(options, flags); err) return err;
+  TRY(setFormat(options, info, flags));
+  TRY(setVisibility(options, flags));
+  TRY(setScaleAngle(options, flags));
   return {};
 }

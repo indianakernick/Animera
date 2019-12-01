@@ -120,9 +120,9 @@ Error initWriteFile(WriteContext &ctx) {
 }
 
 Error initWrite(WriteContext &ctx) {
-  if (Error err = initWritePng(ctx)) return err;
-  if (Error err = initWriteInfo(ctx)) return err;
-  if (Error err = initWriteFile(ctx)) return err;
+  TRY(initWritePng(ctx));
+  TRY(initWriteInfo(ctx));
+  TRY(initWriteFile(ctx));
   return {};
 }
 
@@ -205,9 +205,9 @@ Error initReadFile(ReadContext &ctx) {
 }
 
 Error initRead(ReadContext &ctx) {
-  if (Error err = initReadPng(ctx)) return err;
-  if (Error err = initReadInfo(ctx)) return err;
-  if (Error err = initReadFile(ctx)) return err;
+  TRY(initReadPng(ctx));
+  TRY(initReadInfo(ctx));
+  TRY(initReadFile(ctx));
   return {};
 }
 
@@ -259,7 +259,7 @@ Error exportPng(
 ) {
   WriteContext ctx;
   ctx.dev = &dev;
-  if (Error err = initWrite(ctx)) return err;
+  TRY(initWrite(ctx));
   
   if (setjmp(png_jmpbuf(ctx.png))) {
     return destroyWrite(ctx);
@@ -332,7 +332,7 @@ Error importPng(
 ) {
   ReadContext ctx;
   ctx.dev = &dev;
-  if (Error err = initRead(ctx)) return err;
+  TRY(initRead(ctx));
   std::unique_ptr<png_bytep[]> rows;
   
   if (setjmp(png_jmpbuf(ctx.png))) {
@@ -374,7 +374,7 @@ Error exportPng(
 ) {
   WriteContext ctx;
   ctx.dev = &dev;
-  if (Error err = initWrite(ctx)) return err;
+  TRY(initWrite(ctx));
   
   if (setjmp(png_jmpbuf(ctx.png))) {
     return destroyWrite(ctx);
@@ -417,7 +417,7 @@ Error importPng(
 ) {
   ReadContext ctx;
   ctx.dev = &dev;
-  if (Error err = initRead(ctx)) return err;
+  TRY(initRead(ctx));
   std::unique_ptr<png_byte[]> imageData;
   std::unique_ptr<png_bytep[]> rows;
   
