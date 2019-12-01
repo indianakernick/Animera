@@ -157,16 +157,20 @@ void RectangleSelectTool::mouseDown(const ToolMouseEvent &event) {
   status.appendLabeled(mode);
   
   if (mode == SelectMode::copy) {
-    if (event.button == ButtonType::primary) startPos = event.pos;
+    if (event.button == ButtonType::primary) {
+      startPos = event.pos;
+      ctx->lock();
+      status.append("SELECTION: ");
+      status.append({event.pos, QSize{1, 1}});
+    } else {
+      status.appendLabeled(event.pos);
+    }
     drawSquarePoint(*ctx->overlay, tool_overlay_color, event.pos);
-    status.append("SELECTION: ");
-    status.append({event.pos, QSize{1, 1}});
     ctx->emitChanges(ToolChanges::overlay);
-    ctx->lock();
   } else if (mode == SelectMode::paste) {
-    showOverlay(event.pos);
     status.append("SELECTION: ");
     status.append({event.pos + offset, bounds.size()});
+    showOverlay(event.pos);
     paste(event.pos, event.button);
   } else Q_UNREACHABLE();
   
@@ -237,16 +241,20 @@ void PolygonSelectTool::mouseDown(const ToolMouseEvent &event) {
   status.appendLabeled(mode);
   
   if (mode == SelectMode::copy) {
-    if (event.button == ButtonType::primary) initPoly(event.pos);
+    if (event.button == ButtonType::primary) {
+      initPoly(event.pos);
+      ctx->lock();
+      status.append("SELECTION: ");
+      status.append({event.pos, QSize{1, 1}});
+    } else {
+      status.appendLabeled(event.pos);
+    }
     drawSquarePoint(*ctx->overlay, tool_overlay_color, event.pos);
-    status.append("SELECTION: ");
-    status.append({event.pos, QSize{1, 1}});
     ctx->emitChanges(ToolChanges::overlay);
-    ctx->lock();
   } else if (mode == SelectMode::paste) {
-    showOverlay(event.pos);
     status.append("SELECTION: ");
     status.append({event.pos + offset, bounds.size()});
+    showOverlay(event.pos);
     pasteWithMask(event.pos, event.button, mask);
   } else Q_UNREACHABLE();
   
@@ -356,10 +364,10 @@ void WandSelectTool::mouseDown(const ToolMouseEvent &event) {
       addToSelection(event);
     }
   } else if (mode == SelectMode::paste) {
-    clearImage(*ctx->overlay);
-    showOverlay(event.pos);
     status.append("SELECTION: ");
     status.append({event.pos + offset, bounds.size()});
+    clearImage(*ctx->overlay);
+    showOverlay(event.pos);
     pasteWithMask(event.pos, event.button, mask);
   } else Q_UNREACHABLE();
   
@@ -372,7 +380,8 @@ void WandSelectTool::mouseMove(const ToolMouseEvent &event) {
   if (mode == SelectMode::copy) {
     status.appendLabeled(event.pos);
   } else if (mode == SelectMode::paste) {
-    status.appendLabeled(event.pos + offset);
+    status.append("SELECTION: ");
+    status.append({event.pos + offset, bounds.size()});
     clearImage(*ctx->overlay);
     showOverlay(event.pos);
     ctx->emitChanges(ToolChanges::overlay);
