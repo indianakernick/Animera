@@ -10,6 +10,7 @@
 
 #include <limits>
 #include "config.hpp"
+#include "scope time.hpp"
 #include <Graphics/copy.hpp>
 #include <Graphics/fill.hpp>
 #include <Graphics/mask.hpp>
@@ -85,6 +86,8 @@ void compositeFrame(
   const Frame &frame,
   const Format format
 ) {
+  SCOPE_TIME("compositeFrame");
+  
   auto dstSurface = makeSurface<gfx::Pixel<PxFmt>>(dst);
   
   switch (format) {

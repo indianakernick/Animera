@@ -259,6 +259,8 @@ Maybe an ellipse tool
 
 what's up the the height of the timeline?
   reduce to min then go fullscreen
+  https://forum.qt.io/topic/109357/prevent-the-child-of-a-qsplitter-from-resizing-when-the-splitter-resizes
+  might need to create a custom splitter
   
 set cursor and respond to clicks more precisely
   setMask could help

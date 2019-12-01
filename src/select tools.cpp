@@ -12,6 +12,7 @@
 #include "connect.hpp"
 #include "painting.hpp"
 #include "composite.hpp"
+#include "scope time.hpp"
 #include "surface factory.hpp"
 #include "graphics convert.hpp"
 #include <Graphics/flood fill.hpp>
@@ -23,6 +24,8 @@ SelectTool<Derived>::~SelectTool() {
 
 template <typename Derived>
 bool SelectTool<Derived>::resizeImages() {
+  SCOPE_TIME("SelectTool::resizeImages");
+  
   const QImage::Format format = qimageFormat(ctx->format);
   if (selection.format() != format || selection.size() != ctx->size) {
     selection = {ctx->size, format};
@@ -36,6 +39,8 @@ bool SelectTool<Derived>::resizeImages() {
 
 template <typename Derived>
 void SelectTool<Derived>::copy(const QPoint pos) {
+  SCOPE_TIME("SelectTool::copy");
+  
   QImage overlayView = view(overlay, bounds);
   const QRect rect = bounds.intersected(ctx->cell->rect());
   if (rect.isEmpty()) {
@@ -61,6 +66,8 @@ void SelectTool<Derived>::copyWithMask(
   const QPoint pos,
   const QImage &mask
 ) {
+  SCOPE_TIME("SelectTool::copyWithMask");
+  
   const QRect rect = bounds.intersected(ctx->cell->rect());
   if (!rect.isEmpty()) {
     blitMaskImage(
@@ -86,6 +93,8 @@ void SelectTool<Derived>::paste(
   const QPoint pos,
   const ButtonType button
 ) {
+  SCOPE_TIME("SelectTool::paste");
+  
   if (button == ButtonType::secondary) {
     return ctx->emitChanges(ToolChanges::overlay);
   }
@@ -108,6 +117,8 @@ void SelectTool<Derived>::pasteWithMask(
   const ButtonType button,
   const QImage &mask
 ) {
+  SCOPE_TIME("SelectTool::pasteWithMask");
+  
   if (button == ButtonType::secondary) {
     return ctx->emitChanges(ToolChanges::overlay);
   }
@@ -125,11 +136,15 @@ void SelectTool<Derived>::pasteWithMask(
 
 template <typename Derived>
 void SelectTool<Derived>::showOverlay(const QPoint pos) {
+  SCOPE_TIME("SelectTool::showOverlay");
+  
   blitImage(*ctx->overlay, cview(overlay, bounds), pos + offset);
 }
 
 template <typename Derived>
 void SelectTool<Derived>::toggleMode() {
+  SCOPE_TIME("SelectTool::toggleMode");
+  
   if (mode == SelectMode::copy) {
     if (!bounds.isEmpty()) mode = SelectMode::paste;
   } else if (mode == SelectMode::paste) {
@@ -138,16 +153,22 @@ void SelectTool<Derived>::toggleMode() {
 }
 
 void RectangleSelectTool::attachCell() {
+  SCOPE_TIME("RectangleSelectTool::attachCell");
+  
   resizeImages();
 }
 
 void RectangleSelectTool::mouseLeave(const ToolLeaveEvent &) {
+  SCOPE_TIME("RectangleSelectTool::mouseLeave");
+  
   clearImage(*ctx->overlay);
   ctx->emitChanges(ToolChanges::overlay);
   ctx->clearStatus();
 }
 
 void RectangleSelectTool::mouseDown(const ToolMouseEvent &event) {
+  SCOPE_TIME("RectangleSelectTool::mouseDown");
+  
   clearImage(*ctx->overlay);
   if (event.button == ButtonType::secondary) {
     toggleMode();
@@ -178,6 +199,8 @@ void RectangleSelectTool::mouseDown(const ToolMouseEvent &event) {
 }
 
 void RectangleSelectTool::mouseMove(const ToolMouseEvent &event) {
+  SCOPE_TIME("RectangleSelectTool::mouseMove");
+  
   clearImage(*ctx->overlay);
   StatusMsg status;
   status.appendLabeled(mode);
@@ -201,6 +224,8 @@ void RectangleSelectTool::mouseMove(const ToolMouseEvent &event) {
 }
 
 void RectangleSelectTool::mouseUp(const ToolMouseEvent &event) {
+  SCOPE_TIME("RectangleSelectTool::mouseUp");
+  
   if (event.button != ButtonType::primary) return;
   if (mode == SelectMode::copy) {
     ctx->unlock();
@@ -220,18 +245,24 @@ void RectangleSelectTool::mouseUp(const ToolMouseEvent &event) {
 }
 
 void PolygonSelectTool::attachCell() {
+  SCOPE_TIME("PolygonSelectTool::attachCell");
+  
   if (resizeImages()) {
     mask = {ctx->size, mask_format};
   }
 }
 
 void PolygonSelectTool::mouseLeave(const ToolLeaveEvent &) {
+  SCOPE_TIME("PolygonSelectTool::mouseLeave");
+  
   clearImage(*ctx->overlay);
   ctx->emitChanges(ToolChanges::overlay);
   ctx->clearStatus();
 }
 
 void PolygonSelectTool::mouseDown(const ToolMouseEvent &event) {
+  SCOPE_TIME("PolygonSelectTool::mouseDown");
+  
   clearImage(*ctx->overlay);
   if (event.button == ButtonType::secondary) {
     toggleMode();
@@ -262,6 +293,8 @@ void PolygonSelectTool::mouseDown(const ToolMouseEvent &event) {
 }
 
 void PolygonSelectTool::mouseMove(const ToolMouseEvent &event) {
+  SCOPE_TIME("PolygonSelectTool::mouseMove");
+  
   clearImage(*ctx->overlay);
   StatusMsg status;
   status.appendLabeled(mode);
@@ -285,6 +318,8 @@ void PolygonSelectTool::mouseMove(const ToolMouseEvent &event) {
 }
 
 void PolygonSelectTool::mouseUp(const ToolMouseEvent &event) {
+  SCOPE_TIME("PolygonSelectTool::mouseUp");
+  
   if (event.button != ButtonType::primary) return;
   if (mode == SelectMode::copy) {
     ctx->unlock();
@@ -306,12 +341,16 @@ void PolygonSelectTool::mouseUp(const ToolMouseEvent &event) {
 }
 
 void PolygonSelectTool::initPoly(const QPoint point) {
+  SCOPE_TIME("PolygonSelectTool::initPoly");
+  
   polygon.clear();
   polygon.push_back(point);
   bounds = toRect(point);
 }
 
 void PolygonSelectTool::pushPoly(const QPoint point) {
+  SCOPE_TIME("PolygonSelectTool::pushPoly");
+  
   assert(!polygon.empty());
   if (polygon.back() == point) return;
   polygon.push_back(point);
@@ -325,6 +364,8 @@ WandSelectTool::WandSelectTool() {
 }
 
 void WandSelectTool::attachCell() {
+  SCOPE_TIME("WandSelectTool::attachCell");
+  
   clearImage(*ctx->overlay);
   ctx->emitChanges(ToolChanges::overlay);
   mode = SelectMode::copy;
@@ -336,12 +377,16 @@ void WandSelectTool::attachCell() {
 }
 
 void WandSelectTool::detachCell() {
+  SCOPE_TIME("WandSelectTool::detachCell");
+  
   animTimer.stop();
   clearImage(*ctx->overlay);
   ctx->emitChanges(ToolChanges::overlay);
 }
 
 void WandSelectTool::mouseLeave(const ToolLeaveEvent &) {
+  SCOPE_TIME("WandSelectTool::mouseLeave");
+  
   if (mode == SelectMode::paste) {
     clearImage(*ctx->overlay);
     ctx->emitChanges(ToolChanges::overlay);
@@ -350,6 +395,8 @@ void WandSelectTool::mouseLeave(const ToolLeaveEvent &) {
 }
 
 void WandSelectTool::mouseDown(const ToolMouseEvent &event) {
+  SCOPE_TIME("WandSelectTool::mouseDown");
+  
   if (event.button == ButtonType::secondary) {
     toggleMode(event);
     ctx->emitChanges(ToolChanges::overlay);
@@ -375,6 +422,8 @@ void WandSelectTool::mouseDown(const ToolMouseEvent &event) {
 }
 
 void WandSelectTool::mouseMove(const ToolMouseEvent &event) {
+  SCOPE_TIME("WandSelectTool::mouseMove");
+  
   StatusMsg status;
   status.appendLabeled(mode);
   if (mode == SelectMode::copy) {
@@ -390,6 +439,8 @@ void WandSelectTool::mouseMove(const ToolMouseEvent &event) {
 }
 
 void WandSelectTool::toggleMode(const ToolMouseEvent &event) {
+  SCOPE_TIME("WandSelectTool::toggleMode");
+  
   if (mode == SelectMode::paste) {
     mode = SelectMode::copy;
     clearImage(*ctx->overlay);
@@ -449,6 +500,8 @@ private:
 }
 
 void WandSelectTool::addToSelection(const ToolMouseEvent &event) {
+  SCOPE_TIME("WandSelectTool::addToSelection");
+  
   QRect rect = toRect(ctx->size);
   if (sampleCell(*ctx->cell, event.pos) == 0) {
     ctx->growCell(rect);
@@ -493,6 +546,8 @@ void WandSelectTool::addToSelection(const ToolMouseEvent &event) {
 }
 
 QRgb WandSelectTool::getOverlayColor() const {
+  SCOPE_TIME("WandSelectTool::getOverlayColor");
+  
   static_assert(wand_frames % 2 == 0);
   constexpr int half_frames = wand_frames / 2;
   const int mirroredFrame = animFrame > half_frames ? wand_frames - animFrame : animFrame;
@@ -501,6 +556,8 @@ QRgb WandSelectTool::getOverlayColor() const {
 }
 
 void WandSelectTool::paintOverlay() const {
+  SCOPE_TIME("WandSelectTool::paintOverlay");
+  
   const QRect rect = toRect(ctx->size).intersected(ctx->cell->rect());
   if (rect.isEmpty()) return;
   fillMaskImage(*ctx->overlay, cview(mask, rect), getOverlayColor(), rect.topLeft());
@@ -508,6 +565,8 @@ void WandSelectTool::paintOverlay() const {
 }
 
 void WandSelectTool::animate() {
+  SCOPE_TIME("WandSelectTool::animate");
+  
   paintOverlay();
   animFrame = (animFrame + 1) % wand_frames;
 }

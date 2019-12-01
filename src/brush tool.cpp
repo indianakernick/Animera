@@ -10,15 +10,20 @@
 
 #include "cell.hpp"
 #include "painting.hpp"
+#include "scope time.hpp"
 #include "graphics convert.hpp"
 
 void BrushTool::mouseLeave(const ToolLeaveEvent &) {
+  SCOPE_TIME("BrushTool::mouseLeave");
+  
   clearImage(*ctx->overlay);
   ctx->emitChanges(ToolChanges::overlay);
   ctx->clearStatus();
 }
 
 void BrushTool::mouseDown(const ToolMouseEvent &event) {
+  SCOPE_TIME("BrushTool::mouseDown");
+  
   clearImage(*ctx->overlay);
   symPoint(*ctx->overlay, tool_overlay_color, event.pos);
   ctx->growCell(symPointRect(event.pos));
@@ -31,6 +36,8 @@ void BrushTool::mouseDown(const ToolMouseEvent &event) {
 }
 
 void BrushTool::mouseMove(const ToolMouseEvent &event) {
+  SCOPE_TIME("BrushTool::mouseMove");
+  
   clearImage(*ctx->overlay);
   symPoint(*ctx->overlay, tool_overlay_color, event.pos);
   symPointStatus(event.pos);
@@ -45,6 +52,8 @@ void BrushTool::mouseMove(const ToolMouseEvent &event) {
 }
 
 void BrushTool::mouseUp(const ToolMouseEvent &event) {
+  SCOPE_TIME("BrushTool::mouseUp");
+  
   ctx->unlock();
   symPointStatus(event.pos);
   ctx->growCell(symPointRect(event.pos));
@@ -80,6 +89,8 @@ QPoint reflectXY(const QSize size, const QPoint point) {
 }
 
 void BrushTool::symPointStatus(const QPoint point) {
+  SCOPE_TIME("BrushTool::symPointStatus");
+  
   StatusMsg status;
   const QPoint refl = reflectXY(ctx->size, point);
   status.appendLabeled(point);
@@ -99,6 +110,8 @@ void BrushTool::symPointStatus(const QPoint point) {
 }
 
 bool BrushTool::symPoint(QImage &img, const QRgb col, const QPoint point) {
+  SCOPE_TIME("BrushTool::symPoint");
+  
   const QPoint refl = reflectXY(img.size(), point);
   bool drawn = drawRoundPoint(img, col, point, radius);
   if (test_flag(mode, SymmetryMode::hori)) {
@@ -114,6 +127,8 @@ bool BrushTool::symPoint(QImage &img, const QRgb col, const QPoint point) {
 }
 
 bool BrushTool::symLine(QImage &img, const QRgb col, const QLine line) {
+  SCOPE_TIME("BrushTool::symLine");
+  
   const QSize size = ctx->size;
   bool drawn = drawLine(img, col, line, radius);
   if (test_flag(mode, SymmetryMode::hori)) {
@@ -132,8 +147,10 @@ bool BrushTool::symLine(QImage &img, const QRgb col, const QLine line) {
 }
 
 QRect BrushTool::symPointRect(const QPoint point) {
+  SCOPE_TIME("BrushTool::symPointRect");
+  
   const QPoint refl = reflectXY(ctx->size, point);
-  QRect rect = toRect(point);
+  QRect rect = convert(gfx::circleRect(convert(point), radius));
   if (test_flag(mode, SymmetryMode::hori)) {
     rect = rect.united(convert(gfx::circleRect({refl.x(), point.y()}, radius)));
   }

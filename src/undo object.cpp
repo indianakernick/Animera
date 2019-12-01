@@ -9,6 +9,7 @@
 #include "undo object.hpp"
 
 #include "config.hpp"
+#include "scope time.hpp"
 
 UndoObject::UndoObject(QObject *parent)
   : QObject{parent} {}
@@ -29,6 +30,8 @@ void UndoObject::keyPress(const Qt::Key key) {
 }
 
 void UndoObject::cellModified() {
+  SCOPE_TIME("UndoObject::cellModified");
+  
   // TODO: not notified of cells being cleared or pasted onto
   // maybe we could listen to the timeline.modified signal?
   stack.modify(*cell);
@@ -53,6 +56,8 @@ void UndoObject::redo() {
 }
 
 void UndoObject::restore(const Cell &newCell) {
+  SCOPE_TIME("UndoObject::restore");
+  
   if (cell->isNull() > newCell.isNull()) {
     Q_EMIT shouldGrowCell(newCell.rect());
     copyImage(cell->img, newCell.img);

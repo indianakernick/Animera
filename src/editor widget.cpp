@@ -12,6 +12,7 @@
 #include "config.hpp"
 #include "connect.hpp"
 #include "composite.hpp"
+#include "scope time.hpp"
 #include <QtGui/qevent.h>
 #include <QtGui/qpainter.h>
 #include "surface factory.hpp"
@@ -60,6 +61,8 @@ public:
   }
   
   void setScale(const int newScale) {
+    SCOPE_TIME("EditorView::setScale");
+    
     const int oldScale = scale;
     scale = std::clamp(newScale, edit_min_scale, edit_max_scale);
     if (scale == oldScale) return;
@@ -149,6 +152,8 @@ private:
   }
   
   void updateCheckers(const QSize size) {
+    SCOPE_TIME("EditorWidget::updateCheckers");
+    
     /*
     
     scale = 3
@@ -181,6 +186,8 @@ private:
   }
   
   void paintEvent(QPaintEvent *) override {
+    SCOPE_TIME("EditorView::paintEvent");
+    
     QPainter painter{this};
     const QRect viewRect = getViewRect();
     painter.drawImage(viewRect, checkers, QRect{
@@ -305,21 +312,29 @@ EditorWidget::EditorWidget(QWidget *parent)
 }
 
 void EditorWidget::composite() {
+  SCOPE_TIME("EditorWidget::composite");
+  
   compositeFrame(view->getTarget(), palette, frame, format);
   view->repaint();
 }
 
 void EditorWidget::compositeOverlay() {
+  SCOPE_TIME("EditorWidget::compositeOverlay");
+  
   view->repaint();
 }
 
 void EditorWidget::compositePalette() {
+  SCOPE_TIME("EditorWidget::compositePalette");
+  
   if (format == Format::index) {
     composite();
   }
 }
 
 void EditorWidget::setFrame(const Frame &newFrame) {
+  SCOPE_TIME("EditorWidget::setFrame");
+  
   frame = newFrame;
   composite();
 }
@@ -366,6 +381,8 @@ void EditorWidget::showEvent(QShowEvent *) {
 }
 
 void EditorWidget::resizeEvent(QResizeEvent *event) {
+  SCOPE_TIME("EditorWidget::resizeEvent");
+  
   view->resize();
   adjustMargins();
   QScrollArea::resizeEvent(event);

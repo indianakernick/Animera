@@ -164,6 +164,7 @@
 		4529A9F8238E22660034A014 /* docopt_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = docopt_private.h; sourceTree = "<group>"; };
 		4529A9FB239263110034A014 /* docopt helpers.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "docopt helpers.cpp"; sourceTree = "<group>"; };
 		4529A9FC239263110034A014 /* docopt helpers.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "docopt helpers.hpp"; sourceTree = "<group>"; };
+		4529A9FE23937E8E0034A014 /* scope time.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "scope time.hpp"; sourceTree = "<group>"; };
 		453A20C4231A078100F055BA /* sprite file.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "sprite file.cpp"; sourceTree = "<group>"; };
 		453A20C5231A078100F055BA /* sprite file.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "sprite file.hpp"; sourceTree = "<group>"; };
 		453A20C7231A139100F055BA /* palette span.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "palette span.hpp"; sourceTree = "<group>"; };
@@ -818,6 +819,7 @@
 				45C5C8D12389219C0056CEE7 /* cli.hpp */,
 				4529A9FB239263110034A014 /* docopt helpers.cpp */,
 				4529A9FC239263110034A014 /* docopt helpers.hpp */,
+				4529A9FE23937E8E0034A014 /* scope time.hpp */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -2041,6 +2043,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					GLM_FORCE_SILENT_WARNINGS,
 					NDEBUG,
+					ENABLE_SCOPE_TIME,
 				);
 				HEADER_SEARCH_PATHS = (
 					$PROJECT_DIR/include,
