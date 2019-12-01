@@ -11,6 +11,10 @@
 
 #ifdef ENABLE_SCOPE_TIME
 
+// TODO: refactor Profiler
+// I first wrote this in 2016
+// It hasn't really changed much since
+
 #include <chrono>
 #include <cstdio>
 #include <vector>

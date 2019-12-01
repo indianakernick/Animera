@@ -27,10 +27,20 @@ private:
   SymmetryMode mode = SymmetryMode::none;
   QRgb color = 0;
   
+  template <typename Func>
+  void visit(Func, bool = true) const;
+  template <typename Func>
+  void visit(QPoint, Func, bool = true) const;
+  template <typename Func>
+  void visit(QLine, Func, bool = true) const;
+  
   void symPointStatus(QPoint);
-  bool symPoint(QImage &, QRgb, QPoint);
-  bool symLine(QImage &, QRgb, QLine);
-  QRect symPointRect(QPoint);
+  void symPointOverlay(QPoint);
+  void symPoint(QPoint);
+  void symLine(QLine);
+  QRect symPointRect(QPoint) const;
+  QRect pointRect(QPoint) const;
+  QRect lineRect(QLine) const;
 };
 
 #endif

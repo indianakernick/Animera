@@ -236,6 +236,8 @@ void writeOverlay(
 }
 
 void growCell(Cell &cell, const Format format, const QRect rect) {
+  SCOPE_TIME("growCell");
+  
   if (!cell) {
     cell.img = {rect.size(), qimageFormat(format)};
     cell.pos = rect.topLeft();
