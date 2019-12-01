@@ -66,16 +66,16 @@ static const uint qt_meta_data_ToolCtx[] = {
 
  // signals: name, argc, parameters, tag, flags
        1,    1,   49,    2, 0x06 /* Public */,
-       3,    0,   52,    2, 0x06 /* Public */,
-       4,    1,   53,    2, 0x06 /* Public */,
-       6,    0,   56,    2, 0x06 /* Public */,
-       7,    1,   57,    2, 0x06 /* Public */,
-       8,    0,   60,    2, 0x06 /* Public */,
-       9,    0,   61,    2, 0x06 /* Public */,
+       3,    1,   52,    2, 0x06 /* Public */,
+       4,    1,   55,    2, 0x06 /* Public */,
+       6,    0,   58,    2, 0x06 /* Public */,
+       7,    1,   59,    2, 0x06 /* Public */,
+       8,    0,   62,    2, 0x06 /* Public */,
+       9,    0,   63,    2, 0x06 /* Public */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::QRect,    2,
-    QMetaType::Void,
+    QMetaType::Void, QMetaType::QRect,    2,
     QMetaType::Void, 0x80000000 | 5,    2,
     QMetaType::Void,
     QMetaType::Void, QMetaType::QRect,    2,
@@ -92,7 +92,7 @@ void ToolCtx::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, voi
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->cellModified((*reinterpret_cast< QRect(*)>(_a[1]))); break;
-        case 1: _t->overlayModified(); break;
+        case 1: _t->overlayModified((*reinterpret_cast< QRect(*)>(_a[1]))); break;
         case 2: _t->shouldShowNorm((*reinterpret_cast< std::string_view(*)>(_a[1]))); break;
         case 3: _t->changingAction(); break;
         case 4: _t->cellRequested((*reinterpret_cast< QRect(*)>(_a[1]))); break;
@@ -110,7 +110,7 @@ void ToolCtx::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, voi
             }
         }
         {
-            using _t = void (ToolCtx::*)() const;
+            using _t = void (ToolCtx::*)(QRect ) const;
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ToolCtx::overlayModified)) {
                 *result = 1;
                 return;
@@ -202,9 +202,10 @@ void ToolCtx::cellModified(QRect _t1)const
 }
 
 // SIGNAL 1
-void ToolCtx::overlayModified()const
+void ToolCtx::overlayModified(QRect _t1)const
 {
-    QMetaObject::activate(const_cast< ToolCtx *>(this), &staticMetaObject, 1, nullptr);
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    QMetaObject::activate(const_cast< ToolCtx *>(this), &staticMetaObject, 1, _a);
 }
 
 // SIGNAL 2

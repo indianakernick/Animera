@@ -22,7 +22,6 @@ public:
   void setMode(SymmetryMode);
 
 private:
-  QPoint lastPos = no_point;
   int radius = brsh_radius.def;
   SymmetryMode mode = SymmetryMode::none;
   QRgb color = 0;
@@ -35,7 +34,8 @@ private:
   void visit(QLine, Func, bool = true) const;
   
   void symPointStatus(QPoint);
-  void symPointOverlay(QPoint);
+  void symPointOverlay(QPoint, QRgb);
+  void symChangeOverlay(QLine);
   void symPoint(QPoint);
   void symLine(QLine);
   QRect symPointRect(QPoint) const;

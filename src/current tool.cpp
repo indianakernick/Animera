@@ -24,30 +24,30 @@ void CurrentTool::setCell(Cell *newCell) {
 
 void CurrentTool::mouseLeave() {
   assert(tool);
-  tool->mouseLeave({button});
+  tool->mouseLeave({lastPos, button});
 }
 
 void CurrentTool::mouseDown(const QPoint ePos, const ButtonType eButton) {
   assert(tool);
   if (button == ButtonType::none) {
     button = eButton;
+    tool->mouseDown({ePos, lastPos, eButton});
     lastPos = ePos;
-    tool->mouseDown({ePos, eButton});
   }
 }
 
 void CurrentTool::mouseMove(const QPoint ePos) {
   assert(tool);
   if (ePos != lastPos) {
+    tool->mouseMove({ePos, lastPos, button});
     lastPos = ePos;
-    tool->mouseMove({ePos, button});
   }
 }
 
 void CurrentTool::mouseMove() {
   assert(tool);
   if (button == ButtonType::none) {
-    tool->mouseMove({lastPos, ButtonType::none});
+    tool->mouseMove({lastPos, lastPos, ButtonType::none});
   }
 }
 
@@ -55,8 +55,8 @@ void CurrentTool::mouseUp(const QPoint ePos, const ButtonType eButton) {
   assert(tool);
   if (eButton == button) {
     button = ButtonType::none;
+    tool->mouseUp({ePos, lastPos, eButton});
     lastPos = ePos;
-    tool->mouseUp({ePos, eButton});
   }
 }
 

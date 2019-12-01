@@ -319,10 +319,11 @@ void EditorWidget::composite(const QRect rect) {
   view->repaint({rect.topLeft() * scale, rect.size() * scale});
 }
 
-void EditorWidget::compositeOverlay() {
+void EditorWidget::compositeOverlay(const QRect rect) {
   SCOPE_TIME("EditorWidget::compositeOverlay");
   
-  view->repaint();
+  const int scale = view->getScale();
+  view->repaint({rect.topLeft() * scale, rect.size() * scale});
 }
 
 void EditorWidget::compositePalette() {

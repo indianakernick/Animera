@@ -13,22 +13,22 @@
 #include "scope time.hpp"
 #include "graphics convert.hpp"
 
-void BrushTool::mouseLeave(const ToolLeaveEvent &) {
+void BrushTool::mouseLeave(const ToolLeaveEvent &event) {
   SCOPE_TIME("BrushTool::mouseLeave");
   
-  clearImage(*ctx->overlay);
-  ctx->emitChanges(ToolChanges::overlay);
   ctx->clearStatus();
+  symPointOverlay(event.lastPos, 0);
+  symChangeOverlay({event.lastPos, event.lastPos});
 }
 
 void BrushTool::mouseDown(const ToolMouseEvent &event) {
   SCOPE_TIME("BrushTool::mouseDown");
   
-  clearImage(*ctx->overlay);
-  symPointOverlay(event.pos);
   symPointStatus(event.pos);
+  symPointOverlay(event.lastPos, 0);
+  symPointOverlay(event.pos, tool_overlay_color);
+  symChangeOverlay({event.lastPos, event.pos});
   ctx->growCell(symPointRect(event.pos));
-  lastPos = event.pos;
   color = ctx->selectColor(event.button);
   symPoint(event.pos);
   ctx->lock();
@@ -37,15 +37,15 @@ void BrushTool::mouseDown(const ToolMouseEvent &event) {
 void BrushTool::mouseMove(const ToolMouseEvent &event) {
   SCOPE_TIME("BrushTool::mouseMove");
   
-  clearImage(*ctx->overlay);
-  symPointOverlay(event.pos);
   symPointStatus(event.pos);
+  symPointOverlay(event.lastPos, 0);
+  symPointOverlay(event.pos, tool_overlay_color);
   if (event.button == ButtonType::none) {
-    return ctx->emitChanges(ToolChanges::overlay);
+    symChangeOverlay({event.lastPos, event.pos});
+  } else {
+    ctx->growCell(symPointRect(event.pos));
+    symLine({event.lastPos, event.pos});
   }
-  ctx->growCell(symPointRect(event.pos));
-  symLine({lastPos, event.pos});
-  lastPos = event.pos;
 }
 
 void BrushTool::mouseUp(const ToolMouseEvent &event) {
@@ -54,7 +54,7 @@ void BrushTool::mouseUp(const ToolMouseEvent &event) {
   ctx->unlock();
   symPointStatus(event.pos);
   ctx->growCell(symPointRect(event.pos));
-  symLine({lastPos, event.pos});
+  symLine({event.lastPos, event.pos});
   ctx->finishChange();
 }
 
@@ -119,11 +119,19 @@ void BrushTool::symPointStatus(const QPoint point) {
   ctx->showStatus(status);
 }
 
-void BrushTool::symPointOverlay(const QPoint point) {
+void BrushTool::symPointOverlay(const QPoint point, const QRgb col) {
   SCOPE_TIME("BrushTool::symPointOverlay");
   
-  visit(point, [this](const QPoint point) {
-    drawRoundPoint(*ctx->overlay, tool_overlay_color, point, radius);
+  visit(point, [this, col](const QPoint point) {
+    drawRoundPoint(*ctx->overlay, col, point, radius);
+  });
+}
+
+void BrushTool::symChangeOverlay(const QLine line) {
+  SCOPE_TIME("BrushTool::symChangeOverlay");
+  
+  visit(line, [this](const QLine line) {
+    ctx->emitChanges(false, lineRect(line));
   });
 }
 

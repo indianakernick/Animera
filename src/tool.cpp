@@ -12,7 +12,7 @@ void ToolCtx::emitChanges(const ToolChanges changes) const {
   if (changes == ToolChanges::cell || changes == ToolChanges::cell_overlay) {
     Q_EMIT cellModified(toRect(size));
   } else if (changes == ToolChanges::overlay) {
-    Q_EMIT overlayModified();
+    Q_EMIT overlayModified(toRect(size));
   }
 }
 
@@ -20,7 +20,7 @@ void ToolCtx::emitChanges(const bool drawn) const {
   if (drawn) {
     Q_EMIT cellModified(toRect(size));
   } else {
-    Q_EMIT overlayModified();
+    Q_EMIT overlayModified(toRect(size));
   }
 }
 
@@ -28,7 +28,7 @@ void ToolCtx::emitChanges(const bool drawn, const QRect rect) const {
   if (drawn) {
     Q_EMIT cellModified(rect);
   } else {
-    Q_EMIT overlayModified();
+    Q_EMIT overlayModified(rect);
   }
 }
 

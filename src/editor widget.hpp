@@ -32,7 +32,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
   void composite(QRect);
-  void compositeOverlay();
+  void compositeOverlay(QRect);
   void compositePalette();
   void setFrame(const Frame &);
   void setPalette(PaletteCSpan);

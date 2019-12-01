@@ -37,11 +37,13 @@ struct ToolColors {
 };
 
 struct ToolLeaveEvent {
+  QPoint lastPos;
   ButtonType button;
 };
 
 struct ToolMouseEvent {
   QPoint pos;
+  QPoint lastPos;
   ButtonType button;
 };
 
@@ -54,7 +56,7 @@ class ToolCtx final : public QObject {
 
 Q_SIGNALS:
   void cellModified(QRect) const;
-  void overlayModified() const;
+  void overlayModified(QRect) const;
   void shouldShowNorm(std::string_view) const;
   void changingAction() const;
   void cellRequested(QRect) const;

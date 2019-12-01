@@ -25,7 +25,7 @@ public:
 
 Q_SIGNALS:
   void cellModified(QRect);
-  void overlayModified();
+  void overlayModified(QRect);
   void shouldShowNorm(std::string_view);
   void changingAction();
   void cellRequested(QRect);
