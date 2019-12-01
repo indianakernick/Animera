@@ -33,9 +33,7 @@ public:
   }
   
   void adjustScale() {
-    const QSize size = overlay.size();
-    const QSize viewSize = parent->viewport()->size();
-    setScale(std::min(viewSize.width() / size.width(), viewSize.height() / size.height()));
+    setScale(getFittingScale());
   }
   
   void setSize(const QSize size) {
@@ -43,7 +41,11 @@ public:
     editor = {size, QImage::Format_ARGB32};
     clearImage(overlay);
     clearImage(editor);
-    adjustScale();
+    scale = getFittingScale();
+    setFixedSize(size * scale);
+    updateCheckers();
+    Q_EMIT resized();
+    repaint();
   }
   
   void resize() {
@@ -92,6 +94,15 @@ private:
   int scale = edit_min_scale;
   ButtonType buttonDown = ButtonType::none;
   bool keyButton = false;
+
+  int getFittingScale() const {
+    const QSize size = overlay.size();
+    const QSize viewSize = parent->viewport()->size();
+    const int horiScale = viewSize.width() / size.width();
+    const int vertScale = viewSize.height() / size.height();
+    const int minScale = std::min(horiScale, vertScale);
+    return std::clamp(minScale, edit_min_scale, edit_max_scale);
+  }
 
   void zoomIntoCenter(const int oldScale) {
     // TODO: this could still be improved
