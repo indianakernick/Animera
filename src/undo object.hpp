@@ -26,7 +26,7 @@ public Q_SLOTS:
   void cellModified();
 
 Q_SIGNALS:
-  void cellReverted();
+  void cellReverted(QRect);
   void shouldShowTemp(std::string_view);
   void shouldClearCell();
   void shouldGrowCell(QRect);

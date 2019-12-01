@@ -53,7 +53,7 @@ class ToolCtx final : public QObject {
   Q_OBJECT
 
 Q_SIGNALS:
-  void cellModified() const;
+  void cellModified(QRect) const;
   void overlayModified() const;
   void shouldShowNorm(std::string_view) const;
   void changingAction() const;
@@ -71,6 +71,7 @@ public:
   
   void emitChanges(ToolChanges) const;
   void emitChanges(bool) const;
+  void emitChanges(bool, QRect) const;
   void growCell(QRect) const;
   QRgb selectColor(ButtonType) const;
   void showStatus(const StatusMsg &) const;

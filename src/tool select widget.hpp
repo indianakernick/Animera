@@ -24,7 +24,7 @@ public:
   explicit ToolSelectWidget(QWidget *);
 
 Q_SIGNALS:
-  void cellModified();
+  void cellModified(QRect);
   void overlayModified();
   void shouldShowNorm(std::string_view);
   void changingAction();

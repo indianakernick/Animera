@@ -85,12 +85,12 @@ static const uint qt_meta_data_EditorWidget[] = {
        9,    1,   91,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      11,    0,   94,    2, 0x0a /* Public */,
-      12,    0,   95,    2, 0x0a /* Public */,
-      13,    0,   96,    2, 0x0a /* Public */,
-      14,    1,   97,    2, 0x0a /* Public */,
-      16,    1,  100,    2, 0x0a /* Public */,
-      18,    2,  103,    2, 0x0a /* Public */,
+      11,    1,   94,    2, 0x0a /* Public */,
+      12,    0,   97,    2, 0x0a /* Public */,
+      13,    0,   98,    2, 0x0a /* Public */,
+      14,    1,   99,    2, 0x0a /* Public */,
+      16,    1,  102,    2, 0x0a /* Public */,
+      18,    2,  105,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, 0x80000000 | 3,    2,
@@ -101,7 +101,7 @@ static const uint qt_meta_data_EditorWidget[] = {
     QMetaType::Void, 0x80000000 | 10,    2,
 
  // slots: parameters
-    QMetaType::Void,
+    QMetaType::Void, QMetaType::QRect,    2,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void, 0x80000000 | 15,    2,
@@ -123,7 +123,7 @@ void EditorWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         case 3: _t->mouseMove((*reinterpret_cast< QPoint(*)>(_a[1]))); break;
         case 4: _t->mouseUp((*reinterpret_cast< QPoint(*)>(_a[1])),(*reinterpret_cast< ButtonType(*)>(_a[2]))); break;
         case 5: _t->keyPress((*reinterpret_cast< Qt::Key(*)>(_a[1]))); break;
-        case 6: _t->composite(); break;
+        case 6: _t->composite((*reinterpret_cast< QRect(*)>(_a[1]))); break;
         case 7: _t->compositeOverlay(); break;
         case 8: _t->compositePalette(); break;
         case 9: _t->setFrame((*reinterpret_cast< const Frame(*)>(_a[1]))); break;

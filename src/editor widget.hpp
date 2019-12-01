@@ -31,7 +31,7 @@ Q_SIGNALS:
   void keyPress(Qt::Key);
 
 public Q_SLOTS:
-  void composite();
+  void composite(QRect);
   void compositeOverlay();
   void compositePalette();
   void setFrame(const Frame &);

@@ -17,7 +17,7 @@
 /// Take all of the images that make up a frame and composite them together into
 /// a single image
 template <typename PxFmt = gfx::ARGB>
-void compositeFrame(QImage &, PaletteCSpan, const Frame &, Format);
+void compositeFrame(QImage &, PaletteCSpan, const Frame &, Format, QRect);
 /// Composite the overlay on top of the frame
 void compositeOverlay(QImage &, const QImage &);
 

@@ -61,12 +61,13 @@ void UndoObject::restore(const Cell &newCell) {
   if (cell->isNull() > newCell.isNull()) {
     Q_EMIT shouldGrowCell(newCell.rect());
     copyImage(cell->img, newCell.img);
-    Q_EMIT cellReverted();
+    Q_EMIT cellReverted(newCell.rect());
   } else if (cell->isNull() < newCell.isNull()) {
     Q_EMIT shouldClearCell();
   } else {
+    const QRect rect = cell->rect().united(newCell.rect());
     *cell = newCell;
-    Q_EMIT cellReverted();
+    Q_EMIT cellReverted(rect);
   }
 }
 

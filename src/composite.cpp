@@ -35,44 +35,44 @@ template <typename Format>
 using Surface = gfx::Surface<gfx::Pixel<Format>>;
 
 template <typename Format>
-void compositeColor(Surface<Format> output, const Frame &frame) {
-  eachImage(frame, [output](const Cell &cell) {
+void compositeColor(Surface<Format> output, const Frame &frame, const QPoint outPos) {
+  eachImage(frame, [output, outPos](const Cell &cell) {
     gfx::porterDuffRegion(
       gfx::mode_src_over,
       output,
       makeCSurface<PixelRgba>(cell.img),
       Format{},
       gfx::ARGB{},
-      convert(cell.pos)
+      convert(cell.pos - outPos)
     );
   });
 }
 
 template <typename Format>
-void compositePalette(Surface<Format> output, const Frame &frame, PaletteCSpan palette) {
+void compositePalette(Surface<Format> output, const Frame &frame, const QPoint outPos, PaletteCSpan palette) {
   gfx::I<> format{palette.data()};
-  eachImage(frame, [output, format](const Cell &cell) {
+  eachImage(frame, [output, outPos, format](const Cell &cell) {
     gfx::porterDuffRegion(
       gfx::mode_src_over,
       output,
       makeCSurface<PixelIndex>(cell.img),
       Format{},
       format,
-      convert(cell.pos)
+      convert(cell.pos - outPos)
     );
   });
 }
 
 template <typename Format>
-void compositeGray(Surface<Format> output, const Frame &frame) {
-  eachImage(frame, [output](const Cell &cell) {
+void compositeGray(Surface<Format> output, const Frame &frame, const QPoint outPos) {
+  eachImage(frame, [output, outPos](const Cell &cell) {
     gfx::porterDuffRegion(
       gfx::mode_src_over,
       output,
       makeCSurface<PixelGray>(cell.img),
       Format{},
       gfx::YA{},
-      convert(cell.pos)
+      convert(cell.pos - outPos)
     );
   });
 }
@@ -84,31 +84,34 @@ void compositeFrame(
   QImage &dst,
   PaletteCSpan palette,
   const Frame &frame,
-  const Format format
+  const Format format,
+  QRect rect
 ) {
   SCOPE_TIME("compositeFrame");
   
-  auto dstSurface = makeSurface<gfx::Pixel<PxFmt>>(dst);
+  rect = rect.intersected(dst.rect());
+  if (rect.isEmpty()) return;
+  auto dstSurface = makeSurface<gfx::Pixel<PxFmt>>(dst).view(convert(rect));
   
   switch (format) {
     case Format::rgba:
-      gfx::overFill(dstSurface);
-      compositeColor<PxFmt>(dstSurface, frame);
+      gfx::fill(dstSurface);
+      compositeColor<PxFmt>(dstSurface, frame, rect.topLeft());
       break;
     case Format::index:
-      gfx::overFill(dstSurface);
-      compositePalette<PxFmt>(dstSurface, frame, palette);
+      gfx::fill(dstSurface);
+      compositePalette<PxFmt>(dstSurface, frame, rect.topLeft(), palette);
       break;
     case Format::gray:
-      gfx::overFill(dstSurface);
-      compositeGray<PxFmt>(dstSurface, frame);
+      gfx::fill(dstSurface);
+      compositeGray<PxFmt>(dstSurface, frame, rect.topLeft());
       break;
     default: Q_UNREACHABLE();
   }
 }
 
-template void compositeFrame<gfx::ARGB>(QImage &, PaletteCSpan, const Frame &, Format);
-template void compositeFrame<gfx::YA>(QImage &, PaletteCSpan, const Frame &, Format);
+template void compositeFrame<gfx::ARGB>(QImage &, PaletteCSpan, const Frame &, Format, QRect);
+template void compositeFrame<gfx::YA>(QImage &, PaletteCSpan, const Frame &, Format, QRect);
 
 void compositeOverlay(QImage &drawing, const QImage &overlay) {
   gfx::porterDuff(

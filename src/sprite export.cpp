@@ -62,9 +62,9 @@ void Exporter::setImageFrom(const Cell &cell) {
 
 void Exporter::setImageFrom(const Frame &frame) {
   if (format == Format::gray) {
-    compositeFrame<gfx::YA>(image, palette, frame, format);
+    compositeFrame<gfx::YA>(image, palette, frame, format, image.rect());
   } else {
-    compositeFrame<gfx::ARGB>(image, palette, frame, format);
+    compositeFrame<gfx::ARGB>(image, palette, frame, format, image.rect());
   }
 }
 

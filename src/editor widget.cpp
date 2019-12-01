@@ -311,11 +311,12 @@ EditorWidget::EditorWidget(QWidget *parent)
   setStyleSheet("background-color: " + glob_back_color.name());
 }
 
-void EditorWidget::composite() {
+void EditorWidget::composite(const QRect rect) {
   SCOPE_TIME("EditorWidget::composite");
   
-  compositeFrame(view->getTarget(), palette, frame, format);
-  view->repaint();
+  compositeFrame(view->getTarget(), palette, frame, format, rect);
+  const int scale = view->getScale();
+  view->repaint({rect.topLeft() * scale, rect.size() * scale});
 }
 
 void EditorWidget::compositeOverlay() {
@@ -328,7 +329,7 @@ void EditorWidget::compositePalette() {
   SCOPE_TIME("EditorWidget::compositePalette");
   
   if (format == Format::index) {
-    composite();
+    composite(toRect(size));
   }
 }
 
@@ -336,7 +337,7 @@ void EditorWidget::setFrame(const Frame &newFrame) {
   SCOPE_TIME("EditorWidget::setFrame");
   
   frame = newFrame;
-  composite();
+  composite(toRect(size));
 }
 
 void EditorWidget::setPalette(const PaletteCSpan newPalette) {

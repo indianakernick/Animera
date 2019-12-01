@@ -93,31 +93,31 @@ static const uint qt_meta_data_ToolSelectWidget[] = {
        7,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    0,  114,    2, 0x06 /* Public */,
-       3,    0,  115,    2, 0x06 /* Public */,
-       4,    1,  116,    2, 0x06 /* Public */,
-       6,    0,  119,    2, 0x06 /* Public */,
-       7,    1,  120,    2, 0x06 /* Public */,
-       8,    0,  123,    2, 0x06 /* Public */,
-       9,    0,  124,    2, 0x06 /* Public */,
+       1,    1,  114,    2, 0x06 /* Public */,
+       3,    0,  117,    2, 0x06 /* Public */,
+       4,    1,  118,    2, 0x06 /* Public */,
+       6,    0,  121,    2, 0x06 /* Public */,
+       7,    1,  122,    2, 0x06 /* Public */,
+       8,    0,  125,    2, 0x06 /* Public */,
+       9,    0,  126,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      10,    0,  125,    2, 0x0a /* Public */,
-      11,    2,  126,    2, 0x0a /* Public */,
-      13,    1,  131,    2, 0x0a /* Public */,
-      14,    2,  134,    2, 0x0a /* Public */,
-      15,    1,  139,    2, 0x0a /* Public */,
-      17,    1,  142,    2, 0x0a /* Public */,
-      19,    1,  145,    2, 0x0a /* Public */,
-      21,    1,  148,    2, 0x0a /* Public */,
-      23,    1,  151,    2, 0x0a /* Public */,
-      25,    2,  154,    2, 0x0a /* Public */,
-      27,    2,  159,    2, 0x08 /* Private */,
-      30,    0,  164,    2, 0x08 /* Private */,
-      31,    0,  165,    2, 0x08 /* Private */,
+      10,    0,  127,    2, 0x0a /* Public */,
+      11,    2,  128,    2, 0x0a /* Public */,
+      13,    1,  133,    2, 0x0a /* Public */,
+      14,    2,  136,    2, 0x0a /* Public */,
+      15,    1,  141,    2, 0x0a /* Public */,
+      17,    1,  144,    2, 0x0a /* Public */,
+      19,    1,  147,    2, 0x0a /* Public */,
+      21,    1,  150,    2, 0x0a /* Public */,
+      23,    1,  153,    2, 0x0a /* Public */,
+      25,    2,  156,    2, 0x0a /* Public */,
+      27,    2,  161,    2, 0x08 /* Private */,
+      30,    0,  166,    2, 0x08 /* Private */,
+      31,    0,  167,    2, 0x08 /* Private */,
 
  // signals: parameters
-    QMetaType::Void,
+    QMetaType::Void, QMetaType::QRect,    2,
     QMetaType::Void,
     QMetaType::Void, 0x80000000 | 5,    2,
     QMetaType::Void,
@@ -149,7 +149,7 @@ void ToolSelectWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
         auto *_t = static_cast<ToolSelectWidget *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->cellModified(); break;
+        case 0: _t->cellModified((*reinterpret_cast< QRect(*)>(_a[1]))); break;
         case 1: _t->overlayModified(); break;
         case 2: _t->shouldShowNorm((*reinterpret_cast< std::string_view(*)>(_a[1]))); break;
         case 3: _t->changingAction(); break;
@@ -174,7 +174,7 @@ void ToolSelectWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
     } else if (_c == QMetaObject::IndexOfMethod) {
         int *result = reinterpret_cast<int *>(_a[0]);
         {
-            using _t = void (ToolSelectWidget::*)();
+            using _t = void (ToolSelectWidget::*)(QRect );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ToolSelectWidget::cellModified)) {
                 *result = 0;
                 return;
@@ -266,9 +266,10 @@ int ToolSelectWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void ToolSelectWidget::cellModified()
+void ToolSelectWidget::cellModified(QRect _t1)
 {
-    QMetaObject::activate(this, &staticMetaObject, 0, nullptr);
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    QMetaObject::activate(this, &staticMetaObject, 0, _a);
 }
 
 // SIGNAL 1

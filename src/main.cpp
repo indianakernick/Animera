@@ -6,13 +6,13 @@
 //  Copyright © 2019 Indi Kernick. All rights reserved.
 //
 
-#define BUG_TEST 0
+#define EXPERIMENT 0
 #define BENCHMARK 1
 #define APP 2
 
 #define EXECUTE APP
 
-#if EXECUTE == BUG_TEST
+#if EXECUTE == EXPERIMENT
 
 /*#include <QtWidgets/qshortcut.h>
 #include <QtWidgets/qmainwindow.h>
@@ -2491,10 +2491,17 @@ int main(int argc, char **argv) {
 #elif EXECUTE == APP
   
 #include "cli.hpp"
+#include "scope time.hpp"
 
 int main(int argc, char **argv) {
-  CLI cli{argc, argv};
-  return cli.exec();
+  int ret;
+  {
+    SCOPE_TIME("main");
+    CLI cli{argc, argv};
+    ret = cli.exec();
+  }
+  SCOPE_TIME_INFO();
+  return ret;
 }
 
 #endif
