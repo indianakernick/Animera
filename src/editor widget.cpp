@@ -20,6 +20,8 @@
 #include <Graphics/iterator.hpp>
 #include <QtWidgets/qscrollbar.h>
 
+#define ENABLE_DEBUG_PAINT 1
+
 class EditorImage final : public QWidget {
   Q_OBJECT
   
@@ -80,6 +82,19 @@ public:
     setScale(scale + dir);
   }
   
+  void startDebugPaint() {
+    #if ENABLE_DEBUG_PAINT
+    assert(!debugPaint);
+    debugPaint = true;
+    #endif
+  }
+  void stopDebugPaint() {
+    #if ENABLE_DEBUG_PAINT
+    assert(debugPaint);
+    debugPaint = false;
+    #endif
+  }
+  
 Q_SIGNALS:
   void mouseEnter(QPoint);
   void mouseLeave();
@@ -98,6 +113,10 @@ private:
   int scale = edit_min_scale;
   ButtonType buttonDown = ButtonType::none;
   bool keyButton = false;
+  
+  #if ENABLE_DEBUG_PAINT
+  bool debugPaint = false;
+  #endif
 
   int getFittingScale() const {
     const QSize size = overlay.size();
@@ -186,7 +205,7 @@ private:
     }
   }
   
-  void paintEvent(QPaintEvent *) override {
+  void paintEvent([[maybe_unused]] QPaintEvent *event) override {
     SCOPE_TIME("EditorView::paintEvent");
     
     QPainter painter{this};
@@ -197,6 +216,12 @@ private:
     });
     painter.drawImage(rect(), editor);
     painter.drawImage(rect(), overlay);
+    
+    #if ENABLE_DEBUG_PAINT
+    if (debugPaint) {
+      painter.fillRect(event->rect(), QColor{0, 255, 0, 63});
+    }
+    #endif
   }
   
   QPoint getPixelPos(const QPointF localPos) {
@@ -320,14 +345,18 @@ void EditorWidget::composite(const QRect rect) {
   
   compositeFrame(view->getTarget(), palette, frame, format, rect);
   const int scale = view->getScale();
+  view->startDebugPaint();
   view->repaint({rect.topLeft() * scale, rect.size() * scale});
+  view->stopDebugPaint();
 }
 
 void EditorWidget::compositeOverlay(const QRect rect) {
   SCOPE_TIME("EditorWidget::compositeOverlay");
   
   const int scale = view->getScale();
+  view->startDebugPaint();
   view->repaint({rect.topLeft() * scale, rect.size() * scale});
+  view->stopDebugPaint();
 }
 
 void EditorWidget::compositePalette() {
