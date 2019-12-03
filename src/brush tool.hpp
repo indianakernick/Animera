@@ -22,7 +22,8 @@ public:
   void setMode(SymmetryMode);
 
 private:
-  int radius = brsh_radius.def;
+  // TODO: restore this to 0
+  int radius = 4;
   SymmetryMode mode = SymmetryMode::none;
   QRgb color = 0;
   

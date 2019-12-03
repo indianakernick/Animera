@@ -25,7 +25,6 @@ public:
   void mouseUp(const ToolMouseEvent &) override final;
 
 protected:
-  bool isDragging() const;
   QRgb getColor() const;
 
 private:
@@ -48,9 +47,8 @@ private:
   // TODO: restore this to 0
   int radius = 2;
  
-  bool drawPoint(QImage &, QPoint);
+  bool drawPoint(QImage &, QRgb, QPoint);
   bool drawDrag(QImage &, QPoint, QPoint);
-  void drawOverlay(QImage &, QPoint);
   void updateStatus(StatusMsg &, QPoint, QPoint);
   QRect pointRect(QPoint);
   QRect dragRect(QPoint, QPoint);
@@ -70,9 +68,8 @@ private:
   // TODO: restore this to 1
   int thickness = 8;
 
-  bool drawPoint(QImage &, QPoint);
+  bool drawPoint(QImage &, QRgb, QPoint);
   bool drawDrag(QImage &, QPoint, QPoint);
-  void drawOverlay(QImage &, QPoint);
   void updateStatus(StatusMsg &, QPoint, QPoint);
   QRect pointRect(QPoint);
   QRect dragRect(QPoint, QPoint);
@@ -89,9 +86,8 @@ public:
 private:
   gfx::CircleShape shape = gfx::CircleShape::c1x1;
   
-  bool drawPoint(QImage &, QPoint);
+  bool drawPoint(QImage &, QRgb, QPoint);
   bool drawDrag(QImage &, QPoint, QPoint);
-  void drawOverlay(QImage &, QPoint);
   void updateStatus(StatusMsg &, QPoint, QPoint);
   QRect pointRect(QPoint);
   QRect dragRect(QPoint, QPoint);
@@ -109,9 +105,8 @@ private:
   // TODO: restore this to 1
   int thickness = 4;
 
-  bool drawPoint(QImage &, QPoint);
+  bool drawPoint(QImage &, QRgb, QPoint);
   bool drawDrag(QImage &, QPoint, QPoint);
-  void drawOverlay(QImage &, QPoint);
   void updateStatus(StatusMsg &, QPoint, QPoint);
   QRect pointRect(QPoint);
   QRect dragRect(QPoint, QPoint);
@@ -124,9 +119,8 @@ public:
   ~FilledRectangleTool();
 
 private:
-  bool drawPoint(QImage &, QPoint);
+  bool drawPoint(QImage &, QRgb, QPoint);
   bool drawDrag(QImage &, QPoint, QPoint);
-  void drawOverlay(QImage &, QPoint);
   void updateStatus(StatusMsg &, QPoint, QPoint);
   QRect pointRect(QPoint);
   QRect dragRect(QPoint, QPoint);
