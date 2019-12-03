@@ -103,13 +103,12 @@ void BrushTool::visit(const QLine line, Func func, const bool first) const {
 void BrushTool::symPointStatus(const QPoint point) {
   SCOPE_TIME("BrushTool::symPointStatus");
   
-  StatusMsg status;
+  StatusMsg status = ctx->showStatus();
   status.appendLabeled(point);
   visit(point, [&status](const QPoint point) {
     status.append(' ');
     status.append(point);
   }, false);
-  ctx->showStatus(status);
 }
 
 void BrushTool::symPointOverlay(const QPoint point, const QRgb col) {

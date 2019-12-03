@@ -57,6 +57,10 @@ void ToolCtx::showStatus(const StatusMsg &status) const {
   Q_EMIT shouldShowNorm(status.get());
 }
 
+StatusMsg ToolCtx::showStatus() const {
+  return StatusMsg{this};
+}
+
 void ToolCtx::clearStatus() const {
   Q_EMIT shouldShowNorm("");
 }

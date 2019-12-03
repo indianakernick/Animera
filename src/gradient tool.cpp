@@ -26,18 +26,18 @@ void LinearGradientTool::mouseDown(const ToolMouseEvent &event) {
     mode = opposite(mode);
   }
   
-  StatusMsg status;
+  StatusMsg status = ctx->showStatus();
   status.appendLabeled(mode);
   
   if (event.button != ButtonType::primary) {
-    return ctx->showStatus(status.appendLabeled(event.pos));
+    status.appendLabeled(event.pos);
+    return;
   }
   
   startPos = event.pos;
   ctx->growCell(toRect(startPos));
   status.append("RECT: ");
   status.append({event.pos, QSize{1, 1}});
-  ctx->showStatus(status);
   cleanCell = *ctx->cell;
   const QPoint pos = ctx->cell->pos;
   drawSquarePoint(ctx->cell->img, ctx->colors.primary, startPos - pos);
@@ -51,11 +51,11 @@ void LinearGradientTool::mouseMove(const ToolMouseEvent &event) {
   drawSquarePoint(*ctx->overlay, 0, event.lastPos);
   drawSquarePoint(*ctx->overlay, tool_overlay_color, event.pos);
   
-  StatusMsg status;
+  StatusMsg status = ctx->showStatus();
   status.appendLabeled(mode);
   
   if (event.button != ButtonType::primary) {
-    ctx->showStatus(status.appendLabeled(event.pos));
+    status.appendLabeled(event.pos);
     ctx->changeOverlay(event.lastPos);
     ctx->changeOverlay(event.pos);
     return;
@@ -66,7 +66,6 @@ void LinearGradientTool::mouseMove(const ToolMouseEvent &event) {
   ctx->growCell(rect);
   status.append("RECT: ");
   status.append(rect);
-  ctx->showStatus(status);
   drawGradient(rect, event.pos);
   ctx->changeOverlay(event.lastPos);
   ctx->changeCell(rect);
@@ -75,10 +74,12 @@ void LinearGradientTool::mouseMove(const ToolMouseEvent &event) {
 void LinearGradientTool::mouseUp(const ToolMouseEvent &event) {
   SCOPE_TIME("LinearGradientTool::mouseUp");
   
-  if (event.button == ButtonType::primary) {
-    ctx->unlock();
-    ctx->finishChange();
-  }
+  if (event.button != ButtonType::primary) return;
+  StatusMsg status = ctx->showStatus();
+  status.appendLabeled(mode);
+  status.appendLabeled(event.pos);
+  ctx->unlock();
+  ctx->finishChange();
 }
 
 void LinearGradientTool::drawGradient(QRect rect, const QPoint endPos) {

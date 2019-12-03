@@ -14,11 +14,17 @@
 #include <QtCore/qrect.h>
 #include "paint params.hpp"
 
+class ToolCtx;
+
 class StatusMsg {
 public:
+  [[deprecated]] StatusMsg();
+  explicit StatusMsg(const ToolCtx *);
+  ~StatusMsg();
+
   void clear();
   bool empty() const;
-  std::string_view get() const;
+  [[deprecated]] std::string_view get() const;
 
   StatusMsg &append(bool);
   StatusMsg &append(char);
@@ -42,6 +48,7 @@ public:
   StatusMsg &appendLabeled(LineGradMode);
 
 private:
+  const ToolCtx *ctx;
   std::string msg;
 };
 
