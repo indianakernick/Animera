@@ -32,7 +32,7 @@ void Timeline::optimize() {
   LayerIdx idx{};
   for (Layer &layer : layers) {
     for (CellSpan &span : layer.spans) {
-      optimizeCell(*span.cell);
+      ::shrinkCell(*span.cell);
     }
     layer.spans.optimize();
     changeSpan(idx);
@@ -46,6 +46,7 @@ void Timeline::change() {
   changeFrameCount();
   changeLayerCount();
   changeFrame();
+  changeCell();
   changePos();
   Q_EMIT selectionChanged(selection);
   changeLayers(LayerIdx{0}, layerCount());
@@ -162,6 +163,7 @@ void Timeline::nextFrame() {
   if (locked) return;
   currPos.f = (currPos.f + FrameIdx{1}) % frameCount;
   changeFrame();
+  changeCell();
   changePos();
 }
 
@@ -169,6 +171,7 @@ void Timeline::prevFrame() {
   if (locked) return;
   currPos.f = (currPos.f - FrameIdx{1} + frameCount) % frameCount;
   changeFrame();
+  changeCell();
   changePos();
 }
 
@@ -256,6 +259,7 @@ void Timeline::removeLayer() {
     changeLayers(currPos.l, layerCount());
   }
   changeFrame();
+  changeCell();
   changePos();
   Q_EMIT modified();
 }
@@ -266,6 +270,7 @@ void Timeline::moveLayerUp() {
   std::swap(layers[+(currPos.l - LayerIdx{1})], layers[+currPos.l]);
   changeLayers(currPos.l - LayerIdx{1}, currPos.l + LayerIdx{1});
   changeFrame();
+  changeCell();
   layerAbove();
   Q_EMIT modified();
 }
@@ -276,6 +281,7 @@ void Timeline::moveLayerDown() {
   std::swap(layers[+currPos.l], layers[+(currPos.l + LayerIdx{1})]);
   changeLayers(currPos.l, currPos.l + LayerIdx{2});
   changeFrame();
+  changeCell();
   layerBelow();
   Q_EMIT modified();
 }
@@ -311,6 +317,7 @@ void Timeline::removeFrame() {
   }
   currPos.f = std::max(currPos.f - FrameIdx{1}, FrameIdx{0});
   changeFrame();
+  changeCell();
   changePos();
   Q_EMIT modified();
 }
@@ -320,6 +327,7 @@ void Timeline::clearCell() {
   layers[+currPos.l].spans.replace(currPos.f, false);
   changeSpan(currPos.l);
   changeFrame();
+  changeCell();
   changePos();
   Q_EMIT modified();
 }
@@ -356,6 +364,20 @@ void Timeline::growCell(const QRect rect) {
   Q_EMIT modified();
 }
 
+void Timeline::shrinkCell() {
+  if (locked) return;
+  Cell &cell = *getCell(currPos);
+  if (!cell) return;
+  ::shrinkCell(cell);
+  if (!cell) {
+    layers[+currPos.l].spans.optimize();
+    changeSpan(currPos.l);
+    changeFrame();
+    changePos();
+  }
+  Q_EMIT modified();
+}
+
 void Timeline::setCurrPos(const CellPos pos) {
   assert(LayerIdx{0} <= pos.l);
   assert(pos.l < layerCount());
@@ -365,6 +387,7 @@ void Timeline::setCurrPos(const CellPos pos) {
   if (currPos.f != pos.f) {
     currPos = pos;
     changeFrame();
+    changeCell();
     changePos();
   } else if (currPos.l != pos.l) {
     currPos.l = pos.l;
@@ -380,7 +403,7 @@ void Timeline::setVisibility(const LayerIdx idx, const bool visible) {
   if (layerVis != visible) {
     layerVis = visible;
     // Q_EMIT visibilityChanged(idx, visible);
-    changeFrame();
+    changeCell();
   }
   Q_EMIT modified();
 }
@@ -408,6 +431,7 @@ void Timeline::clearSelected() {
     changeSpan(l);
   }
   changeFrame();
+  changeCell();
   changePos();
   Q_EMIT modified();
 }
@@ -435,6 +459,7 @@ void Timeline::pasteSelected() {
     changeSpan(l);
   }
   changeFrame();
+  changeCell();
   changePos();
   Q_EMIT modified();
 }
@@ -496,6 +521,10 @@ void Timeline::changeFrameCount() {
 
 void Timeline::changeLayerCount() {
   Q_EMIT layerCountChanged(layerCount());
+}
+
+void Timeline::changeCell() {
+  Q_EMIT cellModified(toRect(canvasSize));
 }
 
 #include "timeline.moc"

@@ -223,7 +223,8 @@ void ToolSelectWidget::connectSignals() {
   CONNECT(ctx, overlayModified, this, overlayModified);
   CONNECT(ctx, shouldShowNorm,  this, shouldShowNorm);
   CONNECT(ctx, changingAction,  this, changingAction);
-  CONNECT(ctx, cellRequested,   this, cellRequested);
+  CONNECT(ctx, growRequested,   this, growRequested);
+  CONNECT(ctx, shrinkRequested, this, shrinkRequested);
   CONNECT(ctx, lockRequested,   this, lockRequested);
   CONNECT(ctx, unlockRequested, this, unlockRequested);
   CONNECT(ctx, lockRequested,   this, lockTool);

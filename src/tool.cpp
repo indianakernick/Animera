@@ -41,7 +41,11 @@ void ToolCtx::changeOverlay(const QPoint point) const {
 }
 
 void ToolCtx::growCell(const QRect rect) const {
-  Q_EMIT cellRequested(rect);
+  Q_EMIT growRequested(rect);
+}
+
+void ToolCtx::shrinkCell() const {
+  Q_EMIT shrinkRequested();
 }
 
 QRgb ToolCtx::selectColor(const ButtonType button) const {

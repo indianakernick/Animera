@@ -281,6 +281,7 @@ private:
     pos = getPos();
     Q_EMIT mouseEnter(pos);
     setFocus();
+    setCursor(cursor());
   }
   void leaveEvent(QEvent *) override {
     Q_EMIT mouseLeave();
@@ -388,10 +389,7 @@ void EditorWidget::compositePalette() {
 }
 
 void EditorWidget::setFrame(const Frame &newFrame) {
-  SCOPE_TIME("EditorWidget::setFrame");
-  
   frame = newFrame;
-  composite(toRect(size));
 }
 
 void EditorWidget::setPalette(const PaletteCSpan newPalette) {

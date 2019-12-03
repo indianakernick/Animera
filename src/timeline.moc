@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_Timeline_t {
-    QByteArrayData data[50];
-    char stringdata0[592];
+    QByteArrayData data[52];
+    char stringdata0[616];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -53,35 +53,37 @@ QT_MOC_LITERAL(17, 213, 8), // "FrameIdx"
 QT_MOC_LITERAL(18, 222, 17), // "layerCountChanged"
 QT_MOC_LITERAL(19, 240, 12), // "delayChanged"
 QT_MOC_LITERAL(20, 253, 8), // "modified"
-QT_MOC_LITERAL(21, 262, 10), // "initCanvas"
-QT_MOC_LITERAL(22, 273, 6), // "Format"
-QT_MOC_LITERAL(23, 280, 9), // "nextFrame"
-QT_MOC_LITERAL(24, 290, 9), // "prevFrame"
-QT_MOC_LITERAL(25, 300, 10), // "layerBelow"
-QT_MOC_LITERAL(26, 311, 10), // "layerAbove"
-QT_MOC_LITERAL(27, 322, 14), // "beginSelection"
-QT_MOC_LITERAL(28, 337, 17), // "continueSelection"
-QT_MOC_LITERAL(29, 355, 12), // "endSelection"
-QT_MOC_LITERAL(30, 368, 14), // "clearSelection"
-QT_MOC_LITERAL(31, 383, 11), // "insertLayer"
-QT_MOC_LITERAL(32, 395, 11), // "removeLayer"
-QT_MOC_LITERAL(33, 407, 11), // "moveLayerUp"
-QT_MOC_LITERAL(34, 419, 13), // "moveLayerDown"
-QT_MOC_LITERAL(35, 433, 11), // "insertFrame"
-QT_MOC_LITERAL(36, 445, 11), // "removeFrame"
-QT_MOC_LITERAL(37, 457, 9), // "clearCell"
-QT_MOC_LITERAL(38, 467, 10), // "extendCell"
-QT_MOC_LITERAL(39, 478, 9), // "splitCell"
-QT_MOC_LITERAL(40, 488, 8), // "growCell"
-QT_MOC_LITERAL(41, 497, 10), // "setCurrPos"
-QT_MOC_LITERAL(42, 508, 13), // "setVisibility"
-QT_MOC_LITERAL(43, 522, 7), // "setName"
-QT_MOC_LITERAL(44, 530, 8), // "setDelay"
-QT_MOC_LITERAL(45, 539, 13), // "clearSelected"
-QT_MOC_LITERAL(46, 553, 12), // "copySelected"
-QT_MOC_LITERAL(47, 566, 13), // "pasteSelected"
-QT_MOC_LITERAL(48, 580, 4), // "lock"
-QT_MOC_LITERAL(49, 585, 6) // "unlock"
+QT_MOC_LITERAL(21, 262, 12), // "cellModified"
+QT_MOC_LITERAL(22, 275, 10), // "initCanvas"
+QT_MOC_LITERAL(23, 286, 6), // "Format"
+QT_MOC_LITERAL(24, 293, 9), // "nextFrame"
+QT_MOC_LITERAL(25, 303, 9), // "prevFrame"
+QT_MOC_LITERAL(26, 313, 10), // "layerBelow"
+QT_MOC_LITERAL(27, 324, 10), // "layerAbove"
+QT_MOC_LITERAL(28, 335, 14), // "beginSelection"
+QT_MOC_LITERAL(29, 350, 17), // "continueSelection"
+QT_MOC_LITERAL(30, 368, 12), // "endSelection"
+QT_MOC_LITERAL(31, 381, 14), // "clearSelection"
+QT_MOC_LITERAL(32, 396, 11), // "insertLayer"
+QT_MOC_LITERAL(33, 408, 11), // "removeLayer"
+QT_MOC_LITERAL(34, 420, 11), // "moveLayerUp"
+QT_MOC_LITERAL(35, 432, 13), // "moveLayerDown"
+QT_MOC_LITERAL(36, 446, 11), // "insertFrame"
+QT_MOC_LITERAL(37, 458, 11), // "removeFrame"
+QT_MOC_LITERAL(38, 470, 9), // "clearCell"
+QT_MOC_LITERAL(39, 480, 10), // "extendCell"
+QT_MOC_LITERAL(40, 491, 9), // "splitCell"
+QT_MOC_LITERAL(41, 501, 8), // "growCell"
+QT_MOC_LITERAL(42, 510, 10), // "shrinkCell"
+QT_MOC_LITERAL(43, 521, 10), // "setCurrPos"
+QT_MOC_LITERAL(44, 532, 13), // "setVisibility"
+QT_MOC_LITERAL(45, 546, 7), // "setName"
+QT_MOC_LITERAL(46, 554, 8), // "setDelay"
+QT_MOC_LITERAL(47, 563, 13), // "clearSelected"
+QT_MOC_LITERAL(48, 577, 12), // "copySelected"
+QT_MOC_LITERAL(49, 590, 13), // "pasteSelected"
+QT_MOC_LITERAL(50, 604, 4), // "lock"
+QT_MOC_LITERAL(51, 609, 6) // "unlock"
 
     },
     "Timeline\0currPosChanged\0\0CellPos\0"
@@ -90,13 +92,14 @@ QT_MOC_LITERAL(49, 585, 6) // "unlock"
     "nameChanged\0std::string_view\0frameChanged\0"
     "Frame\0layerChanged\0std::span<const CellSpan>\0"
     "frameCountChanged\0FrameIdx\0layerCountChanged\0"
-    "delayChanged\0modified\0initCanvas\0"
-    "Format\0nextFrame\0prevFrame\0layerBelow\0"
-    "layerAbove\0beginSelection\0continueSelection\0"
-    "endSelection\0clearSelection\0insertLayer\0"
-    "removeLayer\0moveLayerUp\0moveLayerDown\0"
-    "insertFrame\0removeFrame\0clearCell\0"
-    "extendCell\0splitCell\0growCell\0setCurrPos\0"
+    "delayChanged\0modified\0cellModified\0"
+    "initCanvas\0Format\0nextFrame\0prevFrame\0"
+    "layerBelow\0layerAbove\0beginSelection\0"
+    "continueSelection\0endSelection\0"
+    "clearSelection\0insertLayer\0removeLayer\0"
+    "moveLayerUp\0moveLayerDown\0insertFrame\0"
+    "removeFrame\0clearCell\0extendCell\0"
+    "splitCell\0growCell\0shrinkCell\0setCurrPos\0"
     "setVisibility\0setName\0setDelay\0"
     "clearSelected\0copySelected\0pasteSelected\0"
     "lock\0unlock"
@@ -109,55 +112,57 @@ static const uint qt_meta_data_Timeline[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-      39,   14, // methods
+      41,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-      11,       // signalCount
+      12,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    1,  209,    2, 0x06 /* Public */,
-       4,    1,  212,    2, 0x06 /* Public */,
-       6,    1,  215,    2, 0x06 /* Public */,
-       8,    2,  218,    2, 0x06 /* Public */,
-      10,    2,  223,    2, 0x06 /* Public */,
-      12,    1,  228,    2, 0x06 /* Public */,
-      14,    2,  231,    2, 0x06 /* Public */,
-      16,    1,  236,    2, 0x06 /* Public */,
-      18,    1,  239,    2, 0x06 /* Public */,
-      19,    1,  242,    2, 0x06 /* Public */,
-      20,    0,  245,    2, 0x06 /* Public */,
+       1,    1,  219,    2, 0x06 /* Public */,
+       4,    1,  222,    2, 0x06 /* Public */,
+       6,    1,  225,    2, 0x06 /* Public */,
+       8,    2,  228,    2, 0x06 /* Public */,
+      10,    2,  233,    2, 0x06 /* Public */,
+      12,    1,  238,    2, 0x06 /* Public */,
+      14,    2,  241,    2, 0x06 /* Public */,
+      16,    1,  246,    2, 0x06 /* Public */,
+      18,    1,  249,    2, 0x06 /* Public */,
+      19,    1,  252,    2, 0x06 /* Public */,
+      20,    0,  255,    2, 0x06 /* Public */,
+      21,    1,  256,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      21,    2,  246,    2, 0x0a /* Public */,
-      23,    0,  251,    2, 0x0a /* Public */,
-      24,    0,  252,    2, 0x0a /* Public */,
-      25,    0,  253,    2, 0x0a /* Public */,
-      26,    0,  254,    2, 0x0a /* Public */,
-      27,    0,  255,    2, 0x0a /* Public */,
-      28,    0,  256,    2, 0x0a /* Public */,
-      29,    0,  257,    2, 0x0a /* Public */,
-      30,    0,  258,    2, 0x0a /* Public */,
-      31,    0,  259,    2, 0x0a /* Public */,
-      32,    0,  260,    2, 0x0a /* Public */,
-      33,    0,  261,    2, 0x0a /* Public */,
-      34,    0,  262,    2, 0x0a /* Public */,
-      35,    0,  263,    2, 0x0a /* Public */,
-      36,    0,  264,    2, 0x0a /* Public */,
-      37,    0,  265,    2, 0x0a /* Public */,
-      38,    0,  266,    2, 0x0a /* Public */,
-      39,    0,  267,    2, 0x0a /* Public */,
-      40,    1,  268,    2, 0x0a /* Public */,
-      41,    1,  271,    2, 0x0a /* Public */,
-      42,    2,  274,    2, 0x0a /* Public */,
-      43,    2,  279,    2, 0x0a /* Public */,
-      44,    1,  284,    2, 0x0a /* Public */,
-      45,    0,  287,    2, 0x0a /* Public */,
-      46,    0,  288,    2, 0x0a /* Public */,
-      47,    0,  289,    2, 0x0a /* Public */,
-      48,    0,  290,    2, 0x0a /* Public */,
-      49,    0,  291,    2, 0x0a /* Public */,
+      22,    2,  259,    2, 0x0a /* Public */,
+      24,    0,  264,    2, 0x0a /* Public */,
+      25,    0,  265,    2, 0x0a /* Public */,
+      26,    0,  266,    2, 0x0a /* Public */,
+      27,    0,  267,    2, 0x0a /* Public */,
+      28,    0,  268,    2, 0x0a /* Public */,
+      29,    0,  269,    2, 0x0a /* Public */,
+      30,    0,  270,    2, 0x0a /* Public */,
+      31,    0,  271,    2, 0x0a /* Public */,
+      32,    0,  272,    2, 0x0a /* Public */,
+      33,    0,  273,    2, 0x0a /* Public */,
+      34,    0,  274,    2, 0x0a /* Public */,
+      35,    0,  275,    2, 0x0a /* Public */,
+      36,    0,  276,    2, 0x0a /* Public */,
+      37,    0,  277,    2, 0x0a /* Public */,
+      38,    0,  278,    2, 0x0a /* Public */,
+      39,    0,  279,    2, 0x0a /* Public */,
+      40,    0,  280,    2, 0x0a /* Public */,
+      41,    1,  281,    2, 0x0a /* Public */,
+      42,    0,  284,    2, 0x0a /* Public */,
+      43,    1,  285,    2, 0x0a /* Public */,
+      44,    2,  288,    2, 0x0a /* Public */,
+      45,    2,  293,    2, 0x0a /* Public */,
+      46,    1,  298,    2, 0x0a /* Public */,
+      47,    0,  301,    2, 0x0a /* Public */,
+      48,    0,  302,    2, 0x0a /* Public */,
+      49,    0,  303,    2, 0x0a /* Public */,
+      50,    0,  304,    2, 0x0a /* Public */,
+      51,    0,  305,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, 0x80000000 | 3,    2,
@@ -171,9 +176,10 @@ static const uint qt_meta_data_Timeline[] = {
     QMetaType::Void, 0x80000000 | 9,    2,
     QMetaType::Void, QMetaType::Int,    2,
     QMetaType::Void,
+    QMetaType::Void, QMetaType::QRect,    2,
 
  // slots: parameters
-    QMetaType::Void, 0x80000000 | 22, QMetaType::QSize,    2,    2,
+    QMetaType::Void, 0x80000000 | 23, QMetaType::QSize,    2,    2,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -192,6 +198,7 @@ static const uint qt_meta_data_Timeline[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void, QMetaType::QRect,    2,
+    QMetaType::Void,
     QMetaType::Void, 0x80000000 | 3,    2,
     QMetaType::Void, 0x80000000 | 9, QMetaType::Bool,    2,    2,
     QMetaType::Void, 0x80000000 | 9, 0x80000000 | 11,    2,    2,
@@ -222,34 +229,36 @@ void Timeline::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, vo
         case 8: _t->layerCountChanged((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;
         case 9: _t->delayChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 10: _t->modified(); break;
-        case 11: _t->initCanvas((*reinterpret_cast< Format(*)>(_a[1])),(*reinterpret_cast< QSize(*)>(_a[2]))); break;
-        case 12: _t->nextFrame(); break;
-        case 13: _t->prevFrame(); break;
-        case 14: _t->layerBelow(); break;
-        case 15: _t->layerAbove(); break;
-        case 16: _t->beginSelection(); break;
-        case 17: _t->continueSelection(); break;
-        case 18: _t->endSelection(); break;
-        case 19: _t->clearSelection(); break;
-        case 20: _t->insertLayer(); break;
-        case 21: _t->removeLayer(); break;
-        case 22: _t->moveLayerUp(); break;
-        case 23: _t->moveLayerDown(); break;
-        case 24: _t->insertFrame(); break;
-        case 25: _t->removeFrame(); break;
-        case 26: _t->clearCell(); break;
-        case 27: _t->extendCell(); break;
-        case 28: _t->splitCell(); break;
-        case 29: _t->growCell((*reinterpret_cast< QRect(*)>(_a[1]))); break;
-        case 30: _t->setCurrPos((*reinterpret_cast< CellPos(*)>(_a[1]))); break;
-        case 31: _t->setVisibility((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
-        case 32: _t->setName((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< std::string_view(*)>(_a[2]))); break;
-        case 33: _t->setDelay((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 34: _t->clearSelected(); break;
-        case 35: _t->copySelected(); break;
-        case 36: _t->pasteSelected(); break;
-        case 37: _t->lock(); break;
-        case 38: _t->unlock(); break;
+        case 11: _t->cellModified((*reinterpret_cast< QRect(*)>(_a[1]))); break;
+        case 12: _t->initCanvas((*reinterpret_cast< Format(*)>(_a[1])),(*reinterpret_cast< QSize(*)>(_a[2]))); break;
+        case 13: _t->nextFrame(); break;
+        case 14: _t->prevFrame(); break;
+        case 15: _t->layerBelow(); break;
+        case 16: _t->layerAbove(); break;
+        case 17: _t->beginSelection(); break;
+        case 18: _t->continueSelection(); break;
+        case 19: _t->endSelection(); break;
+        case 20: _t->clearSelection(); break;
+        case 21: _t->insertLayer(); break;
+        case 22: _t->removeLayer(); break;
+        case 23: _t->moveLayerUp(); break;
+        case 24: _t->moveLayerDown(); break;
+        case 25: _t->insertFrame(); break;
+        case 26: _t->removeFrame(); break;
+        case 27: _t->clearCell(); break;
+        case 28: _t->extendCell(); break;
+        case 29: _t->splitCell(); break;
+        case 30: _t->growCell((*reinterpret_cast< QRect(*)>(_a[1]))); break;
+        case 31: _t->shrinkCell(); break;
+        case 32: _t->setCurrPos((*reinterpret_cast< CellPos(*)>(_a[1]))); break;
+        case 33: _t->setVisibility((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
+        case 34: _t->setName((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< std::string_view(*)>(_a[2]))); break;
+        case 35: _t->setDelay((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 36: _t->clearSelected(); break;
+        case 37: _t->copySelected(); break;
+        case 38: _t->pasteSelected(); break;
+        case 39: _t->lock(); break;
+        case 40: _t->unlock(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -331,6 +340,13 @@ void Timeline::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, vo
                 return;
             }
         }
+        {
+            using _t = void (Timeline::*)(QRect );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&Timeline::cellModified)) {
+                *result = 11;
+                return;
+            }
+        }
     }
 }
 
@@ -363,13 +379,13 @@ int Timeline::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 39)
+        if (_id < 41)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 39;
+        _id -= 41;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 39)
+        if (_id < 41)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 39;
+        _id -= 41;
     }
     return _id;
 }
@@ -448,6 +464,13 @@ void Timeline::delayChanged(int _t1)
 void Timeline::modified()
 {
     QMetaObject::activate(this, &staticMetaObject, 10, nullptr);
+}
+
+// SIGNAL 11
+void Timeline::cellModified(QRect _t1)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    QMetaObject::activate(this, &staticMetaObject, 11, _a);
 }
 QT_WARNING_POP
 QT_END_MOC_NAMESPACE

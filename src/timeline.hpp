@@ -85,6 +85,7 @@ public Q_SLOTS:
   void extendCell();
   void splitCell();
   void growCell(QRect);
+  void shrinkCell();
   
   void setCurrPos(CellPos);
   void setVisibility(LayerIdx, bool);
@@ -115,6 +116,7 @@ Q_SIGNALS:
   void delayChanged(int);
   
   void modified();
+  void cellModified(QRect);
   
 private:
   std::vector<Layer> layers;
@@ -137,6 +139,7 @@ private:
   void changeLayers(LayerIdx, LayerIdx);
   void changeFrameCount();
   void changeLayerCount();
+  void changeCell();
 };
 
 #endif

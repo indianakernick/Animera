@@ -42,7 +42,7 @@ void writeOverlay(PaletteCSpan, Format, QImage &, const QImage &, const QImage &
 /// Ensure that the cell is large enough to enclose the given rectangle
 void growCell(Cell &, Format, QRect);
 /// Shrink the cell to occupy the smallest amount of space
-void optimizeCell(Cell &);
+void shrinkCell(Cell &);
 /// Sample a pixel from a cell. Returns 0 if the position is out of range
 QRgb sampleCell(const Cell &, QPoint);
 

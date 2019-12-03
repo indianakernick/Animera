@@ -48,6 +48,7 @@ void BrushTool::mouseUp(const ToolMouseEvent &) {
   SCOPE_TIME("BrushTool::mouseUp");
   
   ctx->unlock();
+  if (color == 0) ctx->shrinkCell();
   ctx->finishChange();
 }
 

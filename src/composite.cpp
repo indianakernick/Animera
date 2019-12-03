@@ -255,7 +255,9 @@ void growCell(Cell &cell, const Format format, const QRect rect) {
   }
 }
 
-void optimizeCell(Cell &cell) {
+void shrinkCell(Cell &cell) {
+  SCOPE_TIME("shrinkCell");
+
   if (!cell) return;
   QPoint min = toPoint(std::numeric_limits<int>::max());
   QPoint max = toPoint(std::numeric_limits<int>::min());

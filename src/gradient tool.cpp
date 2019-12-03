@@ -78,6 +78,9 @@ void LinearGradientTool::mouseUp(const ToolMouseEvent &event) {
   status.appendLabeled(mode);
   status.appendLabeled(event.pos);
   ctx->unlock();
+  if (ctx->colors.primary == 0 || ctx->colors.secondary == 0) {
+    ctx->shrinkCell();
+  }
   ctx->finishChange();
 }
 

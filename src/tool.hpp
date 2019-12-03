@@ -59,7 +59,8 @@ Q_SIGNALS:
   void overlayModified(QRect) const;
   void shouldShowNorm(std::string_view) const;
   void changingAction() const;
-  void cellRequested(QRect) const;
+  void growRequested(QRect) const;
+  void shrinkRequested() const;
   void lockRequested() const;
   void unlockRequested() const;
 
@@ -78,7 +79,9 @@ public:
   void changeCell(QPoint) const;
   void changeOverlay(QRect) const;
   void changeOverlay(QPoint) const;
+  
   void growCell(QRect) const;
+  void shrinkCell() const;
   
   QRgb selectColor(ButtonType) const;
   

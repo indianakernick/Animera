@@ -28,7 +28,8 @@ Q_SIGNALS:
   void overlayModified(QRect);
   void shouldShowNorm(std::string_view);
   void changingAction();
-  void cellRequested(QRect);
+  void growRequested(QRect);
+  void shrinkRequested();
   void lockRequested();
   void unlockRequested();
 
