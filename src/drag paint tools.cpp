@@ -38,7 +38,7 @@ void DragPaintTool<Derived>::mouseDown(const ToolMouseEvent &event) {
   startPos = event.pos;
   color = ctx->selectColor(event.button);
   const QRect rect = that()->pointRect(event.pos);
-  ctx->growCell(rect);
+  if (color != 0) ctx->growCell(rect);
   cleanCell = *ctx->cell;
   const QPoint pos = ctx->cell->pos;
   that()->drawPoint(ctx->cell->img, color, startPos - pos);
@@ -63,7 +63,7 @@ void DragPaintTool<Derived>::mouseMove(const ToolMouseEvent &event) {
   
   *ctx->cell = cleanCell;
   const QRect rect = that()->dragRect(startPos, event.pos);
-  ctx->growCell(rect);
+  if (color != 0) ctx->growCell(rect);
   const QPoint pos = ctx->cell->pos;
   that()->drawDrag(ctx->cell->img, startPos - pos, event.pos - pos);
   ctx->changeCell(rect.united(that()->dragRect(startPos, event.lastPos)));

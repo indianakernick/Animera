@@ -34,10 +34,12 @@ void LinearGradientTool::mouseDown(const ToolMouseEvent &event) {
     return;
   }
   
-  startPos = event.pos;
-  ctx->growCell(toRect(startPos));
   status.append("RECT: ");
   status.append({event.pos, QSize{1, 1}});
+  startPos = event.pos;
+  if (ctx->colors.primary != 0 || ctx->colors.secondary != 0) {
+    ctx->growCell(toRect(startPos));
+  }
   cleanCell = *ctx->cell;
   const QPoint pos = ctx->cell->pos;
   drawSquarePoint(ctx->cell->img, ctx->colors.primary, startPos - pos);
@@ -61,11 +63,13 @@ void LinearGradientTool::mouseMove(const ToolMouseEvent &event) {
     return;
   }
   
-  *ctx->cell = cleanCell;
   QRect rect = unite(startPos, event.pos);
-  ctx->growCell(rect);
   status.append("RECT: ");
   status.append(rect);
+  *ctx->cell = cleanCell;
+  if (ctx->colors.primary != 0 || ctx->colors.secondary != 0) {
+    ctx->growCell(rect);
+  }
   drawGradient(rect, event.pos);
   ctx->changeCell(rect.united(toRect(event.lastPos)));
 }

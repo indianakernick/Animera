@@ -24,8 +24,8 @@ void BrushTool::mouseLeave(const ToolLeaveEvent &event) {
 void BrushTool::mouseDown(const ToolMouseEvent &event) {
   SCOPE_TIME("BrushTool::mouseDown");
   
-  ctx->growCell(symPointRect(event.pos));
   color = ctx->selectColor(event.button);
+  if (color != 0) ctx->growCell(symPointRect(event.pos));
   symPoint(event.pos);
   ctx->lock();
 }
@@ -39,7 +39,7 @@ void BrushTool::mouseMove(const ToolMouseEvent &event) {
   if (event.button == ButtonType::none) {
     symChangeOverlay({event.lastPos, event.pos});
   } else {
-    ctx->growCell(symPointRect(event.pos));
+    if (color != 0) ctx->growCell(symPointRect(event.pos));
     symLine({event.lastPos, event.pos});
   }
 }

@@ -33,13 +33,13 @@ void FloodFillTool::mouseDown(const ToolMouseEvent &event) {
 
   QRect rect = toRect(ctx->size);
   bool grew = false;
-  if (sampleCell(*ctx->cell, event.pos) == 0) {
+  const QRgb color = ctx->selectColor(event.button);
+  if (sampleCell(*ctx->cell, event.pos) == 0 && color != 0) {
     ctx->growCell(rect);
     grew = true;
   } else {
     rect = rect.intersected(ctx->cell->rect());
   }
-  const QRgb color = ctx->selectColor(event.button);
   const QPoint pos = ctx->cell->pos;
   drawFloodFill(ctx->cell->img, color, event.pos - pos, rect.translated(-pos));
   if (grew || color == 0) ctx->shrinkCell();
