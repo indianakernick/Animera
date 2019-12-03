@@ -17,10 +17,10 @@ public:
   void setCell(Cell *);
   
   void mouseEnter(QPoint);
+  void mouseEnter();
   void mouseLeave();
   void mouseDown(QPoint, ButtonType);
   void mouseMove(QPoint);
-  void mouseMove();
   void mouseUp(QPoint, ButtonType);
   void keyPress(Qt::Key);
   

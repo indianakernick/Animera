@@ -135,8 +135,9 @@ void ToolSelectWidget::setOverlay(QImage *overlay) {
 
 void ToolSelectWidget::setCell(Cell *cell) {
   ctx.cell = cell;
+  if (mouseIn) currTool.mouseLeave();
   currTool.setCell(cell);
-  if (mouseIn) currTool.mouseMove();
+  if (mouseIn) currTool.mouseEnter();
 }
 
 void ToolSelectWidget::setColors(const ToolColors colors) {
@@ -154,8 +155,9 @@ void ToolSelectWidget::initCanvas(const Format format, const QSize size) {
 
 void ToolSelectWidget::setTool(ToolWidget *widget, Tool *tool) {
   currWidget = widget;
+  if (mouseIn) currTool.mouseLeave();
   currTool.setTool(tool);
-  if (mouseIn) currTool.mouseMove();
+  if (mouseIn) currTool.mouseEnter();
 }
 
 void ToolSelectWidget::lockTool() {
