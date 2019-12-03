@@ -10,5 +10,6 @@
 #define native_mac_hpp
 
 void hideMouseUntilMouseMoves();
+void systemLog(const char *);
 
 #endif

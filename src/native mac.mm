@@ -13,3 +13,8 @@
 void hideMouseUntilMouseMoves() {
   [NSCursor setHiddenUntilMouseMoves:true];
 }
+
+// This is only really useful for debugging
+void systemLog(const char *message) {
+  NSLog(@"%@", [NSString stringWithUTF8String:message]);
+}

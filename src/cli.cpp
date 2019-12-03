@@ -239,11 +239,15 @@ int CLI::exec() {
 }
 
 Error CLI::parseArgs(std::map<std::string, docopt::value> &flags) const {
+  char **first = argv + 1;
+  if (argc == 2 && std::strncmp(*first, "-psn_", 5) == 0) {
+    ++first;
+  }
+  std::string doc = docopt_usage;
+  doc += "\n\n";
+  doc += short_options;
   try {
-    std::string doc = docopt_usage;
-    doc += "\n\n";
-    doc += short_options;
-    flags = docopt::docopt_parse(doc, {argv + 1, argv + argc}, false, false);
+    flags = docopt::docopt_parse(doc, {first, argv + argc}, false, false);
   } catch (docopt::DocoptArgumentError &e) {
     return e.what();
   }
