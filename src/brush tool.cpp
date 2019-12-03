@@ -158,8 +158,6 @@ void BrushTool::symLine(const QLine line) {
 }
 
 QRect BrushTool::symPointRect(const QPoint point) const {
-  SCOPE_TIME("BrushTool::symPointRect");
-  
   QRect rect = pointRect(point);
   visit(point, [&rect, this](const QPoint point) {
     rect = rect.united(pointRect(point));

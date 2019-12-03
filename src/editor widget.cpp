@@ -152,7 +152,7 @@ private:
   }
   
   void updateCheckers(const QSize size) {
-    SCOPE_TIME("EditorWidget::updateCheckers");
+    SCOPE_TIME("EditorView::updateCheckers");
     
     /*
     

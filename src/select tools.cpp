@@ -341,16 +341,12 @@ void PolygonSelectTool::mouseUp(const ToolMouseEvent &event) {
 }
 
 void PolygonSelectTool::initPoly(const QPoint point) {
-  SCOPE_TIME("PolygonSelectTool::initPoly");
-  
   polygon.clear();
   polygon.push_back(point);
   bounds = toRect(point);
 }
 
 void PolygonSelectTool::pushPoly(const QPoint point) {
-  SCOPE_TIME("PolygonSelectTool::pushPoly");
-  
   assert(!polygon.empty());
   if (polygon.back() == point) return;
   polygon.push_back(point);
@@ -546,8 +542,6 @@ void WandSelectTool::addToSelection(const ToolMouseEvent &event) {
 }
 
 QRgb WandSelectTool::getOverlayColor() const {
-  SCOPE_TIME("WandSelectTool::getOverlayColor");
-  
   static_assert(wand_frames % 2 == 0);
   constexpr int half_frames = wand_frames / 2;
   const int mirroredFrame = animFrame > half_frames ? wand_frames - animFrame : animFrame;

@@ -11,6 +11,7 @@
 #include "config.hpp"
 #include "connect.hpp"
 #include "strings.hpp"
+#include "scope time.hpp"
 #include "global font.hpp"
 #include <QtGui/qpainter.h>
 
@@ -41,6 +42,8 @@ void StatusBarWidget::showPerm(const std::string_view text) {
 }
 
 void StatusBarWidget::paintEvent(QPaintEvent *) {
+  SCOPE_TIME("StatusBarWidget::paintEvent");
+
   QPainter painter{this};
   painter.fillRect(rect(), stat_background);
   painter.setFont(getGlobalFont());
