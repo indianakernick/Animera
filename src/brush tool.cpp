@@ -48,13 +48,10 @@ void BrushTool::mouseMove(const ToolMouseEvent &event) {
   }
 }
 
-void BrushTool::mouseUp(const ToolMouseEvent &event) {
+void BrushTool::mouseUp(const ToolMouseEvent &) {
   SCOPE_TIME("BrushTool::mouseUp");
   
   ctx->unlock();
-  symPointStatus(event.pos);
-  ctx->growCell(symPointRect(event.pos));
-  symLine({event.lastPos, event.pos});
   ctx->finishChange();
 }
 

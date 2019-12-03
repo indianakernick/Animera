@@ -81,6 +81,7 @@ public:
   }
   
 Q_SIGNALS:
+  void mouseEnter(QPoint);
   void mouseLeave();
   void mouseDown(QPoint, ButtonType);
   void mouseMove(QPoint);
@@ -251,6 +252,8 @@ private:
     setCursor(cursor());
   }
   void enterEvent(QEvent *) override {
+    pos = getPos();
+    Q_EMIT mouseEnter(pos);
     setFocus();
   }
   void leaveEvent(QEvent *) override {
@@ -302,6 +305,7 @@ EditorWidget::EditorWidget(QWidget *parent)
   grabGesture(Qt::PinchGesture);
   view = new EditorImage{this};
   setWidget(view);
+  CONNECT(view, mouseEnter, this, mouseEnter);
   CONNECT(view, mouseLeave, this, mouseLeave);
   CONNECT(view, mouseDown,  this, mouseDown);
   CONNECT(view, mouseMove,  this, mouseMove);

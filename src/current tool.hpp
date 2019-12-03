@@ -16,6 +16,7 @@ public:
   void setTool(Tool *);
   void setCell(Cell *);
   
+  void mouseEnter(QPoint);
   void mouseLeave();
   void mouseDown(QPoint, ButtonType);
   void mouseMove(QPoint);

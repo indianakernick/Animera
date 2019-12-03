@@ -33,6 +33,7 @@ Q_SIGNALS:
   void unlockRequested();
 
 public Q_SLOTS:
+  void mouseEnter(QPoint);
   void mouseLeave();
   void mouseDown(QPoint, ButtonType);
   void mouseMove(QPoint);

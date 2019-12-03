@@ -84,6 +84,11 @@ ToolSelectWidget::ToolSelectWidget(QWidget *parent)
   setAlignment(Qt::AlignVCenter);
 }
 
+void ToolSelectWidget::mouseEnter(const QPoint pos) {
+  currTool.mouseEnter(pos);
+  mouseIn = true;
+}
+
 void ToolSelectWidget::mouseLeave() {
   currTool.mouseLeave();
   mouseIn = false;

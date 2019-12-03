@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_ToolSelectWidget_t {
-    QByteArrayData data[32];
-    char stringdata0[347];
+    QByteArrayData data[33];
+    char stringdata0[358];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -42,38 +42,39 @@ QT_MOC_LITERAL(6, 79, 14), // "changingAction"
 QT_MOC_LITERAL(7, 94, 13), // "cellRequested"
 QT_MOC_LITERAL(8, 108, 13), // "lockRequested"
 QT_MOC_LITERAL(9, 122, 15), // "unlockRequested"
-QT_MOC_LITERAL(10, 138, 10), // "mouseLeave"
-QT_MOC_LITERAL(11, 149, 9), // "mouseDown"
-QT_MOC_LITERAL(12, 159, 10), // "ButtonType"
-QT_MOC_LITERAL(13, 170, 9), // "mouseMove"
-QT_MOC_LITERAL(14, 180, 7), // "mouseUp"
-QT_MOC_LITERAL(15, 188, 8), // "keyPress"
-QT_MOC_LITERAL(16, 197, 7), // "Qt::Key"
-QT_MOC_LITERAL(17, 205, 10), // "setOverlay"
-QT_MOC_LITERAL(18, 216, 7), // "QImage*"
-QT_MOC_LITERAL(19, 224, 7), // "setCell"
-QT_MOC_LITERAL(20, 232, 5), // "Cell*"
-QT_MOC_LITERAL(21, 238, 9), // "setColors"
-QT_MOC_LITERAL(22, 248, 10), // "ToolColors"
-QT_MOC_LITERAL(23, 259, 10), // "setPalette"
-QT_MOC_LITERAL(24, 270, 12), // "PaletteCSpan"
-QT_MOC_LITERAL(25, 283, 10), // "initCanvas"
-QT_MOC_LITERAL(26, 294, 6), // "Format"
-QT_MOC_LITERAL(27, 301, 7), // "setTool"
-QT_MOC_LITERAL(28, 309, 11), // "ToolWidget*"
-QT_MOC_LITERAL(29, 321, 5), // "Tool*"
-QT_MOC_LITERAL(30, 327, 8), // "lockTool"
-QT_MOC_LITERAL(31, 336, 10) // "unlockTool"
+QT_MOC_LITERAL(10, 138, 10), // "mouseEnter"
+QT_MOC_LITERAL(11, 149, 10), // "mouseLeave"
+QT_MOC_LITERAL(12, 160, 9), // "mouseDown"
+QT_MOC_LITERAL(13, 170, 10), // "ButtonType"
+QT_MOC_LITERAL(14, 181, 9), // "mouseMove"
+QT_MOC_LITERAL(15, 191, 7), // "mouseUp"
+QT_MOC_LITERAL(16, 199, 8), // "keyPress"
+QT_MOC_LITERAL(17, 208, 7), // "Qt::Key"
+QT_MOC_LITERAL(18, 216, 10), // "setOverlay"
+QT_MOC_LITERAL(19, 227, 7), // "QImage*"
+QT_MOC_LITERAL(20, 235, 7), // "setCell"
+QT_MOC_LITERAL(21, 243, 5), // "Cell*"
+QT_MOC_LITERAL(22, 249, 9), // "setColors"
+QT_MOC_LITERAL(23, 259, 10), // "ToolColors"
+QT_MOC_LITERAL(24, 270, 10), // "setPalette"
+QT_MOC_LITERAL(25, 281, 12), // "PaletteCSpan"
+QT_MOC_LITERAL(26, 294, 10), // "initCanvas"
+QT_MOC_LITERAL(27, 305, 6), // "Format"
+QT_MOC_LITERAL(28, 312, 7), // "setTool"
+QT_MOC_LITERAL(29, 320, 11), // "ToolWidget*"
+QT_MOC_LITERAL(30, 332, 5), // "Tool*"
+QT_MOC_LITERAL(31, 338, 8), // "lockTool"
+QT_MOC_LITERAL(32, 347, 10) // "unlockTool"
 
     },
     "ToolSelectWidget\0cellModified\0\0"
     "overlayModified\0shouldShowNorm\0"
     "std::string_view\0changingAction\0"
     "cellRequested\0lockRequested\0unlockRequested\0"
-    "mouseLeave\0mouseDown\0ButtonType\0"
-    "mouseMove\0mouseUp\0keyPress\0Qt::Key\0"
-    "setOverlay\0QImage*\0setCell\0Cell*\0"
-    "setColors\0ToolColors\0setPalette\0"
+    "mouseEnter\0mouseLeave\0mouseDown\0"
+    "ButtonType\0mouseMove\0mouseUp\0keyPress\0"
+    "Qt::Key\0setOverlay\0QImage*\0setCell\0"
+    "Cell*\0setColors\0ToolColors\0setPalette\0"
     "PaletteCSpan\0initCanvas\0Format\0setTool\0"
     "ToolWidget*\0Tool*\0lockTool\0unlockTool"
 };
@@ -85,7 +86,7 @@ static const uint qt_meta_data_ToolSelectWidget[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-      20,   14, // methods
+      21,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -93,28 +94,29 @@ static const uint qt_meta_data_ToolSelectWidget[] = {
        7,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    1,  114,    2, 0x06 /* Public */,
-       3,    1,  117,    2, 0x06 /* Public */,
-       4,    1,  120,    2, 0x06 /* Public */,
-       6,    0,  123,    2, 0x06 /* Public */,
-       7,    1,  124,    2, 0x06 /* Public */,
-       8,    0,  127,    2, 0x06 /* Public */,
-       9,    0,  128,    2, 0x06 /* Public */,
+       1,    1,  119,    2, 0x06 /* Public */,
+       3,    1,  122,    2, 0x06 /* Public */,
+       4,    1,  125,    2, 0x06 /* Public */,
+       6,    0,  128,    2, 0x06 /* Public */,
+       7,    1,  129,    2, 0x06 /* Public */,
+       8,    0,  132,    2, 0x06 /* Public */,
+       9,    0,  133,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      10,    0,  129,    2, 0x0a /* Public */,
-      11,    2,  130,    2, 0x0a /* Public */,
-      13,    1,  135,    2, 0x0a /* Public */,
-      14,    2,  138,    2, 0x0a /* Public */,
-      15,    1,  143,    2, 0x0a /* Public */,
-      17,    1,  146,    2, 0x0a /* Public */,
-      19,    1,  149,    2, 0x0a /* Public */,
-      21,    1,  152,    2, 0x0a /* Public */,
-      23,    1,  155,    2, 0x0a /* Public */,
-      25,    2,  158,    2, 0x0a /* Public */,
-      27,    2,  163,    2, 0x08 /* Private */,
-      30,    0,  168,    2, 0x08 /* Private */,
-      31,    0,  169,    2, 0x08 /* Private */,
+      10,    1,  134,    2, 0x0a /* Public */,
+      11,    0,  137,    2, 0x0a /* Public */,
+      12,    2,  138,    2, 0x0a /* Public */,
+      14,    1,  143,    2, 0x0a /* Public */,
+      15,    2,  146,    2, 0x0a /* Public */,
+      16,    1,  151,    2, 0x0a /* Public */,
+      18,    1,  154,    2, 0x0a /* Public */,
+      20,    1,  157,    2, 0x0a /* Public */,
+      22,    1,  160,    2, 0x0a /* Public */,
+      24,    1,  163,    2, 0x0a /* Public */,
+      26,    2,  166,    2, 0x0a /* Public */,
+      28,    2,  171,    2, 0x08 /* Private */,
+      31,    0,  176,    2, 0x08 /* Private */,
+      32,    0,  177,    2, 0x08 /* Private */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::QRect,    2,
@@ -126,17 +128,18 @@ static const uint qt_meta_data_ToolSelectWidget[] = {
     QMetaType::Void,
 
  // slots: parameters
-    QMetaType::Void,
-    QMetaType::Void, QMetaType::QPoint, 0x80000000 | 12,    2,    2,
     QMetaType::Void, QMetaType::QPoint,    2,
-    QMetaType::Void, QMetaType::QPoint, 0x80000000 | 12,    2,    2,
-    QMetaType::Void, 0x80000000 | 16,    2,
-    QMetaType::Void, 0x80000000 | 18,    2,
-    QMetaType::Void, 0x80000000 | 20,    2,
-    QMetaType::Void, 0x80000000 | 22,    2,
-    QMetaType::Void, 0x80000000 | 24,    2,
-    QMetaType::Void, 0x80000000 | 26, QMetaType::QSize,    2,    2,
-    QMetaType::Void, 0x80000000 | 28, 0x80000000 | 29,    2,    2,
+    QMetaType::Void,
+    QMetaType::Void, QMetaType::QPoint, 0x80000000 | 13,    2,    2,
+    QMetaType::Void, QMetaType::QPoint,    2,
+    QMetaType::Void, QMetaType::QPoint, 0x80000000 | 13,    2,    2,
+    QMetaType::Void, 0x80000000 | 17,    2,
+    QMetaType::Void, 0x80000000 | 19,    2,
+    QMetaType::Void, 0x80000000 | 21,    2,
+    QMetaType::Void, 0x80000000 | 23,    2,
+    QMetaType::Void, 0x80000000 | 25,    2,
+    QMetaType::Void, 0x80000000 | 27, QMetaType::QSize,    2,    2,
+    QMetaType::Void, 0x80000000 | 29, 0x80000000 | 30,    2,    2,
     QMetaType::Void,
     QMetaType::Void,
 
@@ -156,19 +159,20 @@ void ToolSelectWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
         case 4: _t->cellRequested((*reinterpret_cast< QRect(*)>(_a[1]))); break;
         case 5: _t->lockRequested(); break;
         case 6: _t->unlockRequested(); break;
-        case 7: _t->mouseLeave(); break;
-        case 8: _t->mouseDown((*reinterpret_cast< QPoint(*)>(_a[1])),(*reinterpret_cast< ButtonType(*)>(_a[2]))); break;
-        case 9: _t->mouseMove((*reinterpret_cast< QPoint(*)>(_a[1]))); break;
-        case 10: _t->mouseUp((*reinterpret_cast< QPoint(*)>(_a[1])),(*reinterpret_cast< ButtonType(*)>(_a[2]))); break;
-        case 11: _t->keyPress((*reinterpret_cast< Qt::Key(*)>(_a[1]))); break;
-        case 12: _t->setOverlay((*reinterpret_cast< QImage*(*)>(_a[1]))); break;
-        case 13: _t->setCell((*reinterpret_cast< Cell*(*)>(_a[1]))); break;
-        case 14: _t->setColors((*reinterpret_cast< ToolColors(*)>(_a[1]))); break;
-        case 15: _t->setPalette((*reinterpret_cast< PaletteCSpan(*)>(_a[1]))); break;
-        case 16: _t->initCanvas((*reinterpret_cast< Format(*)>(_a[1])),(*reinterpret_cast< QSize(*)>(_a[2]))); break;
-        case 17: _t->setTool((*reinterpret_cast< ToolWidget*(*)>(_a[1])),(*reinterpret_cast< Tool*(*)>(_a[2]))); break;
-        case 18: _t->lockTool(); break;
-        case 19: _t->unlockTool(); break;
+        case 7: _t->mouseEnter((*reinterpret_cast< QPoint(*)>(_a[1]))); break;
+        case 8: _t->mouseLeave(); break;
+        case 9: _t->mouseDown((*reinterpret_cast< QPoint(*)>(_a[1])),(*reinterpret_cast< ButtonType(*)>(_a[2]))); break;
+        case 10: _t->mouseMove((*reinterpret_cast< QPoint(*)>(_a[1]))); break;
+        case 11: _t->mouseUp((*reinterpret_cast< QPoint(*)>(_a[1])),(*reinterpret_cast< ButtonType(*)>(_a[2]))); break;
+        case 12: _t->keyPress((*reinterpret_cast< Qt::Key(*)>(_a[1]))); break;
+        case 13: _t->setOverlay((*reinterpret_cast< QImage*(*)>(_a[1]))); break;
+        case 14: _t->setCell((*reinterpret_cast< Cell*(*)>(_a[1]))); break;
+        case 15: _t->setColors((*reinterpret_cast< ToolColors(*)>(_a[1]))); break;
+        case 16: _t->setPalette((*reinterpret_cast< PaletteCSpan(*)>(_a[1]))); break;
+        case 17: _t->initCanvas((*reinterpret_cast< Format(*)>(_a[1])),(*reinterpret_cast< QSize(*)>(_a[2]))); break;
+        case 18: _t->setTool((*reinterpret_cast< ToolWidget*(*)>(_a[1])),(*reinterpret_cast< Tool*(*)>(_a[2]))); break;
+        case 19: _t->lockTool(); break;
+        case 20: _t->unlockTool(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -254,13 +258,13 @@ int ToolSelectWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 20)
+        if (_id < 21)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 20;
+        _id -= 21;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 20)
+        if (_id < 21)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 20;
+        _id -= 21;
     }
     return _id;
 }

@@ -322,6 +322,7 @@ void Window::connectSignals() {
   CONNECT(tools,           unlockRequested,     sprite.timeline, unlock);
   
   CONNECT(editor,          overlayChanged,      tools,           setOverlay);
+  CONNECT(editor,          mouseEnter,          tools,           mouseEnter);
   CONNECT(editor,          mouseLeave,          tools,           mouseLeave);
   CONNECT(editor,          mouseDown,           tools,           mouseDown);
   CONNECT(editor,          mouseMove,           tools,           mouseMove);

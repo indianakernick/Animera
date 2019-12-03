@@ -66,6 +66,10 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "open /Users/indikernick/Desktop/screenshot.png"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "new 4096 4096"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

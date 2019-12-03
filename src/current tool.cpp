@@ -22,6 +22,14 @@ void CurrentTool::setCell(Cell *newCell) {
   attach();
 }
 
+void CurrentTool::mouseEnter(const QPoint pos) {
+  assert(tool);
+  if (button == ButtonType::none) {
+    lastPos = pos;
+    tool->mouseMove({lastPos, lastPos, ButtonType::none});
+  }
+}
+
 void CurrentTool::mouseLeave() {
   assert(tool);
   tool->mouseLeave({lastPos, button});
@@ -54,9 +62,13 @@ void CurrentTool::mouseMove() {
 void CurrentTool::mouseUp(const QPoint ePos, const ButtonType eButton) {
   assert(tool);
   if (eButton == button) {
+    if (ePos != lastPos) {
+      // I'm pretty sure this never happens but now we can safely assume so
+      tool->mouseMove({ePos, lastPos, button});
+    }
+    lastPos = ePos;
     button = ButtonType::none;
     tool->mouseUp({ePos, lastPos, eButton});
-    lastPos = ePos;
   }
 }
 
