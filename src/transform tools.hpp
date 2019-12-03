@@ -13,7 +13,6 @@
 
 class TranslateTool final : public Tool {
 public:
-  void attachCell() override;
   void mouseLeave(const ToolLeaveEvent &) override;
   void mouseDown(const ToolMouseEvent &) override;
   void mouseMove(const ToolMouseEvent &) override;
@@ -21,7 +20,6 @@ public:
   void keyPress(const ToolKeyEvent &) override;
 
 private:
-  QPoint lastPos = no_point;
   bool drag = false;
   
   void translate(QPoint);

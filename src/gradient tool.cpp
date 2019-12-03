@@ -67,8 +67,7 @@ void LinearGradientTool::mouseMove(const ToolMouseEvent &event) {
   status.append("RECT: ");
   status.append(rect);
   drawGradient(rect, event.pos);
-  ctx->changeOverlay(event.lastPos);
-  ctx->changeCell(rect);
+  ctx->changeCell(rect.united(toRect(event.lastPos)));
 }
 
 void LinearGradientTool::mouseUp(const ToolMouseEvent &event) {

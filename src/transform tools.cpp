@@ -15,18 +15,12 @@
 #include "graphics convert.hpp"
 #include <Graphics/transform.hpp>
 
-void TranslateTool::attachCell() {
-  clearImage(*ctx->overlay);
-  ctx->emitChanges(ToolChanges::overlay);
-}
-
 void TranslateTool::mouseLeave(const ToolLeaveEvent &) {
   ctx->clearStatus();
 }
 
 void TranslateTool::mouseDown(const ToolMouseEvent &event) {
   if (event.button != ButtonType::primary) return;
-  lastPos = event.pos;
   drag = !ctx->cell->isNull();
   if (drag) ctx->lock();
 }
@@ -35,20 +29,16 @@ void TranslateTool::mouseMove(const ToolMouseEvent &event) {
   if (event.button != ButtonType::primary || !drag) {
     return updateStatus();
   }
-  translate(event.pos - lastPos);
+  const QPoint move = event.pos - event.lastPos;
+  if (move == QPoint{0, 0}) return;
+  translate(move);
   updateStatus();
-  lastPos = event.pos;
-  ctx->emitChanges(ToolChanges::cell);
 }
 
 void TranslateTool::mouseUp(const ToolMouseEvent &event) {
   if (event.button != ButtonType::primary || !drag) return;
-  ctx->unlock();
-  translate(event.pos - lastPos);
-  updateStatus();
-  lastPos = event.pos;
   drag = false;
-  ctx->emitChanges(ToolChanges::cell);
+  ctx->unlock();
   ctx->finishChange();
 }
 
@@ -72,22 +62,21 @@ void TranslateTool::keyPress(const ToolKeyEvent &event) {
   if (move == QPoint{0, 0}) return;
   translate(move);
   updateStatus();
-  ctx->emitChanges(ToolChanges::cell);
   ctx->finishChange();
 }
 
 void TranslateTool::translate(const QPoint move) {
+  const QRect rect = ctx->cell->rect();
   ctx->cell->pos += move;
+  ctx->changeCell(rect.united(rect.translated(move)));
 }
 
 void TranslateTool::updateStatus() {
-  ctx->showStatus(StatusMsg{}.appendLabeled(ctx->cell->pos));
+  ctx->showStatus().appendLabeled(ctx->cell->pos);
 }
 
 void FlipTool::attachCell() {
   flipX = flipY = false;
-  clearImage(*ctx->overlay);
-  ctx->emitChanges(ToolChanges::overlay);
 }
 
 void FlipTool::mouseLeave(const ToolLeaveEvent &) {
@@ -120,6 +109,7 @@ void FlipTool::mouseMove(const ToolMouseEvent &) {
 
 void FlipTool::keyPress(const ToolKeyEvent &event) {
   if (ctx->cell->isNull()) return;
+  const QRect rect = ctx->cell->rect();
   if (flipXChanged(event.key, flipX)) {
     QImage &src = ctx->cell->img;
     QImage flipped{src.size(), src.format()};
@@ -140,23 +130,20 @@ void FlipTool::keyPress(const ToolKeyEvent &event) {
     return;
   }
   updateStatus();
-  ctx->emitChanges(ToolChanges::cell);
+  ctx->changeCell(rect.united({ctx->cell->pos, rect.size()}));
   ctx->finishChange();
 }
 
 void FlipTool::updateStatus() {
-  StatusMsg status;
+  StatusMsg status = ctx->showStatus();
   status.append("X: ");
   status.append(flipX);
   status.append(" Y: ");
   status.append(flipY);
-  ctx->showStatus(status);
 }
 
 void RotateTool::attachCell() {
   angle = 0;
-  clearImage(*ctx->overlay);
-  ctx->emitChanges(ToolChanges::overlay);
 }
 
 void RotateTool::mouseLeave(const ToolLeaveEvent &) {
@@ -185,6 +172,7 @@ void RotateTool::keyPress(const ToolKeyEvent &event) {
   if (ctx->cell->isNull()) return;
   const int rot = arrowToRot(event.key);
   if (rot == 0) return;
+  const QRect rect = ctx->cell->rect();
   angle = (angle + rot) & 3;
   QImage &src = ctx->cell->img;
   QImage rotated{src.size().transposed(), src.format()};
@@ -211,13 +199,12 @@ void RotateTool::keyPress(const ToolKeyEvent &event) {
   } else Q_UNREACHABLE();
   src = std::move(rotated);
   updateStatus();
-  ctx->emitChanges(ToolChanges::cell);
+  ctx->changeCell(rect.united(ctx->cell->rect()));
   ctx->finishChange();
 }
 
 void RotateTool::updateStatus() {
-  StatusMsg status;
+  StatusMsg status = ctx->showStatus();
   status.append("ANGLE: ");
   status.append(angle * 90);
-  ctx->showStatus(status);
 }
