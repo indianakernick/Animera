@@ -71,15 +71,22 @@ public:
   QSize size;
   ToolColors colors;
   
-  void emitChanges(ToolChanges) const;
-  void emitChanges(bool) const;
+  [[deprecated]] void emitChanges(ToolChanges) const;
+  [[deprecated]] void emitChanges(bool) const;
+  
   void changeCell(QRect) const;
+  void changeCell(QPoint) const;
   void changeOverlay(QRect) const;
+  void changeOverlay(QPoint) const;
   void growCell(QRect) const;
+  
   QRgb selectColor(ButtonType) const;
+  
   void showStatus(const StatusMsg &) const;
   void clearStatus() const;
+  
   void finishChange() const;
+  
   void lock() const;
   void unlock() const;
 };

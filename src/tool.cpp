@@ -28,8 +28,16 @@ void ToolCtx::changeCell(const QRect rect) const {
   Q_EMIT cellModified(rect);
 }
 
+void ToolCtx::changeCell(const QPoint point) const {
+  changeCell(toRect(point));
+}
+
 void ToolCtx::changeOverlay(const QRect rect) const {
   Q_EMIT overlayModified(rect);
+}
+
+void ToolCtx::changeOverlay(const QPoint point) const {
+  changeOverlay(toRect(point));
 }
 
 void ToolCtx::growCell(const QRect rect) const {

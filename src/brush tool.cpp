@@ -24,10 +24,6 @@ void BrushTool::mouseLeave(const ToolLeaveEvent &event) {
 void BrushTool::mouseDown(const ToolMouseEvent &event) {
   SCOPE_TIME("BrushTool::mouseDown");
   
-  symPointStatus(event.pos);
-  symPointOverlay(event.lastPos, 0);
-  symPointOverlay(event.pos, tool_overlay_color);
-  symChangeOverlay({event.lastPos, event.pos});
   ctx->growCell(symPointRect(event.pos));
   color = ctx->selectColor(event.button);
   symPoint(event.pos);
@@ -128,7 +124,8 @@ void BrushTool::symChangeOverlay(const QLine line) {
   SCOPE_TIME("BrushTool::symChangeOverlay");
   
   visit(line, [this](const QLine line) {
-    ctx->changeOverlay(lineRect(line));
+    ctx->changeOverlay(pointRect(line.p1()));
+    ctx->changeOverlay(pointRect(line.p2()));
   });
 }
 
@@ -150,9 +147,8 @@ void BrushTool::symLine(const QLine line) {
   visit(line, [this](const QLine line) {
     QImage &img = ctx->cell->img;
     const QPoint pos = ctx->cell->pos;
-    const QRect rect = lineRect(line);
     drawLine(img, color, line.translated(-pos), radius);
-    ctx->changeCell(rect);
+    ctx->changeCell(lineRect(line));
   });
 }
 

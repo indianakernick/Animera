@@ -21,6 +21,7 @@
 #include <QtWidgets/qscrollbar.h>
 
 #define ENABLE_DEBUG_PAINT 1
+#define DISABLE_PAINT_RECT 0
 
 class EditorImage final : public QWidget {
   Q_OBJECT
@@ -340,6 +341,23 @@ EditorWidget::EditorWidget(QWidget *parent)
   setStyleSheet("background-color: " + glob_back_color.name());
 }
 
+#if DISABLE_PAINT_RECT
+
+void EditorWidget::composite(QRect) {
+  SCOPE_TIME("EditorWidget::composite");
+  
+  compositeFrame(view->getTarget(), palette, frame, format, toRect(size));
+  view->repaint();
+}
+
+void EditorWidget::compositeOverlay(QRect) {
+  SCOPE_TIME("EditorWidget::compositeOverlay");
+  
+  view->repaint();
+}
+
+#else
+
 void EditorWidget::composite(const QRect rect) {
   SCOPE_TIME("EditorWidget::composite");
   
@@ -358,6 +376,8 @@ void EditorWidget::compositeOverlay(const QRect rect) {
   view->repaint({rect.topLeft() * scale, rect.size() * scale});
   view->stopDebugPaint();
 }
+
+#endif
 
 void EditorWidget::compositePalette() {
   SCOPE_TIME("EditorWidget::compositePalette");

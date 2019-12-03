@@ -18,22 +18,18 @@ void FloodFillTool::mouseLeave(const ToolLeaveEvent &event) {
   
   ctx->clearStatus();
   drawSquarePoint(*ctx->overlay, 0, event.lastPos);
-  ctx->changeOverlay(toRect(event.lastPos));
+  ctx->changeOverlay(event.lastPos);
 }
 
 void FloodFillTool::mouseDown(const ToolMouseEvent &event) {
   SCOPE_TIME("FloodFillTool::mouseDown");
 
-  drawSquarePoint(*ctx->overlay, 0, event.lastPos);
-  ctx->changeOverlay(toRect(event.lastPos));
-  drawSquarePoint(*ctx->overlay, tool_overlay_color, event.pos);
   QRect rect = toRect(ctx->size);
   if (sampleCell(*ctx->cell, event.pos) == 0) {
     ctx->growCell(rect);
   } else {
     rect = rect.intersected(ctx->cell->rect());
   }
-  ctx->showStatus(StatusMsg{}.appendLabeled(event.pos));
   const QRgb color = ctx->selectColor(event.button);
   const QPoint pos = ctx->cell->pos;
   drawFloodFill(ctx->cell->img, color, event.pos - pos, rect.translated(-pos));
@@ -47,5 +43,6 @@ void FloodFillTool::mouseMove(const ToolMouseEvent &event) {
   ctx->showStatus(StatusMsg{}.appendLabeled(event.pos));
   drawSquarePoint(*ctx->overlay, 0, event.lastPos);
   drawSquarePoint(*ctx->overlay, tool_overlay_color, event.pos);
-  ctx->changeOverlay(unite(event.lastPos, event.pos));
+  ctx->changeOverlay(event.lastPos);
+  ctx->changeOverlay(event.pos);
 }

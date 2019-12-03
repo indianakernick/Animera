@@ -9,17 +9,19 @@
 #include "gradient tool.hpp"
 
 #include "painting.hpp"
+#include "scope time.hpp"
 
-void LinearGradientTool::mouseLeave(const ToolLeaveEvent &) {
-  clearImage(*ctx->overlay);
-  ctx->emitChanges(ToolChanges::overlay);
+void LinearGradientTool::mouseLeave(const ToolLeaveEvent &event) {
+  SCOPE_TIME("LinearGradientTool::mouseLeave");
+  
   ctx->clearStatus();
+  drawSquarePoint(*ctx->overlay, 0, event.lastPos);
+  ctx->changeOverlay(event.lastPos);
 }
 
 void LinearGradientTool::mouseDown(const ToolMouseEvent &event) {
-  clearImage(*ctx->overlay);
-  drawSquarePoint(*ctx->overlay, tool_overlay_color, event.pos);
-  
+  SCOPE_TIME("LinearGradientTool::mouseDown");
+
   if (event.button == ButtonType::secondary) {
     mode = opposite(mode);
   }
@@ -28,8 +30,7 @@ void LinearGradientTool::mouseDown(const ToolMouseEvent &event) {
   status.appendLabeled(mode);
   
   if (event.button != ButtonType::primary) {
-    ctx->showStatus(status.appendLabeled(event.pos));
-    return ctx->emitChanges(ToolChanges::overlay);
+    return ctx->showStatus(status.appendLabeled(event.pos));
   }
   
   startPos = event.pos;
@@ -40,12 +41,14 @@ void LinearGradientTool::mouseDown(const ToolMouseEvent &event) {
   cleanCell = *ctx->cell;
   const QPoint pos = ctx->cell->pos;
   drawSquarePoint(ctx->cell->img, ctx->colors.primary, startPos - pos);
-  ctx->emitChanges(ToolChanges::cell_overlay);
+  ctx->changeCell(startPos);
   ctx->lock();
 }
 
 void LinearGradientTool::mouseMove(const ToolMouseEvent &event) {
-  clearImage(*ctx->overlay);
+  SCOPE_TIME("LinearGradientTool::mouseMove");
+
+  drawSquarePoint(*ctx->overlay, 0, event.lastPos);
   drawSquarePoint(*ctx->overlay, tool_overlay_color, event.pos);
   
   StatusMsg status;
@@ -53,7 +56,9 @@ void LinearGradientTool::mouseMove(const ToolMouseEvent &event) {
   
   if (event.button != ButtonType::primary) {
     ctx->showStatus(status.appendLabeled(event.pos));
-    return ctx->emitChanges(ToolChanges::overlay);
+    ctx->changeOverlay(event.lastPos);
+    ctx->changeOverlay(event.pos);
+    return;
   }
   
   *ctx->cell = cleanCell;
@@ -63,25 +68,22 @@ void LinearGradientTool::mouseMove(const ToolMouseEvent &event) {
   status.append(rect);
   ctx->showStatus(status);
   drawGradient(rect, event.pos);
+  ctx->changeOverlay(event.lastPos);
+  ctx->changeCell(rect);
 }
 
 void LinearGradientTool::mouseUp(const ToolMouseEvent &event) {
-  clearImage(*ctx->overlay);
-  drawSquarePoint(*ctx->overlay, tool_overlay_color, event.pos);
+  SCOPE_TIME("LinearGradientTool::mouseUp");
   
-  if (event.button != ButtonType::primary) {
-    return ctx->emitChanges(ToolChanges::overlay);
+  if (event.button == ButtonType::primary) {
+    ctx->unlock();
+    ctx->finishChange();
   }
-  
-  ctx->unlock();
-  *ctx->cell = cleanCell;
-  QRect rect = unite(startPos, event.pos);
-  ctx->growCell(rect);
-  drawGradient(rect, event.pos);
-  ctx->finishChange();
 }
 
 void LinearGradientTool::drawGradient(QRect rect, const QPoint endPos) {
+  SCOPE_TIME("LinearGradientTool::drawGradient");
+  
   QImage &img = ctx->cell->img;
   const QPoint pos = ctx->cell->pos;
   QRgb first = ctx->colors.primary;
@@ -91,12 +93,12 @@ void LinearGradientTool::drawGradient(QRect rect, const QPoint endPos) {
       std::swap(first, second);
     }
     rect = rect.translated(-pos);
-    ctx->emitChanges(drawHoriGradient(img, first, second, rect));
+    drawHoriGradient(img, first, second, rect);
   } else if (mode == LineGradMode::vert) {
     if (startPos.y() > endPos.y()) {
       std::swap(first, second);
     }
     rect = rect.translated(-pos);
-    ctx->emitChanges(drawVertGradient(img, first, second, rect));
+    drawVertGradient(img, first, second, rect);
   } else Q_UNREACHABLE();
 }
