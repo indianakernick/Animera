@@ -24,12 +24,12 @@ void ToolCtx::emitChanges(const bool drawn) const {
   }
 }
 
-void ToolCtx::emitChanges(const bool drawn, const QRect rect) const {
-  if (drawn) {
-    Q_EMIT cellModified(rect);
-  } else {
-    Q_EMIT overlayModified(rect);
-  }
+void ToolCtx::changeCell(const QRect rect) const {
+  Q_EMIT cellModified(rect);
+}
+
+void ToolCtx::changeOverlay(const QRect rect) const {
+  Q_EMIT overlayModified(rect);
 }
 
 void ToolCtx::growCell(const QRect rect) const {

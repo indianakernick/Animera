@@ -128,7 +128,7 @@ void BrushTool::symChangeOverlay(const QLine line) {
   SCOPE_TIME("BrushTool::symChangeOverlay");
   
   visit(line, [this](const QLine line) {
-    ctx->emitChanges(false, lineRect(line));
+    ctx->changeOverlay(lineRect(line));
   });
 }
 
@@ -139,7 +139,8 @@ void BrushTool::symPoint(const QPoint point) {
     QImage &img = ctx->cell->img;
     const QPoint pos = ctx->cell->pos;
     const QRect rect = pointRect(point);
-    ctx->emitChanges(drawRoundPoint(img, color, point - pos, radius), rect);
+    drawRoundPoint(img, color, point - pos, radius);
+    ctx->changeCell(rect);
   });
 }
 
@@ -150,7 +151,8 @@ void BrushTool::symLine(const QLine line) {
     QImage &img = ctx->cell->img;
     const QPoint pos = ctx->cell->pos;
     const QRect rect = lineRect(line);
-    ctx->emitChanges(drawLine(img, color, line.translated(-pos), radius), rect);
+    drawLine(img, color, line.translated(-pos), radius);
+    ctx->changeCell(rect);
   });
 }
 

@@ -11,15 +11,21 @@
 #include "cell.hpp"
 #include "painting.hpp"
 #include "composite.hpp"
+#include "scope time.hpp"
 
-void FloodFillTool::mouseLeave(const ToolLeaveEvent &) {
-  clearImage(*ctx->overlay);
-  ctx->emitChanges(ToolChanges::overlay);
+void FloodFillTool::mouseLeave(const ToolLeaveEvent &event) {
+  SCOPE_TIME("FloodFillTool::mouseLeave");
+  
   ctx->clearStatus();
+  drawSquarePoint(*ctx->overlay, 0, event.lastPos);
+  ctx->changeOverlay(toRect(event.lastPos));
 }
 
 void FloodFillTool::mouseDown(const ToolMouseEvent &event) {
-  clearImage(*ctx->overlay);
+  SCOPE_TIME("FloodFillTool::mouseDown");
+
+  drawSquarePoint(*ctx->overlay, 0, event.lastPos);
+  ctx->changeOverlay(toRect(event.lastPos));
   drawSquarePoint(*ctx->overlay, tool_overlay_color, event.pos);
   QRect rect = toRect(ctx->size);
   if (sampleCell(*ctx->cell, event.pos) == 0) {
@@ -29,16 +35,17 @@ void FloodFillTool::mouseDown(const ToolMouseEvent &event) {
   }
   ctx->showStatus(StatusMsg{}.appendLabeled(event.pos));
   const QRgb color = ctx->selectColor(event.button);
-  QImage &img = ctx->cell->img;
   const QPoint pos = ctx->cell->pos;
-  rect.translate(-pos);
-  ctx->emitChanges(drawFloodFill(img, color, event.pos - pos, rect));
+  drawFloodFill(ctx->cell->img, color, event.pos - pos, rect.translated(-pos));
+  ctx->changeCell(rect);
   ctx->finishChange();
 }
 
 void FloodFillTool::mouseMove(const ToolMouseEvent &event) {
-  clearImage(*ctx->overlay);
-  drawSquarePoint(*ctx->overlay, tool_overlay_color, event.pos);
+  SCOPE_TIME("FloodFillTool::mouseMove");
+
   ctx->showStatus(StatusMsg{}.appendLabeled(event.pos));
-  ctx->emitChanges(ToolChanges::overlay);
+  drawSquarePoint(*ctx->overlay, 0, event.lastPos);
+  drawSquarePoint(*ctx->overlay, tool_overlay_color, event.pos);
+  ctx->changeOverlay(unite(event.lastPos, event.pos));
 }

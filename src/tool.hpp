@@ -73,7 +73,8 @@ public:
   
   void emitChanges(ToolChanges) const;
   void emitChanges(bool) const;
-  void emitChanges(bool, QRect) const;
+  void changeCell(QRect) const;
+  void changeOverlay(QRect) const;
   void growCell(QRect) const;
   QRgb selectColor(ButtonType) const;
   void showStatus(const StatusMsg &) const;
