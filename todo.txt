@@ -233,6 +233,7 @@ more abstract tool interface
     can all tools fit into this restricted model?
   mouseLeave event handlers seem to all be the same
   something similar to DragPaintTool but for all tools
+  RectangleSelectTool and PolygonSelectTool are almost identical
 
 remove signals from tools (maybe?)
   tools update a data structure

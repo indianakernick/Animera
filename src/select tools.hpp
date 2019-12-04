@@ -26,6 +26,7 @@ protected:
   QRect overlayRect(QPoint);
   void showOverlay(QPoint);
   void clearOverlay(QPoint);
+  void clearOverlay(SelectMode, QPoint);
   void toggleMode();
   
   QImage selection;

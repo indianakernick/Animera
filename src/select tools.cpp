@@ -161,6 +161,17 @@ void SelectTool<Derived>::clearOverlay(const QPoint pos) {
 }
 
 template <typename Derived>
+void SelectTool<Derived>::clearOverlay(const SelectMode currMode, const QPoint pos) {
+  if (currMode == SelectMode::copy) {
+    drawSquarePoint(*ctx->overlay, 0, pos);
+    ctx->changeOverlay(pos);
+  } else if (currMode == SelectMode::paste) {
+    clearOverlay(pos);
+    ctx->changeOverlay(overlayRect(pos));
+  } else Q_UNREACHABLE();
+}
+
+template <typename Derived>
 void SelectTool<Derived>::toggleMode() {
   if (mode == SelectMode::copy) {
     if (!bounds.isEmpty()) mode = SelectMode::paste;
@@ -179,13 +190,7 @@ void RectangleSelectTool::mouseLeave(const ToolLeaveEvent &event) {
   SCOPE_TIME("RectangleSelectTool::mouseLeave");
   
   ctx->clearStatus();
-  if (mode == SelectMode::copy) {
-    drawSquarePoint(*ctx->overlay, 0, event.lastPos);
-    ctx->changeOverlay(event.lastPos);
-  } else if (mode == SelectMode::paste) {
-    clearOverlay(event.lastPos);
-    ctx->changeOverlay(overlayRect(event.lastPos));
-  } else Q_UNREACHABLE();
+  clearOverlay(mode, event.lastPos);
 }
 
 void RectangleSelectTool::mouseDown(const ToolMouseEvent &event) {
@@ -195,13 +200,7 @@ void RectangleSelectTool::mouseDown(const ToolMouseEvent &event) {
     const SelectMode prevMode = mode;
     toggleMode();
     if (prevMode != mode) {
-      if (prevMode == SelectMode::copy) {
-        drawSquarePoint(*ctx->overlay, 0, event.lastPos);
-        ctx->changeOverlay(event.lastPos);
-      } else if (prevMode == SelectMode::paste) {
-        clearOverlay(event.lastPos);
-        ctx->changeOverlay(overlayRect(event.lastPos));
-      } else Q_UNREACHABLE();
+      clearOverlay(prevMode, event.lastPos);
     }
   }
   
@@ -210,10 +209,10 @@ void RectangleSelectTool::mouseDown(const ToolMouseEvent &event) {
   
   if (mode == SelectMode::copy) {
     if (event.button == ButtonType::primary) {
-      status.append("SELECTION: ");
-      status.append({event.pos, QSize{1, 1}});
       startPos = event.pos;
       ctx->lock();
+      status.append("SELECTION: ");
+      status.append({event.pos, QSize{1, 1}});
     } else {
       status.appendLabeled(event.pos);
     }
@@ -244,17 +243,17 @@ void RectangleSelectTool::mouseMove(const ToolMouseEvent &event) {
       status.append("SELECTION: ");
       status.append(bounds);
     } else {
-      status.appendLabeled(event.pos);
       drawSquarePoint(*ctx->overlay, 0, event.lastPos);
       drawSquarePoint(*ctx->overlay, tool_overlay_color, event.pos);
       ctx->changeOverlay(unite(event.lastPos, event.pos));
+      status.appendLabeled(event.pos);
     }
   } else if (mode == SelectMode::paste) {
-    status.append("SELECTION: ");
-    status.append(overlayRect(event.pos));
     clearOverlay(event.lastPos);
     showOverlay(event.pos);
     ctx->changeOverlay(overlayRect(event.pos).united(overlayRect(event.lastPos)));
+    status.append("SELECTION: ");
+    status.append(overlayRect(event.pos));
   } else Q_UNREACHABLE();
   
   ctx->showStatus(status);
@@ -288,12 +287,11 @@ void PolygonSelectTool::attachCell() {
   }
 }
 
-void PolygonSelectTool::mouseLeave(const ToolLeaveEvent &) {
+void PolygonSelectTool::mouseLeave(const ToolLeaveEvent &event) {
   SCOPE_TIME("PolygonSelectTool::mouseLeave");
   
-  clearImage(*ctx->overlay);
-  ctx->emitChanges(ToolChanges::overlay);
   ctx->clearStatus();
+  clearOverlay(mode, event.lastPos);
 }
 
 void PolygonSelectTool::mouseDown(const ToolMouseEvent &event) {
@@ -301,7 +299,11 @@ void PolygonSelectTool::mouseDown(const ToolMouseEvent &event) {
   
   clearImage(*ctx->overlay);
   if (event.button == ButtonType::secondary) {
+    const SelectMode prevMode = mode;
     toggleMode();
+    if (prevMode != mode) {
+      clearOverlay(prevMode, event.lastPos);
+    }
   }
   
   StatusMsg status;
@@ -317,7 +319,7 @@ void PolygonSelectTool::mouseDown(const ToolMouseEvent &event) {
       status.appendLabeled(event.pos);
     }
     drawSquarePoint(*ctx->overlay, tool_overlay_color, event.pos);
-    ctx->emitChanges(ToolChanges::overlay);
+    ctx->changeOverlay(event.pos);
   } else if (mode == SelectMode::paste) {
     status.append("SELECTION: ");
     status.append({event.pos + offset, bounds.size()});
@@ -331,26 +333,32 @@ void PolygonSelectTool::mouseDown(const ToolMouseEvent &event) {
 void PolygonSelectTool::mouseMove(const ToolMouseEvent &event) {
   SCOPE_TIME("PolygonSelectTool::mouseMove");
   
-  clearImage(*ctx->overlay);
   StatusMsg status;
   status.appendLabeled(mode);
+  
   if (mode == SelectMode::copy) {
     if (event.button == ButtonType::primary) {
+      drawFilledRect(*ctx->overlay, 0, bounds);
       pushPoly(event.pos);
       drawFilledPolygon(*ctx->overlay, tool_overlay_color, polygon);
+      ctx->changeOverlay(bounds);
       status.append("SELECTION: ");
       status.append(bounds);
     } else {
+      drawSquarePoint(*ctx->overlay, 0, event.lastPos);
       drawSquarePoint(*ctx->overlay, tool_overlay_color, event.pos);
+      ctx->changeOverlay(unite(event.lastPos, event.pos));
       status.appendLabeled(event.pos);
     }
   } else if (mode == SelectMode::paste) {
+    clearOverlay(event.lastPos);
     showOverlay(event.pos);
+    ctx->changeOverlay(overlayRect(event.pos).united(overlayRect(event.lastPos)));
     status.append("SELECTION: ");
-    status.append({event.pos + offset, bounds.size()});
+    status.append(overlayRect(event.pos));
   } else Q_UNREACHABLE();
+  
   ctx->showStatus(status);
-  ctx->emitChanges(ToolChanges::overlay);
 }
 
 void PolygonSelectTool::mouseUp(const ToolMouseEvent &event) {
@@ -366,14 +374,13 @@ void PolygonSelectTool::mouseUp(const ToolMouseEvent &event) {
     copyWithMask(event.pos, mask);
     mode = SelectMode::paste;
   }
-  clearImage(*ctx->overlay);
   showOverlay(event.pos);
+  ctx->changeOverlay(overlayRect(event.pos));
   StatusMsg status;
   status.appendLabeled(mode);
   status.append("SELECTION: ");
-  status.append({event.pos + offset, bounds.size()});
+  status.append(overlayRect(event.pos));
   ctx->showStatus(status);
-  ctx->emitChanges(ToolChanges::overlay);
 }
 
 void PolygonSelectTool::initPoly(const QPoint point) {
