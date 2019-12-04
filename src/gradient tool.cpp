@@ -59,8 +59,7 @@ void LinearGradientTool::mouseMove(const ToolMouseEvent &event) {
   
   if (event.button != ButtonType::primary) {
     ctx->showStatus(status.appendLabeled(event.pos));
-    ctx->changeOverlay(event.lastPos);
-    ctx->changeOverlay(event.pos);
+    ctx->changeOverlay(unite(event.lastPos, event.pos));
     return;
   }
   

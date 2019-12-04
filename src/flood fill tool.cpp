@@ -53,6 +53,5 @@ void FloodFillTool::mouseMove(const ToolMouseEvent &event) {
   ctx->showStatus(StatusMsg{}.appendLabeled(event.pos));
   drawSquarePoint(*ctx->overlay, 0, event.lastPos);
   drawSquarePoint(*ctx->overlay, tool_overlay_color, event.pos);
-  ctx->changeOverlay(event.lastPos);
-  ctx->changeOverlay(event.pos);
+  ctx->changeOverlay(unite(event.lastPos, event.pos));
 }
