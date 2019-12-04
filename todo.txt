@@ -139,15 +139,12 @@ thick line
   https://www.skytopia.com/project/articles/compsci/clipping.html
   http://kt8216.unixcab.org/murphy/index.html
 
-don't clear the whole overlay
-  do we really need to clear the whole thing all the time
-  there are some places where we must clear the whole thing
+why is the overlay a few frames behind the cursor?
+  is there anything that can be done?
+  
+can shrinkCell be optimized by accepting a rectangle?
 
-why is drawing on large images (screenshots) so slow?
-  just moving the mouse around is slow
-  maybe it's compositing
-  optimize compositing just one layer
-  use a profiler!
+optimize flood fill on 0
 
 ----------------------------------- scripting ----------------------------------
 

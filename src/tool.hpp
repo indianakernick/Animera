@@ -72,9 +72,6 @@ public:
   QSize size;
   ToolColors colors;
   
-  [[deprecated]] void emitChanges(ToolChanges) const;
-  [[deprecated]] void emitChanges(bool) const;
-  
   void changeCell(QRect) const;
   void changeCell(QPoint) const;
   void changeOverlay(QRect) const;
