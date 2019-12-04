@@ -22,6 +22,7 @@ bool drawSquarePoint(
   const QPoint pos,
   const gfx::CircleShape shape
 ) {
+  if (img.isNull()) return false;
   return visitSurface(img, [color, pos, shape](auto surface) {
     return gfx::drawFilledRect(surface, color, gfx::centerRect(convert(pos), shape));
   });
@@ -35,6 +36,7 @@ bool drawRoundPoint(
   const gfx::CircleShape shape
 ) {
   assert(radius >= 0);
+  if (img.isNull()) return false;
   if (radius == 0) {
     return drawSquarePoint(img, color, pos, shape);
   } else {
@@ -44,6 +46,7 @@ bool drawRoundPoint(
 
 bool drawFloodFill(QImage &img, const QRgb color, QPoint pos, QRect rect) {
   assert(!rect.isEmpty());
+  if (img.isNull()) return false;
   if (!img.rect().contains(pos)) return false;
   pos -= rect.topLeft();
   return visitSurface(img, [pos, color, rect](auto surface) {
@@ -58,6 +61,7 @@ bool drawFilledCircle(
   const int radius,
   const gfx::CircleShape shape
 ) {
+  if (img.isNull()) return false;
   return visitSurface(img, [center, radius, shape, color](auto surface) {
     return gfx::drawFilledCircle(surface, color, convert(center), radius, shape);
   });
@@ -72,12 +76,14 @@ bool drawStrokedCircle(
   const gfx::CircleShape shape
 ) {
   assert(thickness > 0);
+  if (img.isNull()) return false;
   return visitSurface(img, [center, radius, thickness, shape, color](auto surface) {
     return gfx::drawStrokedCircle(surface, color, convert(center), radius, radius - thickness + 1, shape);
   });
 }
 
 bool drawFilledRect(QImage &img, const QRgb color, const QRect rect) {
+  if (img.isNull()) return false;
   return visitSurface(img, [rect, color](auto surface) {
     return gfx::drawFilledRect(surface, color, convert(rect));
   });
@@ -90,6 +96,7 @@ bool drawStrokedRect(
   const int thickness
 ) {
   assert(thickness > 0);
+  if (img.isNull()) return false;
   if (!img.rect().intersects(rect)) return false;
   return visitSurface(img, [rect, thickness, color](auto surface) {
     const QRect inner = rect.marginsRemoved({thickness, thickness, thickness, thickness});
@@ -153,6 +160,7 @@ bool drawHoriGradient(
   const QRgb right,
   const QRect rect
 ) {
+  if (img.isNull()) return false;
   return visitSurface(img, [left, right, rect](auto surface) {
     using Pixel = typename decltype(surface)::Pixel;
     auto func = makeInterpolator<Pixel>(left, right);
@@ -166,6 +174,7 @@ bool drawVertGradient(
   const QRgb bottom,
   const QRect rect
 ) {
+  if (img.isNull()) return false;
   return visitSurface(img, [top, bottom, rect](auto surface) {
     using Pixel = typename decltype(surface)::Pixel;
     auto func = makeInterpolator<Pixel>(top, bottom);
@@ -174,6 +183,7 @@ bool drawVertGradient(
 }
 
 bool drawLine(QImage &img, const QRgb color, const QLine line, const int radius) {
+  if (img.isNull()) return false;
   return visitSurface(img, [line, radius, color](auto surface) {
     return gfx::drawLine(surface, color, convert(line.p1()), convert(line.p2()), radius);
   });
@@ -184,6 +194,7 @@ bool drawFilledPolygon(
   const QRgb color,
   const std::vector<QPoint> &poly
 ) {
+  if (img.isNull()) return false;
   // TODO: avoid using QPainter
   QPainter painter{&img};
   painter.setCompositionMode(QPainter::CompositionMode_Source);

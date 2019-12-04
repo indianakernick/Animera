@@ -95,19 +95,22 @@ void SelectTool<Derived>::paste(
 ) {
   SCOPE_TIME("SelectTool::paste");
   
+  const QRect rect = overlayRect(pos);
   if (button == ButtonType::secondary) {
-    return ctx->emitChanges(ToolChanges::overlay);
+    return ctx->changeOverlay(rect);
   }
-  const QRect rect{pos + offset, bounds.size()};
-  ctx->growCell(rect);
-  const QPoint cellPos = ctx->cell->pos;
-  const QPoint offsetPos = rect.topLeft() - cellPos;
   if (button == ButtonType::primary) {
-    blitImage(ctx->cell->img, cview(selection, bounds), offsetPos);
+    ctx->growCell(rect);
+    const QPoint cellPos = ctx->cell->pos;
+    blitImage(ctx->cell->img, cview(selection, bounds), rect.topLeft() - cellPos);
+    ctx->shrinkCell();
   } else if (button == ButtonType::erase) {
+    if (ctx->colors.erase != 0) ctx->growCell(rect);
+    const QPoint cellPos = ctx->cell->pos;
     drawFilledRect(ctx->cell->img, ctx->colors.erase, rect.translated(-cellPos));
+    if (ctx->colors.erase == 0) ctx->shrinkCell();
   }
-  ctx->emitChanges(ToolChanges::cell_overlay);
+  ctx->changeCell(rect);
   ctx->finishChange();
 }
 
@@ -119,19 +122,28 @@ void SelectTool<Derived>::pasteWithMask(
 ) {
   SCOPE_TIME("SelectTool::pasteWithMask");
   
+  const QRect rect = overlayRect(pos);
   if (button == ButtonType::secondary) {
-    return ctx->emitChanges(ToolChanges::overlay);
+    return ctx->changeOverlay(rect);
   }
-  const QRect rect = {pos + offset, bounds.size()};
-  ctx->growCell(rect);
-  const QPoint offsetPos = rect.topLeft() - ctx->cell->pos;
   if (button == ButtonType::primary) {
+    ctx->growCell(rect);
+    const QPoint offsetPos = rect.topLeft() - ctx->cell->pos;
     blitMaskImage(ctx->cell->img, cview(mask, bounds), cview(selection, bounds), offsetPos);
+    ctx->shrinkCell();
   } else if (button == ButtonType::erase) {
+    if (ctx->colors.erase != 0) ctx->growCell(rect);
+    const QPoint offsetPos = rect.topLeft() - ctx->cell->pos;
     fillMaskImage(ctx->cell->img, cview(mask, bounds), ctx->colors.erase, offsetPos);
+    if (ctx->colors.erase == 0) ctx->shrinkCell();
   }
-  ctx->emitChanges(ToolChanges::cell_overlay);
+  ctx->changeCell(rect);
   ctx->finishChange();
+}
+
+template <typename Derived>
+QRect SelectTool<Derived>::overlayRect(const QPoint pos) {
+  return {pos + offset, bounds.size()};
 }
 
 template <typename Derived>
@@ -142,9 +154,14 @@ void SelectTool<Derived>::showOverlay(const QPoint pos) {
 }
 
 template <typename Derived>
+void SelectTool<Derived>::clearOverlay(const QPoint pos) {
+  SCOPE_TIME("SelectTool::clearOverlay");
+                                   
+  drawFilledRect(*ctx->overlay, 0, overlayRect(pos));
+}
+
+template <typename Derived>
 void SelectTool<Derived>::toggleMode() {
-  SCOPE_TIME("SelectTool::toggleMode");
-  
   if (mode == SelectMode::copy) {
     if (!bounds.isEmpty()) mode = SelectMode::paste;
   } else if (mode == SelectMode::paste) {
@@ -158,69 +175,85 @@ void RectangleSelectTool::attachCell() {
   resizeImages();
 }
 
-void RectangleSelectTool::mouseLeave(const ToolLeaveEvent &) {
+void RectangleSelectTool::mouseLeave(const ToolLeaveEvent &event) {
   SCOPE_TIME("RectangleSelectTool::mouseLeave");
   
-  clearImage(*ctx->overlay);
-  ctx->emitChanges(ToolChanges::overlay);
   ctx->clearStatus();
+  if (mode == SelectMode::copy) {
+    drawSquarePoint(*ctx->overlay, 0, event.lastPos);
+    ctx->changeOverlay(event.lastPos);
+  } else if (mode == SelectMode::paste) {
+    clearOverlay(event.lastPos);
+    ctx->changeOverlay(overlayRect(event.lastPos));
+  } else Q_UNREACHABLE();
 }
 
 void RectangleSelectTool::mouseDown(const ToolMouseEvent &event) {
   SCOPE_TIME("RectangleSelectTool::mouseDown");
   
-  clearImage(*ctx->overlay);
   if (event.button == ButtonType::secondary) {
+    const SelectMode prevMode = mode;
     toggleMode();
+    if (prevMode != mode) {
+      if (prevMode == SelectMode::copy) {
+        drawSquarePoint(*ctx->overlay, 0, event.lastPos);
+        ctx->changeOverlay(event.lastPos);
+      } else if (prevMode == SelectMode::paste) {
+        clearOverlay(event.lastPos);
+        ctx->changeOverlay(overlayRect(event.lastPos));
+      } else Q_UNREACHABLE();
+    }
   }
   
-  StatusMsg status;
+  StatusMsg status = ctx->showStatus();
   status.appendLabeled(mode);
   
   if (mode == SelectMode::copy) {
     if (event.button == ButtonType::primary) {
-      startPos = event.pos;
-      ctx->lock();
       status.append("SELECTION: ");
       status.append({event.pos, QSize{1, 1}});
+      startPos = event.pos;
+      ctx->lock();
     } else {
       status.appendLabeled(event.pos);
     }
     drawSquarePoint(*ctx->overlay, tool_overlay_color, event.pos);
-    ctx->emitChanges(ToolChanges::overlay);
+    ctx->changeOverlay(event.pos);
   } else if (mode == SelectMode::paste) {
     status.append("SELECTION: ");
-    status.append({event.pos + offset, bounds.size()});
+    status.append(overlayRect(event.pos));
     showOverlay(event.pos);
     paste(event.pos, event.button);
   } else Q_UNREACHABLE();
-  
-  ctx->showStatus(status);
 }
 
 void RectangleSelectTool::mouseMove(const ToolMouseEvent &event) {
   SCOPE_TIME("RectangleSelectTool::mouseMove");
   
-  clearImage(*ctx->overlay);
-  StatusMsg status;
+  StatusMsg status = ctx->showStatus();
   status.appendLabeled(mode);
+  
   if (mode == SelectMode::copy) {
     if (event.button == ButtonType::primary) {
+      drawStrokedRect(*ctx->overlay, 0, bounds);
       bounds = unite(startPos, event.pos);
       drawStrokedRect(*ctx->overlay, tool_overlay_color, bounds);
+      ctx->changeOverlay(bounds.united(toRect(event.lastPos)));
       status.append("SELECTION: ");
       status.append(bounds);
     } else {
-      drawSquarePoint(*ctx->overlay, tool_overlay_color, event.pos);
       status.appendLabeled(event.pos);
+      drawSquarePoint(*ctx->overlay, 0, event.lastPos);
+      drawSquarePoint(*ctx->overlay, tool_overlay_color, event.pos);
+      ctx->changeOverlay(unite(event.lastPos, event.pos));
     }
   } else if (mode == SelectMode::paste) {
-    showOverlay(event.pos);
     status.append("SELECTION: ");
-    status.append({event.pos + offset, bounds.size()});
+    status.append(overlayRect(event.pos));
+    clearOverlay(event.lastPos);
+    showOverlay(event.pos);
+    ctx->changeOverlay(overlayRect(event.pos).united(overlayRect(event.lastPos)));
   } else Q_UNREACHABLE();
-  ctx->showStatus(status);
-  ctx->emitChanges(ToolChanges::overlay);
 }
 
 void RectangleSelectTool::mouseUp(const ToolMouseEvent &event) {
@@ -234,14 +267,12 @@ void RectangleSelectTool::mouseUp(const ToolMouseEvent &event) {
     copy(event.pos);
     mode = SelectMode::paste;
   }
-  clearImage(*ctx->overlay);
   showOverlay(event.pos);
-  StatusMsg status;
+  ctx->changeOverlay(overlayRect(event.pos));
+  StatusMsg status = ctx->showStatus();
   status.appendLabeled(mode);
   status.append("SELECTION: ");
-  status.append({event.pos + offset, bounds.size()});
-  ctx->showStatus(status);
-  ctx->emitChanges(ToolChanges::overlay);
+  status.append(overlayRect(event.pos));
 }
 
 void PolygonSelectTool::attachCell() {

@@ -32,6 +32,8 @@ void StatusBarWidget::showTemp(const std::string_view text) {
 }
 
 void StatusBarWidget::showNorm(const std::string_view text) {
+  SCOPE_TIME("StatusBarWidget::showNorm");
+  
   normText = toLatinString(text);
   repaint();
 }

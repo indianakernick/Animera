@@ -347,11 +347,14 @@ EditorWidget::EditorWidget(QWidget *parent)
 void EditorWidget::composite(const QRect rect) {
   SCOPE_TIME("EditorWidget::composite");
   
+  const int scale = view->getScale();
+  
   #if ENABLE_DEBUG_COMPOSITE
   view->compRect = {};
   for (const Cell *cell : frame) {
     view->compRect = view->compRect.united(cell->rect());
   }
+  view->compRect = {view->compRect.topLeft() * scale, view->compRect.size() * scale};
   #endif
   
   #if DISABLE_PAINT_RECT
@@ -359,7 +362,6 @@ void EditorWidget::composite(const QRect rect) {
   view->repaint();
   #else
   compositeFrame(view->getTarget(), palette, frame, format, rect);
-  const int scale = view->getScale();
   SET_DEBUG_PAINT(true);
   view->repaint({rect.topLeft() * scale, rect.size() * scale});
   SET_DEBUG_PAINT(false);
@@ -369,17 +371,19 @@ void EditorWidget::composite(const QRect rect) {
 void EditorWidget::compositeOverlay(const QRect rect) {
   SCOPE_TIME("EditorWidget::compositeOverlay");
   
+  const int scale = view->getScale();
+  
   #if ENABLE_DEBUG_COMPOSITE
   view->compRect = {};
   for (const Cell *cell : frame) {
     view->compRect = view->compRect.united(cell->rect());
   }
+  view->compRect = {view->compRect.topLeft() * scale, view->compRect.size() * scale};
   #endif
   
   #if DISABLE_PAINT_RECT
   view->repaint();
   #else
-  const int scale = view->getScale();
   SET_DEBUG_PAINT(true);
   view->repaint({rect.topLeft() * scale, rect.size() * scale});
   SET_DEBUG_PAINT(false);

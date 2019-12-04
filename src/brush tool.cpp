@@ -124,8 +124,7 @@ void BrushTool::symChangeOverlay(const QLine line) {
   SCOPE_TIME("BrushTool::symChangeOverlay");
   
   visit(line, [this](const QLine line) {
-    ctx->changeOverlay(pointRect(line.p1()));
-    ctx->changeOverlay(pointRect(line.p2()));
+    ctx->changeOverlay(lineRect(line));
   });
 }
 

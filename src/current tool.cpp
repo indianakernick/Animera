@@ -39,7 +39,9 @@ void CurrentTool::mouseEnter() {
 
 void CurrentTool::mouseLeave() {
   assert(tool);
-  tool->mouseLeave({lastPos, button});
+  if (button == ButtonType::none) {
+    tool->mouseLeave({lastPos, ButtonType::none});
+  }
 }
 
 void CurrentTool::mouseDown(const QPoint ePos, const ButtonType eButton) {
@@ -47,7 +49,7 @@ void CurrentTool::mouseDown(const QPoint ePos, const ButtonType eButton) {
   if (button == ButtonType::none) {
     if (ePos != lastPos) {
       // I'm pretty sure this never happens but now we can safely assume so
-      tool->mouseMove({lastPos, ePos, ButtonType::none});
+      tool->mouseMove({ePos, lastPos, ButtonType::none});
     }
     lastPos = ePos;
     button = eButton;

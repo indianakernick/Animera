@@ -23,7 +23,9 @@ protected:
   void copyWithMask(QPoint, const QImage &);
   void paste(QPoint, ButtonType);
   void pasteWithMask(QPoint, ButtonType, const QImage &);
+  QRect overlayRect(QPoint);
   void showOverlay(QPoint);
+  void clearOverlay(QPoint);
   void toggleMode();
   
   QImage selection;
