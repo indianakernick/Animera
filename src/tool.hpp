@@ -85,8 +85,7 @@ public:
   
   QRgb selectColor(ButtonType) const;
   
-  [[deprecated]] void showStatus(const StatusMsg &) const;
-  StatusMsg showStatus() const;
+  void showStatus(const StatusMsg &) const;
   void clearStatus() const;
   
   void finishChange() const;

@@ -22,11 +22,16 @@ void CurrentTool::setCell(Cell *newCell) {
   attach();
 }
 
-void CurrentTool::mouseEnter(const QPoint pos) {
+void CurrentTool::mouseEnter(const QPoint ePos) {
   assert(tool);
   if (button == ButtonType::none) {
-    lastPos = pos;
-    tool->mouseMove({lastPos, lastPos, ButtonType::none});
+    if (lastPos == QPoint{-1, -1}) {
+      lastPos = ePos;
+      tool->mouseMove({lastPos, lastPos, ButtonType::none});
+    } else {
+      tool->mouseMove({ePos, lastPos, ButtonType::none});
+      lastPos = ePos;
+    }
   }
 }
 

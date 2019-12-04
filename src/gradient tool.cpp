@@ -26,16 +26,17 @@ void LinearGradientTool::mouseDown(const ToolMouseEvent &event) {
     mode = opposite(mode);
   }
   
-  StatusMsg status = ctx->showStatus();
+  StatusMsg status;
   status.appendLabeled(mode);
   
   if (event.button != ButtonType::primary) {
-    status.appendLabeled(event.pos);
+    ctx->showStatus(status.appendLabeled(event.pos));
     return;
   }
   
   status.append("RECT: ");
   status.append({event.pos, QSize{1, 1}});
+  ctx->showStatus(status);
   startPos = event.pos;
   if (ctx->colors.primary != 0 || ctx->colors.secondary != 0) {
     ctx->growCell(toRect(startPos));
@@ -53,11 +54,11 @@ void LinearGradientTool::mouseMove(const ToolMouseEvent &event) {
   drawSquarePoint(*ctx->overlay, 0, event.lastPos);
   drawSquarePoint(*ctx->overlay, tool_overlay_color, event.pos);
   
-  StatusMsg status = ctx->showStatus();
+  StatusMsg status;
   status.appendLabeled(mode);
   
   if (event.button != ButtonType::primary) {
-    status.appendLabeled(event.pos);
+    ctx->showStatus(status.appendLabeled(event.pos));
     ctx->changeOverlay(event.lastPos);
     ctx->changeOverlay(event.pos);
     return;
@@ -66,6 +67,7 @@ void LinearGradientTool::mouseMove(const ToolMouseEvent &event) {
   QRect rect = unite(startPos, event.pos);
   status.append("RECT: ");
   status.append(rect);
+  ctx->showStatus(status);
   *ctx->cell = cleanCell;
   if (ctx->colors.primary != 0 || ctx->colors.secondary != 0) {
     ctx->growCell(rect);
@@ -78,9 +80,10 @@ void LinearGradientTool::mouseUp(const ToolMouseEvent &event) {
   SCOPE_TIME("LinearGradientTool::mouseUp");
   
   if (event.button != ButtonType::primary) return;
-  StatusMsg status = ctx->showStatus();
+  StatusMsg status;
   status.appendLabeled(mode);
   status.appendLabeled(event.pos);
+  ctx->showStatus(status);
   ctx->unlock();
   if (ctx->colors.primary == 0 || ctx->colors.secondary == 0) {
     ctx->shrinkCell();

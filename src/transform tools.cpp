@@ -72,7 +72,7 @@ void TranslateTool::translate(const QPoint move) {
 }
 
 void TranslateTool::updateStatus() {
-  ctx->showStatus().appendLabeled(ctx->cell->pos);
+  ctx->showStatus(StatusMsg{}.appendLabeled(ctx->cell->pos));
 }
 
 void FlipTool::attachCell() {
@@ -135,11 +135,12 @@ void FlipTool::keyPress(const ToolKeyEvent &event) {
 }
 
 void FlipTool::updateStatus() {
-  StatusMsg status = ctx->showStatus();
+  StatusMsg status;
   status.append("X: ");
   status.append(flipX);
   status.append(" Y: ");
   status.append(flipY);
+  ctx->showStatus(status);
 }
 
 void RotateTool::attachCell() {
@@ -204,7 +205,8 @@ void RotateTool::keyPress(const ToolKeyEvent &event) {
 }
 
 void RotateTool::updateStatus() {
-  StatusMsg status = ctx->showStatus();
+  StatusMsg status;
   status.append("ANGLE: ");
   status.append(angle * 90);
+  ctx->showStatus(status);
 }

@@ -32,8 +32,9 @@ void DragPaintTool<Derived>::mouseLeave(const ToolLeaveEvent &event) {
 
 template <typename Derived>
 void DragPaintTool<Derived>::mouseDown(const ToolMouseEvent &event) {
-  StatusMsg status = ctx->showStatus();
+  StatusMsg status;
   that()->updateStatus(status, event.pos, event.pos);
+  ctx->showStatus(status);
   
   startPos = event.pos;
   color = ctx->selectColor(event.button);
@@ -52,13 +53,14 @@ void DragPaintTool<Derived>::mouseMove(const ToolMouseEvent &event) {
   that()->drawPoint(*ctx->overlay, tool_overlay_color, event.pos);
   
   if (event.button == ButtonType::none) {
-    ctx->showStatus().appendLabeled(event.pos);
+    ctx->showStatus(StatusMsg{}.appendLabeled(event.pos));
     ctx->changeOverlay(that()->dragRect(event.lastPos, event.pos));
     return;
   }
   
-  StatusMsg status = ctx->showStatus();
+  StatusMsg status;
   that()->updateStatus(status, startPos, event.pos);
+  ctx->showStatus(status);
   
   *ctx->cell = cleanCell;
   const QRect rect = that()->dragRect(startPos, event.pos);
@@ -70,7 +72,7 @@ void DragPaintTool<Derived>::mouseMove(const ToolMouseEvent &event) {
 
 template <typename Derived>
 void DragPaintTool<Derived>::mouseUp(const ToolMouseEvent &event) {
-  ctx->showStatus().appendLabeled(event.pos);
+  ctx->showStatus(StatusMsg{}.appendLabeled(event.pos));
   ctx->unlock();
   if (color == 0) ctx->shrinkCell();
   ctx->finishChange();

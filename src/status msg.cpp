@@ -8,22 +8,6 @@
 
 #include "status msg.hpp"
 
-#include "tool.hpp"
-
-StatusMsg::StatusMsg()
-  : ctx{} {}
-
-StatusMsg::StatusMsg(const ToolCtx *ctx)
-  : ctx{ctx} {
-  assert(ctx);
-}
-
-StatusMsg::~StatusMsg() {
-  if (ctx) {
-    Q_EMIT ctx->shouldShowNorm(msg);
-  }
-}
-
 void StatusMsg::clear() {
   msg.clear();
 }

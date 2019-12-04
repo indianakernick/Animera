@@ -205,7 +205,7 @@ void RectangleSelectTool::mouseDown(const ToolMouseEvent &event) {
     }
   }
   
-  StatusMsg status = ctx->showStatus();
+  StatusMsg status;
   status.appendLabeled(mode);
   
   if (mode == SelectMode::copy) {
@@ -225,12 +225,14 @@ void RectangleSelectTool::mouseDown(const ToolMouseEvent &event) {
     showOverlay(event.pos);
     paste(event.pos, event.button);
   } else Q_UNREACHABLE();
+  
+  ctx->showStatus(status);
 }
 
 void RectangleSelectTool::mouseMove(const ToolMouseEvent &event) {
   SCOPE_TIME("RectangleSelectTool::mouseMove");
   
-  StatusMsg status = ctx->showStatus();
+  StatusMsg status;
   status.appendLabeled(mode);
   
   if (mode == SelectMode::copy) {
@@ -254,6 +256,8 @@ void RectangleSelectTool::mouseMove(const ToolMouseEvent &event) {
     showOverlay(event.pos);
     ctx->changeOverlay(overlayRect(event.pos).united(overlayRect(event.lastPos)));
   } else Q_UNREACHABLE();
+  
+  ctx->showStatus(status);
 }
 
 void RectangleSelectTool::mouseUp(const ToolMouseEvent &event) {
@@ -269,10 +273,11 @@ void RectangleSelectTool::mouseUp(const ToolMouseEvent &event) {
   }
   showOverlay(event.pos);
   ctx->changeOverlay(overlayRect(event.pos));
-  StatusMsg status = ctx->showStatus();
+  StatusMsg status;
   status.appendLabeled(mode);
   status.append("SELECTION: ");
   status.append(overlayRect(event.pos));
+  ctx->showStatus(status);
 }
 
 void PolygonSelectTool::attachCell() {

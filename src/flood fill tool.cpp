@@ -50,7 +50,7 @@ void FloodFillTool::mouseDown(const ToolMouseEvent &event) {
 void FloodFillTool::mouseMove(const ToolMouseEvent &event) {
   SCOPE_TIME("FloodFillTool::mouseMove");
 
-  ctx->showStatus().appendLabeled(event.pos);
+  ctx->showStatus(StatusMsg{}.appendLabeled(event.pos));
   drawSquarePoint(*ctx->overlay, 0, event.lastPos);
   drawSquarePoint(*ctx->overlay, tool_overlay_color, event.pos);
   ctx->changeOverlay(event.lastPos);
