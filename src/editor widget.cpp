@@ -20,7 +20,7 @@
 #include <Graphics/iterator.hpp>
 #include <QtWidgets/qscrollbar.h>
 
-#define ENABLE_DEBUG_COMPOSITE 1
+#define ENABLE_DEBUG_COMPOSITE 0
 #define ENABLE_DEBUG_PAINT ENABLE_DEBUG_COMPOSITE ? 0 : 1
 #define DISABLE_PAINT_RECT ENABLE_DEBUG_COMPOSITE ? 1 : 0
 
@@ -223,7 +223,7 @@ private:
     #endif
     
     #if ENABLE_DEBUG_COMPOSITE
-    painter.fillRect(compRect, QColor{0, 0, 255, 63});
+    painter.fillRect(QRect{compRect.topLeft() * scale, compRect.size() * scale}, QColor{0, 0, 255, 63});
     #endif
   }
   
@@ -347,14 +347,11 @@ EditorWidget::EditorWidget(QWidget *parent)
 void EditorWidget::composite(const QRect rect) {
   SCOPE_TIME("EditorWidget::composite");
   
-  const int scale = view->getScale();
-  
   #if ENABLE_DEBUG_COMPOSITE
   view->compRect = {};
   for (const Cell *cell : frame) {
     view->compRect = view->compRect.united(cell->rect());
   }
-  view->compRect = {view->compRect.topLeft() * scale, view->compRect.size() * scale};
   #endif
   
   #if DISABLE_PAINT_RECT
@@ -363,6 +360,7 @@ void EditorWidget::composite(const QRect rect) {
   #else
   compositeFrame(view->getTarget(), palette, frame, format, rect);
   SET_DEBUG_PAINT(true);
+  const int scale = view->getScale();
   view->repaint({rect.topLeft() * scale, rect.size() * scale});
   SET_DEBUG_PAINT(false);
   #endif
@@ -371,20 +369,18 @@ void EditorWidget::composite(const QRect rect) {
 void EditorWidget::compositeOverlay(const QRect rect) {
   SCOPE_TIME("EditorWidget::compositeOverlay");
   
-  const int scale = view->getScale();
-  
   #if ENABLE_DEBUG_COMPOSITE
   view->compRect = {};
   for (const Cell *cell : frame) {
     view->compRect = view->compRect.united(cell->rect());
   }
-  view->compRect = {view->compRect.topLeft() * scale, view->compRect.size() * scale};
   #endif
   
   #if DISABLE_PAINT_RECT
   view->repaint();
   #else
   SET_DEBUG_PAINT(true);
+  const int scale = view->getScale();
   view->repaint({rect.topLeft() * scale, rect.size() * scale});
   SET_DEBUG_PAINT(false);
   #endif

@@ -266,7 +266,8 @@ void RectangleSelectTool::mouseUp(const ToolMouseEvent &event) {
   if (mode == SelectMode::copy) {
     ctx->unlock();
     bounds = unite(startPos, event.pos);
-    clearImage(selection);
+    drawFilledRect(selection, 0, lastBounds);
+    lastBounds = bounds;
     copy(event.pos);
     mode = SelectMode::paste;
   }
@@ -297,7 +298,6 @@ void PolygonSelectTool::mouseLeave(const ToolLeaveEvent &event) {
 void PolygonSelectTool::mouseDown(const ToolMouseEvent &event) {
   SCOPE_TIME("PolygonSelectTool::mouseDown");
   
-  clearImage(*ctx->overlay);
   if (event.button == ButtonType::secondary) {
     const SelectMode prevMode = mode;
     toggleMode();
@@ -368,9 +368,10 @@ void PolygonSelectTool::mouseUp(const ToolMouseEvent &event) {
   if (mode == SelectMode::copy) {
     ctx->unlock();
     pushPoly(event.pos);
-    clearImage(mask);
+    drawFilledRect(mask, 0, lastBounds);
     drawFilledPolygon(mask, mask_color_on, polygon);
-    clearImage(selection);
+    drawFilledRect(selection, 0, lastBounds);
+    lastBounds = bounds;
     copyWithMask(event.pos, mask);
     mode = SelectMode::paste;
   }
@@ -405,13 +406,12 @@ WandSelectTool::WandSelectTool() {
 void WandSelectTool::attachCell() {
   SCOPE_TIME("WandSelectTool::attachCell");
   
-  clearImage(*ctx->overlay);
-  ctx->emitChanges(ToolChanges::overlay);
   mode = SelectMode::copy;
   if (resizeImages()) {
     mask = {ctx->size, mask_format};
   }
-  clearImage(mask);
+  drawFilledRect(mask, 0, bounds);
+  bounds = {};
   animTimer.start();
 }
 
@@ -419,18 +419,21 @@ void WandSelectTool::detachCell() {
   SCOPE_TIME("WandSelectTool::detachCell");
   
   animTimer.stop();
-  clearImage(*ctx->overlay);
-  ctx->emitChanges(ToolChanges::overlay);
+  if (mode == SelectMode::copy) {
+    drawFilledRect(*ctx->overlay, 0, bounds);
+    ctx->changeOverlay(bounds);
+  }
 }
 
-void WandSelectTool::mouseLeave(const ToolLeaveEvent &) {
+void WandSelectTool::mouseLeave(const ToolLeaveEvent &event) {
   SCOPE_TIME("WandSelectTool::mouseLeave");
   
-  if (mode == SelectMode::paste) {
-    clearImage(*ctx->overlay);
-    ctx->emitChanges(ToolChanges::overlay);
-  }
   ctx->clearStatus();
+  if (mode == SelectMode::paste) {
+    const QRect rect = overlayRect(event.lastPos);
+    drawFilledRect(*ctx->overlay, 0, rect);
+    ctx->changeOverlay(rect);
+  }
 }
 
 void WandSelectTool::mouseDown(const ToolMouseEvent &event) {
@@ -438,7 +441,6 @@ void WandSelectTool::mouseDown(const ToolMouseEvent &event) {
   
   if (event.button == ButtonType::secondary) {
     toggleMode(event);
-    ctx->emitChanges(ToolChanges::overlay);
   }
 
   StatusMsg status;
@@ -452,7 +454,7 @@ void WandSelectTool::mouseDown(const ToolMouseEvent &event) {
   } else if (mode == SelectMode::paste) {
     status.append("SELECTION: ");
     status.append({event.pos + offset, bounds.size()});
-    clearImage(*ctx->overlay);
+    clearOverlay(event.lastPos);
     showOverlay(event.pos);
     pasteWithMask(event.pos, event.button, mask);
   } else Q_UNREACHABLE();
@@ -465,16 +467,22 @@ void WandSelectTool::mouseMove(const ToolMouseEvent &event) {
   
   StatusMsg status;
   status.appendLabeled(mode);
+  
   if (mode == SelectMode::copy) {
     status.appendLabeled(event.pos);
   } else if (mode == SelectMode::paste) {
     status.append("SELECTION: ");
-    status.append({event.pos + offset, bounds.size()});
-    clearImage(*ctx->overlay);
+    status.append(overlayRect(event.pos));
+    clearOverlay(event.lastPos);
     showOverlay(event.pos);
-    ctx->emitChanges(ToolChanges::overlay);
+    ctx->changeOverlay(overlayRect(event.lastPos).united(overlayRect(event.pos)));
   } else Q_UNREACHABLE();
+  
   ctx->showStatus(status);
+}
+
+QRect WandSelectTool::cellRect() const {
+  return toRect(ctx->size).intersected(ctx->cell->rect());
 }
 
 void WandSelectTool::toggleMode(const ToolMouseEvent &event) {
@@ -482,17 +490,22 @@ void WandSelectTool::toggleMode(const ToolMouseEvent &event) {
   
   if (mode == SelectMode::paste) {
     mode = SelectMode::copy;
-    clearImage(*ctx->overlay);
-    clearImage(overlay);
-    clearImage(mask);
+    const QRect rect = overlayRect(event.lastPos);
+    drawFilledRect(*ctx->overlay, 0, rect);
+    ctx->changeOverlay(rect);
+    drawFilledRect(overlay, 0, bounds);
+    drawFilledRect(mask, 0, bounds);
     bounds = {};
     animTimer.start();
   } else if (mode == SelectMode::copy) {
-    animTimer.stop();
     if (bounds.isEmpty()) return;
+    animTimer.stop();
     mode = SelectMode::paste;
-    clearImage(selection);
+    drawFilledRect(*ctx->overlay, 0, bounds);
+    ctx->changeOverlay(bounds);
+    drawFilledRect(selection, 0, bounds);
     copyWithMask(event.pos, mask);
+    ctx->shrinkCell();
   } else Q_UNREACHABLE();
 }
 
@@ -577,9 +590,7 @@ void WandSelectTool::addToSelection(const ToolMouseEvent &event) {
   }
   
   if (removedFromSelection) {
-    // TODO: don't clear the whole overlay
-    // just clear rect
-    clearImage(*ctx->overlay);
+    drawFilledRect(*ctx->overlay, 0, rect);
   }
   paintOverlay();
 }
@@ -595,10 +606,10 @@ QRgb WandSelectTool::getOverlayColor() const {
 void WandSelectTool::paintOverlay() const {
   SCOPE_TIME("WandSelectTool::paintOverlay");
   
-  const QRect rect = toRect(ctx->size).intersected(ctx->cell->rect());
-  if (rect.isEmpty()) return;
-  fillMaskImage(*ctx->overlay, cview(mask, rect), getOverlayColor(), rect.topLeft());
-  ctx->emitChanges(ToolChanges::overlay);
+  if (mode != SelectMode::copy) return;
+  if (bounds.isEmpty()) return;
+  fillMaskImage(*ctx->overlay, cview(mask, bounds), getOverlayColor(), bounds.topLeft());
+  ctx->changeOverlay(bounds);
 }
 
 void WandSelectTool::animate() {

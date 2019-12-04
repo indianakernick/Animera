@@ -303,6 +303,8 @@ editor scale in status bar
 
 ignore the waking click
 
+zoom into the mouse instead of zooming into the center
+
 ------------------------------- minor refactoring ------------------------------
 
 there might be a few random constants that should be in config.hpp but aren't

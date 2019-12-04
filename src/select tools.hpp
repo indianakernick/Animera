@@ -33,6 +33,7 @@ protected:
   QImage overlay;
   QPoint offset;
   QRect bounds;
+  QRect lastBounds;
   SelectMode mode = SelectMode::copy;
 };
 
@@ -81,6 +82,7 @@ private:
   QTimer animTimer;
   int animFrame;
   
+  QRect cellRect() const;
   void toggleMode(const ToolMouseEvent &);
   void addToSelection(const ToolMouseEvent &);
   QRgb getOverlayColor() const;
