@@ -10,6 +10,7 @@
 
 #include <Graphics/fill.hpp>
 #include "surface factory.hpp"
+#include "graphics convert.hpp"
 
 bool compatible(const QImage &a, const QImage &b) {
   return a.size() == b.size() && a.format() == b.format();
@@ -37,6 +38,12 @@ void clearImage(QImage &dst) {
 void clearImage(QImage &dst, const QRgb color) {
   visitSurfaces(dst, color, [](auto dst, auto color) {
     gfx::overFill(dst, color);
+  });
+}
+
+void clearImage(QImage &dst, const QRect rect) {
+  visitSurface(dst, [rect](auto dst) {
+    gfx::fillRegion(dst, convert(rect));
   });
 }
 

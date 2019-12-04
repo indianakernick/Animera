@@ -64,6 +64,7 @@ QImage makeMask(QSize);
 void copyImage(QImage &, const QImage &);
 void clearImage(QImage &);
 void clearImage(QImage &, QRgb);
+void clearImage(QImage &, QRect);
 
 // TODO: Is a custom image worth considering?
 // The non-const version is kind of annoying to use.
