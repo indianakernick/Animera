@@ -28,8 +28,12 @@ void ToolCtx::growCell(const QRect rect) const {
   Q_EMIT growRequested(rect);
 }
 
+void ToolCtx::shrinkCell(const QRect rect) const {
+  Q_EMIT shrinkRequested(rect);
+}
+
 void ToolCtx::shrinkCell() const {
-  Q_EMIT shrinkRequested();
+  Q_EMIT shrinkRequested(toRect(size));
 }
 
 QRgb ToolCtx::selectColor(const ButtonType button) const {

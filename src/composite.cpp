@@ -255,10 +255,14 @@ void growCell(Cell &cell, const Format format, const QRect rect) {
   }
 }
 
-void shrinkCell(Cell &cell) {
+void shrinkCell(Cell &cell, const QRect rect) {
   SCOPE_TIME("shrinkCell");
-
+  
   if (!cell) return;
+  if (rect.isEmpty()) return;
+  if (!cell.rect().intersects(rect)) return;
+  if (cell.rect().contains(rect, true)) return;
+  
   QPoint min = toPoint(std::numeric_limits<int>::max());
   QPoint max = toPoint(std::numeric_limits<int>::min());
   visitSurface(cell.img, [&min, &max](auto image) {
@@ -277,15 +281,15 @@ void shrinkCell(Cell &cell) {
       ++y;
     }
   });
-  const QRect rect{min, max};
-  if (rect.isEmpty()) {
+  const QRect newRect{min, max};
+  if (newRect.isEmpty()) {
     cell = {};
     return;
   }
-  QImage image{rect.size(), cell.img.format()};
-  blitImage(image, cell.img, -rect.topLeft());
+  QImage image{newRect.size(), cell.img.format()};
+  blitImage(image, cell.img, -newRect.topLeft());
   cell.img = std::move(image);
-  cell.pos += rect.topLeft();
+  cell.pos += newRect.topLeft();
 }
 
 QRgb sampleCell(const Cell &cell, QPoint pos) {

@@ -26,6 +26,7 @@ private:
   int radius = 4;
   SymmetryMode mode = SymmetryMode::none;
   QRgb color = 0;
+  QRect bounds;
   
   template <typename Func>
   void visit(Func, bool = true) const;

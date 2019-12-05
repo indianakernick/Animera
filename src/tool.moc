@@ -72,9 +72,9 @@ static const uint qt_meta_data_ToolCtx[] = {
        4,    1,   60,    2, 0x06 /* Public */,
        6,    0,   63,    2, 0x06 /* Public */,
        7,    1,   64,    2, 0x06 /* Public */,
-       8,    0,   67,    2, 0x06 /* Public */,
-       9,    0,   68,    2, 0x06 /* Public */,
-      10,    0,   69,    2, 0x06 /* Public */,
+       8,    1,   67,    2, 0x06 /* Public */,
+       9,    0,   70,    2, 0x06 /* Public */,
+      10,    0,   71,    2, 0x06 /* Public */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::QRect,    2,
@@ -82,7 +82,7 @@ static const uint qt_meta_data_ToolCtx[] = {
     QMetaType::Void, 0x80000000 | 5,    2,
     QMetaType::Void,
     QMetaType::Void, QMetaType::QRect,    2,
-    QMetaType::Void,
+    QMetaType::Void, QMetaType::QRect,    2,
     QMetaType::Void,
     QMetaType::Void,
 
@@ -100,7 +100,7 @@ void ToolCtx::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, voi
         case 2: _t->shouldShowNorm((*reinterpret_cast< std::string_view(*)>(_a[1]))); break;
         case 3: _t->changingAction(); break;
         case 4: _t->growRequested((*reinterpret_cast< QRect(*)>(_a[1]))); break;
-        case 5: _t->shrinkRequested(); break;
+        case 5: _t->shrinkRequested((*reinterpret_cast< QRect(*)>(_a[1]))); break;
         case 6: _t->lockRequested(); break;
         case 7: _t->unlockRequested(); break;
         default: ;
@@ -143,7 +143,7 @@ void ToolCtx::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, voi
             }
         }
         {
-            using _t = void (ToolCtx::*)() const;
+            using _t = void (ToolCtx::*)(QRect ) const;
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ToolCtx::shrinkRequested)) {
                 *result = 5;
                 return;
@@ -241,9 +241,10 @@ void ToolCtx::growRequested(QRect _t1)const
 }
 
 // SIGNAL 5
-void ToolCtx::shrinkRequested()const
+void ToolCtx::shrinkRequested(QRect _t1)const
 {
-    QMetaObject::activate(const_cast< ToolCtx *>(this), &staticMetaObject, 5, nullptr);
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    QMetaObject::activate(const_cast< ToolCtx *>(this), &staticMetaObject, 5, _a);
 }
 
 // SIGNAL 6

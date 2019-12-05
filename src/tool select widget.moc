@@ -101,25 +101,25 @@ static const uint qt_meta_data_ToolSelectWidget[] = {
        4,    1,  130,    2, 0x06 /* Public */,
        6,    0,  133,    2, 0x06 /* Public */,
        7,    1,  134,    2, 0x06 /* Public */,
-       8,    0,  137,    2, 0x06 /* Public */,
-       9,    0,  138,    2, 0x06 /* Public */,
-      10,    0,  139,    2, 0x06 /* Public */,
+       8,    1,  137,    2, 0x06 /* Public */,
+       9,    0,  140,    2, 0x06 /* Public */,
+      10,    0,  141,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      11,    1,  140,    2, 0x0a /* Public */,
-      12,    0,  143,    2, 0x0a /* Public */,
-      13,    2,  144,    2, 0x0a /* Public */,
-      15,    1,  149,    2, 0x0a /* Public */,
-      16,    2,  152,    2, 0x0a /* Public */,
-      17,    1,  157,    2, 0x0a /* Public */,
-      19,    1,  160,    2, 0x0a /* Public */,
-      21,    1,  163,    2, 0x0a /* Public */,
-      23,    1,  166,    2, 0x0a /* Public */,
-      25,    1,  169,    2, 0x0a /* Public */,
-      27,    2,  172,    2, 0x0a /* Public */,
-      29,    2,  177,    2, 0x08 /* Private */,
-      32,    0,  182,    2, 0x08 /* Private */,
-      33,    0,  183,    2, 0x08 /* Private */,
+      11,    1,  142,    2, 0x0a /* Public */,
+      12,    0,  145,    2, 0x0a /* Public */,
+      13,    2,  146,    2, 0x0a /* Public */,
+      15,    1,  151,    2, 0x0a /* Public */,
+      16,    2,  154,    2, 0x0a /* Public */,
+      17,    1,  159,    2, 0x0a /* Public */,
+      19,    1,  162,    2, 0x0a /* Public */,
+      21,    1,  165,    2, 0x0a /* Public */,
+      23,    1,  168,    2, 0x0a /* Public */,
+      25,    1,  171,    2, 0x0a /* Public */,
+      27,    2,  174,    2, 0x0a /* Public */,
+      29,    2,  179,    2, 0x08 /* Private */,
+      32,    0,  184,    2, 0x08 /* Private */,
+      33,    0,  185,    2, 0x08 /* Private */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::QRect,    2,
@@ -127,7 +127,7 @@ static const uint qt_meta_data_ToolSelectWidget[] = {
     QMetaType::Void, 0x80000000 | 5,    2,
     QMetaType::Void,
     QMetaType::Void, QMetaType::QRect,    2,
-    QMetaType::Void,
+    QMetaType::Void, QMetaType::QRect,    2,
     QMetaType::Void,
     QMetaType::Void,
 
@@ -161,7 +161,7 @@ void ToolSelectWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
         case 2: _t->shouldShowNorm((*reinterpret_cast< std::string_view(*)>(_a[1]))); break;
         case 3: _t->changingAction(); break;
         case 4: _t->growRequested((*reinterpret_cast< QRect(*)>(_a[1]))); break;
-        case 5: _t->shrinkRequested(); break;
+        case 5: _t->shrinkRequested((*reinterpret_cast< QRect(*)>(_a[1]))); break;
         case 6: _t->lockRequested(); break;
         case 7: _t->unlockRequested(); break;
         case 8: _t->mouseEnter((*reinterpret_cast< QPoint(*)>(_a[1]))); break;
@@ -218,7 +218,7 @@ void ToolSelectWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
             }
         }
         {
-            using _t = void (ToolSelectWidget::*)();
+            using _t = void (ToolSelectWidget::*)(QRect );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ToolSelectWidget::shrinkRequested)) {
                 *result = 5;
                 return;
@@ -316,9 +316,10 @@ void ToolSelectWidget::growRequested(QRect _t1)
 }
 
 // SIGNAL 5
-void ToolSelectWidget::shrinkRequested()
+void ToolSelectWidget::shrinkRequested(QRect _t1)
 {
-    QMetaObject::activate(this, &staticMetaObject, 5, nullptr);
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    QMetaObject::activate(this, &staticMetaObject, 5, _a);
 }
 
 // SIGNAL 6

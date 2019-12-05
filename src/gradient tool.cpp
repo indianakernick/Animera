@@ -84,9 +84,21 @@ void LinearGradientTool::mouseUp(const ToolMouseEvent &event) {
   status.appendLabeled(event.pos);
   ctx->showStatus(status);
   ctx->unlock();
-  if (ctx->colors.primary == 0 || ctx->colors.secondary == 0) {
-    ctx->shrinkCell();
+  
+  const bool primaryZero = ctx->colors.primary == 0;
+  const bool secondaryZero = ctx->colors.secondary == 0;
+  const QRect rect = unite(startPos, event.pos);
+  if (primaryZero && secondaryZero) {
+    ctx->shrinkCell(rect);
+  } else if (primaryZero || secondaryZero) {
+    const QPoint pos = primaryZero ? startPos : event.pos;
+    if (mode == LineGradMode::hori) {
+      ctx->shrinkCell({pos.x(), rect.top(), 1, rect.height()});
+    } else if (mode == LineGradMode::vert) {
+      ctx->shrinkCell({rect.left(), pos.y(), rect.width(), 1});
+    } else Q_UNREACHABLE();
   }
+  
   ctx->finishChange();
 }
 

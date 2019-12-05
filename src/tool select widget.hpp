@@ -29,7 +29,7 @@ Q_SIGNALS:
   void shouldShowNorm(std::string_view);
   void changingAction();
   void growRequested(QRect);
-  void shrinkRequested();
+  void shrinkRequested(QRect);
   void lockRequested();
   void unlockRequested();
 

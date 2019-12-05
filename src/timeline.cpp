@@ -32,7 +32,7 @@ void Timeline::optimize() {
   LayerIdx idx{};
   for (Layer &layer : layers) {
     for (CellSpan &span : layer.spans) {
-      ::shrinkCell(*span.cell);
+      ::shrinkCell(*span.cell, toRect(canvasSize));
     }
     layer.spans.optimize();
     changeSpan(idx);
@@ -364,11 +364,11 @@ void Timeline::growCell(const QRect rect) {
   Q_EMIT modified();
 }
 
-void Timeline::shrinkCell() {
+void Timeline::shrinkCell(const QRect rect) {
   if (locked) return;
   Cell &cell = *getCell(currPos);
   if (!cell) return;
-  ::shrinkCell(cell);
+  ::shrinkCell(cell, rect);
   if (!cell) {
     layers[+currPos.l].spans.optimize();
     changeSpan(currPos.l);

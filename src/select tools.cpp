@@ -103,12 +103,12 @@ void SelectTool<Derived>::paste(
     ctx->growCell(rect);
     const QPoint cellPos = ctx->cell->pos;
     blitImage(ctx->cell->img, cview(selection, bounds), rect.topLeft() - cellPos);
-    ctx->shrinkCell();
+    ctx->shrinkCell(rect);
   } else if (button == ButtonType::erase) {
     if (ctx->colors.erase != 0) ctx->growCell(rect);
     const QPoint cellPos = ctx->cell->pos;
     drawFilledRect(ctx->cell->img, ctx->colors.erase, rect.translated(-cellPos));
-    if (ctx->colors.erase == 0) ctx->shrinkCell();
+    if (ctx->colors.erase == 0) ctx->shrinkCell(rect);
   }
   ctx->changeCell(rect);
   ctx->finishChange();
@@ -130,12 +130,12 @@ void SelectTool<Derived>::pasteWithMask(
     ctx->growCell(rect);
     const QPoint offsetPos = rect.topLeft() - ctx->cell->pos;
     blitMaskImage(ctx->cell->img, cview(mask, bounds), cview(selection, bounds), offsetPos);
-    ctx->shrinkCell();
+    ctx->shrinkCell(rect);
   } else if (button == ButtonType::erase) {
     if (ctx->colors.erase != 0) ctx->growCell(rect);
     const QPoint offsetPos = rect.topLeft() - ctx->cell->pos;
     fillMaskImage(ctx->cell->img, cview(mask, bounds), ctx->colors.erase, offsetPos);
-    if (ctx->colors.erase == 0) ctx->shrinkCell();
+    if (ctx->colors.erase == 0) ctx->shrinkCell(rect);
   }
   ctx->changeCell(rect);
   ctx->finishChange();

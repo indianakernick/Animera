@@ -25,7 +25,12 @@ void BrushTool::mouseDown(const ToolMouseEvent &event) {
   SCOPE_TIME("BrushTool::mouseDown");
   
   color = ctx->selectColor(event.button);
-  if (color != 0) ctx->growCell(symPointRect(event.pos));
+  const QRect rect = symPointRect(event.pos);
+  if (color == 0) {
+    bounds = rect;
+  } else {
+    ctx->growCell(rect);
+  }
   symPoint(event.pos);
   ctx->lock();
 }
@@ -38,17 +43,22 @@ void BrushTool::mouseMove(const ToolMouseEvent &event) {
   symPointOverlay(event.pos, tool_overlay_color);
   if (event.button == ButtonType::none) {
     symChangeOverlay({event.lastPos, event.pos});
-  } else {
-    if (color != 0) ctx->growCell(symPointRect(event.pos));
-    symLine({event.lastPos, event.pos});
+    return;
   }
+  const QRect rect = symPointRect(event.pos);
+  if (color == 0) {
+    bounds = bounds.united(rect);
+  } else {
+    ctx->growCell(rect);
+  }
+  symLine({event.lastPos, event.pos});
 }
 
 void BrushTool::mouseUp(const ToolMouseEvent &) {
   SCOPE_TIME("BrushTool::mouseUp");
   
   ctx->unlock();
-  if (color == 0) ctx->shrinkCell();
+  if (color == 0) ctx->shrinkCell(bounds);
   ctx->finishChange();
 }
 

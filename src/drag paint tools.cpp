@@ -10,6 +10,7 @@
 
 #include <cmath>
 #include "painting.hpp"
+#include "scope time.hpp"
 #include "graphics convert.hpp"
 
 template <typename Derived>
@@ -25,6 +26,8 @@ void DragPaintTool<Derived>::detachCell() {}
 
 template <typename Derived>
 void DragPaintTool<Derived>::mouseLeave(const ToolLeaveEvent &event) {
+  SCOPE_TIME("DragPaintTool::mouseLeave");
+
   ctx->clearStatus();
   that()->drawPoint(*ctx->overlay, 0, event.lastPos);
   ctx->changeOverlay(that()->pointRect(event.lastPos));
@@ -32,6 +35,8 @@ void DragPaintTool<Derived>::mouseLeave(const ToolLeaveEvent &event) {
 
 template <typename Derived>
 void DragPaintTool<Derived>::mouseDown(const ToolMouseEvent &event) {
+  SCOPE_TIME("DragPaintTool::mouseDown");
+
   StatusMsg status;
   that()->updateStatus(status, event.pos, event.pos);
   ctx->showStatus(status);
@@ -49,6 +54,8 @@ void DragPaintTool<Derived>::mouseDown(const ToolMouseEvent &event) {
 
 template <typename Derived>
 void DragPaintTool<Derived>::mouseMove(const ToolMouseEvent &event) {
+  SCOPE_TIME("DragPaintTool::mouseMove");
+
   that()->drawPoint(*ctx->overlay, 0, event.lastPos);
   that()->drawPoint(*ctx->overlay, tool_overlay_color, event.pos);
   
@@ -72,9 +79,11 @@ void DragPaintTool<Derived>::mouseMove(const ToolMouseEvent &event) {
 
 template <typename Derived>
 void DragPaintTool<Derived>::mouseUp(const ToolMouseEvent &event) {
+  SCOPE_TIME("DragPaintTool::mouseUp");
+
   ctx->showStatus(StatusMsg{}.appendLabeled(event.pos));
   ctx->unlock();
-  if (color == 0) ctx->shrinkCell();
+  if (color == 0) ctx->shrinkCell(that()->dragRect(startPos, event.pos));
   ctx->finishChange();
 }
 

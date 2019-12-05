@@ -153,16 +153,16 @@ static const uint qt_meta_data_Timeline[] = {
       39,    0,  279,    2, 0x0a /* Public */,
       40,    0,  280,    2, 0x0a /* Public */,
       41,    1,  281,    2, 0x0a /* Public */,
-      42,    0,  284,    2, 0x0a /* Public */,
-      43,    1,  285,    2, 0x0a /* Public */,
-      44,    2,  288,    2, 0x0a /* Public */,
-      45,    2,  293,    2, 0x0a /* Public */,
-      46,    1,  298,    2, 0x0a /* Public */,
-      47,    0,  301,    2, 0x0a /* Public */,
-      48,    0,  302,    2, 0x0a /* Public */,
-      49,    0,  303,    2, 0x0a /* Public */,
-      50,    0,  304,    2, 0x0a /* Public */,
-      51,    0,  305,    2, 0x0a /* Public */,
+      42,    1,  284,    2, 0x0a /* Public */,
+      43,    1,  287,    2, 0x0a /* Public */,
+      44,    2,  290,    2, 0x0a /* Public */,
+      45,    2,  295,    2, 0x0a /* Public */,
+      46,    1,  300,    2, 0x0a /* Public */,
+      47,    0,  303,    2, 0x0a /* Public */,
+      48,    0,  304,    2, 0x0a /* Public */,
+      49,    0,  305,    2, 0x0a /* Public */,
+      50,    0,  306,    2, 0x0a /* Public */,
+      51,    0,  307,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, 0x80000000 | 3,    2,
@@ -198,7 +198,7 @@ static const uint qt_meta_data_Timeline[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void, QMetaType::QRect,    2,
-    QMetaType::Void,
+    QMetaType::Void, QMetaType::QRect,    2,
     QMetaType::Void, 0x80000000 | 3,    2,
     QMetaType::Void, 0x80000000 | 9, QMetaType::Bool,    2,    2,
     QMetaType::Void, 0x80000000 | 9, 0x80000000 | 11,    2,    2,
@@ -249,7 +249,7 @@ void Timeline::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, vo
         case 28: _t->extendCell(); break;
         case 29: _t->splitCell(); break;
         case 30: _t->growCell((*reinterpret_cast< QRect(*)>(_a[1]))); break;
-        case 31: _t->shrinkCell(); break;
+        case 31: _t->shrinkCell((*reinterpret_cast< QRect(*)>(_a[1]))); break;
         case 32: _t->setCurrPos((*reinterpret_cast< CellPos(*)>(_a[1]))); break;
         case 33: _t->setVisibility((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
         case 34: _t->setName((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< std::string_view(*)>(_a[2]))); break;

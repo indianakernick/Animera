@@ -141,8 +141,6 @@ thick line
 
 why is the overlay a few frames behind the cursor?
   is there anything that can be done?
-  
-can shrinkCell be optimized by accepting a rectangle?
 
 optimize flood fill on 0
 
