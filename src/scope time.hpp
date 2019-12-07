@@ -11,175 +11,153 @@
 
 #ifdef ENABLE_SCOPE_TIME
 
-// TODO: refactor Profiler
-// I first wrote this in 2016
-// It hasn't really changed much since
-
 #include <chrono>
 #include <cstdio>
 #include <vector>
 #include <unordered_map>
 
-class Profiler {
+class ScopeTime {
 public:
-  explicit Profiler(const char *name);
-  ~Profiler();
+  explicit ScopeTime(const char *);
+  ~ScopeTime();
   
-  static void formatInfo(std::FILE *);
-  static void resetInfo();
+  static void print();
+  static void reset();
   
 private:
+  using Clock = std::chrono::high_resolution_clock;
+
+  Clock::time_point start;
+
   struct TreeNode {
-    uint64_t calls;
-    uint64_t time;
+    size_t calls;
+    Clock::duration time;
     std::unordered_map<const char *, TreeNode> children;
     const char *name;
     TreeNode *parent;
   };
   
-  std::chrono::high_resolution_clock::time_point start;
-  static inline TreeNode tree {0, 0, {}, "ROOT", nullptr};
+  static inline TreeNode tree {0, {}, {}, "ROOT", nullptr};
   static inline TreeNode *current = &tree;
   
-  static void recFormatInfo(std::FILE *, TreeNode *, int);
+  static void printImpl(const TreeNode *, int);
   
-  static const int NAME_INDENT = 2;
-  static const int MAX_DEPTH = 16;
-  static const int NUM_PREC = 4;
-  static const int NAME_WIDTH = 48;
-  static const int REST_WIDTH = 24;
+  static constexpr int name_indent = 2;
+  static constexpr int max_depth = 32;
+  static constexpr int num_prec = 4;
+  static constexpr int name_width = 48;
+  static constexpr int rest_width = 24;
   
-  static inline char spaces[NAME_INDENT * MAX_DEPTH] {};
+  static inline char spaces[name_indent * max_depth] {};
   static inline bool initSpaces = false;
-  static inline bool oddLine = false;
 };
 
-inline Profiler::Profiler(const char *name) {
+inline ScopeTime::ScopeTime(const char *name) {
   TreeNode *prevCurrent = current;
   current = &current->children[name];
   current->parent = prevCurrent;
   current->name = name;
-  start = std::chrono::high_resolution_clock::now();
+  start = Clock::now();
 }
 
-inline Profiler::~Profiler() {
-  current->time += (std::chrono::high_resolution_clock::now() - start).count();
+inline ScopeTime::~ScopeTime() {
+  current->time += Clock::now() - start;
   ++current->calls;
   current = current->parent;
 }
 
-inline void Profiler::formatInfo(std::FILE *stream) {
-  std::fprintf(stream, "%-*s", NAME_WIDTH, "Name");
-  std::fprintf(stream, "%-*s", REST_WIDTH, "Total Count");
-  std::fprintf(stream, "%-*s", REST_WIDTH, "Avg Count per parent");
-  std::fprintf(stream, "%-*s", REST_WIDTH, "Total Time (ms)");
-  std::fprintf(stream, "%-*s", REST_WIDTH, "Average Time (ms)");
-  std::fprintf(stream, "%-*s", REST_WIDTH, "Percent of parent time");
-  std::fprintf(stream, "\n");
+inline void ScopeTime::print() {
+  std::printf("%-*s", name_width, "Name");
+  std::printf("%-*s", rest_width, "Total Count");
+  std::printf("%-*s", rest_width, "Avg Count per parent");
+  std::printf("%-*s", rest_width, "Total Time (ms)");
+  std::printf("%-*s", rest_width, "Average Time (ms)");
+  std::printf("%-*s", rest_width, "Percent of parent time");
+  std::printf("\n");
 
-  recFormatInfo(stream, &tree, 0);
-  /*
-  The Xcode console doesn't support ANSI escape codes
-  if (stream == stdout || stream == stderr) {
-    Term::defaultBackColor();
-  }*/
+  printImpl(&tree, 0);
 }
 
-inline void Profiler::resetInfo() {
+inline void ScopeTime::reset() {
   current = &tree;
   tree.calls = 0;
-  tree.time = 0;
+  tree.time = {};
   tree.children.clear();
   tree.name = "ROOT";
   tree.parent = nullptr;
 }
 
-inline void Profiler::recFormatInfo(std::FILE *stream, TreeNode *node, int depth) {
-  int newDepth;
+inline void ScopeTime::printImpl(const TreeNode *node, const int depth) {
+  assert(depth <= max_depth);
+  
+  int newDepth = 0;
   if (node->parent) {
     newDepth = depth + 1;
     
-    if (!initSpaces) {
+    if (!std::exchange(initSpaces, true)) {
       std::memset(spaces, ' ', sizeof(spaces));
-      initSpaces = true;
     }
-    /*
-    The Xcode console doesn't support ANSI escape codes
-    if (stream == stdout || stream == stderr) {
-      if (oddLine) {
-        Term::backColor(Term::Color::BLUE);
-        oddLine = false;
-      } else {
-        //Term::defaultBackColor();
-        oddLine = true;
-      }
-    }*/
     
-    std::fprintf(stream, "%.*s", depth * NAME_INDENT, spaces);
-    std::fprintf(stream, "%-*s", NAME_WIDTH - depth * NAME_INDENT, node->name);
+    std::printf("%.*s", depth * name_indent, spaces);
+    std::printf("%-*s", name_width - depth * name_indent, node->name);
     
-    std::fprintf(stream, "%-*llu", REST_WIDTH, node->calls);
+    std::printf("%-*zu", rest_width, node->calls);
     
     //not child of root
     if (node->parent->parent) {
-      const float avgParentCalls = static_cast<float>(node->calls) / node->parent->calls;
-      std::fprintf(stream, "%-*.*g", REST_WIDTH, NUM_PREC, avgParentCalls);
+      const double avgParentCalls = static_cast<double>(node->calls) / node->parent->calls;
+      std::printf("%-*.*g", rest_width, num_prec, avgParentCalls);
     } else {
-      std::fprintf(stream, "%-*llu", REST_WIDTH, node->calls);
+      std::printf("%-*zu", rest_width, node->calls);
     }
 
-    const float totalTime = node->time * 1e-6f;
-    std::fprintf(stream, "%-*.*g", REST_WIDTH, NUM_PREC, totalTime);
+    using MilliFloat = std::chrono::duration<double, std::milli>;
+    const double totalTime = std::chrono::duration_cast<MilliFloat>(node->time).count();
+    std::printf("%-*.*g", rest_width, num_prec, totalTime);
 
     if (node->calls) {
-      std::fprintf(stream, "%-*.*g", REST_WIDTH, NUM_PREC, totalTime / node->calls);
+      std::printf("%-*.*g", rest_width, num_prec, totalTime / node->calls);
     } else {
-      std::fprintf(stream, "%-*i", REST_WIDTH, 0);
+      std::printf("%-*i", rest_width, 0);
     }
     
     //not child of root
     if (node->parent->parent) {
-      const float percent = (static_cast<float>(node->time) / node->parent->time);
-      std::fprintf(stream, "%.*g%%", NUM_PREC, percent * 100.0f);
+      const double percent = (static_cast<double>(node->time.count()) / node->parent->time.count());
+      std::printf("%.*g%%", num_prec, percent * 100.0);
     }
     
-    /*
-    The Xcode console doesn't support ANSI escape codes
-    if (stream == stdout || stream == stderr) {
-      Term::defaultBackColor();
-    }*/
-    
-    std::fprintf(stream, "\n");
-  } else {
-    newDepth = 0;
+    std::printf("\n");
   }
   
   //copy children into a vector
-  std::vector<TreeNode *> children;
+  std::vector<const TreeNode *> children;
   children.reserve(node->children.size());
   for (auto i = node->children.begin(); i != node->children.end(); ++i) {
     children.push_back(&(i->second));
   }
   
   //sort by total time in accending order
-  std::sort(children.begin(), children.end(), [](TreeNode *a, TreeNode *b) {
+  std::sort(children.begin(), children.end(), [](const TreeNode *a, const TreeNode *b) {
     return a->time > b->time;
   });
   
-  for (auto i = children.begin(); i != children.end(); ++i) {
-    recFormatInfo(stream, *i, newDepth);
+  for (const TreeNode *child : children) {
+    printImpl(child, newDepth);
   }
 }
 
-#define CONCAT_IMPL(a, b) a##b
-#define CONCAT(a, b) CONCAT_IMPL(a, b)
-#define SCOPE_TIME(name) Profiler CONCAT(profiler_, __COUNTER__) {name}
-#define SCOPE_TIME_INFO() Profiler::formatInfo(stdout)
+#define CONCAT_IMPL(A, B) A##B
+#define CONCAT(A, B) CONCAT_IMPL(A, B)
+#define SCOPE_TIME(NAME) ScopeTime CONCAT(scope_time_, __LINE__) {NAME}
+#define SCOPE_TIME_PRINT() ScopeTime::print()
+#define SCOPE_TIME_RESET() ScopeTime::reset()
 
 #else
 
 #define SCOPE_TIME(NAME)
-#define SCOPE_TIME_INFO()
+#define SCOPE_TIME_PRINT()
+#define SCOPE_TIME_RESET()
 
 #endif
 
