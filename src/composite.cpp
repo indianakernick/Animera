@@ -20,61 +20,55 @@
 
 namespace {
 
-template <typename Func>
-void eachImage(const Frame &frame, Func func) {
-  // Layer 0 is on top of layer 1
-  for (auto c = frame.crbegin(); c != frame.crend(); ++c) {
-    const Cell &cell = **c;
-    if (cell) {
-      func(cell);
-    }
-  }
-}
-
 template <typename Format>
 using Surface = gfx::Surface<gfx::Pixel<Format>>;
 
-template <typename Format>
-void compositeColor(Surface<Format> output, const Frame &frame, const QPoint outPos) {
-  eachImage(frame, [output, outPos](const Cell &cell) {
-    gfx::porterDuffRegion(
-      gfx::mode_src_over,
-      output,
-      makeCSurface<PixelRgba>(cell.img),
-      Format{},
-      gfx::ARGB{},
-      convert(cell.pos - outPos)
-    );
-  });
+template <typename DstFormat, typename SrcFormat>
+void copy(Surface<DstFormat> dst, const Cell &cell, const QPoint dstPos, SrcFormat srcFmt) {
+  gfx::Surface src = makeCSurface<gfx::Pixel<SrcFormat>>(cell.img);
+  const gfx::Point pos = convert(cell.pos - dstPos);
+  if constexpr (std::is_same_v<DstFormat, SrcFormat>) {
+    gfx::copyRegion(dst, src, pos);
+  } else {
+    gfx::eachRegion(dst, src, pos, [srcFmt](auto &dst, const auto src) {
+      dst = DstFormat::pixel(srcFmt.color(src));
+    });
+  }
 }
 
-template <typename Format>
-void compositePalette(Surface<Format> output, const Frame &frame, const QPoint outPos, PaletteCSpan palette) {
-  gfx::I<> format{palette.data()};
-  eachImage(frame, [output, outPos, format](const Cell &cell) {
-    gfx::porterDuffRegion(
-      gfx::mode_src_over,
-      output,
-      makeCSurface<PixelIndex>(cell.img),
-      Format{},
-      format,
-      convert(cell.pos - outPos)
-    );
-  });
+template <typename DstFormat, typename SrcFormat>
+void composite(Surface<DstFormat> dst, const Cell &cell, const QPoint dstPos, SrcFormat srcFmt) {
+  gfx::porterDuffRegion(
+    gfx::mode_src_over,
+    dst,
+    makeCSurface<gfx::Pixel<SrcFormat>>(cell.img),
+    DstFormat{},
+    srcFmt,
+    convert(cell.pos - dstPos)
+  );
 }
 
-template <typename Format>
-void compositeGray(Surface<Format> output, const Frame &frame, const QPoint outPos) {
-  eachImage(frame, [output, outPos](const Cell &cell) {
-    gfx::porterDuffRegion(
-      gfx::mode_src_over,
-      output,
-      makeCSurface<PixelGray>(cell.img),
-      Format{},
-      gfx::YA{},
-      convert(cell.pos - outPos)
-    );
-  });
+template <typename DstFormat, typename SrcFormat>
+void compositeFrame(Surface<DstFormat> dst, const Frame &frame, const QPoint dstPos, SrcFormat srcFmt) {
+  // Layer 0 is on top of layer 1
+  const QRect dstRect = {dstPos, convert(dst.size())};
+  for (size_t c = frame.size() - 1; c != ~size_t{}; --c) {
+    const Cell &cell = *frame[c];
+    const QRect cellRect = dstRect.intersected(cell.rect());
+    if (cellRect.isEmpty()) continue;
+    bool overlap = false;
+    for (size_t d = c + 1; d != frame.size(); ++d) {
+      if (cellRect.intersects(frame[d]->rect())) {
+        overlap = true;
+        break;
+      }
+    }
+    if (overlap) {
+      composite<DstFormat>(dst, cell, dstPos, srcFmt);
+    } else {
+      copy<DstFormat>(dst, cell, dstPos, srcFmt);
+    }
+  }
 }
 
 }
@@ -93,18 +87,17 @@ void compositeFrame(
   if (rect.isEmpty()) return;
   auto dstSurface = makeSurface<gfx::Pixel<PxFmt>>(dst).view(convert(rect));
   
+  gfx::fill(dstSurface);
+  
   switch (format) {
     case Format::rgba:
-      gfx::fill(dstSurface);
-      compositeColor<PxFmt>(dstSurface, frame, rect.topLeft());
+      compositeFrame<PxFmt>(dstSurface, frame, rect.topLeft(), gfx::ARGB{});
       break;
     case Format::index:
-      gfx::fill(dstSurface);
-      compositePalette<PxFmt>(dstSurface, frame, rect.topLeft(), palette);
+      compositeFrame<PxFmt>(dstSurface, frame, rect.topLeft(), gfx::I<>{palette.data()});
       break;
     case Format::gray:
-      gfx::fill(dstSurface);
-      compositeGray<PxFmt>(dstSurface, frame, rect.topLeft());
+      compositeFrame<PxFmt>(dstSurface, frame, rect.topLeft(), gfx::YA{});
       break;
     default: Q_UNREACHABLE();
   }

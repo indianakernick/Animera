@@ -142,8 +142,6 @@ thick line
 why is the overlay a few frames behind the cursor?
   is there anything that can be done?
 
-optimize flood fill on 0
-
 ----------------------------------- scripting ----------------------------------
 
 scripting interface
