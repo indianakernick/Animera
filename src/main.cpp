@@ -2500,7 +2500,7 @@ int main(int argc, char **argv) {
     CLI cli{argc, argv};
     ret = cli.exec();
   }
-  SCOPE_TIME_INFO();
+  SCOPE_TIME_PRINT();
   return ret;
 }
 
