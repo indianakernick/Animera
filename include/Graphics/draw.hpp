@@ -350,15 +350,14 @@ bool drawLine(
   }
 }
 
-namespace detail {
-
 template <typename Pixel>
-class FillPolicy {
+class DrawFillPolicy {
 public:
-  FillPolicy(const Surface<Pixel> surface, const Pixel fillColor) noexcept
+  DrawFillPolicy(const Surface<Pixel> surface, const Pixel fillColor) noexcept
     : surface{surface}, fillColor{fillColor} {}
   
   bool start(const Point pos) noexcept {
+    if (!surface.contains(pos)) return false;
     startColor = surface.ref(pos);
     return startColor != fillColor;
   }
@@ -378,18 +377,13 @@ private:
   Pixel startColor;
 };
 
-}
-
 template <typename Pixel>
 bool drawFloodFill(
   const Surface<Pixel> dst,
   const identity_t<Pixel> pixel,
   const Point pos
 ) noexcept {
-  if (dst.contains(pos)) {
-    return !floodFill(detail::FillPolicy{dst, pixel}, pos).empty();
-  }
-  return false;
+  return !floodFill(DrawFillPolicy{dst, pixel}, pos).empty();
 }
 
 template <typename Pixel, typename Func>

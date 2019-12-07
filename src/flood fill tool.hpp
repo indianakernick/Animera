@@ -16,6 +16,12 @@ public:
   void mouseLeave(const ToolLeaveEvent &) override;
   void mouseDown(const ToolMouseEvent &) override;
   void mouseMove(const ToolMouseEvent &) override;
+
+private:
+  template <typename Pixel>
+  QRect fill(QRect, QPoint, QRgb);
+  QRect fill(QRect, QPoint, QRgb);
+  void fillOpen(QPoint, QRgb);
 };
 
 #endif

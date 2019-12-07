@@ -554,6 +554,7 @@ private:
 void WandSelectTool::addToSelection(const ToolMouseEvent &event) {
   SCOPE_TIME("WandSelectTool::addToSelection");
   
+  // TODO: do something similar to flood fill optimization
   QRect rect = toRect(ctx->size);
   if (sampleCell(*ctx->cell, event.pos) == 0) {
     ctx->growCell(rect);
