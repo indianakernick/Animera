@@ -61,7 +61,8 @@ void DragPaintTool<Derived>::mouseMove(const ToolMouseEvent &event) {
   
   if (event.button == ButtonType::none) {
     ctx->showStatus(StatusMsg{}.appendLabeled(event.pos));
-    ctx->changeOverlay(that()->dragRect(event.lastPos, event.pos));
+    const QRect lastRect = that()->pointRect(event.lastPos);
+    ctx->changeOverlay(lastRect.united(that()->pointRect(event.pos)));
     return;
   }
   
