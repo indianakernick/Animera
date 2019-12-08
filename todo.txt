@@ -305,3 +305,6 @@ there might be a few random constants that should be in config.hpp but aren't
 Should probably be calling update() instead of repaint() in most places
 
 Should probably be using mouse release instead of mouse press in some places
+
+maybe paint functions should accept a cell
+  overlay would have to be a cell (or wrapped in a cell)

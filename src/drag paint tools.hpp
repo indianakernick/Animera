@@ -44,8 +44,7 @@ public:
   void setRadius(int);
 
 private:
-  // TODO: restore this to 0
-  int radius = 2;
+  int radius = line_radius.def;
  
   bool drawPoint(QImage &, QRgb, QPoint);
   bool drawDrag(QImage &, QPoint, QPoint);
@@ -65,8 +64,7 @@ public:
   
 private:
   gfx::CircleShape shape = gfx::CircleShape::c1x1;
-  // TODO: restore this to 1
-  int thickness = 8;
+  int thickness = circ_thick.def;
 
   bool drawPoint(QImage &, QRgb, QPoint);
   bool drawDrag(QImage &, QPoint, QPoint);
@@ -102,8 +100,7 @@ public:
   void setThick(int);
 
 private:
-  // TODO: restore this to 1
-  int thickness = 4;
+  int thickness = rect_thick.def;
 
   bool drawPoint(QImage &, QRgb, QPoint);
   bool drawDrag(QImage &, QPoint, QPoint);

@@ -368,6 +368,15 @@ constexpr int max_image_height = max_image_width;
 // brush
 constexpr IntRange  brsh_radius = {0, 64, 0};
 
+// line
+constexpr IntRange  line_radius = brsh_radius;
+
+// stroked circle
+constexpr IntRange  circ_thick = {1, 64, 1};
+
+// stroked rectangle
+constexpr IntRange  rect_thick = circ_thick;
+
 // wand
 constexpr int       wand_alpha = 128;
 constexpr int       wand_frames = 8;

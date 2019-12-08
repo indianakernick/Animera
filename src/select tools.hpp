@@ -49,7 +49,6 @@ private:
   QPoint startPos = no_point;
 };
 
-// TODO: is polygon select really all that useful?
 class PolygonSelectTool final : public SelectTool<PolygonSelectTool> {
 public:
   void attachCell() override;

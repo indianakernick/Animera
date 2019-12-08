@@ -80,6 +80,13 @@ public:
   static constexpr const char tooltip[] = "Line Tool";
 
   using ToolParamWidget::ToolParamWidget;
+  
+  void createWidgets();
+  void setupLayout();
+  void connectSignals(LineTool *);
+
+private:
+  NumberInputWidget *radius = nullptr;
 };
 
 class StrokedCircleToolWidget final : public ToolParamWidget {
@@ -89,6 +96,14 @@ public:
   static constexpr const char tooltip[] = "Stroked Circle Tool";
 
   using ToolParamWidget::ToolParamWidget;
+  
+  void createWidgets();
+  void setupLayout();
+  void connectSignals(StrokedCircleTool *);
+
+private:
+  NumberInputWidget *thickness = nullptr;
+  ComboBoxWidget *shape = nullptr;
 };
 
 class FilledCircleToolWidget final : public ToolParamWidget {
@@ -98,6 +113,13 @@ public:
   static constexpr const char tooltip[] = "Filled Circle Tool";
 
   using ToolParamWidget::ToolParamWidget;
+  
+  void createWidgets();
+  void setupLayout();
+  void connectSignals(FilledCircleTool *);
+
+private:
+  ComboBoxWidget *shape = nullptr;
 };
 
 class StrokedRectangleToolWidget final : public ToolParamWidget {
@@ -107,6 +129,13 @@ public:
   static constexpr const char tooltip[] = "Stroked Rectangle Tool";
 
   using ToolParamWidget::ToolParamWidget;
+  
+  void createWidgets();
+  void setupLayout();
+  void connectSignals(StrokedRectangleTool *);
+
+private:
+  NumberInputWidget *thickness = nullptr;
 };
 
 class FilledRectangleToolWidget final : public ToolParamWidget {

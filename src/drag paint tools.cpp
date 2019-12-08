@@ -101,6 +101,7 @@ Derived *DragPaintTool<Derived>::that() {
 LineTool::~LineTool() = default;
 
 void LineTool::setRadius(const int newRadius) {
+  assert(line_radius.min <= newRadius && newRadius <= line_radius.max);
   radius = newRadius;
 }
 
@@ -134,6 +135,7 @@ void StrokedCircleTool::setShape(const gfx::CircleShape newShape) {
 }
 
 void StrokedCircleTool::setThick(const int newThick) {
+  assert(circ_thick.min <= newThick && newThick <= circ_thick.max);
   thickness = newThick;
 }
 
@@ -206,6 +208,7 @@ QRect FilledCircleTool::dragRect(const QPoint start, const QPoint end) {
 StrokedRectangleTool::~StrokedRectangleTool() = default;
 
 void StrokedRectangleTool::setThick(const int newThick) {
+  assert(rect_thick.min <= newThick && newThick <= rect_thick.max);
   thickness = newThick;
 }
 
