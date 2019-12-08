@@ -151,7 +151,7 @@ flip_flag(const Enum a, const Enum b) noexcept {
 template <typename Enum>
 constexpr std::enable_if_t<enum_test_flag<Enum>::value, bool>
 test_flag(const Enum a, const Enum b) noexcept {
-  return static_cast<bool>(detail::to_int(a) & detail::to_int(b));
+  return (detail::to_int(a) & detail::to_int(b)) == detail::to_int(b);
 }
 
 template <typename Enum>
