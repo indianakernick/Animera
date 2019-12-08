@@ -20,6 +20,7 @@ class EditorWidget;
 class PaletteWidget;
 class ToolColorsWidget;
 class ToolSelectWidget;
+class ToolParamBarWidget;
 class TimelineWidget;
 class StatusBarWidget;
 class ColorPickerWidget;
@@ -51,6 +52,7 @@ private:
   PaletteWidget *palette = nullptr;
   ToolColorsWidget *colors = nullptr;
   ToolSelectWidget *tools = nullptr;
+  ToolParamBarWidget *toolParams = nullptr;
   TimelineWidget *timeline = nullptr;
   StatusBarWidget *statusBar = nullptr;
   ColorPickerWidget *colorPicker = nullptr;

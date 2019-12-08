@@ -17,25 +17,19 @@
 #include <QtWidgets/qboxlayout.h>
 #include <QtWidgets/qscrollbar.h>
 #include "radio button widget.hpp"
-
-template <typename T>
-struct tag_t {};
-
-template <typename T>
-constexpr tag_t<T> tag{};
+#include "tool param bar widget.hpp"
 
 class ToolWidget final : public RadioButtonWidget {
   Q_OBJECT
   
 public:
-  template <typename WidgetClass>
-  ToolWidget(QWidget *parent, const ToolCtx *ctx, tag_t<WidgetClass>)
+  template <typename ParamWidget>
+  ToolWidget(QWidget *parent, std::unique_ptr<Tool> tool, ParamWidget *params)
     : RadioButtonWidget{parent},
-      tool{std::make_unique<typename WidgetClass::impl>()},
-      widget{std::make_unique<WidgetClass>()} {
-    tool->setCtx(ctx);
-    loadIcons(WidgetClass::icon_name);
-    setToolTip(WidgetClass::tooltip);
+      tool{std::move(tool)},
+      params{params} {
+    loadIcons(ParamWidget::icon_name);
+    setToolTip(ParamWidget::tooltip);
     setFixedSize(tool_button_size);
     CONNECT(this, toggled, this, changeTool);
   }
@@ -47,12 +41,15 @@ private Q_SLOTS:
   void changeTool(const bool checked) {
     if (checked) {
       Q_EMIT shouldChangeTool(this, tool.get());
+      params->show();
+    } else {
+      params->hide();
     }
   }
 
 private:
   std::unique_ptr<Tool> tool;
-  std::unique_ptr<QWidget> widget;
+  ToolParamWidget *params;
   QPixmap enabledIcon;
   QPixmap disabledIcon;
   
@@ -70,14 +67,14 @@ private:
   }
 };
 
-ToolSelectWidget::ToolSelectWidget(QWidget *parent)
+ToolSelectWidget::ToolSelectWidget(QWidget *parent, ToolParamBarWidget *bar)
   : QScrollArea{parent}, box{new QWidget{this}} {
   setFixedWidth(tool_select_width);
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   setStyleSheet("background-color: " + tool_select_background.name());
   setFrameShape(NoFrame);
-  createTools();
+  createTools(bar);
   setupLayout();
   connectSignals();
   setWidget(box);
@@ -185,26 +182,52 @@ void ToolSelectWidget::ensureVisible(ToolWidget *tool) {
   repaint();
 }
 
-template <typename WidgetClass>
-void ToolSelectWidget::pushToolWidget() {
-  tools.push_back(new ToolWidget{box, &ctx, tag<WidgetClass>});
+namespace {
+
+template <typename ParamWidget, typename Tool>
+auto init(ParamWidget *params, Tool *tool, int)
+  -> std::void_t<decltype(params->createWidgets())> {
+  params->createWidgets();
+  params->setupLayout();
+  params->connectSignals(tool);
 }
 
-void ToolSelectWidget::createTools() {
-  pushToolWidget<BrushToolWidget>();
-  pushToolWidget<FloodFillToolWidget>();
-  pushToolWidget<RectangleSelectToolWidget>();
-  pushToolWidget<PolygonSelectToolWidget>();
-  pushToolWidget<WandSelectToolWidget>();
-  pushToolWidget<LineToolWidget>();
-  pushToolWidget<StrokedCircleToolWidget>();
-  pushToolWidget<FilledCircleToolWidget>();
-  pushToolWidget<StrokedRectangleToolWidget>();
-  pushToolWidget<FilledRectangleToolWidget>();
-  pushToolWidget<LinearGradientToolWidget>();
-  pushToolWidget<TranslateToolWidget>();
-  pushToolWidget<FlipToolWidget>();
-  pushToolWidget<RotateToolWidget>();
+template <typename ParamWidget, typename Tool>
+void init(ParamWidget *, Tool *, long) {}
+
+}
+
+template <typename ParamWidget>
+void ToolSelectWidget::pushToolWidget(ToolParamBarWidget *bar, QHBoxLayout *layout) {
+  auto tool = std::make_unique<typename ParamWidget::impl>();
+  tool->setCtx(&ctx);
+  auto *params = new ParamWidget{bar};
+  layout->addWidget(params);
+  init(params, tool.get(), 0);
+  params->hide();
+  tools.push_back(new ToolWidget{box, std::move(tool), params});
+}
+
+void ToolSelectWidget::createTools(ToolParamBarWidget *bar) {
+  auto *layout = new QHBoxLayout{bar};
+  layout->setSpacing(0);
+  layout->setContentsMargins(0, 0, 0, 0);
+  layout->setSizeConstraint(QLayout::SetFixedSize);
+
+  pushToolWidget<BrushToolWidget>(bar, layout);
+  pushToolWidget<FloodFillToolWidget>(bar, layout);
+  pushToolWidget<RectangleSelectToolWidget>(bar, layout);
+  pushToolWidget<PolygonSelectToolWidget>(bar, layout);
+  pushToolWidget<WandSelectToolWidget>(bar, layout);
+  pushToolWidget<LineToolWidget>(bar, layout);
+  pushToolWidget<StrokedCircleToolWidget>(bar, layout);
+  pushToolWidget<FilledCircleToolWidget>(bar, layout);
+  pushToolWidget<StrokedRectangleToolWidget>(bar, layout);
+  pushToolWidget<FilledRectangleToolWidget>(bar, layout);
+  pushToolWidget<LinearGradientToolWidget>(bar, layout);
+  pushToolWidget<TranslateToolWidget>(bar, layout);
+  pushToolWidget<FlipToolWidget>(bar, layout);
+  pushToolWidget<RotateToolWidget>(bar, layout);
 }
 
 void ToolSelectWidget::setupLayout() {

@@ -14,6 +14,9 @@
 #include <QtWidgets/qscrollarea.h>
 
 class ToolWidget;
+class QHBoxLayout;
+class ToolParamWidget;
+class ToolParamBarWidget;
 
 class ToolSelectWidget final : public QScrollArea {
   Q_OBJECT
@@ -21,7 +24,7 @@ class ToolSelectWidget final : public QScrollArea {
   friend class ToolWidget;
 
 public:
-  explicit ToolSelectWidget(QWidget *);
+  ToolSelectWidget(QWidget *, ToolParamBarWidget *);
 
 Q_SIGNALS:
   void cellModified(QRect);
@@ -61,9 +64,9 @@ private:
   bool mouseIn = false;
   
   void ensureVisible(ToolWidget *);
-  template <typename WidgetClass>
-  void pushToolWidget();
-  void createTools();
+  template <typename ParamWidget>
+  void pushToolWidget(ToolParamBarWidget *, QHBoxLayout *);
+  void createTools(ToolParamBarWidget *);
   void setupLayout();
   void connectSignals();
 };

@@ -30,6 +30,7 @@
 #include "tool select widget.hpp"
 #include "color picker widget.hpp"
 #include <QtWidgets/qfiledialog.h>
+#include "tool param bar widget.hpp"
 #include <QtWidgets/qdesktopwidget.h>
 
 Window::Window(QWidget *parent, const QRect desktop)
@@ -92,7 +93,8 @@ void Window::createWidgets() {
   editor = new EditorWidget{this};
   palette = new PaletteWidget{right};
   colors = new ToolColorsWidget{right};
-  tools = new ToolSelectWidget{this};
+  toolParams = new ToolParamBarWidget{bottom};
+  tools = new ToolSelectWidget{this, toolParams};
   timeline = new TimelineWidget{bottom};
   statusBar = new StatusBarWidget{bottom};
   colorPicker = new ColorPickerWidget{right};
@@ -100,12 +102,13 @@ void Window::createWidgets() {
 }
 
 void Window::setupLayouts() {
-  auto *bottomLayout = new QVBoxLayout{bottom};
+  auto *bottomLayout = new QGridLayout{bottom};
   bottomLayout->setContentsMargins(0, 0, 0, 0);
   bottomLayout->setSpacing(0);
-  bottomLayout->addWidget(timeline);
-  bottomLayout->addWidget(new HoriSeparator{bottom});
-  bottomLayout->addWidget(statusBar);
+  bottomLayout->addWidget(timeline, 0, 0, 1, 2);
+  bottomLayout->addWidget(new HoriSeparator{bottom}, 1, 0, 1, 2);
+  bottomLayout->addWidget(statusBar, 2, 0, 1, 1);
+  bottomLayout->addWidget(toolParams, 2, 1, 1, 1);
   bottomLayout->setAlignment(Qt::AlignBottom);
   
   auto *rightLayout = new QVBoxLayout{right};
