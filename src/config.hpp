@@ -228,7 +228,7 @@ constexpr int scaleOverlayAlpha(const int alpha) {
 // ------------------------------- status bar ------------------------------- //
 
 constexpr int        stat_temp_duration_ms = 2500;
-constexpr WidgetRect stat_rect = textBoxRect(64);
+constexpr WidgetRect stat_rect = textBoxRect(48);
 
 inline const QColor  stat_background = glob_main;
 

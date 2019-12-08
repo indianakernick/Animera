@@ -159,6 +159,13 @@ ComboBoxWidget::ComboBoxWidget(QWidget *parent, const int chars)
   arrow = bakeColoredBitmap(":/General/up down arrow.png", glob_light_2);
 }
 
+void ComboBoxWidget::setPolicy(const OrderPolicy newPolicy) {
+  if (newPolicy != policy) {
+    policy = newPolicy;
+    enforcePolicy();
+  }
+}
+
 void ComboBoxWidget::clearWithItem(const QString &text) {
   items.resize(1);
   items[0] = text;
@@ -168,12 +175,14 @@ void ComboBoxWidget::clearWithItem(const QString &text) {
 void ComboBoxWidget::addItem(const QString &text) {
   items.push_back(text);
   if (items.size() == 1) setCurrentIndex(0);
+  enforcePolicy();
   update();
 }
 
 void ComboBoxWidget::setCurrentIndex(const int index) {
   assert(0 <= index && index < count());
   current = index;
+  enforcePolicy();
   Q_EMIT currentIndexChanged(current);
   Q_EMIT currentTextChanged(items[current]);
   update();
@@ -195,6 +204,24 @@ int ComboBoxWidget::currentIndex() const {
 QString ComboBoxWidget::currentText() const {
   assert(0 <= current && current < count());
   return items[current];
+}
+
+void ComboBoxWidget::enforcePolicy() {
+  switch (policy) {
+    case OrderPolicy::bottom:
+      if (current == count() - 1) break;
+      std::rotate(items.begin(), items.begin() + current + 1, items.end());
+      current = count() - 1;
+      Q_EMIT currentIndexChanged(current);
+      break;
+    case OrderPolicy::top:
+      if (current == 0) break;
+      std::rotate(items.begin(), items.begin() + current, items.end());
+      current = 0;
+      Q_EMIT currentIndexChanged(current);
+      break;
+    case OrderPolicy::constant: ;
+  }
 }
 
 void ComboBoxWidget::mousePressEvent(QMouseEvent *event) {

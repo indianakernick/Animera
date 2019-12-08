@@ -24,8 +24,15 @@ class ComboBoxWidget final : public QWidget {
   Q_OBJECT
   
 public:
+  enum class OrderPolicy {
+    constant, // selected item doesn't move
+    bottom,   // selected item moves to bottom
+    top       // selected item moves to top
+  };
+
   ComboBoxWidget(QWidget *, int);
 
+  void setPolicy(OrderPolicy);
   void clearWithItem(const QString &);
   void addItem(const QString &);
   void setCurrentIndex(int);
@@ -46,6 +53,9 @@ private:
   ComboBoxPopup *popup = nullptr;
   std::vector<QString> items;
   int current = -1;
+  OrderPolicy policy = OrderPolicy::constant;
+
+  void enforcePolicy();
 
   void mousePressEvent(QMouseEvent *) override;
   void paintEvent(QPaintEvent *) override;
