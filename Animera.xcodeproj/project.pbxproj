@@ -27,6 +27,7 @@
 		4529AA00239B4A420034A014 /* scope time.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4529A9FF239B4A420034A014 /* scope time.cpp */; };
 		4529AA03239CA0D40034A014 /* tool param bar widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4529AA01239CA0D40034A014 /* tool param bar widget.cpp */; };
 		4529AA06239CA4090034A014 /* tool param widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4529AA04239CA4090034A014 /* tool param widget.cpp */; };
+		4529AA09239CDF4F0034A014 /* quit dialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4529AA07239CDF4F0034A014 /* quit dialog.cpp */; };
 		453A20C6231A078100F055BA /* sprite file.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453A20C4231A078100F055BA /* sprite file.cpp */; };
 		453C78192234935000818B19 /* timeline widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C78172234935000818B19 /* timeline widget.cpp */; };
 		453C781C22349BBD00818B19 /* editor widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C781A22349BBD00818B19 /* editor widget.cpp */; };
@@ -173,6 +174,8 @@
 		4529AA02239CA0D40034A014 /* tool param bar widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "tool param bar widget.hpp"; sourceTree = "<group>"; };
 		4529AA04239CA4090034A014 /* tool param widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "tool param widget.cpp"; sourceTree = "<group>"; };
 		4529AA05239CA4090034A014 /* tool param widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "tool param widget.hpp"; sourceTree = "<group>"; };
+		4529AA07239CDF4F0034A014 /* quit dialog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "quit dialog.cpp"; sourceTree = "<group>"; };
+		4529AA08239CDF4F0034A014 /* quit dialog.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "quit dialog.hpp"; sourceTree = "<group>"; };
 		453A20C4231A078100F055BA /* sprite file.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "sprite file.cpp"; sourceTree = "<group>"; };
 		453A20C5231A078100F055BA /* sprite file.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "sprite file.hpp"; sourceTree = "<group>"; };
 		453A20C7231A139100F055BA /* palette span.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "palette span.hpp"; sourceTree = "<group>"; };
@@ -908,6 +911,8 @@
 				45D109AE22E2D88500D1F1CB /* export dialog.hpp */,
 				45A6103A2307E1EF000A0BD6 /* error dialog.cpp */,
 				45A6103B2307E1EF000A0BD6 /* error dialog.hpp */,
+				4529AA07239CDF4F0034A014 /* quit dialog.cpp */,
+				4529AA08239CDF4F0034A014 /* quit dialog.hpp */,
 			);
 			name = Dialogs;
 			sourceTree = "<group>";
@@ -977,6 +982,7 @@
 				45AA32DB22F52A3300005DD8 /* Moc - editor widget */,
 				45AA32DC22F52A6400005DD8 /* Moc - tool widgets */,
 				45AA32DE22F52AC800005DD8 /* Moc - undo object */,
+				4529AA0A239CE3D00034A014 /* Moc - quit dialog */,
 				45AA32DF22F52B0000005DD8 /* Moc - application */,
 				45AA32E022F52B2900005DD8 /* Moc - timeline */,
 				45AA32E122F52B8B00005DD8 /* Moc - palette */,
@@ -1075,6 +1081,27 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		4529AA0A239CE3D00034A014 /* Moc - quit dialog */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(PROJECT_DIR)/src/quit dialog.hpp",
+				"$(PROJECT_DIR)/src/quit dialog.cpp",
+			);
+			name = "Moc - quit dialog";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(PROJECT_DIR)/src/quit dialog.moc",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/opt/qt/bin/moc \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/qt/bin/moc \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+		};
 		453C787B2235D63B00818B19 /* RCC */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1786,6 +1813,7 @@
 				45B284B9221E110F00D6D055 /* painting.cpp in Sources */,
 				45B284B3221A919000D6D055 /* tool.cpp in Sources */,
 				45D1099E22DB09C100D1F1CB /* transform tools.cpp in Sources */,
+				4529AA09239CDF4F0034A014 /* quit dialog.cpp in Sources */,
 				453C78402234DF3200818B19 /* application.cpp in Sources */,
 				45CAC92922CC7B5800F945BF /* sample object.cpp in Sources */,
 				455F2868220690A600C73F39 /* main.cpp in Sources */,

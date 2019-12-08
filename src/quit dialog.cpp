@@ -1,0 +1,63 @@
+//
+//  quit dialog.cpp
+//  Animera
+//
+//  Created by Indi Kernick on 8/12/19.
+//  Copyright © 2019 Indi Kernick. All rights reserved.
+//
+
+#include "quit dialog.hpp"
+
+#include "connect.hpp"
+#include "label widget.hpp"
+#include "separator widget.hpp"
+#include <QtWidgets/qboxlayout.h>
+#include "text push button widget.hpp"
+
+QuitDialog::QuitDialog(QWidget *parent)
+  : Dialog{parent} {
+  setAttribute(Qt::WA_DeleteOnClose);
+  setWindowTitle("Quit");
+  setStyleSheet("background-color:" + glob_main.name());
+  createWidgets();
+  setupLayout();
+  connectSignals();
+}
+
+void QuitDialog::createWidgets() {  
+  quit = new TextPushButtonWidget{this, textBoxRect(8), "Quit"};
+  save = new TextPushButtonWidget{this, textBoxRect(8), "Save"};
+  cancel = new TextPushButtonWidget{this, textBoxRect(8), "Cancel"};
+}
+
+void QuitDialog::setupLayout() {
+  auto *layout = new QVBoxLayout{this};
+  layout->setSpacing(0);
+  layout->setContentsMargins(0, 0, 0, 0);
+  
+  const char title[] = "Quit without saving?";
+  constexpr WidgetRect titleRect = textBoxRect(std::size(title));
+  constexpr WidgetRect titleRectMargins = addMargins(titleRect, true, true, true, false);
+  layout->addWidget(new LabelWidget{this, titleRectMargins, title});
+  layout->addWidget(new HoriSeparator{this});
+  
+  auto *buttonLayout = new QHBoxLayout;
+  layout->addLayout(buttonLayout);
+  buttonLayout->setSpacing(0);
+  buttonLayout->setContentsMargins(glob_margin, glob_margin, glob_margin, glob_margin);
+  
+  buttonLayout->addWidget(quit);
+  buttonLayout->addWidget(save);
+  buttonLayout->addWidget(cancel);
+}
+
+void QuitDialog::connectSignals() {
+  CONNECT(quit, pressed, this, shouldQuit);
+  CONNECT(quit, pressed, this, accept);
+  CONNECT(save, pressed, this, shouldSave);
+  CONNECT(save, pressed, this, accept);
+  CONNECT(cancel, pressed, this, shouldCancel);
+  CONNECT(cancel, pressed, this, accept);
+}
+
+#include "quit dialog.moc"

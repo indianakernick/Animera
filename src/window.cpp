@@ -10,6 +10,8 @@
 
 #include "config.hpp"
 #include "connect.hpp"
+#include <QtGui/qevent.h>
+#include "quit dialog.hpp"
 #include "application.hpp"
 #include "global font.hpp"
 #include "undo object.hpp"
@@ -370,11 +372,18 @@ void Window::connectSignals() {
 void Window::saveToPath(const QString &path) {
   sprite.optimize();
   if (Error err = sprite.saveFile(path); err) {
-    (new ErrorDialog{this, "File save error", err.msg()})->open();
+    auto *dialog = new ErrorDialog{this, "File save error", err.msg()};
+    if (closeAfterDialog) {
+      CONNECT(dialog, finished, this, close);
+    }
+    dialog->open();
   } else {
     setWindowFilePath(path);
     setWindowModified(false);
     statusBar->showTemp("Saved!");
+    if (closeAfterDialog) {
+      close();
+    }
   }
 }
 
@@ -392,8 +401,11 @@ void Window::saveFileDialog() {
   dialog->setAcceptMode(QFileDialog::AcceptSave);
   dialog->setNameFilter("Animera Sprite (*.animera)");
   dialog->setDefaultSuffix("animera");
-  dialog->setDirectory(QDir::homePath() + "/my sprite.animera");
+  dialog->setDirectory(QDir::homePath() + "/sprite.animera");
   CONNECT(dialog, fileSelected, this, saveToPath);
+  if (closeAfterDialog) {
+    CONNECT(dialog, rejected, this, close);
+  }
   dialog->open();
 }
 
@@ -463,7 +475,7 @@ void Window::savePaletteDialog() {
   dialog->setAcceptMode(QFileDialog::AcceptSave);
   dialog->setNameFilter("PNG Image (*.png)");
   dialog->setDefaultSuffix("png");
-  dialog->setDirectory(QDir::homePath() + "/my palette.png");
+  dialog->setDirectory(QDir::homePath() + "/palette.png");
   CONNECT(dialog, fileSelected, this, savePalette);
   dialog->open();
 }
@@ -473,8 +485,21 @@ void Window::resetPalette() {
   palette->updatePalette();
 }
 
-void Window::closeEvent(QCloseEvent *) {
-  static_cast<Application *>(QApplication::instance())->windowClosed(this);
+void Window::closeEvent(QCloseEvent *event) {
+  if (!quitter && isWindowModified()) {
+    closeAfterDialog = true;
+    event->ignore();
+    quitter = new QuitDialog{this};
+    CONNECT(quitter, shouldQuit, this, close);
+    CONNECT_TYPE(quitter, shouldSave, this, saveFile, Qt::QueuedConnection);
+    CONNECT_LAMBDA(quitter, shouldCancel, [this]() {
+      quitter = nullptr;
+      closeAfterDialog = false;
+    });
+    quitter->open();
+  } else {
+    static_cast<Application *>(QApplication::instance())->windowClosed(this);
+  }
 }
 
 #include "window.moc"

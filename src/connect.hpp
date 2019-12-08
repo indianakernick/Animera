@@ -32,13 +32,17 @@ constexpr auto value(T &&obj, long) -> std::decay_t<decltype(obj)>;
 
 }
 
-#define CONNECT(SENDER, SIGNAL, RECEIVER, SLOT)                                 \
+#define CONNECT_TYPE(SENDER, SIGNAL, RECEIVER, SLOT, TYPE)                      \
   QObject::connect(                                                             \
     detail::address(SENDER, 0),                                                 \
     &decltype(detail::value(SENDER, 0))::SIGNAL,                                \
     detail::address(RECEIVER, 0),                                               \
-    &decltype(detail::value(RECEIVER, 0))::SLOT                                 \
+    &decltype(detail::value(RECEIVER, 0))::SLOT,                                \
+    TYPE                                                                        \
   )
+
+#define CONNECT(SENDER, SIGNAL, RECEIVER, SLOT)                                 \
+  CONNECT_TYPE(SENDER, SIGNAL, RECEIVER, SLOT, Qt::AutoConnection)
 
 #define CONNECT_LAMBDA(SENDER, SIGNAL, ...)                                     \
   QObject::connect(                                                             \
@@ -47,6 +51,7 @@ constexpr auto value(T &&obj, long) -> std::decay_t<decltype(obj)>;
     __VA_ARGS__                                                                 \
   )
 
+// TODO: this is currently unused
 #define CONNECT_OVERLOAD(SENDER, SIGNAL, RECEIVER, SLOT, ...)                   \
   QObject::connect(                                                             \
     detail::address(SENDER, 0),                                                 \
