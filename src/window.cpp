@@ -162,8 +162,12 @@ void Window::initStyles() {
   setStyleSheet(
     "QMenuBar {"
       "background-color: " + glob_main.name() + ";"
-      "color: " + glob_light_2.name() + ";"
+      "color: " + glob_text_color.name() + ";"
       "outline-style: none;"
+    "}"
+    
+    "QMenuBar::item {"
+      "padding: " + QString::number(glob_margin + glob_border_width + glob_text_margin) + "px;"
     "}"
     
     "QMenuBar::item:open {"
@@ -180,7 +184,7 @@ void Window::initStyles() {
     "}"
     
     "QMenu::separator {"
-      "background-color: " + glob_light_2.name() + ";"
+      "background-color: " + glob_border_color.name() + ";"
       "height: " + QString::number(glob_border_width) + "px;"
       "margin-top: " + QString::number(glob_margin) + "px;"
       "margin-bottom: " + QString::number(glob_margin) + "px;"
@@ -188,7 +192,7 @@ void Window::initStyles() {
     
     "QMenu::item {"
       "background-color: " + glob_main.name() + ";"
-      "color: " + glob_light_2.name() + ";"
+      "color: " + glob_text_color.name() + ";"
       "padding: " + QString::number(glob_text_margin) + "px;"
     "}"
     
