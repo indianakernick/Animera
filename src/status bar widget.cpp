@@ -20,9 +20,8 @@ StatusBarWidget::StatusBarWidget(QWidget *parent)
   timer.setInterval(stat_temp_duration_ms);
   timer.setSingleShot(true);
   CONNECT(timer, timeout, this, hideTemp);
-  setMinimumWidth(stat_min_width);
-  setFixedHeight(stat_height);
-  setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+  setMinimumWidth(stat_rect.widget().width());
+  setFixedHeight(stat_rect.widget().height());
 }
 
 void StatusBarWidget::showTemp(const std::string_view text) {
@@ -50,10 +49,7 @@ void StatusBarWidget::paintEvent(QPaintEvent *) {
   painter.fillRect(rect(), stat_background);
   painter.setFont(getGlobalFont());
   painter.setPen(glob_text_color);
-  const QPoint pos = {
-    glob_margin + glob_text_margin,
-    glob_margin + glob_text_margin + glob_font_accent_px
-  };
+  const QPoint pos = stat_rect.pos() + QPoint{0, glob_font_accent_px};
   if (!tempText.isEmpty()) {
     painter.drawText(pos, tempText);
     return;

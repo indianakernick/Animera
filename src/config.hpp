@@ -227,11 +227,10 @@ constexpr int scaleOverlayAlpha(const int alpha) {
 
 // ------------------------------- status bar ------------------------------- //
 
-constexpr int       stat_temp_duration_ms = 2500;
-constexpr int       stat_min_width = 200_px;
-constexpr int       stat_height = glob_font_px + 2 * (glob_text_margin + glob_margin);
+constexpr int        stat_temp_duration_ms = 2500;
+constexpr WidgetRect stat_rect = textBoxRect(64);
 
-inline const QColor stat_background = glob_main;
+inline const QColor  stat_background = glob_main;
 
 // --------------------------------- editor --------------------------------- //
 
