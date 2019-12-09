@@ -29,6 +29,7 @@ bool SelectTool<Derived>::resizeImages() {
   const QImage::Format format = qimageFormat(ctx->format);
   if (selection.format() != format || selection.size() != ctx->size) {
     selection = {ctx->size, format};
+    clearImage(selection);
   }
   if (overlay.size() != ctx->size) {
     overlay = {ctx->size, qimageFormat(Format::rgba)};
@@ -409,8 +410,10 @@ void WandSelectTool::attachCell() {
   mode = SelectMode::copy;
   if (resizeImages()) {
     mask = {ctx->size, mask_format};
+    clearImage(mask);
+  } else {
+    clearImage(mask, bounds);
   }
-  clearImage(mask, bounds);
   bounds = {};
   animTimer.start();
 }
