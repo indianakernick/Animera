@@ -36,7 +36,7 @@ void Application::waitForOpenEvent() {
 void Application::newFileDialog() {
   auto *dialog = new InitCanvasDialog{desktop()};
   CONNECT(dialog, canvasInitialized, this, newFile);
-  dialog->show();
+  dialog->open();
 }
 
 void Application::openFileDialog() {
@@ -45,7 +45,9 @@ void Application::openFileDialog() {
   dialog->setNameFilter("*.animera *.png");
   dialog->setFileMode(QFileDialog::ExistingFile);
   CONNECT(dialog, fileSelected, this, openFile);
+  // TODO: why can't I use open instead of show?
   dialog->show();
+  // TODO: why can't this be called before show?
   updateDirSettings(dialog, "Sprite Directory");
 }
 

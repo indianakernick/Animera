@@ -428,8 +428,8 @@ void Window::saveFileDialog() {
   if (closeAfterDialog) {
     CONNECT(dialog, rejected, this, close);
   }
-  dialog->open();
   updateDirSettings(dialog, "Sprite Directory");
+  dialog->open();
 }
 
 void Window::exportSprite(const ExportOptions &options) {
@@ -462,8 +462,8 @@ void Window::exportFrameDialog() {
   dialog->setNameFilter("PNG Image (*.png)");
   dialog->setDefaultSuffix("png");
   CONNECT(dialog, fileSelected, this, exportFrame);
-  dialog->open();
   updateDirSettings(dialog, "Export Directory");
+  dialog->open();
 }
 
 void Window::openPalette(const QString &path) {
@@ -489,8 +489,8 @@ void Window::openPaletteDialog() {
   dialog->setNameFilter("PNG Image (*.png)");
   dialog->setFileMode(QFileDialog::ExistingFile);
   CONNECT(dialog, fileSelected, this, openPalette);
-  dialog->open();
   updateDirSettings(dialog, "Palette Directory");
+  dialog->open();
 }
 
 void Window::savePaletteDialog() {
@@ -499,8 +499,8 @@ void Window::savePaletteDialog() {
   dialog->setNameFilter("PNG Image (*.png)");
   dialog->setDefaultSuffix("png");
   CONNECT(dialog, fileSelected, this, savePalette);
-  dialog->open();
   updateDirSettings(dialog, "Palette Directory");
+  dialog->open();
 }
 
 void Window::resetPalette() {

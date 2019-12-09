@@ -273,8 +273,6 @@ growCell overflows
 editor scaling is sometimes a pixel off
   this might be due to QPainter using floats
   might have to do scaling myself
-  
-QFileDialog::setDirectory must be called after open/show to have any affect
 
 -------------------------------- minor features --------------------------------
 
