@@ -41,6 +41,7 @@ void Application::newFileDialog() {
 
 void Application::openFileDialog() {
   auto *dialog = new QFileDialog{desktop()};
+  dialog->setAttribute(Qt::WA_DeleteOnClose);
   dialog->setAcceptMode(QFileDialog::AcceptOpen);
   dialog->setNameFilter("*.animera *.png");
   dialog->setFileMode(QFileDialog::ExistingFile);

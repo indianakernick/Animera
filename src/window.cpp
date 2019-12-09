@@ -421,6 +421,7 @@ void Window::saveFile() {
 
 void Window::saveFileDialog() {
   auto *dialog = new QFileDialog{this};
+  dialog->setAttribute(Qt::WA_DeleteOnClose);
   dialog->setAcceptMode(QFileDialog::AcceptSave);
   dialog->setNameFilter("Animera Sprite (*.animera)");
   dialog->setDefaultSuffix("animera");
@@ -458,6 +459,7 @@ void Window::exportFrame(const QString &path) {
 
 void Window::exportFrameDialog() {
   auto *dialog = new QFileDialog{this};
+  dialog->setAttribute(Qt::WA_DeleteOnClose);
   dialog->setAcceptMode(QFileDialog::AcceptSave);
   dialog->setNameFilter("PNG Image (*.png)");
   dialog->setDefaultSuffix("png");
@@ -485,6 +487,7 @@ void Window::savePalette(const QString &path) {
 
 void Window::openPaletteDialog() {
   auto *dialog = new QFileDialog{this};
+  dialog->setAttribute(Qt::WA_DeleteOnClose);
   dialog->setAcceptMode(QFileDialog::AcceptOpen);
   dialog->setNameFilter("PNG Image (*.png)");
   dialog->setFileMode(QFileDialog::ExistingFile);
@@ -495,6 +498,7 @@ void Window::openPaletteDialog() {
 
 void Window::savePaletteDialog() {
   auto *dialog = new QFileDialog{this};
+  dialog->setAttribute(Qt::WA_DeleteOnClose);
   dialog->setAcceptMode(QFileDialog::AcceptSave);
   dialog->setNameFilter("PNG Image (*.png)");
   dialog->setDefaultSuffix("png");
@@ -510,8 +514,8 @@ void Window::resetPalette() {
 
 void Window::closeEvent(QCloseEvent *event) {
   if (!quitter && isWindowModified()) {
-    closeAfterDialog = true;
     event->ignore();
+    closeAfterDialog = true;
     quitter = new QuitDialog{this};
     CONNECT(quitter, shouldQuit, this, close);
     CONNECT_TYPE(quitter, shouldSave, this, saveFile, Qt::QueuedConnection);

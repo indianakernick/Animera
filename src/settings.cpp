@@ -19,6 +19,7 @@ QSettings &getSettings() {
 
 void updateDirSettings(QFileDialog *dialog, const QString &key) {
   const QString dir = getSettings().value(key, QDir::homePath()).toString();
+  getSettings().setValue(key, dir);
   dialog->setDirectory(dir);
   CONNECT_LAMBDA(dialog, directoryEntered, [key](const QString &dir) {
     getSettings().setValue(key, dir);
