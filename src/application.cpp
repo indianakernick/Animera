@@ -10,6 +10,7 @@
 
 #include "window.hpp"
 #include "connect.hpp"
+#include "settings.hpp"
 #include <QtGui/qevent.h>
 #include "global font.hpp"
 #include <QtCore/qresource.h>
@@ -43,9 +44,9 @@ void Application::openFileDialog() {
   dialog->setAcceptMode(QFileDialog::AcceptOpen);
   dialog->setNameFilter("*.animera *.png");
   dialog->setFileMode(QFileDialog::ExistingFile);
-  dialog->setDirectory(QDir::homePath());
   CONNECT(dialog, fileSelected, this, openFile);
   dialog->show();
+  updateDirSettings(dialog, "Sprite Directory");
 }
 
 void Application::windowClosed(Window *window) {

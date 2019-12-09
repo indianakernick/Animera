@@ -130,10 +130,6 @@ fixed byte order image formats
 are there resources than can be shared between windows?
   global resource cache might be useful
 
-more efficient status message updates
-  there might be situations where the status bar is updated multiple times and
-  only the last update is seen
-
 thick line
   https://stackoverflow.com/questions/11194876/clip-line-to-screen-coordinates/11195387
   https://www.skytopia.com/project/articles/compsci/clipping.html
@@ -266,11 +262,6 @@ editor cursor update issues
     zooming out of editor and mouse leaves
     mouse enters editor while dragging
 
-panels can be nested
-  download file in chrome then CMD+SHIFT+G
-  what's up with the file dialog in export dialog?
-  is this a bug?
-
 growCell overflows
   could overflow cell pos
   could exceed max image size
@@ -282,6 +273,8 @@ growCell overflows
 editor scaling is sometimes a pixel off
   this might be due to QPainter using floats
   might have to do scaling myself
+  
+QFileDialog::setDirectory must be called after open/show to have any affect
 
 -------------------------------- minor features --------------------------------
 

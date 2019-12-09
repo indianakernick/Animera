@@ -10,6 +10,7 @@
 
 #include "config.hpp"
 #include "connect.hpp"
+#include "settings.hpp"
 #include <QtGui/qevent.h>
 #include "quit dialog.hpp"
 #include "application.hpp"
@@ -423,12 +424,12 @@ void Window::saveFileDialog() {
   dialog->setAcceptMode(QFileDialog::AcceptSave);
   dialog->setNameFilter("Animera Sprite (*.animera)");
   dialog->setDefaultSuffix("animera");
-  dialog->setDirectory(QDir::homePath() + "/sprite.animera");
   CONNECT(dialog, fileSelected, this, saveToPath);
   if (closeAfterDialog) {
     CONNECT(dialog, rejected, this, close);
   }
   dialog->open();
+  updateDirSettings(dialog, "Sprite Directory");
 }
 
 void Window::exportSprite(const ExportOptions &options) {
@@ -460,9 +461,9 @@ void Window::exportFrameDialog() {
   dialog->setAcceptMode(QFileDialog::AcceptSave);
   dialog->setNameFilter("PNG Image (*.png)");
   dialog->setDefaultSuffix("png");
-  dialog->setDirectory(QDir::homePath() + "/sprite.png");
   CONNECT(dialog, fileSelected, this, exportFrame);
   dialog->open();
+  updateDirSettings(dialog, "Export Directory");
 }
 
 void Window::openPalette(const QString &path) {
@@ -487,9 +488,9 @@ void Window::openPaletteDialog() {
   dialog->setAcceptMode(QFileDialog::AcceptOpen);
   dialog->setNameFilter("PNG Image (*.png)");
   dialog->setFileMode(QFileDialog::ExistingFile);
-  dialog->setDirectory(QDir::homePath());
   CONNECT(dialog, fileSelected, this, openPalette);
   dialog->open();
+  updateDirSettings(dialog, "Palette Directory");
 }
 
 void Window::savePaletteDialog() {
@@ -497,9 +498,9 @@ void Window::savePaletteDialog() {
   dialog->setAcceptMode(QFileDialog::AcceptSave);
   dialog->setNameFilter("PNG Image (*.png)");
   dialog->setDefaultSuffix("png");
-  dialog->setDirectory(QDir::homePath() + "/palette.png");
   CONNECT(dialog, fileSelected, this, savePalette);
   dialog->open();
+  updateDirSettings(dialog, "Palette Directory");
 }
 
 void Window::resetPalette() {

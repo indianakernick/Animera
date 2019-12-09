@@ -59,6 +59,7 @@
 		455F28872206930E00C73F39 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455F28862206930D00C73F39 /* OpenGL.framework */; };
 		4571C132227C383A00479006 /* radio button widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4571C130227C383A00479006 /* radio button widget.cpp */; };
 		4576DFE82298DB2D00FDECA3 /* separator widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4576DFE62298DB2D00FDECA3 /* separator widget.cpp */; };
+		457D74F3239E2488009B4E4B /* settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 457D74F1239E2488009B4E4B /* settings.cpp */; };
 		457DC0BD22E7D6160000777B /* file input widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 457DC0BB22E7D6160000777B /* file input widget.cpp */; };
 		457DC0C222E9518A0000777B /* cell span.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 457DC0C022E9518A0000777B /* cell span.cpp */; };
 		457DC0C622EA93FC0000777B /* export pattern.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 457DC0C422EA93FC0000777B /* export pattern.cpp */; };
@@ -285,6 +286,8 @@
 		4571C131227C383A00479006 /* radio button widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "radio button widget.hpp"; sourceTree = "<group>"; };
 		4576DFE62298DB2D00FDECA3 /* separator widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "separator widget.cpp"; sourceTree = "<group>"; };
 		4576DFE72298DB2D00FDECA3 /* separator widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "separator widget.hpp"; sourceTree = "<group>"; };
+		457D74F1239E2488009B4E4B /* settings.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = settings.cpp; sourceTree = "<group>"; };
+		457D74F2239E2488009B4E4B /* settings.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = settings.hpp; sourceTree = "<group>"; };
 		457DC0BB22E7D6160000777B /* file input widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "file input widget.cpp"; sourceTree = "<group>"; };
 		457DC0BC22E7D6160000777B /* file input widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "file input widget.hpp"; sourceTree = "<group>"; };
 		457DC0BE22E7FB2B0000777B /* widget rect.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "widget rect.hpp"; sourceTree = "<group>"; };
@@ -836,6 +839,8 @@
 				4529A9FC239263110034A014 /* docopt helpers.hpp */,
 				4529A9FF239B4A420034A014 /* scope time.cpp */,
 				4529A9FE23937E8E0034A014 /* scope time.hpp */,
+				457D74F1239E2488009B4E4B /* settings.cpp */,
+				457D74F2239E2488009B4E4B /* settings.hpp */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -1838,6 +1843,7 @@
 				45D109AC22E2D4FD00D1F1CB /* text push button widget.cpp in Sources */,
 				453E8E4B236572250070B841 /* file io.cpp in Sources */,
 				4595D48C22C05E5400607D64 /* timeline cells widget.cpp in Sources */,
+				457D74F3239E2488009B4E4B /* settings.cpp in Sources */,
 				453C78432234E13E00818B19 /* window.cpp in Sources */,
 				45A6103C2307E1EF000A0BD6 /* error dialog.cpp in Sources */,
 				4512636622781D7B00C66A19 /* tool colors widget.cpp in Sources */,
