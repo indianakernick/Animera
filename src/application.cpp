@@ -20,6 +20,8 @@
 
 Application::Application(int &argc, char **argv)
   : QApplication{argc, argv} {
+  setApplicationName("Animera");
+  setOrganizationName("Indiana Kernick");
   loadResources();
   initStyles();
 }
