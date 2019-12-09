@@ -10,7 +10,6 @@
 
 #include "connect.hpp"
 #include "label widget.hpp"
-#include "separator widget.hpp"
 #include <QtWidgets/qboxlayout.h>
 #include "text push button widget.hpp"
 
@@ -24,7 +23,7 @@ QuitDialog::QuitDialog(QWidget *parent)
   connectSignals();
 }
 
-void QuitDialog::createWidgets() {  
+void QuitDialog::createWidgets() {
   quit = new TextPushButtonWidget{this, textBoxRect(8), "Quit"};
   save = new TextPushButtonWidget{this, textBoxRect(8), "Save"};
   cancel = new TextPushButtonWidget{this, textBoxRect(8), "Cancel"};
@@ -33,18 +32,14 @@ void QuitDialog::createWidgets() {
 void QuitDialog::setupLayout() {
   auto *layout = new QVBoxLayout{this};
   layout->setSpacing(0);
-  layout->setContentsMargins(0, 0, 0, 0);
+  layout->setContentsMargins(glob_margin, glob_margin, glob_margin, glob_margin);
   
-  const char title[] = "Quit without saving?";
-  constexpr WidgetRect titleRect = textBoxRect(std::size(title));
-  constexpr WidgetRect titleRectMargins = addMargins(titleRect, true, true, true, false);
-  layout->addWidget(new LabelWidget{this, titleRectMargins, title});
-  layout->addWidget(new HoriSeparator{this});
+  layout->addWidget(makeLabel(this, "Quit without saving?"));
   
   auto *buttonLayout = new QHBoxLayout;
   layout->addLayout(buttonLayout);
   buttonLayout->setSpacing(0);
-  buttonLayout->setContentsMargins(glob_margin, glob_margin, glob_margin, glob_margin);
+  buttonLayout->setContentsMargins(0, 0, 0, 0);
   
   buttonLayout->addWidget(quit);
   buttonLayout->addWidget(save);
