@@ -8,6 +8,7 @@
 
 #include "file io.hpp"
 
+#include <QtCore/qdir.h>
 #include "file io error.hpp"
 
 /*
@@ -45,7 +46,7 @@ QIODevice &FileWriter::dev() {
 Error FileWriter::flush() const {
   QFile file{path};
   if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-    return "Failed to open file for writing\n" + path;
+    return file.errorString() + "\n" + QDir::toNativeSeparators(path);
   }
   if (!file.write(buff.data().data(), buff.data().size())) {
     // Well, fuck
@@ -58,7 +59,7 @@ Error FileWriter::flush() const {
 Error FileReader::open(const QString &newPath) {
   file.setFileName(newPath);
   if (!file.open(QIODevice::ReadOnly | QIODevice::ExistingOnly)) {
-    return "Failed to open file for reading\n" + newPath;
+    return file.errorString() + "\n" + QDir::toNativeSeparators(newPath);
   }
   return {};
 }
