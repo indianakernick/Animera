@@ -35,19 +35,14 @@
 #include "tool param bar widget.hpp"
 #include <QtWidgets/qdesktopwidget.h>
 
-Window::Window(QWidget *parent, const QRect desktop)
+Window::Window(QWidget *parent, const Window *previous)
   : QMainWindow{parent} {
   setAttribute(Qt::WA_DeleteOnClose);
   createWidgets();
   resize(glob_window_size);
   setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
   setFocusPolicy(Qt::StrongFocus);
-  setGeometry(QStyle::alignedRect(
-    Qt::LeftToRight,
-    Qt::AlignCenter,
-    size(),
-    desktop
-  ));
+  setPosition(previous);
   initStyles();
   setupLayouts();
   populateMenubar();
@@ -83,6 +78,33 @@ void Window::openImage(const QString &path) {
 
 void Window::modify() {
   setWindowModified(true);
+}
+
+void Window::setPosition(const Window *previous) {
+  const QRect desktop = QApplication::desktop()->availableGeometry(this);
+  if (previous) {
+  
+#ifdef Q_OS_MACOS
+    const QPoint offset = {21, 23};
+#else
+    const QPoint offset = toPoint(previous->geometry().top() - previous->pos().y());
+#endif
+  
+    const QPoint newPos = previous->pos() + offset;
+    const QPoint newCorner = toPoint(frameGeometry().size()) + newPos;
+    if (desktop.contains(newCorner)) {
+      move(newPos);
+    } else {
+      move(previous->pos());
+    }
+  } else {
+    move(QStyle::alignedRect(
+      Qt::LeftToRight,
+      Qt::AlignCenter,
+      frameGeometry().size(),
+      desktop
+    ).topLeft());
+  }
 }
 
 void Window::createWidgets() {

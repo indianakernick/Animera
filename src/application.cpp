@@ -106,9 +106,8 @@ void Application::loadResources() {
 }
 
 Window *Application::makeWindow() {
-  return windows.emplace_back(
-    new Window{desktop(), desktop()->availableGeometry()}
-  );
+  const Window *previous = windows.empty() ? nullptr : windows.back();
+  return windows.emplace_back(new Window{desktop(), previous});
 }
 
 bool Application::event(QEvent *event) {

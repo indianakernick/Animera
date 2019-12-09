@@ -32,7 +32,7 @@ class Window final : public QMainWindow {
   Q_OBJECT
 
 public:
-  Window(QWidget *, QRect);
+  Window(QWidget *, const Window *);
   
   void newFile(Format, QSize);
   void openFile(const QString &);
@@ -62,6 +62,7 @@ private:
   QuitDialog *quitter = nullptr;
   bool closeAfterDialog = false;
   
+  void setPosition(const Window *);
   void createWidgets();
   void setupLayouts();
   void initStyles();
