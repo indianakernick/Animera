@@ -93,12 +93,19 @@ QString FileInputWidget::path() const {
   return text->text();
 }
 
-void FileInputWidget::setTextFromDialog() {
-  QString newDir = QFileDialog::getExistingDirectory(nullptr, "", path());
-  if (!newDir.isNull()) {
-    text->setText(QDir::cleanPath(newDir));
-    changePath();
-  }
+void FileInputWidget::setPathFromDialog() {
+  auto *dialog = new QFileDialog{parentWidget()};
+  dialog->setAcceptMode(QFileDialog::AcceptOpen);
+  dialog->setOption(QFileDialog::ShowDirsOnly);
+  dialog->setFileMode(QFileDialog::Directory);
+  dialog->setDirectory(path());
+  CONNECT(dialog, fileSelected, this, setPath);
+  dialog->open();
+}
+
+void FileInputWidget::setPath(const QString &newDir) {
+  text->setText(QDir::cleanPath(newDir));
+  changePath();
 }
 
 void FileInputWidget::simplifyPath() {
@@ -132,7 +139,7 @@ void FileInputWidget::initText() {
 }
 
 void FileInputWidget::connectSignals() {
-  CONNECT(icon, pressed,         this, setTextFromDialog);
+  CONNECT(icon, pressed,         this, setPathFromDialog);
   CONNECT(text, editingFinished, this, simplifyPath);
   CONNECT(text, editingFinished, this, changePath);
 }

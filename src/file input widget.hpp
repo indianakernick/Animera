@@ -27,7 +27,8 @@ Q_SIGNALS:
   void pathChanged(const QString &);
 
 private Q_SLOTS:
-  void setTextFromDialog();
+  void setPathFromDialog();
+  void setPath(const QString &);
   void simplifyPath();
   void changePath();
 
