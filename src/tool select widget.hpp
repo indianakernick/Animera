@@ -56,6 +56,7 @@ private Q_SLOTS:
   void unlockTool();
   
 private:
+  ToolParamBarWidget *bar = nullptr;
   QWidget *box = nullptr;
   std::vector<ToolWidget *> tools;
   CurrentTool currTool;
@@ -65,8 +66,8 @@ private:
   
   void ensureVisible(ToolWidget *);
   template <typename ParamWidget>
-  void pushToolWidget(ToolParamBarWidget *, QHBoxLayout *);
-  void createTools(ToolParamBarWidget *);
+  void pushToolWidget(QHBoxLayout *);
+  void createTools();
   void setupLayout();
   void connectSignals();
 };

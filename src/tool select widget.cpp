@@ -68,13 +68,13 @@ private:
 };
 
 ToolSelectWidget::ToolSelectWidget(QWidget *parent, ToolParamBarWidget *bar)
-  : QScrollArea{parent}, box{new QWidget{this}} {
+  : QScrollArea{parent}, bar{bar}, box{new QWidget{this}} {
   setFixedWidth(tool_select_width);
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   setStyleSheet("background-color: " + tool_select_background.name());
   setFrameShape(NoFrame);
-  createTools(bar);
+  createTools();
   setupLayout();
   connectSignals();
   setWidget(box);
@@ -198,7 +198,7 @@ void init(ParamWidget *, Tool *, long) {}
 }
 
 template <typename ParamWidget>
-void ToolSelectWidget::pushToolWidget(ToolParamBarWidget *bar, QHBoxLayout *layout) {
+void ToolSelectWidget::pushToolWidget(QHBoxLayout *layout) {
   auto tool = std::make_unique<typename ParamWidget::impl>();
   tool->setCtx(&ctx);
   auto *params = new ParamWidget{bar};
@@ -208,26 +208,27 @@ void ToolSelectWidget::pushToolWidget(ToolParamBarWidget *bar, QHBoxLayout *layo
   tools.push_back(new ToolWidget{box, std::move(tool), params});
 }
 
-void ToolSelectWidget::createTools(ToolParamBarWidget *bar) {
+void ToolSelectWidget::createTools() {
   auto *layout = new QHBoxLayout{bar};
   layout->setSpacing(0);
   layout->setContentsMargins(0, 0, 0, 0);
   layout->setSizeConstraint(QLayout::SetFixedSize);
+  layout->addStretch();
 
-  pushToolWidget<BrushToolWidget>(bar, layout);
-  pushToolWidget<FloodFillToolWidget>(bar, layout);
-  pushToolWidget<RectangleSelectToolWidget>(bar, layout);
-  pushToolWidget<PolygonSelectToolWidget>(bar, layout);
-  pushToolWidget<WandSelectToolWidget>(bar, layout);
-  pushToolWidget<LineToolWidget>(bar, layout);
-  pushToolWidget<StrokedCircleToolWidget>(bar, layout);
-  pushToolWidget<FilledCircleToolWidget>(bar, layout);
-  pushToolWidget<StrokedRectangleToolWidget>(bar, layout);
-  pushToolWidget<FilledRectangleToolWidget>(bar, layout);
-  pushToolWidget<LinearGradientToolWidget>(bar, layout);
-  pushToolWidget<TranslateToolWidget>(bar, layout);
-  pushToolWidget<FlipToolWidget>(bar, layout);
-  pushToolWidget<RotateToolWidget>(bar, layout);
+  pushToolWidget<BrushToolWidget>(layout);
+  pushToolWidget<FloodFillToolWidget>(layout);
+  pushToolWidget<RectangleSelectToolWidget>(layout);
+  pushToolWidget<PolygonSelectToolWidget>(layout);
+  pushToolWidget<WandSelectToolWidget>(layout);
+  pushToolWidget<LineToolWidget>(layout);
+  pushToolWidget<StrokedCircleToolWidget>(layout);
+  pushToolWidget<FilledCircleToolWidget>(layout);
+  pushToolWidget<StrokedRectangleToolWidget>(layout);
+  pushToolWidget<FilledRectangleToolWidget>(layout);
+  pushToolWidget<LinearGradientToolWidget>(layout);
+  pushToolWidget<TranslateToolWidget>(layout);
+  pushToolWidget<FlipToolWidget>(layout);
+  pushToolWidget<RotateToolWidget>(layout);
 }
 
 void ToolSelectWidget::setupLayout() {
@@ -256,6 +257,7 @@ void ToolSelectWidget::connectSignals() {
     CONNECT(tool, shouldChangeTool, this, setTool);
   }
   tools[0]->click();
+  bar->adjustSize();
 }
 
 #include "tool select widget.moc"
