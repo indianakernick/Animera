@@ -396,7 +396,7 @@ void Window::saveToPath(const QString &path) {
   sprite.optimize();
   if (Error err = sprite.saveFile(path); err) {
     auto *dialog = new ErrorDialog{this, "File save error", err.msg()};
-    if (closeAfterDialog) {
+    if (closeAfterSave) {
       CONNECT(dialog, finished, this, close);
     }
     dialog->open();
@@ -404,7 +404,7 @@ void Window::saveToPath(const QString &path) {
     setWindowFilePath(path);
     setWindowModified(false);
     statusBar->showTemp("Saved!");
-    if (closeAfterDialog) {
+    if (closeAfterSave) {
       close();
     }
   }
@@ -426,7 +426,7 @@ void Window::saveFileDialog() {
   dialog->setNameFilter("Animera Sprite (*.animera)");
   dialog->setDefaultSuffix("animera");
   CONNECT(dialog, fileSelected, this, saveToPath);
-  if (closeAfterDialog) {
+  if (closeAfterSave) {
     CONNECT(dialog, rejected, this, close);
   }
   updateDirSettings(dialog, "Sprite Directory");
@@ -513,19 +513,20 @@ void Window::resetPalette() {
 }
 
 void Window::closeEvent(QCloseEvent *event) {
-  if (!quitter && isWindowModified()) {
+  auto *app = static_cast<Application *>(QApplication::instance());
+  if (!app->isClosing() && showQuitDialog && isWindowModified()) {
     event->ignore();
-    closeAfterDialog = true;
-    quitter = new QuitDialog{this};
+    showQuitDialog = false;
+    auto *quitter = new QuitDialog{this};
     CONNECT(quitter, shouldQuit, this, close);
     CONNECT_TYPE(quitter, shouldSave, this, saveFile, Qt::QueuedConnection);
     CONNECT_LAMBDA(quitter, shouldCancel, [this]() {
-      quitter = nullptr;
-      closeAfterDialog = false;
+      showQuitDialog = true;
+      closeAfterSave = false;
     });
     quitter->open();
   } else {
-    static_cast<Application *>(QApplication::instance())->windowClosed(this);
+    app->windowClosed(this);
   }
 }
 

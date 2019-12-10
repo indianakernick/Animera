@@ -26,7 +26,6 @@ class StatusBarWidget;
 class ColorPickerWidget;
 class QMenuBar;
 class ExportDialog;
-class QuitDialog;
 
 class Window final : public QMainWindow {
   Q_OBJECT
@@ -59,8 +58,8 @@ private:
   ColorPickerWidget *colorPicker = nullptr;
   QMenuBar *menubar = nullptr;
   ExportDialog *exporter = nullptr;
-  QuitDialog *quitter = nullptr;
-  bool closeAfterDialog = false;
+  bool showQuitDialog = true;
+  bool closeAfterSave = false;
   
   void setPosition(const Window *);
   void createWidgets();

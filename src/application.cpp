@@ -46,14 +46,18 @@ void Application::openFileDialog() {
   dialog->setNameFilter("*.animera *.png");
   dialog->setFileMode(QFileDialog::ExistingFile);
   CONNECT(dialog, fileSelected, this, openFile);
-  // TODO: why can't I use open instead of show?
-  dialog->show();
-  // TODO: why can't this be called before show?
+  // TODO: why can't I use open instead of exec?
+  // https://forum.qt.io/topic/109616/how-to-open-an-asynchronous-application-modal-file-dialog
   updateDirSettings(dialog, "Sprite Directory");
+  dialog->exec();
 }
 
 void Application::windowClosed(Window *window) {
   windows.erase(std::remove(windows.begin(), windows.end(), window), windows.end());
+}
+
+bool Application::isClosing() const {
+  return closing;
 }
 
 void Application::newFile(const Format format, const QSize size) {
@@ -115,12 +119,15 @@ Window *Application::makeWindow() {
 }
 
 bool Application::event(QEvent *event) {
-  if (event->type() == QEvent::FileOpen) {
-    noFileTimer.stop();
-    openFile(static_cast<QFileOpenEvent *>(event)->file());
-    return true;
-  } else {
-    return QApplication::event(event);
+  switch (event->type()) {
+    case QEvent::FileOpen:
+      noFileTimer.stop();
+      openFile(static_cast<QFileOpenEvent *>(event)->file());
+      return true;
+    case QEvent::Close:
+      closing = true;
+    default:
+      return QApplication::event(event);
   }
 }
 
