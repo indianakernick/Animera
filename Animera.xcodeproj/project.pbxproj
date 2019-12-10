@@ -21,7 +21,7 @@
 		4520A82A232B424B009FCD1F /* transform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4520A828232B424B009FCD1F /* transform.cpp */; };
 		4525907E2330B7D600FE38A2 /* shrink.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4525907D2330B7D600FE38A2 /* shrink.cpp */; };
 		45288B6122FA8AAD008FB52D /* libz.1.2.11.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 45288B6022FA8AAC008FB52D /* libz.1.2.11.dylib */; };
-		45288B6222FA8AB8008FB52D /* libz.1.2.11.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 45288B6022FA8AAC008FB52D /* libz.1.2.11.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		45288B6222FA8AB8008FB52D /* libz.1.2.11.dylib in Copy zlib and libpng */ = {isa = PBXBuildFile; fileRef = 45288B6022FA8AAC008FB52D /* libz.1.2.11.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		4529A9FA238E22660034A014 /* docopt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4529A9F7238E22660034A014 /* docopt.cpp */; };
 		4529A9FD239263110034A014 /* docopt helpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4529A9FB239263110034A014 /* docopt helpers.cpp */; };
 		4529AA00239B4A420034A014 /* scope time.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4529A9FF239B4A420034A014 /* scope time.cpp */; };
@@ -35,7 +35,6 @@
 		453C78402234DF3200818B19 /* application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C783E2234DF3200818B19 /* application.cpp */; };
 		453C78432234E13E00818B19 /* window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C78412234E13E00818B19 /* window.cpp */; };
 		453C78462234F3C600818B19 /* status bar widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C78442234F3C600818B19 /* status bar widget.cpp */; };
-		453C787D2235D70D00818B19 /* resources.rcc in Resources */ = {isa = PBXBuildFile; fileRef = 453C787C2235D70D00818B19 /* resources.rcc */; };
 		453D28BD22768D9900D0E5F9 /* text input widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453D28BB22768D9900D0E5F9 /* text input widget.cpp */; };
 		453D28C02276956A00D0E5F9 /* color input widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453D28BE2276956A00D0E5F9 /* color input widget.cpp */; };
 		453D28C3227698F200D0E5F9 /* widget painting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453D28C1227698F200D0E5F9 /* widget painting.cpp */; };
@@ -60,6 +59,7 @@
 		4571C132227C383A00479006 /* radio button widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4571C130227C383A00479006 /* radio button widget.cpp */; };
 		4576DFE82298DB2D00FDECA3 /* separator widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4576DFE62298DB2D00FDECA3 /* separator widget.cpp */; };
 		457D74F3239E2488009B4E4B /* settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 457D74F1239E2488009B4E4B /* settings.cpp */; };
+		457D74F5239F67D7009B4E4B /* resources.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 457D74F4239F67D6009B4E4B /* resources.cpp */; };
 		457DC0BD22E7D6160000777B /* file input widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 457DC0BB22E7D6160000777B /* file input widget.cpp */; };
 		457DC0C222E9518A0000777B /* cell span.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 457DC0C022E9518A0000777B /* cell span.cpp */; };
 		457DC0C622EA93FC0000777B /* export pattern.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 457DC0C422EA93FC0000777B /* export pattern.cpp */; };
@@ -81,7 +81,7 @@
 		45BB5F6B23239CB700E42371 /* copy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45BB5F6A23239CB700E42371 /* copy.cpp */; };
 		45C447F422F56E6100B65AD3 /* dialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45C447F222F56E6100B65AD3 /* dialog.cpp */; };
 		45C447F622F64ECB00B65AD3 /* libpng16.16.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 45C447F522F64ECA00B65AD3 /* libpng16.16.dylib */; };
-		45C447F822F64F0300B65AD3 /* libpng16.16.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 45C447F522F64ECA00B65AD3 /* libpng16.16.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		45C447F822F64F0300B65AD3 /* libpng16.16.dylib in Copy zlib and libpng */ = {isa = PBXBuildFile; fileRef = 45C447F522F64ECA00B65AD3 /* libpng16.16.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		45C447FB22F6B57000B65AD3 /* png.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45C447F922F6B57000B65AD3 /* png.cpp */; };
 		45C5C8BA237A65820056CEE7 /* timeline status object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45C5C8B8237A65820056CEE7 /* timeline status object.cpp */; };
 		45C5C8D22389219C0056CEE7 /* cli.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45C5C8D02389219C0056CEE7 /* cli.cpp */; };
@@ -107,24 +107,16 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		45C447F722F64EDF00B65AD3 /* CopyFiles */ = {
+		45C447F722F64EDF00B65AD3 /* Copy zlib and libpng */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				45288B6222FA8AB8008FB52D /* libz.1.2.11.dylib in CopyFiles */,
-				45C447F822F64F0300B65AD3 /* libpng16.16.dylib in CopyFiles */,
+				45288B6222FA8AB8008FB52D /* libz.1.2.11.dylib in Copy zlib and libpng */,
+				45C447F822F64F0300B65AD3 /* libpng16.16.dylib in Copy zlib and libpng */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		45C5C8CE238902DC0056CEE7 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 6;
-			files = (
-			);
+			name = "Copy zlib and libpng";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -194,7 +186,6 @@
 		453C78442234F3C600818B19 /* status bar widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "status bar widget.cpp"; sourceTree = "<group>"; };
 		453C78452234F3C600818B19 /* status bar widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "status bar widget.hpp"; sourceTree = "<group>"; };
 		453C78792235D4B500818B19 /* resources.qrc */ = {isa = PBXFileReference; lastKnownFileType = text; path = resources.qrc; sourceTree = "<group>"; };
-		453C787C2235D70D00818B19 /* resources.rcc */ = {isa = PBXFileReference; lastKnownFileType = file; path = resources.rcc; sourceTree = "<group>"; };
 		453D28BA22768B2B00D0E5F9 /* geometry.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = geometry.hpp; sourceTree = "<group>"; };
 		453D28BB22768D9900D0E5F9 /* text input widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "text input widget.cpp"; sourceTree = "<group>"; };
 		453D28BC22768D9900D0E5F9 /* text input widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "text input widget.hpp"; sourceTree = "<group>"; };
@@ -288,6 +279,7 @@
 		4576DFE72298DB2D00FDECA3 /* separator widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "separator widget.hpp"; sourceTree = "<group>"; };
 		457D74F1239E2488009B4E4B /* settings.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = settings.cpp; sourceTree = "<group>"; };
 		457D74F2239E2488009B4E4B /* settings.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = settings.hpp; sourceTree = "<group>"; };
+		457D74F4239F67D6009B4E4B /* resources.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = resources.cpp; sourceTree = "<group>"; };
 		457DC0BB22E7D6160000777B /* file input widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "file input widget.cpp"; sourceTree = "<group>"; };
 		457DC0BC22E7D6160000777B /* file input widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "file input widget.hpp"; sourceTree = "<group>"; };
 		457DC0BE22E7FB2B0000777B /* widget rect.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "widget rect.hpp"; sourceTree = "<group>"; };
@@ -480,7 +472,6 @@
 			isa = PBXGroup;
 			children = (
 				453C78792235D4B500818B19 /* resources.qrc */,
-				453C787C2235D70D00818B19 /* resources.rcc */,
 				4554868F23433711001D5611 /* Logo */,
 				457DC0B422E6DD940000777B /* General */,
 				45F3EB6F22CC5D4F00F9F93E /* Formats */,
@@ -768,6 +759,7 @@
 		455F2853220688FD00C73F39 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				457D74F4239F67D6009B4E4B /* resources.cpp */,
 				458F84032249CB7C005F91D0 /* config.hpp */,
 				455F2867220690A600C73F39 /* main.cpp */,
 				455486C023449E43001D5611 /* Native */,
@@ -995,13 +987,12 @@
 				45AA32C622F51DB900005DD8 /* Moc - window */,
 				45AA32E322F52BE800005DD8 /* Moc - tool */,
 				45AA32E422F52C2E00005DD8 /* Moc - main */,
+				453C787B2235D63B00818B19 /* RCC */,
 				455F284D220688FD00C73F39 /* Sources */,
 				455F284E220688FD00C73F39 /* Frameworks */,
-				45C447F722F64EDF00B65AD3 /* CopyFiles */,
-				453C787B2235D63B00818B19 /* RCC */,
+				45C447F722F64EDF00B65AD3 /* Copy zlib and libpng */,
 				455F284F220688FD00C73F39 /* Resources */,
 				455F288A2206A17600C73F39 /* Mac Deploy */,
-				45C5C8CE238902DC0056CEE7 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -1078,7 +1069,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				453C787D2235D70D00818B19 /* resources.rcc in Resources */,
 				455F285C2206890300C73F39 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1121,10 +1111,11 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
+				"$(PROJECT_DIR)/src/resources.rcc",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/opt/qt/bin/rcc --no-compress --binary \"$PROJECT_DIR/Resources/resources.qrc\" -o \"$PROJECT_DIR/Resources/resources.rcc\"\n";
+			shellScript = "/usr/local/opt/qt/bin/rcc --no-compress --output \"$PROJECT_DIR/src/resources.cpp\" \"$PROJECT_DIR/Resources/resources.qrc\"\n";
 		};
 		455F288A2206A17600C73F39 /* Mac Deploy */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1838,6 +1829,7 @@
 				453C78192234935000818B19 /* timeline widget.cpp in Sources */,
 				45D109B222E304A300D1F1CB /* combo box widget.cpp in Sources */,
 				4529A9FD239263110034A014 /* docopt helpers.cpp in Sources */,
+				457D74F5239F67D7009B4E4B /* resources.cpp in Sources */,
 				45DC2566224B137C00F40116 /* status msg.cpp in Sources */,
 				45F065F22222998300BCE863 /* current tool.cpp in Sources */,
 				45D109AC22E2D4FD00D1F1CB /* text push button widget.cpp in Sources */,

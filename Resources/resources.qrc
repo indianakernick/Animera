@@ -1,6 +1,5 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource>
-  <file>./resources.qrc</file>
   <file>./Tools/base.png</file>
   <file>./Tools/brush.png</file>
   <file>./Tools/flood fill.png</file>

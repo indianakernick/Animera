@@ -13,7 +13,6 @@
 #include "settings.hpp"
 #include <QtGui/qevent.h>
 #include "global font.hpp"
-#include <QtCore/qresource.h>
 #include <QtWidgets/qtooltip.h>
 #include "init canvas dialog.hpp"
 #include <QtWidgets/qfiledialog.h>
@@ -23,7 +22,6 @@ Application::Application(int &argc, char **argv)
   : QApplication{argc, argv} {
   setApplicationName("Animera");
   setOrganizationName("Indiana Kernick");
-  loadResources();
   initStyles();
 }
 
@@ -98,19 +96,6 @@ void Application::initStyles() {
     "}"
   );
   QToolTip::setFont(getGlobalFont());
-}
-
-void Application::loadResources() {
-  QString resPath = applicationDirPath();
-  #if defined(Q_OS_MACOS)
-  resPath += "/../Resources/";
-  #elif defined(Q_OS_WIN)
-  resPath += "/";
-  #else
-  resPath += "/";
-  #endif
-  [[maybe_unused]] bool registered = QResource::registerResource(resPath + "resources.rcc");
-  assert(registered);
 }
 
 Window *Application::makeWindow() {

@@ -37,7 +37,6 @@ private:
   bool closing = false;
 
   void initStyles();
-  void loadResources();
   Window *makeWindow();
   
   bool event(QEvent *) override;
