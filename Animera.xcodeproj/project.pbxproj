@@ -2089,7 +2089,7 @@
 					"$(inherited)",
 					/usr/local/opt/qt/lib,
 				);
-				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_OPTIMIZATION_LEVEL = z;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					GLM_FORCE_SILENT_WARNINGS,
 					NDEBUG,
