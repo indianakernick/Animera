@@ -12,6 +12,7 @@
 #include "strings.hpp"
 #include "chunk io.hpp"
 #include "cell span.hpp"
+#include "scope time.hpp"
 #include <Graphics/format.hpp>
 
 namespace {
@@ -49,6 +50,8 @@ void copyToByteOrder(
   const size_t size,
   const Format format
 ) {
+  SCOPE_TIME("copyToByteOrder");
+
   assert(size % byteDepth(format) == 0);
   switch (format) {
     case Format::rgba: {
@@ -86,6 +89,8 @@ void copyFromByteOrder(
   const size_t size,
   const Format format
 ) {
+  SCOPE_TIME("copyFromByteOrder");
+
   assert(size % byteDepth(format) == 0);
   switch (format) {
     case Format::rgba: {
@@ -122,6 +127,8 @@ void copyFromByteOrder(
 }
 
 Error writeSignature(QIODevice &dev) {
+  SCOPE_TIME("writeSignature");
+
   if (dev.write(file_sig, file_sig_len) != file_sig_len) {
     return FileIOError{}.what();
   }
@@ -129,6 +136,8 @@ Error writeSignature(QIODevice &dev) {
 }
 
 Error writeAHDR(QIODevice &dev, const SpriteInfo &info) try {
+  SCOPE_TIME("writeAHDR");
+
   ChunkWriter writer{dev};
   writer.begin(5 * file_int_size + 1, chunk_anim_header);
   writer.writeInt(info.width);
@@ -178,6 +187,8 @@ Error writeGray(QIODevice &dev, const PaletteCSpan colors) try {
 }
 
 Error writePLTE(QIODevice &dev, const PaletteCSpan colors, const Format format) try {
+  SCOPE_TIME("writePLTE");
+
   switch (format) {
     case Format::rgba:
     case Format::index:
@@ -190,6 +201,8 @@ Error writePLTE(QIODevice &dev, const PaletteCSpan colors, const Format format) 
 }
 
 Error writeLHDR(QIODevice &dev, const Layer &layer) try {
+  SCOPE_TIME("writeLHDR");
+
   ChunkWriter writer{dev};
   const uint32_t nameLen = static_cast<uint32_t>(layer.name.size());
   writer.begin(file_int_size + 1 + nameLen, chunk_layer_header);
@@ -203,6 +216,8 @@ Error writeLHDR(QIODevice &dev, const Layer &layer) try {
 }
 
 Error writeCHDR(QIODevice &dev, const CellSpan &span) try {
+  SCOPE_TIME("writeCHDR");
+
   ChunkWriter writer{dev};
   writer.begin(chunk_cell_header);
   writer.writeInt(static_cast<uint32_t>(span.len));
@@ -220,6 +235,8 @@ Error writeCHDR(QIODevice &dev, const CellSpan &span) try {
 }
 
 Error writeCDAT(QIODevice &dev, const QImage &image, const Format format) try {
+  SCOPE_TIME("writeCDAT");
+  
   static_assert(sizeof(uInt) >= sizeof(uint32_t));
   
   assert(!image.isNull());
@@ -260,6 +277,9 @@ Error writeCDAT(QIODevice &dev, const QImage &image, const Format format) try {
       stream.next_out = outBuff.data();
       stream.avail_out = outBuffSize;
     }
+    
+    SCOPE_TIME("deflate");
+    
     ret = deflate(&stream, stream.avail_in ? Z_NO_FLUSH : Z_FINISH);
   } while (ret == Z_OK);
   assert(ret == Z_STREAM_END);
@@ -276,6 +296,8 @@ Error writeCDAT(QIODevice &dev, const QImage &image, const Format format) try {
 }
 
 Error writeAEND(QIODevice &dev) try {
+  SCOPE_TIME("writeAEND");
+
   ChunkWriter writer{dev};
   writer.begin(0, chunk_anim_end);
   writer.end();
@@ -285,6 +307,8 @@ Error writeAEND(QIODevice &dev) try {
 }
 
 Error readSignature(QIODevice &dev) {
+  SCOPE_TIME("readSignature");
+
   char signature[file_sig_len];
   if (dev.read(signature, file_sig_len) != file_sig_len) {
     return FileIOError{}.what();
@@ -317,6 +341,8 @@ Error readFormatByte(Format &format, const uint8_t byte) {
 }
 
 Error readAHDR(QIODevice &dev, SpriteInfo &info) try {
+  SCOPE_TIME("readAHDR");
+
   ChunkReader reader{dev};
   const ChunkStart start = reader.begin();
   TRY(expectedName(start, chunk_anim_header));
@@ -407,6 +433,8 @@ Error readGray(QIODevice &dev, const PaletteSpan colors) try {
 }
 
 Error readPLTE(QIODevice &dev, const PaletteSpan colors, const Format format) try {
+  SCOPE_TIME("readPLTE");
+  
   switch (format) {
     case Format::rgba:
     case Format::index:
@@ -440,6 +468,8 @@ Error readVisibileByte(bool &visible, const uint8_t byte) {
 }
 
 Error readLHDR(QIODevice &dev, Layer &layer) try {
+  SCOPE_TIME("readLHDR");
+
   ChunkReader reader{dev};
   const ChunkStart start = reader.begin();
   TRY(expectedName(start, chunk_layer_header));
@@ -469,6 +499,8 @@ Error readLHDR(QIODevice &dev, Layer &layer) try {
 }
 
 Error readCHDR(QIODevice &dev, CellSpan &span, const Format format) try {
+  SCOPE_TIME("readCHDR");
+
   ChunkReader reader{dev};
   const ChunkStart start = reader.begin();
   TRY(expectedName(start, chunk_cell_header));
@@ -508,6 +540,8 @@ Error readCHDR(QIODevice &dev, CellSpan &span, const Format format) try {
 }
 
 Error readCDAT(QIODevice &dev, QImage &image, const Format format) try {
+  SCOPE_TIME("readCDAT");
+
   assert(!image.isNull());
   const uint32_t outBuffSize = image.width() * byteDepth(format);
   std::vector<Bytef> outBuff(outBuffSize);
@@ -545,6 +579,9 @@ Error readCDAT(QIODevice &dev, QImage &image, const Format format) try {
       stream.avail_out = outBuffSize;
       ++rowIdx;
     }
+    
+    SCOPE_TIME("inflate");
+    
     ret = inflate(&stream, Z_NO_FLUSH);
   } while (ret == Z_OK);
   if (ret == Z_DATA_ERROR) {
@@ -575,6 +612,8 @@ Error readCDAT(QIODevice &dev, QImage &image, const Format format) try {
 }
 
 Error readAEND(QIODevice &dev) try {
+  SCOPE_TIME("readAEND");
+
   ChunkReader reader{dev};
   const ChunkStart start = reader.begin();
   TRY(expectedName(start, chunk_anim_end));

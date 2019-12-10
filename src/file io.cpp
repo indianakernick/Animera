@@ -9,6 +9,7 @@
 #include "file io.hpp"
 
 #include <QtCore/qdir.h>
+#include "scope time.hpp"
 #include "file io error.hpp"
 
 /*
@@ -34,6 +35,8 @@ alternative c
 */
 
 Error FileWriter::open(const QString &newPath) {
+  SCOPE_TIME("FileWriter::open");
+
   buff.open(QIODevice::WriteOnly);
   path = newPath;
   return {};
@@ -44,6 +47,8 @@ QIODevice &FileWriter::dev() {
 }
 
 Error FileWriter::flush() const {
+  SCOPE_TIME("FileWriter::flush");
+
   QFile file{path};
   if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
     return file.errorString() + "\n" + QDir::toNativeSeparators(path);
@@ -57,6 +62,8 @@ Error FileWriter::flush() const {
 }
 
 Error FileReader::open(const QString &newPath) {
+  SCOPE_TIME("FileReader::open");
+
   file.setFileName(newPath);
   if (!file.open(QIODevice::ReadOnly | QIODevice::ExistingOnly)) {
     return file.errorString() + "\n" + QDir::toNativeSeparators(newPath);

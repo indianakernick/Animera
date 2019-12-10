@@ -11,6 +11,7 @@
 #include "file io.hpp"
 #include "chunk io.hpp"
 #include "export png.hpp"
+#include "scope time.hpp"
 #include "sprite file.hpp"
 #include <Graphics/format.hpp>
 
@@ -125,10 +126,14 @@ void Palette::initDefault() {
 }
 
 Error Palette::serialize(QIODevice &dev) const {
+  SCOPE_TIME("Palette::serialize");
+
   return writePLTE(dev, getUsedSpan(colors), canvasFormat);
 }
 
 Error Palette::deserialize(QIODevice &dev) {
+  SCOPE_TIME("Palette::deserialize");
+
   TRY(readPLTE(dev, colors, canvasFormat));
   change();
   return {};

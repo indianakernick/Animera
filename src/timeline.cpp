@@ -10,6 +10,7 @@
 
 #include "file io.hpp"
 #include "composite.hpp"
+#include "scope time.hpp"
 #include "export png.hpp"
 #include "sprite file.hpp"
 #include "sprite export.hpp"
@@ -79,6 +80,8 @@ Error Timeline::openImage(
 }
 
 Error Timeline::serializeHead(QIODevice &dev) const {
+  SCOPE_TIME("Timeline::serializeHead");
+
   SpriteInfo info;
   info.width = canvasSize.width();
   info.height = canvasSize.height();
@@ -90,6 +93,8 @@ Error Timeline::serializeHead(QIODevice &dev) const {
 }
 
 Error Timeline::serializeBody(QIODevice &dev) const {
+  SCOPE_TIME("Timeline::serializeBody");
+
   for (const Layer &layer : layers) {
     TRY(writeLHDR(dev, layer));
     for (const CellSpan &span : layer.spans) {
@@ -101,10 +106,14 @@ Error Timeline::serializeBody(QIODevice &dev) const {
 }
 
 Error Timeline::serializeTail(QIODevice &dev) const {
+  SCOPE_TIME("Timeline::serializeTail");
+
   return writeAEND(dev);
 }
 
 Error Timeline::deserializeHead(QIODevice &dev, Format &format, QSize &size) {
+  SCOPE_TIME("Timeline::deserializeHead");
+
   SpriteInfo info;
   TRY(readAHDR(dev, info));
   canvasSize = size = {info.width, info.height};
@@ -116,6 +125,8 @@ Error Timeline::deserializeHead(QIODevice &dev, Format &format, QSize &size) {
 }
 
 Error Timeline::deserializeBody(QIODevice &dev) {
+  SCOPE_TIME("Timeline::deserializeBody");
+
   for (Layer &layer : layers) {
     TRY(readLHDR(dev, layer));
     for (CellSpan &span : layer.spans) {
@@ -127,6 +138,8 @@ Error Timeline::deserializeBody(QIODevice &dev) {
 }
 
 Error Timeline::deserializeTail(QIODevice &dev) {
+  SCOPE_TIME("Timeline::deserializeTail");
+
   TRY(readAEND(dev));
   selection = empty_rect;
   change();

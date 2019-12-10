@@ -9,6 +9,7 @@
 #include "sprite.hpp"
 
 #include "file io.hpp"
+#include "scope time.hpp"
 #include "sprite file.hpp"
 
 void Sprite::newFile(const Format newFormat, const QSize newSize) {
@@ -67,6 +68,8 @@ void Sprite::optimize() {
 }
 
 Error Sprite::saveFile(const QString &path) const {
+  SCOPE_TIME("Sprite::saveFile");
+
   FileWriter writer;
   TRY(writer.open(path));
   TRY(writeSignature(writer.dev()));
@@ -78,6 +81,8 @@ Error Sprite::saveFile(const QString &path) const {
 }
 
 Error Sprite::openFile(const QString &path) {
+  SCOPE_TIME("Sprite::openFile");
+  
   FileReader reader;
   TRY(reader.open(path));
   TRY(readSignature(reader.dev()));

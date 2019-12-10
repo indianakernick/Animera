@@ -213,6 +213,9 @@ are frame tags useful?
       the lines would stack on top of each other if tags are overlapping
       tooltip would show the name
       uses signficantly less space
+  
+resize the canvas
+  maybe a sprite info dialog that shows size, format and cells
 
 --------------------------------- refactoring ----------------------------------
 
@@ -241,7 +244,6 @@ gradient tool
   
 scale tool
   it's possible now that we have dynamically resizable cells
-  we could also allow the user to resize the canvas
   
 Maybe an ellipse tool
 
