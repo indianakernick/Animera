@@ -2079,7 +2079,6 @@
 				OTHER_LDFLAGS = "-headerpad_max_install_names";
 				PRODUCT_BUNDLE_IDENTIFIER = "Indi-Kernick.Animera";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				REEXPORTED_LIBRARY_PATHS = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
 			};
@@ -2094,6 +2093,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = QY44MADGVC;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2142,7 +2142,6 @@
 				OTHER_LDFLAGS = "-headerpad_max_install_names";
 				PRODUCT_BUNDLE_IDENTIFIER = "Indi-Kernick.Animera";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				REEXPORTED_LIBRARY_PATHS = "";
 				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
