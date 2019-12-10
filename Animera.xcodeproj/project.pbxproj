@@ -20,8 +20,6 @@
 		45161F0622F1399A0036BBED /* timeline painting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45161F0422F1399A0036BBED /* timeline painting.cpp */; };
 		4520A82A232B424B009FCD1F /* transform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4520A828232B424B009FCD1F /* transform.cpp */; };
 		4525907E2330B7D600FE38A2 /* shrink.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4525907D2330B7D600FE38A2 /* shrink.cpp */; };
-		45288B6122FA8AAD008FB52D /* libz.1.2.11.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 45288B6022FA8AAC008FB52D /* libz.1.2.11.dylib */; };
-		45288B6222FA8AB8008FB52D /* libz.1.2.11.dylib in Copy zlib and libpng */ = {isa = PBXBuildFile; fileRef = 45288B6022FA8AAC008FB52D /* libz.1.2.11.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		4529A9FA238E22660034A014 /* docopt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4529A9F7238E22660034A014 /* docopt.cpp */; };
 		4529A9FD239263110034A014 /* docopt helpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4529A9FB239263110034A014 /* docopt helpers.cpp */; };
 		4529AA00239B4A420034A014 /* scope time.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4529A9FF239B4A420034A014 /* scope time.cpp */; };
@@ -47,7 +45,6 @@
 		454E990B2348200B0059274C /* sprite export.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 454E99092348200B0059274C /* sprite export.cpp */; };
 		454E990F2349A9B40059274C /* gradient tool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 454E990D2349A9B40059274C /* gradient tool.cpp */; };
 		455486BF23449254001D5611 /* native mac.mm in Sources */ = {isa = PBXBuildFile; fileRef = 455486BE23449254001D5611 /* native mac.mm */; };
-		455F285C2206890300C73F39 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 455F285B2206890300C73F39 /* Assets.xcassets */; };
 		455F2868220690A600C73F39 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 455F2867220690A600C73F39 /* main.cpp */; };
 		455F2879220691DE00C73F39 /* QtCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455F286E220691DD00C73F39 /* QtCore.framework */; };
 		455F287D220691DE00C73F39 /* QtWidgets.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455F2872220691DD00C73F39 /* QtWidgets.framework */; };
@@ -60,6 +57,10 @@
 		4576DFE82298DB2D00FDECA3 /* separator widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4576DFE62298DB2D00FDECA3 /* separator widget.cpp */; };
 		457D74F3239E2488009B4E4B /* settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 457D74F1239E2488009B4E4B /* settings.cpp */; };
 		457D74F5239F67D7009B4E4B /* resources.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 457D74F4239F67D6009B4E4B /* resources.cpp */; };
+		457D74FB239F8AF3009B4E4B /* libz.1.2.11.dylib in Copy libpng and libz */ = {isa = PBXBuildFile; fileRef = 457D74F9239F8AD5009B4E4B /* libz.1.2.11.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		457D74FD239F9401009B4E4B /* libz.1.2.11.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 457D74F9239F8AD5009B4E4B /* libz.1.2.11.dylib */; };
+		457D74FE239F94F0009B4E4B /* libpng16.16.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 45C447F522F64ECA00B65AD3 /* libpng16.16.dylib */; };
+		457D74FF239F97A6009B4E4B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 455F285B2206890300C73F39 /* Assets.xcassets */; };
 		457DC0BD22E7D6160000777B /* file input widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 457DC0BB22E7D6160000777B /* file input widget.cpp */; };
 		457DC0C222E9518A0000777B /* cell span.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 457DC0C022E9518A0000777B /* cell span.cpp */; };
 		457DC0C622EA93FC0000777B /* export pattern.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 457DC0C422EA93FC0000777B /* export pattern.cpp */; };
@@ -80,8 +81,7 @@
 		45BB5F6923239BC400E42371 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45BB5F6423239AB900E42371 /* main.cpp */; };
 		45BB5F6B23239CB700E42371 /* copy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45BB5F6A23239CB700E42371 /* copy.cpp */; };
 		45C447F422F56E6100B65AD3 /* dialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45C447F222F56E6100B65AD3 /* dialog.cpp */; };
-		45C447F622F64ECB00B65AD3 /* libpng16.16.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 45C447F522F64ECA00B65AD3 /* libpng16.16.dylib */; };
-		45C447F822F64F0300B65AD3 /* libpng16.16.dylib in Copy zlib and libpng */ = {isa = PBXBuildFile; fileRef = 45C447F522F64ECA00B65AD3 /* libpng16.16.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		45C447F822F64F0300B65AD3 /* libpng16.16.dylib in Copy libpng and libz */ = {isa = PBXBuildFile; fileRef = 45C447F522F64ECA00B65AD3 /* libpng16.16.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		45C447FB22F6B57000B65AD3 /* png.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45C447F922F6B57000B65AD3 /* png.cpp */; };
 		45C5C8BA237A65820056CEE7 /* timeline status object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45C5C8B8237A65820056CEE7 /* timeline status object.cpp */; };
 		45C5C8D22389219C0056CEE7 /* cli.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45C5C8D02389219C0056CEE7 /* cli.cpp */; };
@@ -107,16 +107,16 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		45C447F722F64EDF00B65AD3 /* Copy zlib and libpng */ = {
+		45C447F722F64EDF00B65AD3 /* Copy libpng and libz */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				45288B6222FA8AB8008FB52D /* libz.1.2.11.dylib in Copy zlib and libpng */,
-				45C447F822F64F0300B65AD3 /* libpng16.16.dylib in Copy zlib and libpng */,
+				45C447F822F64F0300B65AD3 /* libpng16.16.dylib in Copy libpng and libz */,
+				457D74FB239F8AF3009B4E4B /* libz.1.2.11.dylib in Copy libpng and libz */,
 			);
-			name = "Copy zlib and libpng";
+			name = "Copy libpng and libz";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -150,7 +150,6 @@
 		4520A828232B424B009FCD1F /* transform.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = transform.cpp; sourceTree = "<group>"; };
 		45259062232E0D3600FE38A2 /* graphics convert.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "graphics convert.hpp"; sourceTree = "<group>"; };
 		4525907D2330B7D600FE38A2 /* shrink.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = shrink.cpp; sourceTree = "<group>"; };
-		45288B6022FA8AAC008FB52D /* libz.1.2.11.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.11.dylib; path = ../../../../../../usr/local/Cellar/zlib/1.2.11/lib/libz.1.2.11.dylib; sourceTree = "<group>"; };
 		452926E222BB607E00B17E0D /* screenshot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = screenshot.png; sourceTree = "<group>"; };
 		4529A9EE238A2ECF0034A014 /* catch.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = catch.hpp; sourceTree = "<group>"; };
 		4529A9EF238A2ECF0034A014 /* update */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = update; sourceTree = "<group>"; };
@@ -280,6 +279,7 @@
 		457D74F1239E2488009B4E4B /* settings.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = settings.cpp; sourceTree = "<group>"; };
 		457D74F2239E2488009B4E4B /* settings.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = settings.hpp; sourceTree = "<group>"; };
 		457D74F4239F67D6009B4E4B /* resources.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = resources.cpp; sourceTree = "<group>"; };
+		457D74F9239F8AD5009B4E4B /* libz.1.2.11.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.11.dylib; path = ../../../../../../usr/local/Cellar/zlib/1.2.11/lib/libz.1.2.11.dylib; sourceTree = "<group>"; };
 		457DC0BB22E7D6160000777B /* file input widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "file input widget.cpp"; sourceTree = "<group>"; };
 		457DC0BC22E7D6160000777B /* file input widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "file input widget.hpp"; sourceTree = "<group>"; };
 		457DC0BE22E7FB2B0000777B /* widget rect.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "widget rect.hpp"; sourceTree = "<group>"; };
@@ -404,8 +404,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				45288B6122FA8AAD008FB52D /* libz.1.2.11.dylib in Frameworks */,
-				45C447F622F64ECB00B65AD3 /* libpng16.16.dylib in Frameworks */,
+				457D74FE239F94F0009B4E4B /* libpng16.16.dylib in Frameworks */,
+				457D74FD239F9401009B4E4B /* libz.1.2.11.dylib in Frameworks */,
 				455F28872206930E00C73F39 /* OpenGL.framework in Frameworks */,
 				455F28852206930800C73F39 /* CoreVideo.framework in Frameworks */,
 				455F28832206930200C73F39 /* IOKit.framework in Frameworks */,
@@ -775,7 +775,7 @@
 		455F2869220691DC00C73F39 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				45288B6022FA8AAC008FB52D /* libz.1.2.11.dylib */,
+				457D74F9239F8AD5009B4E4B /* libz.1.2.11.dylib */,
 				45C447F522F64ECA00B65AD3 /* libpng16.16.dylib */,
 				455F28882206942200C73F39 /* libqcocoa.dylib */,
 				455F28862206930D00C73F39 /* OpenGL.framework */,
@@ -990,9 +990,10 @@
 				453C787B2235D63B00818B19 /* RCC */,
 				455F284D220688FD00C73F39 /* Sources */,
 				455F284E220688FD00C73F39 /* Frameworks */,
-				45C447F722F64EDF00B65AD3 /* Copy zlib and libpng */,
+				45C447F722F64EDF00B65AD3 /* Copy libpng and libz */,
 				455F284F220688FD00C73F39 /* Resources */,
 				455F288A2206A17600C73F39 /* Mac Deploy */,
+				457D74FC239F8B06009B4E4B /* Trim */,
 			);
 			buildRules = (
 			);
@@ -1069,7 +1070,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				455F285C2206890300C73F39 /* Assets.xcassets in Resources */,
+				457D74FF239F97A6009B4E4B /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1134,6 +1135,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if [[ \"$CONFIGURATION\" = \"Release\" ]]; then\n  /usr/local/opt/qt/bin/macdeployqt \"$CODESIGNING_FOLDER_PATH\" -codesign=\"kerndog73@gmail.com\"\nelse\n  /usr/local/opt/qt/bin/macdeployqt \"$CODESIGNING_FOLDER_PATH\" -codesign=\"kerndog73@gmail.com\" -no-strip\nfi\n";
+		};
+		457D74FC239F8B06009B4E4B /* Trim */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = Trim;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# macdeployqt adds a bunch of crap that we don't need and \n# this is the easiest way to deal with it\n# removing these took the app from 40MB to 22MB\n# futher improvements could be made by compiling qt from source\n# and maybe static linking with lto but\n# I don't think the size difference will be worth the effort \n\n# the app seems to run just fine without libz and libpng\n# I can't seem to find the symbols in any of the qt libraries\n\ncd \"$BUILT_PRODUCTS_DIR/$CONTENTS_FOLDER_PATH\"\n\ncd PlugIns\nrm -rf styles\nrm -rf iconengines\nrm -rf imageformats\nrm -rf printsupport\nrm -rf virtualkeyboard\nrm -rf platforminputcontexts\ncd ..\n\ncd Frameworks\nrm -rf libz.1.dylib # wtf\nrm -rf QtSvg.framework\nrm -rf QtQml.framework\nrm -rf QtQuick.framework\nrm -rf QtNetwork.framework\nrm -rf QtVirtualKeyboard.framework\n";
 		};
 		45AA32C622F51DB900005DD8 /* Moc - window */ = {
 			isa = PBXShellScriptBuildPhase;
