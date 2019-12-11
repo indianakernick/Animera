@@ -88,6 +88,11 @@ directory structure
   git submodules maybe?
     https://stackoverflow.com/questions/15844542/git-symlink-reference-to-a-file-in-an-external-repository/27770463#27770463
 
+static linking took the app from 22MB to 14MB
+  could probably do a little better if I knew what I was doing
+  it's a real pain to setup
+  also, I think there's a licensing issue anyway
+
 --------------------------------- optimizations --------------------------------
 
 optimize LayerCells
@@ -108,13 +113,6 @@ filled polygon
   http://www.sunshine2k.de/coding/java/Polygon/Filling/FillPolygon.htm
   http://www.sunshine2k.de/coding/java/TriangleRasterization/TriangleRasterization.html
   https://fgiesen.wordpress.com/2013/02/08/triangle-rasterization-in-practice/
-
-lto
-  99fb460bb1d36e6dab434940a0ea62ddbeecc69c
-  none
-    769,856 bytes
-  monolithic
-    722,208 bytes
 
 fixed byte order image formats
   remove qRgb calls
