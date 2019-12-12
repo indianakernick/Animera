@@ -12,6 +12,7 @@
 #include <QtCore/qdir.h>
 #include "composite.hpp"
 #include "export png.hpp"
+#include "scope time.hpp"
 #include "surface factory.hpp"
 #include "graphics convert.hpp"
 #include <Graphics/transform.hpp>
@@ -27,6 +28,8 @@ Exporter::Exporter(
     size{size} {}
 
 Error Exporter::exportSprite(const std::vector<Layer> &layers) {
+  SCOPE_TIME("Exporter::exportSprite");
+  
   initImages();
   if (options.composite) {
     return exportFrames(layers);
@@ -56,11 +59,15 @@ QSize Exporter::getXformedSize() const {
 }
 
 void Exporter::setImageFrom(const Cell &cell) {
+  SCOPE_TIME("Exporter::setImageFrom (cell)");
+  
   clearImage(image);
   blitImage(image, cell.img, cell.pos);
 }
 
 void Exporter::setImageFrom(const Frame &frame) {
+  SCOPE_TIME("Exporter::setImageFrom (frame)");
+
   if (format == Format::gray) {
     compositeFrame<gfx::YA>(image, palette, frame, format, image.rect());
   } else {
@@ -69,6 +76,8 @@ void Exporter::setImageFrom(const Frame &frame) {
 }
 
 void Exporter::applyTransform() {
+  SCOPE_TIME("Exporter::applyTransform");
+
   visitSurface(xformed, [this](const auto dst) {
     const auto src = makeCSurface<typename decltype(dst)::Pixel>(image);
     gfx::spatialTransform(dst, src, [this, &dst](const gfx::Point dstPos) noexcept {
@@ -81,6 +90,8 @@ void Exporter::applyTransform() {
 }
 
 Error Exporter::exportImage(const ExportState state) {
+  SCOPE_TIME("Exporter::exportImage");
+
   FileWriter writer;
   TRY(writer.open(getExportPath(options, state)));
   if (xformed.isNull()) {
@@ -101,6 +112,8 @@ bool Exporter::shouldInclude(const Layer &layer) const {
 }
 
 Error Exporter::exportCells(const std::vector<Layer> &layers) {
+  SCOPE_TIME("Exporter::exportCells");
+  
   for (LayerIdx l = options.selection.minL; l <= options.selection.maxL; ++l) {
     const Layer &layer = layers[+l];
     if (!shouldInclude(layer)) continue;
@@ -117,6 +130,8 @@ Error Exporter::exportCells(const std::vector<Layer> &layers) {
 }
 
 Error Exporter::exportFrames(const std::vector<Layer> &layers) {
+  SCOPE_TIME("Exporter::exportFrames");
+
   const LayerIdx rectLayers = options.selection.maxL - options.selection.minL + LayerIdx{1};
   Frame frame;
   frame.reserve(+rectLayers);

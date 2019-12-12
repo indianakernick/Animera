@@ -9,6 +9,7 @@
 #include "export png.hpp"
 
 #include "png.hpp"
+#include "scope time.hpp"
 #include <QtCore/qfile.h>
 #include "surface factory.hpp"
 #include <Graphics/format.hpp>
@@ -257,6 +258,8 @@ Error exportPng(
   const Format canvasFormat,
   const ExportFormat exportFormat
 ) {
+  SCOPE_TIME("exportPng");
+
   WriteContext ctx;
   ctx.dev = &dev;
   TRY(initWrite(ctx));
@@ -330,6 +333,8 @@ Error importPng(
   QImage &image,
   Format &format
 ) {
+  SCOPE_TIME("importPng");
+
   ReadContext ctx;
   ctx.dev = &dev;
   TRY(initRead(ctx));
@@ -372,6 +377,8 @@ Error exportPng(
   const PaletteCSpan palette,
   const Format format
 ) {
+  SCOPE_TIME("exportPng (palette)");
+
   WriteContext ctx;
   ctx.dev = &dev;
   TRY(initWrite(ctx));
@@ -415,6 +422,8 @@ Error importPng(
   const PaletteSpan palette,
   const Format format
 ) {
+  SCOPE_TIME("importPng (palette)");
+
   ReadContext ctx;
   ctx.dev = &dev;
   TRY(initRead(ctx));

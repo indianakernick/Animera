@@ -35,8 +35,6 @@ alternative c
 */
 
 Error FileWriter::open(const QString &newPath) {
-  SCOPE_TIME("FileWriter::open");
-
   buff.open(QIODevice::WriteOnly);
   path = newPath;
   return {};
@@ -62,8 +60,6 @@ Error FileWriter::flush() const {
 }
 
 Error FileReader::open(const QString &newPath) {
-  SCOPE_TIME("FileReader::open");
-
   file.setFileName(newPath);
   if (!file.open(QIODevice::ReadOnly | QIODevice::ExistingOnly)) {
     return file.errorString() + "\n" + QDir::toNativeSeparators(newPath);
