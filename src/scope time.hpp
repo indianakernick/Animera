@@ -28,7 +28,7 @@ private:
   Clock::time_point start;
 
   struct TreeNode {
-    size_t calls;
+    size_t calls = 0;
     Clock::duration time;
     std::unordered_map<const char *, TreeNode> children;
     const char *name;
@@ -51,7 +51,6 @@ inline ScopeTime::ScopeTime(const char *name) {
   current = &current->children[name];
   current->parent = prevCurrent;
   current->name = name;
-  current->calls = 0;
   start = Clock::now();
 }
 

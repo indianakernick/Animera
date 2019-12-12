@@ -57,9 +57,6 @@
 		4576DFE82298DB2D00FDECA3 /* separator widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4576DFE62298DB2D00FDECA3 /* separator widget.cpp */; };
 		457D74F3239E2488009B4E4B /* settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 457D74F1239E2488009B4E4B /* settings.cpp */; };
 		457D74F5239F67D7009B4E4B /* resources.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 457D74F4239F67D6009B4E4B /* resources.cpp */; };
-		457D74FB239F8AF3009B4E4B /* libz.1.2.11.dylib in Copy libpng and libz */ = {isa = PBXBuildFile; fileRef = 457D74F9239F8AD5009B4E4B /* libz.1.2.11.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		457D74FD239F9401009B4E4B /* libz.1.2.11.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 457D74F9239F8AD5009B4E4B /* libz.1.2.11.dylib */; };
-		457D74FE239F94F0009B4E4B /* libpng16.16.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 45C447F522F64ECA00B65AD3 /* libpng16.16.dylib */; };
 		457D74FF239F97A6009B4E4B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 455F285B2206890300C73F39 /* Assets.xcassets */; };
 		457DC0BD22E7D6160000777B /* file input widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 457DC0BB22E7D6160000777B /* file input widget.cpp */; };
 		457DC0C222E9518A0000777B /* cell span.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 457DC0C022E9518A0000777B /* cell span.cpp */; };
@@ -81,7 +78,6 @@
 		45BB5F6923239BC400E42371 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45BB5F6423239AB900E42371 /* main.cpp */; };
 		45BB5F6B23239CB700E42371 /* copy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45BB5F6A23239CB700E42371 /* copy.cpp */; };
 		45C447F422F56E6100B65AD3 /* dialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45C447F222F56E6100B65AD3 /* dialog.cpp */; };
-		45C447F822F64F0300B65AD3 /* libpng16.16.dylib in Copy libpng and libz */ = {isa = PBXBuildFile; fileRef = 45C447F522F64ECA00B65AD3 /* libpng16.16.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		45C447FB22F6B57000B65AD3 /* png.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45C447F922F6B57000B65AD3 /* png.cpp */; };
 		45C5C8BA237A65820056CEE7 /* timeline status object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45C5C8B8237A65820056CEE7 /* timeline status object.cpp */; };
 		45C5C8D22389219C0056CEE7 /* cli.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45C5C8D02389219C0056CEE7 /* cli.cpp */; };
@@ -100,26 +96,13 @@
 		45D109B222E304A300D1F1CB /* combo box widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45D109B022E304A300D1F1CB /* combo box widget.cpp */; };
 		45DC2566224B137C00F40116 /* status msg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45DC2564224B137C00F40116 /* status msg.cpp */; };
 		45DFE499224DE89E00EA40C5 /* global font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45DFE497224DE89E00EA40C5 /* global font.cpp */; };
+		45E333FA23A1D7BD009F5EC1 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 45E333F923A1D7BC009F5EC1 /* libz.dylib */; };
+		45E333FE23A1D8DE009F5EC1 /* libpng.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 45E333FD23A1D8DE009F5EC1 /* libpng.dylib */; };
 		45F0431423247BFE00E99F95 /* odr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45F0431323247BFE00E99F95 /* odr.cpp */; };
 		45F043182324833400E99F95 /* fill.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45F043172324833400E99F95 /* fill.cpp */; };
 		45F065F22222998300BCE863 /* current tool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45F065F02222998300BCE863 /* current tool.cpp */; };
 		45F3EB6E22CC430F00F9F93E /* init canvas dialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45F3EB6C22CC430F00F9F93E /* init canvas dialog.cpp */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		45C447F722F64EDF00B65AD3 /* Copy libpng and libz */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				45C447F822F64F0300B65AD3 /* libpng16.16.dylib in Copy libpng and libz */,
-				457D74FB239F8AF3009B4E4B /* libz.1.2.11.dylib in Copy libpng and libz */,
-			);
-			name = "Copy libpng and libz";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		45054F6E225970150078350B /* undo object.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "undo object.cpp"; sourceTree = "<group>"; };
@@ -264,14 +247,14 @@
 		455F28602206890300C73F39 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		455F28612206890300C73F39 /* Animera.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Animera.entitlements; sourceTree = "<group>"; };
 		455F2867220690A600C73F39 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		455F286E220691DD00C73F39 /* QtCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtCore.framework; path = ../../../../../../usr/local/Cellar/qt/5.12.0/lib/QtCore.framework; sourceTree = "<group>"; };
-		455F2872220691DD00C73F39 /* QtWidgets.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtWidgets.framework; path = ../../../../../../usr/local/Cellar/qt/5.12.0/lib/QtWidgets.framework; sourceTree = "<group>"; };
-		455F2874220691DD00C73F39 /* QtGui.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtGui.framework; path = ../../../../../../usr/local/Cellar/qt/5.12.0/lib/QtGui.framework; sourceTree = "<group>"; };
+		455F286E220691DD00C73F39 /* QtCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtCore.framework; path = ../../../../../../usr/local/opt/qt/lib/QtCore.framework; sourceTree = "<group>"; };
+		455F2872220691DD00C73F39 /* QtWidgets.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtWidgets.framework; path = ../../../../../../usr/local/opt/qt/lib/QtWidgets.framework; sourceTree = "<group>"; };
+		455F2874220691DD00C73F39 /* QtGui.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtGui.framework; path = ../../../../../../usr/local/opt/qt/lib/QtGui.framework; sourceTree = "<group>"; };
 		455F2880220692EE00C73F39 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		455F28822206930200C73F39 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		455F28842206930800C73F39 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		455F28862206930D00C73F39 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
-		455F28882206942200C73F39 /* libqcocoa.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libqcocoa.dylib; path = ../../../../../../usr/local/Cellar/qt/5.12.0/plugins/platforms/libqcocoa.dylib; sourceTree = "<group>"; };
+		455F28882206942200C73F39 /* libqcocoa.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libqcocoa.dylib; path = ../../../../../../usr/local/opt/qt/plugins/platforms/libqcocoa.dylib; sourceTree = "<group>"; };
 		4571C130227C383A00479006 /* radio button widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "radio button widget.cpp"; sourceTree = "<group>"; };
 		4571C131227C383A00479006 /* radio button widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "radio button widget.hpp"; sourceTree = "<group>"; };
 		4576DFE62298DB2D00FDECA3 /* separator widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "separator widget.cpp"; sourceTree = "<group>"; };
@@ -279,7 +262,6 @@
 		457D74F1239E2488009B4E4B /* settings.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = settings.cpp; sourceTree = "<group>"; };
 		457D74F2239E2488009B4E4B /* settings.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = settings.hpp; sourceTree = "<group>"; };
 		457D74F4239F67D6009B4E4B /* resources.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = resources.cpp; sourceTree = "<group>"; };
-		457D74F9239F8AD5009B4E4B /* libz.1.2.11.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.11.dylib; path = ../../../../../../usr/local/Cellar/zlib/1.2.11/lib/libz.1.2.11.dylib; sourceTree = "<group>"; };
 		457DC0BB22E7D6160000777B /* file input widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "file input widget.cpp"; sourceTree = "<group>"; };
 		457DC0BC22E7D6160000777B /* file input widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "file input widget.hpp"; sourceTree = "<group>"; };
 		457DC0BE22E7FB2B0000777B /* widget rect.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "widget rect.hpp"; sourceTree = "<group>"; };
@@ -330,7 +312,6 @@
 		45C2A280220E821200E989C2 /* plan r1.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "plan r1.txt"; sourceTree = "<group>"; };
 		45C447F222F56E6100B65AD3 /* dialog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = dialog.cpp; sourceTree = "<group>"; };
 		45C447F322F56E6100B65AD3 /* dialog.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = dialog.hpp; sourceTree = "<group>"; };
-		45C447F522F64ECA00B65AD3 /* libpng16.16.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpng16.16.dylib; path = ../../../../../../usr/local/Cellar/libpng/1.6.37/lib/libpng16.16.dylib; sourceTree = "<group>"; };
 		45C447F922F6B57000B65AD3 /* png.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = png.cpp; sourceTree = "<group>"; };
 		45C447FA22F6B57000B65AD3 /* png.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = png.hpp; sourceTree = "<group>"; };
 		45C5C8B723729C880056CEE7 /* strings.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = strings.hpp; sourceTree = "<group>"; };
@@ -379,6 +360,8 @@
 		45DFE498224DE89E00EA40C5 /* global font.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "global font.hpp"; sourceTree = "<group>"; };
 		45DFE4A12252038700EA40C5 /* 5x7+2_var_ascii.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "5x7+2_var_ascii.ttf"; sourceTree = "<group>"; };
 		45DFE4A22252039600EA40C5 /* 5x7+2ascii.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "5x7+2ascii.ttf"; sourceTree = "<group>"; };
+		45E333F923A1D7BC009F5EC1 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = ../../../../../../usr/local/opt/zlib/lib/libz.dylib; sourceTree = "<group>"; };
+		45E333FD23A1D8DE009F5EC1 /* libpng.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpng.dylib; path = ../../../../../../usr/local/lib/libpng.dylib; sourceTree = "<group>"; };
 		45F0431323247BFE00E99F95 /* odr.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = odr.cpp; sourceTree = "<group>"; };
 		45F043172324833400E99F95 /* fill.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = fill.cpp; sourceTree = "<group>"; };
 		45F065F02222998300BCE863 /* current tool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "current tool.cpp"; sourceTree = "<group>"; };
@@ -404,13 +387,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				457D74FE239F94F0009B4E4B /* libpng16.16.dylib in Frameworks */,
-				457D74FD239F9401009B4E4B /* libz.1.2.11.dylib in Frameworks */,
 				455F28872206930E00C73F39 /* OpenGL.framework in Frameworks */,
+				45E333FE23A1D8DE009F5EC1 /* libpng.dylib in Frameworks */,
 				455F28852206930800C73F39 /* CoreVideo.framework in Frameworks */,
 				455F28832206930200C73F39 /* IOKit.framework in Frameworks */,
 				455F2881220692EE00C73F39 /* Cocoa.framework in Frameworks */,
 				455F2879220691DE00C73F39 /* QtCore.framework in Frameworks */,
+				45E333FA23A1D7BD009F5EC1 /* libz.dylib in Frameworks */,
 				455F287D220691DE00C73F39 /* QtWidgets.framework in Frameworks */,
 				455F287F220691DE00C73F39 /* QtGui.framework in Frameworks */,
 			);
@@ -775,8 +758,8 @@
 		455F2869220691DC00C73F39 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				457D74F9239F8AD5009B4E4B /* libz.1.2.11.dylib */,
-				45C447F522F64ECA00B65AD3 /* libpng16.16.dylib */,
+				45E333FD23A1D8DE009F5EC1 /* libpng.dylib */,
+				45E333F923A1D7BC009F5EC1 /* libz.dylib */,
 				455F28882206942200C73F39 /* libqcocoa.dylib */,
 				455F28862206930D00C73F39 /* OpenGL.framework */,
 				455F28842206930800C73F39 /* CoreVideo.framework */,
@@ -990,9 +973,10 @@
 				453C787B2235D63B00818B19 /* RCC */,
 				455F284D220688FD00C73F39 /* Sources */,
 				455F284E220688FD00C73F39 /* Frameworks */,
-				45C447F722F64EDF00B65AD3 /* Copy libpng and libz */,
 				455F284F220688FD00C73F39 /* Resources */,
+				45E3340323A1E4BF009F5EC1 /* Install libpng and libz */,
 				455F288A2206A17600C73F39 /* Mac Deploy */,
+				45E3340423A1E9A0009F5EC1 /* Update paths */,
 				457D74FC239F8B06009B4E4B /* Trim */,
 			);
 			buildRules = (
@@ -1134,7 +1118,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [[ \"$CONFIGURATION\" = \"Release\" ]]; then\n  /usr/local/opt/qt/bin/macdeployqt \"$CODESIGNING_FOLDER_PATH\" -codesign=\"kerndog73@gmail.com\"\nelse\n  /usr/local/opt/qt/bin/macdeployqt \"$CODESIGNING_FOLDER_PATH\" -codesign=\"kerndog73@gmail.com\" -no-strip\nfi\n";
+			shellScript = "if [[ \"$CONFIGURATION\" = \"Release\" ]]; then\n  /usr/local/opt/qt/bin/macdeployqt \"$CODESIGNING_FOLDER_PATH\" -codesign=$EXPANDED_CODE_SIGN_IDENTITY\nelse\n  /usr/local/opt/qt/bin/macdeployqt \"$CODESIGNING_FOLDER_PATH\" -codesign=$EXPANDED_CODE_SIGN_IDENTITY -no-strip\nfi\n";
 		};
 		457D74FC239F8B06009B4E4B /* Trim */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1152,7 +1136,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# macdeployqt adds a bunch of crap that we don't need and \n# this is the easiest way to deal with it\n# removing these took the app from 40MB to 22MB\n# futher improvements could be made by compiling qt from source\n# and maybe static linking with lto but\n# I don't think the size difference will be worth the effort \n\n# the app seems to run just fine without libz and libpng\n# I can't seem to find the symbols in any of the qt libraries\n\ncd \"$BUILT_PRODUCTS_DIR/$CONTENTS_FOLDER_PATH\"\n\ncd PlugIns\nrm -rf styles\nrm -rf iconengines\nrm -rf imageformats\nrm -rf printsupport\nrm -rf virtualkeyboard\nrm -rf platforminputcontexts\ncd ..\n\ncd Frameworks\nrm -rf libz.1.dylib # wtf\nrm -rf QtSvg.framework\nrm -rf QtQml.framework\nrm -rf QtQuick.framework\nrm -rf QtNetwork.framework\nrm -rf QtVirtualKeyboard.framework\n";
+			shellScript = "# macdeployqt adds a bunch of crap that we don't need and \n# this is the easiest way to deal with it\n# removing these took the app from 40MB to 22MB\n# futher improvements could be made by compiling qt from source\n# and maybe static linking with lto but\n# I don't think the size difference will be worth the effort \n\n# the app seems to run just fine without libz and libpng\n# I can't seem to find the symbols in any of the qt libraries\n\ncd \"$BUILT_PRODUCTS_DIR/$CONTENTS_FOLDER_PATH\"\n\ncd PlugIns\nrm -rf styles\nrm -rf iconengines\nrm -rf imageformats\nrm -rf printsupport\nrm -rf virtualkeyboard\nrm -rf platforminputcontexts\n\ncd ../Frameworks\nrm -rf libz.1.dylib # wtf\nrm -rf QtSvg.framework\nrm -rf QtQml.framework\nrm -rf QtQuick.framework\nrm -rf QtNetwork.framework\nrm -rf QtVirtualKeyboard.framework\n";
 		};
 		45AA32C622F51DB900005DD8 /* Moc - window */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1804,6 +1788,46 @@
 			shellPath = /bin/sh;
 			shellScript = "/usr/local/opt/qt/bin/moc \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/qt/bin/moc \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
 		};
+		45E3340323A1E4BF009F5EC1 /* Install libpng and libz */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				/usr/local/lib/libpng.dylib,
+				/usr/local/opt/zlib/lib/libz.dylib,
+			);
+			name = "Install libpng and libz";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/libpng.dylib",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/libz.dylib",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "FRAMEWORKS=\"$BUILT_PRODUCTS_DIR/$FRAMEWORKS_FOLDER_PATH\"\n\ncp /usr/local/lib/libpng.dylib \"$FRAMEWORKS/libpng.dylib\"\ncp /usr/local/opt/zlib/lib/libz.dylib \"$FRAMEWORKS/libz.dylib\"\n\ncodesign --force --sign $EXPANDED_CODE_SIGN_IDENTITY -o runtime --timestamp=none --preserve-metadata=identifier,entitlements,flags \"$FRAMEWORKS/libpng.dylib\"\ncodesign --force --sign $EXPANDED_CODE_SIGN_IDENTITY -o runtime --timestamp=none --preserve-metadata=identifier,entitlements,flags \"$FRAMEWORKS/libz.dylib\"\n";
+		};
+		45E3340423A1E9A0009F5EC1 /* Update paths */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Update paths";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "EXE=\"$BUILT_PRODUCTS_DIR/$EXECUTABLE_PATH\"\ninstall_name_tool -change \"@executable_path/../Frameworks/libpng16.16.dylib\" \"@executable_path/../Frameworks/libpng.dylib\" \"$EXE\"\ninstall_name_tool -change \"@executable_path/../Frameworks/libz.1.dylib\" \"@executable_path/../Frameworks/libz.dylib\" \"$EXE\"\n\notool -L \"$EXE\"\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -2057,8 +2081,8 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/usr/local/opt/qt/plugins/platforms,
-					/usr/local/Cellar/libpng/1.6.37/lib,
-					/usr/local/Cellar/zlib/1.2.11/lib,
+					/usr/local/lib,
+					/usr/local/opt/zlib/lib,
 				);
 				LLVM_LTO = NO;
 				OTHER_CPLUSPLUSFLAGS = (
@@ -2120,8 +2144,8 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/usr/local/opt/qt/plugins/platforms,
-					/usr/local/Cellar/libpng/1.6.37/lib,
-					/usr/local/Cellar/zlib/1.2.11/lib,
+					/usr/local/lib,
+					/usr/local/opt/zlib/lib,
 				);
 				LLVM_LTO = YES;
 				OTHER_CPLUSPLUSFLAGS = (
