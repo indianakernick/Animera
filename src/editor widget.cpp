@@ -155,12 +155,10 @@ private:
     QScrollBar *vbar = parent->verticalScrollBar();
     return {hbar->value(), vbar->value()};
   }
-  
   QSize getViewSize() const {
     const QSize port = parent->viewport()->size();
     return {std::min(width(), port.width()), std::min(height(), port.height())};
   }
-  
   QRect getViewRect() const {
     return {getViewPos(), getViewSize()};
   }
@@ -281,6 +279,7 @@ private:
     Q_EMIT mouseMove(pos);
     setCursor(cursor());
   }
+  
   void enterEvent(QEvent *) override {
     pos = getPos();
     Q_EMIT mouseEnter(pos);
@@ -291,8 +290,7 @@ private:
     Q_EMIT mouseLeave();
     clearFocus();
   }
-
-public:
+  
   void keyPressEvent(QKeyEvent *event) override {
     if (event->key() == key_zoom_out) {
       zoom(-1);
