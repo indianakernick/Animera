@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_EditorWidget_t {
-    QByteArrayData data[21];
-    char stringdata0[216];
+    QByteArrayData data[22];
+    char stringdata0[229];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -36,29 +36,30 @@ QT_MOC_LITERAL(0, 0, 12), // "EditorWidget"
 QT_MOC_LITERAL(1, 13, 14), // "overlayChanged"
 QT_MOC_LITERAL(2, 28, 0), // ""
 QT_MOC_LITERAL(3, 29, 7), // "QImage*"
-QT_MOC_LITERAL(4, 37, 10), // "mouseEnter"
-QT_MOC_LITERAL(5, 48, 10), // "mouseLeave"
-QT_MOC_LITERAL(6, 59, 9), // "mouseDown"
-QT_MOC_LITERAL(7, 69, 10), // "ButtonType"
-QT_MOC_LITERAL(8, 80, 9), // "mouseMove"
-QT_MOC_LITERAL(9, 90, 7), // "mouseUp"
-QT_MOC_LITERAL(10, 98, 8), // "keyPress"
-QT_MOC_LITERAL(11, 107, 7), // "Qt::Key"
-QT_MOC_LITERAL(12, 115, 9), // "composite"
-QT_MOC_LITERAL(13, 125, 16), // "compositeOverlay"
-QT_MOC_LITERAL(14, 142, 16), // "compositePalette"
-QT_MOC_LITERAL(15, 159, 8), // "setFrame"
-QT_MOC_LITERAL(16, 168, 5), // "Frame"
-QT_MOC_LITERAL(17, 174, 10), // "setPalette"
-QT_MOC_LITERAL(18, 185, 12), // "PaletteCSpan"
-QT_MOC_LITERAL(19, 198, 10), // "initCanvas"
-QT_MOC_LITERAL(20, 209, 6) // "Format"
+QT_MOC_LITERAL(4, 37, 12), // "scaleChanged"
+QT_MOC_LITERAL(5, 50, 10), // "mouseEnter"
+QT_MOC_LITERAL(6, 61, 10), // "mouseLeave"
+QT_MOC_LITERAL(7, 72, 9), // "mouseDown"
+QT_MOC_LITERAL(8, 82, 10), // "ButtonType"
+QT_MOC_LITERAL(9, 93, 9), // "mouseMove"
+QT_MOC_LITERAL(10, 103, 7), // "mouseUp"
+QT_MOC_LITERAL(11, 111, 8), // "keyPress"
+QT_MOC_LITERAL(12, 120, 7), // "Qt::Key"
+QT_MOC_LITERAL(13, 128, 9), // "composite"
+QT_MOC_LITERAL(14, 138, 16), // "compositeOverlay"
+QT_MOC_LITERAL(15, 155, 16), // "compositePalette"
+QT_MOC_LITERAL(16, 172, 8), // "setFrame"
+QT_MOC_LITERAL(17, 181, 5), // "Frame"
+QT_MOC_LITERAL(18, 187, 10), // "setPalette"
+QT_MOC_LITERAL(19, 198, 12), // "PaletteCSpan"
+QT_MOC_LITERAL(20, 211, 10), // "initCanvas"
+QT_MOC_LITERAL(21, 222, 6) // "Format"
 
     },
     "EditorWidget\0overlayChanged\0\0QImage*\0"
-    "mouseEnter\0mouseLeave\0mouseDown\0"
-    "ButtonType\0mouseMove\0mouseUp\0keyPress\0"
-    "Qt::Key\0composite\0compositeOverlay\0"
+    "scaleChanged\0mouseEnter\0mouseLeave\0"
+    "mouseDown\0ButtonType\0mouseMove\0mouseUp\0"
+    "keyPress\0Qt::Key\0composite\0compositeOverlay\0"
     "compositePalette\0setFrame\0Frame\0"
     "setPalette\0PaletteCSpan\0initCanvas\0"
     "Format"
@@ -71,46 +72,48 @@ static const uint qt_meta_data_EditorWidget[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-      13,   14, // methods
+      14,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       7,       // signalCount
+       8,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    1,   79,    2, 0x06 /* Public */,
-       4,    1,   82,    2, 0x06 /* Public */,
-       5,    0,   85,    2, 0x06 /* Public */,
-       6,    2,   86,    2, 0x06 /* Public */,
-       8,    1,   91,    2, 0x06 /* Public */,
-       9,    2,   94,    2, 0x06 /* Public */,
-      10,    1,   99,    2, 0x06 /* Public */,
+       1,    1,   84,    2, 0x06 /* Public */,
+       4,    1,   87,    2, 0x06 /* Public */,
+       5,    1,   90,    2, 0x06 /* Public */,
+       6,    0,   93,    2, 0x06 /* Public */,
+       7,    2,   94,    2, 0x06 /* Public */,
+       9,    1,   99,    2, 0x06 /* Public */,
+      10,    2,  102,    2, 0x06 /* Public */,
+      11,    1,  107,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      12,    1,  102,    2, 0x0a /* Public */,
-      13,    1,  105,    2, 0x0a /* Public */,
-      14,    0,  108,    2, 0x0a /* Public */,
-      15,    1,  109,    2, 0x0a /* Public */,
-      17,    1,  112,    2, 0x0a /* Public */,
-      19,    2,  115,    2, 0x0a /* Public */,
+      13,    1,  110,    2, 0x0a /* Public */,
+      14,    1,  113,    2, 0x0a /* Public */,
+      15,    0,  116,    2, 0x0a /* Public */,
+      16,    1,  117,    2, 0x0a /* Public */,
+      18,    1,  120,    2, 0x0a /* Public */,
+      20,    2,  123,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, 0x80000000 | 3,    2,
+    QMetaType::Void, QMetaType::Int,    2,
     QMetaType::Void, QMetaType::QPoint,    2,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::QPoint, 0x80000000 | 7,    2,    2,
+    QMetaType::Void, QMetaType::QPoint, 0x80000000 | 8,    2,    2,
     QMetaType::Void, QMetaType::QPoint,    2,
-    QMetaType::Void, QMetaType::QPoint, 0x80000000 | 7,    2,    2,
-    QMetaType::Void, 0x80000000 | 11,    2,
+    QMetaType::Void, QMetaType::QPoint, 0x80000000 | 8,    2,    2,
+    QMetaType::Void, 0x80000000 | 12,    2,
 
  // slots: parameters
     QMetaType::Void, QMetaType::QRect,    2,
     QMetaType::Void, QMetaType::QRect,    2,
     QMetaType::Void,
-    QMetaType::Void, 0x80000000 | 16,    2,
-    QMetaType::Void, 0x80000000 | 18,    2,
-    QMetaType::Void, 0x80000000 | 20, QMetaType::QSize,    2,    2,
+    QMetaType::Void, 0x80000000 | 17,    2,
+    QMetaType::Void, 0x80000000 | 19,    2,
+    QMetaType::Void, 0x80000000 | 21, QMetaType::QSize,    2,    2,
 
        0        // eod
 };
@@ -122,18 +125,19 @@ void EditorWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->overlayChanged((*reinterpret_cast< QImage*(*)>(_a[1]))); break;
-        case 1: _t->mouseEnter((*reinterpret_cast< QPoint(*)>(_a[1]))); break;
-        case 2: _t->mouseLeave(); break;
-        case 3: _t->mouseDown((*reinterpret_cast< QPoint(*)>(_a[1])),(*reinterpret_cast< ButtonType(*)>(_a[2]))); break;
-        case 4: _t->mouseMove((*reinterpret_cast< QPoint(*)>(_a[1]))); break;
-        case 5: _t->mouseUp((*reinterpret_cast< QPoint(*)>(_a[1])),(*reinterpret_cast< ButtonType(*)>(_a[2]))); break;
-        case 6: _t->keyPress((*reinterpret_cast< Qt::Key(*)>(_a[1]))); break;
-        case 7: _t->composite((*reinterpret_cast< QRect(*)>(_a[1]))); break;
-        case 8: _t->compositeOverlay((*reinterpret_cast< QRect(*)>(_a[1]))); break;
-        case 9: _t->compositePalette(); break;
-        case 10: _t->setFrame((*reinterpret_cast< const Frame(*)>(_a[1]))); break;
-        case 11: _t->setPalette((*reinterpret_cast< PaletteCSpan(*)>(_a[1]))); break;
-        case 12: _t->initCanvas((*reinterpret_cast< Format(*)>(_a[1])),(*reinterpret_cast< QSize(*)>(_a[2]))); break;
+        case 1: _t->scaleChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 2: _t->mouseEnter((*reinterpret_cast< QPoint(*)>(_a[1]))); break;
+        case 3: _t->mouseLeave(); break;
+        case 4: _t->mouseDown((*reinterpret_cast< QPoint(*)>(_a[1])),(*reinterpret_cast< ButtonType(*)>(_a[2]))); break;
+        case 5: _t->mouseMove((*reinterpret_cast< QPoint(*)>(_a[1]))); break;
+        case 6: _t->mouseUp((*reinterpret_cast< QPoint(*)>(_a[1])),(*reinterpret_cast< ButtonType(*)>(_a[2]))); break;
+        case 7: _t->keyPress((*reinterpret_cast< Qt::Key(*)>(_a[1]))); break;
+        case 8: _t->composite((*reinterpret_cast< QRect(*)>(_a[1]))); break;
+        case 9: _t->compositeOverlay((*reinterpret_cast< QRect(*)>(_a[1]))); break;
+        case 10: _t->compositePalette(); break;
+        case 11: _t->setFrame((*reinterpret_cast< const Frame(*)>(_a[1]))); break;
+        case 12: _t->setPalette((*reinterpret_cast< PaletteCSpan(*)>(_a[1]))); break;
+        case 13: _t->initCanvas((*reinterpret_cast< Format(*)>(_a[1])),(*reinterpret_cast< QSize(*)>(_a[2]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -146,44 +150,51 @@ void EditorWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
             }
         }
         {
+            using _t = void (EditorWidget::*)(int );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&EditorWidget::scaleChanged)) {
+                *result = 1;
+                return;
+            }
+        }
+        {
             using _t = void (EditorWidget::*)(QPoint );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&EditorWidget::mouseEnter)) {
-                *result = 1;
+                *result = 2;
                 return;
             }
         }
         {
             using _t = void (EditorWidget::*)();
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&EditorWidget::mouseLeave)) {
-                *result = 2;
+                *result = 3;
                 return;
             }
         }
         {
             using _t = void (EditorWidget::*)(QPoint , ButtonType );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&EditorWidget::mouseDown)) {
-                *result = 3;
+                *result = 4;
                 return;
             }
         }
         {
             using _t = void (EditorWidget::*)(QPoint );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&EditorWidget::mouseMove)) {
-                *result = 4;
+                *result = 5;
                 return;
             }
         }
         {
             using _t = void (EditorWidget::*)(QPoint , ButtonType );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&EditorWidget::mouseUp)) {
-                *result = 5;
+                *result = 6;
                 return;
             }
         }
         {
             using _t = void (EditorWidget::*)(Qt::Key );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&EditorWidget::keyPress)) {
-                *result = 6;
+                *result = 7;
                 return;
             }
         }
@@ -219,13 +230,13 @@ int EditorWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 13)
+        if (_id < 14)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 13;
+        _id -= 14;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 13)
+        if (_id < 14)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 13;
+        _id -= 14;
     }
     return _id;
 }
@@ -238,44 +249,51 @@ void EditorWidget::overlayChanged(QImage * _t1)
 }
 
 // SIGNAL 1
-void EditorWidget::mouseEnter(QPoint _t1)
+void EditorWidget::scaleChanged(int _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 1, _a);
 }
 
 // SIGNAL 2
-void EditorWidget::mouseLeave()
+void EditorWidget::mouseEnter(QPoint _t1)
 {
-    QMetaObject::activate(this, &staticMetaObject, 2, nullptr);
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    QMetaObject::activate(this, &staticMetaObject, 2, _a);
 }
 
 // SIGNAL 3
-void EditorWidget::mouseDown(QPoint _t1, ButtonType _t2)
+void EditorWidget::mouseLeave()
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))) };
-    QMetaObject::activate(this, &staticMetaObject, 3, _a);
+    QMetaObject::activate(this, &staticMetaObject, 3, nullptr);
 }
 
 // SIGNAL 4
-void EditorWidget::mouseMove(QPoint _t1)
+void EditorWidget::mouseDown(QPoint _t1, ButtonType _t2)
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))) };
     QMetaObject::activate(this, &staticMetaObject, 4, _a);
 }
 
 // SIGNAL 5
-void EditorWidget::mouseUp(QPoint _t1, ButtonType _t2)
+void EditorWidget::mouseMove(QPoint _t1)
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 5, _a);
 }
 
 // SIGNAL 6
+void EditorWidget::mouseUp(QPoint _t1, ButtonType _t2)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))) };
+    QMetaObject::activate(this, &staticMetaObject, 6, _a);
+}
+
+// SIGNAL 7
 void EditorWidget::keyPress(Qt::Key _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
-    QMetaObject::activate(this, &staticMetaObject, 6, _a);
+    QMetaObject::activate(this, &staticMetaObject, 7, _a);
 }
 QT_WARNING_POP
 QT_END_MOC_NAMESPACE
@@ -303,8 +321,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_EditorImage_t {
-    QByteArrayData data[11];
-    char stringdata0[99];
+    QByteArrayData data[12];
+    char stringdata0[112];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -314,21 +332,23 @@ struct qt_meta_stringdata_EditorImage_t {
 static const qt_meta_stringdata_EditorImage_t qt_meta_stringdata_EditorImage = {
     {
 QT_MOC_LITERAL(0, 0, 11), // "EditorImage"
-QT_MOC_LITERAL(1, 12, 10), // "mouseEnter"
-QT_MOC_LITERAL(2, 23, 0), // ""
-QT_MOC_LITERAL(3, 24, 10), // "mouseLeave"
-QT_MOC_LITERAL(4, 35, 9), // "mouseDown"
-QT_MOC_LITERAL(5, 45, 10), // "ButtonType"
-QT_MOC_LITERAL(6, 56, 9), // "mouseMove"
-QT_MOC_LITERAL(7, 66, 7), // "mouseUp"
-QT_MOC_LITERAL(8, 74, 8), // "keyPress"
-QT_MOC_LITERAL(9, 83, 7), // "Qt::Key"
-QT_MOC_LITERAL(10, 91, 7) // "resized"
+QT_MOC_LITERAL(1, 12, 12), // "scaleChanged"
+QT_MOC_LITERAL(2, 25, 0), // ""
+QT_MOC_LITERAL(3, 26, 10), // "mouseEnter"
+QT_MOC_LITERAL(4, 37, 10), // "mouseLeave"
+QT_MOC_LITERAL(5, 48, 9), // "mouseDown"
+QT_MOC_LITERAL(6, 58, 10), // "ButtonType"
+QT_MOC_LITERAL(7, 69, 9), // "mouseMove"
+QT_MOC_LITERAL(8, 79, 7), // "mouseUp"
+QT_MOC_LITERAL(9, 87, 8), // "keyPress"
+QT_MOC_LITERAL(10, 96, 7), // "Qt::Key"
+QT_MOC_LITERAL(11, 104, 7) // "resized"
 
     },
-    "EditorImage\0mouseEnter\0\0mouseLeave\0"
-    "mouseDown\0ButtonType\0mouseMove\0mouseUp\0"
-    "keyPress\0Qt::Key\0resized"
+    "EditorImage\0scaleChanged\0\0mouseEnter\0"
+    "mouseLeave\0mouseDown\0ButtonType\0"
+    "mouseMove\0mouseUp\0keyPress\0Qt::Key\0"
+    "resized"
 };
 #undef QT_MOC_LITERAL
 
@@ -338,29 +358,31 @@ static const uint qt_meta_data_EditorImage[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-       7,   14, // methods
+       8,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       7,       // signalCount
+       8,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    1,   49,    2, 0x06 /* Public */,
-       3,    0,   52,    2, 0x06 /* Public */,
-       4,    2,   53,    2, 0x06 /* Public */,
-       6,    1,   58,    2, 0x06 /* Public */,
-       7,    2,   61,    2, 0x06 /* Public */,
-       8,    1,   66,    2, 0x06 /* Public */,
-      10,    0,   69,    2, 0x06 /* Public */,
+       1,    1,   54,    2, 0x06 /* Public */,
+       3,    1,   57,    2, 0x06 /* Public */,
+       4,    0,   60,    2, 0x06 /* Public */,
+       5,    2,   61,    2, 0x06 /* Public */,
+       7,    1,   66,    2, 0x06 /* Public */,
+       8,    2,   69,    2, 0x06 /* Public */,
+       9,    1,   74,    2, 0x06 /* Public */,
+      11,    0,   77,    2, 0x06 /* Public */,
 
  // signals: parameters
+    QMetaType::Void, QMetaType::Int,    2,
     QMetaType::Void, QMetaType::QPoint,    2,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::QPoint, 0x80000000 | 5,    2,    2,
+    QMetaType::Void, QMetaType::QPoint, 0x80000000 | 6,    2,    2,
     QMetaType::Void, QMetaType::QPoint,    2,
-    QMetaType::Void, QMetaType::QPoint, 0x80000000 | 5,    2,    2,
-    QMetaType::Void, 0x80000000 | 9,    2,
+    QMetaType::Void, QMetaType::QPoint, 0x80000000 | 6,    2,    2,
+    QMetaType::Void, 0x80000000 | 10,    2,
     QMetaType::Void,
 
        0        // eod
@@ -372,63 +394,71 @@ void EditorImage::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         auto *_t = static_cast<EditorImage *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->mouseEnter((*reinterpret_cast< QPoint(*)>(_a[1]))); break;
-        case 1: _t->mouseLeave(); break;
-        case 2: _t->mouseDown((*reinterpret_cast< QPoint(*)>(_a[1])),(*reinterpret_cast< ButtonType(*)>(_a[2]))); break;
-        case 3: _t->mouseMove((*reinterpret_cast< QPoint(*)>(_a[1]))); break;
-        case 4: _t->mouseUp((*reinterpret_cast< QPoint(*)>(_a[1])),(*reinterpret_cast< ButtonType(*)>(_a[2]))); break;
-        case 5: _t->keyPress((*reinterpret_cast< Qt::Key(*)>(_a[1]))); break;
-        case 6: _t->resized(); break;
+        case 0: _t->scaleChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 1: _t->mouseEnter((*reinterpret_cast< QPoint(*)>(_a[1]))); break;
+        case 2: _t->mouseLeave(); break;
+        case 3: _t->mouseDown((*reinterpret_cast< QPoint(*)>(_a[1])),(*reinterpret_cast< ButtonType(*)>(_a[2]))); break;
+        case 4: _t->mouseMove((*reinterpret_cast< QPoint(*)>(_a[1]))); break;
+        case 5: _t->mouseUp((*reinterpret_cast< QPoint(*)>(_a[1])),(*reinterpret_cast< ButtonType(*)>(_a[2]))); break;
+        case 6: _t->keyPress((*reinterpret_cast< Qt::Key(*)>(_a[1]))); break;
+        case 7: _t->resized(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
         int *result = reinterpret_cast<int *>(_a[0]);
         {
+            using _t = void (EditorImage::*)(int );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&EditorImage::scaleChanged)) {
+                *result = 0;
+                return;
+            }
+        }
+        {
             using _t = void (EditorImage::*)(QPoint );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&EditorImage::mouseEnter)) {
-                *result = 0;
+                *result = 1;
                 return;
             }
         }
         {
             using _t = void (EditorImage::*)();
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&EditorImage::mouseLeave)) {
-                *result = 1;
+                *result = 2;
                 return;
             }
         }
         {
             using _t = void (EditorImage::*)(QPoint , ButtonType );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&EditorImage::mouseDown)) {
-                *result = 2;
+                *result = 3;
                 return;
             }
         }
         {
             using _t = void (EditorImage::*)(QPoint );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&EditorImage::mouseMove)) {
-                *result = 3;
+                *result = 4;
                 return;
             }
         }
         {
             using _t = void (EditorImage::*)(QPoint , ButtonType );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&EditorImage::mouseUp)) {
-                *result = 4;
+                *result = 5;
                 return;
             }
         }
         {
             using _t = void (EditorImage::*)(Qt::Key );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&EditorImage::keyPress)) {
-                *result = 5;
+                *result = 6;
                 return;
             }
         }
         {
             using _t = void (EditorImage::*)();
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&EditorImage::resized)) {
-                *result = 6;
+                *result = 7;
                 return;
             }
         }
@@ -464,62 +494,69 @@ int EditorImage::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 7)
+        if (_id < 8)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 7;
+        _id -= 8;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 7)
+        if (_id < 8)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 7;
+        _id -= 8;
     }
     return _id;
 }
 
 // SIGNAL 0
-void EditorImage::mouseEnter(QPoint _t1)
+void EditorImage::scaleChanged(int _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);
 }
 
 // SIGNAL 1
-void EditorImage::mouseLeave()
+void EditorImage::mouseEnter(QPoint _t1)
 {
-    QMetaObject::activate(this, &staticMetaObject, 1, nullptr);
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    QMetaObject::activate(this, &staticMetaObject, 1, _a);
 }
 
 // SIGNAL 2
-void EditorImage::mouseDown(QPoint _t1, ButtonType _t2)
+void EditorImage::mouseLeave()
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))) };
-    QMetaObject::activate(this, &staticMetaObject, 2, _a);
+    QMetaObject::activate(this, &staticMetaObject, 2, nullptr);
 }
 
 // SIGNAL 3
-void EditorImage::mouseMove(QPoint _t1)
+void EditorImage::mouseDown(QPoint _t1, ButtonType _t2)
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))) };
     QMetaObject::activate(this, &staticMetaObject, 3, _a);
 }
 
 // SIGNAL 4
-void EditorImage::mouseUp(QPoint _t1, ButtonType _t2)
+void EditorImage::mouseMove(QPoint _t1)
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 4, _a);
 }
 
 // SIGNAL 5
-void EditorImage::keyPress(Qt::Key _t1)
+void EditorImage::mouseUp(QPoint _t1, ButtonType _t2)
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))) };
     QMetaObject::activate(this, &staticMetaObject, 5, _a);
 }
 
 // SIGNAL 6
+void EditorImage::keyPress(Qt::Key _t1)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    QMetaObject::activate(this, &staticMetaObject, 6, _a);
+}
+
+// SIGNAL 7
 void EditorImage::resized()
 {
-    QMetaObject::activate(this, &staticMetaObject, 6, nullptr);
+    QMetaObject::activate(this, &staticMetaObject, 7, nullptr);
 }
 QT_WARNING_POP
 QT_END_MOC_NAMESPACE

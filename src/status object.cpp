@@ -1,17 +1,22 @@
 //
-//  timeline status object.cpp
+//  status object.cpp
 //  Animera
 //
 //  Created by Indi Kernick on 12/11/19.
 //  Copyright © 2019 Indi Kernick. All rights reserved.
 //
 
-#include "timeline status object.hpp"
+#include "status object.hpp"
 
 #include "status msg.hpp"
 
 StatusObject::StatusObject(QObject *parent)
   : QObject{parent} {}
+
+void StatusObject::setScale(const int newScale) {
+  scale = newScale;
+  updateStatus();
+}
 
 void StatusObject::setCurrPos(const CellPos newCurrPos) {
   currPos = newCurrPos;
@@ -35,7 +40,9 @@ void StatusObject::setLayerCount(const LayerIdx newLayerCount) {
 
 void StatusObject::updateStatus() {
   StatusMsg status;
-  status.append("CELLS: ");
+  status.append("SCALE: ");
+  status.append(scale);
+  status.append(" CELLS: ");
   status.append(+frameCount, +layerCount);
   status.append(" CELL: ");
   status.append(+currPos.f, +currPos.l);
@@ -49,4 +56,4 @@ void StatusObject::updateStatus() {
   Q_EMIT shouldShowPerm(status.get());
 }
 
-#include "timeline status object.moc"
+#include "status object.moc"

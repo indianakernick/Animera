@@ -26,6 +26,7 @@ class StatusBarWidget;
 class ColorPickerWidget;
 class QMenuBar;
 class ExportDialog;
+class StatusObject;
 
 class Window final : public QMainWindow {
   Q_OBJECT
@@ -56,6 +57,7 @@ private:
   TimelineWidget *timeline = nullptr;
   StatusBarWidget *statusBar = nullptr;
   ColorPickerWidget *colorPicker = nullptr;
+  StatusObject *status = nullptr;
   QMenuBar *menubar = nullptr;
   ExportDialog *exporter = nullptr;
   bool showQuitDialog = true;

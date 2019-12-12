@@ -79,7 +79,7 @@
 		45BB5F6B23239CB700E42371 /* copy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45BB5F6A23239CB700E42371 /* copy.cpp */; };
 		45C447F422F56E6100B65AD3 /* dialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45C447F222F56E6100B65AD3 /* dialog.cpp */; };
 		45C447FB22F6B57000B65AD3 /* png.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45C447F922F6B57000B65AD3 /* png.cpp */; };
-		45C5C8BA237A65820056CEE7 /* timeline status object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45C5C8B8237A65820056CEE7 /* timeline status object.cpp */; };
+		45C5C8BA237A65820056CEE7 /* status object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45C5C8B8237A65820056CEE7 /* status object.cpp */; };
 		45C5C8D22389219C0056CEE7 /* cli.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45C5C8D02389219C0056CEE7 /* cli.cpp */; };
 		45C5C8D4238A13AA0056CEE7 /* export options.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45C5C8D3238A13AA0056CEE7 /* export options.cpp */; };
 		45CAC92922CC7B5800F945BF /* sample object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45CAC92722CC7B5800F945BF /* sample object.cpp */; };
@@ -315,8 +315,8 @@
 		45C447F922F6B57000B65AD3 /* png.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = png.cpp; sourceTree = "<group>"; };
 		45C447FA22F6B57000B65AD3 /* png.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = png.hpp; sourceTree = "<group>"; };
 		45C5C8B723729C880056CEE7 /* strings.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = strings.hpp; sourceTree = "<group>"; };
-		45C5C8B8237A65820056CEE7 /* timeline status object.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "timeline status object.cpp"; sourceTree = "<group>"; };
-		45C5C8B9237A65820056CEE7 /* timeline status object.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "timeline status object.hpp"; sourceTree = "<group>"; };
+		45C5C8B8237A65820056CEE7 /* status object.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "status object.cpp"; sourceTree = "<group>"; };
+		45C5C8B9237A65820056CEE7 /* status object.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "status object.hpp"; sourceTree = "<group>"; };
 		45C5C8BC237CC2950056CEE7 /* math.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = math.hpp; sourceTree = "<group>"; };
 		45C5C8D02389219C0056CEE7 /* cli.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = cli.cpp; sourceTree = "<group>"; };
 		45C5C8D12389219C0056CEE7 /* cli.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = cli.hpp; sourceTree = "<group>"; };
@@ -637,8 +637,8 @@
 				4513144C22D1B06F00D66262 /* timeline controls widget.hpp */,
 				45161F0422F1399A0036BBED /* timeline painting.cpp */,
 				45161F0522F1399A0036BBED /* timeline painting.hpp */,
-				45C5C8B8237A65820056CEE7 /* timeline status object.cpp */,
-				45C5C8B9237A65820056CEE7 /* timeline status object.hpp */,
+				45C5C8B8237A65820056CEE7 /* status object.cpp */,
+				45C5C8B9237A65820056CEE7 /* status object.hpp */,
 			);
 			name = Timeline;
 			sourceTree = "<group>";
@@ -941,7 +941,6 @@
 				45AA32C722F524E100005DD8 /* Moc - timeline controls widget */,
 				45AA32C822F5256500005DD8 /* Moc - timeline frames widget */,
 				45AA32C922F525C700005DD8 /* Moc - timeline layers widget */,
-				45C5C8BB237A660A0056CEE7 /* Moc - timeline status object */,
 				45AA32CA22F5263200005DD8 /* Moc - timeline cells widget */,
 				45AA32CB22F526CB00005DD8 /* Moc - color picker widget */,
 				45AA32CC22F526FC00005DD8 /* Moc - color slider widget */,
@@ -957,6 +956,7 @@
 				45AA32D622F5292400005DD8 /* Moc - combo box widget */,
 				45AA32D722F5295B00005DD8 /* Moc - timeline widget */,
 				45AA32D822F529A800005DD8 /* Moc - palette widget */,
+				45C5C8BB237A660A0056CEE7 /* Moc - status object */,
 				45AA32D922F529D600005DD8 /* Moc - sample object */,
 				45AA32DA22F52A0400005DD8 /* Moc - export dialog */,
 				45AA32DB22F52A3300005DD8 /* Moc - editor widget */,
@@ -1765,7 +1765,7 @@
 			shellPath = /bin/sh;
 			shellScript = "/usr/local/opt/qt/bin/moc \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\n";
 		};
-		45C5C8BB237A660A0056CEE7 /* Moc - timeline status object */ = {
+		45C5C8BB237A660A0056CEE7 /* Moc - status object */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1773,14 +1773,14 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"$(PROJECT_DIR)/src/timeline status object.hpp",
-				"$(PROJECT_DIR)/src/timeline status object.cpp",
+				"$(PROJECT_DIR)/src/status object.hpp",
+				"$(PROJECT_DIR)/src/status object.cpp",
 			);
-			name = "Moc - timeline status object";
+			name = "Moc - status object";
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(PROJECT_DIR)/src/timeline status object.moc",
+				"$(PROJECT_DIR)/src/status object.moc",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1801,7 +1801,7 @@
 				453D28C3227698F200D0E5F9 /* widget painting.cpp in Sources */,
 				457DC0C222E9518A0000777B /* cell span.cpp in Sources */,
 				4513144D22D1B06F00D66262 /* timeline controls widget.cpp in Sources */,
-				45C5C8BA237A65820056CEE7 /* timeline status object.cpp in Sources */,
+				45C5C8BA237A65820056CEE7 /* status object.cpp in Sources */,
 				45D109A922DC01A200D1F1CB /* icon push button widget.cpp in Sources */,
 				4513144722D0503700D66262 /* timeline.cpp in Sources */,
 				453D28C622769EC000D0E5F9 /* color slider widget.cpp in Sources */,

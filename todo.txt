@@ -283,8 +283,6 @@ should the editor keys go in a menubar?
   how else are users supposed to discover these keys?
   could put them in a help menu
 
-editor scale in status bar
-
 ignore the waking click
 
 zoom into the mouse instead of zooming into the center

@@ -80,6 +80,7 @@ public:
     updateMouse();
     updateCheckers();
     Q_EMIT resized();
+    Q_EMIT scaleChanged(scale);
     repaint();
   }
   int getScale() const {
@@ -99,6 +100,7 @@ public:
   #endif
   
 Q_SIGNALS:
+  void scaleChanged(int);
   void mouseEnter(QPoint);
   void mouseLeave();
   void mouseDown(QPoint, ButtonType);
@@ -334,13 +336,14 @@ EditorWidget::EditorWidget(QWidget *parent)
   grabGesture(Qt::PinchGesture);
   view = new EditorImage{this};
   setWidget(view);
-  CONNECT(view, mouseEnter, this, mouseEnter);
-  CONNECT(view, mouseLeave, this, mouseLeave);
-  CONNECT(view, mouseDown,  this, mouseDown);
-  CONNECT(view, mouseMove,  this, mouseMove);
-  CONNECT(view, mouseUp,    this, mouseUp);
-  CONNECT(view, keyPress,   this, keyPress);
-  CONNECT(view, resized,    this, adjustMargins);
+  CONNECT(view, scaleChanged, this, scaleChanged);
+  CONNECT(view, mouseEnter,   this, mouseEnter);
+  CONNECT(view, mouseLeave,   this, mouseLeave);
+  CONNECT(view, mouseDown,    this, mouseDown);
+  CONNECT(view, mouseMove,    this, mouseMove);
+  CONNECT(view, mouseUp,      this, mouseUp);
+  CONNECT(view, keyPress,     this, keyPress);
+  CONNECT(view, resized,      this, adjustMargins);
   setStyleSheet("background-color: " + glob_back_color.name());
 }
 

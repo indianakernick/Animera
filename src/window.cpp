@@ -17,6 +17,7 @@
 #include "global font.hpp"
 #include "undo object.hpp"
 #include "error dialog.hpp"
+#include "status object.hpp"
 #include "export dialog.hpp"
 #include "sample object.hpp"
 #include "editor widget.hpp"
@@ -123,6 +124,7 @@ void Window::createWidgets() {
   timeline = new TimelineWidget{bottom};
   statusBar = new StatusBarWidget{bottom};
   colorPicker = new ColorPickerWidget{right};
+  status = new StatusObject{this};
   menubar = new QMenuBar{this};
 }
 
@@ -314,6 +316,10 @@ void Window::connectSignals() {
   CONNECT(sprite.timeline, frameCountChanged,   timeline,        setFrameCount);
   CONNECT(sprite.timeline, layerCountChanged,   timeline,        setLayerCount);
   CONNECT(sprite.timeline, delayChanged,        timeline,        setDelay);
+  CONNECT(sprite.timeline, currPosChanged,      status,          setCurrPos);
+  CONNECT(sprite.timeline, selectionChanged,    status,          setSelection);
+  CONNECT(sprite.timeline, frameCountChanged,   status,          setFrameCount);
+  CONNECT(sprite.timeline, layerCountChanged,   status,          setLayerCount);
   CONNECT(sprite.timeline, modified,            this,            modify);
   
   CONNECT(timeline,        visibilityChanged,   sprite.timeline, setVisibility);
@@ -331,7 +337,6 @@ void Window::connectSignals() {
   CONNECT(timeline,        clearSelection,      sprite.timeline, clearSelection);
   CONNECT(timeline,        currPosChanged,      sprite.timeline, setCurrPos);
   CONNECT(timeline,        delayChanged,        sprite.timeline, setDelay);
-  CONNECT(timeline,        shouldShowPerm,      statusBar,       showPerm);
   
   CONNECT(sprite,          canvasInitialized,   colorPicker,     initCanvas);
   CONNECT(sprite,          canvasInitialized,   colors,          initCanvas);
@@ -365,6 +370,7 @@ void Window::connectSignals() {
   CONNECT(editor,          mouseMove,           sample,          mouseMove);
   CONNECT(editor,          keyPress,            sample,          keyPress);
   CONNECT(editor,          keyPress,            undo,            keyPress);
+  CONNECT(editor,          scaleChanged,        status,          setScale);
   
   CONNECT(colors,          colorsChanged,       tools,           setColors);
   CONNECT(colors,          shouldAttachColor,   colorPicker,     attach);
@@ -390,6 +396,9 @@ void Window::connectSignals() {
   CONNECT(palette,         shouldShowNorm,      statusBar,       showNorm);
   
   CONNECT(colorPicker,     shouldShowNorm,      statusBar,       showNorm);
+  
+  CONNECT(status,          shouldShowPerm,      statusBar,       showPerm);
+  CONNECT(status,          shouldShowPerm,      statusBar,       showTemp);
 }
 
 void Window::saveToPath(const QString &path) {

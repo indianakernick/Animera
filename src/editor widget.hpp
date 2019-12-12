@@ -24,6 +24,7 @@ public:
 
 Q_SIGNALS:
   void overlayChanged(QImage *);
+  void scaleChanged(int);
   void mouseEnter(QPoint);
   void mouseLeave();
   void mouseDown(QPoint, ButtonType);

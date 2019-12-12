@@ -55,14 +55,11 @@ Q_SIGNALS:
   void currPosChanged(CellPos);
   void delayChanged(int);
   
-  void shouldShowPerm(std::string_view);
-  
 private:
   ControlsWidget *controls = nullptr;
   LayersWidget *layers = nullptr;
   FramesWidget *frames = nullptr;
   CellsWidget *cells = nullptr;
-  StatusObject *status = nullptr;
 };
 
 #endif
