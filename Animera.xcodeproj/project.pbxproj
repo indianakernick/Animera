@@ -96,8 +96,8 @@
 		45D109B222E304A300D1F1CB /* combo box widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45D109B022E304A300D1F1CB /* combo box widget.cpp */; };
 		45DC2566224B137C00F40116 /* status msg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45DC2564224B137C00F40116 /* status msg.cpp */; };
 		45DFE499224DE89E00EA40C5 /* global font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45DFE497224DE89E00EA40C5 /* global font.cpp */; };
-		45E333FA23A1D7BD009F5EC1 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 45E333F923A1D7BC009F5EC1 /* libz.dylib */; };
-		45E333FE23A1D8DE009F5EC1 /* libpng.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 45E333FD23A1D8DE009F5EC1 /* libpng.dylib */; };
+		45E3340623A1F4F4009F5EC1 /* libz.1.2.11.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 45E3340523A1F4F4009F5EC1 /* libz.1.2.11.dylib */; };
+		45E3340823A1F514009F5EC1 /* libpng16.16.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 45E3340723A1F513009F5EC1 /* libpng16.16.dylib */; };
 		45F0431423247BFE00E99F95 /* odr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45F0431323247BFE00E99F95 /* odr.cpp */; };
 		45F043182324833400E99F95 /* fill.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45F043172324833400E99F95 /* fill.cpp */; };
 		45F065F22222998300BCE863 /* current tool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45F065F02222998300BCE863 /* current tool.cpp */; };
@@ -360,8 +360,8 @@
 		45DFE498224DE89E00EA40C5 /* global font.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "global font.hpp"; sourceTree = "<group>"; };
 		45DFE4A12252038700EA40C5 /* 5x7+2_var_ascii.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "5x7+2_var_ascii.ttf"; sourceTree = "<group>"; };
 		45DFE4A22252039600EA40C5 /* 5x7+2ascii.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "5x7+2ascii.ttf"; sourceTree = "<group>"; };
-		45E333F923A1D7BC009F5EC1 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = ../../../../../../usr/local/opt/zlib/lib/libz.dylib; sourceTree = "<group>"; };
-		45E333FD23A1D8DE009F5EC1 /* libpng.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpng.dylib; path = ../../../../../../usr/local/lib/libpng.dylib; sourceTree = "<group>"; };
+		45E3340523A1F4F4009F5EC1 /* libz.1.2.11.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.11.dylib; path = ../../../../../../usr/local/Cellar/zlib/1.2.11/lib/libz.1.2.11.dylib; sourceTree = "<group>"; };
+		45E3340723A1F513009F5EC1 /* libpng16.16.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpng16.16.dylib; path = ../../../../../../usr/local/Cellar/libpng/1.6.37/lib/libpng16.16.dylib; sourceTree = "<group>"; };
 		45F0431323247BFE00E99F95 /* odr.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = odr.cpp; sourceTree = "<group>"; };
 		45F043172324833400E99F95 /* fill.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = fill.cpp; sourceTree = "<group>"; };
 		45F065F02222998300BCE863 /* current tool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "current tool.cpp"; sourceTree = "<group>"; };
@@ -388,12 +388,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				455F28872206930E00C73F39 /* OpenGL.framework in Frameworks */,
-				45E333FE23A1D8DE009F5EC1 /* libpng.dylib in Frameworks */,
 				455F28852206930800C73F39 /* CoreVideo.framework in Frameworks */,
 				455F28832206930200C73F39 /* IOKit.framework in Frameworks */,
+				45E3340623A1F4F4009F5EC1 /* libz.1.2.11.dylib in Frameworks */,
 				455F2881220692EE00C73F39 /* Cocoa.framework in Frameworks */,
 				455F2879220691DE00C73F39 /* QtCore.framework in Frameworks */,
-				45E333FA23A1D7BD009F5EC1 /* libz.dylib in Frameworks */,
+				45E3340823A1F514009F5EC1 /* libpng16.16.dylib in Frameworks */,
 				455F287D220691DE00C73F39 /* QtWidgets.framework in Frameworks */,
 				455F287F220691DE00C73F39 /* QtGui.framework in Frameworks */,
 			);
@@ -758,8 +758,8 @@
 		455F2869220691DC00C73F39 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				45E333FD23A1D8DE009F5EC1 /* libpng.dylib */,
-				45E333F923A1D7BC009F5EC1 /* libz.dylib */,
+				45E3340523A1F4F4009F5EC1 /* libz.1.2.11.dylib */,
+				45E3340723A1F513009F5EC1 /* libpng16.16.dylib */,
 				455F28882206942200C73F39 /* libqcocoa.dylib */,
 				455F28862206930D00C73F39 /* OpenGL.framework */,
 				455F28842206930800C73F39 /* CoreVideo.framework */,
@@ -974,9 +974,7 @@
 				455F284D220688FD00C73F39 /* Sources */,
 				455F284E220688FD00C73F39 /* Frameworks */,
 				455F284F220688FD00C73F39 /* Resources */,
-				45E3340323A1E4BF009F5EC1 /* Install libpng and libz */,
 				455F288A2206A17600C73F39 /* Mac Deploy */,
-				45E3340423A1E9A0009F5EC1 /* Update paths */,
 				457D74FC239F8B06009B4E4B /* Trim */,
 			);
 			buildRules = (
@@ -1118,7 +1116,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [[ \"$CONFIGURATION\" = \"Release\" ]]; then\n  /usr/local/opt/qt/bin/macdeployqt \"$CODESIGNING_FOLDER_PATH\" -codesign=$EXPANDED_CODE_SIGN_IDENTITY\nelse\n  /usr/local/opt/qt/bin/macdeployqt \"$CODESIGNING_FOLDER_PATH\" -codesign=$EXPANDED_CODE_SIGN_IDENTITY -no-strip\nfi\n";
+			shellScript = "if [[ \"$CONFIGURATION\" = \"Release\" ]]; then\n  /usr/local/opt/qt/bin/macdeployqt \"$CODESIGNING_FOLDER_PATH\" -codesign=$EXPANDED_CODE_SIGN_IDENTITY -verbose=2\nelse\n  /usr/local/opt/qt/bin/macdeployqt \"$CODESIGNING_FOLDER_PATH\" -codesign=$EXPANDED_CODE_SIGN_IDENTITY -verbose=2 -no-strip\nfi\n";
 		};
 		457D74FC239F8B06009B4E4B /* Trim */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1136,7 +1134,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# macdeployqt adds a bunch of crap that we don't need and \n# this is the easiest way to deal with it\n# removing these took the app from 40MB to 22MB\n# futher improvements could be made by compiling qt from source\n# and maybe static linking with lto but\n# I don't think the size difference will be worth the effort \n\n# the app seems to run just fine without libz and libpng\n# I can't seem to find the symbols in any of the qt libraries\n\ncd \"$BUILT_PRODUCTS_DIR/$CONTENTS_FOLDER_PATH\"\n\ncd PlugIns\nrm -rf styles\nrm -rf iconengines\nrm -rf imageformats\nrm -rf printsupport\nrm -rf virtualkeyboard\nrm -rf platforminputcontexts\n\ncd ../Frameworks\nrm -rf libz.1.dylib # wtf\nrm -rf QtSvg.framework\nrm -rf QtQml.framework\nrm -rf QtQuick.framework\nrm -rf QtNetwork.framework\nrm -rf QtVirtualKeyboard.framework\n";
+			shellScript = "# macdeployqt adds a bunch of crap that we don't need and \n# this is the easiest way to deal with it\n# removing these took the app from 40MB to 22MB\n# futher improvements could be made by compiling qt from source\n# and maybe static linking with lto but\n# I don't think the size difference will be worth the effort \n\n# the app seems to run just fine without libz and libpng\n# I can't seem to find the symbols in any of the qt libraries\n\ncd \"$BUILT_PRODUCTS_DIR/$CONTENTS_FOLDER_PATH\"\n\ncd PlugIns\nrm -rf styles\nrm -rf iconengines\nrm -rf imageformats\nrm -rf printsupport\nrm -rf virtualkeyboard\nrm -rf platforminputcontexts\n\ncd ../Frameworks\nrm -rf QtSvg.framework\nrm -rf QtQml.framework\nrm -rf QtQuick.framework\nrm -rf QtNetwork.framework\nrm -rf QtVirtualKeyboard.framework\n";
 		};
 		45AA32C622F51DB900005DD8 /* Moc - window */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1788,46 +1786,6 @@
 			shellPath = /bin/sh;
 			shellScript = "/usr/local/opt/qt/bin/moc \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/qt/bin/moc \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
 		};
-		45E3340323A1E4BF009F5EC1 /* Install libpng and libz */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				/usr/local/lib/libpng.dylib,
-				/usr/local/opt/zlib/lib/libz.dylib,
-			);
-			name = "Install libpng and libz";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/libpng.dylib",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/libz.dylib",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "FRAMEWORKS=\"$BUILT_PRODUCTS_DIR/$FRAMEWORKS_FOLDER_PATH\"\n\ncp /usr/local/lib/libpng.dylib \"$FRAMEWORKS/libpng.dylib\"\ncp /usr/local/opt/zlib/lib/libz.dylib \"$FRAMEWORKS/libz.dylib\"\n\ncodesign --force --sign $EXPANDED_CODE_SIGN_IDENTITY -o runtime --timestamp=none --preserve-metadata=identifier,entitlements,flags \"$FRAMEWORKS/libpng.dylib\"\ncodesign --force --sign $EXPANDED_CODE_SIGN_IDENTITY -o runtime --timestamp=none --preserve-metadata=identifier,entitlements,flags \"$FRAMEWORKS/libz.dylib\"\n";
-		};
-		45E3340423A1E9A0009F5EC1 /* Update paths */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Update paths";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "EXE=\"$BUILT_PRODUCTS_DIR/$EXECUTABLE_PATH\"\ninstall_name_tool -change \"@executable_path/../Frameworks/libpng16.16.dylib\" \"@executable_path/../Frameworks/libpng.dylib\" \"$EXE\"\ninstall_name_tool -change \"@executable_path/../Frameworks/libz.1.dylib\" \"@executable_path/../Frameworks/libz.dylib\" \"$EXE\"\n\notool -L \"$EXE\"\n";
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -2083,6 +2041,8 @@
 					/usr/local/opt/qt/plugins/platforms,
 					/usr/local/lib,
 					/usr/local/opt/zlib/lib,
+					/usr/local/Cellar/zlib/1.2.11/lib,
+					/usr/local/Cellar/libpng/1.6.37/lib,
 				);
 				LLVM_LTO = NO;
 				OTHER_CPLUSPLUSFLAGS = (
@@ -2146,6 +2106,8 @@
 					/usr/local/opt/qt/plugins/platforms,
 					/usr/local/lib,
 					/usr/local/opt/zlib/lib,
+					/usr/local/Cellar/zlib/1.2.11/lib,
+					/usr/local/Cellar/libpng/1.6.37/lib,
 				);
 				LLVM_LTO = YES;
 				OTHER_CPLUSPLUSFLAGS = (
