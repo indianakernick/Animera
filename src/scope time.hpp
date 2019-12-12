@@ -51,6 +51,7 @@ inline ScopeTime::ScopeTime(const char *name) {
   current = &current->children[name];
   current->parent = prevCurrent;
   current->name = name;
+  current->calls = 0;
   start = Clock::now();
 }
 
@@ -60,15 +61,17 @@ inline ScopeTime::~ScopeTime() {
   current = current->parent;
 }
 
-#define CONCAT_IMPL(A, B) A##B
-#define CONCAT(A, B) CONCAT_IMPL(A, B)
-#define SCOPE_TIME(NAME) ScopeTime CONCAT(scope_time_, __LINE__) {NAME}
+#define SCOPE_TIME_IMPL2(NAME, LINE) ScopeTime scope_time_##LINE {NAME}
+#define SCOPE_TIME_IMPL(NAME, LINE) SCOPE_TIME_IMPL2(NAME, LINE)
+#define SCOPE_TIME(NAME) SCOPE_TIME_IMPL(NAME, __LINE__)
+#define NO_SCOPE_TIME(NAME) SCOPE_TIME(nullptr)
 #define SCOPE_TIME_PRINT() ScopeTime::print()
 #define SCOPE_TIME_RESET() ScopeTime::reset()
 
 #else
 
 #define SCOPE_TIME(NAME)
+#define NO_SCOPE_TIME(NAME)
 #define SCOPE_TIME_PRINT()
 #define SCOPE_TIME_RESET()
 

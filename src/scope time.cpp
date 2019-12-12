@@ -38,6 +38,7 @@ void ScopeTime::reset() {
 }
 
 void ScopeTime::printImpl(const TreeNode *node, const int depth) {
+  if (node->name == nullptr) return;
   int newDepth = 0;
   if (node->parent) {
     newDepth = depth + 1;
