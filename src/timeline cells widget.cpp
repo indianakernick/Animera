@@ -243,15 +243,9 @@ CellsWidget *CellScrollWidget::getChild() {
 }
 
 void CellScrollWidget::changeMargins() {
-  const QMargins before = viewportMargins();
+  Q_EMIT rightMarginChanged(rightMargin());
+  Q_EMIT bottomMarginChanged(bottomMargin());
   adjustMargins();
-  const QMargins after = viewportMargins();
-  if (before.right() != after.right()) {
-    Q_EMIT rightMarginChanged(after.right());
-  }
-  if (before.bottom() != after.bottom()) {
-    Q_EMIT bottomMarginChanged(after.bottom());
-  }
 }
 
 void CellScrollWidget::ensureVisible(const QPoint pos) {

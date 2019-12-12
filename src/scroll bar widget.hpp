@@ -34,6 +34,11 @@ public:
 
 protected:
   void adjustMargins();
+  int rightMargin() const;
+  int bottomMargin() const;
+
+private:
+  ScrollCornerWidget *corner;
 };
 
 #endif

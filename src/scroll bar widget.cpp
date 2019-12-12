@@ -79,17 +79,24 @@ ScrollAreaWidget::ScrollAreaWidget(QWidget *parent)
   : QScrollArea{parent} {
   setVerticalScrollBar(new ScrollBarWidget{Qt::Vertical, this});
   setHorizontalScrollBar(new ScrollBarWidget{Qt::Horizontal, this});
-  setCornerWidget(new ScrollCornerWidget{this});
+  corner = new ScrollCornerWidget{this};
+  corner->hide();
 }
 
 void ScrollAreaWidget::adjustMargins() {
-  QWidget *view = widget();
-  if (view->width() < width() && view->height() < height()) {
-    setViewportMargins(0, 0, 0, 0);
+  if (rightMargin() && bottomMargin()) {
+    setCornerWidget(corner);
+    corner->show();
   } else {
-    const QMargins margins = viewportMargins();
-    const int right = height() < view->height() + margins.bottom() ? glob_scroll_width : 0;
-    const int bottom = width() < view->width() + margins.right() ? glob_scroll_width : 0;
-    setViewportMargins(0, 0, right, bottom);
+    setCornerWidget(nullptr);
+    corner->hide();
   }
+}
+
+int ScrollAreaWidget::rightMargin() const {
+  return height() < widget()->height() ? glob_scroll_width : 0;
+}
+
+int ScrollAreaWidget::bottomMargin() const {
+  return width() < widget()->width() ? glob_scroll_width : 0;
 }
