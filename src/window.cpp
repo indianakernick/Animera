@@ -53,7 +53,6 @@ Window::Window(QWidget *parent, const Window *previous)
 
 void Window::newFile(const Format format, const QSize size) {
   sprite.newFile(format, size);
-  setWindowModified(true);
   show();
 }
 
@@ -73,7 +72,6 @@ void Window::openImage(const QString &path) {
     QDesktopWidget *desktop = static_cast<Application *>(QApplication::instance())->desktop();
     (new ErrorDialog{desktop, "Image open error", err.msg()})->open();
   } else {
-    setWindowModified(true);
     show();
   }
 }

@@ -23,7 +23,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_Timeline_t {
     QByteArrayData data[52];
-    char stringdata0[616];
+    char stringdata0[612];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -75,15 +75,15 @@ QT_MOC_LITERAL(39, 480, 10), // "extendCell"
 QT_MOC_LITERAL(40, 491, 9), // "splitCell"
 QT_MOC_LITERAL(41, 501, 8), // "growCell"
 QT_MOC_LITERAL(42, 510, 10), // "shrinkCell"
-QT_MOC_LITERAL(43, 521, 10), // "setCurrPos"
-QT_MOC_LITERAL(44, 532, 13), // "setVisibility"
-QT_MOC_LITERAL(45, 546, 7), // "setName"
-QT_MOC_LITERAL(46, 554, 8), // "setDelay"
-QT_MOC_LITERAL(47, 563, 13), // "clearSelected"
-QT_MOC_LITERAL(48, 577, 12), // "copySelected"
-QT_MOC_LITERAL(49, 590, 13), // "pasteSelected"
-QT_MOC_LITERAL(50, 604, 4), // "lock"
-QT_MOC_LITERAL(51, 609, 6) // "unlock"
+QT_MOC_LITERAL(43, 521, 6), // "setPos"
+QT_MOC_LITERAL(44, 528, 13), // "setVisibility"
+QT_MOC_LITERAL(45, 542, 7), // "setName"
+QT_MOC_LITERAL(46, 550, 8), // "setDelay"
+QT_MOC_LITERAL(47, 559, 13), // "clearSelected"
+QT_MOC_LITERAL(48, 573, 12), // "copySelected"
+QT_MOC_LITERAL(49, 586, 13), // "pasteSelected"
+QT_MOC_LITERAL(50, 600, 4), // "lock"
+QT_MOC_LITERAL(51, 605, 6) // "unlock"
 
     },
     "Timeline\0currPosChanged\0\0CellPos\0"
@@ -99,7 +99,7 @@ QT_MOC_LITERAL(51, 609, 6) // "unlock"
     "clearSelection\0insertLayer\0removeLayer\0"
     "moveLayerUp\0moveLayerDown\0insertFrame\0"
     "removeFrame\0clearCell\0extendCell\0"
-    "splitCell\0growCell\0shrinkCell\0setCurrPos\0"
+    "splitCell\0growCell\0shrinkCell\0setPos\0"
     "setVisibility\0setName\0setDelay\0"
     "clearSelected\0copySelected\0pasteSelected\0"
     "lock\0unlock"
@@ -250,7 +250,7 @@ void Timeline::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, vo
         case 29: _t->splitCell(); break;
         case 30: _t->growCell((*reinterpret_cast< QRect(*)>(_a[1]))); break;
         case 31: _t->shrinkCell((*reinterpret_cast< QRect(*)>(_a[1]))); break;
-        case 32: _t->setCurrPos((*reinterpret_cast< CellPos(*)>(_a[1]))); break;
+        case 32: _t->setPos((*reinterpret_cast< CellPos(*)>(_a[1]))); break;
         case 33: _t->setVisibility((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
         case 34: _t->setName((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< std::string_view(*)>(_a[2]))); break;
         case 35: _t->setDelay((*reinterpret_cast< int(*)>(_a[1]))); break;

@@ -427,8 +427,8 @@ void Timeline::setVisibility(const LayerIdx idx, const bool visible) {
     // Q_EMIT visibilityChanged(idx, visible);
     changeFrame();
     changeCell(layer.spans.get(currPos.f)->rect());
+    Q_EMIT modified();
   }
-  Q_EMIT modified();
 }
 
 void Timeline::setName(const LayerIdx idx, const std::string_view name) {
