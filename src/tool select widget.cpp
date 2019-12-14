@@ -211,7 +211,7 @@ void ToolSelectWidget::pushToolWidget(QHBoxLayout *layout) {
 void ToolSelectWidget::createTools() {
   auto *layout = new QHBoxLayout{bar};
   layout->setSpacing(0);
-  layout->setContentsMargins(0, 0, 0, 0);
+  layout->setContentsMargins(glob_margin, 0, glob_margin, 0);
   layout->setSizeConstraint(QLayout::SetFixedSize);
   layout->addStretch();
 

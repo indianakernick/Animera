@@ -186,6 +186,10 @@ constexpr WidgetRect addMargins(
   );
 }
 
+constexpr WidgetRect addMargins(const WidgetRect rect) {
+  return addMargins(rect, true, true, true, true);
+}
+
 struct IntRange {
   int min;
   int max;
@@ -228,7 +232,7 @@ constexpr int scaleOverlayAlpha(const int alpha) {
 // ------------------------------- status bar ------------------------------- //
 
 constexpr int        stat_temp_duration_ms = 2500;
-constexpr WidgetRect stat_rect = textBoxRect(48);
+constexpr WidgetRect stat_rect = addMargins(textBoxRect(48));
 
 inline const QColor  stat_background = glob_main;
 
