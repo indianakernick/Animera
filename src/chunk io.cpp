@@ -9,7 +9,6 @@
 #include "chunk io.hpp"
 
 #include "zlib.hpp"
-#include "strings.hpp"
 #include <QtCore/qendian.h>
 #include <QtCore/qiodevice.h>
 
@@ -94,7 +93,7 @@ Error ChunkReader::end() {
   const uint32_t finalCrc = static_cast<uint32_t>(crc);
   if (finalCrc != readInt()) {
     QString msg = "CRC mismatch in '";
-    msg += toLatinString(name);
+    msg += QLatin1String{name, chunk_name_len};
     msg += "' chunk";
     return msg;
   } else {
@@ -138,9 +137,9 @@ void ChunkReader::readData(T *dat, const uint32_t len) {
 Error expectedName(const ChunkStart start, const char *name) {
   if (std::memcmp(start.name, name, chunk_name_len) != 0) {
     QString msg = "Expected '";
-    msg += toLatinString(name);
+    msg += name;
     msg += "' chunk but found '";
-    msg += toLatinString(start.name);
+    msg += QLatin1String(start.name, chunk_name_len);
     msg += '\'';
     return msg;
   } else {
