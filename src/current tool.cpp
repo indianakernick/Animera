@@ -58,7 +58,7 @@ void CurrentTool::mouseDown(const QPoint ePos, const ButtonType eButton) {
     }
     lastPos = ePos;
     button = eButton;
-    tool->mouseDown({ePos, lastPos, eButton});
+    tool->mouseDown({ePos, eButton});
   }
 }
 
@@ -79,7 +79,7 @@ void CurrentTool::mouseUp(const QPoint ePos, const ButtonType eButton) {
     }
     lastPos = ePos;
     button = ButtonType::none;
-    tool->mouseUp({ePos, lastPos, eButton});
+    tool->mouseUp({ePos, eButton});
   }
 }
 

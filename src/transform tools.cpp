@@ -19,13 +19,13 @@ void TranslateTool::mouseLeave(const ToolLeaveEvent &) {
   ctx->clearStatus();
 }
 
-void TranslateTool::mouseDown(const ToolMouseEvent &event) {
+void TranslateTool::mouseDown(const ToolMouseDownEvent &event) {
   if (event.button != ButtonType::primary) return;
   drag = !ctx->cell->isNull();
   if (drag) ctx->lock();
 }
 
-void TranslateTool::mouseMove(const ToolMouseEvent &event) {
+void TranslateTool::mouseMove(const ToolMouseMoveEvent &event) {
   if (event.button != ButtonType::primary || !drag) {
     return updateStatus();
   }
@@ -35,7 +35,7 @@ void TranslateTool::mouseMove(const ToolMouseEvent &event) {
   updateStatus();
 }
 
-void TranslateTool::mouseUp(const ToolMouseEvent &event) {
+void TranslateTool::mouseUp(const ToolMouseUpEvent &event) {
   if (event.button != ButtonType::primary || !drag) return;
   drag = false;
   ctx->unlock();
@@ -103,7 +103,7 @@ bool flipYChanged(const Qt::Key key, bool &flipY) {
 
 }
 
-void FlipTool::mouseMove(const ToolMouseEvent &) {
+void FlipTool::mouseMove(const ToolMouseMoveEvent &) {
   updateStatus();
 }
 
@@ -165,7 +165,7 @@ int arrowToRot(const Qt::Key key) {
 
 }
 
-void RotateTool::mouseMove(const ToolMouseEvent &) {
+void RotateTool::mouseMove(const ToolMouseMoveEvent &) {
   updateStatus();
 }
 

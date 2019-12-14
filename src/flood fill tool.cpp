@@ -24,7 +24,7 @@ void FloodFillTool::mouseLeave(const ToolLeaveEvent &event) {
   ctx->changeOverlay(event.lastPos);
 }
 
-void FloodFillTool::mouseDown(const ToolMouseEvent &event) {
+void FloodFillTool::mouseDown(const ToolMouseDownEvent &event) {
   SCOPE_TIME("FloodFillTool::mouseDown");
 
   const QRgb fillColor = ctx->selectColor(event.button);
@@ -52,7 +52,7 @@ void FloodFillTool::mouseDown(const ToolMouseEvent &event) {
   ctx->finishChange();
 }
 
-void FloodFillTool::mouseMove(const ToolMouseEvent &event) {
+void FloodFillTool::mouseMove(const ToolMouseMoveEvent &event) {
   SCOPE_TIME("FloodFillTool::mouseMove");
 
   ctx->showStatus(StatusMsg{}.appendLabeled(event.pos));

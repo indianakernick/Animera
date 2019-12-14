@@ -20,9 +20,9 @@ public:
   void attachCell() override final;
   void detachCell() override final;
   void mouseLeave(const ToolLeaveEvent &) override final;
-  void mouseDown(const ToolMouseEvent &) override final;
-  void mouseMove(const ToolMouseEvent &) override final;
-  void mouseUp(const ToolMouseEvent &) override final;
+  void mouseDown(const ToolMouseDownEvent &) override final;
+  void mouseMove(const ToolMouseMoveEvent &) override final;
+  void mouseUp(const ToolMouseUpEvent &) override final;
 
 protected:
   QRgb getColor() const;

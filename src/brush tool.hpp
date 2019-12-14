@@ -14,9 +14,9 @@
 class BrushTool final : public Tool {
 public:
   void mouseLeave(const ToolLeaveEvent &) override;
-  void mouseDown(const ToolMouseEvent &) override;
-  void mouseMove(const ToolMouseEvent &) override;
-  void mouseUp(const ToolMouseEvent &) override;
+  void mouseDown(const ToolMouseDownEvent &) override;
+  void mouseMove(const ToolMouseMoveEvent &) override;
+  void mouseUp(const ToolMouseUpEvent &) override;
 
   void setRadius(int);
   void setMode(SymmetryMode);

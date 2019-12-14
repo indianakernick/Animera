@@ -34,7 +34,7 @@ void DragPaintTool<Derived>::mouseLeave(const ToolLeaveEvent &event) {
 }
 
 template <typename Derived>
-void DragPaintTool<Derived>::mouseDown(const ToolMouseEvent &event) {
+void DragPaintTool<Derived>::mouseDown(const ToolMouseDownEvent &event) {
   SCOPE_TIME("DragPaintTool::mouseDown");
 
   StatusMsg status;
@@ -53,7 +53,7 @@ void DragPaintTool<Derived>::mouseDown(const ToolMouseEvent &event) {
 }
 
 template <typename Derived>
-void DragPaintTool<Derived>::mouseMove(const ToolMouseEvent &event) {
+void DragPaintTool<Derived>::mouseMove(const ToolMouseMoveEvent &event) {
   SCOPE_TIME("DragPaintTool::mouseMove");
 
   that()->drawPoint(*ctx->overlay, 0, event.lastPos);
@@ -79,7 +79,7 @@ void DragPaintTool<Derived>::mouseMove(const ToolMouseEvent &event) {
 }
 
 template <typename Derived>
-void DragPaintTool<Derived>::mouseUp(const ToolMouseEvent &event) {
+void DragPaintTool<Derived>::mouseUp(const ToolMouseUpEvent &event) {
   SCOPE_TIME("DragPaintTool::mouseUp");
 
   ctx->showStatus(StatusMsg{}.appendLabeled(event.pos));

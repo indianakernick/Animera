@@ -21,7 +21,7 @@ void BrushTool::mouseLeave(const ToolLeaveEvent &event) {
   symChangeOverlay({event.lastPos, event.lastPos});
 }
 
-void BrushTool::mouseDown(const ToolMouseEvent &event) {
+void BrushTool::mouseDown(const ToolMouseDownEvent &event) {
   SCOPE_TIME("BrushTool::mouseDown");
   
   color = ctx->selectColor(event.button);
@@ -35,7 +35,7 @@ void BrushTool::mouseDown(const ToolMouseEvent &event) {
   ctx->lock();
 }
 
-void BrushTool::mouseMove(const ToolMouseEvent &event) {
+void BrushTool::mouseMove(const ToolMouseMoveEvent &event) {
   SCOPE_TIME("BrushTool::mouseMove");
   
   symPointStatus(event.pos);
@@ -54,7 +54,7 @@ void BrushTool::mouseMove(const ToolMouseEvent &event) {
   symLine({event.lastPos, event.pos});
 }
 
-void BrushTool::mouseUp(const ToolMouseEvent &) {
+void BrushTool::mouseUp(const ToolMouseUpEvent &) {
   SCOPE_TIME("BrushTool::mouseUp");
   
   ctx->unlock();

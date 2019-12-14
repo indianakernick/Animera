@@ -14,8 +14,8 @@
 class FloodFillTool final : public Tool {
 public:
   void mouseLeave(const ToolLeaveEvent &) override;
-  void mouseDown(const ToolMouseEvent &) override;
-  void mouseMove(const ToolMouseEvent &) override;
+  void mouseDown(const ToolMouseDownEvent &) override;
+  void mouseMove(const ToolMouseMoveEvent &) override;
 
 private:
   template <typename Pixel>

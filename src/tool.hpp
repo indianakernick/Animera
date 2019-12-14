@@ -41,9 +41,19 @@ struct ToolLeaveEvent {
   ButtonType button;
 };
 
-struct ToolMouseEvent {
+struct ToolMouseDownEvent {
+  QPoint pos;
+  ButtonType button;
+};
+
+struct ToolMouseMoveEvent {
   QPoint pos;
   QPoint lastPos;
+  ButtonType button;
+};
+
+struct ToolMouseUpEvent {
+  QPoint pos;
   ButtonType button;
 };
 
@@ -99,9 +109,9 @@ public:
   virtual void attachCell() {}
   virtual void detachCell() {}
   virtual void mouseLeave(const ToolLeaveEvent &) {}
-  virtual void mouseDown(const ToolMouseEvent &) {}
-  virtual void mouseMove(const ToolMouseEvent &) {}
-  virtual void mouseUp(const ToolMouseEvent &) {}
+  virtual void mouseDown(const ToolMouseDownEvent &) {}
+  virtual void mouseMove(const ToolMouseMoveEvent &) {}
+  virtual void mouseUp(const ToolMouseUpEvent &) {}
   virtual void keyPress(const ToolKeyEvent &) {}
   
   void setCtx(const ToolCtx *);

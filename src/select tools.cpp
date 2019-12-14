@@ -194,14 +194,14 @@ void RectangleSelectTool::mouseLeave(const ToolLeaveEvent &event) {
   clearOverlay(mode, event.lastPos);
 }
 
-void RectangleSelectTool::mouseDown(const ToolMouseEvent &event) {
+void RectangleSelectTool::mouseDown(const ToolMouseDownEvent &event) {
   SCOPE_TIME("RectangleSelectTool::mouseDown");
   
   if (event.button == ButtonType::secondary) {
     const SelectMode prevMode = mode;
     toggleMode();
     if (prevMode != mode) {
-      clearOverlay(prevMode, event.lastPos);
+      clearOverlay(prevMode, event.pos);
     }
   }
   
@@ -229,7 +229,7 @@ void RectangleSelectTool::mouseDown(const ToolMouseEvent &event) {
   ctx->showStatus(status);
 }
 
-void RectangleSelectTool::mouseMove(const ToolMouseEvent &event) {
+void RectangleSelectTool::mouseMove(const ToolMouseMoveEvent &event) {
   SCOPE_TIME("RectangleSelectTool::mouseMove");
   
   StatusMsg status;
@@ -260,7 +260,7 @@ void RectangleSelectTool::mouseMove(const ToolMouseEvent &event) {
   ctx->showStatus(status);
 }
 
-void RectangleSelectTool::mouseUp(const ToolMouseEvent &event) {
+void RectangleSelectTool::mouseUp(const ToolMouseUpEvent &event) {
   SCOPE_TIME("RectangleSelectTool::mouseUp");
   
   if (event.button != ButtonType::primary) return;
@@ -296,14 +296,14 @@ void PolygonSelectTool::mouseLeave(const ToolLeaveEvent &event) {
   clearOverlay(mode, event.lastPos);
 }
 
-void PolygonSelectTool::mouseDown(const ToolMouseEvent &event) {
+void PolygonSelectTool::mouseDown(const ToolMouseDownEvent &event) {
   SCOPE_TIME("PolygonSelectTool::mouseDown");
   
   if (event.button == ButtonType::secondary) {
     const SelectMode prevMode = mode;
     toggleMode();
     if (prevMode != mode) {
-      clearOverlay(prevMode, event.lastPos);
+      clearOverlay(prevMode, event.pos);
     }
   }
   
@@ -331,7 +331,7 @@ void PolygonSelectTool::mouseDown(const ToolMouseEvent &event) {
   ctx->showStatus(status);
 }
 
-void PolygonSelectTool::mouseMove(const ToolMouseEvent &event) {
+void PolygonSelectTool::mouseMove(const ToolMouseMoveEvent &event) {
   SCOPE_TIME("PolygonSelectTool::mouseMove");
   
   StatusMsg status;
@@ -362,7 +362,7 @@ void PolygonSelectTool::mouseMove(const ToolMouseEvent &event) {
   ctx->showStatus(status);
 }
 
-void PolygonSelectTool::mouseUp(const ToolMouseEvent &event) {
+void PolygonSelectTool::mouseUp(const ToolMouseUpEvent &event) {
   SCOPE_TIME("PolygonSelectTool::mouseUp");
   
   if (event.button != ButtonType::primary) return;
@@ -439,7 +439,7 @@ void WandSelectTool::mouseLeave(const ToolLeaveEvent &event) {
   }
 }
 
-void WandSelectTool::mouseDown(const ToolMouseEvent &event) {
+void WandSelectTool::mouseDown(const ToolMouseDownEvent &event) {
   SCOPE_TIME("WandSelectTool::mouseDown");
   
   if (event.button == ButtonType::secondary) {
@@ -457,7 +457,6 @@ void WandSelectTool::mouseDown(const ToolMouseEvent &event) {
   } else if (mode == SelectMode::paste) {
     status.append("SELECTION: ");
     status.append({event.pos + offset, bounds.size()});
-    clearOverlay(event.lastPos);
     showOverlay(event.pos);
     pasteWithMask(event.pos, event.button, mask);
   } else Q_UNREACHABLE();
@@ -465,7 +464,7 @@ void WandSelectTool::mouseDown(const ToolMouseEvent &event) {
   ctx->showStatus(status);
 }
 
-void WandSelectTool::mouseMove(const ToolMouseEvent &event) {
+void WandSelectTool::mouseMove(const ToolMouseMoveEvent &event) {
   SCOPE_TIME("WandSelectTool::mouseMove");
   
   StatusMsg status;
@@ -488,12 +487,12 @@ QRect WandSelectTool::cellRect() const {
   return toRect(ctx->size).intersected(ctx->cell->rect());
 }
 
-void WandSelectTool::toggleMode(const ToolMouseEvent &event) {
+void WandSelectTool::toggleMode(const ToolMouseDownEvent &event) {
   SCOPE_TIME("WandSelectTool::toggleMode");
   
   if (mode == SelectMode::paste) {
     mode = SelectMode::copy;
-    const QRect rect = overlayRect(event.lastPos);
+    const QRect rect = overlayRect(event.pos);
     clearImage(*ctx->overlay, rect);
     ctx->changeOverlay(rect);
     clearImage(overlay, bounds);
@@ -554,7 +553,7 @@ private:
 
 }
 
-void WandSelectTool::addToSelection(const ToolMouseEvent &event) {
+void WandSelectTool::addToSelection(const ToolMouseDownEvent &event) {
   SCOPE_TIME("WandSelectTool::addToSelection");
   
   // TODO: do something similar to flood fill optimization

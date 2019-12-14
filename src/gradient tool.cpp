@@ -19,7 +19,7 @@ void LinearGradientTool::mouseLeave(const ToolLeaveEvent &event) {
   ctx->changeOverlay(event.lastPos);
 }
 
-void LinearGradientTool::mouseDown(const ToolMouseEvent &event) {
+void LinearGradientTool::mouseDown(const ToolMouseDownEvent &event) {
   SCOPE_TIME("LinearGradientTool::mouseDown");
 
   if (event.button == ButtonType::secondary) {
@@ -48,7 +48,7 @@ void LinearGradientTool::mouseDown(const ToolMouseEvent &event) {
   ctx->lock();
 }
 
-void LinearGradientTool::mouseMove(const ToolMouseEvent &event) {
+void LinearGradientTool::mouseMove(const ToolMouseMoveEvent &event) {
   SCOPE_TIME("LinearGradientTool::mouseMove");
 
   drawSquarePoint(*ctx->overlay, 0, event.lastPos);
@@ -75,7 +75,7 @@ void LinearGradientTool::mouseMove(const ToolMouseEvent &event) {
   ctx->changeCell(rect.united(toRect(event.lastPos)));
 }
 
-void LinearGradientTool::mouseUp(const ToolMouseEvent &event) {
+void LinearGradientTool::mouseUp(const ToolMouseUpEvent &event) {
   SCOPE_TIME("LinearGradientTool::mouseUp");
   
   if (event.button != ButtonType::primary) return;

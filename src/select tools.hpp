@@ -41,9 +41,9 @@ class RectangleSelectTool final : public SelectTool<RectangleSelectTool> {
 public:
   void attachCell() override;
   void mouseLeave(const ToolLeaveEvent &) override;
-  void mouseDown(const ToolMouseEvent &) override;
-  void mouseMove(const ToolMouseEvent &) override;
-  void mouseUp(const ToolMouseEvent &) override;
+  void mouseDown(const ToolMouseDownEvent &) override;
+  void mouseMove(const ToolMouseMoveEvent &) override;
+  void mouseUp(const ToolMouseUpEvent &) override;
   
 private:
   QPoint startPos = no_point;
@@ -53,9 +53,9 @@ class PolygonSelectTool final : public SelectTool<PolygonSelectTool> {
 public:
   void attachCell() override;
   void mouseLeave(const ToolLeaveEvent &) override;
-  void mouseDown(const ToolMouseEvent &) override;
-  void mouseMove(const ToolMouseEvent &) override;
-  void mouseUp(const ToolMouseEvent &) override;
+  void mouseDown(const ToolMouseDownEvent &) override;
+  void mouseMove(const ToolMouseMoveEvent &) override;
+  void mouseUp(const ToolMouseUpEvent &) override;
   
 private:
   QImage mask;
@@ -73,8 +73,8 @@ public:
   void attachCell() override;
   void detachCell() override;
   void mouseLeave(const ToolLeaveEvent &) override;
-  void mouseDown(const ToolMouseEvent &) override;
-  void mouseMove(const ToolMouseEvent &) override;
+  void mouseDown(const ToolMouseDownEvent &) override;
+  void mouseMove(const ToolMouseMoveEvent &) override;
 
 private:
   QImage mask;
@@ -82,8 +82,8 @@ private:
   int animFrame;
   
   QRect cellRect() const;
-  void toggleMode(const ToolMouseEvent &);
-  void addToSelection(const ToolMouseEvent &);
+  void toggleMode(const ToolMouseDownEvent &);
+  void addToSelection(const ToolMouseDownEvent &);
   QRgb getOverlayColor() const;
   void paintOverlay() const;
   void animate();
