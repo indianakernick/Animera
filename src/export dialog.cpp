@@ -38,8 +38,8 @@ void ExportDialog::setFrames(const FrameIdx count) {
   frames = count;
 }
 
-void ExportDialog::setCurrent(const CellPos pos) {
-  current = pos;
+void ExportDialog::setPos(const CellPos newPos) {
+  pos = newPos;
 }
 
 void ExportDialog::setSelection(const CellRect rect) {
@@ -81,7 +81,7 @@ void ExportDialog::submit() {
     options.selection.minL = LayerIdx{};
     options.selection.maxL = layers - LayerIdx{1};
   } else if (layerStr == "Current") {
-    options.selection.minL = options.selection.maxL = current.l;
+    options.selection.minL = options.selection.maxL = pos.l;
   } else if (layerStr == "Selected") {
     options.selection.minL = selection.minL;
     options.selection.maxL = selection.maxL;
@@ -92,7 +92,7 @@ void ExportDialog::submit() {
     options.selection.minF = FrameIdx{};
     options.selection.maxF = frames - FrameIdx{1};
   } else if (frameStr == "Current") {
-    options.selection.minF = options.selection.maxF = current.f;
+    options.selection.minF = options.selection.maxF = pos.f;
   } else if (frameStr == "Selected") {
     options.selection.minF = selection.minF;
     options.selection.maxF = selection.maxF;

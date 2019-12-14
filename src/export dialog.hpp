@@ -27,7 +27,7 @@ public:
   
   void setLayers(LayerIdx);
   void setFrames(FrameIdx);
-  void setCurrent(CellPos);
+  void setPos(CellPos);
   void setSelection(CellRect);
   
 Q_SIGNALS:
@@ -41,7 +41,7 @@ private:
   Format format;
   LayerIdx layers;
   FrameIdx frames;
-  CellPos current;
+  CellPos pos;
   CellRect selection;
   
   TextInputWidget *name = nullptr;

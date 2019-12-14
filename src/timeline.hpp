@@ -57,7 +57,7 @@ public:
 
   LayerIdx getLayers() const;
   FrameIdx getFrames() const;
-  CellPos getCurrent() const;
+  CellPos getPos() const;
   CellRect getSelection() const;
 
 public Q_SLOTS:
@@ -87,7 +87,7 @@ public Q_SLOTS:
   void growCell(QRect);
   void shrinkCell(QRect);
   
-  void setCurrPos(CellPos);
+  void setPos(CellPos);
   void setVisibility(LayerIdx, bool);
   void setName(LayerIdx, std::string_view);
   void setDelay(int);
@@ -139,6 +139,7 @@ private:
   void changeLayers(LayerIdx, LayerIdx);
   void changeFrameCount();
   void changeLayerCount();
+  void changeCell(QRect);
   void changeCell();
 };
 

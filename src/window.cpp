@@ -335,7 +335,7 @@ void Window::connectSignals() {
   CONNECT(timeline,        continueSelection,   sprite.timeline, continueSelection);
   CONNECT(timeline,        endSelection,        sprite.timeline, endSelection);
   CONNECT(timeline,        clearSelection,      sprite.timeline, clearSelection);
-  CONNECT(timeline,        currPosChanged,      sprite.timeline, setCurrPos);
+  CONNECT(timeline,        currPosChanged,      sprite.timeline, setPos);
   CONNECT(timeline,        delayChanged,        sprite.timeline, setDelay);
   
   CONNECT(sprite,          canvasInitialized,   colorPicker,     initCanvas);
@@ -457,7 +457,7 @@ void Window::exportDialog() {
   }
   exporter->setLayers(sprite.timeline.getLayers());
   exporter->setFrames(sprite.timeline.getFrames());
-  exporter->setCurrent(sprite.timeline.getCurrent());
+  exporter->setPos(sprite.timeline.getPos());
   exporter->setSelection(sprite.timeline.getSelection());
   exporter->open();
 }

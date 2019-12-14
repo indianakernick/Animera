@@ -159,7 +159,7 @@ FrameIdx Timeline::getFrames() const {
   return frameCount;
 }
 
-CellPos Timeline::getCurrent() const {
+CellPos Timeline::getPos() const {
   return currPos;
 }
 
@@ -175,6 +175,7 @@ void Timeline::initCanvas(const Format format, const QSize size) {
 void Timeline::nextFrame() {
   if (locked) return;
   currPos.f = (currPos.f + FrameIdx{1}) % frameCount;
+  if (frameCount == FrameIdx{1}) return;
   changeFrame();
   changeCell();
   changePos();
@@ -183,6 +184,7 @@ void Timeline::nextFrame() {
 void Timeline::prevFrame() {
   if (locked) return;
   currPos.f = (currPos.f - FrameIdx{1} + frameCount) % frameCount;
+  if (frameCount == FrameIdx{1}) return;
   changeFrame();
   changeCell();
   changePos();
@@ -259,6 +261,7 @@ void Timeline::insertLayer() {
 
 void Timeline::removeLayer() {
   if (locked) return;
+  const QRect rect = getCell(currPos)->rect();
   if (layers.size() == 1) {
     layers.front().spans.clear(frameCount);
     layers.front().name = "Layer 0";
@@ -272,7 +275,7 @@ void Timeline::removeLayer() {
     changeLayers(currPos.l, layerCount());
   }
   changeFrame();
-  changeCell();
+  changeCell(rect);
   changePos();
   Q_EMIT modified();
 }
@@ -283,7 +286,9 @@ void Timeline::moveLayerUp() {
   std::swap(layers[+(currPos.l - LayerIdx{1})], layers[+currPos.l]);
   changeLayers(currPos.l - LayerIdx{1}, currPos.l + LayerIdx{1});
   changeFrame();
-  changeCell();
+  const QRect upperRect = getCell({currPos.l - LayerIdx{1}, currPos.f})->rect();
+  const QRect lowerRect = getCell(currPos)->rect();
+  changeCell(upperRect.united(lowerRect));
   layerAbove();
   Q_EMIT modified();
 }
@@ -294,7 +299,9 @@ void Timeline::moveLayerDown() {
   std::swap(layers[+currPos.l], layers[+(currPos.l + LayerIdx{1})]);
   changeLayers(currPos.l, currPos.l + LayerIdx{2});
   changeFrame();
-  changeCell();
+  const QRect upperRect = getCell(currPos)->rect();
+  const QRect lowerRect = getCell({currPos.l + LayerIdx{1}, currPos.f})->rect();
+  changeCell(upperRect.united(lowerRect));
   layerBelow();
   Q_EMIT modified();
 }
@@ -337,10 +344,12 @@ void Timeline::removeFrame() {
 
 void Timeline::clearCell() {
   if (locked) return;
-  layers[+currPos.l].spans.replace(currPos.f, false);
+  Layer &layer = layers[+currPos.l];
+  const QRect rect = layer.spans.get(currPos.f)->rect();
+  layer.spans.replace(currPos.f, false);
   changeSpan(currPos.l);
   changeFrame();
-  changeCell();
+  changeCell(rect);
   changePos();
   Q_EMIT modified();
 }
@@ -391,7 +400,7 @@ void Timeline::shrinkCell(const QRect rect) {
   Q_EMIT modified();
 }
 
-void Timeline::setCurrPos(const CellPos pos) {
+void Timeline::setPos(const CellPos pos) {
   assert(LayerIdx{0} <= pos.l);
   assert(pos.l < layerCount());
   assert(FrameIdx{0} <= pos.f);
@@ -411,12 +420,13 @@ void Timeline::setCurrPos(const CellPos pos) {
 void Timeline::setVisibility(const LayerIdx idx, const bool visible) {
   assert(LayerIdx{0} <= idx);
   assert(idx < layerCount());
-  bool &layerVis = layers[+idx].visible;
+  Layer &layer = layers[+idx];
   // TODO: Emit signal when layer visibility changed?
-  if (layerVis != visible) {
-    layerVis = visible;
+  if (layer.visible != visible) {
+    layer.visible = visible;
     // Q_EMIT visibilityChanged(idx, visible);
-    changeCell();
+    changeFrame();
+    changeCell(layer.spans.get(currPos.f)->rect());
   }
   Q_EMIT modified();
 }
@@ -536,8 +546,12 @@ void Timeline::changeLayerCount() {
   Q_EMIT layerCountChanged(layerCount());
 }
 
+void Timeline::changeCell(const QRect rect) {
+  Q_EMIT cellModified(rect);
+}
+
 void Timeline::changeCell() {
-  Q_EMIT cellModified(toRect(canvasSize));
+  changeCell(toRect(canvasSize));
 }
 
 #include "timeline.moc"
