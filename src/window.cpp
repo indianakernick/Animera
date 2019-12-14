@@ -199,6 +199,7 @@ void Window::initStyles() {
     
     "QMenuBar::item {"
       "padding: " + QString::number(glob_margin + glob_border_width + glob_text_margin) + "px;"
+      "border: none"
     "}"
     
     "QMenuBar::item:open {"
