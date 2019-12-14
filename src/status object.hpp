@@ -27,6 +27,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
   void shouldShowPerm(std::string_view);
+  void shouldShowApnd(std::string_view);
 
 private:
   int scale;

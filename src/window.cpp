@@ -397,7 +397,7 @@ void Window::connectSignals() {
   CONNECT(colorPicker,     shouldShowNorm,      statusBar,       showNorm);
   
   CONNECT(status,          shouldShowPerm,      statusBar,       showPerm);
-  CONNECT(status,          shouldShowPerm,      statusBar,       showTemp);
+  CONNECT(status,          shouldShowApnd,      statusBar,       showApnd);
 }
 
 void Window::saveToPath(const QString &path) {

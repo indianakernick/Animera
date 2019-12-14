@@ -17,28 +17,35 @@
 
 StatusBarWidget::StatusBarWidget(QWidget *parent)
   : QWidget{parent} {
-  timer.setInterval(stat_temp_duration_ms);
-  timer.setSingleShot(true);
-  CONNECT(timer, timeout, this, hideTemp);
+  tempTimer.setInterval(stat_temp_duration_ms);
+  tempTimer.setSingleShot(true);
+  CONNECT(tempTimer, timeout, this, hideTemp);
+  apndTimer.setInterval(stat_temp_duration_ms);
+  apndTimer.setSingleShot(true);
+  CONNECT(apndTimer, timeout, this, hideApnd);
   setMinimumWidth(stat_rect.widget().width());
   setFixedHeight(stat_rect.widget().height());
 }
 
 void StatusBarWidget::showTemp(const std::string_view text) {
   tempText = toLatinString(text);
-  timer.start();
+  tempTimer.start();
   repaint();
 }
 
 void StatusBarWidget::showNorm(const std::string_view text) {
-  SCOPE_TIME("StatusBarWidget::showNorm");
-  
   normText = toLatinString(text);
   repaint();
 }
 
 void StatusBarWidget::showPerm(const std::string_view text) {
   permText = toLatinString(text);
+  repaint();
+}
+
+void StatusBarWidget::showApnd(const std::string_view text) {
+  apndText = toLatinString(text);
+  apndTimer.start();
   repaint();
 }
 
@@ -50,21 +57,30 @@ void StatusBarWidget::paintEvent(QPaintEvent *) {
   painter.setFont(getGlobalFont());
   painter.setPen(glob_text_color);
   const QPoint pos = stat_rect.pos() + QPoint{0, glob_font_accent_px};
+  
   if (!tempText.isEmpty()) {
     painter.drawText(pos, tempText);
-    return;
-  }
-  if (!normText.isEmpty()) {
+  } else if (!normText.isEmpty()) {
     painter.drawText(pos, normText);
-    return;
-  }
-  if (!permText.isEmpty()) {
+    if (!apndText.isEmpty()) {
+      const int normWidth = normText.size() * glob_font_stride_px;
+      const int apndOffset = normWidth + 3 * glob_font_stride_px;
+      const int lineX = pos.x() + normWidth + glob_font_stride_px + 2_px;
+      painter.drawText(pos + QPoint{apndOffset, 0}, apndText);
+      painter.fillRect(lineX, 0, 1_px, height(), glob_text_color);
+    }
+  } else if (!permText.isEmpty()) {
     painter.drawText(pos, permText);
   }
 }
 
 void StatusBarWidget::hideTemp() {
   tempText.clear();
+  repaint();
+}
+
+void StatusBarWidget::hideApnd() {
+  apndText.clear();
   repaint();
 }
 

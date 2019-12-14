@@ -16,6 +16,10 @@ bool StatusMsg::empty() const {
   return msg.empty();
 }
 
+size_t StatusMsg::size() const {
+  return msg.size();
+}
+
 std::string_view StatusMsg::get() const {
   return msg;
 }

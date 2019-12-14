@@ -42,6 +42,7 @@ void StatusObject::updateStatus() {
   StatusMsg status;
   status.append("SCALE: ");
   status.append(scale);
+  const size_t scaleSize = status.size();
   status.append(" CELLS: ");
   status.append(+frameCount, +layerCount);
   status.append(" CELL: ");
@@ -54,6 +55,7 @@ void StatusObject::updateStatus() {
     });
   }
   Q_EMIT shouldShowPerm(status.get());
+  Q_EMIT shouldShowApnd(status.get().substr(0, scaleSize));
 }
 
 #include "status object.moc"

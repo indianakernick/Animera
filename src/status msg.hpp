@@ -18,6 +18,7 @@ class StatusMsg {
 public:
   void clear();
   bool empty() const;
+  size_t size() const;
   std::string_view get() const;
 
   StatusMsg &append(bool);
