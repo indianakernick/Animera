@@ -63,6 +63,19 @@ public:
     return {{}, size()};
   }
   
+  size_t byteWidth() const noexcept {
+    return width_ * sizeof(Pixel);
+  }
+  size_t bytePitch() const noexcept {
+    return pitch_ * sizeof(Pixel);
+  }
+  size_t byteSize() const noexcept {
+    return width_ * height_ * sizeof(Pixel);
+  }
+  size_t wholeByteSize() const noexcept {
+    return pitch_ * height_ * sizeof(Pixel);
+  }
+  
   template <typename OtherPixel>
   OtherPixel *dataAs() const noexcept {
     return reinterpret_cast<OtherPixel *>(data_);
