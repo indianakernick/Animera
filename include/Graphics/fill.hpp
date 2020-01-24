@@ -27,7 +27,7 @@ void fillRow(
   assert(dst.contains(first));
   assert(dst.contains(Point{last, first.y}));
   if constexpr (sizeof(Pixel) == 1) {
-    std::memset(dst.ptr(first), pixel, last - first.x + 1);
+    std::memset(dst.ptr(first), static_cast<int>(pixel), last - first.x + 1);
   } else {
     Pixel *firstPixel = dst.data() + dst.pitch() * first.y;
     Pixel *const lastPixel = firstPixel + last + 1;
@@ -111,7 +111,7 @@ template <typename Pixel>
 void fill(const Surface<Pixel> dst, const identity_t<Pixel> pixel) noexcept {
   for (auto dstRow : dst) {
     if constexpr (sizeof(Pixel) == 1) {
-      std::memset(dstRow.begin(), pixel, dst.width());
+      std::memset(dstRow.begin(), static_cast<int>(pixel), dst.width());
     } else {
       for (Pixel &dstPixel : dstRow) {
         dstPixel = pixel;
@@ -131,7 +131,7 @@ void fill(const Surface<Pixel> dst) noexcept {
 template <typename Pixel>
 void overFill(const Surface<Pixel> dst, const identity_t<Pixel> pixel) noexcept {
   if constexpr (sizeof(Pixel) == 1) {
-    std::memset(dst.data(), pixel, dst.pitch() * dst.height());
+    std::memset(dst.data(), static_cast<int>(pixel), dst.pitch() * dst.height());
   } else {
     Pixel *firstPixel = dst.data();
     Pixel *const lastPixel = firstPixel + dst.pitch() * dst.height();
