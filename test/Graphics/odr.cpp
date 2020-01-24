@@ -16,6 +16,7 @@
 #include <Graphics/porter duff.hpp>
 #include <Graphics/each.hpp>
 #include <Graphics/copy.hpp>
+#include <Graphics/compare.hpp>
 #include <Graphics/fill.hpp>
 #include <Graphics/flood fill.hpp>
 #include <Graphics/transform.hpp>
