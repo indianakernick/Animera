@@ -26,7 +26,6 @@ struct Point {
   constexpr Point operator+(const Point other) const noexcept {
     return {x + other.x, y + other.y};
   }
-  // TODO: should this return a Size?
   constexpr Point operator-(const Point other) const noexcept {
     return {x - other.x, y - other.y};
   }
@@ -34,7 +33,28 @@ struct Point {
     return {x + value, y + value};
   }
   constexpr Point operator-(const int value) const noexcept {
-    return {x - value, x - value};
+    return {x - value, y - value};
+  }
+  
+  constexpr Point &operator+=(const Point other) noexcept {
+    x += other.x;
+    y += other.y;
+    return *this;
+  }
+  constexpr Point &operator-=(const Point other) noexcept {
+    x -= other.x;
+    y -= other.y;
+    return *this;
+  }
+  constexpr Point &operator+=(const int value) noexcept {
+    x += value;
+    y += value;
+    return *this;
+  }
+  constexpr Point &operator-=(const int value) noexcept {
+    x -= value;
+    y -= value;
+    return *this;
   }
   
   constexpr bool operator==(const Point other) const noexcept {
@@ -75,7 +95,7 @@ struct Size {
   }
 };
 
-constexpr  Size Point::size() const noexcept {
+constexpr Size Point::size() const noexcept {
   return {x, y};
 }
 
@@ -113,9 +133,7 @@ struct Rect {
   }
   
   constexpr Rect intersected(const Rect other) const noexcept {
-    if (empty() || other.empty()) {
-      return {};
-    }
+    if (empty() || other.empty()) return {};
     
     // <algorithm> header is about 20k lines
     const auto max = [](const int a, const int b) {
@@ -139,6 +157,10 @@ struct Rect {
     } else {
       return {};
     }
+  }
+  
+  constexpr bool intersects(const Rect other) const noexcept {
+    return !intersected(other).empty();
   }
   
   bool operator==(const Rect other) const noexcept {
