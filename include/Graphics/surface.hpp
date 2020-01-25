@@ -26,6 +26,8 @@ public:
   
   static_assert(std::is_trivially_copyable_v<Pixel>);
   
+  Surface() noexcept
+    : data_{}, pitch_{}, width_{}, height_{} {}
   Surface(Pixel *data, const ptrdiff_t pitch, const int width, const int height) noexcept
     : data_{data}, pitch_{pitch}, width_{width}, height_{height} {
     assert(data != nullptr);
@@ -56,6 +58,9 @@ public:
     return height_;
   }
   
+  bool null() const noexcept {
+    return data_ == nullptr;
+  }
   Size size() const noexcept {
     return {width_, height_};
   }
