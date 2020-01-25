@@ -44,14 +44,27 @@ bool equal(
   const CSurface<identity_t<Pixel>> b
 ) noexcept {
   if (a.size() != b.size()) return false;
-  if (a.pitch() == b.pitch() && a.pitch() == a.width()) {
-    return std::memcmp(a.data(), b.data(), a.byteSize()) == 0;
+  if constexpr (std::has_unique_object_representations_v<Pixel>) {
+    if (a.pitch() == b.pitch() && a.pitch() == a.width()) {
+      return std::memcmp(a.data(), b.data(), a.byteSize()) == 0;
+    } else {
+      const size_t width = a.byteWidth();
+      auto bRowIter = begin(b);
+      for (auto aRow : range(a)) {
+        if (std::memcmp(aRow.begin(), bRowIter.begin(), width) != 0) {
+          return false;
+        }
+        ++bRowIter;
+      }
+      return true;
+    }
   } else {
-    const size_t width = a.byteWidth();
     auto bRowIter = begin(b);
     for (auto aRow : range(a)) {
-      if (std::memcmp(aRow.begin(), bRowIter.begin(), width) != 0) {
-        return false;
+      const Pixel *bColIter = bRowIter.begin();
+      for (const Pixel aPixel : aRow) {
+        if (aPixel != *bColIter) return false;
+        ++bColIter;
       }
       ++bRowIter;
     }
