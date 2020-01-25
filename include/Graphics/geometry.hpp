@@ -9,6 +9,8 @@
 #ifndef graphics_geometry_hpp
 #define graphics_geometry_hpp
 
+#include <cstddef>
+
 namespace gfx {
 
 struct Size;
@@ -196,6 +198,26 @@ constexpr Rect circleRect(const Point ctr, const int rad, const CircleShape shap
     {2 * rad + 1 + centerOffsetX(shape), 2 * rad + 1 + centerOffsetY(shape)}
   };
 }
+
+}
+
+namespace std {
+
+static_assert(sizeof(size_t) == 8 && sizeof(int) == 4);
+
+template <>
+struct hash<gfx::Point> {
+  size_t operator()(const gfx::Point point) const noexcept {
+    return (static_cast<size_t>(point.x) << 32) | point.y;
+  }
+};
+
+template <>
+struct hash<gfx::Size> {
+  size_t operator()(const gfx::Size size) const noexcept {
+    return (static_cast<size_t>(size.w) << 32) | size.h;
+  }
+};
 
 }
 
