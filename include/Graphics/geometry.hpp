@@ -21,6 +21,10 @@ struct Point {
   
   constexpr Size size() const noexcept;
   
+  constexpr Point transposed() const noexcept {
+    return {y, x};
+  }
+  
   constexpr Point operator-() const noexcept {
     return {-x, -y};
   }
@@ -31,11 +35,15 @@ struct Point {
   constexpr Point operator-(const Point other) const noexcept {
     return {x - other.x, y - other.y};
   }
+  
   constexpr Point operator+(const int value) const noexcept {
     return {x + value, y + value};
   }
   constexpr Point operator-(const int value) const noexcept {
     return {x - value, y - value};
+  }
+  constexpr Point operator*(const int value) const noexcept {
+    return {x * value, y * value};
   }
   
   constexpr Point &operator+=(const Point other) noexcept {
@@ -48,6 +56,7 @@ struct Point {
     y -= other.y;
     return *this;
   }
+  
   constexpr Point &operator+=(const int value) noexcept {
     x += value;
     y += value;
@@ -56,6 +65,11 @@ struct Point {
   constexpr Point &operator-=(const int value) noexcept {
     x -= value;
     y -= value;
+    return *this;
+  }
+  constexpr Point &operator*=(const int value) noexcept {
+    x *= value;
+    y *= value;
     return *this;
   }
   
@@ -87,6 +101,9 @@ struct Size {
   }
   constexpr Size operator-(const int value) const noexcept {
     return {w - value, h - value};
+  }
+  constexpr Size operator*(const int value) const noexcept {
+    return {w * value, h * value};
   }
   
   constexpr bool operator==(const Size other) const noexcept {
