@@ -104,6 +104,13 @@ struct Size {
     return {h, w};
   }
   
+  constexpr Size operator+(const Size other) const noexcept {
+    return {w + other.w, h + other.h};
+  }
+  constexpr Size operator-(const Size other) const noexcept {
+    return {w - other.w, h - other.h};
+  }
+  
   constexpr Size operator+(const int value) const noexcept {
     return {w + value, h + value};
   }
