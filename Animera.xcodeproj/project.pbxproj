@@ -109,6 +109,7 @@
 		45054F6F225970150078350B /* undo object.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "undo object.hpp"; sourceTree = "<group>"; };
 		45054F712259C9AA0078350B /* color picker widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "color picker widget.cpp"; sourceTree = "<group>"; };
 		45054F722259C9AA0078350B /* color picker widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "color picker widget.hpp"; sourceTree = "<group>"; };
+		4508C81923DAAD9E0029A03B /* compare.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = compare.hpp; sourceTree = "<group>"; };
 		4512636422781D7B00C66A19 /* tool colors widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "tool colors widget.cpp"; sourceTree = "<group>"; };
 		4512636522781D7B00C66A19 /* tool colors widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "tool colors widget.hpp"; sourceTree = "<group>"; };
 		4513144522D0503700D66262 /* timeline.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = timeline.cpp; sourceTree = "<group>"; };
@@ -920,6 +921,7 @@
 				45139157231CA5EC001BB0C7 /* porter duff.hpp */,
 				45139158231CB1C9001BB0C7 /* each.hpp */,
 				45B00FFD231D1756000A2519 /* copy.hpp */,
+				4508C81923DAAD9E0029A03B /* compare.hpp */,
 				45B00FFE231D270C000A2519 /* fill.hpp */,
 				45B00FFF231E6553000A2519 /* flood fill.hpp */,
 				45F5EB282321D7A000BB9CEB /* transform.hpp */,
@@ -2045,6 +2047,7 @@
 					/usr/local/Cellar/libpng/1.6.37/lib,
 				);
 				LLVM_LTO = NO;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-Wall",
@@ -2110,6 +2113,7 @@
 					/usr/local/Cellar/libpng/1.6.37/lib,
 				);
 				LLVM_LTO = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-Wall",

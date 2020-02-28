@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'timeline layers widget.hpp'
 **
-** Created by: The Qt Meta Object Compiler version 67 (Qt 5.13.2)
+** Created by: The Qt Meta Object Compiler version 67 (Qt 5.14.1)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -13,7 +13,7 @@
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'timeline layers widget.hpp' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 67
-#error "This file was generated using the moc from 5.13.2. It"
+#error "This file was generated using the moc from 5.14.1. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -136,7 +136,7 @@ void LayerNameWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int 
 }
 
 QT_INIT_METAOBJECT const QMetaObject LayerNameWidget::staticMetaObject = { {
-    &QWidget::staticMetaObject,
+    QMetaObject::SuperData::link<QWidget::staticMetaObject>(),
     qt_meta_stringdata_LayerNameWidget.data,
     qt_meta_data_LayerNameWidget,
     qt_static_metacall,
@@ -299,7 +299,7 @@ void LayersWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
 }
 
 QT_INIT_METAOBJECT const QMetaObject LayersWidget::staticMetaObject = { {
-    &QWidget::staticMetaObject,
+    QMetaObject::SuperData::link<QWidget::staticMetaObject>(),
     qt_meta_stringdata_LayersWidget.data,
     qt_meta_data_LayersWidget,
     qt_static_metacall,
@@ -416,7 +416,7 @@ void LayerScrollWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, in
 }
 
 QT_INIT_METAOBJECT const QMetaObject LayerScrollWidget::staticMetaObject = { {
-    &QScrollArea::staticMetaObject,
+    QMetaObject::SuperData::link<QScrollArea::staticMetaObject>(),
     qt_meta_stringdata_LayerScrollWidget.data,
     qt_meta_data_LayerScrollWidget,
     qt_static_metacall,
@@ -467,7 +467,7 @@ QT_END_MOC_NAMESPACE
 /****************************************************************************
 ** Meta object code from reading C++ file 'timeline layers widget.cpp'
 **
-** Created by: The Qt Meta Object Compiler version 67 (Qt 5.13.2)
+** Created by: The Qt Meta Object Compiler version 67 (Qt 5.14.1)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -478,7 +478,7 @@ QT_END_MOC_NAMESPACE
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'timeline layers widget.cpp' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 67
-#error "This file was generated using the moc from 5.13.2. It"
+#error "This file was generated using the moc from 5.14.1. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -551,7 +551,7 @@ void VisibleWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _i
 }
 
 QT_INIT_METAOBJECT const QMetaObject VisibleWidget::staticMetaObject = { {
-    &IconRadioButtonWidget::staticMetaObject,
+    QMetaObject::SuperData::link<IconRadioButtonWidget::staticMetaObject>(),
     qt_meta_stringdata_VisibleWidget.data,
     qt_meta_data_VisibleWidget,
     qt_static_metacall,

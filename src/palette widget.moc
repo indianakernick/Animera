@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'palette widget.hpp'
 **
-** Created by: The Qt Meta Object Compiler version 67 (Qt 5.13.2)
+** Created by: The Qt Meta Object Compiler version 67 (Qt 5.14.1)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -13,7 +13,7 @@
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'palette widget.hpp' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 67
-#error "This file was generated using the moc from 5.13.2. It"
+#error "This file was generated using the moc from 5.14.1. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -159,7 +159,7 @@ void PaletteWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _i
 }
 
 QT_INIT_METAOBJECT const QMetaObject PaletteWidget::staticMetaObject = { {
-    &QScrollArea::staticMetaObject,
+    QMetaObject::SuperData::link<QScrollArea::staticMetaObject>(),
     qt_meta_stringdata_PaletteWidget.data,
     qt_meta_data_PaletteWidget,
     qt_static_metacall,
@@ -237,7 +237,7 @@ QT_END_MOC_NAMESPACE
 /****************************************************************************
 ** Meta object code from reading C++ file 'palette widget.cpp'
 **
-** Created by: The Qt Meta Object Compiler version 67 (Qt 5.13.2)
+** Created by: The Qt Meta Object Compiler version 67 (Qt 5.14.1)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -248,7 +248,7 @@ QT_END_MOC_NAMESPACE
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'palette widget.cpp' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 67
-#error "This file was generated using the moc from 5.13.2. It"
+#error "This file was generated using the moc from 5.14.1. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -379,7 +379,7 @@ void PaletteColorWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, i
 }
 
 QT_INIT_METAOBJECT const QMetaObject PaletteColorWidget::staticMetaObject = { {
-    &RadioButtonWidget::staticMetaObject,
+    QMetaObject::SuperData::link<RadioButtonWidget::staticMetaObject>(),
     qt_meta_stringdata_PaletteColorWidget.data,
     qt_meta_data_PaletteColorWidget,
     qt_static_metacall,
@@ -599,7 +599,7 @@ void PaletteTableWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, i
 }
 
 QT_INIT_METAOBJECT const QMetaObject PaletteTableWidget::staticMetaObject = { {
-    &QWidget::staticMetaObject,
+    QMetaObject::SuperData::link<QWidget::staticMetaObject>(),
     qt_meta_stringdata_PaletteTableWidget.data,
     qt_meta_data_PaletteTableWidget,
     qt_static_metacall,
