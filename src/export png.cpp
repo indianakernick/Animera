@@ -372,12 +372,12 @@ Error importPng(
   return destroyRead(ctx);
 }
 
-Error exportPng(
+Error exportPalettePng(
   QIODevice &dev,
   const PaletteCSpan palette,
   const Format format
 ) {
-  SCOPE_TIME("exportPng (palette)");
+  SCOPE_TIME("exportPalettePng");
 
   WriteContext ctx;
   ctx.dev = &dev;
@@ -417,12 +417,12 @@ Error exportPng(
   return destroyWrite(ctx);
 }
 
-Error importPng(
+Error importPalettePng(
   QIODevice &dev,
   const PaletteSpan palette,
   const Format format
 ) {
-  SCOPE_TIME("importPng (palette)");
+  SCOPE_TIME("importPalettePng");
 
   ReadContext ctx;
   ctx.dev = &dev;

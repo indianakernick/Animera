@@ -15,7 +15,7 @@
 
 Error exportPng(QIODevice &, PaletteCSpan, QImage, Format, ExportFormat);
 Error importPng(QIODevice &, PaletteSpan, QImage &, Format &);
-Error exportPng(QIODevice &, PaletteCSpan, Format);
-Error importPng(QIODevice &, PaletteSpan, Format);
+Error exportPalettePng(QIODevice &, PaletteCSpan, Format);
+Error importPalettePng(QIODevice &, PaletteSpan, Format);
 
 #endif

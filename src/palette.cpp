@@ -142,14 +142,14 @@ Error Palette::deserialize(QIODevice &dev) {
 Error Palette::save(const QString &path) const {
   FileWriter writer;
   TRY(writer.open(path));
-  TRY(exportPng(writer.dev(), getUsedSpan(colors), canvasFormat));
+  TRY(exportPalettePng(writer.dev(), getUsedSpan(colors), canvasFormat));
   return writer.flush();
 }
 
 Error Palette::open(const QString &path) {
   FileReader reader;
   TRY(reader.open(path));
-  TRY(importPng(reader.dev(), colors, canvasFormat));
+  TRY(importPalettePng(reader.dev(), colors, canvasFormat));
   return reader.flush();
 }
 
