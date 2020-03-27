@@ -77,6 +77,8 @@ private:
   void exportDialog();
   void exportFrame(const QString &);
   void exportFrameDialog();
+  void exportCell(const QString &);
+  void exportCellDialog();
   void openPalette(const QString &);
   void savePalette(const QString &);
   void openPaletteDialog();

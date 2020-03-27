@@ -507,6 +507,7 @@ void WandSelectTool::toggleMode(const ToolMouseDownEvent &event) {
     ctx->changeOverlay(bounds);
     clearImage(selection, bounds);
     copyWithMask(event.pos, mask);
+    // TODO: flood fill optimization
     ctx->shrinkCell();
   } else Q_UNREACHABLE();
 }
@@ -556,7 +557,7 @@ private:
 void WandSelectTool::addToSelection(const ToolMouseDownEvent &event) {
   SCOPE_TIME("WandSelectTool::addToSelection");
   
-  // TODO: do something similar to flood fill optimization
+  // TODO: flood fill optimization
   QRect rect = toRect(ctx->size);
   if (sampleCell(*ctx->cell, event.pos) == 0) {
     ctx->growCell(rect);

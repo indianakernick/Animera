@@ -57,10 +57,11 @@ struct ExportState {
 };
 
 
-// This is quite similar to SpriteInfo in sprite file.hpp
 struct ExportSpriteInfo {
   LayerIdx layers;
   FrameIdx frames;
+  LayerIdx layer;
+  FrameIdx frame;
   Format format;
 };
 
@@ -68,8 +69,13 @@ class Sprite;
 
 ExportSpriteInfo getSpriteInfo(const Sprite &);
 QString getExportPath(const ExportOptions &, ExportState);
-void initDefaultOptions(ExportOptions &, ExportSpriteInfo);
-ExportOptions exportFrameOptions(const QString &, ExportSpriteInfo);
-Error readExportOptions(ExportOptions &, ExportSpriteInfo, const std::map<std::string, docopt::value> &);
+void initDefaultOptions(ExportOptions &, const ExportSpriteInfo &);
+ExportOptions exportFrameOptions(const QString &, const ExportSpriteInfo &);
+ExportOptions exportCellOptions(const QString &, const ExportSpriteInfo &);
+Error readExportOptions(
+  ExportOptions &,
+  const ExportSpriteInfo &,
+  const std::map<std::string, docopt::value> &
+);
 
 #endif

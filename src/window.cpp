@@ -248,8 +248,10 @@ void Window::populateMenubar() {
   ADD_ACTION(file, "Open", key_open_file, *app, openFileDialog);
   ADD_ACTION(file, "Save", key_save_file, *this, saveFile);
   ADD_ACTION(file, "Save As", key_save_file_as, *this, saveFileDialog);
+  file->addSeparator();
   ADD_ACTION(file, "Export", key_export_file, *this, exportDialog);
   ADD_ACTION(file, "Export Frame", key_export_frame, *this, exportFrameDialog);
+  ADD_ACTION(file, "Export Cell", key_export_cell, *this, exportCellDialog);
   
   QMenu *layer = menubar->addMenu("Layer");
   layer->setFont(getGlobalFont());
@@ -472,6 +474,23 @@ void Window::exportFrameDialog() {
   dialog->setNameFilter("PNG Image (*.png)");
   dialog->setDefaultSuffix("png");
   CONNECT(dialog, fileSelected, this, exportFrame);
+  updateDirSettings(dialog, "Export Directory");
+  dialog->open();
+}
+
+void Window::exportCell(const QString &path) {
+  exportSprite(exportCellOptions(path, getSpriteInfo(sprite)));
+}
+
+void Window::exportCellDialog() {
+  // This is nearly identical to exportFrameDialog
+  // TODO: Can we move these dialog functions out of the window class?
+  auto *dialog = new QFileDialog{this};
+  dialog->setAttribute(Qt::WA_DeleteOnClose);
+  dialog->setAcceptMode(QFileDialog::AcceptSave);
+  dialog->setNameFilter("PNG Image (*.png)");
+  dialog->setDefaultSuffix("png");
+  CONNECT(dialog, fileSelected, this, exportCell);
   updateDirSettings(dialog, "Export Directory");
   dialog->open();
 }

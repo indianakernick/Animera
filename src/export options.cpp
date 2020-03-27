@@ -17,7 +17,13 @@
 #include "export pattern.hpp"
 
 ExportSpriteInfo getSpriteInfo(const Sprite &sprite) {
-  return {sprite.timeline.getLayers(), sprite.timeline.getFrames(), sprite.getFormat()};
+  return {
+    sprite.timeline.getLayers(),
+    sprite.timeline.getFrames(),
+    sprite.timeline.getPos().l,
+    sprite.timeline.getPos().f,
+    sprite.getFormat()
+  };
 }
 
 namespace {
@@ -41,15 +47,21 @@ QString getExportPath(const ExportOptions &options, ExportState state) {
   return path;
 }
 
-void initDefaultOptions(ExportOptions &options, const ExportSpriteInfo info) {
-  options.name = "sprite_%000F";
-  options.directory = ".";
+namespace {
+
+void setDefaultLines(ExportOptions &options) {
   options.layerLine = {LayerIdx{1}, LayerIdx{0}};
   options.frameLine = {FrameIdx{1}, FrameIdx{0}};
+}
+
+void setFullSelection(ExportOptions &options, const ExportSpriteInfo &info) {
   options.selection.minL = LayerIdx{};
   options.selection.minF = FrameIdx{};
   options.selection.maxL = info.layers - LayerIdx{1};
   options.selection.maxF = info.frames - FrameIdx{1};
+}
+
+void setFormat(ExportOptions &options, const ExportSpriteInfo &info) {
   switch (info.format) {
     case Format::rgba:
       options.format = ExportFormat::rgba;
@@ -61,24 +73,64 @@ void initDefaultOptions(ExportOptions &options, const ExportSpriteInfo info) {
       options.format = ExportFormat::gray_alpha;
       break;
   }
-  options.visibility = ExportVis::visible;
-  options.scaleX = 1;
-  options.scaleY = 1;
-  options.angle = 0;
-  options.composite = true;
 }
 
-ExportOptions exportFrameOptions(const QString &path, const ExportSpriteInfo info) {
+void setDefaultTransform(ExportOptions &options) {
+  options.scaleX = options.scaleY = 1;
+  options.angle = 0;
+}
+
+void setPath(ExportOptions &options, const QString &path) {
   QString dir = path;
   dir.chop(dir.size() - dir.lastIndexOf('.'));
   const int lastSlash = dir.lastIndexOf(QDir::separator());
   const int nameLen = dir.size() - lastSlash - 1;
   QString name{dir.data() + lastSlash + 1, nameLen};
   dir.chop(nameLen);
-  ExportOptions options;
-  initDefaultOptions(options, info);
   options.name = std::move(name);
   options.directory = std::move(dir);
+}
+
+}
+
+void initDefaultOptions(ExportOptions &options, const ExportSpriteInfo &info) {
+  options.name = "sprite_%000F";
+  options.directory = ".";
+  setDefaultLines(options);
+  setFullSelection(options, info);
+  setFormat(options, info);
+  options.visibility = ExportVis::visible;
+  setDefaultTransform(options);
+  options.composite = true;
+}
+
+ExportOptions exportFrameOptions(const QString &path, const ExportSpriteInfo &info) {
+  ExportOptions options;
+  setPath(options, path);
+  setDefaultLines(options);
+  options.selection.minL = LayerIdx{};
+  options.selection.minF = info.frame;
+  options.selection.maxL = info.layers - LayerIdx{1};
+  options.selection.maxF = info.frame;
+  setFormat(options, info);
+  options.visibility = ExportVis::visible;
+  setDefaultTransform(options);
+  options.composite = true;
+  return options;
+}
+
+ExportOptions exportCellOptions(const QString &path, const ExportSpriteInfo &info) {
+  ExportOptions options;
+  setPath(options, path);
+  setDefaultLines(options);
+  options.selection.minL = info.layer;
+  options.selection.minF = info.frame;
+  options.selection.maxL = info.layer;
+  options.selection.maxF = info.frame;
+  setFormat(options, info);
+  options.visibility = ExportVis::all;
+  setDefaultTransform(options);
+  options.composite = false;
   return options;
 }
 
@@ -353,7 +405,7 @@ Error setScaleAngle(ExportOptions &options, const std::map<std::string, docopt::
 
 Error readExportOptions(
   ExportOptions &options,
-  const ExportSpriteInfo info,
+  const ExportSpriteInfo &info,
   const std::map<std::string, docopt::value> &flags
 ) {
   TRY(setNameDir(options, flags));
