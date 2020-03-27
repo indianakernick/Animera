@@ -222,7 +222,7 @@ void Window::initStyles() {
     "QMenu::item {"
       "background-color: " + glob_main.name() + ";"
       "color: " + glob_text_color.name() + ";"
-      "padding: " + QString::number(glob_text_margin) + "px;"
+      "padding: " + QString::number(glob_text_margin + glob_margin) + "px;"
     "}"
     
     "QMenu::item:selected {"
