@@ -151,6 +151,7 @@ void ToolSelectWidget::initCanvas(const Format format, const QSize size) {
 }
 
 void ToolSelectWidget::setTool(ToolWidget *widget, Tool *tool) {
+  ensureVisible(widget);
   currWidget = widget;
   if (mouseIn) currTool.mouseLeave();
   currTool.setTool(tool);
