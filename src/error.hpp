@@ -22,7 +22,7 @@ public:
   Error(const QString &m)
     : m{m} {}
   
-  template <size_t Size>
+  template <std::size_t Size>
   Error(const char (&str)[Size])
     : m{QLatin1String{str, Size - 1}} {}
   

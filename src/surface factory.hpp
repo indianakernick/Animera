@@ -21,7 +21,7 @@ gfx::Surface<Pixel> makeSurface(QImage &image) {
   return {
     // non-const QImage::bits calls QImage::detach
     reinterpret_cast<Pixel *>(image.bits()),
-    image.bytesPerLine() / ptrdiff_t{sizeof(Pixel)},
+    image.bytesPerLine() / std::ptrdiff_t{sizeof(Pixel)},
     image.width(),
     image.height()
   };
@@ -35,7 +35,7 @@ gfx::CSurface<Pixel> makeSurface(const QImage &image) {
   assert(image.bytesPerLine() % sizeof(Pixel) == 0);
   return {
     reinterpret_cast<const Pixel *>(image.bits()),
-    image.bytesPerLine() / ptrdiff_t{sizeof(Pixel)},
+    image.bytesPerLine() / std::ptrdiff_t{sizeof(Pixel)},
     image.width(),
     image.height()
   };
@@ -57,13 +57,13 @@ auto handleArg(Arg &&arg) noexcept {
   }
 }
 
-template <typename Tuple, size_t... Is>
+template <typename Tuple, std::size_t... Is>
 [[nodiscard]] decltype(auto) visitSurfacesHelper(Tuple tuple, std::index_sequence<Is...>) {
   using Func = std::tuple_element_t<sizeof...(Is), Tuple>;
   switch (std::get<0>(tuple).depth()) {
-    case 32: return std::forward<Func>(std::get<sizeof...(Is)>(tuple))(handleArg<uint32_t>(std::forward<std::tuple_element_t<Is, Tuple>>(std::get<Is>(tuple)))...);
-    case 16: return std::forward<Func>(std::get<sizeof...(Is)>(tuple))(handleArg<uint16_t>(std::forward<std::tuple_element_t<Is, Tuple>>(std::get<Is>(tuple)))...);
-    case 8 : return std::forward<Func>(std::get<sizeof...(Is)>(tuple))(handleArg<uint8_t> (std::forward<std::tuple_element_t<Is, Tuple>>(std::get<Is>(tuple)))...);
+    case 32: return std::forward<Func>(std::get<sizeof...(Is)>(tuple))(handleArg<std::uint32_t>(std::forward<std::tuple_element_t<Is, Tuple>>(std::get<Is>(tuple)))...);
+    case 16: return std::forward<Func>(std::get<sizeof...(Is)>(tuple))(handleArg<std::uint16_t>(std::forward<std::tuple_element_t<Is, Tuple>>(std::get<Is>(tuple)))...);
+    case 8 : return std::forward<Func>(std::get<sizeof...(Is)>(tuple))(handleArg<std::uint8_t> (std::forward<std::tuple_element_t<Is, Tuple>>(std::get<Is>(tuple)))...);
     default: Q_UNREACHABLE();
   }
 }

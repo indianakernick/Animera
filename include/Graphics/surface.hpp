@@ -28,14 +28,14 @@ public:
   
   Surface() noexcept
     : data_{}, pitch_{}, width_{}, height_{} {}
-  Surface(Pixel *data, const ptrdiff_t pitch, const int width, const int height) noexcept
+  Surface(Pixel *data, const std::ptrdiff_t pitch, const int width, const int height) noexcept
     : data_{data}, pitch_{pitch}, width_{width}, height_{height} {
     assert(data != nullptr);
     assert(pitch > 0);
     assert(width > 0);
     assert(height > 0);
   }
-  Surface(Pixel *data, const ptrdiff_t pitch, const Size size) noexcept
+  Surface(Pixel *data, const std::ptrdiff_t pitch, const Size size) noexcept
     : Surface{data, pitch, size.w, size.h} {}
   
   template <typename OtherPixel, typename = std::enable_if_t<
@@ -48,7 +48,7 @@ public:
   Pixel *data() const noexcept {
     return data_;
   }
-  ptrdiff_t pitch() const noexcept {
+  std::ptrdiff_t pitch() const noexcept {
     return pitch_;
   }
   int width() const noexcept {
@@ -68,16 +68,16 @@ public:
     return {{}, size()};
   }
   
-  size_t byteWidth() const noexcept {
+  std::size_t byteWidth() const noexcept {
     return width_ * sizeof(Pixel);
   }
-  size_t bytePitch() const noexcept {
+  std::size_t bytePitch() const noexcept {
     return pitch_ * sizeof(Pixel);
   }
-  size_t byteSize() const noexcept {
+  std::size_t byteSize() const noexcept {
     return width_ * height_ * sizeof(Pixel);
   }
-  size_t wholeByteSize() const noexcept {
+  std::size_t wholeByteSize() const noexcept {
     return pitch_ * height_ * sizeof(Pixel);
   }
   
@@ -86,8 +86,8 @@ public:
     return reinterpret_cast<OtherPixel *>(data_);
   }
   template <typename OtherPixel>
-  ptrdiff_t pitchAs() const noexcept {
-    return pitch_ * ptrdiff_t{sizeof(Pixel)} / ptrdiff_t{sizeof(OtherPixel)};
+  std::ptrdiff_t pitchAs() const noexcept {
+    return pitch_ * std::ptrdiff_t{sizeof(Pixel)} / std::ptrdiff_t{sizeof(OtherPixel)};
   }
   Surface<const Pixel> asConst() const noexcept {
     return *this;
@@ -109,7 +109,7 @@ public:
     return rect().contains(r);
   }
   
-  ptrdiff_t idx(const int x, const int y) const noexcept {
+  std::ptrdiff_t idx(const int x, const int y) const noexcept {
     return y * pitch_ + x;
   }
   Pixel *ptr(const int x, const int y) const noexcept {
@@ -120,7 +120,7 @@ public:
     return *ptr(x, y);
   }
   
-  ptrdiff_t idx(const Point pos) const noexcept {
+  std::ptrdiff_t idx(const Point pos) const noexcept {
     return idx(pos.x, pos.y);
   }
   Pixel *ptr(const Point pos) const noexcept {
@@ -144,7 +144,7 @@ public:
 
 private:
   Pixel *data_;
-  ptrdiff_t pitch_;
+  std::ptrdiff_t pitch_;
   int width_;
   int height_;
 };

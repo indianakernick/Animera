@@ -114,7 +114,7 @@ void fill(const Surface<Pixel> dst, const identity_t<Pixel> pixel) noexcept {
 
 template <typename Pixel>
 void fill(const Surface<Pixel> dst) noexcept {
-  const size_t width = dst.byteWidth();
+  const std::size_t width = dst.byteWidth();
   for (auto row : dst) {
     std::memset(row.begin(), 0, width);
   }

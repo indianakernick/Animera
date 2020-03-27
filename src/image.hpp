@@ -11,7 +11,7 @@
 
 #include <QtGui/qimage.h>
 
-enum class Format : uint8_t {
+enum class Format : std::uint8_t {
   // cli.cpp depends on the order
   rgba,
   index,
@@ -39,24 +39,24 @@ template <typename Pixel>
 constexpr QImage::Format qimageFormat();
 
 template <>
-constexpr QImage::Format qimageFormat<uint8_t>() {
+constexpr QImage::Format qimageFormat<std::uint8_t>() {
   return QImage::Format_Grayscale8;
 }
 
 template <>
-constexpr QImage::Format qimageFormat<uint16_t>() {
+constexpr QImage::Format qimageFormat<std::uint16_t>() {
   return QImage::Format_Grayscale16;
 }
 
 template <>
-constexpr QImage::Format qimageFormat<uint32_t>() {
+constexpr QImage::Format qimageFormat<std::uint32_t>() {
   return QImage::Format_ARGB32;
 }
 
 using PixelRgba = QRgb;
-using PixelIndex = uint8_t;
-using PixelGray = uint16_t;
-using PixelMask = uint8_t;
+using PixelIndex = std::uint8_t;
+using PixelGray = std::uint16_t;
+using PixelMask = std::uint8_t;
 
 bool compatible(const QImage &, const QImage &);
 QImage makeCompatible(const QImage &);

@@ -33,7 +33,7 @@ public:
   const CellSpan *data() const {
     return spans.data();
   }
-  size_t size() const {
+  std::size_t size() const {
     return spans.size();
   }
   auto begin() {
@@ -48,7 +48,7 @@ public:
   auto end() const {
     return spans.end();
   }
-  void resize(const size_t size) {
+  void resize(const std::size_t size) {
     spans.resize(size);
   }
   

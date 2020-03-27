@@ -23,7 +23,7 @@ void ScopeTime::print() {
   std::cout << std::setw(rest_width) << std::left << "Percent of parent time";
   std::cout << '\n';
 
-  const size_t prec = std::cout.precision(num_prec);
+  const std::size_t prec = std::cout.precision(num_prec);
   printImpl(&tree, 0);
   std::cout.precision(prec);
 }

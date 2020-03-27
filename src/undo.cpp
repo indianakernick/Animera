@@ -35,7 +35,7 @@ void UndoStack::modify(Cell cell) {
   assert(!stack.empty());
   stack.erase(stack.begin() + top + 1, stack.end());
   if (stack.size() >= edit_undo_stack) {
-    const size_t oldImages = stack.size() - edit_undo_stack + 1;
+    const std::size_t oldImages = stack.size() - edit_undo_stack + 1;
     stack.erase(stack.begin(), stack.begin() + oldImages);
     top -= oldImages;
   }

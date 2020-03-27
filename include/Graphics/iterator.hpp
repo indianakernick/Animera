@@ -25,14 +25,14 @@ template <typename Pixel>
 class RowIterator {
 public:
   using value_type = ColRange<Pixel>;
-  using difference_type = ptrdiff_t;
+  using difference_type = std::ptrdiff_t;
   using reference = value_type &;
   using pointer = value_type *;
   using iterator_category = std::random_access_iterator_tag;
 
   RowIterator() noexcept
     : data{nullptr}, pitch{0}, width{0} {}
-  RowIterator(Pixel *data, const ptrdiff_t pitch, const ptrdiff_t width) noexcept
+  RowIterator(Pixel *data, const std::ptrdiff_t pitch, const std::ptrdiff_t width) noexcept
     : data{data}, pitch{pitch}, width{width} {}
 
   // This is not technically a random access iterator
@@ -118,8 +118,8 @@ public:
 
 private:
   Pixel *data;
-  ptrdiff_t pitch;
-  ptrdiff_t width;
+  std::ptrdiff_t pitch;
+  std::ptrdiff_t width;
 };
 
 template <typename Pixel>

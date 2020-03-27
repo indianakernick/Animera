@@ -33,7 +33,7 @@ void copy(
   const CSurface<identity_t<Pixel>> src
 ) noexcept {
   assert(dst.size() == src.size());
-  const size_t width = dst.byteWidth();
+  const std::size_t width = dst.byteWidth();
   auto srcRowIter = begin(src);
   for (auto row : range(dst)) {
     std::memcpy(row.begin(), srcRowIter.begin(), width);

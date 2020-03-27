@@ -16,27 +16,27 @@ namespace gfx {
 // TODO: fixed order pixel formats
 
 struct ARGB {
-  using Pixel = uint32_t;
+  using Pixel = std::uint32_t;
 
-  static constexpr uint8_t red(const Pixel pixel) noexcept {
+  static constexpr std::uint8_t red(const Pixel pixel) noexcept {
     return (pixel >> 16) & 0xFF;
   }
-  static constexpr uint8_t green(const Pixel pixel) noexcept {
+  static constexpr std::uint8_t green(const Pixel pixel) noexcept {
     return (pixel >> 8) & 0xFF;
   }
-  static constexpr uint8_t blue(const Pixel pixel) noexcept {
+  static constexpr std::uint8_t blue(const Pixel pixel) noexcept {
     return pixel & 0xFF;
   }
-  static constexpr uint8_t alpha(const Pixel pixel) noexcept {
+  static constexpr std::uint8_t alpha(const Pixel pixel) noexcept {
     return pixel >> 24;
   }
   
   static constexpr Pixel pixel(const int r, const int g, const int b, const int a = 255) noexcept {
     return pixel({
-      static_cast<uint8_t>(r),
-      static_cast<uint8_t>(g),
-      static_cast<uint8_t>(b),
-      static_cast<uint8_t>(a)
+      static_cast<std::uint8_t>(r),
+      static_cast<std::uint8_t>(g),
+      static_cast<std::uint8_t>(b),
+      static_cast<std::uint8_t>(a)
     });
   }
 
@@ -55,7 +55,7 @@ template <typename Target = ARGB>
 struct I {
   const typename Target::Pixel *data;
   
-  using Pixel = uint8_t;
+  using Pixel = std::uint8_t;
   
   Color color(const Pixel pixel) const noexcept {
     assert(data);
@@ -64,17 +64,17 @@ struct I {
 };
 
 struct YA {
-  using Pixel = uint16_t;
+  using Pixel = std::uint16_t;
 
-  static constexpr uint8_t gray(const Pixel pixel) noexcept {
+  static constexpr std::uint8_t gray(const Pixel pixel) noexcept {
     return pixel & 255;
   }
-  static constexpr uint8_t alpha(const Pixel pixel) noexcept {
+  static constexpr std::uint8_t alpha(const Pixel pixel) noexcept {
     return pixel >> 8;
   }
   static constexpr Pixel pixel(const int gray, const int alpha) noexcept {
     return pixel({
-      static_cast<uint8_t>(gray), 0, 0, static_cast<uint8_t>(alpha)
+      static_cast<std::uint8_t>(gray), 0, 0, static_cast<std::uint8_t>(alpha)
     });
   }
 
@@ -88,7 +88,7 @@ struct YA {
 };
 
 struct Y {
-  using Pixel = uint8_t;
+  using Pixel = std::uint8_t;
   
   static constexpr Color color(const Pixel pixel) noexcept {
     return {pixel, pixel, pixel, 255};

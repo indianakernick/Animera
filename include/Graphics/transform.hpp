@@ -50,7 +50,7 @@ void flipVert(Surface<Pixel> dst, CSurface<identity_t<Pixel>> src, Func func) no
 template <typename Pixel>
 void flipVert(Surface<Pixel> dst, CSurface<identity_t<Pixel>> src) noexcept {
   assert(dst.size() == src.size());
-  const size_t width = dst.byteWidth();
+  const std::size_t width = dst.byteWidth();
   auto srcRowIter = end(src);
   for (auto dstRow : range(dst)) {
     --srcRowIter;

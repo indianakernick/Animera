@@ -112,22 +112,22 @@ template <typename Pixel>
 struct PixelFormat;
 
 template <>
-struct PixelFormat<uint8_t> {
+struct PixelFormat<std::uint8_t> {
   // TODO: Interpolating indexed colors. Is this the best we can do?
   using type = gfx::Y;
 };
 
 template <>
-struct PixelFormat<uint16_t> {
+struct PixelFormat<std::uint16_t> {
   using type = gfx::YA;
 };
 
 template <>
-struct PixelFormat<uint32_t> {
+struct PixelFormat<std::uint32_t> {
   using type = gfx::ARGB;
 };
 
-uint8_t interpolate(const uint8_t a, const uint8_t b, const int index, const int size) {
+std::uint8_t interpolate(const std::uint8_t a, const std::uint8_t b, const int index, const int size) {
   // TODO: remove the if
   if (a > b) {
     return scale(size - index, 0, size, b, a);

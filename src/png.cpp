@@ -21,17 +21,17 @@ void pngWarning(png_structp, png_const_charp msg) {
   std::cout << "PNG warning: " << msg << '\n';
 }
 
-void pngWrite(png_structp png, png_bytep data, size_t size) {
+void pngWrite(png_structp png, png_bytep data, std::size_t size) {
   auto *dev = reinterpret_cast<QIODevice *>(png_get_io_ptr(png));
-  const size_t written = dev->write(reinterpret_cast<const char *>(data), size);
+  const std::size_t written = dev->write(reinterpret_cast<const char *>(data), size);
   if (written < size) {
     pngError(png, "Failed to write to output file");
   }
 }
 
-void pngRead(png_structp png, png_bytep data, size_t size) {
+void pngRead(png_structp png, png_bytep data, std::size_t size) {
   auto *dev = reinterpret_cast<QIODevice *>(png_get_io_ptr(png));
-  const size_t read = dev->read(reinterpret_cast<char *>(data), size);
+  const std::size_t read = dev->read(reinterpret_cast<char *>(data), size);
   if (read < size) {
     pngError(png, "Truncated or invalid input file");
   }

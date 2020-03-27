@@ -52,12 +52,12 @@ template <typename DstFormat, typename SrcFormat>
 void compositeFrame(Surface<DstFormat> dst, const Frame &frame, const QPoint dstPos, SrcFormat srcFmt) {
   // Layer 0 is on top of layer 1
   const QRect dstRect = {dstPos, convert(dst.size())};
-  for (size_t c = frame.size() - 1; c != ~size_t{}; --c) {
+  for (std::size_t c = frame.size() - 1; c != ~std::size_t{}; --c) {
     const Cell &cell = *frame[c];
     const QRect cellRect = dstRect.intersected(cell.rect());
     if (cellRect.isEmpty()) continue;
     bool overlap = false;
-    for (size_t d = c + 1; d != frame.size(); ++d) {
+    for (std::size_t d = c + 1; d != frame.size(); ++d) {
       if (cellRect.intersects(frame[d]->rect())) {
         overlap = true;
         break;
@@ -145,8 +145,8 @@ namespace {
 
 PixelRgba rgbaToOverlayPx(const PixelRgba pixel) {
   const gfx::Color color = gfx::ARGB::color(pixel);
-  const uint8_t gray = gfx::gray(color);
-  const uint8_t alpha = scaleOverlayAlpha(color.a);
+  const std::uint8_t gray = gfx::gray(color);
+  const std::uint8_t alpha = scaleOverlayAlpha(color.a);
   return qRgba(gray, gray, gray, alpha);
 }
 

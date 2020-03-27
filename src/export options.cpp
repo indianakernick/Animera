@@ -170,8 +170,8 @@ const char *formatNames[] = {
 };
 
 QString formatNamesList(std::initializer_list<ExportFormat> formats) {
-  return validListStr("formats", formats.size(), [formats](QString &str, size_t i) {
-    str += formatNames[static_cast<size_t>(formats.begin()[i])];
+  return validListStr("formats", formats.size(), [formats](QString &str, std::size_t i) {
+    str += formatNames[static_cast<std::size_t>(formats.begin()[i])];
   });
 }
 

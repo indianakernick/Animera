@@ -19,29 +19,29 @@ class ChunkWriter {
 public:
   explicit ChunkWriter(QIODevice &);
 
-  void begin(uint32_t, const char *);
+  void begin(std::uint32_t, const char *);
   void begin(const char *);
   void end();
   
-  void writeByte(uint8_t);
-  void writeInt(uint32_t);
-  void writeString(const char *, uint32_t);
-  void writeString(const signed char *, uint32_t);
-  void writeString(const unsigned char *, uint32_t);
+  void writeByte(std::uint8_t);
+  void writeInt(std::uint32_t);
+  void writeString(const char *, std::uint32_t);
+  void writeString(const signed char *, std::uint32_t);
+  void writeString(const unsigned char *, std::uint32_t);
 
 private:
   QIODevice &dev;
   unsigned long crc;
   qint64 startPos;
   
-  void writeStart(uint32_t, const char *);
+  void writeStart(std::uint32_t, const char *);
   
   template <typename T>
-  void writeData(const T *, uint32_t);
+  void writeData(const T *, std::uint32_t);
 };
 
 struct ChunkStart {
-  uint32_t length;
+  std::uint32_t length;
   char name[chunk_name_len];
 };
 
@@ -52,11 +52,11 @@ public:
   ChunkStart begin();
   Error end();
   
-  uint8_t readByte();
-  uint32_t readInt();
-  void readString(char *, uint32_t);
-  void readString(signed char *, uint32_t);
-  void readString(unsigned char *, uint32_t);
+  std::uint8_t readByte();
+  std::uint32_t readInt();
+  void readString(char *, std::uint32_t);
+  void readString(signed char *, std::uint32_t);
+  void readString(unsigned char *, std::uint32_t);
 
 private:
   QIODevice &dev;
@@ -64,11 +64,11 @@ private:
   char name[chunk_name_len];
   
   template <typename T>
-  void readData(T *, uint32_t);
+  void readData(T *, std::uint32_t);
 };
 
 Error expectedName(ChunkStart, const char *);
-Error expectedLength(ChunkStart, uint32_t);
-Error expectedNameLength(ChunkStart, const char *, uint32_t);
+Error expectedLength(ChunkStart, std::uint32_t);
+Error expectedNameLength(ChunkStart, const char *, std::uint32_t);
 
 #endif

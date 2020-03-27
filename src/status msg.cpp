@@ -16,7 +16,7 @@ bool StatusMsg::empty() const {
   return msg.empty();
 }
 
-size_t StatusMsg::size() const {
+std::size_t StatusMsg::size() const {
   return msg.size();
 }
 

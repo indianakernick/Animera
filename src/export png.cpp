@@ -63,8 +63,8 @@ Format getFormat(const int colorType) {
 template <typename Func>
 void eachRow(QImage &image, Func func) {
   png_bytep row = image.bits();
-  const ptrdiff_t pitch = image.bytesPerLine();
-  const ptrdiff_t height = image.height();
+  const std::ptrdiff_t pitch = image.bytesPerLine();
+  const std::ptrdiff_t height = image.height();
   const png_bytep endRow = row + pitch * height;
   while (row != endRow) {
     func(row);
@@ -223,11 +223,11 @@ void readPalette(ReadContext &ctx, PaletteSpan palette) {
   if (png_get_tRNS(ctx.png, ctx.info, &trns, &trnsSize, nullptr) != PNG_INFO_tRNS) {
     trnsSize = 0;
   }
-  size_t i = 0;
-  for (; i != static_cast<size_t>(trnsSize); ++i) {
+  std::size_t i = 0;
+  for (; i != static_cast<std::size_t>(trnsSize); ++i) {
     palette[i] = gfx::ARGB::pixel(plte[i].red, plte[i].green, plte[i].blue, trns[i]);
   }
-  for (; i != static_cast<size_t>(plteSize); ++i) {
+  for (; i != static_cast<std::size_t>(plteSize); ++i) {
     palette[i] = gfx::ARGB::pixel(plte[i].red, plte[i].green, plte[i].blue);
   }
   for (; i != pal_colors; ++i) {
@@ -238,8 +238,8 @@ void readPalette(ReadContext &ctx, PaletteSpan palette) {
 void fillRows(
   png_bytepp rowPtr,
   png_bytep row,
-  const ptrdiff_t pitch,
-  const size_t height
+  const std::ptrdiff_t pitch,
+  const std::size_t height
 ) {
   const png_bytep endRow = row + pitch * height;
   while (row != endRow) {
@@ -452,15 +452,15 @@ Error importPng(
   png_set_bgr(ctx.png);
   png_read_update_info(ctx.png, ctx.info);
   
-  const size_t pitch = png_get_rowbytes(ctx.png, ctx.info);
+  const std::size_t pitch = png_get_rowbytes(ctx.png, ctx.info);
   imageData = std::make_unique<png_byte[]>(pitch * height);
   rows = std::make_unique<png_bytep[]>(height);
   fillRows(rows.get(), imageData.get(), pitch, height);
   png_read_image(ctx.png, rows.get());
   
-  const size_t length = std::min(
-    static_cast<size_t>(palette.size()),
-    size_t{width} * height
+  const std::size_t length = std::min(
+    static_cast<std::size_t>(palette.size()),
+    std::size_t{width} * height
   );
   
   auto copy = [palette, length, &imageData](auto bytes) {
@@ -476,9 +476,9 @@ Error importPng(
   };
   
   if (format == Format::gray) {
-    copy(std::integral_constant<size_t, 2>{});
+    copy(std::integral_constant<std::size_t, 2>{});
   } else if (format == Format::rgba || format == Format::index) {
-    copy(std::integral_constant<size_t, 4>{});
+    copy(std::integral_constant<std::size_t, 4>{});
   }
   
   png_read_end(ctx.png, ctx.info);

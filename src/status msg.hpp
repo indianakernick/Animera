@@ -18,7 +18,7 @@ class StatusMsg {
 public:
   void clear();
   bool empty() const;
-  size_t size() const;
+  std::size_t size() const;
   std::string_view get() const;
 
   StatusMsg &append(bool);
@@ -32,7 +32,7 @@ public:
   StatusMsg &append(SelectMode);
   StatusMsg &append(LineGradMode);
   
-  template <size_t Size>
+  template <std::size_t Size>
   StatusMsg &append(const char (&str)[Size]) {
     msg.append(str, Size - 1);
     return *this;

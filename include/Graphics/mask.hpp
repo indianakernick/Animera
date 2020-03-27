@@ -16,16 +16,16 @@
 
 namespace gfx {
 
-constexpr uint8_t mask_off = 0;
-constexpr uint8_t mask_on = 0xFF;
+constexpr std::uint8_t mask_off = 0;
+constexpr std::uint8_t mask_on = 0xFF;
 
 namespace detail {
 
 template <typename Uint>
-Uint spread(const uint8_t byte) noexcept {
+Uint spread(const std::uint8_t byte) noexcept {
   static_assert(std::is_unsigned_v<Uint>);
   static_assert(std::is_integral_v<Uint>);
-  constexpr size_t bits = 8 * (sizeof(Uint) - 1);
+  constexpr std::size_t bits = 8 * (sizeof(Uint) - 1);
   std::make_signed_t<Uint> integer = byte;
   integer <<= bits;
   integer >>= bits; // C++20 says this is a sign extension
@@ -35,8 +35,8 @@ Uint spread(const uint8_t byte) noexcept {
 }
 
 template <typename Pixel>
-void maskClip(const Surface<Pixel> dst, const CSurface<uint8_t> msk) noexcept {
-  each(dst, msk, [](Pixel &dstPx, const uint8_t mskPx) {
+void maskClip(const Surface<Pixel> dst, const CSurface<std::uint8_t> msk) noexcept {
+  each(dst, msk, [](Pixel &dstPx, const std::uint8_t mskPx) {
     dstPx &= detail::spread<Pixel>(mskPx);
   });
 }
@@ -44,7 +44,7 @@ void maskClip(const Surface<Pixel> dst, const CSurface<uint8_t> msk) noexcept {
 template <typename Pixel>
 bool maskClipRegion(
   const Surface<Pixel> dst,
-  const CSurface<uint8_t> msk,
+  const CSurface<std::uint8_t> msk,
   const Point mskPos
 ) noexcept {
   return region(dst, msk, mskPos, [](auto dstView, auto mskView) {
@@ -55,10 +55,10 @@ bool maskClipRegion(
 template <typename Pixel>
 void maskFill(
   const Surface<Pixel> dst,
-  const CSurface<uint8_t> msk,
+  const CSurface<std::uint8_t> msk,
   const identity_t<Pixel> pixel
 ) noexcept {
-  each(dst, msk, [pixel](Pixel &dstPx, const uint8_t mskPx) {
+  each(dst, msk, [pixel](Pixel &dstPx, const std::uint8_t mskPx) {
     const Pixel mask = detail::spread<Pixel>(mskPx);
     dstPx = (dstPx & ~mask) | (pixel & mask);
   });
@@ -67,7 +67,7 @@ void maskFill(
 template <typename Pixel>
 bool maskFillRegion(
   const Surface<Pixel> dst,
-  const CSurface<uint8_t> msk,
+  const CSurface<std::uint8_t> msk,
   const identity_t<Pixel> pixel,
   const Point mskPos
 ) noexcept {
@@ -80,9 +80,9 @@ template <typename Pixel>
 void maskCopy(
   const Surface<Pixel> dst,
   const CSurface<identity_t<Pixel>> src,
-  const CSurface<uint8_t> msk
+  const CSurface<std::uint8_t> msk
 ) noexcept {
-  each(dst, src, msk, [](Pixel &dstPx, const Pixel srcPx, const uint8_t mskPx) {
+  each(dst, src, msk, [](Pixel &dstPx, const Pixel srcPx, const std::uint8_t mskPx) {
     const Pixel mask = detail::spread<Pixel>(mskPx);
     dstPx = (dstPx & ~mask) | (srcPx & mask);
   });
@@ -92,7 +92,7 @@ template <typename Pixel>
 bool maskCopyRegion(
   const Surface<Pixel> dst,
   const CSurface<identity_t<Pixel>> src,
-  const CSurface<uint8_t> msk,
+  const CSurface<std::uint8_t> msk,
   const Point srcPos,
   const Point mskPos
 ) noexcept {

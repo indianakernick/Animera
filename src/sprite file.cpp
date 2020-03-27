@@ -40,14 +40,14 @@ constexpr int byteDepth(const Format format) {
   }
 }
 
-constexpr uint8_t formatByte(const Format format) {
+constexpr std::uint8_t formatByte(const Format format) {
   return byteDepth(format);
 }
 
 void copyToByteOrder(
   unsigned char *dst,
   const unsigned char *src,
-  const size_t size,
+  const std::size_t size,
   const Format format
 ) {
   SCOPE_TIME("copyToByteOrder");
@@ -86,7 +86,7 @@ void copyToByteOrder(
 void copyFromByteOrder(
   unsigned char *dst,
   const unsigned char *src,
-  const size_t size,
+  const std::size_t size,
   const Format format
 ) {
   SCOPE_TIME("copyFromByteOrder");
@@ -142,8 +142,8 @@ Error writeAHDR(QIODevice &dev, const SpriteInfo &info) try {
   writer.begin(5 * file_int_size + 1, chunk_anim_header);
   writer.writeInt(info.width);
   writer.writeInt(info.height);
-  writer.writeInt(static_cast<uint32_t>(info.layers));
-  writer.writeInt(static_cast<uint32_t>(info.frames));
+  writer.writeInt(static_cast<std::uint32_t>(info.layers));
+  writer.writeInt(static_cast<std::uint32_t>(info.frames));
   writer.writeInt(info.delay);
   writer.writeByte(formatByte(info.format));
   writer.end();
@@ -156,8 +156,8 @@ namespace {
 
 Error writeRgba(QIODevice &dev, const PaletteCSpan colors) try {
   ChunkWriter writer{dev};
-  writer.begin(static_cast<uint32_t>(colors.size()) * 4, chunk_palette);
-  for (size_t i = 0; i != colors.size(); ++i) {
+  writer.begin(static_cast<std::uint32_t>(colors.size()) * 4, chunk_palette);
+  for (std::size_t i = 0; i != colors.size(); ++i) {
     const gfx::Color color = gfx::ARGB::color(colors[i]);
     writer.writeByte(color.r);
     writer.writeByte(color.g);
@@ -172,8 +172,8 @@ Error writeRgba(QIODevice &dev, const PaletteCSpan colors) try {
 
 Error writeGray(QIODevice &dev, const PaletteCSpan colors) try {
   ChunkWriter writer{dev};
-  writer.begin(static_cast<uint32_t>(colors.size()) * 2, chunk_palette);
-  for (size_t i = 0; i != colors.size(); ++i) {
+  writer.begin(static_cast<std::uint32_t>(colors.size()) * 2, chunk_palette);
+  for (std::size_t i = 0; i != colors.size(); ++i) {
     const gfx::Color color = gfx::YA::color(colors[i]);
     writer.writeByte(color.r);
     writer.writeByte(color.a);
@@ -204,9 +204,9 @@ Error writeLHDR(QIODevice &dev, const Layer &layer) try {
   SCOPE_TIME("writeLHDR");
 
   ChunkWriter writer{dev};
-  const uint32_t nameLen = static_cast<uint32_t>(layer.name.size());
+  const std::uint32_t nameLen = static_cast<std::uint32_t>(layer.name.size());
   writer.begin(file_int_size + 1 + nameLen, chunk_layer_header);
-  writer.writeInt(static_cast<uint32_t>(layer.spans.size()));
+  writer.writeInt(static_cast<std::uint32_t>(layer.spans.size()));
   writer.writeByte(layer.visible);
   writer.writeString(layer.name.data(), nameLen);
   writer.end();
@@ -220,7 +220,7 @@ Error writeCHDR(QIODevice &dev, const CellSpan &span) try {
 
   ChunkWriter writer{dev};
   writer.begin(chunk_cell_header);
-  writer.writeInt(static_cast<uint32_t>(span.len));
+  writer.writeInt(static_cast<std::uint32_t>(span.len));
   if (*span.cell) {
     const QRect rect = span.cell->rect();
     writer.writeInt(rect.x());
@@ -237,12 +237,12 @@ Error writeCHDR(QIODevice &dev, const CellSpan &span) try {
 Error writeCDAT(QIODevice &dev, const QImage &image, const Format format) try {
   SCOPE_TIME("writeCDAT");
   
-  static_assert(sizeof(uInt) >= sizeof(uint32_t));
+  static_assert(sizeof(uInt) >= sizeof(std::uint32_t));
   
   assert(!image.isNull());
-  const uint32_t outBuffSize = file_buff_size;
+  const std::uint32_t outBuffSize = file_buff_size;
   std::vector<Bytef> outBuff(outBuffSize);
-  const uint32_t inBuffSize = image.width() * byteDepth(format);
+  const std::uint32_t inBuffSize = image.width() * byteDepth(format);
   std::vector<Bytef> inBuff(inBuffSize);
   
   z_stream stream;
@@ -260,7 +260,7 @@ Error writeCDAT(QIODevice &dev, const QImage &image, const Format format) try {
   writer.begin(chunk_cell_data);
   
   int rowIdx = 0;
-  uint32_t remainingChunk = ~uint32_t{};
+  std::uint32_t remainingChunk = ~std::uint32_t{};
   
   do {
     if (stream.avail_in == 0 && rowIdx < image.height()) {
@@ -321,7 +321,7 @@ Error readSignature(QIODevice &dev) {
 
 namespace {
 
-Error readFormatByte(Format &format, const uint8_t byte) {
+Error readFormatByte(Format &format, const std::uint8_t byte) {
   switch (byte) {
     case formatByte(Format::rgba):
       format = Format::rgba;
@@ -353,7 +353,7 @@ Error readAHDR(QIODevice &dev, SpriteInfo &info) try {
   info.layers = static_cast<LayerIdx>(reader.readInt());
   info.frames = static_cast<FrameIdx>(reader.readInt());
   info.delay = reader.readInt();
-  const uint8_t format = reader.readByte();
+  const std::uint8_t format = reader.readByte();
   
   TRY(reader.end());
   
@@ -451,7 +451,7 @@ Error readPLTE(QIODevice &dev, const PaletteSpan colors, const Format format) tr
 
 namespace {
 
-Error readVisibileByte(bool &visible, const uint8_t byte) {
+Error readVisibileByte(bool &visible, const std::uint8_t byte) {
   switch (byte) {
     case 0:
       visible = false;
@@ -476,13 +476,13 @@ Error readLHDR(QIODevice &dev, Layer &layer) try {
   if (start.length <= file_int_size + 1) {
     return "'" + toLatinString(chunk_layer_header) + "' chunk length too small";
   }
-  const uint32_t nameLen = start.length - (file_int_size + 1);
+  const std::uint32_t nameLen = start.length - (file_int_size + 1);
   if (nameLen > layer_name_max_len) {
     return "'" + toLatinString(chunk_layer_header) + "' chunk length too big";
   }
   
-  const uint32_t spans = reader.readInt();
-  const uint8_t visible = reader.readByte();
+  const std::uint32_t spans = reader.readInt();
+  const std::uint8_t visible = reader.readByte();
   
   layer.name.resize(nameLen);
   reader.readString(layer.name.data(), nameLen);
@@ -543,9 +543,9 @@ Error readCDAT(QIODevice &dev, QImage &image, const Format format) try {
   SCOPE_TIME("readCDAT");
 
   assert(!image.isNull());
-  const uint32_t outBuffSize = image.width() * byteDepth(format);
+  const std::uint32_t outBuffSize = image.width() * byteDepth(format);
   std::vector<Bytef> outBuff(outBuffSize);
-  const uint32_t inBuffSize = file_buff_size;
+  const std::uint32_t inBuffSize = file_buff_size;
   std::vector<Bytef> inBuff(inBuffSize);
   
   z_stream stream;
@@ -564,7 +564,7 @@ Error readCDAT(QIODevice &dev, QImage &image, const Format format) try {
   TRY(expectedName(start, chunk_cell_data));
   
   int rowIdx = 0;
-  uint32_t remainingChunk = start.length;
+  std::uint32_t remainingChunk = start.length;
   
   do {
     if (stream.avail_in == 0 && remainingChunk != 0) {

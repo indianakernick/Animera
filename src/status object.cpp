@@ -42,7 +42,7 @@ void StatusObject::updateStatus() {
   StatusMsg status;
   status.append("SCALE: ");
   status.append(scale);
-  const size_t scaleSize = status.size();
+  const std::size_t scaleSize = status.size();
   status.append(" CELLS: ");
   status.append(+frameCount, +layerCount);
   status.append(" CELL: ");

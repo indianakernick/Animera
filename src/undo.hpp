@@ -30,7 +30,7 @@ public:
   
 private:
   std::vector<Cell> stack;
-  size_t top;
+  std::size_t top;
 };
 
 #endif

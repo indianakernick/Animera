@@ -15,7 +15,7 @@
 namespace gfx {
 
 struct Factor {
-  uint8_t a, b;
+  std::uint8_t a, b;
 };
 
 // Porter-Duff compositing with straight alpha
@@ -26,36 +26,36 @@ struct Factor {
 Branchless is about 6 times slower!
 
 inline Color porterDuff(const Factor f, const Color a, const Color b) {
-  const uint32_t cA = a.a*f.a + b.a*f.b;
-  const uint32_t flag = (static_cast<int32_t>(cA == 0) << 31) >> 31;
-  const uint8_t cR = (a.a*f.a*a.r + b.a*f.b*b.r) / (cA | flag);
-  const uint8_t cG = (a.a*f.a*a.g + b.a*f.b*b.g) / (cA | flag);
-  const uint8_t cB = (a.a*f.a*a.b + b.a*f.b*b.b) / (cA | flag);
-  return {cR, cG, cB, static_cast<uint8_t>(cA / 255)};
+  const std::uint32_t cA = a.a*f.a + b.a*f.b;
+  const std::uint32_t flag = (static_cast<std::int32_t>(cA == 0) << 31) >> 31;
+  const std::uint8_t cR = (a.a*f.a*a.r + b.a*f.b*b.r) / (cA | flag);
+  const std::uint8_t cG = (a.a*f.a*a.g + b.a*f.b*b.g) / (cA | flag);
+  const std::uint8_t cB = (a.a*f.a*a.b + b.a*f.b*b.b) / (cA | flag);
+  return {cR, cG, cB, static_cast<std::uint8_t>(cA / 255)};
 }
 */
 
 inline Color porterDuff(const Factor f, const Color a, const Color b) noexcept {
-  const uint32_t cA = a.a*f.a + b.a*f.b;
+  const std::uint32_t cA = a.a*f.a + b.a*f.b;
   if (cA == 0) {
     return {0, 0, 0, 0};
   } else {
-    const uint8_t cR = (a.a*f.a*a.r + b.a*f.b*b.r) / cA;
-    const uint8_t cG = (a.a*f.a*a.g + b.a*f.b*b.g) / cA;
-    const uint8_t cB = (a.a*f.a*a.b + b.a*f.b*b.b) / cA;
-    return {cR, cG, cB, static_cast<uint8_t>(cA / 255)};
+    const std::uint8_t cR = (a.a*f.a*a.r + b.a*f.b*b.r) / cA;
+    const std::uint8_t cG = (a.a*f.a*a.g + b.a*f.b*b.g) / cA;
+    const std::uint8_t cB = (a.a*f.a*a.b + b.a*f.b*b.b) / cA;
+    return {cR, cG, cB, static_cast<std::uint8_t>(cA / 255)};
   }
 }
 
 // Using a lambda to encourage inlining
 #define MODE(NAME, FACTOR_A, FACTOR_B)                                          \
   constexpr auto mode_##NAME = [](                                              \
-    [[maybe_unused]] const uint8_t a,                                           \
-    [[maybe_unused]] const uint8_t b                                            \
+    [[maybe_unused]] const std::uint8_t a,                                           \
+    [[maybe_unused]] const std::uint8_t b                                            \
   ) noexcept {                                                                  \
     return Factor{                                                              \
-      static_cast<uint8_t>(FACTOR_A),                                           \
-      static_cast<uint8_t>(FACTOR_B)                                            \
+      static_cast<std::uint8_t>(FACTOR_A),                                           \
+      static_cast<std::uint8_t>(FACTOR_B)                                            \
     };                                                                          \
   }
 

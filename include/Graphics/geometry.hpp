@@ -238,19 +238,19 @@ constexpr Rect circleRect(const Point ctr, const int rad, const CircleShape shap
 
 namespace std {
 
-static_assert(sizeof(size_t) == 8 && sizeof(int) == 4);
+static_assert(sizeof(std::size_t) == 8 && sizeof(int) == 4);
 
 template <>
 struct hash<gfx::Point> {
-  size_t operator()(const gfx::Point point) const noexcept {
-    return (static_cast<size_t>(point.x) << 32) | point.y;
+  std::size_t operator()(const gfx::Point point) const noexcept {
+    return (static_cast<std::size_t>(point.x) << 32) | point.y;
   }
 };
 
 template <>
 struct hash<gfx::Size> {
-  size_t operator()(const gfx::Size size) const noexcept {
-    return (static_cast<size_t>(size.w) << 32) | size.h;
+  std::size_t operator()(const gfx::Size size) const noexcept {
+    return (static_cast<std::size_t>(size.w) << 32) | size.h;
   }
 };
 

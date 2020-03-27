@@ -14,15 +14,15 @@
 namespace gfx {
 
 struct Color {
-  uint8_t r, g, b, a;
+  std::uint8_t r, g, b, a;
 };
 
-constexpr uint8_t gray(const uint8_t r, const uint8_t g, const uint8_t b) noexcept {
+constexpr std::uint8_t gray(const std::uint8_t r, const std::uint8_t g, const std::uint8_t b) noexcept {
   // https://poynton.ca/notes/colour_and_gamma/ColorFAQ.html#RTFToC9
   return (54 * r + 183 * g + 19 * b) / 256;
 }
 
-constexpr uint8_t gray(const Color color) noexcept {
+constexpr std::uint8_t gray(const Color color) noexcept {
   return gray(color.r, color.g, color.b);
 }
 

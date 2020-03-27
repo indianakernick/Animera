@@ -28,7 +28,7 @@ private:
   Clock::time_point start;
 
   struct TreeNode {
-    size_t calls = 0;
+    std::size_t calls = 0;
     Clock::duration time;
     std::unordered_map<const char *, TreeNode> children;
     const char *name;

@@ -347,10 +347,10 @@ constexpr int        erro_wrap_width = 40;
 
 // ------------------------------- file format ------------------------------ //
 
-constexpr size_t file_sig_len = 8;
+constexpr std::size_t file_sig_len = 8;
 constexpr char file_sig[file_sig_len] = "animera";
 
-constexpr size_t chunk_name_len = 4;
+constexpr std::size_t chunk_name_len = 4;
 constexpr char chunk_palette[chunk_name_len + 1] = "PLTE";
 constexpr char chunk_anim_header[chunk_name_len + 1] = "AHDR";
 constexpr char chunk_layer_header[chunk_name_len + 1] = "LHDR";
@@ -358,13 +358,13 @@ constexpr char chunk_cell_header[chunk_name_len + 1] = "CHDR";
 constexpr char chunk_cell_data[chunk_name_len + 1] = "CDAT";
 constexpr char chunk_anim_end[chunk_name_len + 1] = "AEND";
 
-constexpr size_t file_buff_size = 1 << 15;
-constexpr size_t file_int_size = 4;
+constexpr std::size_t file_buff_size = 1 << 15;
+constexpr std::size_t file_int_size = 4;
 
-static_assert(sizeof(int) >= sizeof(uint32_t));
+static_assert(sizeof(int) >= sizeof(std::uint32_t));
 
 // TODO: enforce max image size
-constexpr int max_image_width = ~uint32_t{} / 4;
+constexpr int max_image_width = ~std::uint32_t{} / 4;
 constexpr int max_image_height = max_image_width;
 
 // ---------------------------------- tools --------------------------------- //

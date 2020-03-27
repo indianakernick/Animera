@@ -57,7 +57,7 @@ const char *formatNames[] = {
 };
 
 ExportFormat formatFromString(const QString &format) {
-  for (size_t f = 0; f != std::size(formatNames); ++f) {
+  for (std::size_t f = 0; f != std::size(formatNames); ++f) {
     if (format == formatNames[f]) {
       return static_cast<ExportFormat>(f);
     }
@@ -66,7 +66,7 @@ ExportFormat formatFromString(const QString &format) {
 }
 
 QString formatToString(const ExportFormat format) {
-  return formatNames[static_cast<size_t>(format)];
+  return formatNames[static_cast<std::size_t>(format)];
 }
 
 }

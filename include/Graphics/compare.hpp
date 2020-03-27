@@ -48,7 +48,7 @@ bool equal(
     if (a.pitch() == b.pitch() && a.pitch() == a.width()) {
       return std::memcmp(a.data(), b.data(), a.byteSize()) == 0;
     } else {
-      const size_t width = a.byteWidth();
+      const std::size_t width = a.byteWidth();
       auto bRowIter = begin(b);
       for (auto aRow : range(a)) {
         if (std::memcmp(aRow.begin(), bRowIter.begin(), width) != 0) {
@@ -85,7 +85,7 @@ bool equal(
   const CSurface<Pixel> src,
   const identity_t<Pixel> pixel
 ) noexcept {
-  // TODO: pack small pixels into a uint64_t
+  // TODO: pack small pixels into a std::uint64_t
   for (auto srcRow : range(src)) {
     for (const Pixel srcPixel : srcRow) {
       if (srcPixel != pixel) return false;
