@@ -95,10 +95,10 @@ Error Exporter::exportImage(const ExportState state) {
   FileWriter writer;
   TRY(writer.open(getExportPath(options, state)));
   if (xformed.isNull()) {
-    TRY(exportPng(writer.dev(), palette, image, format, options.format));
+    TRY(exportCellPng(writer.dev(), palette, image, format, options.format));
   } else {
     applyTransform();
-    TRY(exportPng(writer.dev(), palette, xformed, format, options.format));
+    TRY(exportCellPng(writer.dev(), palette, xformed, format, options.format));
   }
   return writer.flush();
 }

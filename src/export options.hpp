@@ -56,7 +56,6 @@ struct ExportState {
   // Could add layer name to this
 };
 
-
 struct ExportSpriteInfo {
   LayerIdx layers;
   FrameIdx frames;

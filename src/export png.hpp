@@ -13,9 +13,17 @@
 #include "palette span.hpp"
 #include "export options.hpp"
 
-Error exportPng(QIODevice &, PaletteCSpan, QImage, Format, ExportFormat);
-Error importPng(QIODevice &, PaletteSpan, QImage &, Format &);
+/// Export a cell as a PNG
+Error exportCellPng(QIODevice &, PaletteCSpan, QImage, Format, ExportFormat);
+/// Import a cell as a PNG
+Error importCellPng(QIODevice &, QImage &, Format);
+
+/// Import a sprite as a PNG
+Error importSpritePng(QIODevice &, PaletteSpan, QImage &, Format &);
+
+/// Export the palette as a PNG
 Error exportPalettePng(QIODevice &, PaletteCSpan, Format);
+/// Import the palette as a PNG
 Error importPalettePng(QIODevice &, PaletteSpan, Format);
 
 #endif

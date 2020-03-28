@@ -44,6 +44,7 @@ public:
   void optimize();
   void change();
   Error openImage(const QString &, PaletteSpan, Format &, QSize &);
+  Error importImage(const QString &);
 
   Error serializeHead(QIODevice &) const;
   Error serializeBody(QIODevice &) const;

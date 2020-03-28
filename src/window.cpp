@@ -252,6 +252,9 @@ void Window::populateMenubar() {
   ADD_ACTION(file, "Export", key_export_file, *this, exportDialog);
   ADD_ACTION(file, "Export Frame", key_export_frame, *this, exportFrameDialog);
   ADD_ACTION(file, "Export Cell", key_export_cell, *this, exportCellDialog);
+  file->addSeparator();
+  // ADD_ACTION(file, "Import", QString{"CTRL+I"}, *this, exportDialog);
+  ADD_ACTION(file, "Import Cell", key_import_cell, *this, importCellDialog);
   
   QMenu *layer = menubar->addMenu("Layer");
   layer->setFont(getGlobalFont());
@@ -492,6 +495,24 @@ void Window::exportCellDialog() {
   dialog->setDefaultSuffix("png");
   CONNECT(dialog, fileSelected, this, exportCell);
   updateDirSettings(dialog, "Export Directory");
+  dialog->open();
+}
+
+void Window::importCell(const QString &path) {
+  if (Error err = sprite.timeline.importImage(path); err) {
+    (new ErrorDialog{this, "Import error", err.msg()})->open();
+  }
+}
+
+void Window::importCellDialog() {
+  // TODO: This is very similar to openPaletteDialog
+  auto *dialog = new QFileDialog{this};
+  dialog->setAttribute(Qt::WA_DeleteOnClose);
+  dialog->setAcceptMode(QFileDialog::AcceptOpen);
+  dialog->setNameFilter("PNG Image (*.png)");
+  dialog->setFileMode(QFileDialog::ExistingFile);
+  CONNECT(dialog, fileSelected, this, importCell);
+  updateDirSettings(dialog, "Import Directory");
   dialog->open();
 }
 

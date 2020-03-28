@@ -251,14 +251,14 @@ void fillRows(
 
 }
 
-Error exportPng(
+Error exportCellPng(
   QIODevice &dev,
   const PaletteCSpan palette,
   QImage image,
   const Format canvasFormat,
   const ExportFormat exportFormat
 ) {
-  SCOPE_TIME("exportPng");
+  SCOPE_TIME("exportCellPng");
 
   WriteContext ctx;
   ctx.dev = &dev;
@@ -327,13 +327,62 @@ Error exportPng(
   return destroyWrite(ctx);
 }
 
-Error importPng(
+Error importCellPng(
+  QIODevice &dev,
+  QImage &image,
+  const Format format
+) {
+  // TODO: This is extemely similar to importSpritePng
+  SCOPE_TIME("importCellPng");
+  
+  ReadContext ctx;
+  ctx.dev = &dev;
+  TRY(initRead(ctx));
+  std::unique_ptr<png_bytep[]> rows;
+  
+  if (setjmp(png_jmpbuf(ctx.png))) {
+    return destroyRead(ctx);
+  }
+  
+  png_read_info(ctx.png, ctx.info);
+  png_uint_32 width, height;
+  int colorType;
+  png_get_IHDR(ctx.png, ctx.info, &width, &height, 0, &colorType, 0, 0, 0);
+  png_set_interlace_handling(ctx.png);
+  png_set_strip_16(ctx.png);
+  png_set_packing(ctx.png);
+  if (!(colorType & PNG_COLOR_MASK_PALETTE) && !(colorType & PNG_COLOR_MASK_ALPHA)) {
+    png_set_filler(ctx.png, 255, PNG_FILLER_AFTER);
+  }
+  png_set_bgr(ctx.png);
+  png_read_update_info(ctx.png, ctx.info);
+  
+  if (getFormat(colorType) != format) {
+    // TODO: We could definitly convert the imported PNG to match in some cases
+    // gray -> rgba
+    // index -> rgba
+    // TODO: If we import indexed into indexed, the palette might not match
+    return "Format of imported PNG does not match format of sprite";
+  }
+  
+  image = {static_cast<int>(width), static_cast<int>(height), qimageFormat(format)};
+  
+  rows = std::make_unique<png_bytep[]>(height);
+  fillRows(rows.get(), image.bits(), image.bytesPerLine(), height);
+  png_read_image(ctx.png, rows.get());
+  
+  png_read_end(ctx.png, ctx.info);
+  
+  return destroyRead(ctx);
+}
+
+Error importSpritePng(
   QIODevice &dev,
   const PaletteSpan palette,
   QImage &image,
   Format &format
 ) {
-  SCOPE_TIME("importPng");
+  SCOPE_TIME("importSpritePng");
 
   ReadContext ctx;
   ctx.dev = &dev;

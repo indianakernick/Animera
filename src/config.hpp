@@ -433,6 +433,7 @@ constexpr auto       key_save_file_as = QKeySequence::SaveAs;
 inline const QString key_export_file = "CTRL+E";
 inline const QString key_export_frame = "CTRL+SHIFT+E";
 inline const QString key_export_cell = "CTRL+ALT+E";
+inline const QString key_import_cell = "CTRL+ALT+I";
 
 // layer
 inline const QString key_new_layer = "SHIFT+N";

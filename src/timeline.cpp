@@ -63,7 +63,7 @@ Error Timeline::openImage(
   QImage image;
   FileReader reader;
   TRY(reader.open(path));
-  TRY(importPng(reader.dev(), palette, image, format));
+  TRY(importSpritePng(reader.dev(), palette, image, format));
   TRY(reader.flush());
   canvasFormat = format;
   canvasSize = size = image.size();
@@ -76,6 +76,24 @@ Error Timeline::openImage(
   layers.push_back(std::move(layer));
   selection = empty_rect;
   delay = ctrl_delay.def;
+  return {};
+}
+
+Error Timeline::importImage(const QString &path) {
+  QImage image;
+  FileReader reader;
+  TRY(reader.open(path));
+  TRY(importCellPng(reader.dev(), image, canvasFormat));
+  TRY(reader.flush());
+  
+  Cell *cell = getCell(currPos);
+  cell->pos = {};
+  cell->img = std::move(image);
+  
+  changeFrame();
+  changeCell();
+  changeSpan(currPos.l);
+  Q_EMIT modified();
   return {};
 }
 
