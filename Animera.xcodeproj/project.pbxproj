@@ -1100,7 +1100,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/opt/qt/bin/rcc --no-compress --output \"$PROJECT_DIR/src/resources.cpp\" \"$PROJECT_DIR/Resources/resources.qrc\"\n";
+			shellScript = "/usr/local/opt/qt/bin/rcc --no-compress --namespace --output \"$PROJECT_DIR/src/resources.cpp\" \"$PROJECT_DIR/Resources/resources.qrc\"\n";
 		};
 		455F288A2206A17600C73F39 /* Mac Deploy */ = {
 			isa = PBXShellScriptBuildPhase;
