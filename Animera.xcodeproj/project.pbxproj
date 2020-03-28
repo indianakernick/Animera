@@ -347,13 +347,13 @@
 		45D109AE22E2D88500D1F1CB /* export dialog.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "export dialog.hpp"; sourceTree = "<group>"; };
 		45D109B022E304A300D1F1CB /* combo box widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "combo box widget.cpp"; sourceTree = "<group>"; };
 		45D109B122E304A300D1F1CB /* combo box widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "combo box widget.hpp"; sourceTree = "<group>"; };
+		45D9DC7C242F04B4001ACE37 /* title@8x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "title@8x.png"; sourceTree = "<group>"; };
 		45DAE12323249C22001E593C /* region.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = region.hpp; sourceTree = "<group>"; };
 		45DAE1242324A272001E593C /* mask.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = mask.hpp; sourceTree = "<group>"; };
 		45DAE1252324B5E1001E593C /* convert.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = convert.hpp; sourceTree = "<group>"; };
 		45DAE1262324BC49001E593C /* draw.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = draw.hpp; sourceTree = "<group>"; };
 		45DC255F224A034200F40116 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		45DC2562224A0AEA00F40116 /* title.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = title.png; sourceTree = "<group>"; };
-		45DC2563224A0AEA00F40116 /* title@4x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "title@4x.png"; sourceTree = "<group>"; };
 		45DC2564224B137C00F40116 /* status msg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "status msg.cpp"; sourceTree = "<group>"; };
 		45DC2565224B137C00F40116 /* status msg.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "status msg.hpp"; sourceTree = "<group>"; };
 		45DECE1422813AA2000920A9 /* surface factory.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "surface factory.hpp"; sourceTree = "<group>"; };
@@ -678,7 +678,7 @@
 			children = (
 				45B284972219003B00D6D055 /* icon.png */,
 				45DC2562224A0AEA00F40116 /* title.png */,
-				45DC2563224A0AEA00F40116 /* title@4x.png */,
+				45D9DC7C242F04B4001ACE37 /* title@8x.png */,
 				452926E222BB607E00B17E0D /* screenshot.png */,
 			);
 			path = Logo;

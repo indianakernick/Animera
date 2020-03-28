@@ -1,6 +1,6 @@
-![Title](https://i.imgur.com/1JFTkvd.png)
+![Title](https://i.imgur.com/iV3U1Ve.png)
 
-### If a picture is a thousand words then a gif is what, a million words?
+### A cross-platform Qt tool for making pixel-art animations for games
 
 ![Screenshot](https://i.imgur.com/J3uSFnF.png)
 
