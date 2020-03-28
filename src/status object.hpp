@@ -30,7 +30,7 @@ Q_SIGNALS:
   void shouldShowApnd(std::string_view);
 
 private:
-  int scale;
+  int scale = 1;
   CellPos currPos;
   CellRect selection;
   FrameIdx frameCount;
