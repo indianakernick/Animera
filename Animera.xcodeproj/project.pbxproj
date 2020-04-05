@@ -975,6 +975,7 @@
 				453C787B2235D63B00818B19 /* RCC */,
 				455F284D220688FD00C73F39 /* Sources */,
 				455F284E220688FD00C73F39 /* Frameworks */,
+				452162832439552F00719467 /* Export Icon */,
 				455F284F220688FD00C73F39 /* Resources */,
 				455F288A2206A17600C73F39 /* Mac Deploy */,
 				457D74FC239F8B06009B4E4B /* Trim */,
@@ -1061,6 +1062,32 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		452162832439552F00719467 /* Export Icon */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(PROJECT_DIR)/Sprites/icon.animera",
+			);
+			name = "Export Icon";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(PROJECT_DIR)/Assets.xcassets/AppIcon.appiconset/16.png",
+				"$(PROJECT_DIR)/Assets.xcassets/AppIcon.appiconset/32.png",
+				"$(PROJECT_DIR)/Assets.xcassets/AppIcon.appiconset/64.png",
+				"$(PROJECT_DIR)/Assets.xcassets/AppIcon.appiconset/128.png",
+				"$(PROJECT_DIR)/Assets.xcassets/AppIcon.appiconset/256.png",
+				"$(PROJECT_DIR)/Assets.xcassets/AppIcon.appiconset/512.png",
+				"$(PROJECT_DIR)/Assets.xcassets/AppIcon.appiconset/1024.png",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "alias Animera=\"$BUILT_PRODUCTS_DIR/$EXECUTABLE_PATH\"\nOUT=\"$PROJECT_DIR/Assets.xcassets/AppIcon.appiconset/\"\nIN=\"$PROJECT_DIR/Sprites/icon.animera\"\n\nfunction ex {\n  Animera export --name=\"$1\" --directory=\"$OUT\" --no-composite --scale=$2 \"$IN\"\n}\n\nex 16 1\nex 32 2\nex 64 4\nex 128 8\nex 256 16\nex 512 32\nex 1024 64\n";
+		};
 		4529AA0A239CE3D00034A014 /* Moc - quit dialog */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
