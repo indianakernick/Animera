@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef timeline_widget_hpp
-#define timeline_widget_hpp
+#ifndef animera_timeline_widget_hpp
+#define animera_timeline_widget_hpp
 
 #include <span>
 #include "cell.hpp"

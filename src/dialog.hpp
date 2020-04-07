@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef dialog_hpp
-#define dialog_hpp
+#ifndef animera_dialog_hpp
+#define animera_dialog_hpp
 
 #include <QtWidgets/qdialog.h>
 

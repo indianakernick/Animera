@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef file_input_widget_hpp
-#define file_input_widget_hpp
+#ifndef animera_file_input_widget_hpp
+#define animera_file_input_widget_hpp
 
 #include <QtWidgets/qwidget.h>
 

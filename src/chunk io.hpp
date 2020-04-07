@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef chunk_io_hpp
-#define chunk_io_hpp
+#ifndef animera_chunk_io_hpp
+#define animera_chunk_io_hpp
 
 #include "error.hpp"
 #include "config.hpp"

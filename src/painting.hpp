@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef painting_hpp
-#define painting_hpp
+#ifndef animera_painting_hpp
+#define animera_painting_hpp
 
 #include <QtGui/qimage.h>
 #include "paint params.hpp"

@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef label_widget_hpp
-#define label_widget_hpp
+#ifndef animera_label_widget_hpp
+#define animera_label_widget_hpp
 
 #include "config.hpp"
 #include <QtWidgets/qwidget.h>

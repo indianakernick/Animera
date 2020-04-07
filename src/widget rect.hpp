@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef widget_rect_hpp
-#define widget_rect_hpp
+#ifndef animera_widget_rect_hpp
+#define animera_widget_rect_hpp
 
 #include <QtCore/qrect.h>
 

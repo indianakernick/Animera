@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef scope_time_hpp
-#define scope_time_hpp
+#ifndef animera_scope_time_hpp
+#define animera_scope_time_hpp
 
 #ifdef ENABLE_SCOPE_TIME
 

@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef undo_object_hpp
-#define undo_object_hpp
+#ifndef animera_undo_object_hpp
+#define animera_undo_object_hpp
 
 #include "undo.hpp"
 #include "cell.hpp"

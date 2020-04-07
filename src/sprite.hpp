@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef sprite_hpp
-#define sprite_hpp
+#ifndef animera_sprite_hpp
+#define animera_sprite_hpp
 
 #include "error.hpp"
 #include "palette.hpp"

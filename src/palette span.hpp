@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef palette_span_hpp
-#define palette_span_hpp
+#ifndef animera_palette_span_hpp
+#define animera_palette_span_hpp
 
 #include <span>
 #include <array>

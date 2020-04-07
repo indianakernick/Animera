@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef flood_fill_tool_hpp
-#define flood_fill_tool_hpp
+#ifndef animera_flood_fill_tool_hpp
+#define animera_flood_fill_tool_hpp
 
 #include "tool.hpp"
 

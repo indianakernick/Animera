@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef image_hpp
-#define image_hpp
+#ifndef animera_image_hpp
+#define animera_image_hpp
 
 #include <QtGui/qimage.h>
 

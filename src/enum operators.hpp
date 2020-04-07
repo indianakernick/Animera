@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef enum_operators_hpp
-#define enum_operators_hpp
+#ifndef animera_enum_operators_hpp
+#define animera_enum_operators_hpp
 
 #include <type_traits>
 

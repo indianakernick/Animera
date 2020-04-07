@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef text_push_button_widget_hpp
-#define text_push_button_widget_hpp
+#ifndef animera_text_push_button_widget_hpp
+#define animera_text_push_button_widget_hpp
 
 #include "config.hpp"
 #include <QtWidgets/qabstractbutton.h>

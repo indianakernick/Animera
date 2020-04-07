@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef file_io_error_hpp
-#define file_io_error_hpp
+#ifndef animera_file_io_error_hpp
+#define animera_file_io_error_hpp
 
 #include <exception>
 

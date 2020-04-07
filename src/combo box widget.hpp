@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef combo_box_widget_hpp
-#define combo_box_widget_hpp
+#ifndef animera_combo_box_widget_hpp
+#define animera_combo_box_widget_hpp
 
 #include "config.hpp"
 #include <QtWidgets/qwidget.h>

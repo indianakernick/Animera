@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef select_tools_hpp
-#define select_tools_hpp
+#ifndef animera_select_tools_hpp
+#define animera_select_tools_hpp
 
 #include "tool.hpp"
 #include <QtCore/qtimer.h>

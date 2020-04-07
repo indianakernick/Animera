@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef status_object_hpp
-#define status_object_hpp
+#ifndef animera_status_object_hpp
+#define animera_status_object_hpp
 
 #include "cell.hpp"
 #include <QtCore/qobject.h>

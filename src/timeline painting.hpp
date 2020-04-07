@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef timeline_painting_hpp
-#define timeline_painting_hpp
+#ifndef animera_timeline_painting_hpp
+#define animera_timeline_painting_hpp
 
 class QPixmap;
 class QString;

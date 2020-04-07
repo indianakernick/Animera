@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef tool_param_bar_widget_hpp
-#define tool_param_bar_widget_hpp
+#ifndef animera_tool_param_bar_widget_hpp
+#define animera_tool_param_bar_widget_hpp
 
 #include <QtWidgets/qwidget.h>
 

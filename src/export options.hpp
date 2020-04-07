@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef export_options_hpp
-#define export_options_hpp
+#ifndef animera_export_options_hpp
+#define animera_export_options_hpp
 
 #include "cell.hpp"
 #include "docopt.h"

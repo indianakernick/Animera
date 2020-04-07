@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef zlib_hpp
-#define zlib_hpp
+#ifndef animera_zlib_hpp
+#define animera_zlib_hpp
 
 #define ZLIB_CONST
 

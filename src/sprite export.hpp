@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef sprite_export_hpp
-#define sprite_export_hpp
+#ifndef animera_sprite_export_hpp
+#define animera_sprite_export_hpp
 
 #include "error.hpp"
 #include "cell span.hpp"

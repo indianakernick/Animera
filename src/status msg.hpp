@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef status_msg_hpp
-#define status_msg_hpp
+#ifndef animera_status_msg_hpp
+#define animera_status_msg_hpp
 
 #include <string>
 #include <string_view>

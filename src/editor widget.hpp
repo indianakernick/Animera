@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef editor_widget_hpp
-#define editor_widget_hpp
+#ifndef animera_editor_widget_hpp
+#define animera_editor_widget_hpp
 
 #include "tool.hpp"
 #include "cell.hpp"

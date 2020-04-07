@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef math_hpp
-#define math_hpp
+#ifndef animera_math_hpp
+#define animera_math_hpp
 
 constexpr int scaleImpl(
   const int value,

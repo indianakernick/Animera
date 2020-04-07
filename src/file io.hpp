@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef file_io_hpp
-#define file_io_hpp
+#ifndef animera_file_io_hpp
+#define animera_file_io_hpp
 
 #include "error.hpp"
 #include <QtCore/qfile.h>

@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef init_canvas_dialog_hpp
-#define init_canvas_dialog_hpp
+#ifndef animera_init_canvas_dialog_hpp
+#define animera_init_canvas_dialog_hpp
 
 #include "image.hpp"
 #include "dialog.hpp"

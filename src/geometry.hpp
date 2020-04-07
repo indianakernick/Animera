@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef geometry_hpp
-#define geometry_hpp
+#ifndef animera_geometry_hpp
+#define animera_geometry_hpp
 
 #include <QtCore/qrect.h>
 

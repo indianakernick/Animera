@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef timeline_controls_widget_hpp
-#define timeline_controls_widget_hpp
+#ifndef animera_timeline_controls_widget_hpp
+#define animera_timeline_controls_widget_hpp
 
 #include <QtCore/qtimer.h>
 #include "color input widget.hpp"

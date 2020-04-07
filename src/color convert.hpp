@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef color_convert_hpp
-#define color_convert_hpp
+#ifndef animera_color_convert_hpp
+#define animera_color_convert_hpp
 
 #include <QtGui/qcolor.h>
 

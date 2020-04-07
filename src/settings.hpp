@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef settings_hpp
-#define settings_hpp
+#ifndef animera_settings_hpp
+#define animera_settings_hpp
 
 #include <QtCore/qsettings.h>
 

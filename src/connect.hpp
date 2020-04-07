@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef connect_hpp
-#define connect_hpp
+#ifndef animera_connect_hpp
+#define animera_connect_hpp
 
 #include <type_traits>
 #include <QtCore/qobject.h>

@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef palette_hpp
-#define palette_hpp
+#ifndef animera_palette_hpp
+#define animera_palette_hpp
 
 #include "error.hpp"
 #include "image.hpp"

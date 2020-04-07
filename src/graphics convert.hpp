@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef graphics_convert_hpp
-#define graphics_convert_hpp
+#ifndef animera_graphics_convert_hpp
+#define animera_graphics_convert_hpp
 
 #include <QtCore/qrect.h>
 #include <Graphics/geometry.hpp>

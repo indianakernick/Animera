@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef color_slider_widget_hpp
-#define color_slider_widget_hpp
+#ifndef animera_color_slider_widget_hpp
+#define animera_color_slider_widget_hpp
 
 #include "color convert.hpp"
 #include <QtWidgets/qwidget.h>

@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef undo_hpp
-#define undo_hpp
+#ifndef animera_undo_hpp
+#define animera_undo_hpp
 
 #include <vector>
 #include "cell.hpp"

@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef error_hpp
-#define error_hpp
+#ifndef animera_error_hpp
+#define animera_error_hpp
 
 #include <cassert>
 #include <QtCore/qstring.h>

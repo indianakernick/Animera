@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef tool_select_widget_hpp
-#define tool_select_widget_hpp
+#ifndef animera_tool_select_widget_hpp
+#define animera_tool_select_widget_hpp
 
 #include "status msg.hpp"
 #include "current tool.hpp"

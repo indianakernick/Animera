@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef color_handle_hpp
-#define color_handle_hpp
+#ifndef animera_color_handle_hpp
+#define animera_color_handle_hpp
 
 #include <QtGui/qrgb.h>
 #include <QtCore/qstring.h>

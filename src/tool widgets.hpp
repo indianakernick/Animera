@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef tool_widgets_hpp
-#define tool_widgets_hpp
+#ifndef animera_tool_widgets_hpp
+#define animera_tool_widgets_hpp
 
 #include "brush tool.hpp"
 #include "select tools.hpp"

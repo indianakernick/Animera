@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef scroll_bar_widget_hpp
-#define scroll_bar_widget_hpp
+#ifndef animera_scroll_bar_widget_hpp
+#define animera_scroll_bar_widget_hpp
 
 #include <QtWidgets/qscrollbar.h>
 #include <QtWidgets/qscrollarea.h>

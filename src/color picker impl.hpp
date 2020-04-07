@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef color_picker_impl_hpp
-#define color_picker_impl_hpp
+#ifndef animera_color_picker_impl_hpp
+#define animera_color_picker_impl_hpp
 
 #include <QtGui/qrgb.h>
 #include <QtCore/qobject.h>

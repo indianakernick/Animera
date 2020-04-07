@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef config_hpp
-#define config_hpp
+#ifndef animera_config_hpp
+#define animera_config_hpp
 
 #include "math.hpp"
 #include "geometry.hpp"

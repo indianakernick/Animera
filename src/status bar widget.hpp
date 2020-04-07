@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef status_bar_widget_hpp
-#define status_bar_widget_hpp
+#ifndef animera_status_bar_widget_hpp
+#define animera_status_bar_widget_hpp
 
 #include <string_view>
 #include <QtCore/qtimer.h>

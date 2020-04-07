@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef strings_hpp
-#define strings_hpp
+#ifndef animera_strings_hpp
+#define animera_strings_hpp
 
 #include <QtCore/qstring.h>
 

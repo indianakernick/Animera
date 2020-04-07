@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef radio_button_widget_hpp
-#define radio_button_widget_hpp
+#ifndef animera_radio_button_widget_hpp
+#define animera_radio_button_widget_hpp
 
 #include <QtWidgets/qabstractbutton.h>
 

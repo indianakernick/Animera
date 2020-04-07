@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef separator_widget_hpp
-#define separator_widget_hpp
+#ifndef animera_separator_widget_hpp
+#define animera_separator_widget_hpp
 
 #include <QtWidgets/qwidget.h>
 

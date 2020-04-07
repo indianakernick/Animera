@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef widget_painting_hpp
-#define widget_painting_hpp
+#ifndef animera_widget_painting_hpp
+#define animera_widget_painting_hpp
 
 #include "config.hpp"
 #include <QtGui/qpixmap.h>

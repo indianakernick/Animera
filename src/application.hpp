@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef application_hpp
-#define application_hpp
+#ifndef animera_application_hpp
+#define animera_application_hpp
 
 #include "image.hpp"
 #include <QtCore/qtimer.h>

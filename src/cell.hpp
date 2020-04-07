@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef cell_hpp
-#define cell_hpp
+#ifndef animera_cell_hpp
+#define animera_cell_hpp
 
 #include <memory>
 #include <vector>

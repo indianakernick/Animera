@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef transform_tools_hpp
-#define transform_tools_hpp
+#ifndef animera_transform_tools_hpp
+#define animera_transform_tools_hpp
 
 #include "tool.hpp"
 

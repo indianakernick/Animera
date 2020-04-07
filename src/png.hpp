@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef png_hpp
-#define png_hpp
+#ifndef animera_png_hpp
+#define animera_png_hpp
 
 #include <cstddef>
 #include <libpng16/png.h>

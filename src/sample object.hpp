@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef sample_object_hpp
-#define sample_object_hpp
+#ifndef animera_sample_object_hpp
+#define animera_sample_object_hpp
 
 #include "image.hpp"
 #include <QtGui/qrgb.h>

@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef text_input_widget_hpp
-#define text_input_widget_hpp
+#ifndef animera_text_input_widget_hpp
+#define animera_text_input_widget_hpp
 
 #include "config.hpp"
 #include <QtCore/qtimer.h>

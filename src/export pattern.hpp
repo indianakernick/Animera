@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef export_pattern_hpp
-#define export_pattern_hpp
+#ifndef animera_export_pattern_hpp
+#define animera_export_pattern_hpp
 
 #include "cell.hpp"
 #include <QtCore/qstring.h>

@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef picker_impl_gray_hpp
-#define picker_impl_gray_hpp
+#ifndef animera_picker_impl_gray_hpp
+#define animera_picker_impl_gray_hpp
 
 #include "color picker impl.hpp"
 

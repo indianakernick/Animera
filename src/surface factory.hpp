@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef surface_factory_hpp
-#define surface_factory_hpp
+#ifndef animera_surface_factory_hpp
+#define animera_surface_factory_hpp
 
 #include <QtGui/qimage.h>
 #include <Graphics/surface.hpp>

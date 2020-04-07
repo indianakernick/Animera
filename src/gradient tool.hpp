@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef gradient_tool_hpp
-#define gradient_tool_hpp
+#ifndef animera_gradient_tool_hpp
+#define animera_gradient_tool_hpp
 
 #include "tool.hpp"
 #include "cell.hpp"

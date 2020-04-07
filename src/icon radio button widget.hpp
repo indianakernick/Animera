@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef icon_radio_button_widget_hpp
-#define icon_radio_button_widget_hpp
+#ifndef animera_icon_radio_button_widget_hpp
+#define animera_icon_radio_button_widget_hpp
 
 #include "radio button widget.hpp"
 

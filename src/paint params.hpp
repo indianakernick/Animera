@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef paint_params_hpp
-#define paint_params_hpp
+#ifndef animera_paint_params_hpp
+#define animera_paint_params_hpp
 
 #include <QtCore/qrect.h>
 #include "enum operators.hpp"

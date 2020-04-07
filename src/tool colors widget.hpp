@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef tool_colors_widget_hpp
-#define tool_colors_widget_hpp
+#ifndef animera_tool_colors_widget_hpp
+#define animera_tool_colors_widget_hpp
 
 #include <array>
 #include "tool.hpp"

@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef error_dialog_hpp
-#define error_dialog_hpp
+#ifndef animera_error_dialog_hpp
+#define animera_error_dialog_hpp
 
 #include "dialog.hpp"
 

@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef drag_paint_tools_hpp
-#define drag_paint_tools_hpp
+#ifndef animera_drag_paint_tools_hpp
+#define animera_drag_paint_tools_hpp
 
 #include "tool.hpp"
 #include "cell.hpp"

@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef docopt_helpers_hpp
-#define docopt_helpers_hpp
+#ifndef animera_docopt_helpers_hpp
+#define animera_docopt_helpers_hpp
 
 #include "error.hpp"
 #include <QtCore/qstring.h>

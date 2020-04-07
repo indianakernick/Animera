@@ -22,8 +22,6 @@ void Sprite::newFile(const Format newFormat, const QSize newSize) {
   timeline.initDefault();
 }
 
-namespace {
-
 /*
 
 AHDR

@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef cli_hpp
-#define cli_hpp
+#ifndef animera_cli_hpp
+#define animera_cli_hpp
 
 #include "docopt.h"
 #include "error.hpp"

@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef composite_hpp
-#define composite_hpp
+#ifndef animera_composite_hpp
+#define animera_composite_hpp
 
 #include <span>
 #include "cell.hpp"

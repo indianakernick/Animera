@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef quit_dialog_hpp
-#define quit_dialog_hpp
+#ifndef animera_quit_dialog_hpp
+#define animera_quit_dialog_hpp
 
 #include "dialog.hpp"
 

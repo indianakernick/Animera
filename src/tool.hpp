@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef tool_hpp
-#define tool_hpp
+#ifndef animera_tool_hpp
+#define animera_tool_hpp
 
 #include "image.hpp"
 #include "status msg.hpp"

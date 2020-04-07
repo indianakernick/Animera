@@ -6,8 +6,8 @@
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef window_hpp
-#define window_hpp
+#ifndef animera_window_hpp
+#define animera_window_hpp
 
 #include "sprite.hpp"
 #include <QtWidgets/qmainwindow.h>
