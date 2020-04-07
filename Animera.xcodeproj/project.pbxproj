@@ -3191,7 +3191,7 @@
 					"-Wno-comma",
 				);
 				OTHER_LDFLAGS = "-headerpad_max_install_names";
-				PRODUCT_BUNDLE_IDENTIFIER = "Indi-Kernick.Animera";
+				PRODUCT_BUNDLE_IDENTIFIER = "Indiana-Kernick.Animera";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
@@ -3257,7 +3257,7 @@
 					"-Wno-comma",
 				);
 				OTHER_LDFLAGS = "-headerpad_max_install_names";
-				PRODUCT_BUNDLE_IDENTIFIER = "Indi-Kernick.Animera";
+				PRODUCT_BUNDLE_IDENTIFIER = "Indiana-Kernick.Animera";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 			};

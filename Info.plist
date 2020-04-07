@@ -11,24 +11,26 @@
 			<array>
 				<string>animera</string>
 			</array>
-			<key>LSHandlerRank</key>
-			<string>Owner</string>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
 			<key>CFBundleTypeIconFile</key>
 			<string>Document</string>
 			<key>CFBundleTypeName</key>
 			<string>Animera Sprite</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array/>
 		</dict>
 		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
 			<key>LSItemContentTypes</key>
 			<array>
 				<string>public.png</string>
 			</array>
-			<key>LSHandlerRank</key>
-			<string>Alternate</string>
-			<key>CFBundleTypeRole</key>
-			<string>Viewer</string>
 		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
@@ -50,7 +52,7 @@
 	<key>LSMinimumSystemVersion</key>
 	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2019 Indi Kernick. All rights reserved.</string>
+	<string>Copyright © 2020 Indiana Kernick. All rights reserved.</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
