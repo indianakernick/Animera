@@ -69,7 +69,7 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "open /Users/indikernick/Dev/Projects/C++/Animera/Sprites/icon.animera"
+            argument = "open /Users/indikernick/Dev/Projects/C++/Animera/Resources/Sprites/icon.animera"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument

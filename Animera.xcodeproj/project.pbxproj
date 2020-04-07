@@ -850,6 +850,7 @@
 				45BE2A2822680B0900E21A85 /* Color Picker */,
 				453C787A2235D55600818B19 /* Tools */,
 				45BAD72D22460C22000D095C /* Fonts */,
+				4554869023443256001D5611 /* Sprites */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -1860,7 +1861,6 @@
 				455F28612206890300C73F39 /* Animera.entitlements */,
 				45CEB6AC243C062100661D78 /* doc */,
 				4549B969243BFB8800B1A62A /* third_party */,
-				4554869023443256001D5611 /* Sprites */,
 				453C78222234CB5500818B19 /* Resources */,
 				455F2853220688FD00C73F39 /* src */,
 				455F2852220688FD00C73F39 /* Products */,
@@ -2184,7 +2184,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "alias Animera=\"$BUILT_PRODUCTS_DIR/$EXECUTABLE_PATH\"\nOUT=\"$PROJECT_DIR/Assets.xcassets/AppIcon.appiconset/\"\nIN=\"$PROJECT_DIR/Sprites/icon.animera\"\n\nfunction ex {\n  Animera export --name=\"$1\" --directory=\"$OUT\" --no-composite --scale=$2 \"$IN\"\n}\n\nex 16 1\nex 32 2\nex 64 4\nex 128 8\nex 256 16\nex 512 32\nex 1024 64\n";
+			shellScript = "alias Animera=\"$BUILT_PRODUCTS_DIR/$EXECUTABLE_PATH\"\nOUT=\"$PROJECT_DIR/Assets.xcassets/AppIcon.appiconset/\"\nIN=\"$PROJECT_DIR/Resources/Sprites/icon.animera\"\n\nfunction ex {\n  Animera export --name=\"$1\" --directory=\"$OUT\" --no-composite --scale=$2 \"$IN\"\n}\n\nex 16 1\nex 32 2\nex 64 4\nex 128 8\nex 256 16\nex 512 32\nex 1024 64\n";
 		};
 		4529AA0A239CE3D00034A014 /* Moc - quit dialog */ = {
 			isa = PBXShellScriptBuildPhase;

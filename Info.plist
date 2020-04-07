@@ -19,8 +19,6 @@
 			<string>Editor</string>
 			<key>LSHandlerRank</key>
 			<string>Owner</string>
-			<key>LSItemContentTypes</key>
-			<array/>
 		</dict>
 		<dict>
 			<key>CFBundleTypeRole</key>
