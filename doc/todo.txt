@@ -288,6 +288,8 @@ should the editor keys go in a menubar?
 
 ignore the waking click
 
+use QIODevice::errorString instead of "File IO error"
+
 ------------------------------- minor refactoring ------------------------------
 
 there might be a few random constants that should be in config.hpp but aren't

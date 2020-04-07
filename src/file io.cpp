@@ -51,7 +51,7 @@ Error FileWriter::flush() const {
   if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
     return file.errorString() + "\n" + QDir::toNativeSeparators(path);
   }
-  if (!file.write(buff.data().data(), buff.data().size())) {
+  if (file.write(buff.data().data(), buff.data().size()) != buff.data().size()) {
     // Well, fuck
     file.remove();
     return FileIOError{}.what();
