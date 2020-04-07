@@ -20,9 +20,16 @@ The sprite format (`.animera`) is heavily inspired by the PNG format. This is be
 
 The file starts with an 8 byte signature.
 
-| 'A' | 'n' | 'i' | 'm' | 'e' | 'r' | 'a' | '\0' |
-|-----|-----|-----|-----|-----|-----|-----|------|
-| 65  | 110 | 105 | 109 | 101 | 114 | 97  | 0    |
+| Byte | ASCII |
+|------|-------|
+| 65   | A     |
+| 110  | n     |
+| 105  | i     |
+| 109  | m     |
+| 101  | e     |
+| 114  | r     |
+| 97   | a     |
+| 0    | \0    |
 
 Following the signature are some number of chunks. The order of the chunks is defined by the following pseudo-code.
 
