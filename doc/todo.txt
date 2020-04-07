@@ -298,3 +298,8 @@ Should probably be using mouse release instead of mouse press in some places
 
 maybe paint functions should accept a cell
   overlay would have to be a cell (or wrapped in a cell)
+
+------------------------------- submodules notes -------------------------------
+
+Fast-forward all submodules
+  git submodule update --remote --merge

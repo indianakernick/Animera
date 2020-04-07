@@ -1858,9 +1858,7 @@
 				455F285B2206890300C73F39 /* Assets.xcassets */,
 				455F28602206890300C73F39 /* Info.plist */,
 				455F28612206890300C73F39 /* Animera.entitlements */,
-				45C2A2562207BC4000E989C2 /* plan r0.txt */,
-				45C2A280220E821200E989C2 /* plan r1.txt */,
-				45161F0022F11EB60036BBED /* todo.txt */,
+				45CEB6AC243C062100661D78 /* doc */,
 				4549B969243BFB8800B1A62A /* third_party */,
 				4554869023443256001D5611 /* Sprites */,
 				453C78222234CB5500818B19 /* Resources */,
@@ -1980,6 +1978,16 @@
 				455486B8234466C2001D5611 /* palette select.png */,
 			);
 			path = "Color Picker";
+			sourceTree = "<group>";
+		};
+		45CEB6AC243C062100661D78 /* doc */ = {
+			isa = PBXGroup;
+			children = (
+				45C2A2562207BC4000E989C2 /* plan r0.txt */,
+				45C2A280220E821200E989C2 /* plan r1.txt */,
+				45161F0022F11EB60036BBED /* todo.txt */,
+			);
+			path = doc;
 			sourceTree = "<group>";
 		};
 		45F3EB6B22CC42ED00F9F93E /* Dialogs */ = {

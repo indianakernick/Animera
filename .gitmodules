@@ -1,9 +1,12 @@
 [submodule "third_party/Graphics"]
 	path = third_party/Graphics
 	url = https://github.com/Kerndog73/Graphics
+	shallow = true
 [submodule "third_party/docopt"]
 	path = third_party/docopt
 	url = https://github.com/docopt/docopt.cpp
+	shallow = true
 [submodule "third_party/Catch2"]
 	path = third_party/Catch2
 	url = https://github.com/catchorg/Catch2
+	shallow = true
