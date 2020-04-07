@@ -121,6 +121,9 @@
 		45054F6F225970150078350B /* undo object.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "undo object.hpp"; sourceTree = "<group>"; };
 		45054F712259C9AA0078350B /* color picker widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "color picker widget.cpp"; sourceTree = "<group>"; };
 		45054F722259C9AA0078350B /* color picker widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "color picker widget.hpp"; sourceTree = "<group>"; };
+		45064A1C243C263D00A3FD8B /* 5x7ascii.sfd */ = {isa = PBXFileReference; lastKnownFileType = text; path = 5x7ascii.sfd; sourceTree = "<group>"; };
+		45064A1E243C263D00A3FD8B /* 5x7+2_var_ascii.sfd */ = {isa = PBXFileReference; lastKnownFileType = text; path = "5x7+2_var_ascii.sfd"; sourceTree = "<group>"; };
+		45064A1F243C263D00A3FD8B /* 5x7+2ascii.sfd */ = {isa = PBXFileReference; lastKnownFileType = text; path = "5x7+2ascii.sfd"; sourceTree = "<group>"; };
 		4512636422781D7B00C66A19 /* tool colors widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "tool colors widget.cpp"; sourceTree = "<group>"; };
 		4512636522781D7B00C66A19 /* tool colors widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "tool colors widget.hpp"; sourceTree = "<group>"; };
 		4513144522D0503700D66262 /* timeline.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = timeline.cpp; sourceTree = "<group>"; };
@@ -1964,6 +1967,9 @@
 				45F3EB6922C5F44700F9F93E /* 5x7ascii.ttf */,
 				45DFE4A22252039600EA40C5 /* 5x7+2ascii.ttf */,
 				45DFE4A12252038700EA40C5 /* 5x7+2_var_ascii.ttf */,
+				45064A1C243C263D00A3FD8B /* 5x7ascii.sfd */,
+				45064A1F243C263D00A3FD8B /* 5x7+2ascii.sfd */,
+				45064A1E243C263D00A3FD8B /* 5x7+2_var_ascii.sfd */,
 			);
 			path = Fonts;
 			sourceTree = "<group>";

@@ -1,8 +1,8 @@
-![Title](https://i.imgur.com/iV3U1Ve.png)
+![Title](https://i.imgur.com/8dFXBlO.png)
 
 ### A cross-platform Qt tool for making pixel-art animations for games
 
-![Screenshot](https://i.imgur.com/J3uSFnF.png)
+![Screenshot](https://i.imgur.com/yEaAsxv.png)
 
 ---
 
