@@ -56,6 +56,8 @@ Following the signature are a number of chunks. These chunks have a defined stru
 | Data   | "Length" bytes                   | The contents of the chunk is defined by the particular chunk.                                                    |
 | CRC    | 4-byte, big-endian, unsigned int | A CRC (Cyclic Redundancy Check) of the "Name" and "Data" parts as defined by zlib's `crc32` function.            |
 
+See also: [PNG chunk layout](http://www.libpng.org/pub/png/spec/1.2/PNG-Structure.html#Chunk-layout)
+
 ## Data Types
 
 To avoid repetition, I will define some standard data types that are used in the definitions of standard chunks.
@@ -65,6 +67,8 @@ To avoid repetition, I will define some standard data types that are used in the
 | Byte   | 1 byte, unsigned              |
 | Int    | 4 bytes, unsigned, big-endian |
 | String | A sequence of ASCII bytes     |
+
+See also: [PNG integer byte order](http://www.libpng.org/pub/png/spec/1.2/PNG-DataRep.html#DR.Integers-and-byte-order)
 
 ## Standard Chunks
 
@@ -145,6 +149,10 @@ The pixel format of the cell data is defined by the pixel format in the AHDR chu
 
    Each pixel is four bytes that correspond to the red, green, blue and alpha channels respectively.
 
+See also: [PNG IDAT chunk](http://www.libpng.org/pub/png/spec/1.2/PNG-Chunks.html#C.IDAT)
+
 ### AEND (Animation End)
 
 This chunk contains no data. It corresponds to the IEND chunk of PNG. It marks the end of the file to ensure that the file hasn't been truncated.
+
+See also: [PNG IEND chunk](http://www.libpng.org/pub/png/spec/1.2/PNG-Chunks.html#C.IEND)
