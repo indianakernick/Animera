@@ -290,6 +290,11 @@ ignore the waking click
 
 use QIODevice::errorString instead of "File IO error"
 
+support unicode characters in layer names
+
+some of the integer's in the sprite format are signed and some are unsigned
+  update the documenation (and code perhaps?) accordingly
+
 ------------------------------- minor refactoring ------------------------------
 
 there might be a few random constants that should be in config.hpp but aren't

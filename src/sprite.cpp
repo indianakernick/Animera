@@ -22,43 +22,6 @@ void Sprite::newFile(const Format newFormat, const QSize newSize) {
   timeline.initDefault();
 }
 
-/*
-
-AHDR
-animation header
- - width
- - height
- - number of layers
- - number of frames
- - delay
- - format
-
-PLTE
-palette
- - colors excluding trailing 0 entries
-
-LHDR
-layer header
- - number of spans in the layer
- - byte visibility
- - ascii string name
-
-CHDR
-cell header
- - length of span
- - x coord
- - y coord
- - width
- - height
-
-CDAT
-cell data
- - compressed image data
- 
-AEND
-animation end
-*/
-
 void Sprite::optimize() {
   timeline.optimize();
 }
