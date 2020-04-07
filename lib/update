@@ -1,8 +1,0 @@
-#!/bin/sh
-
-GH=https://raw.githubusercontent.com
-LIB=$(dirname $0)
-
-curl $GH/catchorg/Catch2/master/single_include/catch2/catch.hpp > $LIB/Catch2/catch.hpp
-
-# docopt seems kind of abandoned so I don't think it needs to be in this script
