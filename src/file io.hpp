@@ -2,8 +2,8 @@
 //  file io.hpp
 //  Animera
 //
-//  Created by Indi Kernick on 27/10/19.
-//  Copyright © 2019 Indi Kernick. All rights reserved.
+//  Created by Indiana Kernick on 27/10/19.
+//  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
 #ifndef file_io_hpp

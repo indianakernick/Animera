@@ -2,8 +2,8 @@
 //  tool.hpp
 //  Animera
 //
-//  Created by Indi Kernick on 18/2/19.
-//  Copyright © 2019 Indi Kernick. All rights reserved.
+//  Created by Indiana Kernick on 18/2/19.
+//  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
 #ifndef tool_hpp

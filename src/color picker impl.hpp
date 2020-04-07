@@ -2,8 +2,8 @@
 //  color picker impl.hpp
 //  Animera
 //
-//  Created by Indi Kernick on 10/7/19.
-//  Copyright © 2019 Indi Kernick. All rights reserved.
+//  Created by Indiana Kernick on 10/7/19.
+//  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
 #ifndef color_picker_impl_hpp

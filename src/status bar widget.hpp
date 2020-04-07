@@ -2,8 +2,8 @@
 //  status bar widget.hpp
 //  Animera
 //
-//  Created by Indi Kernick on 10/3/19.
-//  Copyright © 2019 Indi Kernick. All rights reserved.
+//  Created by Indiana Kernick on 10/3/19.
+//  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
 #ifndef status_bar_widget_hpp

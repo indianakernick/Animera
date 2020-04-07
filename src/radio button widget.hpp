@@ -2,8 +2,8 @@
 //  radio button widget.hpp
 //  Animera
 //
-//  Created by Indi Kernick on 3/5/19.
-//  Copyright © 2019 Indi Kernick. All rights reserved.
+//  Created by Indiana Kernick on 3/5/19.
+//  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
 #ifndef radio_button_widget_hpp

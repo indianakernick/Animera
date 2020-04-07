@@ -2,8 +2,8 @@
 //  sprite file.hpp
 //  Animera
 //
-//  Created by Indi Kernick on 31/8/19.
-//  Copyright © 2019 Indi Kernick. All rights reserved.
+//  Created by Indiana Kernick on 31/8/19.
+//  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
 #ifndef sprite_file_hpp

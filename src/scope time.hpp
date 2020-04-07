@@ -2,8 +2,8 @@
 //  scope time.hpp
 //  Animera
 //
-//  Created by Indi Kernick on 1/12/19.
-//  Copyright © 2019 Indi Kernick. All rights reserved.
+//  Created by Indiana Kernick on 1/12/19.
+//  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
 #ifndef scope_time_hpp

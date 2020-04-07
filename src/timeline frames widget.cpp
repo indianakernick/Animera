@@ -2,8 +2,8 @@
 //  timeline frames widget.cpp
 //  Animera
 //
-//  Created by Indi Kernick on 24/6/19.
-//  Copyright © 2019 Indi Kernick. All rights reserved.
+//  Created by Indiana Kernick on 24/6/19.
+//  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
 #include "timeline frames widget.hpp"

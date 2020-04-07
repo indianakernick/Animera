@@ -2,8 +2,8 @@
 //  sprite.cpp
 //  Animera
 //
-//  Created by Indi Kernick on 7/7/19.
-//  Copyright © 2019 Indi Kernick. All rights reserved.
+//  Created by Indiana Kernick on 7/7/19.
+//  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
 #include "sprite.hpp"
@@ -60,8 +60,6 @@ cell data
 AEND
 animation end
 */
-
-}
 
 void Sprite::optimize() {
   timeline.optimize();

@@ -2,8 +2,8 @@
 //  tool param widget.hpp
 //  Animera
 //
-//  Created by Indi Kernick on 8/12/19.
-//  Copyright © 2019 Indi Kernick. All rights reserved.
+//  Created by Indiana Kernick on 8/12/19.
+//  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
 #ifndef tool_param_widget_hpp
