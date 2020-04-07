@@ -303,3 +303,6 @@ maybe paint functions should accept a cell
 
 Fast-forward all submodules
   git submodule update --remote --merge
+
+Clone with submodules
+  git clone --recurse-submodules <url>
