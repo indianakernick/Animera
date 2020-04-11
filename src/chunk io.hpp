@@ -52,6 +52,9 @@ public:
   ChunkStart begin();
   Error end();
   
+  ChunkStart peek();
+  void skip(ChunkStart);
+  
   std::uint8_t readByte();
   std::uint32_t readInt();
   void readString(char *, std::uint32_t);

@@ -101,6 +101,19 @@ Error ChunkReader::end() {
   }
 }
 
+ChunkStart ChunkReader::peek() {
+  ChunkStart start;
+  start.length = readInt();
+  readString(start.name, chunk_name_len);
+  if (!dev.seek(dev.pos() - chunk_name_len - file_int_size)) throw FileIOError{};
+  return start;
+}
+
+void ChunkReader::skip(ChunkStart start) {
+  const qint64 skipLen = start.length + chunk_name_len + 2 * file_int_size;
+  if (dev.skip(skipLen) != skipLen) throw FileIOError{};
+}
+
 std::uint8_t ChunkReader::readByte() {
   std::uint8_t byte;
   readData(&byte, 1);

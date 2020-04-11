@@ -24,7 +24,7 @@ R"(Usage:
     Animera [--help --long-help]
     Animera new <width> <height> [<format>]
     Animera open <file>
-    Animera info [--json] <file>
+    Animera info [--layer-names --json] <file>
     Animera export [--name=<pattern> --directory=<path>]
                    [--layer-stride=<int> --layer-offset=<int>]
                    [--frame-stride=<int> --frame-offset=<int>]
@@ -54,6 +54,7 @@ R"(Options:
     <width>                   Width of the sprite to create.
     <height>                  Height of the sprite to create.
     <format>                  Format of the sprite to create.
+    --layer-names             Output the names of layers.
     -j, --json                Output info as JSON.
     -n, --name <pattern>      Name pattern for the sprite.
     -d, --directory <path>    Directory to write files to.
@@ -91,6 +92,10 @@ R"(Options:
             index  (8-bit Indexed)
             gray   (8-bit Grayscale with alpha)
         This is "rgba" by default.
+    
+    --layer-names
+        Outputs information about the layers. This includes the name, the number
+        of spans and the visibility.
     
     -j, --json
         By default, sprite info is outputted in a pleasant-for-humans format.
