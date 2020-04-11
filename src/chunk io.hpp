@@ -68,7 +68,6 @@ private:
 };
 
 Error expectedName(ChunkStart, const char *);
-Error expectedLength(ChunkStart, std::uint32_t);
-Error expectedNameLength(ChunkStart, const char *, std::uint32_t);
+QString chunkLengthInvalid(ChunkStart);
 
 #endif

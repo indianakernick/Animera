@@ -346,7 +346,9 @@ Error readAHDR(QIODevice &dev, SpriteInfo &info) try {
   ChunkReader reader{dev};
   const ChunkStart start = reader.begin();
   TRY(expectedName(start, chunk_anim_header));
-  TRY(expectedLength(start, 5 * file_int_size + 1));
+  if (start.length != 5 * file_int_size + 1) {
+    return chunkLengthInvalid(start);
+  }
   
   info.width = reader.readInt();
   info.height = reader.readInt();
@@ -381,11 +383,7 @@ namespace {
 Error checkPaletteStart(ChunkStart start, const int multiple) {
   TRY(expectedName(start, chunk_palette));
   if (start.length % multiple != 0 || start.length / multiple > pal_colors) {
-    QString msg = "Invalid '";
-    msg += toLatinString(chunk_palette);
-    msg += "' chunk length ";
-    msg += QString::number(start.length);
-    return msg;
+    return chunkLengthInvalid(start);
   }
   return {};
 }
@@ -473,12 +471,9 @@ Error readLHDR(QIODevice &dev, Layer &layer) try {
   ChunkReader reader{dev};
   const ChunkStart start = reader.begin();
   TRY(expectedName(start, chunk_layer_header));
-  if (start.length <= file_int_size + 1) {
-    return "'" + toLatinString(chunk_layer_header) + "' chunk length too small";
-  }
   const std::uint32_t nameLen = start.length - (file_int_size + 1);
-  if (nameLen > layer_name_max_len) {
-    return "'" + toLatinString(chunk_layer_header) + "' chunk length too big";
+  if (start.length <= file_int_size + 1 || nameLen > layer_name_max_len) {
+    return chunkLengthInvalid(start);
   }
   
   const std::uint32_t spans = reader.readInt();
@@ -505,7 +500,7 @@ Error readCHDR(QIODevice &dev, CellSpan &span, const Format format) try {
   const ChunkStart start = reader.begin();
   TRY(expectedName(start, chunk_cell_header));
   if (start.length != file_int_size && start.length != 5 * file_int_size) {
-    return "'" + toLatinString(chunk_cell_header) + "' chunk length invalid";
+    return chunkLengthInvalid(start);
   }
   
   span.len = static_cast<FrameIdx>(reader.readInt());
@@ -617,7 +612,9 @@ Error readAEND(QIODevice &dev) try {
   ChunkReader reader{dev};
   const ChunkStart start = reader.begin();
   TRY(expectedName(start, chunk_anim_end));
-  TRY(expectedLength(start, 0));
+  if (start.length != 0) {
+    return chunkLengthInvalid(start);
+  }
   TRY(reader.end());
   return {};
 } catch (FileIOError &e) {

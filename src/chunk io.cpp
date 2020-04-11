@@ -147,14 +147,11 @@ Error expectedName(const ChunkStart start, const char *name) {
   }
 }
 
-Error expectedLength(const ChunkStart start, const std::uint32_t length) {
-  if (start.length != length) {
-    QString msg = "Expected chunk size ";
-    msg += QString::number(length);
-    msg += " but found ";
-    msg += QString::number(start.length);
-    return msg;
-  } else {
-    return {};
-  }
+QString chunkLengthInvalid(const ChunkStart start) {
+  QString msg = "Length of '";
+  msg += QLatin1String{start.name, chunk_name_len};
+  msg += "' chunk is invalid (";
+  msg += QString::number(start.length);
+  msg += " bytes)";
+  return msg;
 }
