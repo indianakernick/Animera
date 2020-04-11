@@ -10,6 +10,8 @@
 
 #include "sprite.hpp"
 #include "strings.hpp"
+#include "file io.hpp"
+#include "sprite file.hpp"
 #include "application.hpp"
 #include "docopt helpers.hpp"
 #include <QtCore/qtextstream.h>
@@ -26,6 +28,7 @@ R"(Usage:
     Animera [--help --long-help]
     Animera new <width> <height> [<format>]
     Animera open <file>
+    Animera info [--json] <file>
     Animera export [--name=<pattern> --directory=<path>]
                    [--layer-stride=<int> --layer-offset=<int>]
                    [--frame-stride=<int> --frame-offset=<int>]
@@ -39,6 +42,7 @@ R"(Usage:
     Animera [--help | --long-help]
     Animera new <width> <height> [<format>]
     Animera open <file>
+    Animera info [--json] <file>
     Animera export [--name=<pattern> --directory=<path>]
                    [--layer-stride=<int> --layer-offset=<int>]
                    [--frame-stride=<int> --frame-offset=<int>]
@@ -54,6 +58,7 @@ R"(Options:
     <width>                   Width of the sprite to create.
     <height>                  Height of the sprite to create.
     <format>                  Format of the sprite to create.
+    -j, --json                Output info as JSON.
     -n, --name <pattern>      Name pattern for the sprite.
     -d, --directory <path>    Directory to write files to.
     --layer-stride <int>      Stride multiplied by layer number.
@@ -90,6 +95,10 @@ R"(Options:
             index  (8-bit Indexed)
             gray   (8-bit Grayscale with alpha)
         This is "rgba" by default.
+    
+    -j, --json
+        By default, sprite info is outputted in a pleasant-for-humans format.
+        When this option is present, sprite info is outputted as JSON.
     
     -n, --name <pattern>
         Name pattern for the sprite. By default this is "sprite_%000F".
@@ -223,7 +232,7 @@ int CLI::exec() {
   std::map<std::string, docopt::value> flags;
   if (Error err = parseArgs(flags); err) {
     console() << "Command line error\n" << err.msg() << '\n';
-    console() << usage;
+    console() << usage << '\n';
     return 1;
   }
   
@@ -231,6 +240,8 @@ int CLI::exec() {
     return execNew(flags);
   } else if (flags.at("open").asBool()) {
     return execOpen(flags);
+  } else if (flags.at("info").asBool()) {
+    return execInfo(flags);
   } else if (flags.at("export").asBool()) {
     return execExport(flags);
   } else {
@@ -256,11 +267,11 @@ Error CLI::parseArgs(std::map<std::string, docopt::value> &flags) const {
 
 int CLI::execDefault(const std::map<std::string, docopt::value> &flags) const {
   if (flags.at("--help").asBool()) {
-    console() << usage << "\n\n" << short_options;
+    console() << usage << "\n\n" << short_options << '\n';
     return 0;
   }
   if (flags.at("--long-help").asBool()) {
-    console() << usage << "\n\n" << long_options;
+    console() << usage << "\n\n" << long_options << '\n';
     return 0;
   }
   Application app{argc, argv};
@@ -308,6 +319,64 @@ int CLI::execOpen(const std::map<std::string, docopt::value> &flags) const {
   Application app{argc, argv};
   app.openFile(toLatinString(flags.at("<file>").asString()));
   return app.exec();
+}
+
+namespace {
+
+Error readInfo(const QString &path, SpriteInfo &info) {
+  FileReader reader;
+  TRY(reader.open(path));
+  TRY(readSignature(reader.dev()));
+  TRY(readAHDR(reader.dev(), info));
+  TRY(reader.flush());
+  return Error{};
+}
+
+QString formatToString(const Format format) {
+  switch (format) {
+    case Format::rgba:
+      return "RGBA";
+    case Format::index:
+      return "Indexed";
+    case Format::gray:
+      return "Grayscale";
+    default:
+      return "";
+  }
+}
+
+}
+
+int CLI::execInfo(const std::map<std::string, docopt::value> &flags) const {
+  QCoreApplication app{argc, argv};
+  SpriteInfo info;
+  
+  if (Error err = readInfo(toLatinString(flags.at("<file>").asString()), info); err) {
+    console() << "File open error\n";
+    console() << err.msg() << '\n';
+    return 1;
+  }
+  
+  // TODO: Maybe an option to output LHDR
+  
+  if (flags.at("--json").asBool()) {
+    console() << "{\n";
+    console() << "  \"width\": " << info.width << ",\n";
+    console() << "  \"height\": " << info.height << ",\n";
+    console() << "  \"format\": \"" << formatToString(info.format) << "\",\n";
+    console() << "  \"layers\": " << static_cast<int>(info.layers) << ",\n";
+    console() << "  \"frames\": " << static_cast<int>(info.frames) << ",\n";
+    console() << "  \"delay\": " << info.delay << '\n';
+    console() << "}\n";
+  } else {
+    console() << "Size:   {" << info.width << ", " << info.height << "}\n";
+    console() << "Format: " << formatToString(info.format) << '\n';
+    console() << "Layers: " << static_cast<int>(info.layers) << '\n';
+    console() << "Frames: " << static_cast<int>(info.frames) << '\n';
+    console() << "Delay:  " << info.delay << " ms\n";
+  }
+  
+  return 0;
 }
 
 int CLI::execExport(const std::map<std::string, docopt::value> &flags) const {
