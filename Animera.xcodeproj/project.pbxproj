@@ -124,7 +124,7 @@
 		45064A1C243C263D00A3FD8B /* 5x7ascii.sfd */ = {isa = PBXFileReference; lastKnownFileType = text; path = 5x7ascii.sfd; sourceTree = "<group>"; };
 		45064A1E243C263D00A3FD8B /* 5x7+2_var_ascii.sfd */ = {isa = PBXFileReference; lastKnownFileType = text; path = "5x7+2_var_ascii.sfd"; sourceTree = "<group>"; };
 		45064A1F243C263D00A3FD8B /* 5x7+2ascii.sfd */ = {isa = PBXFileReference; lastKnownFileType = text; path = "5x7+2ascii.sfd"; sourceTree = "<group>"; };
-		45064A20243C365E00A3FD8B /* sprite format.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "sprite format.md"; sourceTree = "<group>"; };
+		45064A20243C365E00A3FD8B /* sprite format.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "sprite format.md"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = "<none>"; };
 		4512636422781D7B00C66A19 /* tool colors widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "tool colors widget.cpp"; sourceTree = "<group>"; };
 		4512636522781D7B00C66A19 /* tool colors widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "tool colors widget.hpp"; sourceTree = "<group>"; };
 		4513144522D0503700D66262 /* timeline.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = timeline.cpp; sourceTree = "<group>"; };

@@ -449,7 +449,7 @@ Error readPLTE(QIODevice &dev, const PaletteSpan colors, const Format format) tr
 
 namespace {
 
-Error readVisibileByte(bool &visible, const std::uint8_t byte) {
+Error readVisibleByte(bool &visible, const std::uint8_t byte) {
   switch (byte) {
     case 0:
       visible = false;
@@ -458,9 +458,16 @@ Error readVisibileByte(bool &visible, const std::uint8_t byte) {
       visible = true;
       break;
     default:
-      return "Invalid visibility " + QString::number(byte);
+      return "Invalid visibility (" + QString::number(byte) + ")";
   }
   return {};
+}
+
+bool validLayerName(const std::string_view name) {
+  for (const char ch : name) {
+    if (!printable(ch)) return false;
+  }
+  return true;
 }
 
 }
@@ -484,9 +491,13 @@ Error readLHDR(QIODevice &dev, Layer &layer) try {
   
   TRY(reader.end());
   
+  if (!validLayerName(layer.name)) {
+    return "Layer name contains non-ASCII characters";
+  }
+  
   // TODO: range checking on spans?
   layer.spans.resize(spans);
-  TRY(readVisibileByte(layer.visible, visible));
+  TRY(readVisibleByte(layer.visible, visible));
   
   return {};
 } catch (FileIOError &e) {

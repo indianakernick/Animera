@@ -13,11 +13,39 @@
 #include "strings.hpp"
 #include <QtGui/qevent.h>
 #include <QtGui/qpainter.h>
+#include <QtGui/qvalidator.h>
 #include "widget painting.hpp"
 #include "timeline painting.hpp"
 #include "text input widget.hpp"
 #include <QtWidgets/qboxlayout.h>
 #include "icon radio button widget.hpp"
+
+namespace {
+
+class NameValidator final : public QValidator {
+public:
+  explicit NameValidator(QWidget *parent)
+    : QValidator{parent} {}
+  
+  void fixup(QString &input) const override {
+    for (int i = 0; i != input.size(); ) {
+      if (!printable(input[i].unicode())) {
+        input.remove(i, 1);
+      } else {
+        ++i;
+      }
+    }
+  }
+  
+  State validate(QString &input, int &) const override {
+    for (const QChar ch : input) {
+      if (!printable(ch.unicode())) return State::Invalid;
+    }
+    return State::Acceptable;
+  }
+};
+
+}
 
 class VisibleWidget final : public IconRadioButtonWidget {
   Q_OBJECT
@@ -53,7 +81,7 @@ void LayerNameWidget::setVisibility(const bool visibility) {
 }
 
 void LayerNameWidget::setName(const std::string_view text) {
-  name->setText(QString{toLatinString(text)});
+  name->setText(toLatinString(text));
 }
 
 void LayerNameWidget::changeVisibility(const bool visibility) {
@@ -78,6 +106,8 @@ void LayerNameWidget::createWidgets() {
   visible->setToolTip("Toggle Visibility");
   name = new TextInputWidget{this, layer_text_rect};
   name->setMaxLength(layer_name_max_len);
+  auto *validator = new NameValidator{name};
+  name->setValidator(validator);
 }
 
 void LayerNameWidget::setupLayout() {

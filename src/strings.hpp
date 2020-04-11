@@ -20,4 +20,9 @@ constexpr QLatin1String toLatinString(const char (&text)[Size]) {
   return QLatin1String{text, Size - 1};
 }
 
+// std::isprint has UB when passed a ushort from QChar
+constexpr bool printable(const int ch) {
+  return 32 <= ch && ch <= 126;
+}
+
 #endif
