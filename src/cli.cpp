@@ -8,16 +8,12 @@
 
 #include "cli.hpp"
 
-#include "sprite.hpp"
 #include "strings.hpp"
-#include "file io.hpp"
-#include "sprite file.hpp"
+#include "cli new.hpp"
+#include "cli info.hpp"
+#include "cli export.hpp"
 #include "application.hpp"
-#include "docopt helpers.hpp"
 #include <QtCore/qtextstream.h>
-
-CLI::CLI(int &argc, char **argv)
-  : argc{argc}, argv{argv} {}
 
 namespace {
 
@@ -221,29 +217,28 @@ Error checkMutuallyExclusive(const std::map<std::string, docopt::value> &flags) 
   return {};
 }
 
-QTextStream &console() {
-  static QTextStream stream{stdout};
-  return stream;
 }
 
-}
+CLI::CLI(int &argc, char **argv)
+  : argc{argc}, argv{argv} {}
 
 int CLI::exec() {
   std::map<std::string, docopt::value> flags;
   if (Error err = parseArgs(flags); err) {
-    console() << "Command line error\n" << err.msg() << '\n';
-    console() << usage << '\n';
+    QTextStream console{stdout};
+    console << "Command line error\n" << err.msg() << '\n';
+    console << usage << '\n';
     return 1;
   }
   
   if (flags.at("new").asBool()) {
-    return execNew(flags);
+    return cliNew(argc, argv, flags);
   } else if (flags.at("open").asBool()) {
     return execOpen(flags);
   } else if (flags.at("info").asBool()) {
-    return execInfo(flags);
+    return cliInfo(argc, argv, flags);
   } else if (flags.at("export").asBool()) {
-    return execExport(flags);
+    return cliExport(argc, argv, flags);
   } else {
     return execDefault(flags);
   }
@@ -266,12 +261,13 @@ Error CLI::parseArgs(std::map<std::string, docopt::value> &flags) const {
 }
 
 int CLI::execDefault(const std::map<std::string, docopt::value> &flags) const {
+  QTextStream console{stdout};
   if (flags.at("--help").asBool()) {
-    console() << usage << "\n\n" << short_options << '\n';
+    console << usage << "\n\n" << short_options << '\n';
     return 0;
   }
   if (flags.at("--long-help").asBool()) {
-    console() << usage << "\n\n" << long_options << '\n';
+    console << usage << "\n\n" << long_options << '\n';
     return 0;
   }
   Application app{argc, argv};
@@ -279,126 +275,8 @@ int CLI::execDefault(const std::map<std::string, docopt::value> &flags) const {
   return app.exec();
 }
 
-namespace {
-
-const char *formatNames[] = {
-  "rgba",
-  "index",
-  "gray"
-};
-
-Error setFormatSize(Format &format, QSize &size, const std::map<std::string, docopt::value> &flags) {
-  TRY(setInt(size.rwidth(), flags.at("<width>"), "width", init_size_range));
-  TRY(setInt(size.rheight(), flags.at("<height>"), "height", init_size_range));
-  if (const docopt::value &value = flags.at("<format>"); value) {
-    if (!setEnum(format, value.asString(), formatNames)) {
-      return "Invalid format" + validListStr("formats", formatNames);
-    }
-  } else {
-    format = Format::rgba;
-  }
-  return {};
-}
-
-}
-
-int CLI::execNew(const std::map<std::string, docopt::value> &flags) const {
-  Format format;
-  QSize size;
-  if (Error err = setFormatSize(format, size, flags); err) {
-    console() << "Configuration error\n";
-    console() << err.msg() << '\n';
-    return 1;
-  }
-  Application app{argc, argv};
-  app.newFile(format, size);
-  return app.exec();
-}
-
 int CLI::execOpen(const std::map<std::string, docopt::value> &flags) const {
   Application app{argc, argv};
   app.openFile(toLatinString(flags.at("<file>").asString()));
   return app.exec();
-}
-
-namespace {
-
-Error readInfo(const QString &path, SpriteInfo &info) {
-  FileReader reader;
-  TRY(reader.open(path));
-  TRY(readSignature(reader.dev()));
-  TRY(readAHDR(reader.dev(), info));
-  TRY(reader.flush());
-  return Error{};
-}
-
-QString formatToString(const Format format) {
-  switch (format) {
-    case Format::rgba:
-      return "RGBA";
-    case Format::index:
-      return "Indexed";
-    case Format::gray:
-      return "Grayscale";
-    default:
-      return "";
-  }
-}
-
-}
-
-int CLI::execInfo(const std::map<std::string, docopt::value> &flags) const {
-  QCoreApplication app{argc, argv};
-  SpriteInfo info;
-  
-  if (Error err = readInfo(toLatinString(flags.at("<file>").asString()), info); err) {
-    console() << "File open error\n";
-    console() << err.msg() << '\n';
-    return 1;
-  }
-  
-  // TODO: Maybe an option to output LHDR
-  
-  if (flags.at("--json").asBool()) {
-    console() << "{\n";
-    console() << "  \"width\": " << info.width << ",\n";
-    console() << "  \"height\": " << info.height << ",\n";
-    console() << "  \"format\": \"" << formatToString(info.format) << "\",\n";
-    console() << "  \"layers\": " << static_cast<int>(info.layers) << ",\n";
-    console() << "  \"frames\": " << static_cast<int>(info.frames) << ",\n";
-    console() << "  \"delay\": " << info.delay << '\n';
-    console() << "}\n";
-  } else {
-    console() << "Size:   {" << info.width << ", " << info.height << "}\n";
-    console() << "Format: " << formatToString(info.format) << '\n';
-    console() << "Layers: " << static_cast<int>(info.layers) << '\n';
-    console() << "Frames: " << static_cast<int>(info.frames) << '\n';
-    console() << "Delay:  " << info.delay << " ms\n";
-  }
-  
-  return 0;
-}
-
-int CLI::execExport(const std::map<std::string, docopt::value> &flags) const {
-  QCoreApplication app{argc, argv};
-  Sprite sprite;
-  if (Error err = sprite.openFile(toLatinString(flags.at("<file>").asString())); err) {
-    console() << "File open error\n";
-    console() << err.msg() << '\n';
-    return 1;
-  }
-  ExportOptions options;
-  const ExportSpriteInfo info = getSpriteInfo(sprite);
-  initDefaultOptions(options, info);
-  if (Error err = readExportOptions(options, info, flags); err) {
-    console() << "Configuration error\n";
-    console() << err.msg() << '\n';
-    return 1;
-  }
-  if (Error err = sprite.exportSprite(options); err) {
-    console() << "Export error\n";
-    console() << err.msg() << '\n';
-    return 1;
-  }
-  return 0;
 }

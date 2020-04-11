@@ -71,10 +71,5 @@ QString getExportPath(const ExportOptions &, ExportState);
 void initDefaultOptions(ExportOptions &, const ExportSpriteInfo &);
 ExportOptions exportFrameOptions(const QString &, const ExportSpriteInfo &);
 ExportOptions exportCellOptions(const QString &, const ExportSpriteInfo &);
-Error readExportOptions(
-  ExportOptions &,
-  const ExportSpriteInfo &,
-  const std::map<std::string, docopt::value> &
-);
 
 #endif

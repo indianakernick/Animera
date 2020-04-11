@@ -102,6 +102,9 @@
 		45DFE499224DE89E00EA40C5 /* global font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45DFE497224DE89E00EA40C5 /* global font.cpp */; };
 		45E3340623A1F4F4009F5EC1 /* libz.1.2.11.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 45E3340523A1F4F4009F5EC1 /* libz.1.2.11.dylib */; };
 		45E3340823A1F514009F5EC1 /* libpng16.16.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 45E3340723A1F513009F5EC1 /* libpng16.16.dylib */; };
+		45E3FFAC244179C2007A1FE8 /* cli export.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45E3FFAA244179C2007A1FE8 /* cli export.cpp */; };
+		45E3FFAF24417A47007A1FE8 /* cli info.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45E3FFAD24417A47007A1FE8 /* cli info.cpp */; };
+		45E3FFB224417D40007A1FE8 /* cli new.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45E3FFB024417D40007A1FE8 /* cli new.cpp */; };
 		45F065F22222998300BCE863 /* current tool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45F065F02222998300BCE863 /* current tool.cpp */; };
 		45F3EB6E22CC430F00F9F93E /* init canvas dialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45F3EB6C22CC430F00F9F93E /* init canvas dialog.cpp */; };
 /* End PBXBuildFile section */
@@ -784,6 +787,12 @@
 		45DFE4A22252039600EA40C5 /* 5x7+2ascii.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "5x7+2ascii.ttf"; sourceTree = "<group>"; };
 		45E3340523A1F4F4009F5EC1 /* libz.1.2.11.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.11.dylib; path = ../../../../../../usr/local/Cellar/zlib/1.2.11/lib/libz.1.2.11.dylib; sourceTree = "<group>"; };
 		45E3340723A1F513009F5EC1 /* libpng16.16.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpng16.16.dylib; path = ../../../../../../usr/local/Cellar/libpng/1.6.37/lib/libpng16.16.dylib; sourceTree = "<group>"; };
+		45E3FFAA244179C2007A1FE8 /* cli export.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "cli export.cpp"; sourceTree = "<group>"; };
+		45E3FFAB244179C2007A1FE8 /* cli export.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "cli export.hpp"; sourceTree = "<group>"; };
+		45E3FFAD24417A47007A1FE8 /* cli info.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "cli info.cpp"; sourceTree = "<group>"; };
+		45E3FFAE24417A47007A1FE8 /* cli info.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "cli info.hpp"; sourceTree = "<group>"; };
+		45E3FFB024417D40007A1FE8 /* cli new.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "cli new.cpp"; sourceTree = "<group>"; };
+		45E3FFB124417D40007A1FE8 /* cli new.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "cli new.hpp"; sourceTree = "<group>"; };
 		45F065F02222998300BCE863 /* current tool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "current tool.cpp"; sourceTree = "<group>"; };
 		45F065F12222998300BCE863 /* current tool.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "current tool.hpp"; sourceTree = "<group>"; };
 		45F3EB6922C5F44700F9F93E /* 5x7ascii.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = 5x7ascii.ttf; sourceTree = "<group>"; };
@@ -1889,6 +1898,7 @@
 				455F2867220690A600C73F39 /* main.cpp */,
 				455486C023449E43001D5611 /* Native */,
 				458F84052249DF97005F91D0 /* Utilities */,
+				45E3FFA824417976007A1FE8 /* CLI */,
 				453B7C76227ECF62003BB799 /* Graphics */,
 				453C783C2234DECE00818B19 /* Cells */,
 				453C783B2234DEBA00818B19 /* Tools */,
@@ -1950,10 +1960,6 @@
 				453E8E4C236578720070B841 /* file io error.hpp */,
 				45C5C8B723729C880056CEE7 /* strings.hpp */,
 				45C5C8BC237CC2950056CEE7 /* math.hpp */,
-				45C5C8D02389219C0056CEE7 /* cli.cpp */,
-				45C5C8D12389219C0056CEE7 /* cli.hpp */,
-				4529A9FB239263110034A014 /* docopt helpers.cpp */,
-				4529A9FC239263110034A014 /* docopt helpers.hpp */,
 				4529A9FF239B4A420034A014 /* scope time.cpp */,
 				4529A9FE23937E8E0034A014 /* scope time.hpp */,
 				457D74F1239E2488009B4E4B /* settings.cpp */,
@@ -1996,6 +2002,23 @@
 				45064A20243C365E00A3FD8B /* sprite format.md */,
 			);
 			path = doc;
+			sourceTree = "<group>";
+		};
+		45E3FFA824417976007A1FE8 /* CLI */ = {
+			isa = PBXGroup;
+			children = (
+				45C5C8D02389219C0056CEE7 /* cli.cpp */,
+				45C5C8D12389219C0056CEE7 /* cli.hpp */,
+				4529A9FB239263110034A014 /* docopt helpers.cpp */,
+				4529A9FC239263110034A014 /* docopt helpers.hpp */,
+				45E3FFB024417D40007A1FE8 /* cli new.cpp */,
+				45E3FFB124417D40007A1FE8 /* cli new.hpp */,
+				45E3FFAD24417A47007A1FE8 /* cli info.cpp */,
+				45E3FFAE24417A47007A1FE8 /* cli info.hpp */,
+				45E3FFAA244179C2007A1FE8 /* cli export.cpp */,
+				45E3FFAB244179C2007A1FE8 /* cli export.hpp */,
+			);
+			name = CLI;
 			sourceTree = "<group>";
 		};
 		45F3EB6B22CC42ED00F9F93E /* Dialogs */ = {
@@ -2934,9 +2957,11 @@
 				45B284B0221A83C300D6D055 /* composite.cpp in Sources */,
 				455486BF23449254001D5611 /* native mac.mm in Sources */,
 				453A20C6231A078100F055BA /* sprite file.cpp in Sources */,
+				45E3FFAF24417A47007A1FE8 /* cli info.cpp in Sources */,
 				453D28C3227698F200D0E5F9 /* widget painting.cpp in Sources */,
 				457DC0C222E9518A0000777B /* cell span.cpp in Sources */,
 				4513144D22D1B06F00D66262 /* timeline controls widget.cpp in Sources */,
+				45E3FFAC244179C2007A1FE8 /* cli export.cpp in Sources */,
 				45C5C8BA237A65820056CEE7 /* status object.cpp in Sources */,
 				45D109A922DC01A200D1F1CB /* icon push button widget.cpp in Sources */,
 				4513144722D0503700D66262 /* timeline.cpp in Sources */,
@@ -2992,6 +3017,7 @@
 				453D28C92276A7DD00D0E5F9 /* color graph widget.cpp in Sources */,
 				45D1099B22DB075A00D1F1CB /* drag paint tools.cpp in Sources */,
 				4513145522D59EA300D66262 /* color picker impl.cpp in Sources */,
+				45E3FFB224417D40007A1FE8 /* cli new.cpp in Sources */,
 				45C5C8D22389219C0056CEE7 /* cli.cpp in Sources */,
 				4595D49222C0644B00607D64 /* timeline frames widget.cpp in Sources */,
 				4513145022D1BF8700D66262 /* palette.cpp in Sources */,
