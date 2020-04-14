@@ -10,7 +10,7 @@
 #define animera_export_options_hpp
 
 #include "cell.hpp"
-#include "docopt.h"
+#include <docopt.h>
 #include "error.hpp"
 #include <QtCore/qstring.h>
 

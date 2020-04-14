@@ -9,7 +9,7 @@
 #ifndef animera_cli_hpp
 #define animera_cli_hpp
 
-#include "docopt.h"
+#include <docopt.h>
 #include "error.hpp"
 
 class CLI {

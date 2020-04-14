@@ -8,7 +8,7 @@
 
 #include "docopt helpers.hpp"
 
-#include "docopt.h"
+#include <docopt.h>
 #include "config.hpp"
 
 QString nonZeroRangeStr(const IntRange range) {
