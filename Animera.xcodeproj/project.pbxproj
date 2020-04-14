@@ -40,7 +40,6 @@
 		453D28D72278134200D0E5F9 /* color handle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453D28D52278134200D0E5F9 /* color handle.cpp */; };
 		453E8E4B236572250070B841 /* file io.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453E8E49236572250070B841 /* file io.cpp */; };
 		4549BB41243BFF4D00B1A62A /* copy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4549BB10243BFF3200B1A62A /* copy.cpp */; };
-		4549BB42243BFF4D00B1A62A /* catch.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 4549BB11243BFF3200B1A62A /* catch.hpp */; };
 		4549BB43243BFF4D00B1A62A /* odr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4549BB12243BFF3200B1A62A /* odr.cpp */; };
 		4549BB44243BFF4D00B1A62A /* fill.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4549BB13243BFF3200B1A62A /* fill.cpp */; };
 		4549BB45243BFF4D00B1A62A /* shrink.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4549BB14243BFF3200B1A62A /* shrink.cpp */; };
@@ -580,7 +579,6 @@
 		4549BB09243BFF3200B1A62A /* catch_reporter_tap.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = catch_reporter_tap.hpp; sourceTree = "<group>"; };
 		4549BB0A243BFF3200B1A62A /* catch_reporter_sonarqube.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = catch_reporter_sonarqube.hpp; sourceTree = "<group>"; };
 		4549BB10243BFF3200B1A62A /* copy.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = copy.cpp; sourceTree = "<group>"; };
-		4549BB11243BFF3200B1A62A /* catch.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = catch.hpp; sourceTree = "<group>"; };
 		4549BB12243BFF3200B1A62A /* odr.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = odr.cpp; sourceTree = "<group>"; };
 		4549BB13243BFF3200B1A62A /* fill.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = fill.cpp; sourceTree = "<group>"; };
 		4549BB14243BFF3200B1A62A /* shrink.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = shrink.cpp; sourceTree = "<group>"; };
@@ -1722,7 +1720,6 @@
 			isa = PBXGroup;
 			children = (
 				4549BB10243BFF3200B1A62A /* copy.cpp */,
-				4549BB11243BFF3200B1A62A /* catch.hpp */,
 				4549BB12243BFF3200B1A62A /* odr.cpp */,
 				4549BB13243BFF3200B1A62A /* fill.cpp */,
 				4549BB14243BFF3200B1A62A /* shrink.cpp */,
@@ -3041,7 +3038,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4549BB41243BFF4D00B1A62A /* copy.cpp in Sources */,
-				4549BB42243BFF4D00B1A62A /* catch.hpp in Sources */,
 				4549BB43243BFF4D00B1A62A /* odr.cpp in Sources */,
 				4549BB44243BFF4D00B1A62A /* fill.cpp in Sources */,
 				4549BB45243BFF4D00B1A62A /* shrink.cpp in Sources */,

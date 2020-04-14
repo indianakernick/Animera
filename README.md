@@ -2,7 +2,7 @@
 
 ### A cross-platform Qt tool for making pixel-art animations for games
 
-![Screenshot](https://i.imgur.com/yEaAsxv.png)
+![Screenshot](https://i.imgur.com/OnXnWhs.png)
 
 ---
 
