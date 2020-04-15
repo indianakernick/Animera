@@ -135,9 +135,9 @@ private:
   
   void enterEvent(QEvent *) override {
     StatusMsg status;
-    status.append("INDEX: ");
+    status.append("Index: ");
     status.append(index);
-    status.append(" COLOR: ");
+    status.append(" Color: ");
     const gfx::Color gColor = getGColor();
     if (format == Format::gray) {
       status.append(gColor.r, gColor.a);

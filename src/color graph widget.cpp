@@ -149,11 +149,11 @@ void SVGraphWidget::updateStatus(QPointF point) {
   const int sat = pix2sat(point.x());
   const int val = pix2val(point.y());
   StatusMsg status;
-  status.append("SATURATION: ");
+  status.append("Saturation: ");
   status.append(sat);
-  status.append(" VALUE: ");
+  status.append(" Value: ");
   status.append(val);
-  status.append(" COLOR: ");
+  status.append(" Color: ");
   const RGB rgbColor = hsv2rgb({color.h, sat, val});
   status.append(rgbColor.r, rgbColor.g, rgbColor.b, alpha);
   Q_EMIT shouldShowNorm(status.get());

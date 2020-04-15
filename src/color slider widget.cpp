@@ -194,9 +194,9 @@ void HueSliderWidget::decColor() {
 
 void HueSliderWidget::updateStatus(StatusMsg &status, const int pointX) {
   const int hue = pix2hue(pointX);
-  status.append("HUE: ");
+  status.append("Hue: ");
   status.append(hue);
-  status.append(" COLOR: ");
+  status.append(" Color: ");
   const RGB rgbColor = hsv2rgb({hue, color.s, color.v});
   status.append(rgbColor.r, rgbColor.g, rgbColor.b, alpha);
 }
@@ -277,9 +277,9 @@ void AlphaSliderWidget::decColor() {
 
 void AlphaSliderWidget::updateStatus(StatusMsg &status, const int pointX) {
   const int alphaValue = pix2alp(pointX);
-  status.append("ALPHA: ");
+  status.append("Alpha: ");
   status.append(alphaValue);
-  status.append(" COLOR: ");
+  status.append(" Color: ");
   if (grayMode) {
     status.append(color.r, alphaValue);
   } else {
@@ -340,9 +340,9 @@ void GraySliderWidget::decColor() {
 
 void GraySliderWidget::updateStatus(StatusMsg &status, const int pointX) {
   const int grayValue = pix2alp(pointX);
-  status.append("GRAY: ");
+  status.append("Gray: ");
   status.append(grayValue);
-  status.append(" COLOR: ");
+  status.append(" Color: ");
   status.append(grayValue, alpha);
 }
 

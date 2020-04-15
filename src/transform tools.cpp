@@ -206,7 +206,7 @@ void RotateTool::keyPress(const ToolKeyEvent &event) {
 
 void RotateTool::updateStatus() {
   StatusMsg status;
-  status.append("ANGLE: ");
+  status.append("Angle: ");
   status.append(angle * 90);
   ctx->showStatus(status);
 }

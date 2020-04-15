@@ -34,7 +34,7 @@ void LinearGradientTool::mouseDown(const ToolMouseDownEvent &event) {
     return;
   }
   
-  status.append("RECT: ");
+  status.append("Rect: ");
   status.append({event.pos, QSize{1, 1}});
   ctx->showStatus(status);
   startPos = event.pos;
@@ -64,7 +64,7 @@ void LinearGradientTool::mouseMove(const ToolMouseMoveEvent &event) {
   }
   
   QRect rect = unite(startPos, event.pos);
-  status.append("RECT: ");
+  status.append("Rect: ");
   status.append(rect);
   ctx->showStatus(status);
   *ctx->cell = cleanCell;

@@ -25,7 +25,7 @@ std::string_view StatusMsg::get() const {
 }
 
 StatusMsg &StatusMsg::append(const bool b) {
-  msg += b ? "YES" : "NO";
+  msg += b ? "Yes" : "No";
   return *this;
 }
 
@@ -78,22 +78,22 @@ StatusMsg &StatusMsg::append(const QRect rect) {
 
 StatusMsg &StatusMsg::append(const SelectMode mode) {
   switch (mode) {
-    case SelectMode::copy:  return append("COPY");
-    case SelectMode::paste: return append("PASTE");
+    case SelectMode::copy:  return append("Copy");
+    case SelectMode::paste: return append("Paste");
     default: Q_UNREACHABLE();
   }
 }
 
 StatusMsg &StatusMsg::append(const LineGradMode mode) {
   switch (mode) {
-    case LineGradMode::hori: return append("HORI");
-    case LineGradMode::vert: return append("VERT");
+    case LineGradMode::hori: return append("Hori");
+    case LineGradMode::vert: return append("Vert");
     default: Q_UNREACHABLE();
   }
 }
 
 StatusMsg &StatusMsg::appendLabeled(const QPoint pos) {
-  append("POS: ");
+  append("Pos: ");
   append(pos);
   return *this;
 }

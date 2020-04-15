@@ -114,9 +114,9 @@ bool LineTool::drawDrag(QImage &image, const QPoint start, const QPoint end) {
 }
 
 void LineTool::updateStatus(StatusMsg &status, const QPoint start, const QPoint end) {
-  status.append("START: ");
+  status.append("Start: ");
   status.append(start);
-  status.append(" END: ");
+  status.append(" End: ");
   status.append(end);
 }
 
@@ -162,9 +162,9 @@ bool StrokedCircleTool::drawDrag(QImage &image, const QPoint start, const QPoint
 }
 
 void StrokedCircleTool::updateStatus(StatusMsg &status, const QPoint start, const QPoint end) {
-  status.append("CENTER: ");
+  status.append("Center: ");
   status.append(start);
-  status.append(" RADIUS: ");
+  status.append(" Radius: ");
   status.append(calcRadius(start, end));
 }
 
@@ -191,9 +191,9 @@ bool FilledCircleTool::drawDrag(QImage &image, const QPoint start, const QPoint 
 }
 
 void FilledCircleTool::updateStatus(StatusMsg &status, const QPoint start, const QPoint end) {
-  status.append("CENTER: ");
+  status.append("Center: ");
   status.append(start);
-  status.append(" RADIUS: ");
+  status.append(" Radius: ");
   status.append(calcRadius(start, end));
 }
 
@@ -221,7 +221,7 @@ bool StrokedRectangleTool::drawDrag(QImage &image, const QPoint start, const QPo
 }
 
 void StrokedRectangleTool::updateStatus(StatusMsg &status, const QPoint start, const QPoint end) {
-  status.append("RECT: ");
+  status.append("Rect: ");
   status.append(unite(start, end));
 }
 
@@ -244,7 +244,7 @@ bool FilledRectangleTool::drawDrag(QImage &image, const QPoint start, const QPoi
 }
 
 void FilledRectangleTool::updateStatus(StatusMsg &status, const QPoint start, const QPoint end) {
-  status.append("RECT: ");
+  status.append("Rect: ");
   status.append(unite(start, end));
 }
 

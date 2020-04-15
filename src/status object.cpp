@@ -40,15 +40,15 @@ void StatusObject::setLayerCount(const LayerIdx newLayerCount) {
 
 void StatusObject::updateStatus() {
   StatusMsg status;
-  status.append("SCALE: ");
+  status.append("Scale: ");
   status.append(scale);
   const std::size_t scaleSize = status.size();
-  status.append(" CELLS: ");
+  status.append(" Timeline: ");
   status.append(+frameCount, +layerCount);
-  status.append(" CELL: ");
+  status.append(" Cell: ");
   status.append(+currPos.f, +currPos.l);
   if (selection.minL <= selection.maxL && selection.minF <= selection.maxF) {
-    status.append(" SELECTION: ");
+    status.append(" Selection: ");
     status.append({
       QPoint{+selection.minF, +selection.minL},
       QPoint{+selection.maxF, +selection.maxL}

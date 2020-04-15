@@ -120,19 +120,19 @@ private:
     gfx::Color gColor;
     switch (format) {
       case Format::rgba:
-        status.append("COLOR: ");
+        status.append("Color: ");
         gColor = gfx::ARGB::color(color);
         status.append(gColor.r, gColor.g, gColor.b, gColor.a);
         break;
       case Format::index:
-        status.append("INDEX: ");
+        status.append("Index: ");
         status.append(static_cast<int>(color));
-        status.append(" COLOR: ");
+        status.append(" Color: ");
         gColor = gfx::ARGB::color(palette[color]);
         status.append(gColor.r, gColor.g, gColor.b, gColor.a);
         break;
       case Format::gray:
-        status.append("COLOR: ");
+        status.append("Color: ");
         gColor = gfx::YA::color(color);
         status.append(gColor.r, gColor.a);
         break;
