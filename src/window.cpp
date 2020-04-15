@@ -237,6 +237,51 @@ void Window::initStyles() {
   CONNECT(action, triggered, &WIDGET, MEMFN);                                   \
 } while (0)
 
+namespace {
+
+class ToggleLayerVis final : public QObject {
+  Q_OBJECT
+
+public:
+  explicit ToggleLayerVis(QAction *action)
+    : QObject{action}, action{action} {}
+  
+  void toggleVis(Timeline &timeline) {
+    timeline.setVisibility(currLayer, !visible[+currLayer]);
+  }
+  
+public Q_SLOTS:
+  void setCurrPos(const CellPos pos) {
+    if (currLayer == pos.l) return;
+    currLayer = pos.l;
+    updateText();
+  }
+  
+  void setVisibility(const LayerIdx layer, const bool vis) {
+    visible[+layer] = vis;
+    updateText();
+  }
+  
+  void setLayerCount(const LayerIdx count) {
+    visible.resize(+count, true);
+  }
+  
+private:
+  QAction *action;
+  LayerIdx currLayer = LayerIdx{};
+  std::vector<bool> visible;
+  
+  void updateText() {
+    if (visible[+currLayer]) {
+      action->setText("Hide Layer");
+    } else {
+      action->setText("Show Layer");
+    }
+  }
+};
+
+}
+
 void Window::populateMenubar() {
   menubar->setFont(getGlobalFont());
   menubar->setNativeMenuBar(false);
@@ -262,17 +307,19 @@ void Window::populateMenubar() {
   ADD_ACTION(layer, "Delete Layer", key_delete_layer, sprite.timeline, removeLayer);
   ADD_ACTION(layer, "Move Layer Up", key_move_layer_up, sprite.timeline, moveLayerUp);
   ADD_ACTION(layer, "Move Layer Down", key_move_layer_down, sprite.timeline, moveLayerDown);
-  //ADD_ACTION(layer, "Toggle Visibility", Qt::SHIFT + Qt::Key_V, sprite.timeline, toggleLayerVisible);
-  // TODO: Maybe consider this
-  // We have to keep the action in sync with the timeline
-  // https://forum.qt.io/topic/83488/how-do-i-change-the-style-of-checkboxes-for-checkable-qactions-in-a-qmenu/2
-  /*{
-    QAction *action = layer->addAction("Visible");
-    action->setShortcut(Qt::SHIFT + Qt::Key_V);
-    action->setCheckable(true);
-    action->setChecked(true);
-    CONNECT(action, triggered, &timeline, toggleLayerVisible);
-  }*/
+  
+  {
+    QAction *action = layer->addAction("Hide Layer");
+    action->setShortcut(key_toggle_layer_vis);
+    auto *toggle = new ToggleLayerVis{action};
+    CONNECT_LAMBDA(action, triggered, [toggle, this] {
+      toggle->toggleVis(sprite.timeline);
+    });
+    CONNECT(sprite.timeline, currPosChanged,    toggle, setCurrPos);
+    CONNECT(sprite.timeline, visibilityChanged, toggle, setVisibility);
+    CONNECT(sprite.timeline, layerCountChanged, toggle, setLayerCount);
+  }
+  
   layer->addSeparator();
   ADD_ACTION(layer, "Layer Above", key_layer_above, sprite.timeline, layerAbove);
   ADD_ACTION(layer, "Layer Below", key_layer_below, sprite.timeline, layerBelow);

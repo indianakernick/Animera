@@ -439,10 +439,9 @@ void Timeline::setVisibility(const LayerIdx idx, const bool visible) {
   assert(LayerIdx{0} <= idx);
   assert(idx < layerCount());
   Layer &layer = layers[+idx];
-  // TODO: Emit signal when layer visibility changed?
   if (layer.visible != visible) {
     layer.visible = visible;
-    // Q_EMIT visibilityChanged(idx, visible);
+    Q_EMIT visibilityChanged(idx, visible);
     changeFrame();
     changeCell(layer.spans.get(currPos.f)->rect());
     Q_EMIT modified();

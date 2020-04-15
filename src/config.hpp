@@ -435,6 +435,7 @@ inline const QString key_new_layer = "SHIFT+N";
 inline const QString key_delete_layer = "SHIFT+BACKSPACE";
 inline const QString key_move_layer_up = "SHIFT+UP";
 inline const QString key_move_layer_down = "SHIFT+DOWN";
+inline const QString key_toggle_layer_vis = "SHIFT+V";
 constexpr Qt::Key    key_layer_above = Qt::Key_E;
 constexpr Qt::Key    key_layer_below = Qt::Key_D;
 
