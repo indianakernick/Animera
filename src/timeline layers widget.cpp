@@ -71,9 +71,9 @@ LayerNameWidget::LayerNameWidget(QWidget *parent, const LayerIdx layer)
   setFixedSize(layer_width, cell_height);
   createWidgets();
   setupLayout();
-  CONNECT(visible, toggled, this, changeVisibility);
-  CONNECT(visible, isolated, this, isolate);
-  CONNECT(name, textEdited, this, changeName);
+  CONNECT(visible, toggled,    this, changeVisibility);
+  CONNECT(visible, isolated,   this, isolate);
+  CONNECT(name,    textEdited, this, changeName);
 }
 
 void LayerNameWidget::setVisibility(const bool visibility) {

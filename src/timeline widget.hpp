@@ -29,6 +29,7 @@ public Q_SLOTS:
   void setCurrPos(CellPos);
   void setSelection(CellRect);
   void setVisibility(LayerIdx, bool);
+  void isolateLayer(LayerIdx);
   void setName(LayerIdx, std::string_view);
   void setLayer(LayerIdx, std::span<const CellSpan>);
   void setFrameCount(FrameIdx);

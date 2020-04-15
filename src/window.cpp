@@ -320,6 +320,14 @@ void Window::populateMenubar() {
     CONNECT(sprite.timeline, layerCountChanged, toggle, setLayerCount);
   }
   
+  {
+    QAction *action = layer->addAction("Isolate Layer");
+    action->setShortcut(key_isolate_layer);
+    CONNECT_LAMBDA(action, triggered, [this] {
+      timeline->isolateLayer(sprite.timeline.getPos().l);
+    });
+  }
+  
   layer->addSeparator();
   ADD_ACTION(layer, "Layer Above", key_layer_above, sprite.timeline, layerAbove);
   ADD_ACTION(layer, "Layer Below", key_layer_below, sprite.timeline, layerBelow);
