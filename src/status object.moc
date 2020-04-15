@@ -23,7 +23,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_StatusObject_t {
     QByteArrayData data[14];
-    char stringdata0[157];
+    char stringdata0[153];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -38,19 +38,19 @@ QT_MOC_LITERAL(2, 28, 0), // ""
 QT_MOC_LITERAL(3, 29, 16), // "std::string_view"
 QT_MOC_LITERAL(4, 46, 14), // "shouldShowApnd"
 QT_MOC_LITERAL(5, 61, 8), // "setScale"
-QT_MOC_LITERAL(6, 70, 10), // "setCurrPos"
-QT_MOC_LITERAL(7, 81, 7), // "CellPos"
-QT_MOC_LITERAL(8, 89, 12), // "setSelection"
-QT_MOC_LITERAL(9, 102, 8), // "CellRect"
-QT_MOC_LITERAL(10, 111, 13), // "setFrameCount"
-QT_MOC_LITERAL(11, 125, 8), // "FrameIdx"
-QT_MOC_LITERAL(12, 134, 13), // "setLayerCount"
-QT_MOC_LITERAL(13, 148, 8) // "LayerIdx"
+QT_MOC_LITERAL(6, 70, 6), // "setPos"
+QT_MOC_LITERAL(7, 77, 7), // "CellPos"
+QT_MOC_LITERAL(8, 85, 12), // "setSelection"
+QT_MOC_LITERAL(9, 98, 8), // "CellRect"
+QT_MOC_LITERAL(10, 107, 13), // "setFrameCount"
+QT_MOC_LITERAL(11, 121, 8), // "FrameIdx"
+QT_MOC_LITERAL(12, 130, 13), // "setLayerCount"
+QT_MOC_LITERAL(13, 144, 8) // "LayerIdx"
 
     },
     "StatusObject\0shouldShowPerm\0\0"
     "std::string_view\0shouldShowApnd\0"
-    "setScale\0setCurrPos\0CellPos\0setSelection\0"
+    "setScale\0setPos\0CellPos\0setSelection\0"
     "CellRect\0setFrameCount\0FrameIdx\0"
     "setLayerCount\0LayerIdx"
 };
@@ -103,7 +103,7 @@ void StatusObject::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         case 0: _t->shouldShowPerm((*reinterpret_cast< std::string_view(*)>(_a[1]))); break;
         case 1: _t->shouldShowApnd((*reinterpret_cast< std::string_view(*)>(_a[1]))); break;
         case 2: _t->setScale((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 3: _t->setCurrPos((*reinterpret_cast< CellPos(*)>(_a[1]))); break;
+        case 3: _t->setPos((*reinterpret_cast< CellPos(*)>(_a[1]))); break;
         case 4: _t->setSelection((*reinterpret_cast< CellRect(*)>(_a[1]))); break;
         case 5: _t->setFrameCount((*reinterpret_cast< FrameIdx(*)>(_a[1]))); break;
         case 6: _t->setLayerCount((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;

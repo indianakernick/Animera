@@ -247,18 +247,18 @@ public:
     : QObject{action}, action{action} {}
   
   void toggleVis(Timeline &timeline) {
-    timeline.setVisibility(currLayer, !visible[+currLayer]);
+    timeline.setVisibility(layer, !visible[+layer]);
   }
   
 public Q_SLOTS:
-  void setCurrPos(const CellPos pos) {
-    if (currLayer == pos.l) return;
-    currLayer = pos.l;
+  void setPos(const CellPos pos) {
+    if (layer == pos.l) return;
+    layer = pos.l;
     updateText();
   }
   
-  void setVisibility(const LayerIdx layer, const bool vis) {
-    visible[+layer] = vis;
+  void setVisibility(const LayerIdx idx, const bool visibility) {
+    visible[+idx] = visibility;
     updateText();
   }
   
@@ -268,11 +268,11 @@ public Q_SLOTS:
   
 private:
   QAction *action;
-  LayerIdx currLayer = LayerIdx{};
+  LayerIdx layer = LayerIdx{};
   std::vector<bool> visible;
   
   void updateText() {
-    if (visible[+currLayer]) {
+    if (visible[+layer]) {
       action->setText("Hide Layer");
     } else {
       action->setText("Show Layer");
@@ -315,7 +315,7 @@ void Window::populateMenubar() {
     CONNECT_LAMBDA(action, triggered, [toggle, this] {
       toggle->toggleVis(sprite.timeline);
     });
-    CONNECT(sprite.timeline, currPosChanged,    toggle, setCurrPos);
+    CONNECT(sprite.timeline, posChanged,    toggle, setPos);
     CONNECT(sprite.timeline, visibilityChanged, toggle, setVisibility);
     CONNECT(sprite.timeline, layerCountChanged, toggle, setLayerCount);
   }
@@ -348,7 +348,7 @@ void Window::populateMenubar() {
     QAction *action = frame->addAction("Play Animation");
     action->setShortcut(key_play_anim);
     CONNECT(action, triggered, timeline, toggleAnimation);
-    CONNECT_LAMBDA(timeline, animationToggled, [action](const bool playing) {
+    CONNECT_LAMBDA(timeline, shouldToggleAnimation, [action](const bool playing) {
       if (playing) {
         action->setText("Pause Animation");
       } else {
@@ -375,102 +375,102 @@ void Window::populateMenubar() {
 #undef ADD_ACTION
 
 void Window::connectSignals() {
-  CONNECT(sprite.timeline, currCellChanged,     tools,           setCell);
-  CONNECT(sprite.timeline, currCellChanged,     sample,          setCell);
-  CONNECT(sprite.timeline, currCellChanged,     undo,            setCell);
-  CONNECT(sprite.timeline, frameChanged,        editor,          setFrame);
-  CONNECT(sprite.timeline, cellModified,        editor,          composite);
-  CONNECT(sprite.timeline, currPosChanged,      timeline,        setCurrPos);
-  CONNECT(sprite.timeline, selectionChanged,    timeline,        setSelection);
-  CONNECT(sprite.timeline, visibilityChanged,   timeline,        setVisibility);
-  CONNECT(sprite.timeline, nameChanged,         timeline,        setName);
-  CONNECT(sprite.timeline, layerChanged,        timeline,        setLayer);
-  CONNECT(sprite.timeline, frameCountChanged,   timeline,        setFrameCount);
-  CONNECT(sprite.timeline, layerCountChanged,   timeline,        setLayerCount);
-  CONNECT(sprite.timeline, delayChanged,        timeline,        setDelay);
-  CONNECT(sprite.timeline, currPosChanged,      status,          setCurrPos);
-  CONNECT(sprite.timeline, selectionChanged,    status,          setSelection);
-  CONNECT(sprite.timeline, frameCountChanged,   status,          setFrameCount);
-  CONNECT(sprite.timeline, layerCountChanged,   status,          setLayerCount);
-  CONNECT(sprite.timeline, modified,            this,            modify);
+  CONNECT(sprite.timeline, cellChanged,             tools,           setCell);
+  CONNECT(sprite.timeline, cellChanged,             sample,          setCell);
+  CONNECT(sprite.timeline, cellChanged,             undo,            setCell);
+  CONNECT(sprite.timeline, frameChanged,            editor,          setFrame);
+  CONNECT(sprite.timeline, cellModified,            editor,          composite);
+  CONNECT(sprite.timeline, posChanged,              timeline,        setPos);
+  CONNECT(sprite.timeline, selectionChanged,        timeline,        setSelection);
+  CONNECT(sprite.timeline, visibilityChanged,       timeline,        setVisibility);
+  CONNECT(sprite.timeline, nameChanged,             timeline,        setName);
+  CONNECT(sprite.timeline, layerChanged,            timeline,        setLayer);
+  CONNECT(sprite.timeline, frameCountChanged,       timeline,        setFrameCount);
+  CONNECT(sprite.timeline, layerCountChanged,       timeline,        setLayerCount);
+  CONNECT(sprite.timeline, delayChanged,            timeline,        setDelay);
+  CONNECT(sprite.timeline, posChanged,              status,          setPos);
+  CONNECT(sprite.timeline, selectionChanged,        status,          setSelection);
+  CONNECT(sprite.timeline, frameCountChanged,       status,          setFrameCount);
+  CONNECT(sprite.timeline, layerCountChanged,       status,          setLayerCount);
+  CONNECT(sprite.timeline, modified,                this,            modify);
   
-  CONNECT(timeline,        visibilityChanged,   sprite.timeline, setVisibility);
-  CONNECT(timeline,        nameChanged,         sprite.timeline, setName);
-  CONNECT(timeline,        nextFrame,           sprite.timeline, nextFrame);
-  CONNECT(timeline,        insertLayer,         sprite.timeline, insertLayer);
-  CONNECT(timeline,        removeLayer,         sprite.timeline, removeLayer);
-  CONNECT(timeline,        moveLayerUp,         sprite.timeline, moveLayerUp);
-  CONNECT(timeline,        moveLayerDown,       sprite.timeline, moveLayerDown);
-  CONNECT(timeline,        extendCell,          sprite.timeline, extendCell);
-  CONNECT(timeline,        splitCell,           sprite.timeline, splitCell);
-  CONNECT(timeline,        beginSelection,      sprite.timeline, beginSelection);
-  CONNECT(timeline,        continueSelection,   sprite.timeline, continueSelection);
-  CONNECT(timeline,        endSelection,        sprite.timeline, endSelection);
-  CONNECT(timeline,        clearSelection,      sprite.timeline, clearSelection);
-  CONNECT(timeline,        currPosChanged,      sprite.timeline, setPos);
-  CONNECT(timeline,        delayChanged,        sprite.timeline, setDelay);
+  CONNECT(timeline,        shouldSetVisibility,     sprite.timeline, setVisibility);
+  CONNECT(timeline,        shouldSetName,           sprite.timeline, setName);
+  CONNECT(timeline,        shouldNextFrame,         sprite.timeline, nextFrame);
+  CONNECT(timeline,        shouldInsertLayer,       sprite.timeline, insertLayer);
+  CONNECT(timeline,        shouldRemoveLayer,       sprite.timeline, removeLayer);
+  CONNECT(timeline,        shouldMoveLayerUp,       sprite.timeline, moveLayerUp);
+  CONNECT(timeline,        shouldMoveLayerDown,     sprite.timeline, moveLayerDown);
+  CONNECT(timeline,        shouldExtendCell,        sprite.timeline, extendCell);
+  CONNECT(timeline,        shouldSplitCell,         sprite.timeline, splitCell);
+  CONNECT(timeline,        shouldBeginSelection,    sprite.timeline, beginSelection);
+  CONNECT(timeline,        shouldContinueSelection, sprite.timeline, continueSelection);
+  CONNECT(timeline,        shouldEndSelection,      sprite.timeline, endSelection);
+  CONNECT(timeline,        shouldClearSelection,    sprite.timeline, clearSelection);
+  CONNECT(timeline,        shouldSetPos,            sprite.timeline, setPos);
+  CONNECT(timeline,        shouldSetDelay,          sprite.timeline, setDelay);
   
-  CONNECT(sprite,          canvasInitialized,   colorPicker,     initCanvas);
-  CONNECT(sprite,          canvasInitialized,   colors,          initCanvas);
-  CONNECT(sprite,          canvasInitialized,   editor,          initCanvas);
-  CONNECT(sprite,          canvasInitialized,   palette,         initCanvas);
-  CONNECT(sprite,          canvasInitialized,   tools,           initCanvas);
-  CONNECT(sprite,          canvasInitialized,   sample,          initCanvas);
+  CONNECT(sprite,          canvasInitialized,       colorPicker,     initCanvas);
+  CONNECT(sprite,          canvasInitialized,       colors,          initCanvas);
+  CONNECT(sprite,          canvasInitialized,       editor,          initCanvas);
+  CONNECT(sprite,          canvasInitialized,       palette,         initCanvas);
+  CONNECT(sprite,          canvasInitialized,       tools,           initCanvas);
+  CONNECT(sprite,          canvasInitialized,       sample,          initCanvas);
   
-  CONNECT(sprite.palette,  paletteChanged,      palette,         setPalette);
-  CONNECT(sprite.palette,  paletteChanged,      editor,          setPalette);
-  CONNECT(sprite.palette,  paletteChanged,      tools,           setPalette);
-  CONNECT(sprite.palette,  paletteChanged,      colors,          setPalette);
+  CONNECT(sprite.palette,  paletteChanged,          palette,         setPalette);
+  CONNECT(sprite.palette,  paletteChanged,          editor,          setPalette);
+  CONNECT(sprite.palette,  paletteChanged,          tools,           setPalette);
+  CONNECT(sprite.palette,  paletteChanged,          colors,          setPalette);
   
-  CONNECT(tools,           cellModified,        editor,          composite);
-  CONNECT(tools,           overlayModified,     editor,          compositeOverlay);
-  CONNECT(tools,           shouldShowNorm,      statusBar,       showNorm);
-  CONNECT(tools,           growRequested,       sprite.timeline, growCell);
-  CONNECT(tools,           shrinkRequested,     sprite.timeline, shrinkCell);
-  CONNECT(tools,           changingAction,      undo,            cellModified);
-  CONNECT(tools,           changingAction,      this,            modify);
-  CONNECT(tools,           lockRequested,       sprite.timeline, lock);
-  CONNECT(tools,           unlockRequested,     sprite.timeline, unlock);
+  CONNECT(tools,           cellModified,            editor,          composite);
+  CONNECT(tools,           overlayModified,         editor,          compositeOverlay);
+  CONNECT(tools,           shouldShowNorm,          statusBar,       showNorm);
+  CONNECT(tools,           growRequested,           sprite.timeline, growCell);
+  CONNECT(tools,           shrinkRequested,         sprite.timeline, shrinkCell);
+  CONNECT(tools,           changingAction,          undo,            cellModified);
+  CONNECT(tools,           changingAction,          this,            modify);
+  CONNECT(tools,           lockRequested,           sprite.timeline, lock);
+  CONNECT(tools,           unlockRequested,         sprite.timeline, unlock);
   
-  CONNECT(editor,          overlayChanged,      tools,           setOverlay);
-  CONNECT(editor,          mouseEnter,          tools,           mouseEnter);
-  CONNECT(editor,          mouseLeave,          tools,           mouseLeave);
-  CONNECT(editor,          mouseDown,           tools,           mouseDown);
-  CONNECT(editor,          mouseMove,           tools,           mouseMove);
-  CONNECT(editor,          mouseUp,             tools,           mouseUp);
-  CONNECT(editor,          keyPress,            tools,           keyPress);
-  CONNECT(editor,          mouseMove,           sample,          mouseMove);
-  CONNECT(editor,          keyPress,            sample,          keyPress);
-  CONNECT(editor,          keyPress,            undo,            keyPress);
-  CONNECT(editor,          scaleChanged,        status,          setScale);
+  CONNECT(editor,          overlayChanged,          tools,           setOverlay);
+  CONNECT(editor,          mouseEnter,              tools,           mouseEnter);
+  CONNECT(editor,          mouseLeave,              tools,           mouseLeave);
+  CONNECT(editor,          mouseDown,               tools,           mouseDown);
+  CONNECT(editor,          mouseMove,               tools,           mouseMove);
+  CONNECT(editor,          mouseUp,                 tools,           mouseUp);
+  CONNECT(editor,          keyPress,                tools,           keyPress);
+  CONNECT(editor,          mouseMove,               sample,          mouseMove);
+  CONNECT(editor,          keyPress,                sample,          keyPress);
+  CONNECT(editor,          keyPress,                undo,            keyPress);
+  CONNECT(editor,          scaleChanged,            status,          setScale);
   
-  CONNECT(colors,          colorsChanged,       tools,           setColors);
-  CONNECT(colors,          shouldAttachColor,   colorPicker,     attach);
-  CONNECT(colors,          shouldAttachIndex,   palette,         attachIndex);
-  CONNECT(colors,          shouldShowNorm,      statusBar,       showNorm);
+  CONNECT(colors,          colorsChanged,           tools,           setColors);
+  CONNECT(colors,          shouldAttachColor,       colorPicker,     attach);
+  CONNECT(colors,          shouldAttachIndex,       palette,         attachIndex);
+  CONNECT(colors,          shouldShowNorm,          statusBar,       showNorm);
   
-  CONNECT(sample,          shouldSetColor,      colorPicker,     setColor);
-  CONNECT(sample,          shouldSetIndex,      colors,          setIndex);
-  CONNECT(sample,          shouldSetIndex,      palette,         attachIndex);
+  CONNECT(sample,          shouldSetColor,          colorPicker,     setColor);
+  CONNECT(sample,          shouldSetIndex,          colors,          setIndex);
+  CONNECT(sample,          shouldSetIndex,          palette,         attachIndex);
   
-  CONNECT(undo,            cellReverted,        editor,          composite);
-  CONNECT(undo,            cellReverted,        this,            modify);
-  CONNECT(undo,            shouldShowTemp,      statusBar,       showTemp);
-  CONNECT(undo,            shouldClearCell,     sprite.timeline, clearCell);
-  CONNECT(undo,            shouldGrowCell,      sprite.timeline, growCell);
+  CONNECT(undo,            cellReverted,            editor,          composite);
+  CONNECT(undo,            cellReverted,            this,            modify);
+  CONNECT(undo,            shouldShowTemp,          statusBar,       showTemp);
+  CONNECT(undo,            shouldClearCell,         sprite.timeline, clearCell);
+  CONNECT(undo,            shouldGrowCell,          sprite.timeline, growCell);
   
-  CONNECT(palette,         shouldAttachColor,   colorPicker,     attach);
-  CONNECT(palette,         shouldSetColor,      colorPicker,     setColor);
-  CONNECT(palette,         shouldSetIndex,      colors,          setIndex);
-  CONNECT(palette,         paletteColorChanged, editor,          compositePalette);
-  CONNECT(palette,         paletteColorChanged, colors,          changePaletteColors);
-  CONNECT(palette,         paletteColorChanged, this,            modify);
-  CONNECT(palette,         shouldShowNorm,      statusBar,       showNorm);
+  CONNECT(palette,         shouldAttachColor,       colorPicker,     attach);
+  CONNECT(palette,         shouldSetColor,          colorPicker,     setColor);
+  CONNECT(palette,         shouldSetIndex,          colors,          setIndex);
+  CONNECT(palette,         paletteColorChanged,     editor,          compositePalette);
+  CONNECT(palette,         paletteColorChanged,     colors,          updatePaletteColors);
+  CONNECT(palette,         paletteColorChanged,     this,            modify);
+  CONNECT(palette,         shouldShowNorm,          statusBar,       showNorm);
   
-  CONNECT(colorPicker,     shouldShowNorm,      statusBar,       showNorm);
+  CONNECT(colorPicker,     shouldShowNorm,          statusBar,       showNorm);
   
-  CONNECT(status,          shouldShowPerm,      statusBar,       showPerm);
-  CONNECT(status,          shouldShowApnd,      statusBar,       showApnd);
+  CONNECT(status,          shouldShowPerm,          statusBar,       showPerm);
+  CONNECT(status,          shouldShowApnd,          statusBar,       showApnd);
 }
 
 void Window::saveToPath(const QString &path) {

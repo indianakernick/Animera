@@ -34,10 +34,10 @@ void resizeCopyImage(QImage &image, const QSize newSize) {
 }
 
 CellsWidget::CellsWidget(QWidget *parent)
-: QWidget{parent},
-  currPosImg{0, 0, QImage::Format_ARGB32_Premultiplied},
-  selectionImg{0, 0, QImage::Format_ARGB32_Premultiplied},
-  layersImg{0, 0, QImage::Format_ARGB32_Premultiplied} {
+  : QWidget{parent},
+    posImg{0, 0, QImage::Format_ARGB32_Premultiplied},
+    selectionImg{0, 0, QImage::Format_ARGB32_Premultiplied},
+    layersImg{0, 0, QImage::Format_ARGB32_Premultiplied} {
   cellPix = bakeColoredBitmap(":/Timeline/cell.png", cell_icon_color);
   beginLinkPix = bakeColoredBitmap(":/Timeline/begin linked cell.png", cell_icon_color);
   endLinkPix = bakeColoredBitmap(":/Timeline/end linked cell.png", cell_icon_color);
@@ -59,13 +59,13 @@ void CellsWidget::setSelection(const CellRect rect) {
   repaint();
 }
 
-void CellsWidget::setCurrPos(const CellPos pos) {
+void CellsWidget::setPos(const CellPos pos) {
   const QPoint pixelPos = {+pos.f * cell_width, +pos.l * cell_height};
   Q_EMIT shouldEnsureVisible(pixelPos);
-  currPosImg.fill(0);
-  QPainter painter{&currPosImg};
+  posImg.fill(0);
+  QPainter painter{&posImg};
   painter.setPen(Qt::NoPen);
-  painter.setBrush(cell_curr_color);
+  painter.setBrush(cell_pos_color);
   constexpr int size = 2 * cell_icon_pad + cell_icon_size;
   if (height() > cell_height || width() == cell_width) {
     painter.drawRect(0, +pos.l * cell_height, width(), size);
@@ -157,7 +157,7 @@ void CellsWidget::setLayer(const LayerIdx idx, std::span<const CellSpan> spans) 
 
 void CellsWidget::setFrameCount(const FrameIdx count) {
   setFixedWidth(+count * cell_width);
-  resizeImage(currPosImg, size());
+  resizeImage(posImg, size());
   resizeImage(selectionImg, size());
   resizeImage(layersImg, size());
   resizeImage(bordersImg, size());
@@ -166,7 +166,7 @@ void CellsWidget::setFrameCount(const FrameIdx count) {
 
 void CellsWidget::setLayerCount(const LayerIdx count) {
   setFixedHeight(+count * cell_height);
-  resizeImage(currPosImg, size());
+  resizeImage(posImg, size());
   resizeImage(selectionImg, size());
   resizeCopyImage(layersImg, size());
   resizeCopyImage(bordersImg, size());
@@ -192,14 +192,14 @@ void CellsWidget::updateSelectionImg() {
 
 void CellsWidget::paintEvent(QPaintEvent *) {
   QPainter painter{this};
-  painter.drawImage(0, 0, currPosImg);
+  painter.drawImage(0, 0, posImg);
   painter.drawImage(0, 0, layersImg);
   painter.drawImage(0, 0, bordersImg);
   painter.drawImage(0, 0, selectionImg);
 }
 
 void CellsWidget::focusOutEvent(QFocusEvent *) {
-  Q_EMIT clearSelection();
+  Q_EMIT shouldClearSelection();
 }
 
 CellPos CellsWidget::getPos(QMouseEvent *event) {
@@ -210,18 +210,18 @@ CellPos CellsWidget::getPos(QMouseEvent *event) {
 }
 
 void CellsWidget::mousePressEvent(QMouseEvent *event) {
-  Q_EMIT currPosChanged(getPos(event));
-  Q_EMIT beginSelection();
+  Q_EMIT shouldSetPos(getPos(event));
+  Q_EMIT shouldBeginSelection();
 }
 
 void CellsWidget::mouseMoveEvent(QMouseEvent *event) {
-  Q_EMIT currPosChanged(getPos(event));
-  Q_EMIT continueSelection();
+  Q_EMIT shouldSetPos(getPos(event));
+  Q_EMIT shouldContinueSelection();
 }
 
 void CellsWidget::mouseReleaseEvent(QMouseEvent *event) {
-  Q_EMIT currPosChanged(getPos(event));
-  Q_EMIT endSelection();
+  Q_EMIT shouldSetPos(getPos(event));
+  Q_EMIT shouldEndSelection();
 }
 
 CellScrollWidget::CellScrollWidget(QWidget *parent)

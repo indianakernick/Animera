@@ -41,7 +41,7 @@ void ControlsWidget::toggleTimer() {
 
 void ControlsWidget::changeDelay(const int delay) {
   animTimer.setInterval(delay);
-  Q_EMIT delayChanged(delay);
+  Q_EMIT shouldSetDelay(delay);
 }
 
 IconPushButtonWidget *ControlsWidget::makePushButton(QPixmap base, const QString &path) {
@@ -96,15 +96,15 @@ void ControlsWidget::setupLayout() {
 }
 
 void ControlsWidget::connectSignals() {
-  CONNECT(insertLayerButton,   pressed,      this, insertLayer);
-  CONNECT(removeLayerButton,   pressed,      this, removeLayer);
-  CONNECT(moveLayerUpButton,   pressed,      this, moveLayerUp);
-  CONNECT(moveLayerDownButton, pressed,      this, moveLayerDown);
-  CONNECT(extendButton,        pressed,      this, extendCell);
-  CONNECT(splitButton,         pressed,      this, splitCell);
+  CONNECT(insertLayerButton,   pressed,      this, shouldInsertLayer);
+  CONNECT(removeLayerButton,   pressed,      this, shouldRemoveLayer);
+  CONNECT(moveLayerUpButton,   pressed,      this, shouldMoveLayerUp);
+  CONNECT(moveLayerDownButton, pressed,      this, shouldMoveLayerDown);
+  CONNECT(extendButton,        pressed,      this, shouldExtendCell);
+  CONNECT(splitButton,         pressed,      this, shouldSplitCell);
   CONNECT(playButton,          toggled,      this, toggleTimer);
-  CONNECT(playButton,          toggled,      this, animationToggled);
-  CONNECT(animTimer,           timeout,      this, nextFrame);
+  CONNECT(playButton,          toggled,      this, shouldToggleAnimation);
+  CONNECT(animTimer,           timeout,      this, shouldNextFrame);
   CONNECT(delayBox,            valueChanged, this, changeDelay);
 }
 

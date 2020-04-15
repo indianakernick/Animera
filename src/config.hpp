@@ -294,7 +294,7 @@ constexpr int       pal_tile_size = 13_px;
 // -------------------------------- timeline -------------------------------- //
 
 inline const QColor cell_icon_color = glob_light_2;
-inline const QColor cell_curr_color = glob_light_1;
+inline const QColor cell_pos_color = glob_light_1;
 inline const QColor cell_select_color = glob_dark_1;
 inline const QColor cell_select_border_color = glob_dark_2;
 

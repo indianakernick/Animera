@@ -52,7 +52,7 @@ struct ExportOptions {
 
 /// State used to evaluate sprite name pattern
 struct ExportState {
-  CellPos currPos;
+  CellPos pos;
   // Could add layer name to this
 };
 

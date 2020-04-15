@@ -23,7 +23,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_CellsWidget_t {
     QByteArrayData data[19];
-    char stringdata0[239];
+    char stringdata0[257];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -36,29 +36,30 @@ QT_MOC_LITERAL(0, 0, 11), // "CellsWidget"
 QT_MOC_LITERAL(1, 12, 7), // "resized"
 QT_MOC_LITERAL(2, 20, 0), // ""
 QT_MOC_LITERAL(3, 21, 19), // "shouldEnsureVisible"
-QT_MOC_LITERAL(4, 41, 14), // "beginSelection"
-QT_MOC_LITERAL(5, 56, 17), // "continueSelection"
-QT_MOC_LITERAL(6, 74, 12), // "endSelection"
-QT_MOC_LITERAL(7, 87, 14), // "clearSelection"
-QT_MOC_LITERAL(8, 102, 14), // "currPosChanged"
-QT_MOC_LITERAL(9, 117, 7), // "CellPos"
-QT_MOC_LITERAL(10, 125, 12), // "setSelection"
-QT_MOC_LITERAL(11, 138, 8), // "CellRect"
-QT_MOC_LITERAL(12, 147, 10), // "setCurrPos"
-QT_MOC_LITERAL(13, 158, 8), // "setLayer"
-QT_MOC_LITERAL(14, 167, 8), // "LayerIdx"
-QT_MOC_LITERAL(15, 176, 25), // "std::span<const CellSpan>"
-QT_MOC_LITERAL(16, 202, 13), // "setFrameCount"
-QT_MOC_LITERAL(17, 216, 8), // "FrameIdx"
-QT_MOC_LITERAL(18, 225, 13) // "setLayerCount"
+QT_MOC_LITERAL(4, 41, 20), // "shouldBeginSelection"
+QT_MOC_LITERAL(5, 62, 23), // "shouldContinueSelection"
+QT_MOC_LITERAL(6, 86, 18), // "shouldEndSelection"
+QT_MOC_LITERAL(7, 105, 20), // "shouldClearSelection"
+QT_MOC_LITERAL(8, 126, 12), // "shouldSetPos"
+QT_MOC_LITERAL(9, 139, 7), // "CellPos"
+QT_MOC_LITERAL(10, 147, 12), // "setSelection"
+QT_MOC_LITERAL(11, 160, 8), // "CellRect"
+QT_MOC_LITERAL(12, 169, 6), // "setPos"
+QT_MOC_LITERAL(13, 176, 8), // "setLayer"
+QT_MOC_LITERAL(14, 185, 8), // "LayerIdx"
+QT_MOC_LITERAL(15, 194, 25), // "std::span<const CellSpan>"
+QT_MOC_LITERAL(16, 220, 13), // "setFrameCount"
+QT_MOC_LITERAL(17, 234, 8), // "FrameIdx"
+QT_MOC_LITERAL(18, 243, 13) // "setLayerCount"
 
     },
     "CellsWidget\0resized\0\0shouldEnsureVisible\0"
-    "beginSelection\0continueSelection\0"
-    "endSelection\0clearSelection\0currPosChanged\0"
-    "CellPos\0setSelection\0CellRect\0setCurrPos\0"
-    "setLayer\0LayerIdx\0std::span<const CellSpan>\0"
-    "setFrameCount\0FrameIdx\0setLayerCount"
+    "shouldBeginSelection\0shouldContinueSelection\0"
+    "shouldEndSelection\0shouldClearSelection\0"
+    "shouldSetPos\0CellPos\0setSelection\0"
+    "CellRect\0setPos\0setLayer\0LayerIdx\0"
+    "std::span<const CellSpan>\0setFrameCount\0"
+    "FrameIdx\0setLayerCount"
 };
 #undef QT_MOC_LITERAL
 
@@ -118,13 +119,13 @@ void CellsWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         switch (_id) {
         case 0: _t->resized(); break;
         case 1: _t->shouldEnsureVisible((*reinterpret_cast< QPoint(*)>(_a[1]))); break;
-        case 2: _t->beginSelection(); break;
-        case 3: _t->continueSelection(); break;
-        case 4: _t->endSelection(); break;
-        case 5: _t->clearSelection(); break;
-        case 6: _t->currPosChanged((*reinterpret_cast< CellPos(*)>(_a[1]))); break;
+        case 2: _t->shouldBeginSelection(); break;
+        case 3: _t->shouldContinueSelection(); break;
+        case 4: _t->shouldEndSelection(); break;
+        case 5: _t->shouldClearSelection(); break;
+        case 6: _t->shouldSetPos((*reinterpret_cast< CellPos(*)>(_a[1]))); break;
         case 7: _t->setSelection((*reinterpret_cast< CellRect(*)>(_a[1]))); break;
-        case 8: _t->setCurrPos((*reinterpret_cast< CellPos(*)>(_a[1]))); break;
+        case 8: _t->setPos((*reinterpret_cast< CellPos(*)>(_a[1]))); break;
         case 9: _t->setLayer((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< std::span<const CellSpan>(*)>(_a[2]))); break;
         case 10: _t->setFrameCount((*reinterpret_cast< FrameIdx(*)>(_a[1]))); break;
         case 11: _t->setLayerCount((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;
@@ -148,35 +149,35 @@ void CellsWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         }
         {
             using _t = void (CellsWidget::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&CellsWidget::beginSelection)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&CellsWidget::shouldBeginSelection)) {
                 *result = 2;
                 return;
             }
         }
         {
             using _t = void (CellsWidget::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&CellsWidget::continueSelection)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&CellsWidget::shouldContinueSelection)) {
                 *result = 3;
                 return;
             }
         }
         {
             using _t = void (CellsWidget::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&CellsWidget::endSelection)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&CellsWidget::shouldEndSelection)) {
                 *result = 4;
                 return;
             }
         }
         {
             using _t = void (CellsWidget::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&CellsWidget::clearSelection)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&CellsWidget::shouldClearSelection)) {
                 *result = 5;
                 return;
             }
         }
         {
             using _t = void (CellsWidget::*)(CellPos );
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&CellsWidget::currPosChanged)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&CellsWidget::shouldSetPos)) {
                 *result = 6;
                 return;
             }
@@ -238,31 +239,31 @@ void CellsWidget::shouldEnsureVisible(QPoint _t1)
 }
 
 // SIGNAL 2
-void CellsWidget::beginSelection()
+void CellsWidget::shouldBeginSelection()
 {
     QMetaObject::activate(this, &staticMetaObject, 2, nullptr);
 }
 
 // SIGNAL 3
-void CellsWidget::continueSelection()
+void CellsWidget::shouldContinueSelection()
 {
     QMetaObject::activate(this, &staticMetaObject, 3, nullptr);
 }
 
 // SIGNAL 4
-void CellsWidget::endSelection()
+void CellsWidget::shouldEndSelection()
 {
     QMetaObject::activate(this, &staticMetaObject, 4, nullptr);
 }
 
 // SIGNAL 5
-void CellsWidget::clearSelection()
+void CellsWidget::shouldClearSelection()
 {
     QMetaObject::activate(this, &staticMetaObject, 5, nullptr);
 }
 
 // SIGNAL 6
-void CellsWidget::currPosChanged(CellPos _t1)
+void CellsWidget::shouldSetPos(CellPos _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 6, _a);

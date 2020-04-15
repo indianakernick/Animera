@@ -42,7 +42,7 @@ public Q_SLOTS:
       Q_EMIT colorChanged();
     }
   }
-  void changePaletteColors() {
+  void updatePaletteColors() {
     if (format == Format::index) {
       repaint();
     }
@@ -172,9 +172,9 @@ void ToolColorsWidget::setIndex(const int index) {
   }
 }
 
-void ToolColorsWidget::changePaletteColors() {
+void ToolColorsWidget::updatePaletteColors() {
   for (auto *widget : widgets) {
-    widget->changePaletteColors();
+    widget->updatePaletteColors();
   }
 }
 

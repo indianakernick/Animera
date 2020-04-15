@@ -50,9 +50,9 @@ QString evalExportPattern(const QString &pattern, const ExportState state) {
       const int zeros = countZeros(c, pattern.cend());
       assert(c != pattern.cend());
       if (*c == 'L') {
-        output.push_back(paddedNumber(zeros, +state.currPos.l));
+        output.push_back(paddedNumber(zeros, +state.pos.l));
       } else if (*c == 'F') {
-        output.push_back(paddedNumber(zeros, +state.currPos.f));
+        output.push_back(paddedNumber(zeros, +state.pos.f));
       } else Q_UNREACHABLE();
     } else {
       assert(validFileNameChar(*c));

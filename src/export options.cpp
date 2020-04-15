@@ -37,8 +37,8 @@ QString getExportPath(const ExportOptions &options, ExportState state) {
   if (path.back() != QDir::separator()) {
     path.push_back(QDir::separator());
   }
-  state.currPos.l = applyLine(options.layerLine, state.currPos.l);
-  state.currPos.f = applyLine(options.frameLine, state.currPos.f);
+  state.pos.l = applyLine(options.layerLine, state.pos.l);
+  state.pos.f = applyLine(options.frameLine, state.pos.f);
   path += evalExportPattern(options.name, state);
   path += ".png";
   return path;

@@ -23,18 +23,13 @@ public:
   LayerNameWidget(QWidget *, LayerIdx);
   
 Q_SIGNALS:
-  void visibilityChanged(LayerIdx, bool);
-  void visibilityIsolated(LayerIdx);
-  void nameChanged(LayerIdx, std::string_view);
+  void shouldSetVisibility(LayerIdx, bool);
+  void shouldIsolateVisibility(LayerIdx);
+  void shouldSetName(LayerIdx, std::string_view);
 
 public Q_SLOTS:
   void setVisibility(bool);
   void setName(std::string_view);
-
-private Q_SLOTS:
-  void changeVisibility(bool);
-  void isolate();
-  void changeName(const QString &);
 
 private:
   VisibleWidget *visible = nullptr;
@@ -52,9 +47,9 @@ public:
   explicit LayersWidget(QWidget *);
   
 Q_SIGNALS:
-  void visibilityChanged(LayerIdx, bool);
-  void visibilityIsolated(LayerIdx);
-  void nameChanged(LayerIdx, std::string_view);
+  void shouldSetVisibility(LayerIdx, bool);
+  void shouldIsolateVisibility(LayerIdx);
+  void shouldSetName(LayerIdx, std::string_view);
 
 public Q_SLOTS:
   void setMargin(int);

@@ -21,19 +21,23 @@ public:
   explicit ControlsWidget(QWidget *);
 
 Q_SIGNALS:
-  void nextFrame();
-  void insertLayer();
-  void removeLayer();
-  void moveLayerUp();
-  void moveLayerDown();
-  void extendCell();
-  void splitCell();
-  void delayChanged(int);
-  void animationToggled(bool);
+  void shouldNextFrame();
+  void shouldInsertLayer();
+  void shouldRemoveLayer();
+  void shouldMoveLayerUp();
+  void shouldMoveLayerDown();
+  void shouldExtendCell();
+  void shouldSplitCell();
+  void shouldSetDelay(int);
+  void shouldToggleAnimation(bool);
 
 public Q_SLOTS:
   void toggleAnimation();
   void setDelay(int);
+
+private Q_SLOTS:
+  void toggleTimer();
+  void changeDelay(int);
 
 private:
   QTimer animTimer;
@@ -45,9 +49,6 @@ private:
   IconPushButtonWidget *splitButton = nullptr;
   IconRadioButtonWidget *playButton = nullptr;
   NumberInputWidget *delayBox = nullptr;
-  
-  void toggleTimer();
-  void changeDelay(int);
   
   IconPushButtonWidget *makePushButton(QPixmap, const QString &);
   IconRadioButtonWidget *makeRadioButton(QPixmap, const QString &, const QString &);

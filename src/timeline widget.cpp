@@ -36,24 +36,24 @@ TimelineWidget::TimelineWidget(QWidget *parent)
   CONNECT(cellScroll, rightMarginChanged, frameScroll, shouldSetRightMargin);
   CONNECT(cellScroll, bottomMarginChanged, layerScroll, shouldSetBottomMargin);
   
-  CONNECT(layers,   visibilityChanged, this, visibilityChanged);
-  CONNECT(layers,   nameChanged,       this, nameChanged);
+  CONNECT(layers,   shouldSetVisibility,     this, shouldSetVisibility);
+  CONNECT(layers,   shouldSetName,           this, shouldSetName);
   
-  CONNECT(controls, nextFrame,         this, nextFrame);
-  CONNECT(controls, insertLayer,       this, insertLayer);
-  CONNECT(controls, removeLayer,       this, removeLayer);
-  CONNECT(controls, moveLayerUp,       this, moveLayerUp);
-  CONNECT(controls, moveLayerDown,     this, moveLayerDown);
-  CONNECT(controls, extendCell,        this, extendCell);
-  CONNECT(controls, splitCell,         this, splitCell);
-  CONNECT(controls, delayChanged,      this, delayChanged);
-  CONNECT(controls, animationToggled,  this, animationToggled);
+  CONNECT(controls, shouldNextFrame,         this, shouldNextFrame);
+  CONNECT(controls, shouldInsertLayer,       this, shouldInsertLayer);
+  CONNECT(controls, shouldRemoveLayer,       this, shouldRemoveLayer);
+  CONNECT(controls, shouldMoveLayerUp,       this, shouldMoveLayerUp);
+  CONNECT(controls, shouldMoveLayerDown,     this, shouldMoveLayerDown);
+  CONNECT(controls, shouldExtendCell,        this, shouldExtendCell);
+  CONNECT(controls, shouldSplitCell,         this, shouldSplitCell);
+  CONNECT(controls, shouldSetDelay,          this, shouldSetDelay);
+  CONNECT(controls, shouldToggleAnimation,   this, shouldToggleAnimation);
   
-  CONNECT(cells,    beginSelection,    this, beginSelection);
-  CONNECT(cells,    continueSelection, this, continueSelection);
-  CONNECT(cells,    endSelection,      this, endSelection);
-  CONNECT(cells,    clearSelection,    this, clearSelection);
-  CONNECT(cells,    currPosChanged,    this, currPosChanged);
+  CONNECT(cells,    shouldBeginSelection,    this, shouldBeginSelection);
+  CONNECT(cells,    shouldContinueSelection, this, shouldContinueSelection);
+  CONNECT(cells,    shouldEndSelection,      this, shouldEndSelection);
+  CONNECT(cells,    shouldClearSelection,    this, shouldClearSelection);
+  CONNECT(cells,    shouldSetPos,            this, shouldSetPos);
   
   auto *grid = new QGridLayout{this};
   grid->setSpacing(0);
@@ -65,8 +65,8 @@ TimelineWidget::TimelineWidget(QWidget *parent)
 }
 
 
-void TimelineWidget::setCurrPos(const CellPos pos) {
-  cells->setCurrPos(pos);
+void TimelineWidget::setPos(const CellPos pos) {
+  cells->setPos(pos);
 }
 
 void TimelineWidget::setSelection(const CellRect rect) {

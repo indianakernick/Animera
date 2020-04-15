@@ -23,15 +23,15 @@ public:
 Q_SIGNALS:
   void resized();
   void shouldEnsureVisible(QPoint);
-  void beginSelection();
-  void continueSelection();
-  void endSelection();
-  void clearSelection();
-  void currPosChanged(CellPos);
+  void shouldBeginSelection();
+  void shouldContinueSelection();
+  void shouldEndSelection();
+  void shouldClearSelection();
+  void shouldSetPos(CellPos);
   
 public Q_SLOTS:
   void setSelection(CellRect);
-  void setCurrPos(CellPos);
+  void setPos(CellPos);
   void setLayer(LayerIdx, std::span<const CellSpan>);
   void setFrameCount(FrameIdx);
   void setLayerCount(LayerIdx);
@@ -41,7 +41,7 @@ private:
   QPixmap beginLinkPix;
   QPixmap endLinkPix;
   
-  QImage currPosImg;
+  QImage posImg;
   QImage selectionImg;
   QImage bordersImg;
   QImage layersImg;

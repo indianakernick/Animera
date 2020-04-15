@@ -26,7 +26,7 @@ public Q_SLOTS:
   void initCanvas(Format);
   void setPalette(PaletteCSpan);
   void setIndex(int);
-  void changePaletteColors();
+  void updatePaletteColors();
 
 Q_SIGNALS:
   void colorsChanged(ToolColors);

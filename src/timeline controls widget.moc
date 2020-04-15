@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_ControlsWidget_t {
-    QByteArrayData data[13];
-    char stringdata0[152];
+    QByteArrayData data[15];
+    char stringdata0[225];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -33,25 +33,29 @@ struct qt_meta_stringdata_ControlsWidget_t {
 static const qt_meta_stringdata_ControlsWidget_t qt_meta_stringdata_ControlsWidget = {
     {
 QT_MOC_LITERAL(0, 0, 14), // "ControlsWidget"
-QT_MOC_LITERAL(1, 15, 9), // "nextFrame"
-QT_MOC_LITERAL(2, 25, 0), // ""
-QT_MOC_LITERAL(3, 26, 11), // "insertLayer"
-QT_MOC_LITERAL(4, 38, 11), // "removeLayer"
-QT_MOC_LITERAL(5, 50, 11), // "moveLayerUp"
-QT_MOC_LITERAL(6, 62, 13), // "moveLayerDown"
-QT_MOC_LITERAL(7, 76, 10), // "extendCell"
-QT_MOC_LITERAL(8, 87, 9), // "splitCell"
-QT_MOC_LITERAL(9, 97, 12), // "delayChanged"
-QT_MOC_LITERAL(10, 110, 16), // "animationToggled"
-QT_MOC_LITERAL(11, 127, 15), // "toggleAnimation"
-QT_MOC_LITERAL(12, 143, 8) // "setDelay"
+QT_MOC_LITERAL(1, 15, 15), // "shouldNextFrame"
+QT_MOC_LITERAL(2, 31, 0), // ""
+QT_MOC_LITERAL(3, 32, 17), // "shouldInsertLayer"
+QT_MOC_LITERAL(4, 50, 17), // "shouldRemoveLayer"
+QT_MOC_LITERAL(5, 68, 17), // "shouldMoveLayerUp"
+QT_MOC_LITERAL(6, 86, 19), // "shouldMoveLayerDown"
+QT_MOC_LITERAL(7, 106, 16), // "shouldExtendCell"
+QT_MOC_LITERAL(8, 123, 15), // "shouldSplitCell"
+QT_MOC_LITERAL(9, 139, 14), // "shouldSetDelay"
+QT_MOC_LITERAL(10, 154, 21), // "shouldToggleAnimation"
+QT_MOC_LITERAL(11, 176, 15), // "toggleAnimation"
+QT_MOC_LITERAL(12, 192, 8), // "setDelay"
+QT_MOC_LITERAL(13, 201, 11), // "toggleTimer"
+QT_MOC_LITERAL(14, 213, 11) // "changeDelay"
 
     },
-    "ControlsWidget\0nextFrame\0\0insertLayer\0"
-    "removeLayer\0moveLayerUp\0moveLayerDown\0"
-    "extendCell\0splitCell\0delayChanged\0"
-    "animationToggled\0toggleAnimation\0"
-    "setDelay"
+    "ControlsWidget\0shouldNextFrame\0\0"
+    "shouldInsertLayer\0shouldRemoveLayer\0"
+    "shouldMoveLayerUp\0shouldMoveLayerDown\0"
+    "shouldExtendCell\0shouldSplitCell\0"
+    "shouldSetDelay\0shouldToggleAnimation\0"
+    "toggleAnimation\0setDelay\0toggleTimer\0"
+    "changeDelay"
 };
 #undef QT_MOC_LITERAL
 
@@ -61,7 +65,7 @@ static const uint qt_meta_data_ControlsWidget[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-      11,   14, // methods
+      13,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -69,19 +73,21 @@ static const uint qt_meta_data_ControlsWidget[] = {
        9,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    0,   69,    2, 0x06 /* Public */,
-       3,    0,   70,    2, 0x06 /* Public */,
-       4,    0,   71,    2, 0x06 /* Public */,
-       5,    0,   72,    2, 0x06 /* Public */,
-       6,    0,   73,    2, 0x06 /* Public */,
-       7,    0,   74,    2, 0x06 /* Public */,
-       8,    0,   75,    2, 0x06 /* Public */,
-       9,    1,   76,    2, 0x06 /* Public */,
-      10,    1,   79,    2, 0x06 /* Public */,
+       1,    0,   79,    2, 0x06 /* Public */,
+       3,    0,   80,    2, 0x06 /* Public */,
+       4,    0,   81,    2, 0x06 /* Public */,
+       5,    0,   82,    2, 0x06 /* Public */,
+       6,    0,   83,    2, 0x06 /* Public */,
+       7,    0,   84,    2, 0x06 /* Public */,
+       8,    0,   85,    2, 0x06 /* Public */,
+       9,    1,   86,    2, 0x06 /* Public */,
+      10,    1,   89,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      11,    0,   82,    2, 0x0a /* Public */,
-      12,    1,   83,    2, 0x0a /* Public */,
+      11,    0,   92,    2, 0x0a /* Public */,
+      12,    1,   93,    2, 0x0a /* Public */,
+      13,    0,   96,    2, 0x08 /* Private */,
+      14,    1,   97,    2, 0x08 /* Private */,
 
  // signals: parameters
     QMetaType::Void,
@@ -97,6 +103,8 @@ static const uint qt_meta_data_ControlsWidget[] = {
  // slots: parameters
     QMetaType::Void,
     QMetaType::Void, QMetaType::Int,    2,
+    QMetaType::Void,
+    QMetaType::Void, QMetaType::Int,    2,
 
        0        // eod
 };
@@ -107,80 +115,82 @@ void ControlsWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
         auto *_t = static_cast<ControlsWidget *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->nextFrame(); break;
-        case 1: _t->insertLayer(); break;
-        case 2: _t->removeLayer(); break;
-        case 3: _t->moveLayerUp(); break;
-        case 4: _t->moveLayerDown(); break;
-        case 5: _t->extendCell(); break;
-        case 6: _t->splitCell(); break;
-        case 7: _t->delayChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 8: _t->animationToggled((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 0: _t->shouldNextFrame(); break;
+        case 1: _t->shouldInsertLayer(); break;
+        case 2: _t->shouldRemoveLayer(); break;
+        case 3: _t->shouldMoveLayerUp(); break;
+        case 4: _t->shouldMoveLayerDown(); break;
+        case 5: _t->shouldExtendCell(); break;
+        case 6: _t->shouldSplitCell(); break;
+        case 7: _t->shouldSetDelay((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 8: _t->shouldToggleAnimation((*reinterpret_cast< bool(*)>(_a[1]))); break;
         case 9: _t->toggleAnimation(); break;
         case 10: _t->setDelay((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 11: _t->toggleTimer(); break;
+        case 12: _t->changeDelay((*reinterpret_cast< int(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
         int *result = reinterpret_cast<int *>(_a[0]);
         {
             using _t = void (ControlsWidget::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ControlsWidget::nextFrame)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ControlsWidget::shouldNextFrame)) {
                 *result = 0;
                 return;
             }
         }
         {
             using _t = void (ControlsWidget::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ControlsWidget::insertLayer)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ControlsWidget::shouldInsertLayer)) {
                 *result = 1;
                 return;
             }
         }
         {
             using _t = void (ControlsWidget::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ControlsWidget::removeLayer)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ControlsWidget::shouldRemoveLayer)) {
                 *result = 2;
                 return;
             }
         }
         {
             using _t = void (ControlsWidget::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ControlsWidget::moveLayerUp)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ControlsWidget::shouldMoveLayerUp)) {
                 *result = 3;
                 return;
             }
         }
         {
             using _t = void (ControlsWidget::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ControlsWidget::moveLayerDown)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ControlsWidget::shouldMoveLayerDown)) {
                 *result = 4;
                 return;
             }
         }
         {
             using _t = void (ControlsWidget::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ControlsWidget::extendCell)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ControlsWidget::shouldExtendCell)) {
                 *result = 5;
                 return;
             }
         }
         {
             using _t = void (ControlsWidget::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ControlsWidget::splitCell)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ControlsWidget::shouldSplitCell)) {
                 *result = 6;
                 return;
             }
         }
         {
             using _t = void (ControlsWidget::*)(int );
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ControlsWidget::delayChanged)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ControlsWidget::shouldSetDelay)) {
                 *result = 7;
                 return;
             }
         }
         {
             using _t = void (ControlsWidget::*)(bool );
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ControlsWidget::animationToggled)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ControlsWidget::shouldToggleAnimation)) {
                 *result = 8;
                 return;
             }
@@ -217,68 +227,68 @@ int ControlsWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 11)
+        if (_id < 13)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 11;
+        _id -= 13;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 11)
+        if (_id < 13)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 11;
+        _id -= 13;
     }
     return _id;
 }
 
 // SIGNAL 0
-void ControlsWidget::nextFrame()
+void ControlsWidget::shouldNextFrame()
 {
     QMetaObject::activate(this, &staticMetaObject, 0, nullptr);
 }
 
 // SIGNAL 1
-void ControlsWidget::insertLayer()
+void ControlsWidget::shouldInsertLayer()
 {
     QMetaObject::activate(this, &staticMetaObject, 1, nullptr);
 }
 
 // SIGNAL 2
-void ControlsWidget::removeLayer()
+void ControlsWidget::shouldRemoveLayer()
 {
     QMetaObject::activate(this, &staticMetaObject, 2, nullptr);
 }
 
 // SIGNAL 3
-void ControlsWidget::moveLayerUp()
+void ControlsWidget::shouldMoveLayerUp()
 {
     QMetaObject::activate(this, &staticMetaObject, 3, nullptr);
 }
 
 // SIGNAL 4
-void ControlsWidget::moveLayerDown()
+void ControlsWidget::shouldMoveLayerDown()
 {
     QMetaObject::activate(this, &staticMetaObject, 4, nullptr);
 }
 
 // SIGNAL 5
-void ControlsWidget::extendCell()
+void ControlsWidget::shouldExtendCell()
 {
     QMetaObject::activate(this, &staticMetaObject, 5, nullptr);
 }
 
 // SIGNAL 6
-void ControlsWidget::splitCell()
+void ControlsWidget::shouldSplitCell()
 {
     QMetaObject::activate(this, &staticMetaObject, 6, nullptr);
 }
 
 // SIGNAL 7
-void ControlsWidget::delayChanged(int _t1)
+void ControlsWidget::shouldSetDelay(int _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 7, _a);
 }
 
 // SIGNAL 8
-void ControlsWidget::animationToggled(bool _t1)
+void ControlsWidget::shouldToggleAnimation(bool _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 8, _a);

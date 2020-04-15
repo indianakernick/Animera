@@ -102,8 +102,8 @@ public Q_SLOTS:
   void unlock();
 
 Q_SIGNALS:
-  void currPosChanged(CellPos);
-  void currCellChanged(Cell *);
+  void posChanged(CellPos);
+  void cellChanged(Cell *);
   void selectionChanged(CellRect);
   
   void visibilityChanged(LayerIdx, bool);
@@ -123,7 +123,7 @@ Q_SIGNALS:
 private:
   std::vector<Layer> layers;
   std::vector<LayerCells> clipboard;
-  CellPos currPos;
+  CellPos pos;
   CellRect selection;
   FrameIdx frameCount;
   QSize canvasSize;

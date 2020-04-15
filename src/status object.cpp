@@ -19,9 +19,9 @@ void StatusObject::setScale(const int newScale) {
   updateStatus(Updated::scale);
 }
 
-void StatusObject::setCurrPos(const CellPos newCurrPos) {
-  if (currPos.l == newCurrPos.l && currPos.f == newCurrPos.f) return;
-  currPos = newCurrPos;
+void StatusObject::setPos(const CellPos newPos) {
+  if (pos.l == newPos.l && pos.f == newPos.f) return;
+  pos = newPos;
   updateStatus(Updated::cell);
 }
 
@@ -60,7 +60,7 @@ void StatusObject::updateStatus(const Updated updated) {
   const std::size_t timelineSize = status.size();
   
   status.append(" Cell: ");
-  status.append(+currPos.f, +currPos.l);
+  status.append(+pos.f, +pos.l);
   const std::size_t cellSize = status.size();
   
   if (selection.minL <= selection.maxL && selection.minF <= selection.maxF) {

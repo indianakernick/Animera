@@ -289,11 +289,6 @@ should the editor keys go in a menubar?
 ignore the waking click
 
 use QIODevice::errorString instead of "File IO error"
-
-support unicode characters in layer names
-
-some of the integer's in the sprite format are signed and some are unsigned
-  update the documenation (and code perhaps?) accordingly
   
 if another application edits the sprite file, ask to reload
 

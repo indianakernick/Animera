@@ -46,7 +46,7 @@ QT_MOC_LITERAL(10, 135, 6), // "Format"
 QT_MOC_LITERAL(11, 142, 10), // "setPalette"
 QT_MOC_LITERAL(12, 153, 12), // "PaletteCSpan"
 QT_MOC_LITERAL(13, 166, 8), // "setIndex"
-QT_MOC_LITERAL(14, 175, 19), // "changePaletteColors"
+QT_MOC_LITERAL(14, 175, 19), // "updatePaletteColors"
 QT_MOC_LITERAL(15, 195, 12) // "changeColors"
 
     },
@@ -55,7 +55,7 @@ QT_MOC_LITERAL(15, 195, 12) // "changeColors"
     "shouldAttachIndex\0shouldShowNorm\0"
     "std::string_view\0initCanvas\0Format\0"
     "setPalette\0PaletteCSpan\0setIndex\0"
-    "changePaletteColors\0changeColors"
+    "updatePaletteColors\0changeColors"
 };
 #undef QT_MOC_LITERAL
 
@@ -114,7 +114,7 @@ void ToolColorsWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
         case 4: _t->initCanvas((*reinterpret_cast< Format(*)>(_a[1]))); break;
         case 5: _t->setPalette((*reinterpret_cast< PaletteCSpan(*)>(_a[1]))); break;
         case 6: _t->setIndex((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 7: _t->changePaletteColors(); break;
+        case 7: _t->updatePaletteColors(); break;
         case 8: _t->changeColors(); break;
         default: ;
         }
@@ -267,7 +267,7 @@ QT_MOC_LITERAL(9, 124, 12), // "PaletteCSpan"
 QT_MOC_LITERAL(10, 137, 10), // "newPalette"
 QT_MOC_LITERAL(11, 148, 8), // "setIndex"
 QT_MOC_LITERAL(12, 157, 5), // "index"
-QT_MOC_LITERAL(13, 163, 19), // "changePaletteColors"
+QT_MOC_LITERAL(13, 163, 19), // "updatePaletteColors"
 QT_MOC_LITERAL(14, 183, 11), // "attachColor"
 QT_MOC_LITERAL(15, 195, 7), // "checked"
 QT_MOC_LITERAL(16, 203, 11) // "attachIndex"
@@ -277,7 +277,7 @@ QT_MOC_LITERAL(16, 203, 11) // "attachIndex"
     "shouldAttachColor\0ColorHandle*\0"
     "shouldAttachIndex\0shouldShowNorm\0"
     "std::string_view\0setPalette\0PaletteCSpan\0"
-    "newPalette\0setIndex\0index\0changePaletteColors\0"
+    "newPalette\0setIndex\0index\0updatePaletteColors\0"
     "attachColor\0checked\0attachIndex"
 };
 #undef QT_MOC_LITERAL
@@ -336,7 +336,7 @@ void ActiveColorWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, in
         case 3: _t->shouldShowNorm((*reinterpret_cast< std::string_view(*)>(_a[1]))); break;
         case 4: _t->setPalette((*reinterpret_cast< const PaletteCSpan(*)>(_a[1]))); break;
         case 5: _t->setIndex((*reinterpret_cast< const int(*)>(_a[1]))); break;
-        case 6: _t->changePaletteColors(); break;
+        case 6: _t->updatePaletteColors(); break;
         case 7: _t->attachColor((*reinterpret_cast< const bool(*)>(_a[1]))); break;
         case 8: _t->attachIndex((*reinterpret_cast< const bool(*)>(_a[1]))); break;
         default: ;

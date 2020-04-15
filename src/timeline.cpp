@@ -16,7 +16,7 @@
 #include "sprite export.hpp"
 
 Timeline::Timeline()
-  : currPos{LayerIdx{0}, FrameIdx{0}}, frameCount{0} {}
+  : pos{LayerIdx{0}, FrameIdx{0}}, frameCount{0} {}
 
 void Timeline::initDefault() {
   frameCount = FrameIdx{1};
@@ -86,13 +86,13 @@ Error Timeline::importImage(const QString &path) {
   TRY(importCellPng(reader.dev(), image, canvasFormat));
   TRY(reader.flush());
   
-  Cell *cell = getCell(currPos);
+  Cell *cell = getCell(pos);
   cell->pos = {};
   cell->img = std::move(image);
   
   changeFrame();
   changeCell();
-  changeSpan(currPos.l);
+  changeSpan(pos.l);
   Q_EMIT modified();
   return {};
 }
@@ -178,7 +178,7 @@ FrameIdx Timeline::getFrames() const {
 }
 
 CellPos Timeline::getPos() const {
-  return currPos;
+  return pos;
 }
 
 CellRect Timeline::getSelection() const {
@@ -192,7 +192,7 @@ void Timeline::initCanvas(const Format format, const QSize size) {
 
 void Timeline::nextFrame() {
   if (locked) return;
-  currPos.f = (currPos.f + FrameIdx{1}) % frameCount;
+  pos.f = (pos.f + FrameIdx{1}) % frameCount;
   if (frameCount == FrameIdx{1}) return;
   changeFrame();
   changeCell();
@@ -201,7 +201,7 @@ void Timeline::nextFrame() {
 
 void Timeline::prevFrame() {
   if (locked) return;
-  currPos.f = (currPos.f - FrameIdx{1} + frameCount) % frameCount;
+  pos.f = (pos.f - FrameIdx{1} + frameCount) % frameCount;
   if (frameCount == FrameIdx{1}) return;
   changeFrame();
   changeCell();
@@ -210,13 +210,13 @@ void Timeline::prevFrame() {
 
 void Timeline::layerBelow() {
   if (locked) return;
-  currPos.l = std::min(currPos.l + LayerIdx{1}, layerCount() - LayerIdx{1});
+  pos.l = std::min(pos.l + LayerIdx{1}, layerCount() - LayerIdx{1});
   changePos();
 }
 
 void Timeline::layerAbove() {
   if (locked) return;
-  currPos.l = std::max(currPos.l - LayerIdx{1}, LayerIdx{0});
+  pos.l = std::max(pos.l - LayerIdx{1}, LayerIdx{0});
   changePos();
 }
 
@@ -235,24 +235,24 @@ CellRect normalize(const CellRect rect) {
 
 void Timeline::beginSelection() {
   if (locked) return;
-  selection.minL = currPos.l;
-  selection.minF = currPos.f;
-  selection.maxL = currPos.l;
-  selection.maxF = currPos.f;
+  selection.minL = pos.l;
+  selection.minF = pos.f;
+  selection.maxL = pos.l;
+  selection.maxF = pos.f;
   Q_EMIT selectionChanged(selection);
 }
 
 void Timeline::continueSelection() {
   if (locked) return;
-  selection.maxL = currPos.l;
-  selection.maxF = currPos.f;
+  selection.maxL = pos.l;
+  selection.maxF = pos.f;
   Q_EMIT selectionChanged(normalize(selection));
 }
 
 void Timeline::endSelection() {
   if (locked) return;
-  selection.maxL = currPos.l;
-  selection.maxF = currPos.f;
+  selection.maxL = pos.l;
+  selection.maxF = pos.f;
   selection = normalize(selection);
   Q_EMIT selectionChanged(selection);
 }
@@ -268,10 +268,10 @@ void Timeline::insertLayer() {
   Layer layer;
   layer.spans.pushNull(frameCount);
   layer.name = "Layer " + std::to_string(layers.size());
-  layers.insert(layers.begin() + +currPos.l, std::move(layer));
+  layers.insert(layers.begin() + +pos.l, std::move(layer));
   changeLayerCount();
   Q_EMIT selectionChanged(selection);
-  changeLayers(currPos.l, layerCount());
+  changeLayers(pos.l, layerCount());
   changeFrame();
   changePos();
   Q_EMIT modified();
@@ -279,18 +279,18 @@ void Timeline::insertLayer() {
 
 void Timeline::removeLayer() {
   if (locked) return;
-  const QRect rect = getCell(currPos)->rect();
+  const QRect rect = getCell(pos)->rect();
   if (layers.size() == 1) {
     layers.front().spans.clear(frameCount);
     layers.front().name = "Layer 0";
     layers.front().visible = true;
     changeLayers(LayerIdx{0}, LayerIdx{1});
   } else {
-    layers.erase(layers.begin() + +currPos.l);
+    layers.erase(layers.begin() + +pos.l);
     changeLayerCount();
     Q_EMIT selectionChanged(selection);
-    currPos.l = std::min(currPos.l, layerCount() - LayerIdx{1});
-    changeLayers(currPos.l, layerCount());
+    pos.l = std::min(pos.l, layerCount() - LayerIdx{1});
+    changeLayers(pos.l, layerCount());
   }
   changeFrame();
   changeCell(rect);
@@ -300,12 +300,12 @@ void Timeline::removeLayer() {
 
 void Timeline::moveLayerUp() {
   if (locked) return;
-  if (currPos.l == LayerIdx{0}) return;
-  std::swap(layers[+(currPos.l - LayerIdx{1})], layers[+currPos.l]);
-  changeLayers(currPos.l - LayerIdx{1}, currPos.l + LayerIdx{1});
+  if (pos.l == LayerIdx{0}) return;
+  std::swap(layers[+(pos.l - LayerIdx{1})], layers[+pos.l]);
+  changeLayers(pos.l - LayerIdx{1}, pos.l + LayerIdx{1});
   changeFrame();
-  const QRect upperRect = getCell({currPos.l - LayerIdx{1}, currPos.f})->rect();
-  const QRect lowerRect = getCell(currPos)->rect();
+  const QRect upperRect = getCell({pos.l - LayerIdx{1}, pos.f})->rect();
+  const QRect lowerRect = getCell(pos)->rect();
   changeCell(upperRect.united(lowerRect));
   layerAbove();
   Q_EMIT modified();
@@ -313,12 +313,12 @@ void Timeline::moveLayerUp() {
 
 void Timeline::moveLayerDown() {
   if (locked) return;
-  if (currPos.l == layerCount() - LayerIdx{1}) return;
-  std::swap(layers[+currPos.l], layers[+(currPos.l + LayerIdx{1})]);
-  changeLayers(currPos.l, currPos.l + LayerIdx{2});
+  if (pos.l == layerCount() - LayerIdx{1}) return;
+  std::swap(layers[+pos.l], layers[+(pos.l + LayerIdx{1})]);
+  changeLayers(pos.l, pos.l + LayerIdx{2});
   changeFrame();
-  const QRect upperRect = getCell(currPos)->rect();
-  const QRect lowerRect = getCell({currPos.l + LayerIdx{1}, currPos.f})->rect();
+  const QRect upperRect = getCell(pos)->rect();
+  const QRect lowerRect = getCell({pos.l + LayerIdx{1}, pos.f})->rect();
   changeCell(upperRect.united(lowerRect));
   layerBelow();
   Q_EMIT modified();
@@ -329,7 +329,7 @@ void Timeline::insertFrame() {
   ++frameCount;
   changeFrameCount();
   for (LayerIdx l = {}; l != layerCount(); ++l) {
-    layers[+l].spans.insert(currPos.f);
+    layers[+l].spans.insert(pos.f);
     changeSpan(l);
   }
   Q_EMIT selectionChanged(selection);
@@ -348,12 +348,12 @@ void Timeline::removeFrame() {
     --frameCount;
     changeFrameCount();
     for (LayerIdx l = {}; l != layerCount(); ++l) {
-      layers[+l].spans.remove(currPos.f);
+      layers[+l].spans.remove(pos.f);
       changeSpan(l);
     }
     Q_EMIT selectionChanged(selection);
   }
-  currPos.f = std::max(currPos.f - FrameIdx{1}, FrameIdx{0});
+  pos.f = std::max(pos.f - FrameIdx{1}, FrameIdx{0});
   changeFrame();
   changeCell();
   changePos();
@@ -362,10 +362,10 @@ void Timeline::removeFrame() {
 
 void Timeline::clearCell() {
   if (locked) return;
-  Layer &layer = layers[+currPos.l];
-  const QRect rect = layer.spans.get(currPos.f)->rect();
-  layer.spans.replace(currPos.f, false);
-  changeSpan(currPos.l);
+  Layer &layer = layers[+pos.l];
+  const QRect rect = layer.spans.get(pos.f)->rect();
+  layer.spans.replace(pos.f, false);
+  changeSpan(pos.l);
   changeFrame();
   changeCell(rect);
   changePos();
@@ -374,31 +374,31 @@ void Timeline::clearCell() {
 
 void Timeline::extendCell() {
   if (locked) return;
-  layers[+currPos.l].spans.extend(currPos.f);
-  changeSpan(currPos.l);
+  layers[+pos.l].spans.extend(pos.f);
+  changeSpan(pos.l);
   nextFrame();
   Q_EMIT modified();
 }
 
 void Timeline::splitCell() {
   if (locked) return;
-  layers[+currPos.l].spans.split(currPos.f);
-  changeSpan(currPos.l);
+  layers[+pos.l].spans.split(pos.f);
+  changeSpan(pos.l);
   changeFrame();
   changePos();
   Q_EMIT modified();
 }
 
 void Timeline::growCell(const QRect rect) {
-  Cell &cell = *getCell(currPos);
+  Cell &cell = *getCell(pos);
   if (cell) {
     ::growCell(cell, canvasFormat, rect);
     return;
   }
   if (locked) return;
-  layers[+currPos.l].spans.replace(currPos.f, true);
-  ::growCell(*getCell(currPos), canvasFormat, rect);
-  changeSpan(currPos.l);
+  layers[+pos.l].spans.replace(pos.f, true);
+  ::growCell(*getCell(pos), canvasFormat, rect);
+  changeSpan(pos.l);
   changeFrame();
   changePos();
   Q_EMIT modified();
@@ -406,31 +406,31 @@ void Timeline::growCell(const QRect rect) {
 
 void Timeline::shrinkCell(const QRect rect) {
   if (locked) return;
-  Cell &cell = *getCell(currPos);
+  Cell &cell = *getCell(pos);
   if (!cell) return;
   ::shrinkCell(cell, rect);
   if (!cell) {
-    layers[+currPos.l].spans.optimize();
-    changeSpan(currPos.l);
+    layers[+pos.l].spans.optimize();
+    changeSpan(pos.l);
     changeFrame();
     changePos();
   }
   Q_EMIT modified();
 }
 
-void Timeline::setPos(const CellPos pos) {
-  assert(LayerIdx{0} <= pos.l);
-  assert(pos.l < layerCount());
-  assert(FrameIdx{0} <= pos.f);
-  assert(pos.f < frameCount);
+void Timeline::setPos(const CellPos newPos) {
+  assert(LayerIdx{0} <= newPos.l);
+  assert(newPos.l < layerCount());
+  assert(FrameIdx{0} <= newPos.f);
+  assert(newPos.f < frameCount);
   if (locked) return;
-  if (currPos.f != pos.f) {
-    currPos = pos;
+  if (pos.f != newPos.f) {
+    pos = newPos;
     changeFrame();
     changeCell();
     changePos();
-  } else if (currPos.l != pos.l) {
-    currPos.l = pos.l;
+  } else if (pos.l != newPos.l) {
+    pos.l = newPos.l;
     changePos();
   }
 }
@@ -443,7 +443,7 @@ void Timeline::setVisibility(const LayerIdx idx, const bool visible) {
     layer.visible = visible;
     Q_EMIT visibilityChanged(idx, visible);
     changeFrame();
-    changeCell(layer.spans.get(currPos.f)->rect());
+    changeCell(layer.spans.get(pos.f)->rect());
     Q_EMIT modified();
   }
 }
@@ -458,7 +458,7 @@ void Timeline::isolateVisibility(const LayerIdx idx) {
     if ((l != idx) == layer.visible) {
       layer.visible = !layer.visible;
       Q_EMIT visibilityChanged(l, layer.visible);
-      cellChanged = cellChanged.united(layer.spans.get(currPos.f)->rect());
+      cellChanged = cellChanged.united(layer.spans.get(pos.f)->rect());
     }
   }
   
@@ -535,16 +535,16 @@ void Timeline::unlock() {
   locked = false;
 }
 
-Cell *Timeline::getCell(const CellPos pos) {
-  return layers[+pos.l].spans.get(pos.f);
+Cell *Timeline::getCell(const CellPos cell) {
+  return layers[+cell.l].spans.get(cell.f);
 }
 
-Frame Timeline::getFrame(const FrameIdx pos) const {
+Frame Timeline::getFrame(const FrameIdx idx) const {
   Frame frame;
   frame.reserve(layers.size());
   for (const Layer &layer : layers) {
     if (layer.visible) {
-      frame.push_back(layer.spans.get(pos));
+      frame.push_back(layer.spans.get(idx));
     }
   }
   return frame;
@@ -555,12 +555,12 @@ LayerIdx Timeline::layerCount() const {
 }
 
 void Timeline::changePos() {
-  Q_EMIT currPosChanged(currPos);
-  Q_EMIT currCellChanged(getCell(currPos));
+  Q_EMIT posChanged(pos);
+  Q_EMIT cellChanged(getCell(pos));
 }
 
 void Timeline::changeFrame() {
-  Q_EMIT frameChanged(getFrame(currPos.f));
+  Q_EMIT frameChanged(getFrame(pos.f));
 }
 
 void Timeline::changeSpan(const LayerIdx idx) {

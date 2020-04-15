@@ -71,9 +71,16 @@ LayerNameWidget::LayerNameWidget(QWidget *parent, const LayerIdx layer)
   setFixedSize(layer_width, cell_height);
   createWidgets();
   setupLayout();
-  CONNECT(visible, toggled,    this, changeVisibility);
-  CONNECT(visible, isolated,   this, isolate);
-  CONNECT(name,    textEdited, this, changeName);
+  
+  CONNECT_LAMBDA(visible, toggled, [this](const bool visibility) {
+    Q_EMIT shouldSetVisibility(idx, visibility);
+  });
+  CONNECT_LAMBDA(visible, isolated, [this] {
+    Q_EMIT shouldIsolateVisibility(idx);
+  });
+  CONNECT_LAMBDA(name, textEdited, [this](const QString &text) {
+    Q_EMIT shouldSetName(idx, text.toStdString());
+  });
 }
 
 void LayerNameWidget::setVisibility(const bool visibility) {
@@ -82,18 +89,6 @@ void LayerNameWidget::setVisibility(const bool visibility) {
 
 void LayerNameWidget::setName(const std::string_view text) {
   name->setText(toLatinString(text));
-}
-
-void LayerNameWidget::changeVisibility(const bool visibility) {
-  Q_EMIT visibilityChanged(idx, visibility);
-}
-
-void LayerNameWidget::isolate() {
-  Q_EMIT visibilityIsolated(idx);
-}
-
-void LayerNameWidget::changeName(const QString &text) {
-  Q_EMIT nameChanged(idx, text.toStdString());
 }
 
 void LayerNameWidget::createWidgets() {
@@ -146,9 +141,9 @@ void LayersWidget::setLayerCount(const LayerIdx count) {
   }
   while (layerCount() < count) {
     auto *layerName = new LayerNameWidget{this, layerCount()};
-    CONNECT(layerName, visibilityChanged,  this, visibilityChanged);
-    CONNECT(layerName, visibilityIsolated, this, visibilityIsolated);
-    CONNECT(layerName, nameChanged,        this, nameChanged);
+    CONNECT(layerName, shouldSetVisibility,     this, shouldSetVisibility);
+    CONNECT(layerName, shouldIsolateVisibility, this, shouldIsolateVisibility);
+    CONNECT(layerName, shouldSetName,           this, shouldSetName);
     layout->addWidget(layerName);
     layers.push_back(layerName);
   }

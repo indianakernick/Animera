@@ -26,7 +26,7 @@ public:
   explicit TimelineWidget(QWidget *);
   
 public Q_SLOTS:
-  void setCurrPos(CellPos);
+  void setPos(CellPos);
   void setSelection(CellRect);
   void setVisibility(LayerIdx, bool);
   void setName(LayerIdx, std::string_view);
@@ -37,25 +37,25 @@ public Q_SLOTS:
   void setDelay(int);
 
 Q_SIGNALS:
-  void visibilityChanged(LayerIdx, bool);
-  void visibilityIsolated(LayerIdx);
-  void nameChanged(LayerIdx, std::string_view);
+  void shouldSetVisibility(LayerIdx, bool);
+  void shouldIsolateVisibility(LayerIdx);
+  void shouldSetName(LayerIdx, std::string_view);
   
-  void nextFrame();
-  void insertLayer();
-  void removeLayer();
-  void moveLayerUp();
-  void moveLayerDown();
-  void extendCell();
-  void splitCell();
+  void shouldNextFrame();
+  void shouldInsertLayer();
+  void shouldRemoveLayer();
+  void shouldMoveLayerUp();
+  void shouldMoveLayerDown();
+  void shouldExtendCell();
+  void shouldSplitCell();
+  void shouldSetDelay(int);
+  void shouldToggleAnimation(bool);
   
-  void beginSelection();
-  void continueSelection();
-  void endSelection();
-  void clearSelection();
-  void currPosChanged(CellPos);
-  void delayChanged(int);
-  void animationToggled(bool);
+  void shouldBeginSelection();
+  void shouldContinueSelection();
+  void shouldEndSelection();
+  void shouldClearSelection();
+  void shouldSetPos(CellPos);
   
 private:
   ControlsWidget *controls = nullptr;

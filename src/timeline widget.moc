@@ -23,7 +23,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_TimelineWidget_t {
     QByteArrayData data[34];
-    char stringdata0[438];
+    char stringdata0[514];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -33,53 +33,56 @@ struct qt_meta_stringdata_TimelineWidget_t {
 static const qt_meta_stringdata_TimelineWidget_t qt_meta_stringdata_TimelineWidget = {
     {
 QT_MOC_LITERAL(0, 0, 14), // "TimelineWidget"
-QT_MOC_LITERAL(1, 15, 17), // "visibilityChanged"
-QT_MOC_LITERAL(2, 33, 0), // ""
-QT_MOC_LITERAL(3, 34, 8), // "LayerIdx"
-QT_MOC_LITERAL(4, 43, 18), // "visibilityIsolated"
-QT_MOC_LITERAL(5, 62, 11), // "nameChanged"
-QT_MOC_LITERAL(6, 74, 16), // "std::string_view"
-QT_MOC_LITERAL(7, 91, 9), // "nextFrame"
-QT_MOC_LITERAL(8, 101, 11), // "insertLayer"
-QT_MOC_LITERAL(9, 113, 11), // "removeLayer"
-QT_MOC_LITERAL(10, 125, 11), // "moveLayerUp"
-QT_MOC_LITERAL(11, 137, 13), // "moveLayerDown"
-QT_MOC_LITERAL(12, 151, 10), // "extendCell"
-QT_MOC_LITERAL(13, 162, 9), // "splitCell"
-QT_MOC_LITERAL(14, 172, 14), // "beginSelection"
-QT_MOC_LITERAL(15, 187, 17), // "continueSelection"
-QT_MOC_LITERAL(16, 205, 12), // "endSelection"
-QT_MOC_LITERAL(17, 218, 14), // "clearSelection"
-QT_MOC_LITERAL(18, 233, 14), // "currPosChanged"
-QT_MOC_LITERAL(19, 248, 7), // "CellPos"
-QT_MOC_LITERAL(20, 256, 12), // "delayChanged"
-QT_MOC_LITERAL(21, 269, 16), // "animationToggled"
-QT_MOC_LITERAL(22, 286, 10), // "setCurrPos"
-QT_MOC_LITERAL(23, 297, 12), // "setSelection"
-QT_MOC_LITERAL(24, 310, 8), // "CellRect"
-QT_MOC_LITERAL(25, 319, 13), // "setVisibility"
-QT_MOC_LITERAL(26, 333, 7), // "setName"
-QT_MOC_LITERAL(27, 341, 8), // "setLayer"
-QT_MOC_LITERAL(28, 350, 25), // "std::span<const CellSpan>"
-QT_MOC_LITERAL(29, 376, 13), // "setFrameCount"
-QT_MOC_LITERAL(30, 390, 8), // "FrameIdx"
-QT_MOC_LITERAL(31, 399, 13), // "setLayerCount"
-QT_MOC_LITERAL(32, 413, 15), // "toggleAnimation"
-QT_MOC_LITERAL(33, 429, 8) // "setDelay"
+QT_MOC_LITERAL(1, 15, 19), // "shouldSetVisibility"
+QT_MOC_LITERAL(2, 35, 0), // ""
+QT_MOC_LITERAL(3, 36, 8), // "LayerIdx"
+QT_MOC_LITERAL(4, 45, 23), // "shouldIsolateVisibility"
+QT_MOC_LITERAL(5, 69, 13), // "shouldSetName"
+QT_MOC_LITERAL(6, 83, 16), // "std::string_view"
+QT_MOC_LITERAL(7, 100, 15), // "shouldNextFrame"
+QT_MOC_LITERAL(8, 116, 17), // "shouldInsertLayer"
+QT_MOC_LITERAL(9, 134, 17), // "shouldRemoveLayer"
+QT_MOC_LITERAL(10, 152, 17), // "shouldMoveLayerUp"
+QT_MOC_LITERAL(11, 170, 19), // "shouldMoveLayerDown"
+QT_MOC_LITERAL(12, 190, 16), // "shouldExtendCell"
+QT_MOC_LITERAL(13, 207, 15), // "shouldSplitCell"
+QT_MOC_LITERAL(14, 223, 14), // "shouldSetDelay"
+QT_MOC_LITERAL(15, 238, 21), // "shouldToggleAnimation"
+QT_MOC_LITERAL(16, 260, 20), // "shouldBeginSelection"
+QT_MOC_LITERAL(17, 281, 23), // "shouldContinueSelection"
+QT_MOC_LITERAL(18, 305, 18), // "shouldEndSelection"
+QT_MOC_LITERAL(19, 324, 20), // "shouldClearSelection"
+QT_MOC_LITERAL(20, 345, 12), // "shouldSetPos"
+QT_MOC_LITERAL(21, 358, 7), // "CellPos"
+QT_MOC_LITERAL(22, 366, 6), // "setPos"
+QT_MOC_LITERAL(23, 373, 12), // "setSelection"
+QT_MOC_LITERAL(24, 386, 8), // "CellRect"
+QT_MOC_LITERAL(25, 395, 13), // "setVisibility"
+QT_MOC_LITERAL(26, 409, 7), // "setName"
+QT_MOC_LITERAL(27, 417, 8), // "setLayer"
+QT_MOC_LITERAL(28, 426, 25), // "std::span<const CellSpan>"
+QT_MOC_LITERAL(29, 452, 13), // "setFrameCount"
+QT_MOC_LITERAL(30, 466, 8), // "FrameIdx"
+QT_MOC_LITERAL(31, 475, 13), // "setLayerCount"
+QT_MOC_LITERAL(32, 489, 15), // "toggleAnimation"
+QT_MOC_LITERAL(33, 505, 8) // "setDelay"
 
     },
-    "TimelineWidget\0visibilityChanged\0\0"
-    "LayerIdx\0visibilityIsolated\0nameChanged\0"
-    "std::string_view\0nextFrame\0insertLayer\0"
-    "removeLayer\0moveLayerUp\0moveLayerDown\0"
-    "extendCell\0splitCell\0beginSelection\0"
-    "continueSelection\0endSelection\0"
-    "clearSelection\0currPosChanged\0CellPos\0"
-    "delayChanged\0animationToggled\0setCurrPos\0"
-    "setSelection\0CellRect\0setVisibility\0"
-    "setName\0setLayer\0std::span<const CellSpan>\0"
-    "setFrameCount\0FrameIdx\0setLayerCount\0"
-    "toggleAnimation\0setDelay"
+    "TimelineWidget\0shouldSetVisibility\0\0"
+    "LayerIdx\0shouldIsolateVisibility\0"
+    "shouldSetName\0std::string_view\0"
+    "shouldNextFrame\0shouldInsertLayer\0"
+    "shouldRemoveLayer\0shouldMoveLayerUp\0"
+    "shouldMoveLayerDown\0shouldExtendCell\0"
+    "shouldSplitCell\0shouldSetDelay\0"
+    "shouldToggleAnimation\0shouldBeginSelection\0"
+    "shouldContinueSelection\0shouldEndSelection\0"
+    "shouldClearSelection\0shouldSetPos\0"
+    "CellPos\0setPos\0setSelection\0CellRect\0"
+    "setVisibility\0setName\0setLayer\0"
+    "std::span<const CellSpan>\0setFrameCount\0"
+    "FrameIdx\0setLayerCount\0toggleAnimation\0"
+    "setDelay"
 };
 #undef QT_MOC_LITERAL
 
@@ -107,13 +110,13 @@ static const uint qt_meta_data_TimelineWidget[] = {
       11,    0,  161,    2, 0x06 /* Public */,
       12,    0,  162,    2, 0x06 /* Public */,
       13,    0,  163,    2, 0x06 /* Public */,
-      14,    0,  164,    2, 0x06 /* Public */,
-      15,    0,  165,    2, 0x06 /* Public */,
-      16,    0,  166,    2, 0x06 /* Public */,
-      17,    0,  167,    2, 0x06 /* Public */,
-      18,    1,  168,    2, 0x06 /* Public */,
-      20,    1,  171,    2, 0x06 /* Public */,
-      21,    1,  174,    2, 0x06 /* Public */,
+      14,    1,  164,    2, 0x06 /* Public */,
+      15,    1,  167,    2, 0x06 /* Public */,
+      16,    0,  170,    2, 0x06 /* Public */,
+      17,    0,  171,    2, 0x06 /* Public */,
+      18,    0,  172,    2, 0x06 /* Public */,
+      19,    0,  173,    2, 0x06 /* Public */,
+      20,    1,  174,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
       22,    1,  177,    2, 0x0a /* Public */,
@@ -137,16 +140,16 @@ static const uint qt_meta_data_TimelineWidget[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void, 0x80000000 | 19,    2,
     QMetaType::Void, QMetaType::Int,    2,
     QMetaType::Void, QMetaType::Bool,    2,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void, 0x80000000 | 21,    2,
 
  // slots: parameters
-    QMetaType::Void, 0x80000000 | 19,    2,
+    QMetaType::Void, 0x80000000 | 21,    2,
     QMetaType::Void, 0x80000000 | 24,    2,
     QMetaType::Void, 0x80000000 | 3, QMetaType::Bool,    2,    2,
     QMetaType::Void, 0x80000000 | 3, 0x80000000 | 6,    2,    2,
@@ -165,24 +168,24 @@ void TimelineWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
         auto *_t = static_cast<TimelineWidget *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->visibilityChanged((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
-        case 1: _t->visibilityIsolated((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;
-        case 2: _t->nameChanged((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< std::string_view(*)>(_a[2]))); break;
-        case 3: _t->nextFrame(); break;
-        case 4: _t->insertLayer(); break;
-        case 5: _t->removeLayer(); break;
-        case 6: _t->moveLayerUp(); break;
-        case 7: _t->moveLayerDown(); break;
-        case 8: _t->extendCell(); break;
-        case 9: _t->splitCell(); break;
-        case 10: _t->beginSelection(); break;
-        case 11: _t->continueSelection(); break;
-        case 12: _t->endSelection(); break;
-        case 13: _t->clearSelection(); break;
-        case 14: _t->currPosChanged((*reinterpret_cast< CellPos(*)>(_a[1]))); break;
-        case 15: _t->delayChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 16: _t->animationToggled((*reinterpret_cast< bool(*)>(_a[1]))); break;
-        case 17: _t->setCurrPos((*reinterpret_cast< CellPos(*)>(_a[1]))); break;
+        case 0: _t->shouldSetVisibility((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
+        case 1: _t->shouldIsolateVisibility((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;
+        case 2: _t->shouldSetName((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< std::string_view(*)>(_a[2]))); break;
+        case 3: _t->shouldNextFrame(); break;
+        case 4: _t->shouldInsertLayer(); break;
+        case 5: _t->shouldRemoveLayer(); break;
+        case 6: _t->shouldMoveLayerUp(); break;
+        case 7: _t->shouldMoveLayerDown(); break;
+        case 8: _t->shouldExtendCell(); break;
+        case 9: _t->shouldSplitCell(); break;
+        case 10: _t->shouldSetDelay((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 11: _t->shouldToggleAnimation((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 12: _t->shouldBeginSelection(); break;
+        case 13: _t->shouldContinueSelection(); break;
+        case 14: _t->shouldEndSelection(); break;
+        case 15: _t->shouldClearSelection(); break;
+        case 16: _t->shouldSetPos((*reinterpret_cast< CellPos(*)>(_a[1]))); break;
+        case 17: _t->setPos((*reinterpret_cast< CellPos(*)>(_a[1]))); break;
         case 18: _t->setSelection((*reinterpret_cast< CellRect(*)>(_a[1]))); break;
         case 19: _t->setVisibility((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
         case 20: _t->setName((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< std::string_view(*)>(_a[2]))); break;
@@ -197,119 +200,119 @@ void TimelineWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
         int *result = reinterpret_cast<int *>(_a[0]);
         {
             using _t = void (TimelineWidget::*)(LayerIdx , bool );
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::visibilityChanged)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::shouldSetVisibility)) {
                 *result = 0;
                 return;
             }
         }
         {
             using _t = void (TimelineWidget::*)(LayerIdx );
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::visibilityIsolated)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::shouldIsolateVisibility)) {
                 *result = 1;
                 return;
             }
         }
         {
             using _t = void (TimelineWidget::*)(LayerIdx , std::string_view );
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::nameChanged)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::shouldSetName)) {
                 *result = 2;
                 return;
             }
         }
         {
             using _t = void (TimelineWidget::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::nextFrame)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::shouldNextFrame)) {
                 *result = 3;
                 return;
             }
         }
         {
             using _t = void (TimelineWidget::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::insertLayer)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::shouldInsertLayer)) {
                 *result = 4;
                 return;
             }
         }
         {
             using _t = void (TimelineWidget::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::removeLayer)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::shouldRemoveLayer)) {
                 *result = 5;
                 return;
             }
         }
         {
             using _t = void (TimelineWidget::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::moveLayerUp)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::shouldMoveLayerUp)) {
                 *result = 6;
                 return;
             }
         }
         {
             using _t = void (TimelineWidget::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::moveLayerDown)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::shouldMoveLayerDown)) {
                 *result = 7;
                 return;
             }
         }
         {
             using _t = void (TimelineWidget::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::extendCell)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::shouldExtendCell)) {
                 *result = 8;
                 return;
             }
         }
         {
             using _t = void (TimelineWidget::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::splitCell)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::shouldSplitCell)) {
                 *result = 9;
                 return;
             }
         }
         {
-            using _t = void (TimelineWidget::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::beginSelection)) {
+            using _t = void (TimelineWidget::*)(int );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::shouldSetDelay)) {
                 *result = 10;
                 return;
             }
         }
         {
-            using _t = void (TimelineWidget::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::continueSelection)) {
+            using _t = void (TimelineWidget::*)(bool );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::shouldToggleAnimation)) {
                 *result = 11;
                 return;
             }
         }
         {
             using _t = void (TimelineWidget::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::endSelection)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::shouldBeginSelection)) {
                 *result = 12;
                 return;
             }
         }
         {
             using _t = void (TimelineWidget::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::clearSelection)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::shouldContinueSelection)) {
                 *result = 13;
                 return;
             }
         }
         {
-            using _t = void (TimelineWidget::*)(CellPos );
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::currPosChanged)) {
+            using _t = void (TimelineWidget::*)();
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::shouldEndSelection)) {
                 *result = 14;
                 return;
             }
         }
         {
-            using _t = void (TimelineWidget::*)(int );
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::delayChanged)) {
+            using _t = void (TimelineWidget::*)();
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::shouldClearSelection)) {
                 *result = 15;
                 return;
             }
         }
         {
-            using _t = void (TimelineWidget::*)(bool );
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::animationToggled)) {
+            using _t = void (TimelineWidget::*)(CellPos );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&TimelineWidget::shouldSetPos)) {
                 *result = 16;
                 return;
             }
@@ -358,108 +361,108 @@ int TimelineWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void TimelineWidget::visibilityChanged(LayerIdx _t1, bool _t2)
+void TimelineWidget::shouldSetVisibility(LayerIdx _t1, bool _t2)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);
 }
 
 // SIGNAL 1
-void TimelineWidget::visibilityIsolated(LayerIdx _t1)
+void TimelineWidget::shouldIsolateVisibility(LayerIdx _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 1, _a);
 }
 
 // SIGNAL 2
-void TimelineWidget::nameChanged(LayerIdx _t1, std::string_view _t2)
+void TimelineWidget::shouldSetName(LayerIdx _t1, std::string_view _t2)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))) };
     QMetaObject::activate(this, &staticMetaObject, 2, _a);
 }
 
 // SIGNAL 3
-void TimelineWidget::nextFrame()
+void TimelineWidget::shouldNextFrame()
 {
     QMetaObject::activate(this, &staticMetaObject, 3, nullptr);
 }
 
 // SIGNAL 4
-void TimelineWidget::insertLayer()
+void TimelineWidget::shouldInsertLayer()
 {
     QMetaObject::activate(this, &staticMetaObject, 4, nullptr);
 }
 
 // SIGNAL 5
-void TimelineWidget::removeLayer()
+void TimelineWidget::shouldRemoveLayer()
 {
     QMetaObject::activate(this, &staticMetaObject, 5, nullptr);
 }
 
 // SIGNAL 6
-void TimelineWidget::moveLayerUp()
+void TimelineWidget::shouldMoveLayerUp()
 {
     QMetaObject::activate(this, &staticMetaObject, 6, nullptr);
 }
 
 // SIGNAL 7
-void TimelineWidget::moveLayerDown()
+void TimelineWidget::shouldMoveLayerDown()
 {
     QMetaObject::activate(this, &staticMetaObject, 7, nullptr);
 }
 
 // SIGNAL 8
-void TimelineWidget::extendCell()
+void TimelineWidget::shouldExtendCell()
 {
     QMetaObject::activate(this, &staticMetaObject, 8, nullptr);
 }
 
 // SIGNAL 9
-void TimelineWidget::splitCell()
+void TimelineWidget::shouldSplitCell()
 {
     QMetaObject::activate(this, &staticMetaObject, 9, nullptr);
 }
 
 // SIGNAL 10
-void TimelineWidget::beginSelection()
+void TimelineWidget::shouldSetDelay(int _t1)
 {
-    QMetaObject::activate(this, &staticMetaObject, 10, nullptr);
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    QMetaObject::activate(this, &staticMetaObject, 10, _a);
 }
 
 // SIGNAL 11
-void TimelineWidget::continueSelection()
+void TimelineWidget::shouldToggleAnimation(bool _t1)
 {
-    QMetaObject::activate(this, &staticMetaObject, 11, nullptr);
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    QMetaObject::activate(this, &staticMetaObject, 11, _a);
 }
 
 // SIGNAL 12
-void TimelineWidget::endSelection()
+void TimelineWidget::shouldBeginSelection()
 {
     QMetaObject::activate(this, &staticMetaObject, 12, nullptr);
 }
 
 // SIGNAL 13
-void TimelineWidget::clearSelection()
+void TimelineWidget::shouldContinueSelection()
 {
     QMetaObject::activate(this, &staticMetaObject, 13, nullptr);
 }
 
 // SIGNAL 14
-void TimelineWidget::currPosChanged(CellPos _t1)
+void TimelineWidget::shouldEndSelection()
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
-    QMetaObject::activate(this, &staticMetaObject, 14, _a);
+    QMetaObject::activate(this, &staticMetaObject, 14, nullptr);
 }
 
 // SIGNAL 15
-void TimelineWidget::delayChanged(int _t1)
+void TimelineWidget::shouldClearSelection()
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
-    QMetaObject::activate(this, &staticMetaObject, 15, _a);
+    QMetaObject::activate(this, &staticMetaObject, 15, nullptr);
 }
 
 // SIGNAL 16
-void TimelineWidget::animationToggled(bool _t1)
+void TimelineWidget::shouldSetPos(CellPos _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 16, _a);

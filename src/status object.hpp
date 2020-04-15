@@ -20,7 +20,7 @@ public:
 
 public Q_SLOTS:
   void setScale(int);
-  void setCurrPos(CellPos);
+  void setPos(CellPos);
   void setSelection(CellRect);
   void setFrameCount(FrameIdx);
   void setLayerCount(LayerIdx);
@@ -31,7 +31,7 @@ Q_SIGNALS:
 
 private:
   int scale = 1;
-  CellPos currPos;
+  CellPos pos;
   CellRect selection;
   FrameIdx frameCount;
   LayerIdx layerCount;
