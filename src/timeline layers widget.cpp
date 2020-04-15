@@ -135,13 +135,6 @@ void LayersWidget::setVisibility(const LayerIdx idx, const bool visible) {
   layers[+idx]->setVisibility(visible);
 }
 
-void LayersWidget::isolate(const LayerIdx idx) {
-  for (LayerIdx l = {}; l != layerCount(); ++l) {
-    layers[+l]->setVisibility(l == idx);
-    Q_EMIT visibilityChanged(l, l == idx);
-  }
-}
-
 void LayersWidget::setName(const LayerIdx idx, const std::string_view name) {
   layers[+idx]->setName(name);
 }
@@ -154,7 +147,7 @@ void LayersWidget::setLayerCount(const LayerIdx count) {
   while (layerCount() < count) {
     auto *layerName = new LayerNameWidget{this, layerCount()};
     CONNECT(layerName, visibilityChanged,  this, visibilityChanged);
-    CONNECT(layerName, visibilityIsolated, this, isolate);
+    CONNECT(layerName, visibilityIsolated, this, visibilityIsolated);
     CONNECT(layerName, nameChanged,        this, nameChanged);
     layout->addWidget(layerName);
     layers.push_back(layerName);

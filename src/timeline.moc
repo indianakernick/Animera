@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_Timeline_t {
-    QByteArrayData data[52];
-    char stringdata0[612];
+    QByteArrayData data[53];
+    char stringdata0[630];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -77,13 +77,14 @@ QT_MOC_LITERAL(41, 501, 8), // "growCell"
 QT_MOC_LITERAL(42, 510, 10), // "shrinkCell"
 QT_MOC_LITERAL(43, 521, 6), // "setPos"
 QT_MOC_LITERAL(44, 528, 13), // "setVisibility"
-QT_MOC_LITERAL(45, 542, 7), // "setName"
-QT_MOC_LITERAL(46, 550, 8), // "setDelay"
-QT_MOC_LITERAL(47, 559, 13), // "clearSelected"
-QT_MOC_LITERAL(48, 573, 12), // "copySelected"
-QT_MOC_LITERAL(49, 586, 13), // "pasteSelected"
-QT_MOC_LITERAL(50, 600, 4), // "lock"
-QT_MOC_LITERAL(51, 605, 6) // "unlock"
+QT_MOC_LITERAL(45, 542, 17), // "isolateVisibility"
+QT_MOC_LITERAL(46, 560, 7), // "setName"
+QT_MOC_LITERAL(47, 568, 8), // "setDelay"
+QT_MOC_LITERAL(48, 577, 13), // "clearSelected"
+QT_MOC_LITERAL(49, 591, 12), // "copySelected"
+QT_MOC_LITERAL(50, 604, 13), // "pasteSelected"
+QT_MOC_LITERAL(51, 618, 4), // "lock"
+QT_MOC_LITERAL(52, 623, 6) // "unlock"
 
     },
     "Timeline\0currPosChanged\0\0CellPos\0"
@@ -100,9 +101,9 @@ QT_MOC_LITERAL(51, 605, 6) // "unlock"
     "moveLayerUp\0moveLayerDown\0insertFrame\0"
     "removeFrame\0clearCell\0extendCell\0"
     "splitCell\0growCell\0shrinkCell\0setPos\0"
-    "setVisibility\0setName\0setDelay\0"
-    "clearSelected\0copySelected\0pasteSelected\0"
-    "lock\0unlock"
+    "setVisibility\0isolateVisibility\0setName\0"
+    "setDelay\0clearSelected\0copySelected\0"
+    "pasteSelected\0lock\0unlock"
 };
 #undef QT_MOC_LITERAL
 
@@ -112,7 +113,7 @@ static const uint qt_meta_data_Timeline[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-      41,   14, // methods
+      42,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -120,49 +121,50 @@ static const uint qt_meta_data_Timeline[] = {
       12,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    1,  219,    2, 0x06 /* Public */,
-       4,    1,  222,    2, 0x06 /* Public */,
-       6,    1,  225,    2, 0x06 /* Public */,
-       8,    2,  228,    2, 0x06 /* Public */,
-      10,    2,  233,    2, 0x06 /* Public */,
-      12,    1,  238,    2, 0x06 /* Public */,
-      14,    2,  241,    2, 0x06 /* Public */,
-      16,    1,  246,    2, 0x06 /* Public */,
-      18,    1,  249,    2, 0x06 /* Public */,
-      19,    1,  252,    2, 0x06 /* Public */,
-      20,    0,  255,    2, 0x06 /* Public */,
-      21,    1,  256,    2, 0x06 /* Public */,
+       1,    1,  224,    2, 0x06 /* Public */,
+       4,    1,  227,    2, 0x06 /* Public */,
+       6,    1,  230,    2, 0x06 /* Public */,
+       8,    2,  233,    2, 0x06 /* Public */,
+      10,    2,  238,    2, 0x06 /* Public */,
+      12,    1,  243,    2, 0x06 /* Public */,
+      14,    2,  246,    2, 0x06 /* Public */,
+      16,    1,  251,    2, 0x06 /* Public */,
+      18,    1,  254,    2, 0x06 /* Public */,
+      19,    1,  257,    2, 0x06 /* Public */,
+      20,    0,  260,    2, 0x06 /* Public */,
+      21,    1,  261,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      22,    2,  259,    2, 0x0a /* Public */,
-      24,    0,  264,    2, 0x0a /* Public */,
-      25,    0,  265,    2, 0x0a /* Public */,
-      26,    0,  266,    2, 0x0a /* Public */,
-      27,    0,  267,    2, 0x0a /* Public */,
-      28,    0,  268,    2, 0x0a /* Public */,
-      29,    0,  269,    2, 0x0a /* Public */,
-      30,    0,  270,    2, 0x0a /* Public */,
-      31,    0,  271,    2, 0x0a /* Public */,
-      32,    0,  272,    2, 0x0a /* Public */,
-      33,    0,  273,    2, 0x0a /* Public */,
-      34,    0,  274,    2, 0x0a /* Public */,
-      35,    0,  275,    2, 0x0a /* Public */,
-      36,    0,  276,    2, 0x0a /* Public */,
-      37,    0,  277,    2, 0x0a /* Public */,
-      38,    0,  278,    2, 0x0a /* Public */,
-      39,    0,  279,    2, 0x0a /* Public */,
-      40,    0,  280,    2, 0x0a /* Public */,
-      41,    1,  281,    2, 0x0a /* Public */,
-      42,    1,  284,    2, 0x0a /* Public */,
-      43,    1,  287,    2, 0x0a /* Public */,
-      44,    2,  290,    2, 0x0a /* Public */,
-      45,    2,  295,    2, 0x0a /* Public */,
-      46,    1,  300,    2, 0x0a /* Public */,
-      47,    0,  303,    2, 0x0a /* Public */,
-      48,    0,  304,    2, 0x0a /* Public */,
-      49,    0,  305,    2, 0x0a /* Public */,
-      50,    0,  306,    2, 0x0a /* Public */,
-      51,    0,  307,    2, 0x0a /* Public */,
+      22,    2,  264,    2, 0x0a /* Public */,
+      24,    0,  269,    2, 0x0a /* Public */,
+      25,    0,  270,    2, 0x0a /* Public */,
+      26,    0,  271,    2, 0x0a /* Public */,
+      27,    0,  272,    2, 0x0a /* Public */,
+      28,    0,  273,    2, 0x0a /* Public */,
+      29,    0,  274,    2, 0x0a /* Public */,
+      30,    0,  275,    2, 0x0a /* Public */,
+      31,    0,  276,    2, 0x0a /* Public */,
+      32,    0,  277,    2, 0x0a /* Public */,
+      33,    0,  278,    2, 0x0a /* Public */,
+      34,    0,  279,    2, 0x0a /* Public */,
+      35,    0,  280,    2, 0x0a /* Public */,
+      36,    0,  281,    2, 0x0a /* Public */,
+      37,    0,  282,    2, 0x0a /* Public */,
+      38,    0,  283,    2, 0x0a /* Public */,
+      39,    0,  284,    2, 0x0a /* Public */,
+      40,    0,  285,    2, 0x0a /* Public */,
+      41,    1,  286,    2, 0x0a /* Public */,
+      42,    1,  289,    2, 0x0a /* Public */,
+      43,    1,  292,    2, 0x0a /* Public */,
+      44,    2,  295,    2, 0x0a /* Public */,
+      45,    1,  300,    2, 0x0a /* Public */,
+      46,    2,  303,    2, 0x0a /* Public */,
+      47,    1,  308,    2, 0x0a /* Public */,
+      48,    0,  311,    2, 0x0a /* Public */,
+      49,    0,  312,    2, 0x0a /* Public */,
+      50,    0,  313,    2, 0x0a /* Public */,
+      51,    0,  314,    2, 0x0a /* Public */,
+      52,    0,  315,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, 0x80000000 | 3,    2,
@@ -201,6 +203,7 @@ static const uint qt_meta_data_Timeline[] = {
     QMetaType::Void, QMetaType::QRect,    2,
     QMetaType::Void, 0x80000000 | 3,    2,
     QMetaType::Void, 0x80000000 | 9, QMetaType::Bool,    2,    2,
+    QMetaType::Void, 0x80000000 | 9,    2,
     QMetaType::Void, 0x80000000 | 9, 0x80000000 | 11,    2,    2,
     QMetaType::Void, QMetaType::Int,    2,
     QMetaType::Void,
@@ -252,13 +255,14 @@ void Timeline::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, vo
         case 31: _t->shrinkCell((*reinterpret_cast< QRect(*)>(_a[1]))); break;
         case 32: _t->setPos((*reinterpret_cast< CellPos(*)>(_a[1]))); break;
         case 33: _t->setVisibility((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
-        case 34: _t->setName((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< std::string_view(*)>(_a[2]))); break;
-        case 35: _t->setDelay((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 36: _t->clearSelected(); break;
-        case 37: _t->copySelected(); break;
-        case 38: _t->pasteSelected(); break;
-        case 39: _t->lock(); break;
-        case 40: _t->unlock(); break;
+        case 34: _t->isolateVisibility((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;
+        case 35: _t->setName((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< std::string_view(*)>(_a[2]))); break;
+        case 36: _t->setDelay((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 37: _t->clearSelected(); break;
+        case 38: _t->copySelected(); break;
+        case 39: _t->pasteSelected(); break;
+        case 40: _t->lock(); break;
+        case 41: _t->unlock(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -379,13 +383,13 @@ int Timeline::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 41)
+        if (_id < 42)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 41;
+        _id -= 42;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 41)
+        if (_id < 42)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 41;
+        _id -= 42;
     }
     return _id;
 }

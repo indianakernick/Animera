@@ -324,7 +324,7 @@ void Window::populateMenubar() {
     QAction *action = layer->addAction("Isolate Layer");
     action->setShortcut(key_isolate_layer);
     CONNECT_LAMBDA(action, triggered, [this] {
-      timeline->isolateLayer(sprite.timeline.getPos().l);
+      sprite.timeline.isolateVisibility(sprite.timeline.getPos().l);
     });
   }
   

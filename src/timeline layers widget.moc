@@ -197,7 +197,7 @@ void LayerNameWidget::nameChanged(LayerIdx _t1, std::string_view _t2)
 }
 struct qt_meta_stringdata_LayersWidget_t {
     QByteArrayData data[11];
-    char stringdata0[124];
+    char stringdata0[135];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -210,19 +210,19 @@ QT_MOC_LITERAL(0, 0, 12), // "LayersWidget"
 QT_MOC_LITERAL(1, 13, 17), // "visibilityChanged"
 QT_MOC_LITERAL(2, 31, 0), // ""
 QT_MOC_LITERAL(3, 32, 8), // "LayerIdx"
-QT_MOC_LITERAL(4, 41, 11), // "nameChanged"
-QT_MOC_LITERAL(5, 53, 16), // "std::string_view"
-QT_MOC_LITERAL(6, 70, 9), // "setMargin"
-QT_MOC_LITERAL(7, 80, 13), // "setVisibility"
-QT_MOC_LITERAL(8, 94, 7), // "isolate"
-QT_MOC_LITERAL(9, 102, 7), // "setName"
-QT_MOC_LITERAL(10, 110, 13) // "setLayerCount"
+QT_MOC_LITERAL(4, 41, 18), // "visibilityIsolated"
+QT_MOC_LITERAL(5, 60, 11), // "nameChanged"
+QT_MOC_LITERAL(6, 72, 16), // "std::string_view"
+QT_MOC_LITERAL(7, 89, 9), // "setMargin"
+QT_MOC_LITERAL(8, 99, 13), // "setVisibility"
+QT_MOC_LITERAL(9, 113, 7), // "setName"
+QT_MOC_LITERAL(10, 121, 13) // "setLayerCount"
 
     },
     "LayersWidget\0visibilityChanged\0\0"
-    "LayerIdx\0nameChanged\0std::string_view\0"
-    "setMargin\0setVisibility\0isolate\0setName\0"
-    "setLayerCount"
+    "LayerIdx\0visibilityIsolated\0nameChanged\0"
+    "std::string_view\0setMargin\0setVisibility\0"
+    "setName\0setLayerCount"
 };
 #undef QT_MOC_LITERAL
 
@@ -237,28 +237,28 @@ static const uint qt_meta_data_LayersWidget[] = {
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       2,       // signalCount
+       3,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
        1,    2,   49,    2, 0x06 /* Public */,
-       4,    2,   54,    2, 0x06 /* Public */,
+       4,    1,   54,    2, 0x06 /* Public */,
+       5,    2,   57,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       6,    1,   59,    2, 0x0a /* Public */,
-       7,    2,   62,    2, 0x0a /* Public */,
-       8,    1,   67,    2, 0x0a /* Public */,
+       7,    1,   62,    2, 0x0a /* Public */,
+       8,    2,   65,    2, 0x0a /* Public */,
        9,    2,   70,    2, 0x0a /* Public */,
       10,    1,   75,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, 0x80000000 | 3, QMetaType::Bool,    2,    2,
-    QMetaType::Void, 0x80000000 | 3, 0x80000000 | 5,    2,    2,
+    QMetaType::Void, 0x80000000 | 3,    2,
+    QMetaType::Void, 0x80000000 | 3, 0x80000000 | 6,    2,    2,
 
  // slots: parameters
     QMetaType::Void, QMetaType::Int,    2,
     QMetaType::Void, 0x80000000 | 3, QMetaType::Bool,    2,    2,
-    QMetaType::Void, 0x80000000 | 3,    2,
-    QMetaType::Void, 0x80000000 | 3, 0x80000000 | 5,    2,    2,
+    QMetaType::Void, 0x80000000 | 3, 0x80000000 | 6,    2,    2,
     QMetaType::Void, 0x80000000 | 3,    2,
 
        0        // eod
@@ -271,10 +271,10 @@ void LayersWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->visibilityChanged((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
-        case 1: _t->nameChanged((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< std::string_view(*)>(_a[2]))); break;
-        case 2: _t->setMargin((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 3: _t->setVisibility((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
-        case 4: _t->isolate((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;
+        case 1: _t->visibilityIsolated((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;
+        case 2: _t->nameChanged((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< std::string_view(*)>(_a[2]))); break;
+        case 3: _t->setMargin((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 4: _t->setVisibility((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
         case 5: _t->setName((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< std::string_view(*)>(_a[2]))); break;
         case 6: _t->setLayerCount((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;
         default: ;
@@ -289,9 +289,16 @@ void LayersWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
             }
         }
         {
+            using _t = void (LayersWidget::*)(LayerIdx );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&LayersWidget::visibilityIsolated)) {
+                *result = 1;
+                return;
+            }
+        }
+        {
             using _t = void (LayersWidget::*)(LayerIdx , std::string_view );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&LayersWidget::nameChanged)) {
-                *result = 1;
+                *result = 2;
                 return;
             }
         }
@@ -346,10 +353,17 @@ void LayersWidget::visibilityChanged(LayerIdx _t1, bool _t2)
 }
 
 // SIGNAL 1
+void LayersWidget::visibilityIsolated(LayerIdx _t1)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    QMetaObject::activate(this, &staticMetaObject, 1, _a);
+}
+
+// SIGNAL 2
 void LayersWidget::nameChanged(LayerIdx _t1, std::string_view _t2)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))) };
-    QMetaObject::activate(this, &staticMetaObject, 1, _a);
+    QMetaObject::activate(this, &staticMetaObject, 2, _a);
 }
 struct qt_meta_stringdata_LayerScrollWidget_t {
     QByteArrayData data[3];

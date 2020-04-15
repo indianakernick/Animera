@@ -90,6 +90,7 @@ public Q_SLOTS:
   
   void setPos(CellPos);
   void setVisibility(LayerIdx, bool);
+  void isolateVisibility(LayerIdx);
   void setName(LayerIdx, std::string_view);
   void setDelay(int);
   

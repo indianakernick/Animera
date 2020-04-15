@@ -53,12 +53,12 @@ public:
   
 Q_SIGNALS:
   void visibilityChanged(LayerIdx, bool);
+  void visibilityIsolated(LayerIdx);
   void nameChanged(LayerIdx, std::string_view);
 
 public Q_SLOTS:
   void setMargin(int);
   void setVisibility(LayerIdx, bool);
-  void isolate(LayerIdx);
   void setName(LayerIdx, std::string_view);
   void setLayerCount(LayerIdx);
   

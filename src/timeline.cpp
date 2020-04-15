@@ -448,6 +448,27 @@ void Timeline::setVisibility(const LayerIdx idx, const bool visible) {
   }
 }
 
+void Timeline::isolateVisibility(const LayerIdx idx) {
+  assert(LayerIdx{0} <= idx);
+  assert(idx < layerCount());
+  
+  QRect cellChanged;
+  for (LayerIdx l = {}; l != layerCount(); ++l) {
+    Layer &layer = layers[+l];
+    if ((l != idx) == layer.visible) {
+      layer.visible = !layer.visible;
+      Q_EMIT visibilityChanged(l, layer.visible);
+      cellChanged = cellChanged.united(layer.spans.get(currPos.f)->rect());
+    }
+  }
+  
+  if (!cellChanged.isEmpty()) {
+    changeFrame();
+    changeCell(cellChanged);
+    Q_EMIT modified();
+  }
+}
+
 void Timeline::setName(const LayerIdx idx, const std::string_view name) {
   assert(LayerIdx{0} <= idx);
   assert(idx < layerCount());

@@ -77,10 +77,6 @@ void TimelineWidget::setVisibility(const LayerIdx layer, const bool visible) {
   layers->setVisibility(layer, visible);
 }
 
-void TimelineWidget::isolateLayer(const LayerIdx layer) {
-  layers->isolate(layer);
-}
-
 void TimelineWidget::setName(const LayerIdx layer, const std::string_view name) {
   layers->setName(layer, name);
 }
