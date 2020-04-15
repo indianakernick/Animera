@@ -22,18 +22,22 @@ ErrorDialog::ErrorDialog(
   setAttribute(Qt::WA_DeleteOnClose);
   setWindowTitle("Error");
   setStyleSheet("background-color:" + glob_main.name());
+  
   auto *layout = new QVBoxLayout{this};
   layout->setSpacing(0);
   layout->setContentsMargins(0, 0, 0, 0);
   layout->setSizeConstraint(QLayout::SetFixedSize);
+  
   const WidgetRect titleRect = textBoxRect(title.size());
   const WidgetRect titleRectMargins = addMargins(titleRect, true, true, true, false);
   layout->addWidget(new LabelWidget{this, titleRectMargins, title});
   layout->addWidget(new HoriSeparator{this});
+  
   const QSize bodySize = wrapToWidth(message, erro_wrap_width);
   const WidgetRect bodyRect = textBoxRect(bodySize);
   const WidgetRect bodyRectMargins = addMargins(bodyRect, true, false, true, false);
   layout->addWidget(new LabelWidget{this, bodyRectMargins, message});
+  
   constexpr WidgetRect buttonRect = addMargins(textBoxRect(8), true, false, true, true);
   auto *ok = new TextPushButtonWidget{this, buttonRect, "Ok"};
   CONNECT(ok, pressed, this, accept);

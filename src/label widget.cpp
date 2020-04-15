@@ -43,8 +43,9 @@ QSize wrapToWidth(QString &text, const int width) {
   for (int i = 0; i != text.size(); ++i) {
     if (text[i] == QChar::LineFeed) {
       size.setWidth(std::max(size.width(), i - line));
-      line = i + 1;
       ++size.rheight();
+      line = i + 1;
+      white = -1;
       continue;
     } else if (text[i] == QChar::Space) {
       white = i;
@@ -55,15 +56,20 @@ QSize wrapToWidth(QString &text, const int width) {
       if (firstWhite > 0) {
         while (text[firstWhite - 1] == QChar::Space) --firstWhite;
       }
-      if (white >= 0 && firstWhite - line <= width) {
+      if (firstWhite >= 0 && firstWhite - line <= width) {
+        // wrap at word boundary
         size.setWidth(std::max(size.width(), firstWhite - line));
         text[white] = QChar::LineFeed;
         line = white + 1;
       } else {
+        // wrap anywhere
+        break;
+        /*
         size.setWidth(width);
         text.insert(line + width, QChar::LineFeed);
         ++i;
         line += width + 1;
+        */
       }
       white = -1;
       ++size.rheight();
