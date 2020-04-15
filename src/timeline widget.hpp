@@ -54,6 +54,7 @@ Q_SIGNALS:
   void clearSelection();
   void currPosChanged(CellPos);
   void delayChanged(int);
+  void animationToggled(bool);
   
 private:
   ControlsWidget *controls = nullptr;

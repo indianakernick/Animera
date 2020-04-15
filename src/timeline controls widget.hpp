@@ -29,6 +29,7 @@ Q_SIGNALS:
   void extendCell();
   void splitCell();
   void delayChanged(int);
+  void animationToggled(bool);
 
 public Q_SLOTS:
   void toggleAnimation();

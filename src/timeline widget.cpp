@@ -36,23 +36,24 @@ TimelineWidget::TimelineWidget(QWidget *parent)
   CONNECT(cellScroll, rightMarginChanged, frameScroll, shouldSetRightMargin);
   CONNECT(cellScroll, bottomMarginChanged, layerScroll, shouldSetBottomMargin);
   
-  CONNECT(layers,   visibilityChanged, this,   visibilityChanged);
-  CONNECT(layers,   nameChanged,       this,   nameChanged);
+  CONNECT(layers,   visibilityChanged, this, visibilityChanged);
+  CONNECT(layers,   nameChanged,       this, nameChanged);
   
-  CONNECT(controls, nextFrame,         this,   nextFrame);
-  CONNECT(controls, insertLayer,       this,   insertLayer);
-  CONNECT(controls, removeLayer,       this,   removeLayer);
-  CONNECT(controls, moveLayerUp,       this,   moveLayerUp);
-  CONNECT(controls, moveLayerDown,     this,   moveLayerDown);
-  CONNECT(controls, extendCell,        this,   extendCell);
-  CONNECT(controls, splitCell,         this,   splitCell);
-  CONNECT(controls, delayChanged,      this,   delayChanged);
+  CONNECT(controls, nextFrame,         this, nextFrame);
+  CONNECT(controls, insertLayer,       this, insertLayer);
+  CONNECT(controls, removeLayer,       this, removeLayer);
+  CONNECT(controls, moveLayerUp,       this, moveLayerUp);
+  CONNECT(controls, moveLayerDown,     this, moveLayerDown);
+  CONNECT(controls, extendCell,        this, extendCell);
+  CONNECT(controls, splitCell,         this, splitCell);
+  CONNECT(controls, delayChanged,      this, delayChanged);
+  CONNECT(controls, animationToggled,  this, animationToggled);
   
-  CONNECT(cells,    beginSelection,    this,   beginSelection);
-  CONNECT(cells,    continueSelection, this,   continueSelection);
-  CONNECT(cells,    endSelection,      this,   endSelection);
-  CONNECT(cells,    clearSelection,    this,   clearSelection);
-  CONNECT(cells,    currPosChanged,    this,   currPosChanged);
+  CONNECT(cells,    beginSelection,    this, beginSelection);
+  CONNECT(cells,    continueSelection, this, continueSelection);
+  CONNECT(cells,    endSelection,      this, endSelection);
+  CONNECT(cells,    clearSelection,    this, clearSelection);
+  CONNECT(cells,    currPosChanged,    this, currPosChanged);
   
   auto *grid = new QGridLayout{this};
   grid->setSpacing(0);

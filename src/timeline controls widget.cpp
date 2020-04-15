@@ -103,6 +103,7 @@ void ControlsWidget::connectSignals() {
   CONNECT(extendButton,        pressed,      this, extendCell);
   CONNECT(splitButton,         pressed,      this, splitCell);
   CONNECT(playButton,          toggled,      this, toggleTimer);
+  CONNECT(playButton,          toggled,      this, animationToggled);
   CONNECT(animTimer,           timeout,      this, nextFrame);
   CONNECT(delayBox,            valueChanged, this, changeDelay);
 }

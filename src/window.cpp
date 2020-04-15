@@ -288,7 +288,19 @@ void Window::populateMenubar() {
   frame->addSeparator();
   ADD_ACTION(frame, "Next Frame", key_next_frame, sprite.timeline, nextFrame);
   ADD_ACTION(frame, "Previous Frame", key_prev_frame, sprite.timeline, prevFrame);
-  ADD_ACTION(frame, "Play Animation", key_play_anim, *timeline, toggleAnimation);
+  
+  {
+    QAction *action = frame->addAction("Play Animation");
+    action->setShortcut(key_play_anim);
+    CONNECT(action, triggered, timeline, toggleAnimation);
+    CONNECT_LAMBDA(timeline, animationToggled, [action](const bool playing) {
+      if (playing) {
+        action->setText("Pause Animation");
+      } else {
+        action->setText("Play Animation");
+      }
+    });
+  }
   
   QMenu *selection = menubar->addMenu("Selection");
   selection->setFont(getGlobalFont());
