@@ -51,15 +51,6 @@ constexpr auto value(T &&obj, long) -> std::decay_t<decltype(obj)>;
     __VA_ARGS__                                                                 \
   )
 
-// TODO: this is currently unused
-#define CONNECT_OVERLOAD(SENDER, SIGNAL, RECEIVER, SLOT, ...)                   \
-  QObject::connect(                                                             \
-    detail::address(SENDER, 0),                                                 \
-    qOverload<__VA_ARGS__>(&decltype(detail::value(SENDER, 0))::SIGNAL),        \
-    detail::address(RECEIVER, 0),                                               \
-    qOverload<__VA_ARGS__>(&decltype(detail::value(RECEIVER, 0))::SLOT)         \
-  )
-
 // connect\((.+),\s+&\w+::(\w+),\s+(.+),\s+&\w+::(\w+)\);
 // CONNECT($1, $2, $3, $4);
 

@@ -265,6 +265,7 @@ void Window::populateMenubar() {
   //ADD_ACTION(layer, "Toggle Visibility", Qt::SHIFT + Qt::Key_V, sprite.timeline, toggleLayerVisible);
   // TODO: Maybe consider this
   // We have to keep the action in sync with the timeline
+  // https://forum.qt.io/topic/83488/how-do-i-change-the-style-of-checkboxes-for-checkable-qactions-in-a-qmenu/2
   /*{
     QAction *action = layer->addAction("Visible");
     action->setShortcut(Qt::SHIFT + Qt::Key_V);

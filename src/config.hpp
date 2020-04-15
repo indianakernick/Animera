@@ -24,11 +24,6 @@ constexpr int operator""_px(const unsigned long long literal) {
   return static_cast<int>(literal * glob_scale);
 }
 
-// TODO: robust font system
-// we might end up using
-// 5x7ascii for the status bar and
-// 5x7+2_var_ascii for the tooltips
-// so global constants probably aren't gonna cut it
 constexpr int       glob_font_width_px = 5_px;
 constexpr int       glob_font_kern_px = 1_px;
 constexpr int       glob_font_stride_px = glob_font_width_px + glob_font_kern_px;
