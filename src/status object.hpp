@@ -36,7 +36,14 @@ private:
   FrameIdx frameCount;
   LayerIdx layerCount;
   
-  void updateStatus();
+  enum class Updated {
+    scale,
+    cell,
+    selection,
+    timeline
+  };
+  
+  void updateStatus(Updated);
 };
 
 #endif

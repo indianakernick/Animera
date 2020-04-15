@@ -14,39 +14,55 @@ StatusObject::StatusObject(QObject *parent)
   : QObject{parent} {}
 
 void StatusObject::setScale(const int newScale) {
+  if (scale == newScale) return;
   scale = newScale;
-  updateStatus();
+  updateStatus(Updated::scale);
 }
 
 void StatusObject::setCurrPos(const CellPos newCurrPos) {
+  if (currPos.l == newCurrPos.l && currPos.f == newCurrPos.f) return;
   currPos = newCurrPos;
-  updateStatus();
+  updateStatus(Updated::cell);
 }
 
 void StatusObject::setSelection(const CellRect newSelection) {
+  if (
+    selection.minL == newSelection.minL &&
+    selection.minF == newSelection.minF &&
+    selection.maxL == newSelection.maxL &&
+    selection.maxF == newSelection.maxF
+  ) return;
   selection = newSelection;
-  updateStatus();
+  updateStatus(Updated::selection);
 }
 
 void StatusObject::setFrameCount(const FrameIdx newFrameCount) {
+  if (frameCount == newFrameCount) return;
   frameCount = newFrameCount;
-  updateStatus();
+  updateStatus(Updated::timeline);
 }
 
 void StatusObject::setLayerCount(const LayerIdx newLayerCount) {
+  if (layerCount == newLayerCount) return;
   layerCount = newLayerCount;
-  updateStatus();
+  updateStatus(Updated::timeline);
 }
 
-void StatusObject::updateStatus() {
+void StatusObject::updateStatus(const Updated updated) {
   StatusMsg status;
+  
   status.append("Scale: ");
   status.append(scale);
   const std::size_t scaleSize = status.size();
+  
   status.append(" Timeline: ");
   status.append(+frameCount, +layerCount);
+  const std::size_t timelineSize = status.size();
+  
   status.append(" Cell: ");
   status.append(+currPos.f, +currPos.l);
+  const std::size_t cellSize = status.size();
+  
   if (selection.minL <= selection.maxL && selection.minF <= selection.maxF) {
     status.append(" Selection: ");
     status.append({
@@ -54,8 +70,27 @@ void StatusObject::updateStatus() {
       QPoint{+selection.maxF, +selection.maxL}
     });
   }
+  
+  std::string_view append;
+  switch (updated) {
+    case Updated::scale:
+      append = status.get().substr(0, scaleSize);
+      break;
+    case Updated::timeline:
+      append = status.get().substr(scaleSize + 1, timelineSize - scaleSize - 1);
+      break;
+    case Updated::cell:
+      append = status.get().substr(timelineSize + 1, cellSize - timelineSize - 1);
+      break;
+    case Updated::selection:
+      // selection can't be changed without moving mouse out of editor
+      break;
+  }
+  
   Q_EMIT shouldShowPerm(status.get());
-  Q_EMIT shouldShowApnd(status.get().substr(0, scaleSize));
+  if (!append.empty()) {
+    Q_EMIT shouldShowApnd(append);
+  }
 }
 
 #include "status object.moc"
