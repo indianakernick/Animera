@@ -108,7 +108,7 @@ QString ExportPatternValidator::defaultText() const {
 }
 
 QValidator::State ExportPatternValidator::validate(QString &input, int &) const {
-  bool truncated;
+  bool truncated = false;
   if (checkExportPattern(input, truncated)) {
     return truncated ? State::Intermediate : State::Invalid;
   }
