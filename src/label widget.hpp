@@ -40,11 +40,13 @@ inline LabelWidget *makeLabel(QWidget *parent, const QString &text) {
   return new LabelWidget{parent, textBoxRect(text.size()), text};
 }
 
-QSize wrapToWidth(QString &, int);
+enum class WrapMode {
+  none,
+  word,
+  anywhere,
+  word_or_anywhere
+};
 
-inline LabelWidget *makeWrappedLabel(QWidget *parent, const int width, QString text) {
-  const WidgetRect rect = textBoxRect(wrapToWidth(text, width));
-  return new LabelWidget{parent, rect, text};
-}
+QSize wrapToWidth(QString &, int, WrapMode);
 
 #endif

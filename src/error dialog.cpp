@@ -33,7 +33,7 @@ ErrorDialog::ErrorDialog(
   layout->addWidget(new LabelWidget{this, titleRectMargins, title});
   layout->addWidget(new HoriSeparator{this});
   
-  const QSize bodySize = wrapToWidth(message, erro_wrap_width);
+  const QSize bodySize = wrapToWidth(message, erro_wrap_width, WrapMode::word);
   const WidgetRect bodyRect = textBoxRect(bodySize);
   const WidgetRect bodyRectMargins = addMargins(bodyRect, true, false, true, false);
   layout->addWidget(new LabelWidget{this, bodyRectMargins, message});

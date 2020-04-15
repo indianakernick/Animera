@@ -35,11 +35,14 @@ void LabelWidget::paintEvent(QPaintEvent *) {
   painter.drawText(bounds, Qt::AlignTop | Qt::AlignLeft, text);
 }
 
-QSize wrapToWidth(QString &text, const int width) {
+QSize wrapToWidth(QString &text, const int width, const WrapMode mode) {
   assert(width > 0);
   int line = 0;
   int white = -1;
   QSize size = {0, 1};
+  const bool canWordWrap = mode == WrapMode::word || mode == WrapMode::word_or_anywhere;
+  const bool canWrapAnywhere = mode == WrapMode::anywhere || mode == WrapMode::word_or_anywhere;
+  
   for (int i = 0; i != text.size(); ++i) {
     if (text[i] == QChar::LineFeed) {
       size.setWidth(std::max(size.width(), i - line));
@@ -51,26 +54,24 @@ QSize wrapToWidth(QString &text, const int width) {
       white = i;
       continue;
     }
+    
+    if (mode == WrapMode::none) continue;
+    
     while (i - line >= width) {
       int firstWhite = white;
-      if (firstWhite > 0) {
-        while (text[firstWhite - 1] == QChar::Space) --firstWhite;
-      }
-      if (firstWhite >= 0 && firstWhite - line <= width) {
-        // wrap at word boundary
+      while (firstWhite > 0 && text[firstWhite - 1] == QChar::Space) --firstWhite;
+      
+      if (canWordWrap && firstWhite >= line && firstWhite - line <= width) {
         size.setWidth(std::max(size.width(), firstWhite - line));
         text[white] = QChar::LineFeed;
         line = white + 1;
-      } else {
-        // wrap anywhere
-        break;
-        /*
+      } else if (canWrapAnywhere) {
         size.setWidth(width);
         text.insert(line + width, QChar::LineFeed);
         ++i;
         line += width + 1;
-        */
-      }
+      } else break;
+      
       white = -1;
       ++size.rheight();
     }
