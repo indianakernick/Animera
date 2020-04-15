@@ -25,9 +25,9 @@ alternative a
   restore dst info
 
 alternative b
-  save dst permissions
+  save dst info
   copy src to dst
-  restore dst permissions
+  restore dst info
 
 alternative c
   src is memory
@@ -51,10 +51,11 @@ Error FileWriter::flush() const {
   if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
     return file.errorString() + "\n" + QDir::toNativeSeparators(path);
   }
-  if (file.write(buff.data().data(), buff.data().size()) != buff.data().size()) {
-    // Well, fuck
-    file.remove();
-    return FileIOError{}.what();
+  const qint64 written = file.write(buff.data().data(), buff.data().size());
+  if (written != buff.data().size()) {
+    QString err = file.errorString();
+    if (written > 0) file.remove();
+    return std::move(err);
   }
   return {};
 }

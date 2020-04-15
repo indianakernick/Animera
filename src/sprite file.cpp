@@ -130,7 +130,7 @@ Error writeSignature(QIODevice &dev) {
   SCOPE_TIME("writeSignature");
 
   if (dev.write(file_sig, file_sig_len) != file_sig_len) {
-    return FileIOError{}.what();
+    return dev.errorString();
   }
   return {};
 }
@@ -149,7 +149,7 @@ Error writeAHDR(QIODevice &dev, const SpriteInfo &info) try {
   writer.end();
   return {};
 } catch (FileIOError &e) {
-  return e.what();
+  return e.msg();
 }
 
 namespace {
@@ -167,7 +167,7 @@ Error writeRgba(QIODevice &dev, const PaletteCSpan colors) try {
   writer.end();
   return {};
 } catch (FileIOError &e) {
-  return e.what();
+  return e.msg();
 }
 
 Error writeGray(QIODevice &dev, const PaletteCSpan colors) try {
@@ -181,7 +181,7 @@ Error writeGray(QIODevice &dev, const PaletteCSpan colors) try {
   writer.end();
   return {};
 } catch (FileIOError &e) {
-  return e.what();
+  return e.msg();
 }
 
 }
@@ -197,7 +197,7 @@ Error writePLTE(QIODevice &dev, const PaletteCSpan colors, const Format format) 
       return writeGray(dev, colors);
   }
 } catch (FileIOError &e) {
-  return e.what();
+  return e.msg();
 }
 
 Error writeLHDR(QIODevice &dev, const Layer &layer) try {
@@ -212,7 +212,7 @@ Error writeLHDR(QIODevice &dev, const Layer &layer) try {
   writer.end();
   return {};
 } catch (FileIOError &e) {
-  return e.what();
+  return e.msg();
 }
 
 Error writeCHDR(QIODevice &dev, const CellSpan &span) try {
@@ -231,7 +231,7 @@ Error writeCHDR(QIODevice &dev, const CellSpan &span) try {
   writer.end();
   return {};
 } catch (FileIOError &e) {
-  return e.what();
+  return e.msg();
 }
 
 Error writeCDAT(QIODevice &dev, const QImage &image, const Format format) try {
@@ -292,7 +292,7 @@ Error writeCDAT(QIODevice &dev, const QImage &image, const Format format) try {
   
   return {};
 } catch (FileIOError &e) {
-  return e.what();
+  return e.msg();
 }
 
 Error writeAEND(QIODevice &dev) try {
@@ -303,7 +303,7 @@ Error writeAEND(QIODevice &dev) try {
   writer.end();
   return {};
 } catch (FileIOError &e) {
-  return e.what();
+  return e.msg();
 }
 
 Error readSignature(QIODevice &dev) {
@@ -311,10 +311,10 @@ Error readSignature(QIODevice &dev) {
 
   char signature[file_sig_len];
   if (dev.read(signature, file_sig_len) != file_sig_len) {
-    return FileIOError{}.what();
+    return dev.errorString();
   }
   if (std::memcmp(signature, file_sig, file_sig_len) != 0) {
-    return "Signature mismatch";
+    return "File signature mismatch";
   }
   return {};
 }
@@ -374,7 +374,7 @@ Error readAHDR(QIODevice &dev, SpriteInfo &info) try {
   
   return {};
 } catch (FileIOError &e) {
-  return e.what();
+  return e.msg();
 }
 
 namespace {
@@ -405,7 +405,7 @@ Error readRgba(QIODevice &dev, const PaletteSpan colors) try {
   std::fill(iter, colors.end(), 0);
   return {};
 } catch (FileIOError &e) {
-  return e.what();
+  return e.msg();
 }
 
 Error readGray(QIODevice &dev, const PaletteSpan colors) try {
@@ -424,7 +424,7 @@ Error readGray(QIODevice &dev, const PaletteSpan colors) try {
   std::fill(iter, colors.end(), 0);
   return {};
 } catch (FileIOError &e) {
-  return e.what();
+  return e.msg();
 }
 
 }
@@ -443,7 +443,7 @@ Error readPLTE(QIODevice &dev, const PaletteSpan colors, const Format format) tr
   }
   return {};
 } catch (FileIOError &e) {
-  return e.what();
+  return e.msg();
 }
 
 namespace {
@@ -500,7 +500,7 @@ Error readLHDR(QIODevice &dev, Layer &layer) try {
   
   return {};
 } catch (FileIOError &e) {
-  return e.what();
+  return e.msg();
 }
 
 Error readCHDR(QIODevice &dev, CellSpan &span, const Format format) try {
@@ -540,7 +540,7 @@ Error readCHDR(QIODevice &dev, CellSpan &span, const Format format) try {
   
   return {};
 } catch (FileIOError &e) {
-  return e.what();
+  return e.msg();
 }
 
 Error readCDAT(QIODevice &dev, QImage &image, const Format format) try {
@@ -612,7 +612,7 @@ Error readCDAT(QIODevice &dev, QImage &image, const Format format) try {
   
   return {};
 } catch (FileIOError &e) {
-  return e.what();
+  return e.msg();
 }
 
 Error readAEND(QIODevice &dev) try {
@@ -627,5 +627,5 @@ Error readAEND(QIODevice &dev) try {
   TRY(reader.end());
   return {};
 } catch (FileIOError &e) {
-  return e.what();
+  return e.msg();
 }

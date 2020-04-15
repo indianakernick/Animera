@@ -288,8 +288,6 @@ should the editor keys go in a menubar?
 
 ignore the waking click
 
-use QIODevice::errorString instead of "File IO error"
-  
 if another application edits the sprite file, ask to reload
 
 ------------------------------- minor refactoring ------------------------------

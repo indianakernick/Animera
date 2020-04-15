@@ -10,12 +10,20 @@
 #define animera_file_io_error_hpp
 
 #include <exception>
+#include <QtCore/qiodevice.h>
 
-class FileIOError final : public std::exception {
+class FileIOError final : public std::runtime_error {
 public:
-  const char *what() const noexcept override {
-    return "File IO error";
+  explicit FileIOError(const QIODevice &dev)
+    : std::runtime_error{dev.errorString().toStdString()},
+      error{dev.errorString()} {}
+
+  QString msg() const {
+    return error;
   }
+
+private:
+  QString error;
 };
 
 #endif

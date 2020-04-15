@@ -34,9 +34,9 @@ void ChunkWriter::end() {
     assert(currPos != 0);
     const qint64 dataLen = currPos - startPos - chunk_name_len - file_int_size;
     assert(dataLen == qint64{static_cast<std::uint32_t>(dataLen)});
-    if (!dev.seek(startPos)) throw FileIOError{};
+    if (!dev.seek(startPos)) throw FileIOError{dev};
     writeInt(static_cast<std::uint32_t>(dataLen));
-    if (!dev.seek(currPos)) throw FileIOError{};
+    if (!dev.seek(currPos)) throw FileIOError{dev};
   }
   writeInt(finalCrc);
 }
@@ -72,7 +72,7 @@ void ChunkWriter::writeStart(const std::uint32_t len, const char *name) {
 template <typename T>
 void ChunkWriter::writeData(const T *dat, const std::uint32_t len) {
   if (dev.write(reinterpret_cast<const char *>(dat), len) != len) {
-    throw FileIOError{};
+    throw FileIOError{dev};
   }
   crc = crc32(crc, reinterpret_cast<const Bytef *>(dat), len);
 }
@@ -105,13 +105,13 @@ ChunkStart ChunkReader::peek() {
   ChunkStart start;
   start.length = readInt();
   readString(start.name, chunk_name_len);
-  if (!dev.seek(dev.pos() - chunk_name_len - file_int_size)) throw FileIOError{};
+  if (!dev.seek(dev.pos() - chunk_name_len - file_int_size)) throw FileIOError{dev};
   return start;
 }
 
 void ChunkReader::skip(ChunkStart start) {
   const qint64 skipLen = start.length + chunk_name_len + 2 * file_int_size;
-  if (dev.skip(skipLen) != skipLen) throw FileIOError{};
+  if (dev.skip(skipLen) != skipLen) throw FileIOError{dev};
 }
 
 std::uint8_t ChunkReader::readByte() {
@@ -142,7 +142,7 @@ void ChunkReader::readString(unsigned char *dat, const std::uint32_t len) {
 template <typename T>
 void ChunkReader::readData(T *dat, const std::uint32_t len) {
   if (dev.read(reinterpret_cast<char *>(dat), len) != len) {
-    throw FileIOError{};
+    throw FileIOError{dev};
   }
   crc = crc32(crc, reinterpret_cast<const Bytef *>(dat), len);
 }

@@ -94,7 +94,7 @@ Error printLayers(QTextStream &console, QIODevice &dev, const bool json) try {
   
   return {};
 } catch (FileIOError &e) {
-  return e.what();
+  return e.msg();
 }
 
 Error printInfo(const QString &path, const bool layers, const bool json) {
