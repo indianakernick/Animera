@@ -286,6 +286,7 @@ void PolygonSelectTool::attachCell() {
   
   if (resizeImages()) {
     mask = {ctx->size, mask_format};
+    clearImage(mask);
   }
 }
 
