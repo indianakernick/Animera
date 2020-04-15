@@ -359,15 +359,14 @@ Error readAHDR(QIODevice &dev, SpriteInfo &info) try {
   
   TRY(reader.end());
   
-  if (info.width <= 0 || max_image_width < info.width) {
+  if (info.width < init_size_range.min || init_size_range.max < info.width) {
     return "Canvas width is out-of-range";
   }
-  if (info.height <= 0 || max_image_height < info.height) {
+  if (info.height < init_size_range.min || init_size_range.max < info.height) {
     return "Canvas height is out-of-range";
   }
-  // TODO: upper bound for layers and frames?
-  if (+info.layers < 0) return "Layer count is out-of-range";
-  if (+info.frames < 0) return "Frame count is out-of-range";
+  if (+info.layers <= 0) return "Layer count is out-of-range";
+  if (+info.frames <= 0) return "Frame count is out-of-range";
   if (info.delay < ctrl_delay.min || ctrl_delay.max < info.delay) {
     return "Animation delay is out-of-range";
   }
@@ -491,13 +490,13 @@ Error readLHDR(QIODevice &dev, Layer &layer) try {
   
   TRY(reader.end());
   
+  if (spans == 0) return "Layer spans out-of-range";
   if (!validLayerName(layer.name)) {
     return "Layer name contains non-ASCII characters";
   }
-  
-  // TODO: range checking on spans?
-  layer.spans.resize(spans);
   TRY(readVisibleByte(layer.visible, visible));
+  
+  layer.spans.resize(spans);
   
   return {};
 } catch (FileIOError &e) {
@@ -529,7 +528,6 @@ Error readCHDR(QIODevice &dev, CellSpan &span, const Format format) try {
   if (+span.len <= 0) return "Negative cell span length";
   span.cell = std::make_unique<Cell>();
   if (start.length == 5 * file_int_size) {
-    // TODO: range checking on pos?
     if (size.width() <= 0 || max_image_width < size.width()) {
       return "Cell width out-of-range";
     }

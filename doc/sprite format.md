@@ -81,14 +81,14 @@ See also: [PNG chunk layout](http://www.libpng.org/pub/png/spec/1.2/PNG-Structur
 
 ### AHDR (Animation Header)
 
-| Type | Description                     |
-|------|---------------------------------|
-| Int  | Width of the canvas in pixels   |
-| Int  | Height of the canvas in pixels  |
-| Int  | Number of layers                |
-| Int  | Number of frames                |
-| Int  | Animation delay in milliseconds |
-| Byte | Pixel format (explained below) |
+| Type | Description                               |
+|------|-------------------------------------------|
+| Int  | Width of the canvas in pixels [1, 32768]  |
+| Int  | Height of the canvas in pixels [1, 32768] |
+| Int  | Number of layers [1, 2147483647]          |
+| Int  | Number of frames [1, 2147483647]          |
+| Int  | Animation delay in milliseconds [1, 999]  |
+| Byte | Pixel format (explained below)            |
 
 The number of layers corresponds to the number of LHDR chunks that follow this
 chunk. There are three valid values for the pixel format byte. These values
@@ -119,9 +119,9 @@ PNG optimizes its PLTE and tRNS chunks.
 
 | Type   | Description                                               |
 |--------|-----------------------------------------------------------|
-| Int    | Number of spans in this layer                             |
+| Uint   | Number of spans in this layer [1, 4294967295]             |
 | Byte   | Visibility of this layer (0 for invisible, 1 for visible) |
-| String | Name of this layer                                        |
+| String | Name of this layer [0, 256]                               |
 
 Each layer contains a number of spans. The number of spans corresponds to the
 number of CHDR chunks that follow this chunk.
@@ -134,20 +134,20 @@ If the span is non-null, the cell rectangle is stored. This is a rectangle on
 the canvas where the cell is placed. All pixels outside of the rectangle are
 considered zero.
 
-| Type | Description                  |
-|------|------------------------------|
-| Int  | Number of cells in this span |
-| Int  | Cell X coordinate            |
-| Int  | Cell Y coordinate            |
-| Int  | Cell width                   |
-| Int  | Cell height                  |
+| Type | Description                                  |
+|------|----------------------------------------------|
+| Int  | Number of cells in this span [1, 2147483647] |
+| Int  | Cell X coordinate [-2147483648, 2147483647]  |
+| Int  | Cell Y coordinate [-2147483648, 2147483647]  |
+| Int  | Cell width [1, 1073741823]                   |
+| Int  | Cell height [1, 1073741823]                  |
 
 If the span is null, the cell rectangle is not stored (because there is no cell
 to have a rectangle).
 
-| Type | Description                  |
-|------|------------------------------|
-| Int  | Number of cells in this span |
+| Type | Description                                  |
+|------|----------------------------------------------|
+| Int  | Number of cells in this span [1, 2147483647] |
 
 If the span is non-null, the following chunk will be a CDAT chunk.
 
