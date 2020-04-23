@@ -19,10 +19,10 @@ DragPaintTool<Derived>::~DragPaintTool() {
 }
 
 template <typename Derived>
-void DragPaintTool<Derived>::attachCell() {}
+void DragPaintTool<Derived>::attachCel() {}
 
 template <typename Derived>
-void DragPaintTool<Derived>::detachCell() {}
+void DragPaintTool<Derived>::detachCel() {}
 
 template <typename Derived>
 void DragPaintTool<Derived>::mouseLeave(const ToolLeaveEvent &event) {
@@ -44,11 +44,11 @@ void DragPaintTool<Derived>::mouseDown(const ToolMouseDownEvent &event) {
   startPos = event.pos;
   color = ctx->selectColor(event.button);
   const QRect rect = that()->pointRect(event.pos);
-  if (color != 0) ctx->growCell(rect);
-  cleanCell = *ctx->cell;
-  const QPoint pos = ctx->cell->pos;
-  that()->drawPoint(ctx->cell->img, color, startPos - pos);
-  ctx->changeCell(rect);
+  if (color != 0) ctx->growCel(rect);
+  cleanCel = *ctx->cel;
+  const QPoint pos = ctx->cel->pos;
+  that()->drawPoint(ctx->cel->img, color, startPos - pos);
+  ctx->changeCel(rect);
   ctx->lock();
 }
 
@@ -70,12 +70,12 @@ void DragPaintTool<Derived>::mouseMove(const ToolMouseMoveEvent &event) {
   that()->updateStatus(status, startPos, event.pos);
   ctx->showStatus(status);
   
-  *ctx->cell = cleanCell;
+  *ctx->cel = cleanCel;
   const QRect rect = that()->dragRect(startPos, event.pos);
-  if (color != 0) ctx->growCell(rect);
-  const QPoint pos = ctx->cell->pos;
-  that()->drawDrag(ctx->cell->img, startPos - pos, event.pos - pos);
-  ctx->changeCell(rect.united(that()->dragRect(startPos, event.lastPos)));
+  if (color != 0) ctx->growCel(rect);
+  const QPoint pos = ctx->cel->pos;
+  that()->drawDrag(ctx->cel->img, startPos - pos, event.pos - pos);
+  ctx->changeCel(rect.united(that()->dragRect(startPos, event.lastPos)));
 }
 
 template <typename Derived>
@@ -84,7 +84,7 @@ void DragPaintTool<Derived>::mouseUp(const ToolMouseUpEvent &event) {
 
   ctx->showStatus(StatusMsg{}.appendLabeled(event.pos));
   ctx->unlock();
-  if (color == 0) ctx->shrinkCell(that()->dragRect(startPos, event.pos));
+  if (color == 0) ctx->shrinkCel(that()->dragRect(startPos, event.pos));
   ctx->finishChange();
 }
 

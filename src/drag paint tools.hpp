@@ -10,15 +10,15 @@
 #define animera_drag_paint_tools_hpp
 
 #include "tool.hpp"
-#include "cell.hpp"
+#include "cel.hpp"
 
 template <typename Derived>
 class DragPaintTool : public Tool {
 public:
   ~DragPaintTool();
   
-  void attachCell() override final;
-  void detachCell() override final;
+  void attachCel() override final;
+  void detachCel() override final;
   void mouseLeave(const ToolLeaveEvent &) override final;
   void mouseDown(const ToolMouseDownEvent &) override final;
   void mouseMove(const ToolMouseMoveEvent &) override final;
@@ -29,7 +29,7 @@ protected:
 
 private:
   QPoint startPos = no_point;
-  Cell cleanCell;
+  Cel cleanCel;
   QRgb color = 0;
   
   Derived *that();

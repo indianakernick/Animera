@@ -19,13 +19,13 @@ void StatusObject::setScale(const int newScale) {
   updateStatus(Updated::scale);
 }
 
-void StatusObject::setPos(const CellPos newPos) {
+void StatusObject::setPos(const CelPos newPos) {
   if (pos.l == newPos.l && pos.f == newPos.f) return;
   pos = newPos;
-  updateStatus(Updated::cell);
+  updateStatus(Updated::cel);
 }
 
-void StatusObject::setSelection(const CellRect newSelection) {
+void StatusObject::setSelection(const CelRect newSelection) {
   if (
     selection.minL == newSelection.minL &&
     selection.minF == newSelection.minF &&
@@ -59,9 +59,9 @@ void StatusObject::updateStatus(const Updated updated) {
   status.append(+frameCount, +layerCount);
   const std::size_t timelineSize = status.size();
   
-  status.append(" Cell: ");
+  status.append(" Cel: ");
   status.append(+pos.f, +pos.l);
-  const std::size_t cellSize = status.size();
+  const std::size_t celSize = status.size();
   
   if (selection.minL <= selection.maxL && selection.minF <= selection.maxF) {
     status.append(" Selection: ");
@@ -79,8 +79,8 @@ void StatusObject::updateStatus(const Updated updated) {
     case Updated::timeline:
       append = status.get().substr(scaleSize + 1, timelineSize - scaleSize - 1);
       break;
-    case Updated::cell:
-      append = status.get().substr(timelineSize + 1, cellSize - timelineSize - 1);
+    case Updated::cel:
+      append = status.get().substr(timelineSize + 1, celSize - timelineSize - 1);
       break;
     case Updated::selection:
       // selection can't be changed without moving mouse out of editor

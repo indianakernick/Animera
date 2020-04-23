@@ -16,17 +16,17 @@ void paintTimelineButtonBack(QPixmap &pixmap) {
   QPainter painter{&pixmap};
   painter.fillRect(
     0, 0,
-    cell_width - glob_border_width, cell_width - glob_border_width,
+    cel_width - glob_border_width, cel_width - glob_border_width,
     glob_main
   );
   painter.fillRect(
-    cell_width - glob_border_width, 0,
-    glob_border_width, cell_width,
+    cel_width - glob_border_width, 0,
+    glob_border_width, cel_width,
     glob_border_color
   );
   painter.fillRect(
-    0, cell_width - glob_border_width,
-    cell_width - glob_border_width, glob_border_width,
+    0, cel_width - glob_border_width,
+    cel_width - glob_border_width, glob_border_width,
     glob_border_color
   );
 }
@@ -36,11 +36,11 @@ void paintTimelineButtonIcon(QPixmap &pixmap, const QString &path) {
   QBitmap bitmap{path};
   bitmap = bitmap.scaled(bitmap.size() * glob_scale);
   QRegion region{bitmap};
-  region.translate(cell_icon_pad, cell_icon_pad);
+  region.translate(cel_icon_pad, cel_icon_pad);
   painter.setClipRegion(region);
   painter.fillRect(
-    cell_icon_pad, cell_icon_pad,
-    cell_icon_size, cell_icon_size,
-    cell_icon_color
+    cel_icon_pad, cel_icon_pad,
+    cel_icon_size, cel_icon_size,
+    cel_icon_color
   );
 }

@@ -8,7 +8,7 @@
 
 #include "transform tools.hpp"
 
-#include "cell.hpp"
+#include "cel.hpp"
 #include <Graphics/fill.hpp>
 #include <Graphics/mask.hpp>
 #include "surface factory.hpp"
@@ -21,7 +21,7 @@ void TranslateTool::mouseLeave(const ToolLeaveEvent &) {
 
 void TranslateTool::mouseDown(const ToolMouseDownEvent &event) {
   if (event.button != ButtonType::primary) return;
-  drag = !ctx->cell->isNull();
+  drag = !ctx->cel->isNull();
   if (drag) ctx->lock();
 }
 
@@ -57,7 +57,7 @@ QPoint arrowToDir(const Qt::Key key) {
 }
 
 void TranslateTool::keyPress(const ToolKeyEvent &event) {
-  if (ctx->cell->isNull()) return;
+  if (ctx->cel->isNull()) return;
   QPoint move = arrowToDir(event.key);
   if (move == QPoint{0, 0}) return;
   translate(move);
@@ -66,16 +66,16 @@ void TranslateTool::keyPress(const ToolKeyEvent &event) {
 }
 
 void TranslateTool::translate(const QPoint move) {
-  const QRect rect = ctx->cell->rect();
-  ctx->cell->pos += move;
-  ctx->changeCell(rect.united(rect.translated(move)));
+  const QRect rect = ctx->cel->rect();
+  ctx->cel->pos += move;
+  ctx->changeCel(rect.united(rect.translated(move)));
 }
 
 void TranslateTool::updateStatus() {
-  ctx->showStatus(StatusMsg{}.appendLabeled(ctx->cell->pos));
+  ctx->showStatus(StatusMsg{}.appendLabeled(ctx->cel->pos));
 }
 
-void FlipTool::attachCell() {
+void FlipTool::attachCel() {
   flipX = flipY = false;
 }
 
@@ -108,29 +108,29 @@ void FlipTool::mouseMove(const ToolMouseMoveEvent &) {
 }
 
 void FlipTool::keyPress(const ToolKeyEvent &event) {
-  if (ctx->cell->isNull()) return;
-  const QRect rect = ctx->cell->rect();
+  if (ctx->cel->isNull()) return;
+  const QRect rect = ctx->cel->rect();
   if (flipXChanged(event.key, flipX)) {
-    QImage &src = ctx->cell->img;
+    QImage &src = ctx->cel->img;
     QImage flipped{src.size(), src.format()};
     visitSurfaces(flipped, src, [](auto flipped, auto src) {
       gfx::flipHori(flipped, src);
     });
-    ctx->cell->pos.setX(ctx->size.width() - (ctx->cell->pos.x() + src.width()));
+    ctx->cel->pos.setX(ctx->size.width() - (ctx->cel->pos.x() + src.width()));
     src = std::move(flipped);
   } else if (flipYChanged(event.key, flipY)) {
-    QImage &src = ctx->cell->img;
+    QImage &src = ctx->cel->img;
     QImage flipped{src.size(), src.format()};
     visitSurfaces(flipped, src, [](auto flipped, auto src) {
       gfx::flipVert(flipped, src);
     });
-    ctx->cell->pos.setY(ctx->size.height() - (ctx->cell->pos.y() + src.height()));
+    ctx->cel->pos.setY(ctx->size.height() - (ctx->cel->pos.y() + src.height()));
     src = std::move(flipped);
   } else {
     return;
   }
   updateStatus();
-  ctx->changeCell(rect.united({ctx->cell->pos, rect.size()}));
+  ctx->changeCel(rect.united({ctx->cel->pos, rect.size()}));
   ctx->finishChange();
 }
 
@@ -143,7 +143,7 @@ void FlipTool::updateStatus() {
   ctx->showStatus(status);
 }
 
-void RotateTool::attachCell() {
+void RotateTool::attachCel() {
   angle = 0;
 }
 
@@ -170,12 +170,12 @@ void RotateTool::mouseMove(const ToolMouseMoveEvent &) {
 }
 
 void RotateTool::keyPress(const ToolKeyEvent &event) {
-  if (ctx->cell->isNull()) return;
+  if (ctx->cel->isNull()) return;
   const int rot = arrowToRot(event.key);
   if (rot == 0) return;
-  const QRect rect = ctx->cell->rect();
+  const QRect rect = ctx->cel->rect();
   angle = (angle + rot) & 3;
-  QImage &src = ctx->cell->img;
+  QImage &src = ctx->cel->img;
   QImage rotated{src.size().transposed(), src.format()};
   visitSurfaces(rotated, src, [rot](auto rotated, auto src) {
     gfx::rotate(rotated, src, rot);
@@ -186,21 +186,21 @@ void RotateTool::keyPress(const ToolKeyEvent &event) {
   } else if (size.width() % 2 < size.height() % 2) {
     size = {size.width(), size.height() - 1};
   }
-  const QPoint pos = ctx->cell->pos;
+  const QPoint pos = ctx->cel->pos;
   if (rot == 1) {
-    ctx->cell->pos = {
+    ctx->cel->pos = {
       size.width() / 2 + (size.height() + 1) / 2 - pos.y() - src.height(),
       (size.height() + 1) / 2 - (size.width() + 1) / 2 + pos.x()
     };
   } else if (rot == 3) {
-    ctx->cell->pos = {
+    ctx->cel->pos = {
       (size.width() + 1) / 2 - (size.height() + 1) / 2 + pos.y(),
       size.height() / 2 + (size.width() + 1) / 2 - pos.x() - src.width()
     };
   } else Q_UNREACHABLE();
   src = std::move(rotated);
   updateStatus();
-  ctx->changeCell(rect.united(ctx->cell->rect()));
+  ctx->changeCel(rect.united(ctx->cel->rect()));
   ctx->finishChange();
 }
 

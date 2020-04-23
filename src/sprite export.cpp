@@ -34,7 +34,7 @@ Error Exporter::exportSprite(const std::vector<Layer> &layers) {
   if (options.composite) {
     return exportFrames(layers);
   } else {
-    return exportCells(layers);
+    return exportCels(layers);
   }
 }
 
@@ -58,11 +58,11 @@ QSize Exporter::getXformedSize() const {
   return xformedSize;
 }
 
-void Exporter::setImageFrom(const Cell &cell) {
-  SCOPE_TIME("Exporter::setImageFrom (cell)");
+void Exporter::setImageFrom(const Cel &cel) {
+  SCOPE_TIME("Exporter::setImageFrom (cel)");
   
   clearImage(image);
-  blitImage(image, cell.img, cell.pos);
+  blitImage(image, cel.img, cel.pos);
 }
 
 void Exporter::setImageFrom(const Frame &frame) {
@@ -95,10 +95,10 @@ Error Exporter::exportImage(const ExportState state) {
   FileWriter writer;
   TRY(writer.open(getExportPath(options, state)));
   if (xformed.isNull()) {
-    TRY(exportCellPng(writer.dev(), palette, image, format, options.format));
+    TRY(exportCelPng(writer.dev(), palette, image, format, options.format));
   } else {
     applyTransform();
-    TRY(exportCellPng(writer.dev(), palette, xformed, format, options.format));
+    TRY(exportCelPng(writer.dev(), palette, xformed, format, options.format));
   }
   return writer.flush();
 }
@@ -111,16 +111,16 @@ bool Exporter::shouldInclude(const Layer &layer) const {
   }
 }
 
-Error Exporter::exportCells(const std::vector<Layer> &layers) {
-  SCOPE_TIME("Exporter::exportCells");
+Error Exporter::exportCels(const std::vector<Layer> &layers) {
+  SCOPE_TIME("Exporter::exportCels");
   
   for (LayerIdx l = options.selection.minL; l <= options.selection.maxL; ++l) {
     const Layer &layer = layers[+l];
     if (!shouldInclude(layer)) continue;
-    LayerCells::ConstIterator iter = layer.spans.find(options.selection.minF);
+    LayerCels::ConstIterator iter = layer.spans.find(options.selection.minF);
     for (FrameIdx f = options.selection.minF; f <= options.selection.maxF; ++f) {
-      if (const Cell *cell = *iter; *cell) {
-        setImageFrom(*cell);
+      if (const Cel *cel = *iter; *cel) {
+        setImageFrom(*cel);
         TRY(exportImage({l, f}));
       }
       ++iter;
@@ -135,7 +135,7 @@ Error Exporter::exportFrames(const std::vector<Layer> &layers) {
   const LayerIdx rectLayers = options.selection.maxL - options.selection.minL + LayerIdx{1};
   Frame frame;
   frame.reserve(+rectLayers);
-  std::vector<LayerCells::ConstIterator> iterators;
+  std::vector<LayerCels::ConstIterator> iterators;
   iterators.reserve(+rectLayers);
   for (LayerIdx l = options.selection.minL; l <= options.selection.maxL; ++l) {
     iterators.push_back(layers[+l].spans.find(options.selection.minF));
@@ -144,7 +144,7 @@ Error Exporter::exportFrames(const std::vector<Layer> &layers) {
     frame.clear();
     for (LayerIdx l = {}; l != rectLayers; ++l) {
       if (!shouldInclude(layers[+(l + options.selection.minL)])) continue;
-      if (const Cell *cell = *iterators[+l]; *cell) {
+      if (const Cel *cel = *iterators[+l]; *cel) {
         frame.push_back(*iterators[+l]);
       }
       ++iterators[+l];

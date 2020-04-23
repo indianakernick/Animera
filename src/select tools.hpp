@@ -39,7 +39,7 @@ protected:
 
 class RectangleSelectTool final : public SelectTool<RectangleSelectTool> {
 public:
-  void attachCell() override;
+  void attachCel() override;
   void mouseLeave(const ToolLeaveEvent &) override;
   void mouseDown(const ToolMouseDownEvent &) override;
   void mouseMove(const ToolMouseMoveEvent &) override;
@@ -51,7 +51,7 @@ private:
 
 class PolygonSelectTool final : public SelectTool<PolygonSelectTool> {
 public:
-  void attachCell() override;
+  void attachCel() override;
   void mouseLeave(const ToolLeaveEvent &) override;
   void mouseDown(const ToolMouseDownEvent &) override;
   void mouseMove(const ToolMouseMoveEvent &) override;
@@ -70,8 +70,8 @@ class WandSelectTool final : public SelectTool<WandSelectTool> {
 public:
   WandSelectTool();
   
-  void attachCell() override;
-  void detachCell() override;
+  void attachCel() override;
+  void detachCel() override;
   void mouseLeave(const ToolLeaveEvent &) override;
   void mouseDown(const ToolMouseDownEvent &) override;
   void mouseMove(const ToolMouseMoveEvent &) override;
@@ -81,7 +81,7 @@ private:
   QTimer animTimer;
   int animFrame;
   
-  QRect cellRect() const;
+  QRect celRect() const;
   void toggleMode(const ToolMouseDownEvent &);
   void addToSelection(const ToolMouseDownEvent &);
   QRgb getOverlayColor() const;

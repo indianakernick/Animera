@@ -14,11 +14,11 @@
 UndoObject::UndoObject(QObject *parent)
   : QObject{parent} {}
 
-void UndoObject::setCell(Cell *newCell) {
-  if (cell != newCell) {
-    stack.reset(*newCell);
+void UndoObject::setCel(Cel *newCel) {
+  if (cel != newCel) {
+    stack.reset(*newCel);
   }
-  cell = newCell;
+  cel = newCel;
 }
 
 void UndoObject::keyPress(const Qt::Key key) {
@@ -29,18 +29,18 @@ void UndoObject::keyPress(const Qt::Key key) {
   }
 }
 
-void UndoObject::cellModified() {
-  SCOPE_TIME("UndoObject::cellModified");
+void UndoObject::celModified() {
+  SCOPE_TIME("UndoObject::celModified");
   
-  // TODO: not notified of cells being cleared or pasted onto
+  // TODO: not notified of cels being cleared or pasted onto
   // maybe we could listen to the timeline.modified signal?
-  stack.modify(*cell);
+  stack.modify(*cel);
 }
 
 void UndoObject::undo() {
   UndoState state = stack.undo();
   if (state.undid) {
-    restore(state.cell);
+    restore(state.cel);
   } else {
     Q_EMIT shouldShowTemp("Cannot undo any further");
   }
@@ -49,25 +49,25 @@ void UndoObject::undo() {
 void UndoObject::redo() {
   UndoState state = stack.redo();
   if (state.undid) {
-    restore(state.cell);
+    restore(state.cel);
   } else {
     Q_EMIT shouldShowTemp("Cannot redo any further");
   }
 }
 
-void UndoObject::restore(const Cell &newCell) {
+void UndoObject::restore(const Cel &newCel) {
   SCOPE_TIME("UndoObject::restore");
   
-  if (cell->isNull() > newCell.isNull()) {
-    Q_EMIT shouldGrowCell(newCell.rect());
-    copyImage(cell->img, newCell.img);
-    Q_EMIT cellReverted(newCell.rect());
-  } else if (cell->isNull() < newCell.isNull()) {
-    Q_EMIT shouldClearCell();
+  if (cel->isNull() > newCel.isNull()) {
+    Q_EMIT shouldGrowCel(newCel.rect());
+    copyImage(cel->img, newCel.img);
+    Q_EMIT celReverted(newCel.rect());
+  } else if (cel->isNull() < newCel.isNull()) {
+    Q_EMIT shouldClearCel();
   } else {
-    const QRect rect = cell->rect().united(newCell.rect());
-    *cell = newCell;
-    Q_EMIT cellReverted(rect);
+    const QRect rect = cel->rect().united(newCel.rect());
+    *cel = newCel;
+    Q_EMIT celReverted(rect);
   }
 }
 

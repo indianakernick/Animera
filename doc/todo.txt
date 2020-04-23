@@ -95,15 +95,15 @@ static linking took the app from 22MB to 14MB
 
 --------------------------------- optimizations --------------------------------
 
-optimize LayerCells
-  we need stable pointers to Cells
+optimize LayerCels
+  we need stable pointers to Cels
   std::deque keeps pointers stable if you insert or erase from either end
   are these guarantees enough?
-    how about using std::vector and emitting currCellChanged more often?
+    how about using std::vector and emitting currCelChanged more often?
   in Timeline
     in a lot of places, we call changePos even through the position isn't changing
-    this is because the address of the cell is changing
-    changing the way the currCellChanged signal is emitted could break things
+    this is because the address of the cel is changing
+    changing the way the currCelChanged signal is emitted could break things
 
 filled polygon
   polygon to triangles (ear something)
@@ -149,7 +149,7 @@ scripting interface
 transform a layer or transform a frame
   would it make sense to extend this concept to all tools?
   bulk operations?
-  apply the actions of a tool on multiple cells
+  apply the actions of a tool on multiple cels
 
 ----------------------------------- palette ------------------------------------
 
@@ -213,7 +213,7 @@ are frame tags useful?
       uses signficantly less space
   
 resize the canvas
-  maybe a sprite info dialog that shows size, format and cells
+  maybe a sprite info dialog that shows size, format and cels
 
 --------------------------------- refactoring ----------------------------------
 
@@ -241,7 +241,7 @@ gradient tool
   bayer matrix?
   
 scale tool
-  it's possible now that we have dynamically resizable cells
+  it's possible now that we have dynamically resizable cels
   
 Maybe an ellipse tool
 
@@ -262,8 +262,8 @@ editor cursor update issues
     zooming out of editor and mouse leaves
     mouse enters editor while dragging
 
-growCell overflows
-  could overflow cell pos
+growCel overflows
+  could overflow cel pos
   could exceed max image size
   check for other places where this could be a problem
 
@@ -298,8 +298,8 @@ Should probably be calling update() instead of repaint() in most places
 
 Should probably be using mouse release instead of mouse press in some places
 
-maybe paint functions should accept a cell
-  overlay would have to be a cell (or wrapped in a cell)
+maybe paint functions should accept a cel
+  overlay would have to be a cel (or wrapped in a cel)
 
 ------------------------------- submodules notes -------------------------------
 

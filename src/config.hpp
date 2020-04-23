@@ -293,27 +293,27 @@ constexpr int       pal_tile_size = 13_px;
 
 // -------------------------------- timeline -------------------------------- //
 
-inline const QColor cell_icon_color = glob_light_2;
-inline const QColor cell_pos_color = glob_light_1;
-inline const QColor cell_select_color = glob_dark_1;
-inline const QColor cell_select_border_color = glob_dark_2;
+inline const QColor cel_icon_color = glob_light_2;
+inline const QColor cel_pos_color = glob_light_1;
+inline const QColor cel_select_color = glob_dark_1;
+inline const QColor cel_select_border_color = glob_dark_2;
 
-constexpr int       cell_icon_pad = 1_px;
-constexpr int       cell_icon_size = 7_px;
-constexpr int       cell_width = 2 * cell_icon_pad + cell_icon_size + glob_border_width;
-constexpr int       cell_height = cell_width;
-constexpr int       cell_border_offset = cell_icon_pad + glob_border_width;
+constexpr int       cel_icon_pad = 1_px;
+constexpr int       cel_icon_size = 7_px;
+constexpr int       cel_width = 2 * cel_icon_pad + cel_icon_size + glob_border_width;
+constexpr int       cel_height = cel_width;
+constexpr int       cel_border_offset = cel_icon_pad + glob_border_width;
 constexpr int       frame_incr = 5;
 constexpr int       layer_name_max_len = 256;
 
 constexpr WidgetRect timelineTextBox(const int innerWidth) {
   const QPoint pos = {
     glob_text_margin,
-    cell_height - glob_border_width - glob_text_margin - glob_font_px
+    cel_height - glob_border_width - glob_text_margin - glob_font_px
   };
   const QSize innerSize = {
     innerWidth,
-    cell_height - glob_border_width
+    cel_height - glob_border_width
   };
   const QSize outerSize = innerSize + toSize(glob_border_width);
   return {toRect(outerSize), toRect(outerSize), toRect(innerSize), pos};
@@ -321,8 +321,8 @@ constexpr WidgetRect timelineTextBox(const int innerWidth) {
 
 constexpr IntRange   ctrl_delay = {1, 999, 100};
 constexpr WidgetRect ctrl_text_rect = timelineTextBox(textBoxWidth(3));
-constexpr int        layer_width = 7 * cell_width + ctrl_text_rect.widget().width();
-constexpr WidgetRect layer_text_rect = timelineTextBox(layer_width - cell_width - glob_border_width);
+constexpr int        layer_width = 7 * cel_width + ctrl_text_rect.widget().width();
+constexpr WidgetRect layer_text_rect = timelineTextBox(layer_width - cel_width - glob_border_width);
 
 // --------------------------- init canvas dialog --------------------------- //
 
@@ -349,8 +349,8 @@ constexpr std::size_t chunk_name_len = 4;
 constexpr char chunk_palette[chunk_name_len + 1] = "PLTE";
 constexpr char chunk_anim_header[chunk_name_len + 1] = "AHDR";
 constexpr char chunk_layer_header[chunk_name_len + 1] = "LHDR";
-constexpr char chunk_cell_header[chunk_name_len + 1] = "CHDR";
-constexpr char chunk_cell_data[chunk_name_len + 1] = "CDAT";
+constexpr char chunk_cel_header[chunk_name_len + 1] = "CHDR";
+constexpr char chunk_cel_data[chunk_name_len + 1] = "CDAT";
 constexpr char chunk_anim_end[chunk_name_len + 1] = "AEND";
 
 constexpr std::size_t file_buff_size = 1 << 15;
@@ -427,8 +427,8 @@ constexpr auto       key_save_file = QKeySequence::Save;
 constexpr auto       key_save_file_as = QKeySequence::SaveAs;
 inline const QString key_export_file = "CTRL+E";
 inline const QString key_export_frame = "CTRL+SHIFT+E";
-inline const QString key_export_cell = "CTRL+ALT+E";
-inline const QString key_import_cell = "CTRL+ALT+I";
+inline const QString key_export_cel = "CTRL+ALT+E";
+inline const QString key_import_cel = "CTRL+ALT+I";
 
 // layer
 inline const QString key_new_layer = "SHIFT+N";
@@ -443,9 +443,9 @@ constexpr Qt::Key    key_layer_below = Qt::Key_D;
 // frame
 inline const QString key_new_frame = "ALT+N";
 inline const QString key_delete_frame = "ALT+BACKSPACE";
-inline const QString key_clear_cell = "ALT+C";
-inline const QString key_extend_cell = "ALT+E";
-inline const QString key_split_cell = "ALT+S";
+inline const QString key_clear_cel = "ALT+C";
+inline const QString key_extend_cel = "ALT+E";
+inline const QString key_split_cel = "ALT+S";
 constexpr Qt::Key    key_next_frame = Qt::Key_F;
 constexpr Qt::Key    key_prev_frame = Qt::Key_S;
 constexpr Qt::Key    key_play_anim = Qt::Key_Space;

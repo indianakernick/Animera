@@ -251,14 +251,14 @@ void fillRows(
 
 }
 
-Error exportCellPng(
+Error exportCelPng(
   QIODevice &dev,
   const PaletteCSpan palette,
   QImage image,
   const Format canvasFormat,
   const ExportFormat exportFormat
 ) {
-  SCOPE_TIME("exportCellPng");
+  SCOPE_TIME("exportCelPng");
 
   WriteContext ctx;
   ctx.dev = &dev;
@@ -327,13 +327,13 @@ Error exportCellPng(
   return destroyWrite(ctx);
 }
 
-Error importCellPng(
+Error importCelPng(
   QIODevice &dev,
   QImage &image,
   const Format format
 ) {
   // TODO: This is extemely similar to importSpritePng
-  SCOPE_TIME("importCellPng");
+  SCOPE_TIME("importCelPng");
   
   ReadContext ctx;
   ctx.dev = &dev;

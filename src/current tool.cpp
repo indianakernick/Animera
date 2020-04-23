@@ -15,10 +15,10 @@ void CurrentTool::setTool(Tool *newTool) {
   attach();
 }
 
-void CurrentTool::setCell(Cell *newCell) {
-  assert(newCell);
+void CurrentTool::setCel(Cel *newCel) {
+  assert(newCel);
   detach();
-  cell = newCell;
+  cel = newCel;
   attach();
 }
 
@@ -89,9 +89,9 @@ void CurrentTool::keyPress(const Qt::Key eKey) {
 }
 
 void CurrentTool::attach() {
-  if (cell) tool->attachCell();
+  if (cel) tool->attachCel();
 }
 
 void CurrentTool::detach() {
-  if (cell) tool->detachCell();
+  if (cel) tool->detachCel();
 }

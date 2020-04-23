@@ -10,10 +10,10 @@
 #define animera_undo_hpp
 
 #include <vector>
-#include "cell.hpp"
+#include "cel.hpp"
 
 struct UndoState {
-  Cell cell;
+  Cel cel;
   bool undid;
 };
 
@@ -23,13 +23,13 @@ public:
 
   bool empty() const;
   void clear();
-  void reset(Cell);
-  void modify(Cell);
+  void reset(Cel);
+  void modify(Cel);
   UndoState undo();
   UndoState redo();
   
 private:
-  std::vector<Cell> stack;
+  std::vector<Cel> stack;
   std::size_t top;
 };
 

@@ -9,7 +9,7 @@
 #ifndef animera_status_object_hpp
 #define animera_status_object_hpp
 
-#include "cell.hpp"
+#include "cel.hpp"
 #include <QtCore/qobject.h>
 
 class StatusObject final : public QObject {
@@ -20,8 +20,8 @@ public:
 
 public Q_SLOTS:
   void setScale(int);
-  void setPos(CellPos);
-  void setSelection(CellRect);
+  void setPos(CelPos);
+  void setSelection(CelRect);
   void setFrameCount(FrameIdx);
   void setLayerCount(LayerIdx);
 
@@ -31,14 +31,14 @@ Q_SIGNALS:
 
 private:
   int scale = 1;
-  CellPos pos;
-  CellRect selection;
+  CelPos pos;
+  CelRect selection;
   FrameIdx frameCount;
   LayerIdx layerCount;
   
   enum class Updated {
     scale,
-    cell,
+    cel,
     selection,
     timeline
   };

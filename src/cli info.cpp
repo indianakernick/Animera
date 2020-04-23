@@ -11,7 +11,7 @@
 #include "file io.hpp"
 #include "strings.hpp"
 #include "chunk io.hpp"
-#include "cell span.hpp"
+#include "cel span.hpp"
 #include "sprite file.hpp"
 #include <QtCore/qtextstream.h>
 #include <QtCore/qcoreapplication.h>

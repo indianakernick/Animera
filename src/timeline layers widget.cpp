@@ -68,7 +68,7 @@ private:
 
 LayerNameWidget::LayerNameWidget(QWidget *parent, const LayerIdx layer)
   : QWidget{parent}, idx{layer} {
-  setFixedSize(layer_width, cell_height);
+  setFixedSize(layer_width, cel_height);
   createWidgets();
   setupLayout();
   
@@ -92,7 +92,7 @@ void LayerNameWidget::setName(const std::string_view text) {
 }
 
 void LayerNameWidget::createWidgets() {
-  QPixmap onPix{cell_width, cell_width};
+  QPixmap onPix{cel_width, cel_width};
   paintTimelineButtonBack(onPix);
   QPixmap offPix = onPix;
   paintTimelineButtonIcon(onPix, ":/Timeline/shown.png");
@@ -159,7 +159,7 @@ LayerScrollWidget::LayerScrollWidget(QWidget *parent)
   setFixedWidth(layer_width);
   setStyleSheet("background-color:" + glob_main.name());
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  setMinimumHeight(cell_height + glob_scroll_width);
+  setMinimumHeight(cel_height + glob_scroll_width);
 }
 
 LayersWidget *LayerScrollWidget::getChild() {

@@ -8,12 +8,12 @@
 
 #include "tool.hpp"
 
-void ToolCtx::changeCell(const QRect rect) const {
-  Q_EMIT cellModified(rect);
+void ToolCtx::changeCel(const QRect rect) const {
+  Q_EMIT celModified(rect);
 }
 
-void ToolCtx::changeCell(const QPoint point) const {
-  changeCell(toRect(point));
+void ToolCtx::changeCel(const QPoint point) const {
+  changeCel(toRect(point));
 }
 
 void ToolCtx::changeOverlay(const QRect rect) const {
@@ -24,15 +24,15 @@ void ToolCtx::changeOverlay(const QPoint point) const {
   changeOverlay(toRect(point));
 }
 
-void ToolCtx::growCell(const QRect rect) const {
+void ToolCtx::growCel(const QRect rect) const {
   Q_EMIT growRequested(rect);
 }
 
-void ToolCtx::shrinkCell(const QRect rect) const {
+void ToolCtx::shrinkCel(const QRect rect) const {
   Q_EMIT shrinkRequested(rect);
 }
 
-void ToolCtx::shrinkCell() const {
+void ToolCtx::shrinkCel() const {
   Q_EMIT shrinkRequested(toRect(size));
 }
 

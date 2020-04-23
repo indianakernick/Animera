@@ -130,10 +130,10 @@ void ToolSelectWidget::setOverlay(QImage *overlay) {
   ctx.overlay = overlay;
 }
 
-void ToolSelectWidget::setCell(Cell *cell) {
-  ctx.cell = cell;
+void ToolSelectWidget::setCel(Cel *cel) {
+  ctx.cel = cel;
   if (mouseIn) currTool.mouseLeave();
-  currTool.setCell(cell);
+  currTool.setCel(cel);
   if (mouseIn) currTool.mouseEnter();
 }
 
@@ -244,7 +244,7 @@ void ToolSelectWidget::setupLayout() {
 }
 
 void ToolSelectWidget::connectSignals() {
-  CONNECT(ctx, cellModified,    this, cellModified);
+  CONNECT(ctx, celModified,    this, celModified);
   CONNECT(ctx, overlayModified, this, overlayModified);
   CONNECT(ctx, shouldShowNorm,  this, shouldShowNorm);
   CONNECT(ctx, changingAction,  this, changingAction);

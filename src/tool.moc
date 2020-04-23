@@ -23,7 +23,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_ToolCtx_t {
     QByteArrayData data[11];
-    char stringdata0[145];
+    char stringdata0[144];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -33,19 +33,19 @@ struct qt_meta_stringdata_ToolCtx_t {
 static const qt_meta_stringdata_ToolCtx_t qt_meta_stringdata_ToolCtx = {
     {
 QT_MOC_LITERAL(0, 0, 7), // "ToolCtx"
-QT_MOC_LITERAL(1, 8, 12), // "cellModified"
-QT_MOC_LITERAL(2, 21, 0), // ""
-QT_MOC_LITERAL(3, 22, 15), // "overlayModified"
-QT_MOC_LITERAL(4, 38, 14), // "shouldShowNorm"
-QT_MOC_LITERAL(5, 53, 16), // "std::string_view"
-QT_MOC_LITERAL(6, 70, 14), // "changingAction"
-QT_MOC_LITERAL(7, 85, 13), // "growRequested"
-QT_MOC_LITERAL(8, 99, 15), // "shrinkRequested"
-QT_MOC_LITERAL(9, 115, 13), // "lockRequested"
-QT_MOC_LITERAL(10, 129, 15) // "unlockRequested"
+QT_MOC_LITERAL(1, 8, 11), // "celModified"
+QT_MOC_LITERAL(2, 20, 0), // ""
+QT_MOC_LITERAL(3, 21, 15), // "overlayModified"
+QT_MOC_LITERAL(4, 37, 14), // "shouldShowNorm"
+QT_MOC_LITERAL(5, 52, 16), // "std::string_view"
+QT_MOC_LITERAL(6, 69, 14), // "changingAction"
+QT_MOC_LITERAL(7, 84, 13), // "growRequested"
+QT_MOC_LITERAL(8, 98, 15), // "shrinkRequested"
+QT_MOC_LITERAL(9, 114, 13), // "lockRequested"
+QT_MOC_LITERAL(10, 128, 15) // "unlockRequested"
 
     },
-    "ToolCtx\0cellModified\0\0overlayModified\0"
+    "ToolCtx\0celModified\0\0overlayModified\0"
     "shouldShowNorm\0std::string_view\0"
     "changingAction\0growRequested\0"
     "shrinkRequested\0lockRequested\0"
@@ -95,7 +95,7 @@ void ToolCtx::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, voi
         auto *_t = static_cast<ToolCtx *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->cellModified((*reinterpret_cast< QRect(*)>(_a[1]))); break;
+        case 0: _t->celModified((*reinterpret_cast< QRect(*)>(_a[1]))); break;
         case 1: _t->overlayModified((*reinterpret_cast< QRect(*)>(_a[1]))); break;
         case 2: _t->shouldShowNorm((*reinterpret_cast< std::string_view(*)>(_a[1]))); break;
         case 3: _t->changingAction(); break;
@@ -109,7 +109,7 @@ void ToolCtx::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, voi
         int *result = reinterpret_cast<int *>(_a[0]);
         {
             using _t = void (ToolCtx::*)(QRect ) const;
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ToolCtx::cellModified)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ToolCtx::celModified)) {
                 *result = 0;
                 return;
             }
@@ -207,7 +207,7 @@ int ToolCtx::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void ToolCtx::cellModified(QRect _t1)const
+void ToolCtx::celModified(QRect _t1)const
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(const_cast< ToolCtx *>(this), &staticMetaObject, 0, _a);

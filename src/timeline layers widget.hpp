@@ -9,7 +9,7 @@
 #ifndef animera_timeline_layers_widget_hpp
 #define animera_timeline_layers_widget_hpp
 
-#include "cell.hpp"
+#include "cel.hpp"
 #include <QtWidgets/qscrollarea.h>
 
 class VisibleWidget;

@@ -9,8 +9,8 @@
 #ifndef animera_undo_object_hpp
 #define animera_undo_object_hpp
 
+#include "cel.hpp"
 #include "undo.hpp"
-#include "cell.hpp"
 #include <string_view>
 #include <QtCore/qobject.h>
 
@@ -21,23 +21,23 @@ public:
   explicit UndoObject(QObject *);
   
 public Q_SLOTS:
-  void setCell(Cell *);
+  void setCel(Cel *);
   void keyPress(Qt::Key);
-  void cellModified();
+  void celModified();
 
 Q_SIGNALS:
-  void cellReverted(QRect);
+  void celReverted(QRect);
   void shouldShowTemp(std::string_view);
-  void shouldClearCell();
-  void shouldGrowCell(QRect);
+  void shouldClearCel();
+  void shouldGrowCel(QRect);
 
 private:
-  Cell *cell = nullptr;
+  Cel *cel = nullptr;
   UndoStack stack;
   
   void undo();
   void redo();
-  void restore(const Cell &);
+  void restore(const Cel &);
 };
 
 #endif

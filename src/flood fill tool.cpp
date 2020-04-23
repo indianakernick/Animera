@@ -8,7 +8,7 @@
 
 #include "flood fill tool.hpp"
 
-#include "cell.hpp"
+#include "cel.hpp"
 #include "painting.hpp"
 #include "composite.hpp"
 #include "scope time.hpp"
@@ -28,26 +28,26 @@ void FloodFillTool::mouseDown(const ToolMouseDownEvent &event) {
   SCOPE_TIME("FloodFillTool::mouseDown");
 
   const QRgb fillColor = ctx->selectColor(event.button);
-  const QRgb startColor = sampleCell(*ctx->cell, event.pos);
+  const QRgb startColor = sampleCel(*ctx->cel, event.pos);
   if (fillColor == startColor) return;
-  const QRect rect = toRect(ctx->size).intersected(ctx->cell->rect());
+  const QRect rect = toRect(ctx->size).intersected(ctx->cel->rect());
   if (startColor == 0) {
     if (rect.contains(event.pos)) {
       fillOpen(event.pos, fillColor);
-    } else if (ctx->cell->isNull()) {
-      ctx->growCell(toRect(ctx->size));
-      drawFilledRect(ctx->cell->img, fillColor, toRect(ctx->size));
-      ctx->changeCell(toRect(ctx->size));
+    } else if (ctx->cel->isNull()) {
+      ctx->growCel(toRect(ctx->size));
+      drawFilledRect(ctx->cel->img, fillColor, toRect(ctx->size));
+      ctx->changeCel(toRect(ctx->size));
     } else {
-      ctx->growCell(toRect(ctx->size));
+      ctx->growCel(toRect(ctx->size));
       const QRect fillRect = fill(toRect(ctx->size), event.pos, fillColor);
-      ctx->shrinkCell(toRect(ctx->size));
-      ctx->changeCell(fillRect);
+      ctx->shrinkCel(toRect(ctx->size));
+      ctx->changeCel(fillRect);
     }
   } else {
     const QRect fillRect = fill(rect, event.pos, fillColor);
-    if (fillColor == 0) ctx->shrinkCell(fillRect);
-    ctx->changeCell(fillRect);
+    if (fillColor == 0) ctx->shrinkCel(fillRect);
+    ctx->changeCel(fillRect);
   }
   ctx->finishChange();
 }
@@ -65,8 +65,8 @@ template <typename Pixel>
 QRect FloodFillTool::fill(const QRect rect, const QPoint pos, const QRgb color) {
   SCOPE_TIME("FloodFillTool::fill");
 
-  gfx::Surface surface = makeSurface<Pixel>(ctx->cell->img);
-  surface = surface.view(convert(rect.translated(-ctx->cell->pos)));
+  gfx::Surface surface = makeSurface<Pixel>(ctx->cel->img);
+  surface = surface.view(convert(rect.translated(-ctx->cel->pos)));
   gfx::DrawFillPolicy policy{surface, static_cast<Pixel>(color)};
   return convert(gfx::floodFill(policy, convert(pos - rect.topLeft()))).translated(rect.topLeft());
 }
@@ -82,43 +82,43 @@ QRect FloodFillTool::fill(const QRect rect, const QPoint pos, const QRgb color) 
 namespace {
 
 template <auto Side>
-bool sideSpill(const QRect fill, const QRect cell, const QRect canvas) {
-  return (fill.*Side)() == (cell.*Side)() && (fill.*Side)() != (canvas.*Side)();
+bool sideSpill(const QRect fill, const QRect cel, const QRect canvas) {
+  return (fill.*Side)() == (cel.*Side)() && (fill.*Side)() != (canvas.*Side)();
 }
 
 }
 
 void FloodFillTool::fillOpen(const QPoint pos, const QRgb color) {
   const QRect canvasRect = toRect(ctx->size);
-  const QRect cellRect = canvasRect.intersected(ctx->cell->rect());
-  QRect fillRect = fill(cellRect, pos, color);
+  const QRect celRect = canvasRect.intersected(ctx->cel->rect());
+  QRect fillRect = fill(celRect, pos, color);
   
-  const bool left   = sideSpill<&QRect::left>  (fillRect, cellRect, canvasRect);
-  const bool top    = sideSpill<&QRect::top>   (fillRect, cellRect, canvasRect);
-  const bool right  = sideSpill<&QRect::right> (fillRect, cellRect, canvasRect);
-  const bool bottom = sideSpill<&QRect::bottom>(fillRect, cellRect, canvasRect);
+  const bool left   = sideSpill<&QRect::left>  (fillRect, celRect, canvasRect);
+  const bool top    = sideSpill<&QRect::top>   (fillRect, celRect, canvasRect);
+  const bool right  = sideSpill<&QRect::right> (fillRect, celRect, canvasRect);
+  const bool bottom = sideSpill<&QRect::bottom>(fillRect, celRect, canvasRect);
   const bool any = left || top || right || bottom;
   
-  if (any) ctx->growCell(canvasRect);
+  if (any) ctx->growCel(canvasRect);
   
   if (left) {
-    const QPoint leftPos = {cellRect.left() - 1, cellRect.top()};
+    const QPoint leftPos = {celRect.left() - 1, celRect.top()};
     fillRect = fillRect.united(fill(canvasRect, leftPos, color));
   }
   if (top) {
-    const QPoint topPos = {cellRect.left(), cellRect.top() - 1};
+    const QPoint topPos = {celRect.left(), celRect.top() - 1};
     fillRect = fillRect.united(fill(canvasRect, topPos, color));
   }
   if (right) {
-    const QPoint rightPos = {cellRect.right() + 1, cellRect.top()};
+    const QPoint rightPos = {celRect.right() + 1, celRect.top()};
     fillRect = fillRect.united(fill(canvasRect, rightPos, color));
   }
   if (bottom) {
-    const QPoint bottomPos = {cellRect.left(), cellRect.bottom() + 1};
+    const QPoint bottomPos = {celRect.left(), celRect.bottom() + 1};
     fillRect = fillRect.united(fill(canvasRect, bottomPos, color));
   }
   
-  if (any && fillRect != canvasRect) ctx->shrinkCell(canvasRect);
+  if (any && fillRect != canvasRect) ctx->shrinkCel(canvasRect);
   
-  ctx->changeCell(fillRect);
+  ctx->changeCel(fillRect);
 }

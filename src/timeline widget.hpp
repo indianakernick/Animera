@@ -10,13 +10,13 @@
 #define animera_timeline_widget_hpp
 
 #include <span>
-#include "cell.hpp"
+#include "cel.hpp"
 #include <QtWidgets/qwidget.h>
 
 class ControlsWidget;
 class LayersWidget;
 class FramesWidget;
-class CellsWidget;
+class CelsWidget;
 class StatusObject;
 
 class TimelineWidget final : public QWidget {
@@ -26,11 +26,11 @@ public:
   explicit TimelineWidget(QWidget *);
   
 public Q_SLOTS:
-  void setPos(CellPos);
-  void setSelection(CellRect);
+  void setPos(CelPos);
+  void setSelection(CelRect);
   void setVisibility(LayerIdx, bool);
   void setName(LayerIdx, std::string_view);
-  void setLayer(LayerIdx, std::span<const CellSpan>);
+  void setLayer(LayerIdx, std::span<const CelSpan>);
   void setFrameCount(FrameIdx);
   void setLayerCount(LayerIdx);
   void toggleAnimation();
@@ -46,8 +46,8 @@ Q_SIGNALS:
   void shouldRemoveLayer();
   void shouldMoveLayerUp();
   void shouldMoveLayerDown();
-  void shouldExtendCell();
-  void shouldSplitCell();
+  void shouldExtendCel();
+  void shouldSplitCel();
   void shouldSetDelay(int);
   void shouldToggleAnimation(bool);
   
@@ -55,13 +55,13 @@ Q_SIGNALS:
   void shouldContinueSelection();
   void shouldEndSelection();
   void shouldClearSelection();
-  void shouldSetPos(CellPos);
+  void shouldSetPos(CelPos);
   
 private:
   ControlsWidget *controls = nullptr;
   LayersWidget *layers = nullptr;
   FramesWidget *frames = nullptr;
-  CellsWidget *cells = nullptr;
+  CelsWidget *cels = nullptr;
 };
 
 #endif

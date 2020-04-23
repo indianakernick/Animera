@@ -27,7 +27,7 @@ public:
   ToolSelectWidget(QWidget *, ToolParamBarWidget *);
 
 Q_SIGNALS:
-  void cellModified(QRect);
+  void celModified(QRect);
   void overlayModified(QRect);
   void shouldShowNorm(std::string_view);
   void changingAction();
@@ -45,7 +45,7 @@ public Q_SLOTS:
   void keyPress(Qt::Key);
   
   void setOverlay(QImage *);
-  void setCell(Cell *);
+  void setCel(Cel *);
   void setColors(ToolColors);
   void setPalette(PaletteCSpan);
   void initCanvas(Format, QSize);

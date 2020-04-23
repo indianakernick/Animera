@@ -116,7 +116,7 @@ ExportOptions exportFrameOptions(const QString &path, const ExportSpriteInfo &in
   return options;
 }
 
-ExportOptions exportCellOptions(const QString &path, const ExportSpriteInfo &info) {
+ExportOptions exportCelOptions(const QString &path, const ExportSpriteInfo &info) {
   ExportOptions options;
   setPath(options, path);
   setDefaultLines(options);

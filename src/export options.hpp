@@ -9,7 +9,7 @@
 #ifndef animera_export_options_hpp
 #define animera_export_options_hpp
 
-#include "cell.hpp"
+#include "cel.hpp"
 #include <docopt.h>
 #include "error.hpp"
 #include <QtCore/qstring.h>
@@ -41,7 +41,7 @@ struct ExportOptions {
   QString directory;
   Line<LayerIdx> layerLine;
   Line<FrameIdx> frameLine;
-  CellRect selection;
+  CelRect selection;
   ExportFormat format;
   ExportVis visibility;
   int scaleX;
@@ -52,7 +52,7 @@ struct ExportOptions {
 
 /// State used to evaluate sprite name pattern
 struct ExportState {
-  CellPos pos;
+  CelPos pos;
   // Could add layer name to this
 };
 
@@ -70,6 +70,6 @@ ExportSpriteInfo getSpriteInfo(const Sprite &);
 QString getExportPath(const ExportOptions &, ExportState);
 void initDefaultOptions(ExportOptions &, const ExportSpriteInfo &);
 ExportOptions exportFrameOptions(const QString &, const ExportSpriteInfo &);
-ExportOptions exportCellOptions(const QString &, const ExportSpriteInfo &);
+ExportOptions exportCelOptions(const QString &, const ExportSpriteInfo &);
 
 #endif

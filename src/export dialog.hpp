@@ -27,8 +27,8 @@ public:
   
   void setLayers(LayerIdx);
   void setFrames(FrameIdx);
-  void setPos(CellPos);
-  void setSelection(CellRect);
+  void setPos(CelPos);
+  void setSelection(CelRect);
   
 Q_SIGNALS:
   void exportSprite(const ExportOptions &);
@@ -41,8 +41,8 @@ private:
   Format format;
   LayerIdx layers;
   FrameIdx frames;
-  CellPos pos;
-  CellRect selection;
+  CelPos pos;
+  CelRect selection;
   
   TextInputWidget *name = nullptr;
   FileInputWidget *dir = nullptr;

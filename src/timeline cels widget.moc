@@ -1,5 +1,5 @@
 /****************************************************************************
-** Meta object code from reading C++ file 'timeline cells widget.hpp'
+** Meta object code from reading C++ file 'timeline cels widget.hpp'
 **
 ** Created by: The Qt Meta Object Compiler version 67 (Qt 5.14.1)
 **
@@ -7,11 +7,11 @@
 *****************************************************************************/
 
 #include <memory>
-#include "/Users/indikernick/Dev/Projects/C++/Animera/src/timeline cells widget.hpp"
+#include "/Users/indikernick/Dev/Projects/C++/Animera/src/timeline cels widget.hpp"
 #include <QtCore/qbytearray.h>
 #include <QtCore/qmetatype.h>
 #if !defined(Q_MOC_OUTPUT_REVISION)
-#error "The header file 'timeline cells widget.hpp' doesn't include <QObject>."
+#error "The header file 'timeline cels widget.hpp' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 67
 #error "This file was generated using the moc from 5.14.1. It"
 #error "cannot be used with the include files from this version of Qt."
@@ -21,49 +21,49 @@
 QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
-struct qt_meta_stringdata_CellsWidget_t {
+struct qt_meta_stringdata_CelsWidget_t {
     QByteArrayData data[19];
-    char stringdata0[257];
+    char stringdata0[253];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
-    qptrdiff(offsetof(qt_meta_stringdata_CellsWidget_t, stringdata0) + ofs \
+    qptrdiff(offsetof(qt_meta_stringdata_CelsWidget_t, stringdata0) + ofs \
         - idx * sizeof(QByteArrayData)) \
     )
-static const qt_meta_stringdata_CellsWidget_t qt_meta_stringdata_CellsWidget = {
+static const qt_meta_stringdata_CelsWidget_t qt_meta_stringdata_CelsWidget = {
     {
-QT_MOC_LITERAL(0, 0, 11), // "CellsWidget"
-QT_MOC_LITERAL(1, 12, 7), // "resized"
-QT_MOC_LITERAL(2, 20, 0), // ""
-QT_MOC_LITERAL(3, 21, 19), // "shouldEnsureVisible"
-QT_MOC_LITERAL(4, 41, 20), // "shouldBeginSelection"
-QT_MOC_LITERAL(5, 62, 23), // "shouldContinueSelection"
-QT_MOC_LITERAL(6, 86, 18), // "shouldEndSelection"
-QT_MOC_LITERAL(7, 105, 20), // "shouldClearSelection"
-QT_MOC_LITERAL(8, 126, 12), // "shouldSetPos"
-QT_MOC_LITERAL(9, 139, 7), // "CellPos"
-QT_MOC_LITERAL(10, 147, 12), // "setSelection"
-QT_MOC_LITERAL(11, 160, 8), // "CellRect"
-QT_MOC_LITERAL(12, 169, 6), // "setPos"
-QT_MOC_LITERAL(13, 176, 8), // "setLayer"
-QT_MOC_LITERAL(14, 185, 8), // "LayerIdx"
-QT_MOC_LITERAL(15, 194, 25), // "std::span<const CellSpan>"
-QT_MOC_LITERAL(16, 220, 13), // "setFrameCount"
-QT_MOC_LITERAL(17, 234, 8), // "FrameIdx"
-QT_MOC_LITERAL(18, 243, 13) // "setLayerCount"
+QT_MOC_LITERAL(0, 0, 10), // "CelsWidget"
+QT_MOC_LITERAL(1, 11, 7), // "resized"
+QT_MOC_LITERAL(2, 19, 0), // ""
+QT_MOC_LITERAL(3, 20, 19), // "shouldEnsureVisible"
+QT_MOC_LITERAL(4, 40, 20), // "shouldBeginSelection"
+QT_MOC_LITERAL(5, 61, 23), // "shouldContinueSelection"
+QT_MOC_LITERAL(6, 85, 18), // "shouldEndSelection"
+QT_MOC_LITERAL(7, 104, 20), // "shouldClearSelection"
+QT_MOC_LITERAL(8, 125, 12), // "shouldSetPos"
+QT_MOC_LITERAL(9, 138, 6), // "CelPos"
+QT_MOC_LITERAL(10, 145, 12), // "setSelection"
+QT_MOC_LITERAL(11, 158, 7), // "CelRect"
+QT_MOC_LITERAL(12, 166, 6), // "setPos"
+QT_MOC_LITERAL(13, 173, 8), // "setLayer"
+QT_MOC_LITERAL(14, 182, 8), // "LayerIdx"
+QT_MOC_LITERAL(15, 191, 24), // "std::span<const CelSpan>"
+QT_MOC_LITERAL(16, 216, 13), // "setFrameCount"
+QT_MOC_LITERAL(17, 230, 8), // "FrameIdx"
+QT_MOC_LITERAL(18, 239, 13) // "setLayerCount"
 
     },
-    "CellsWidget\0resized\0\0shouldEnsureVisible\0"
+    "CelsWidget\0resized\0\0shouldEnsureVisible\0"
     "shouldBeginSelection\0shouldContinueSelection\0"
     "shouldEndSelection\0shouldClearSelection\0"
-    "shouldSetPos\0CellPos\0setSelection\0"
-    "CellRect\0setPos\0setLayer\0LayerIdx\0"
-    "std::span<const CellSpan>\0setFrameCount\0"
+    "shouldSetPos\0CelPos\0setSelection\0"
+    "CelRect\0setPos\0setLayer\0LayerIdx\0"
+    "std::span<const CelSpan>\0setFrameCount\0"
     "FrameIdx\0setLayerCount"
 };
 #undef QT_MOC_LITERAL
 
-static const uint qt_meta_data_CellsWidget[] = {
+static const uint qt_meta_data_CelsWidget[] = {
 
  // content:
        8,       // revision
@@ -111,10 +111,10 @@ static const uint qt_meta_data_CellsWidget[] = {
        0        // eod
 };
 
-void CellsWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+void CelsWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
     if (_c == QMetaObject::InvokeMetaMethod) {
-        auto *_t = static_cast<CellsWidget *>(_o);
+        auto *_t = static_cast<CelsWidget *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->resized(); break;
@@ -123,10 +123,10 @@ void CellsWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         case 3: _t->shouldContinueSelection(); break;
         case 4: _t->shouldEndSelection(); break;
         case 5: _t->shouldClearSelection(); break;
-        case 6: _t->shouldSetPos((*reinterpret_cast< CellPos(*)>(_a[1]))); break;
-        case 7: _t->setSelection((*reinterpret_cast< CellRect(*)>(_a[1]))); break;
-        case 8: _t->setPos((*reinterpret_cast< CellPos(*)>(_a[1]))); break;
-        case 9: _t->setLayer((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< std::span<const CellSpan>(*)>(_a[2]))); break;
+        case 6: _t->shouldSetPos((*reinterpret_cast< CelPos(*)>(_a[1]))); break;
+        case 7: _t->setSelection((*reinterpret_cast< CelRect(*)>(_a[1]))); break;
+        case 8: _t->setPos((*reinterpret_cast< CelPos(*)>(_a[1]))); break;
+        case 9: _t->setLayer((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< std::span<const CelSpan>(*)>(_a[2]))); break;
         case 10: _t->setFrameCount((*reinterpret_cast< FrameIdx(*)>(_a[1]))); break;
         case 11: _t->setLayerCount((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;
         default: ;
@@ -134,50 +134,50 @@ void CellsWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
     } else if (_c == QMetaObject::IndexOfMethod) {
         int *result = reinterpret_cast<int *>(_a[0]);
         {
-            using _t = void (CellsWidget::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&CellsWidget::resized)) {
+            using _t = void (CelsWidget::*)();
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&CelsWidget::resized)) {
                 *result = 0;
                 return;
             }
         }
         {
-            using _t = void (CellsWidget::*)(QPoint );
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&CellsWidget::shouldEnsureVisible)) {
+            using _t = void (CelsWidget::*)(QPoint );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&CelsWidget::shouldEnsureVisible)) {
                 *result = 1;
                 return;
             }
         }
         {
-            using _t = void (CellsWidget::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&CellsWidget::shouldBeginSelection)) {
+            using _t = void (CelsWidget::*)();
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&CelsWidget::shouldBeginSelection)) {
                 *result = 2;
                 return;
             }
         }
         {
-            using _t = void (CellsWidget::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&CellsWidget::shouldContinueSelection)) {
+            using _t = void (CelsWidget::*)();
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&CelsWidget::shouldContinueSelection)) {
                 *result = 3;
                 return;
             }
         }
         {
-            using _t = void (CellsWidget::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&CellsWidget::shouldEndSelection)) {
+            using _t = void (CelsWidget::*)();
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&CelsWidget::shouldEndSelection)) {
                 *result = 4;
                 return;
             }
         }
         {
-            using _t = void (CellsWidget::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&CellsWidget::shouldClearSelection)) {
+            using _t = void (CelsWidget::*)();
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&CelsWidget::shouldClearSelection)) {
                 *result = 5;
                 return;
             }
         }
         {
-            using _t = void (CellsWidget::*)(CellPos );
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&CellsWidget::shouldSetPos)) {
+            using _t = void (CelsWidget::*)(CelPos );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&CelsWidget::shouldSetPos)) {
                 *result = 6;
                 return;
             }
@@ -185,30 +185,30 @@ void CellsWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
     }
 }
 
-QT_INIT_METAOBJECT const QMetaObject CellsWidget::staticMetaObject = { {
+QT_INIT_METAOBJECT const QMetaObject CelsWidget::staticMetaObject = { {
     QMetaObject::SuperData::link<QWidget::staticMetaObject>(),
-    qt_meta_stringdata_CellsWidget.data,
-    qt_meta_data_CellsWidget,
+    qt_meta_stringdata_CelsWidget.data,
+    qt_meta_data_CelsWidget,
     qt_static_metacall,
     nullptr,
     nullptr
 } };
 
 
-const QMetaObject *CellsWidget::metaObject() const
+const QMetaObject *CelsWidget::metaObject() const
 {
     return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
 }
 
-void *CellsWidget::qt_metacast(const char *_clname)
+void *CelsWidget::qt_metacast(const char *_clname)
 {
     if (!_clname) return nullptr;
-    if (!strcmp(_clname, qt_meta_stringdata_CellsWidget.stringdata0))
+    if (!strcmp(_clname, qt_meta_stringdata_CelsWidget.stringdata0))
         return static_cast<void*>(this);
     return QWidget::qt_metacast(_clname);
 }
 
-int CellsWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+int CelsWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
     _id = QWidget::qt_metacall(_c, _id, _a);
     if (_id < 0)
@@ -226,74 +226,74 @@ int CellsWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void CellsWidget::resized()
+void CelsWidget::resized()
 {
     QMetaObject::activate(this, &staticMetaObject, 0, nullptr);
 }
 
 // SIGNAL 1
-void CellsWidget::shouldEnsureVisible(QPoint _t1)
+void CelsWidget::shouldEnsureVisible(QPoint _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 1, _a);
 }
 
 // SIGNAL 2
-void CellsWidget::shouldBeginSelection()
+void CelsWidget::shouldBeginSelection()
 {
     QMetaObject::activate(this, &staticMetaObject, 2, nullptr);
 }
 
 // SIGNAL 3
-void CellsWidget::shouldContinueSelection()
+void CelsWidget::shouldContinueSelection()
 {
     QMetaObject::activate(this, &staticMetaObject, 3, nullptr);
 }
 
 // SIGNAL 4
-void CellsWidget::shouldEndSelection()
+void CelsWidget::shouldEndSelection()
 {
     QMetaObject::activate(this, &staticMetaObject, 4, nullptr);
 }
 
 // SIGNAL 5
-void CellsWidget::shouldClearSelection()
+void CelsWidget::shouldClearSelection()
 {
     QMetaObject::activate(this, &staticMetaObject, 5, nullptr);
 }
 
 // SIGNAL 6
-void CellsWidget::shouldSetPos(CellPos _t1)
+void CelsWidget::shouldSetPos(CelPos _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 6, _a);
 }
-struct qt_meta_stringdata_CellScrollWidget_t {
+struct qt_meta_stringdata_CelScrollWidget_t {
     QByteArrayData data[6];
-    char stringdata0[85];
+    char stringdata0[84];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
-    qptrdiff(offsetof(qt_meta_stringdata_CellScrollWidget_t, stringdata0) + ofs \
+    qptrdiff(offsetof(qt_meta_stringdata_CelScrollWidget_t, stringdata0) + ofs \
         - idx * sizeof(QByteArrayData)) \
     )
-static const qt_meta_stringdata_CellScrollWidget_t qt_meta_stringdata_CellScrollWidget = {
+static const qt_meta_stringdata_CelScrollWidget_t qt_meta_stringdata_CelScrollWidget = {
     {
-QT_MOC_LITERAL(0, 0, 16), // "CellScrollWidget"
-QT_MOC_LITERAL(1, 17, 18), // "rightMarginChanged"
-QT_MOC_LITERAL(2, 36, 0), // ""
-QT_MOC_LITERAL(3, 37, 19), // "bottomMarginChanged"
-QT_MOC_LITERAL(4, 57, 13), // "changeMargins"
-QT_MOC_LITERAL(5, 71, 13) // "ensureVisible"
+QT_MOC_LITERAL(0, 0, 15), // "CelScrollWidget"
+QT_MOC_LITERAL(1, 16, 18), // "rightMarginChanged"
+QT_MOC_LITERAL(2, 35, 0), // ""
+QT_MOC_LITERAL(3, 36, 19), // "bottomMarginChanged"
+QT_MOC_LITERAL(4, 56, 13), // "changeMargins"
+QT_MOC_LITERAL(5, 70, 13) // "ensureVisible"
 
     },
-    "CellScrollWidget\0rightMarginChanged\0"
-    "\0bottomMarginChanged\0changeMargins\0"
+    "CelScrollWidget\0rightMarginChanged\0\0"
+    "bottomMarginChanged\0changeMargins\0"
     "ensureVisible"
 };
 #undef QT_MOC_LITERAL
 
-static const uint qt_meta_data_CellScrollWidget[] = {
+static const uint qt_meta_data_CelScrollWidget[] = {
 
  // content:
        8,       // revision
@@ -325,10 +325,10 @@ static const uint qt_meta_data_CellScrollWidget[] = {
        0        // eod
 };
 
-void CellScrollWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+void CelScrollWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
     if (_c == QMetaObject::InvokeMetaMethod) {
-        auto *_t = static_cast<CellScrollWidget *>(_o);
+        auto *_t = static_cast<CelScrollWidget *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->rightMarginChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
@@ -340,15 +340,15 @@ void CellScrollWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
     } else if (_c == QMetaObject::IndexOfMethod) {
         int *result = reinterpret_cast<int *>(_a[0]);
         {
-            using _t = void (CellScrollWidget::*)(int );
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&CellScrollWidget::rightMarginChanged)) {
+            using _t = void (CelScrollWidget::*)(int );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&CelScrollWidget::rightMarginChanged)) {
                 *result = 0;
                 return;
             }
         }
         {
-            using _t = void (CellScrollWidget::*)(int );
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&CellScrollWidget::bottomMarginChanged)) {
+            using _t = void (CelScrollWidget::*)(int );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&CelScrollWidget::bottomMarginChanged)) {
                 *result = 1;
                 return;
             }
@@ -356,30 +356,30 @@ void CellScrollWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
     }
 }
 
-QT_INIT_METAOBJECT const QMetaObject CellScrollWidget::staticMetaObject = { {
+QT_INIT_METAOBJECT const QMetaObject CelScrollWidget::staticMetaObject = { {
     QMetaObject::SuperData::link<ScrollAreaWidget::staticMetaObject>(),
-    qt_meta_stringdata_CellScrollWidget.data,
-    qt_meta_data_CellScrollWidget,
+    qt_meta_stringdata_CelScrollWidget.data,
+    qt_meta_data_CelScrollWidget,
     qt_static_metacall,
     nullptr,
     nullptr
 } };
 
 
-const QMetaObject *CellScrollWidget::metaObject() const
+const QMetaObject *CelScrollWidget::metaObject() const
 {
     return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
 }
 
-void *CellScrollWidget::qt_metacast(const char *_clname)
+void *CelScrollWidget::qt_metacast(const char *_clname)
 {
     if (!_clname) return nullptr;
-    if (!strcmp(_clname, qt_meta_stringdata_CellScrollWidget.stringdata0))
+    if (!strcmp(_clname, qt_meta_stringdata_CelScrollWidget.stringdata0))
         return static_cast<void*>(this);
     return ScrollAreaWidget::qt_metacast(_clname);
 }
 
-int CellScrollWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+int CelScrollWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
     _id = ScrollAreaWidget::qt_metacall(_c, _id, _a);
     if (_id < 0)
@@ -397,14 +397,14 @@ int CellScrollWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void CellScrollWidget::rightMarginChanged(int _t1)
+void CelScrollWidget::rightMarginChanged(int _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);
 }
 
 // SIGNAL 1
-void CellScrollWidget::bottomMarginChanged(int _t1)
+void CelScrollWidget::bottomMarginChanged(int _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 1, _a);

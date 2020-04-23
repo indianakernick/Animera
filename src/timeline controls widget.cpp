@@ -15,7 +15,7 @@
 
 ControlsWidget::ControlsWidget(QWidget *parent)
   : QWidget{parent} {
-  setFixedSize(layer_width, cell_height);
+  setFixedSize(layer_width, cel_height);
   createWidgets();
   setupLayout();
   connectSignals();
@@ -61,7 +61,7 @@ IconRadioButtonWidget *ControlsWidget::makeRadioButton(
 }
 
 void ControlsWidget::createWidgets() {
-  QPixmap baseIcon{cell_width, cell_width};
+  QPixmap baseIcon{cel_width, cel_width};
   paintTimelineButtonBack(baseIcon);
   insertLayerButton = makePushButton(baseIcon, ":/Timeline/add.png");
   removeLayerButton = makePushButton(baseIcon, ":/Timeline/remove.png");
@@ -75,8 +75,8 @@ void ControlsWidget::createWidgets() {
   removeLayerButton->setToolTip("Remove Layer");
   moveLayerUpButton->setToolTip("Move Layer Up");
   moveLayerDownButton->setToolTip("Move Layer Down");
-  extendButton->setToolTip("Extend Linked Cell");
-  splitButton->setToolTip("Split Linked Cell");
+  extendButton->setToolTip("Extend Linked Cel");
+  splitButton->setToolTip("Split Linked Cel");
   playButton->setToolTip("Toggle Playing");
 }
 
@@ -100,8 +100,8 @@ void ControlsWidget::connectSignals() {
   CONNECT(removeLayerButton,   pressed,      this, shouldRemoveLayer);
   CONNECT(moveLayerUpButton,   pressed,      this, shouldMoveLayerUp);
   CONNECT(moveLayerDownButton, pressed,      this, shouldMoveLayerDown);
-  CONNECT(extendButton,        pressed,      this, shouldExtendCell);
-  CONNECT(splitButton,         pressed,      this, shouldSplitCell);
+  CONNECT(extendButton,        pressed,      this, shouldExtendCel);
+  CONNECT(splitButton,         pressed,      this, shouldSplitCel);
   CONNECT(playButton,          toggled,      this, toggleTimer);
   CONNECT(playButton,          toggled,      this, shouldToggleAnimation);
   CONNECT(animTimer,           timeout,      this, shouldNextFrame);

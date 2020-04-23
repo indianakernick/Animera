@@ -8,7 +8,7 @@
 
 #include "sample object.hpp"
 
-#include "cell.hpp"
+#include "cel.hpp"
 #include "config.hpp"
 #include "composite.hpp"
 
@@ -19,8 +19,8 @@ void SampleObject::initCanvas(const Format newFormat) {
   format = newFormat;
 }
 
-void SampleObject::setCell(const Cell *newCell) {
-  cell = newCell;
+void SampleObject::setCel(const Cel *newCel) {
+  cel = newCel;
 }
 
 void SampleObject::mouseMove(const QPoint newPos) {
@@ -29,7 +29,7 @@ void SampleObject::mouseMove(const QPoint newPos) {
 
 void SampleObject::keyPress(const Qt::Key key) {
   if (key == key_sample) {
-    const QRgb pixel = sampleCell(*cell, pos);
+    const QRgb pixel = sampleCel(*cel, pos);
     // similar to right-clicking on a palette color
     if (format == Format::index) {
       Q_EMIT shouldSetIndex(pixel);

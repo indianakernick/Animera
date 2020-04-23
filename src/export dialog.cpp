@@ -38,11 +38,11 @@ void ExportDialog::setFrames(const FrameIdx count) {
   frames = count;
 }
 
-void ExportDialog::setPos(const CellPos newPos) {
+void ExportDialog::setPos(const CelPos newPos) {
   pos = newPos;
 }
 
-void ExportDialog::setSelection(const CellRect rect) {
+void ExportDialog::setSelection(const CelRect rect) {
   selection = rect;
 }
 

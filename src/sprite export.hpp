@@ -10,7 +10,7 @@
 #define animera_sprite_export_hpp
 
 #include "error.hpp"
-#include "cell span.hpp"
+#include "cel span.hpp"
 #include "palette span.hpp"
 #include "export options.hpp"
 
@@ -30,12 +30,12 @@ private:
   
   void initImages();
   QSize getXformedSize() const;
-  void setImageFrom(const Cell &);
+  void setImageFrom(const Cel &);
   void setImageFrom(const Frame &);
   void applyTransform();
   Error exportImage(ExportState);
   bool shouldInclude(const Layer &) const;
-  Error exportCells(const std::vector<Layer> &);
+  Error exportCels(const std::vector<Layer> &);
   Error exportFrames(const std::vector<Layer> &);
 };
 

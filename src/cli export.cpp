@@ -174,7 +174,7 @@ Error setRange(IntRange &range, const Idx length, const docopt::value &value) {
 }
 
 Error setLayer(
-  CellRect &selection,
+  CelRect &selection,
   const ExportSpriteInfo info,
   const docopt::value &value
 ) {
@@ -186,7 +186,7 @@ Error setLayer(
 }
 
 Error setFrame(
-  CellRect &selection,
+  CelRect &selection,
   const ExportSpriteInfo info,
   const docopt::value &value
 ) {

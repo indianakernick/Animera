@@ -1,20 +1,20 @@
 //
-//  cell span.cpp
+//  cel span.cpp
 //  Animera
 //
 //  Created by Indiana Kernick on 25/7/19.
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#include "cell span.hpp"
+#include "cel span.hpp"
 
 namespace {
 
-using Spans = std::vector<CellSpan>;
+using Spans = std::vector<CelSpan>;
 
 FrameIdx spanLength(const Spans &spans) {
   FrameIdx len{0};
-  for (const CellSpan &span : spans) {
+  for (const CelSpan &span : spans) {
     assert(span.len >= FrameIdx{0});
     len += span.len;
   }
@@ -41,7 +41,7 @@ auto findSpan(Spans &spans, FrameIdx &idx) {
 
 }
 
-LayerCells::ConstIterator &LayerCells::ConstIterator::operator++() {
+LayerCels::ConstIterator &LayerCels::ConstIterator::operator++() {
   assert(FrameIdx{0} < iter->len);
   assert(idx < iter->len);
   if (++idx == iter->len) {
@@ -51,14 +51,14 @@ LayerCells::ConstIterator &LayerCells::ConstIterator::operator++() {
   return *this;
 }
 
-const Cell *LayerCells::ConstIterator::operator*() const {
-  return iter->cell.get();
+const Cel *LayerCels::ConstIterator::operator*() const {
+  return iter->cel.get();
 }
          
-void LayerCells::optimize() {
+void LayerCels::optimize() {
   FrameIdx prevNull{0};
   for (auto s = spans.begin(); s != spans.end(); ++s) {
-    if (s->cell->isNull()) {
+    if (s->cel->isNull()) {
       if (prevNull > FrameIdx{0}) {
         auto prev = std::prev(s);
         s->len += prev->len;
@@ -71,62 +71,62 @@ void LayerCells::optimize() {
   }
 }
 
-LayerCells::ConstIterator LayerCells::find(FrameIdx idx) const {
+LayerCels::ConstIterator LayerCels::find(FrameIdx idx) const {
   ConstIterator iter;
   iter.iter = findSpan(spans, idx);;
   iter.idx = idx;
   return iter;
 }
 
-Cell *LayerCells::get(FrameIdx idx) {
-  return const_cast<Cell *>(std::as_const(*this).get(idx));
+Cel *LayerCels::get(FrameIdx idx) {
+  return const_cast<Cel *>(std::as_const(*this).get(idx));
 }
 
-const Cell *LayerCells::get(FrameIdx idx) const {
-  return findSpan(spans, idx)->cell.get();
+const Cel *LayerCels::get(FrameIdx idx) const {
+  return findSpan(spans, idx)->cel.get();
 }
 
-void LayerCells::insert(FrameIdx idx) {
+void LayerCels::insert(FrameIdx idx) {
   Spans::iterator span = findSpan(spans, idx);
-  if (span->cell->isNull()) {
+  if (span->cel->isNull()) {
     ++span->len;
   } else if (idx < span->len - FrameIdx{1}) {
     const FrameIdx leftSize = idx;
     const FrameIdx rightSize = span->len - idx;
     span->len = leftSize;
-    CellPtr copy = std::make_unique<Cell>(*span->cell);
-    span = spans.insert(++span, {std::make_unique<Cell>()});
+    CelPtr copy = std::make_unique<Cel>(*span->cel);
+    span = spans.insert(++span, {std::make_unique<Cel>()});
     spans.insert(++span, {std::move(copy), rightSize});
   } else {
-    spans.insert(++span, {std::make_unique<Cell>()});
+    spans.insert(++span, {std::make_unique<Cel>()});
   }
 }
 
-void LayerCells::replace(FrameIdx idx, const bool isolate) {
+void LayerCels::replace(FrameIdx idx, const bool isolate) {
   Spans::iterator span = findSpan(spans, idx);
-  if (!isolate && span->cell->isNull()) return;
+  if (!isolate && span->cel->isNull()) return;
   if (span->len == FrameIdx{1}) {
-    *span->cell = {};
+    *span->cel = {};
     return;
   }
   const FrameIdx leftSize = idx;
   const FrameIdx rightSize = span->len - idx - FrameIdx{1};
   if (leftSize == FrameIdx{0}) {
     span->len = rightSize;
-    spans.insert(span, {std::make_unique<Cell>()});
+    spans.insert(span, {std::make_unique<Cel>()});
     return;
   } else if (rightSize == FrameIdx{0}) {
     span->len = leftSize;
-    spans.insert(++span, {std::make_unique<Cell>()});
+    spans.insert(++span, {std::make_unique<Cel>()});
     return;
   }
   span->len = leftSize;
-  CellPtr copy = std::make_unique<Cell>(*span->cell);
-  span = spans.insert(++span, {std::make_unique<Cell>()});
+  CelPtr copy = std::make_unique<Cel>(*span->cel);
+  span = spans.insert(++span, {std::make_unique<Cel>()});
   spans.insert(++span, {std::move(copy), rightSize});
 }
 
-void LayerCells::extend(FrameIdx idx) {
+void LayerCels::extend(FrameIdx idx) {
   const Spans::iterator span = findSpan(spans, idx);
   const Spans::iterator next = std::next(span);
   if (next == spans.end()) return;
@@ -134,13 +134,13 @@ void LayerCells::extend(FrameIdx idx) {
   return shrinkSpan(spans, next);
 }
 
-void LayerCells::split(FrameIdx idx) {
+void LayerCels::split(FrameIdx idx) {
   Spans::iterator span = findSpan(spans, idx);
   if (idx == FrameIdx{0}) return;
   const FrameIdx leftSize = idx;
   const FrameIdx rightSize = span->len - idx;
   span->len = leftSize;
-  CellPtr copy = std::make_unique<Cell>(*span->cell);
+  CelPtr copy = std::make_unique<Cel>(*span->cel);
   spans.insert(++span, {std::move(copy), rightSize});
 }
 
@@ -167,8 +167,8 @@ void removeSpan(Spans &spans, Spans::iterator span, FrameIdx len) {
 
 }
 
-void LayerCells::replaceSpan(FrameIdx idx, LayerCells &newCells) {
-  Spans &newSpans = newCells.spans;
+void LayerCels::replaceSpan(FrameIdx idx, LayerCels &newCels) {
+  Spans &newSpans = newCels.spans;
   const FrameIdx len = spanLength(newSpans);
   if (len <= FrameIdx{0}) return;
   Spans::iterator span = findSpan(spans, idx);
@@ -177,7 +177,7 @@ void LayerCells::replaceSpan(FrameIdx idx, LayerCells &newCells) {
       span = insertSpan(spans, span, newSpans) + newSpans.size();
       removeSpan(spans, span, len - span->len);
     } else if (span->len > len) {
-      CellPtr copy = std::move(span->cell);
+      CelPtr copy = std::move(span->cel);
       span = insertSpan(spans, span, newSpans) + newSpans.size();
       spans.insert(span, {std::move(copy), span->len - len});
     } else {
@@ -192,7 +192,7 @@ void LayerCells::replaceSpan(FrameIdx idx, LayerCells &newCells) {
       span = insertSpan(spans, ++span, newSpans) + newSpans.size();
       removeSpan(spans, span, -rightSize);
     } else if (rightSize > FrameIdx{0}) {
-      CellPtr copy = std::make_unique<Cell>(*span->cell);
+      CelPtr copy = std::make_unique<Cel>(*span->cel);
       span = insertSpan(spans, ++span, newSpans) + newSpans.size();
       span = spans.insert(span, {std::move(copy), rightSize});
     } else {
@@ -201,52 +201,52 @@ void LayerCells::replaceSpan(FrameIdx idx, LayerCells &newCells) {
   }
 }
 
-LayerCells LayerCells::extract(FrameIdx idx, FrameIdx len) const {
+LayerCels LayerCels::extract(FrameIdx idx, FrameIdx len) const {
   Spans newSpans;
-  if (len <= FrameIdx{0}) return LayerCells{std::move(newSpans)};
+  if (len <= FrameIdx{0}) return LayerCels{std::move(newSpans)};
   Spans::const_iterator span = findSpan(spans, idx);
   const FrameIdx leftSize = idx;
   const FrameIdx rightSize = span->len - idx - len;
   if (rightSize >= FrameIdx{0}) {
-    newSpans.push_back({std::make_unique<Cell>(*span->cell), len});
+    newSpans.push_back({std::make_unique<Cel>(*span->cel), len});
   } else {
-    newSpans.push_back({std::make_unique<Cell>(*span->cell), span->len - leftSize});
+    newSpans.push_back({std::make_unique<Cel>(*span->cel), span->len - leftSize});
     len -= span->len - leftSize;
     ++span;
     while (len > span->len) {
-      newSpans.push_back({std::make_unique<Cell>(*span->cell), span->len});
+      newSpans.push_back({std::make_unique<Cel>(*span->cel), span->len});
       len -= span->len;
       ++span;
     }
     if (len > FrameIdx{0}) {
-      newSpans.push_back({std::make_unique<Cell>(*span->cell), len});
+      newSpans.push_back({std::make_unique<Cel>(*span->cel), len});
     }
   }
-  return LayerCells{std::move(newSpans)};
+  return LayerCels{std::move(newSpans)};
 }
 
-LayerCells LayerCells::truncateCopy(FrameIdx len) const {
+LayerCels LayerCels::truncateCopy(FrameIdx len) const {
   Spans newSpans;
   Spans::const_iterator span = spans.begin();
   while (span != spans.end() && len > span->len) {
-    newSpans.push_back({std::make_unique<Cell>(*span->cell), span->len});
+    newSpans.push_back({std::make_unique<Cel>(*span->cel), span->len});
     len -= span->len;
     ++span;
   }
   if (span != spans.end() && len > FrameIdx{0}) {
-    newSpans.push_back({std::make_unique<Cell>(*span->cell), len});
+    newSpans.push_back({std::make_unique<Cel>(*span->cel), len});
   }
-  return LayerCells{std::move(newSpans)};
+  return LayerCels{std::move(newSpans)};
 }
 
-void LayerCells::remove(FrameIdx idx) {
+void LayerCels::remove(FrameIdx idx) {
   shrinkSpan(spans, findSpan(spans, idx));
 }
 
-void LayerCells::clear(const FrameIdx len) {
+void LayerCels::clear(const FrameIdx len) {
   spans.clear();
-  spans.push_back({std::make_unique<Cell>(), len});
+  spans.push_back({std::make_unique<Cel>(), len});
 }
 
-LayerCells::LayerCells(std::vector<CellSpan> spans)
+LayerCels::LayerCels(std::vector<CelSpan> spans)
   : spans{std::move(spans)} {}

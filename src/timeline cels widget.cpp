@@ -1,12 +1,12 @@
 //
-//  timeline cells widget.cpp
+//  timeline cels widget.cpp
 //  Animera
 //
 //  Created by Indiana Kernick on 24/6/19.
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#include "timeline cells widget.hpp"
+#include "timeline cels widget.hpp"
 
 #include "config.hpp"
 #include "connect.hpp"
@@ -33,24 +33,24 @@ void resizeCopyImage(QImage &image, const QSize newSize) {
 
 }
 
-CellsWidget::CellsWidget(QWidget *parent)
+CelsWidget::CelsWidget(QWidget *parent)
   : QWidget{parent},
     posImg{0, 0, QImage::Format_ARGB32_Premultiplied},
     selectionImg{0, 0, QImage::Format_ARGB32_Premultiplied},
     layersImg{0, 0, QImage::Format_ARGB32_Premultiplied} {
-  cellPix = bakeColoredBitmap(":/Timeline/cell.png", cell_icon_color);
-  beginLinkPix = bakeColoredBitmap(":/Timeline/begin linked cell.png", cell_icon_color);
-  endLinkPix = bakeColoredBitmap(":/Timeline/end linked cell.png", cell_icon_color);
+  celPix = bakeColoredBitmap(":/Timeline/cel.png", cel_icon_color);
+  beginLinkPix = bakeColoredBitmap(":/Timeline/begin linked cel.png", cel_icon_color);
+  endLinkPix = bakeColoredBitmap(":/Timeline/end linked cel.png", cel_icon_color);
   setFocusPolicy(Qt::ClickFocus);
 }
 
-void CellsWidget::setSelection(const CellRect rect) {
+void CelsWidget::setSelection(const CelRect rect) {
   if (rect.minL <= rect.maxL && rect.minF <= rect.maxF) {
     selectionRect = {
-      +rect.minF * cell_width,
-      +rect.minL * cell_height,
-      +(rect.maxF - rect.minF + FrameIdx{1}) * cell_width - glob_border_width,
-      +(rect.maxL - rect.minL + LayerIdx{1}) * cell_height - glob_border_width
+      +rect.minF * cel_width,
+      +rect.minL * cel_height,
+      +(rect.maxF - rect.minF + FrameIdx{1}) * cel_width - glob_border_width,
+      +(rect.maxL - rect.minL + LayerIdx{1}) * cel_height - glob_border_width
     };
   } else {
     selectionRect = {};
@@ -59,19 +59,19 @@ void CellsWidget::setSelection(const CellRect rect) {
   repaint();
 }
 
-void CellsWidget::setPos(const CellPos pos) {
-  const QPoint pixelPos = {+pos.f * cell_width, +pos.l * cell_height};
+void CelsWidget::setPos(const CelPos pos) {
+  const QPoint pixelPos = {+pos.f * cel_width, +pos.l * cel_height};
   Q_EMIT shouldEnsureVisible(pixelPos);
   posImg.fill(0);
   QPainter painter{&posImg};
   painter.setPen(Qt::NoPen);
-  painter.setBrush(cell_pos_color);
-  constexpr int size = 2 * cell_icon_pad + cell_icon_size;
-  if (height() > cell_height || width() == cell_width) {
-    painter.drawRect(0, +pos.l * cell_height, width(), size);
+  painter.setBrush(cel_pos_color);
+  constexpr int size = 2 * cel_icon_pad + cel_icon_size;
+  if (height() > cel_height || width() == cel_width) {
+    painter.drawRect(0, +pos.l * cel_height, width(), size);
   }
-  if (width() > cell_width) {
-    painter.drawRect(+pos.f * cell_width, 0, size, height());
+  if (width() > cel_width) {
+    painter.drawRect(+pos.f * cel_width, 0, size, height());
   }
   painter.end();
   repaint();
@@ -81,8 +81,8 @@ namespace {
 
 void paintBorder(QPainter &painter, const int x, const int y) {
   painter.fillRect(
-    x - cell_border_offset, y,
-    glob_border_width, cell_height,
+    x - cel_border_offset, y,
+    glob_border_width, cel_height,
     glob_border_color
   );
 }
@@ -95,57 +95,57 @@ void apply(QPainter &a, QPainter &b, Func func) {
 
 }
 
-void CellsWidget::setLayer(const LayerIdx idx, std::span<const CellSpan> spans) {
+void CelsWidget::setLayer(const LayerIdx idx, std::span<const CelSpan> spans) {
   QPainter layers{&layersImg};
   layers.setCompositionMode(QPainter::CompositionMode_Source);
   QPainter borders{&bordersImg};
   borders.setCompositionMode(QPainter::CompositionMode_Source);
   
   apply(layers, borders, [this, idx](QPainter &painter) {
-    painter.fillRect(0, +idx * cell_height, width(), cell_height, QColor{0, 0, 0, 0});
+    painter.fillRect(0, +idx * cel_height, width(), cel_height, QColor{0, 0, 0, 0});
   });
   
-  int x = cell_icon_pad;
-  const int y = +idx * cell_height;
-  for (const CellSpan &span : spans) {
-    if (*span.cell) {
+  int x = cel_icon_pad;
+  const int y = +idx * cel_height;
+  for (const CelSpan &span : spans) {
+    if (*span.cel) {
       if (span.len == FrameIdx{1}) {
         apply(layers, borders, [this, x, y](QPainter &painter) {
-          painter.drawPixmap(x, y + cell_icon_pad, cellPix);
+          painter.drawPixmap(x, y + cel_icon_pad, celPix);
         });
-        x += cell_width;
+        x += cel_width;
         paintBorder(borders, x, y);
       } else if (span.len > FrameIdx{1}) {
-        const int between = +(span.len - FrameIdx{2}) * cell_width;
+        const int between = +(span.len - FrameIdx{2}) * cel_width;
         apply(layers, borders, [this, x, y](QPainter &painter) {
-          painter.drawPixmap(x, y + cell_icon_pad, beginLinkPix);
+          painter.drawPixmap(x, y + cel_icon_pad, beginLinkPix);
         });
-        x += cell_width;
+        x += cel_width;
         apply(layers, borders, [between, x, y](QPainter &painter) {
           painter.fillRect(
-            x - cell_icon_pad - cell_border_offset, y + cell_icon_pad,
-            between + cell_icon_pad + cell_border_offset, cell_icon_size,
-            cell_icon_color
+            x - cel_icon_pad - cel_border_offset, y + cel_icon_pad,
+            between + cel_icon_pad + cel_border_offset, cel_icon_size,
+            cel_icon_color
           );
         });
         x += between;
         apply(layers, borders, [this, x, y](QPainter &painter) {
-          painter.drawPixmap(x, y + cell_icon_pad, endLinkPix);
+          painter.drawPixmap(x, y + cel_icon_pad, endLinkPix);
         });
-        x += cell_width;
+        x += cel_width;
         paintBorder(borders, x, y);
       } else Q_UNREACHABLE();
     } else {
       for (FrameIdx f = {}; f != span.len; ++f) {
-        x += cell_width;
+        x += cel_width;
         paintBorder(borders, x, y);
       }
     }
   }
   
   borders.fillRect(
-    0, y + cell_height - glob_border_width,
-    x - cell_icon_pad, glob_border_width,
+    0, y + cel_height - glob_border_width,
+    x - cel_icon_pad, glob_border_width,
     glob_border_color
   );
   
@@ -155,8 +155,8 @@ void CellsWidget::setLayer(const LayerIdx idx, std::span<const CellSpan> spans) 
   repaint();
 }
 
-void CellsWidget::setFrameCount(const FrameIdx count) {
-  setFixedWidth(+count * cell_width);
+void CelsWidget::setFrameCount(const FrameIdx count) {
+  setFixedWidth(+count * cel_width);
   resizeImage(posImg, size());
   resizeImage(selectionImg, size());
   resizeImage(layersImg, size());
@@ -164,8 +164,8 @@ void CellsWidget::setFrameCount(const FrameIdx count) {
   Q_EMIT resized();
 }
 
-void CellsWidget::setLayerCount(const LayerIdx count) {
-  setFixedHeight(+count * cell_height);
+void CelsWidget::setLayerCount(const LayerIdx count) {
+  setFixedHeight(+count * cel_height);
   resizeImage(posImg, size());
   resizeImage(selectionImg, size());
   resizeCopyImage(layersImg, size());
@@ -173,7 +173,7 @@ void CellsWidget::setLayerCount(const LayerIdx count) {
   Q_EMIT resized();
 }
 
-void CellsWidget::updateSelectionImg() {
+void CelsWidget::updateSelectionImg() {
   if (selectionRect.isEmpty()) {
     selectionImg.fill(0);
     return;
@@ -181,16 +181,16 @@ void CellsWidget::updateSelectionImg() {
   copyImage(selectionImg, layersImg);
   QPainter painter{&selectionImg};
   painter.setCompositionMode(QPainter::CompositionMode_SourceIn);
-  painter.fillRect(selectionRect, cell_select_color);
+  painter.fillRect(selectionRect, cel_select_color);
   drawStrokedRect(
     selectionImg,
-    cell_select_border_color.rgba(),
+    cel_select_border_color.rgba(),
     selectionRect,
     glob_border_width
   );
 }
 
-void CellsWidget::paintEvent(QPaintEvent *) {
+void CelsWidget::paintEvent(QPaintEvent *) {
   QPainter painter{this};
   painter.drawImage(0, 0, posImg);
   painter.drawImage(0, 0, layersImg);
@@ -198,66 +198,66 @@ void CellsWidget::paintEvent(QPaintEvent *) {
   painter.drawImage(0, 0, selectionImg);
 }
 
-void CellsWidget::focusOutEvent(QFocusEvent *) {
+void CelsWidget::focusOutEvent(QFocusEvent *) {
   Q_EMIT shouldClearSelection();
 }
 
-CellPos CellsWidget::getPos(QMouseEvent *event) {
+CelPos CelsWidget::getPos(QMouseEvent *event) {
   return {
-    LayerIdx{std::clamp(event->pos().y(), 0, height() - 1) / cell_height},
-    FrameIdx{std::clamp(event->pos().x(), 0, width() - 1) / cell_width}
+    LayerIdx{std::clamp(event->pos().y(), 0, height() - 1) / cel_height},
+    FrameIdx{std::clamp(event->pos().x(), 0, width() - 1) / cel_width}
   };
 }
 
-void CellsWidget::mousePressEvent(QMouseEvent *event) {
+void CelsWidget::mousePressEvent(QMouseEvent *event) {
   Q_EMIT shouldSetPos(getPos(event));
   Q_EMIT shouldBeginSelection();
 }
 
-void CellsWidget::mouseMoveEvent(QMouseEvent *event) {
+void CelsWidget::mouseMoveEvent(QMouseEvent *event) {
   Q_EMIT shouldSetPos(getPos(event));
   Q_EMIT shouldContinueSelection();
 }
 
-void CellsWidget::mouseReleaseEvent(QMouseEvent *event) {
+void CelsWidget::mouseReleaseEvent(QMouseEvent *event) {
   Q_EMIT shouldSetPos(getPos(event));
   Q_EMIT shouldEndSelection();
 }
 
-CellScrollWidget::CellScrollWidget(QWidget *parent)
+CelScrollWidget::CelScrollWidget(QWidget *parent)
   : ScrollAreaWidget{parent} {
   setFrameShape(NoFrame);
   setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
   setStyleSheet("background-color:" + glob_main.name());
-  setMinimumSize(cell_width + glob_scroll_width, cell_height + glob_scroll_width);
+  setMinimumSize(cel_width + glob_scroll_width, cel_height + glob_scroll_width);
 }
 
-CellsWidget *CellScrollWidget::getChild() {
-  auto *cells = new CellsWidget{this};
-  rect = new QWidget{cells};
+CelsWidget *CelScrollWidget::getChild() {
+  auto *cels = new CelsWidget{this};
+  rect = new QWidget{cels};
   rect->setVisible(false);
-  CONNECT(cells, shouldEnsureVisible, this, ensureVisible);
-  CONNECT(cells, resized,             this, changeMargins);
-  setWidget(cells);
-  return cells;
+  CONNECT(cels, shouldEnsureVisible, this, ensureVisible);
+  CONNECT(cels, resized,             this, changeMargins);
+  setWidget(cels);
+  return cels;
 }
 
-void CellScrollWidget::changeMargins() {
+void CelScrollWidget::changeMargins() {
   Q_EMIT rightMarginChanged(rightMargin());
   Q_EMIT bottomMarginChanged(bottomMargin());
   adjustMargins();
 }
 
-void CellScrollWidget::ensureVisible(const QPoint pos) {
+void CelScrollWidget::ensureVisible(const QPoint pos) {
   // TODO: Qt bug
   // https://bugreports.qt.io/browse/QTBUG-80093
-  rect->setGeometry(pos.x(), pos.y(), cell_width + 1, cell_height + 1);
+  rect->setGeometry(pos.x(), pos.y(), cel_width + 1, cel_height + 1);
   ensureWidgetVisible(rect, 0, 0);
 }
 
-void CellScrollWidget::resizeEvent(QResizeEvent *event) {
+void CelScrollWidget::resizeEvent(QResizeEvent *event) {
   changeMargins();
   ScrollAreaWidget::resizeEvent(event);
 }
 
-#include "timeline cells widget.moc"
+#include "timeline cels widget.moc"

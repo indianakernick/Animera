@@ -23,7 +23,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_Timeline_t {
     QByteArrayData data[53];
-    char stringdata0[622];
+    char stringdata0[611];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -35,75 +35,75 @@ static const qt_meta_stringdata_Timeline_t qt_meta_stringdata_Timeline = {
 QT_MOC_LITERAL(0, 0, 8), // "Timeline"
 QT_MOC_LITERAL(1, 9, 10), // "posChanged"
 QT_MOC_LITERAL(2, 20, 0), // ""
-QT_MOC_LITERAL(3, 21, 7), // "CellPos"
-QT_MOC_LITERAL(4, 29, 11), // "cellChanged"
-QT_MOC_LITERAL(5, 41, 5), // "Cell*"
-QT_MOC_LITERAL(6, 47, 16), // "selectionChanged"
-QT_MOC_LITERAL(7, 64, 8), // "CellRect"
-QT_MOC_LITERAL(8, 73, 17), // "visibilityChanged"
-QT_MOC_LITERAL(9, 91, 8), // "LayerIdx"
-QT_MOC_LITERAL(10, 100, 11), // "nameChanged"
-QT_MOC_LITERAL(11, 112, 16), // "std::string_view"
-QT_MOC_LITERAL(12, 129, 12), // "frameChanged"
-QT_MOC_LITERAL(13, 142, 5), // "Frame"
-QT_MOC_LITERAL(14, 148, 12), // "layerChanged"
-QT_MOC_LITERAL(15, 161, 25), // "std::span<const CellSpan>"
-QT_MOC_LITERAL(16, 187, 17), // "frameCountChanged"
-QT_MOC_LITERAL(17, 205, 8), // "FrameIdx"
-QT_MOC_LITERAL(18, 214, 17), // "layerCountChanged"
-QT_MOC_LITERAL(19, 232, 12), // "delayChanged"
-QT_MOC_LITERAL(20, 245, 8), // "modified"
-QT_MOC_LITERAL(21, 254, 12), // "cellModified"
-QT_MOC_LITERAL(22, 267, 10), // "initCanvas"
-QT_MOC_LITERAL(23, 278, 6), // "Format"
-QT_MOC_LITERAL(24, 285, 9), // "nextFrame"
-QT_MOC_LITERAL(25, 295, 9), // "prevFrame"
-QT_MOC_LITERAL(26, 305, 10), // "layerBelow"
-QT_MOC_LITERAL(27, 316, 10), // "layerAbove"
-QT_MOC_LITERAL(28, 327, 14), // "beginSelection"
-QT_MOC_LITERAL(29, 342, 17), // "continueSelection"
-QT_MOC_LITERAL(30, 360, 12), // "endSelection"
-QT_MOC_LITERAL(31, 373, 14), // "clearSelection"
-QT_MOC_LITERAL(32, 388, 11), // "insertLayer"
-QT_MOC_LITERAL(33, 400, 11), // "removeLayer"
-QT_MOC_LITERAL(34, 412, 11), // "moveLayerUp"
-QT_MOC_LITERAL(35, 424, 13), // "moveLayerDown"
-QT_MOC_LITERAL(36, 438, 11), // "insertFrame"
-QT_MOC_LITERAL(37, 450, 11), // "removeFrame"
-QT_MOC_LITERAL(38, 462, 9), // "clearCell"
-QT_MOC_LITERAL(39, 472, 10), // "extendCell"
-QT_MOC_LITERAL(40, 483, 9), // "splitCell"
-QT_MOC_LITERAL(41, 493, 8), // "growCell"
-QT_MOC_LITERAL(42, 502, 10), // "shrinkCell"
-QT_MOC_LITERAL(43, 513, 6), // "setPos"
-QT_MOC_LITERAL(44, 520, 13), // "setVisibility"
-QT_MOC_LITERAL(45, 534, 17), // "isolateVisibility"
-QT_MOC_LITERAL(46, 552, 7), // "setName"
-QT_MOC_LITERAL(47, 560, 8), // "setDelay"
-QT_MOC_LITERAL(48, 569, 13), // "clearSelected"
-QT_MOC_LITERAL(49, 583, 12), // "copySelected"
-QT_MOC_LITERAL(50, 596, 13), // "pasteSelected"
-QT_MOC_LITERAL(51, 610, 4), // "lock"
-QT_MOC_LITERAL(52, 615, 6) // "unlock"
+QT_MOC_LITERAL(3, 21, 6), // "CelPos"
+QT_MOC_LITERAL(4, 28, 10), // "celChanged"
+QT_MOC_LITERAL(5, 39, 4), // "Cel*"
+QT_MOC_LITERAL(6, 44, 16), // "selectionChanged"
+QT_MOC_LITERAL(7, 61, 7), // "CelRect"
+QT_MOC_LITERAL(8, 69, 17), // "visibilityChanged"
+QT_MOC_LITERAL(9, 87, 8), // "LayerIdx"
+QT_MOC_LITERAL(10, 96, 11), // "nameChanged"
+QT_MOC_LITERAL(11, 108, 16), // "std::string_view"
+QT_MOC_LITERAL(12, 125, 12), // "frameChanged"
+QT_MOC_LITERAL(13, 138, 5), // "Frame"
+QT_MOC_LITERAL(14, 144, 12), // "layerChanged"
+QT_MOC_LITERAL(15, 157, 24), // "std::span<const CelSpan>"
+QT_MOC_LITERAL(16, 182, 17), // "frameCountChanged"
+QT_MOC_LITERAL(17, 200, 8), // "FrameIdx"
+QT_MOC_LITERAL(18, 209, 17), // "layerCountChanged"
+QT_MOC_LITERAL(19, 227, 12), // "delayChanged"
+QT_MOC_LITERAL(20, 240, 8), // "modified"
+QT_MOC_LITERAL(21, 249, 11), // "celModified"
+QT_MOC_LITERAL(22, 261, 10), // "initCanvas"
+QT_MOC_LITERAL(23, 272, 6), // "Format"
+QT_MOC_LITERAL(24, 279, 9), // "nextFrame"
+QT_MOC_LITERAL(25, 289, 9), // "prevFrame"
+QT_MOC_LITERAL(26, 299, 10), // "layerBelow"
+QT_MOC_LITERAL(27, 310, 10), // "layerAbove"
+QT_MOC_LITERAL(28, 321, 14), // "beginSelection"
+QT_MOC_LITERAL(29, 336, 17), // "continueSelection"
+QT_MOC_LITERAL(30, 354, 12), // "endSelection"
+QT_MOC_LITERAL(31, 367, 14), // "clearSelection"
+QT_MOC_LITERAL(32, 382, 11), // "insertLayer"
+QT_MOC_LITERAL(33, 394, 11), // "removeLayer"
+QT_MOC_LITERAL(34, 406, 11), // "moveLayerUp"
+QT_MOC_LITERAL(35, 418, 13), // "moveLayerDown"
+QT_MOC_LITERAL(36, 432, 11), // "insertFrame"
+QT_MOC_LITERAL(37, 444, 11), // "removeFrame"
+QT_MOC_LITERAL(38, 456, 8), // "clearCel"
+QT_MOC_LITERAL(39, 465, 9), // "extendCel"
+QT_MOC_LITERAL(40, 475, 8), // "splitCel"
+QT_MOC_LITERAL(41, 484, 7), // "growCel"
+QT_MOC_LITERAL(42, 492, 9), // "shrinkCel"
+QT_MOC_LITERAL(43, 502, 6), // "setPos"
+QT_MOC_LITERAL(44, 509, 13), // "setVisibility"
+QT_MOC_LITERAL(45, 523, 17), // "isolateVisibility"
+QT_MOC_LITERAL(46, 541, 7), // "setName"
+QT_MOC_LITERAL(47, 549, 8), // "setDelay"
+QT_MOC_LITERAL(48, 558, 13), // "clearSelected"
+QT_MOC_LITERAL(49, 572, 12), // "copySelected"
+QT_MOC_LITERAL(50, 585, 13), // "pasteSelected"
+QT_MOC_LITERAL(51, 599, 4), // "lock"
+QT_MOC_LITERAL(52, 604, 6) // "unlock"
 
     },
-    "Timeline\0posChanged\0\0CellPos\0cellChanged\0"
-    "Cell*\0selectionChanged\0CellRect\0"
+    "Timeline\0posChanged\0\0CelPos\0celChanged\0"
+    "Cel*\0selectionChanged\0CelRect\0"
     "visibilityChanged\0LayerIdx\0nameChanged\0"
     "std::string_view\0frameChanged\0Frame\0"
-    "layerChanged\0std::span<const CellSpan>\0"
+    "layerChanged\0std::span<const CelSpan>\0"
     "frameCountChanged\0FrameIdx\0layerCountChanged\0"
-    "delayChanged\0modified\0cellModified\0"
+    "delayChanged\0modified\0celModified\0"
     "initCanvas\0Format\0nextFrame\0prevFrame\0"
     "layerBelow\0layerAbove\0beginSelection\0"
     "continueSelection\0endSelection\0"
     "clearSelection\0insertLayer\0removeLayer\0"
     "moveLayerUp\0moveLayerDown\0insertFrame\0"
-    "removeFrame\0clearCell\0extendCell\0"
-    "splitCell\0growCell\0shrinkCell\0setPos\0"
-    "setVisibility\0isolateVisibility\0setName\0"
-    "setDelay\0clearSelected\0copySelected\0"
-    "pasteSelected\0lock\0unlock"
+    "removeFrame\0clearCel\0extendCel\0splitCel\0"
+    "growCel\0shrinkCel\0setPos\0setVisibility\0"
+    "isolateVisibility\0setName\0setDelay\0"
+    "clearSelected\0copySelected\0pasteSelected\0"
+    "lock\0unlock"
 };
 #undef QT_MOC_LITERAL
 
@@ -221,18 +221,18 @@ void Timeline::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, vo
         auto *_t = static_cast<Timeline *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->posChanged((*reinterpret_cast< CellPos(*)>(_a[1]))); break;
-        case 1: _t->cellChanged((*reinterpret_cast< Cell*(*)>(_a[1]))); break;
-        case 2: _t->selectionChanged((*reinterpret_cast< CellRect(*)>(_a[1]))); break;
+        case 0: _t->posChanged((*reinterpret_cast< CelPos(*)>(_a[1]))); break;
+        case 1: _t->celChanged((*reinterpret_cast< Cel*(*)>(_a[1]))); break;
+        case 2: _t->selectionChanged((*reinterpret_cast< CelRect(*)>(_a[1]))); break;
         case 3: _t->visibilityChanged((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
         case 4: _t->nameChanged((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< std::string_view(*)>(_a[2]))); break;
         case 5: _t->frameChanged((*reinterpret_cast< const Frame(*)>(_a[1]))); break;
-        case 6: _t->layerChanged((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< std::span<const CellSpan>(*)>(_a[2]))); break;
+        case 6: _t->layerChanged((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< std::span<const CelSpan>(*)>(_a[2]))); break;
         case 7: _t->frameCountChanged((*reinterpret_cast< FrameIdx(*)>(_a[1]))); break;
         case 8: _t->layerCountChanged((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;
         case 9: _t->delayChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 10: _t->modified(); break;
-        case 11: _t->cellModified((*reinterpret_cast< QRect(*)>(_a[1]))); break;
+        case 11: _t->celModified((*reinterpret_cast< QRect(*)>(_a[1]))); break;
         case 12: _t->initCanvas((*reinterpret_cast< Format(*)>(_a[1])),(*reinterpret_cast< QSize(*)>(_a[2]))); break;
         case 13: _t->nextFrame(); break;
         case 14: _t->prevFrame(); break;
@@ -248,12 +248,12 @@ void Timeline::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, vo
         case 24: _t->moveLayerDown(); break;
         case 25: _t->insertFrame(); break;
         case 26: _t->removeFrame(); break;
-        case 27: _t->clearCell(); break;
-        case 28: _t->extendCell(); break;
-        case 29: _t->splitCell(); break;
-        case 30: _t->growCell((*reinterpret_cast< QRect(*)>(_a[1]))); break;
-        case 31: _t->shrinkCell((*reinterpret_cast< QRect(*)>(_a[1]))); break;
-        case 32: _t->setPos((*reinterpret_cast< CellPos(*)>(_a[1]))); break;
+        case 27: _t->clearCel(); break;
+        case 28: _t->extendCel(); break;
+        case 29: _t->splitCel(); break;
+        case 30: _t->growCel((*reinterpret_cast< QRect(*)>(_a[1]))); break;
+        case 31: _t->shrinkCel((*reinterpret_cast< QRect(*)>(_a[1]))); break;
+        case 32: _t->setPos((*reinterpret_cast< CelPos(*)>(_a[1]))); break;
         case 33: _t->setVisibility((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
         case 34: _t->isolateVisibility((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;
         case 35: _t->setName((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< std::string_view(*)>(_a[2]))); break;
@@ -268,21 +268,21 @@ void Timeline::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, vo
     } else if (_c == QMetaObject::IndexOfMethod) {
         int *result = reinterpret_cast<int *>(_a[0]);
         {
-            using _t = void (Timeline::*)(CellPos );
+            using _t = void (Timeline::*)(CelPos );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&Timeline::posChanged)) {
                 *result = 0;
                 return;
             }
         }
         {
-            using _t = void (Timeline::*)(Cell * );
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&Timeline::cellChanged)) {
+            using _t = void (Timeline::*)(Cel * );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&Timeline::celChanged)) {
                 *result = 1;
                 return;
             }
         }
         {
-            using _t = void (Timeline::*)(CellRect );
+            using _t = void (Timeline::*)(CelRect );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&Timeline::selectionChanged)) {
                 *result = 2;
                 return;
@@ -310,7 +310,7 @@ void Timeline::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, vo
             }
         }
         {
-            using _t = void (Timeline::*)(LayerIdx , std::span<const CellSpan> );
+            using _t = void (Timeline::*)(LayerIdx , std::span<const CelSpan> );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&Timeline::layerChanged)) {
                 *result = 6;
                 return;
@@ -346,7 +346,7 @@ void Timeline::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, vo
         }
         {
             using _t = void (Timeline::*)(QRect );
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&Timeline::cellModified)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&Timeline::celModified)) {
                 *result = 11;
                 return;
             }
@@ -395,21 +395,21 @@ int Timeline::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void Timeline::posChanged(CellPos _t1)
+void Timeline::posChanged(CelPos _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);
 }
 
 // SIGNAL 1
-void Timeline::cellChanged(Cell * _t1)
+void Timeline::celChanged(Cel * _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 1, _a);
 }
 
 // SIGNAL 2
-void Timeline::selectionChanged(CellRect _t1)
+void Timeline::selectionChanged(CelRect _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 2, _a);
@@ -437,7 +437,7 @@ void Timeline::frameChanged(const Frame & _t1)
 }
 
 // SIGNAL 6
-void Timeline::layerChanged(LayerIdx _t1, std::span<const CellSpan> _t2)
+void Timeline::layerChanged(LayerIdx _t1, std::span<const CelSpan> _t2)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))) };
     QMetaObject::activate(this, &staticMetaObject, 6, _a);
@@ -471,7 +471,7 @@ void Timeline::modified()
 }
 
 // SIGNAL 11
-void Timeline::cellModified(QRect _t1)
+void Timeline::celModified(QRect _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 11, _a);

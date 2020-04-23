@@ -14,7 +14,7 @@
 #include "palette span.hpp"
 #include <QtCore/qobject.h>
 
-class Cell;
+class Cel;
 
 enum class ButtonType {
   none,
@@ -25,9 +25,9 @@ enum class ButtonType {
 
 enum class ToolChanges {
   none,
-  cell,
+  cel,
   overlay,
-  cell_overlay
+  cel_overlay
 };
 
 struct ToolColors {
@@ -65,7 +65,7 @@ class ToolCtx final : public QObject {
   Q_OBJECT
 
 Q_SIGNALS:
-  void cellModified(QRect) const;
+  void celModified(QRect) const;
   void overlayModified(QRect) const;
   void shouldShowNorm(std::string_view) const;
   void changingAction() const;
@@ -75,21 +75,21 @@ Q_SIGNALS:
   void unlockRequested() const;
 
 public:
-  Cell *cell = nullptr;
+  Cel *cel = nullptr;
   QImage *overlay = nullptr;
   PaletteCSpan palette;
   Format format;
   QSize size;
   ToolColors colors;
   
-  void changeCell(QRect) const;
-  void changeCell(QPoint) const;
+  void changeCel(QRect) const;
+  void changeCel(QPoint) const;
   void changeOverlay(QRect) const;
   void changeOverlay(QPoint) const;
   
-  void growCell(QRect) const;
-  void shrinkCell(QRect) const;
-  [[deprecated]] void shrinkCell() const;
+  void growCel(QRect) const;
+  void shrinkCel(QRect) const;
+  [[deprecated]] void shrinkCel() const;
   
   QRgb selectColor(ButtonType) const;
   
@@ -106,8 +106,8 @@ class Tool {
 public:
   virtual ~Tool() = default;
 
-  virtual void attachCell() {}
-  virtual void detachCell() {}
+  virtual void attachCel() {}
+  virtual void detachCel() {}
   virtual void mouseLeave(const ToolLeaveEvent &) {}
   virtual void mouseDown(const ToolMouseDownEvent &) {}
   virtual void mouseMove(const ToolMouseMoveEvent &) {}

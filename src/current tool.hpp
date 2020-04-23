@@ -14,7 +14,7 @@
 class CurrentTool {
 public:
   void setTool(Tool *);
-  void setCell(Cell *);
+  void setCel(Cel *);
   
   void mouseEnter(QPoint);
   void mouseEnter();
@@ -26,7 +26,7 @@ public:
   
 private:
   Tool *tool = nullptr;
-  Cell *cell = nullptr;
+  Cel *cel = nullptr;
   QPoint lastPos = {-1, -1};
   ButtonType button = ButtonType::none;
   

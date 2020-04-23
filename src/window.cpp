@@ -251,7 +251,7 @@ public:
   }
   
 public Q_SLOTS:
-  void setPos(const CellPos pos) {
+  void setPos(const CelPos pos) {
     if (layer == pos.l) return;
     layer = pos.l;
     updateText();
@@ -296,10 +296,10 @@ void Window::populateMenubar() {
   file->addSeparator();
   ADD_ACTION(file, "Export", key_export_file, *this, exportDialog);
   ADD_ACTION(file, "Export Frame", key_export_frame, *this, exportFrameDialog);
-  ADD_ACTION(file, "Export Cell", key_export_cell, *this, exportCellDialog);
+  ADD_ACTION(file, "Export Cel", key_export_cel, *this, exportCelDialog);
   file->addSeparator();
   // ADD_ACTION(file, "Import", QString{"CTRL+I"}, *this, exportDialog);
-  ADD_ACTION(file, "Import Cell", key_import_cell, *this, importCellDialog);
+  ADD_ACTION(file, "Import Cel", key_import_cel, *this, importCelDialog);
   
   QMenu *layer = menubar->addMenu("Layer");
   layer->setFont(getGlobalFont());
@@ -337,9 +337,9 @@ void Window::populateMenubar() {
   ADD_ACTION(frame, "New Frame", key_new_frame, sprite.timeline, insertFrame);
   ADD_ACTION(frame, "Delete Frame", key_delete_frame, sprite.timeline, removeFrame);
   frame->addSeparator();
-  ADD_ACTION(frame, "Clear Cell", key_clear_cell, sprite.timeline, clearCell);
-  ADD_ACTION(frame, "Extend Linked Cell", key_extend_cell, sprite.timeline, extendCell);
-  ADD_ACTION(frame, "Split Linked Cell", key_split_cell, sprite.timeline, splitCell);
+  ADD_ACTION(frame, "Clear Cel", key_clear_cel, sprite.timeline, clearCel);
+  ADD_ACTION(frame, "Extend Linked Cel", key_extend_cel, sprite.timeline, extendCel);
+  ADD_ACTION(frame, "Split Linked Cel", key_split_cel, sprite.timeline, splitCel);
   frame->addSeparator();
   ADD_ACTION(frame, "Next Frame", key_next_frame, sprite.timeline, nextFrame);
   ADD_ACTION(frame, "Previous Frame", key_prev_frame, sprite.timeline, prevFrame);
@@ -375,11 +375,11 @@ void Window::populateMenubar() {
 #undef ADD_ACTION
 
 void Window::connectSignals() {
-  CONNECT(sprite.timeline, cellChanged,             tools,           setCell);
-  CONNECT(sprite.timeline, cellChanged,             sample,          setCell);
-  CONNECT(sprite.timeline, cellChanged,             undo,            setCell);
+  CONNECT(sprite.timeline, celChanged,              tools,           setCel);
+  CONNECT(sprite.timeline, celChanged,              sample,          setCel);
+  CONNECT(sprite.timeline, celChanged,              undo,            setCel);
   CONNECT(sprite.timeline, frameChanged,            editor,          setFrame);
-  CONNECT(sprite.timeline, cellModified,            editor,          composite);
+  CONNECT(sprite.timeline, celModified,             editor,          composite);
   CONNECT(sprite.timeline, posChanged,              timeline,        setPos);
   CONNECT(sprite.timeline, selectionChanged,        timeline,        setSelection);
   CONNECT(sprite.timeline, visibilityChanged,       timeline,        setVisibility);
@@ -401,8 +401,8 @@ void Window::connectSignals() {
   CONNECT(timeline,        shouldRemoveLayer,       sprite.timeline, removeLayer);
   CONNECT(timeline,        shouldMoveLayerUp,       sprite.timeline, moveLayerUp);
   CONNECT(timeline,        shouldMoveLayerDown,     sprite.timeline, moveLayerDown);
-  CONNECT(timeline,        shouldExtendCell,        sprite.timeline, extendCell);
-  CONNECT(timeline,        shouldSplitCell,         sprite.timeline, splitCell);
+  CONNECT(timeline,        shouldExtendCel,         sprite.timeline, extendCel);
+  CONNECT(timeline,        shouldSplitCel,          sprite.timeline, splitCel);
   CONNECT(timeline,        shouldBeginSelection,    sprite.timeline, beginSelection);
   CONNECT(timeline,        shouldContinueSelection, sprite.timeline, continueSelection);
   CONNECT(timeline,        shouldEndSelection,      sprite.timeline, endSelection);
@@ -422,12 +422,12 @@ void Window::connectSignals() {
   CONNECT(sprite.palette,  paletteChanged,          tools,           setPalette);
   CONNECT(sprite.palette,  paletteChanged,          colors,          setPalette);
   
-  CONNECT(tools,           cellModified,            editor,          composite);
+  CONNECT(tools,           celModified,             editor,          composite);
   CONNECT(tools,           overlayModified,         editor,          compositeOverlay);
   CONNECT(tools,           shouldShowNorm,          statusBar,       showNorm);
-  CONNECT(tools,           growRequested,           sprite.timeline, growCell);
-  CONNECT(tools,           shrinkRequested,         sprite.timeline, shrinkCell);
-  CONNECT(tools,           changingAction,          undo,            cellModified);
+  CONNECT(tools,           growRequested,           sprite.timeline, growCel);
+  CONNECT(tools,           shrinkRequested,         sprite.timeline, shrinkCel);
+  CONNECT(tools,           changingAction,          undo,            celModified);
   CONNECT(tools,           changingAction,          this,            modify);
   CONNECT(tools,           lockRequested,           sprite.timeline, lock);
   CONNECT(tools,           unlockRequested,         sprite.timeline, unlock);
@@ -453,11 +453,11 @@ void Window::connectSignals() {
   CONNECT(sample,          shouldSetIndex,          colors,          setIndex);
   CONNECT(sample,          shouldSetIndex,          palette,         attachIndex);
   
-  CONNECT(undo,            cellReverted,            editor,          composite);
-  CONNECT(undo,            cellReverted,            this,            modify);
+  CONNECT(undo,            celReverted,             editor,          composite);
+  CONNECT(undo,            celReverted,             this,            modify);
   CONNECT(undo,            shouldShowTemp,          statusBar,       showTemp);
-  CONNECT(undo,            shouldClearCell,         sprite.timeline, clearCell);
-  CONNECT(undo,            shouldGrowCell,          sprite.timeline, growCell);
+  CONNECT(undo,            shouldClearCel,          sprite.timeline, clearCel);
+  CONNECT(undo,            shouldGrowCel,           sprite.timeline, growCel);
   
   CONNECT(palette,         shouldAttachColor,       colorPicker,     attach);
   CONNECT(palette,         shouldSetColor,          colorPicker,     setColor);
@@ -549,11 +549,11 @@ void Window::exportFrameDialog() {
   dialog->open();
 }
 
-void Window::exportCell(const QString &path) {
-  exportSprite(exportCellOptions(path, getSpriteInfo(sprite)));
+void Window::exportCel(const QString &path) {
+  exportSprite(exportCelOptions(path, getSpriteInfo(sprite)));
 }
 
-void Window::exportCellDialog() {
+void Window::exportCelDialog() {
   // This is nearly identical to exportFrameDialog
   // TODO: Can we move these dialog functions out of the window class?
   auto *dialog = new QFileDialog{this};
@@ -561,25 +561,25 @@ void Window::exportCellDialog() {
   dialog->setAcceptMode(QFileDialog::AcceptSave);
   dialog->setNameFilter("PNG Image (*.png)");
   dialog->setDefaultSuffix("png");
-  CONNECT(dialog, fileSelected, this, exportCell);
+  CONNECT(dialog, fileSelected, this, exportCel);
   updateDirSettings(dialog, "Export Directory");
   dialog->open();
 }
 
-void Window::importCell(const QString &path) {
+void Window::importCel(const QString &path) {
   if (Error err = sprite.timeline.importImage(path); err) {
     (new ErrorDialog{this, "Import error", err.msg()})->open();
   }
 }
 
-void Window::importCellDialog() {
+void Window::importCelDialog() {
   // TODO: This is very similar to openPaletteDialog
   auto *dialog = new QFileDialog{this};
   dialog->setAttribute(Qt::WA_DeleteOnClose);
   dialog->setAcceptMode(QFileDialog::AcceptOpen);
   dialog->setNameFilter("PNG Image (*.png)");
   dialog->setFileMode(QFileDialog::ExistingFile);
-  CONNECT(dialog, fileSelected, this, importCell);
+  CONNECT(dialog, fileSelected, this, importCel);
   updateDirSettings(dialog, "Import Directory");
   dialog->open();
 }

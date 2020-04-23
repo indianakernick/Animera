@@ -8,7 +8,7 @@
 
 #include "brush tool.hpp"
 
-#include "cell.hpp"
+#include "cel.hpp"
 #include "painting.hpp"
 #include "scope time.hpp"
 #include "graphics convert.hpp"
@@ -29,7 +29,7 @@ void BrushTool::mouseDown(const ToolMouseDownEvent &event) {
   if (color == 0) {
     bounds = rect;
   } else {
-    ctx->growCell(rect);
+    ctx->growCel(rect);
   }
   symPoint(event.pos);
   ctx->lock();
@@ -49,7 +49,7 @@ void BrushTool::mouseMove(const ToolMouseMoveEvent &event) {
   if (color == 0) {
     bounds = bounds.united(rect);
   } else {
-    ctx->growCell(rect);
+    ctx->growCel(rect);
   }
   symLine({event.lastPos, event.pos});
 }
@@ -58,7 +58,7 @@ void BrushTool::mouseUp(const ToolMouseUpEvent &) {
   SCOPE_TIME("BrushTool::mouseUp");
   
   ctx->unlock();
-  if (color == 0) ctx->shrinkCell(bounds);
+  if (color == 0) ctx->shrinkCel(bounds);
   ctx->finishChange();
 }
 
@@ -143,11 +143,11 @@ void BrushTool::symPoint(const QPoint point) {
   SCOPE_TIME("BrushTool::symPoint");
   
   visit(point, [this](const QPoint point) {
-    QImage &img = ctx->cell->img;
-    const QPoint pos = ctx->cell->pos;
+    QImage &img = ctx->cel->img;
+    const QPoint pos = ctx->cel->pos;
     const QRect rect = pointRect(point);
     drawRoundPoint(img, color, point - pos, radius);
-    ctx->changeCell(rect);
+    ctx->changeCel(rect);
   });
 }
 
@@ -155,10 +155,10 @@ void BrushTool::symLine(const QLine line) {
   SCOPE_TIME("BrushTool::symLine");
   
   visit(line, [this](const QLine line) {
-    QImage &img = ctx->cell->img;
-    const QPoint pos = ctx->cell->pos;
+    QImage &img = ctx->cel->img;
+    const QPoint pos = ctx->cel->pos;
     drawLine(img, color, line.translated(-pos), radius);
-    ctx->changeCell(lineRect(line));
+    ctx->changeCel(lineRect(line));
   });
 }
 

@@ -10,7 +10,7 @@
 #define animera_timeline_hpp
 
 #include "error.hpp"
-#include "cell span.hpp"
+#include "cel span.hpp"
 #include "palette span.hpp"
 #include "export options.hpp"
 
@@ -19,7 +19,7 @@
 /*
 
 struct LayerData {
-  LayerCells spans;
+  LayerCels spans;
   std::string name;
   bool visible;
 };
@@ -58,8 +58,8 @@ public:
 
   LayerIdx getLayers() const;
   FrameIdx getFrames() const;
-  CellPos getPos() const;
-  CellRect getSelection() const;
+  CelPos getPos() const;
+  CelRect getSelection() const;
 
 public Q_SLOTS:
   void initCanvas(Format, QSize);
@@ -82,13 +82,13 @@ public Q_SLOTS:
   void insertFrame();
   void removeFrame();
   
-  void clearCell();
-  void extendCell();
-  void splitCell();
-  void growCell(QRect);
-  void shrinkCell(QRect);
+  void clearCel();
+  void extendCel();
+  void splitCel();
+  void growCel(QRect);
+  void shrinkCel(QRect);
   
-  void setPos(CellPos);
+  void setPos(CelPos);
   void setVisibility(LayerIdx, bool);
   void isolateVisibility(LayerIdx);
   void setName(LayerIdx, std::string_view);
@@ -102,15 +102,15 @@ public Q_SLOTS:
   void unlock();
 
 Q_SIGNALS:
-  void posChanged(CellPos);
-  void cellChanged(Cell *);
-  void selectionChanged(CellRect);
+  void posChanged(CelPos);
+  void celChanged(Cel *);
+  void selectionChanged(CelRect);
   
   void visibilityChanged(LayerIdx, bool);
   void nameChanged(LayerIdx, std::string_view);
   
   void frameChanged(const Frame &);
-  void layerChanged(LayerIdx, std::span<const CellSpan>);
+  void layerChanged(LayerIdx, std::span<const CelSpan>);
   
   void frameCountChanged(FrameIdx);
   void layerCountChanged(LayerIdx);
@@ -118,20 +118,20 @@ Q_SIGNALS:
   void delayChanged(int);
   
   void modified();
-  void cellModified(QRect);
+  void celModified(QRect);
   
 private:
   std::vector<Layer> layers;
-  std::vector<LayerCells> clipboard;
-  CellPos pos;
-  CellRect selection;
+  std::vector<LayerCels> clipboard;
+  CelPos pos;
+  CelRect selection;
   FrameIdx frameCount;
   QSize canvasSize;
   Format canvasFormat;
   int delay;
   bool locked = false;
   
-  Cell *getCell(CellPos);
+  Cel *getCel(CelPos);
   Frame getFrame(FrameIdx) const;
   LayerIdx layerCount() const;
   
@@ -141,8 +141,8 @@ private:
   void changeLayers(LayerIdx, LayerIdx);
   void changeFrameCount();
   void changeLayerCount();
-  void changeCell(QRect);
-  void changeCell();
+  void changeCel(QRect);
+  void changeCel();
 };
 
 #endif

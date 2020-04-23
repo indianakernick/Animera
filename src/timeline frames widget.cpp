@@ -15,7 +15,7 @@
 
 FramesWidget::FramesWidget(QWidget *parent)
   : QWidget{parent} {
-  setFixedSize(0, cell_height);
+  setFixedSize(0, cel_height);
 }
 
 void FramesWidget::setFrameCount(const FrameIdx count) {
@@ -35,7 +35,7 @@ int FramesWidget::roundUpFrames() const {
 }
 
 void FramesWidget::setWidth() {
-  setFixedWidth((roundUpFrames() + frame_incr) * cell_width + margin);
+  setFixedWidth((roundUpFrames() + frame_incr) * cel_width + margin);
 }
 
 void FramesWidget::paintEvent(QPaintEvent *) {
@@ -55,7 +55,7 @@ void FramesWidget::paintEvent(QPaintEvent *) {
       glob_border_width, height(),
       glob_border_color
     );
-    x += frame_incr * cell_width;
+    x += frame_incr * cel_width;
   }
   painter.fillRect(
     0, height() - glob_border_width,
@@ -67,7 +67,7 @@ void FramesWidget::paintEvent(QPaintEvent *) {
 FrameScrollWidget::FrameScrollWidget(QWidget *parent)
   : QScrollArea{parent} {
   setFrameShape(NoFrame);
-  setFixedHeight(cell_height);
+  setFixedHeight(cel_height);
   setStyleSheet("background-color:" + glob_dark_2.name());
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }

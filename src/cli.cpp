@@ -155,9 +155,9 @@ R"(Options:
             1     or  1..1  frame 1
     
     -c, --no-composite
-        By default, the cells that make up a frame are composited so that each
+        By default, the cels that make up a frame are composited so that each
         frame is exported as a single image. If this option is present, layers
-        are not composited and the cells that make up a frame are exported
+        are not composited and the cels that make up a frame are exported
         individually. The presence or absence of this option can affect the
         output formats available.
     

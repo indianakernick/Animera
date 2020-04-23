@@ -26,8 +26,8 @@ Q_SIGNALS:
   void shouldRemoveLayer();
   void shouldMoveLayerUp();
   void shouldMoveLayerDown();
-  void shouldExtendCell();
-  void shouldSplitCell();
+  void shouldExtendCel();
+  void shouldSplitCel();
   void shouldSetDelay(int);
   void shouldToggleAnimation(bool);
 

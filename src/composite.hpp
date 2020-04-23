@@ -10,7 +10,7 @@
 #define animera_composite_hpp
 
 #include <span>
-#include "cell.hpp"
+#include "cel.hpp"
 #include "palette span.hpp"
 #include <Graphics/format.hpp>
 
@@ -39,11 +39,11 @@ void writeOverlay(PaletteCSpan, Format, QImage &, const QImage &);
 /// Colors are converted to grayscale
 void writeOverlay(PaletteCSpan, Format, QImage &, const QImage &, const QImage &);
 
-/// Ensure that the cell is large enough to enclose the given rectangle
-void growCell(Cell &, Format, QRect);
-/// Shrink the cell to occupy the smallest amount of space
-void shrinkCell(Cell &, QRect);
-/// Sample a pixel from a cell. Returns 0 if the position is out of range
-QRgb sampleCell(const Cell &, QPoint);
+/// Ensure that the cel is large enough to enclose the given rectangle
+void growCel(Cel &, Format, QRect);
+/// Shrink the cel to occupy the smallest amount of space
+void shrinkCel(Cel &, QRect);
+/// Sample a pixel from a cel. Returns 0 if the position is out of range
+QRgb sampleCel(const Cel &, QPoint);
 
 #endif

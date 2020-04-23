@@ -10,7 +10,7 @@
 #define animera_editor_widget_hpp
 
 #include "tool.hpp"
-#include "cell.hpp"
+#include "cel.hpp"
 #include "palette span.hpp"
 #include "scroll bar widget.hpp"
 

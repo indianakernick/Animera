@@ -24,9 +24,9 @@ template <typename Format>
 using Surface = gfx::Surface<gfx::Pixel<Format>>;
 
 template <typename DstFormat, typename SrcFormat>
-void copy(Surface<DstFormat> dst, const Cell &cell, const QPoint dstPos, SrcFormat srcFmt) {
-  gfx::Surface src = makeCSurface<gfx::Pixel<SrcFormat>>(cell.img);
-  const gfx::Point pos = convert(cell.pos - dstPos);
+void copy(Surface<DstFormat> dst, const Cel &cel, const QPoint dstPos, SrcFormat srcFmt) {
+  gfx::Surface src = makeCSurface<gfx::Pixel<SrcFormat>>(cel.img);
+  const gfx::Point pos = convert(cel.pos - dstPos);
   if constexpr (std::is_same_v<DstFormat, SrcFormat>) {
     gfx::copyRegion(dst, src, pos);
   } else {
@@ -37,14 +37,14 @@ void copy(Surface<DstFormat> dst, const Cell &cell, const QPoint dstPos, SrcForm
 }
 
 template <typename DstFormat, typename SrcFormat>
-void composite(Surface<DstFormat> dst, const Cell &cell, const QPoint dstPos, SrcFormat srcFmt) {
+void composite(Surface<DstFormat> dst, const Cel &cel, const QPoint dstPos, SrcFormat srcFmt) {
   gfx::porterDuffRegion(
     gfx::mode_src_over,
     dst,
-    makeCSurface<gfx::Pixel<SrcFormat>>(cell.img),
+    makeCSurface<gfx::Pixel<SrcFormat>>(cel.img),
     DstFormat{},
     srcFmt,
-    convert(cell.pos - dstPos)
+    convert(cel.pos - dstPos)
   );
 }
 
@@ -53,20 +53,20 @@ void compositeFrame(Surface<DstFormat> dst, const Frame &frame, const QPoint dst
   // Layer 0 is on top of layer 1
   const QRect dstRect = {dstPos, convert(dst.size())};
   for (std::size_t c = frame.size() - 1; c != ~std::size_t{}; --c) {
-    const Cell &cell = *frame[c];
-    const QRect cellRect = dstRect.intersected(cell.rect());
-    if (cellRect.isEmpty()) continue;
+    const Cel &cel = *frame[c];
+    const QRect celRect = dstRect.intersected(cel.rect());
+    if (celRect.isEmpty()) continue;
     bool overlap = false;
     for (std::size_t d = c + 1; d != frame.size(); ++d) {
-      if (cellRect.intersects(frame[d]->rect())) {
+      if (celRect.intersects(frame[d]->rect())) {
         overlap = true;
         break;
       }
     }
     if (overlap) {
-      composite<DstFormat>(dst, cell, dstPos, srcFmt);
+      composite<DstFormat>(dst, cel, dstPos, srcFmt);
     } else {
-      copy<DstFormat>(dst, cell, dstPos, srcFmt);
+      copy<DstFormat>(dst, cel, dstPos, srcFmt);
     }
   }
 }
@@ -228,37 +228,37 @@ void writeOverlay(
   gfx::maskClip(makeSurface<PixelRgba>(overlay), makeCSurface<PixelMask>(mask));
 }
 
-void growCell(Cell &cell, const Format format, const QRect rect) {
-  SCOPE_TIME("growCell");
+void growCel(Cel &cel, const Format format, const QRect rect) {
+  SCOPE_TIME("growCel");
   
-  if (!cell) {
-    cell.img = {rect.size(), qimageFormat(format)};
-    cell.pos = rect.topLeft();
-    clearImage(cell.img);
+  if (!cel) {
+    cel.img = {rect.size(), qimageFormat(format)};
+    cel.pos = rect.topLeft();
+    clearImage(cel.img);
     return;
   }
-  const QRect cellRect = cell.rect();
-  if (!cellRect.contains(rect)) {
-    const QRect newRect = cellRect.united(rect);
-    QImage newImage{newRect.size(), cell.img.format()};
+  const QRect celRect = cel.rect();
+  if (!celRect.contains(rect)) {
+    const QRect newRect = celRect.united(rect);
+    QImage newImage{newRect.size(), cel.img.format()};
     clearImage(newImage);
-    blitImage(newImage, cell.img, cellRect.topLeft() - newRect.topLeft());
-    cell.img = std::move(newImage);
-    cell.pos = newRect.topLeft();
+    blitImage(newImage, cel.img, celRect.topLeft() - newRect.topLeft());
+    cel.img = std::move(newImage);
+    cel.pos = newRect.topLeft();
   }
 }
 
-void shrinkCell(Cell &cell, const QRect rect) {
-  SCOPE_TIME("shrinkCell");
+void shrinkCel(Cel &cel, const QRect rect) {
+  SCOPE_TIME("shrinkCel");
   
-  if (!cell) return;
+  if (!cel) return;
   if (rect.isEmpty()) return;
-  if (!cell.rect().intersects(rect)) return;
-  if (cell.rect().contains(rect, true)) return;
+  if (!cel.rect().intersects(rect)) return;
+  if (cel.rect().contains(rect, true)) return;
   
   QPoint min = toPoint(std::numeric_limits<int>::max());
   QPoint max = toPoint(std::numeric_limits<int>::min());
-  visitSurface(cell.img, [&min, &max](auto image) {
+  visitSurface(cel.img, [&min, &max](auto image) {
     int y = 0;
     for (auto row : gfx::range(image)) {
       int x = 0;
@@ -276,21 +276,21 @@ void shrinkCell(Cell &cell, const QRect rect) {
   });
   const QRect newRect{min, max};
   if (newRect.isEmpty()) {
-    cell = {};
+    cel = {};
     return;
   }
-  QImage image{newRect.size(), cell.img.format()};
-  blitImage(image, cell.img, -newRect.topLeft());
-  cell.img = std::move(image);
-  cell.pos += newRect.topLeft();
+  QImage image{newRect.size(), cel.img.format()};
+  blitImage(image, cel.img, -newRect.topLeft());
+  cel.img = std::move(image);
+  cel.pos += newRect.topLeft();
 }
 
-QRgb sampleCell(const Cell &cell, QPoint pos) {
-  if (cell.rect().contains(pos)) {
-    pos -= cell.pos;
-    const int depth = cell.img.depth() / 8;
-    const int idx = pos.y() * cell.img.bytesPerLine() + pos.x() * depth;
-    const uchar *bits = cell.img.bits() + idx;
+QRgb sampleCel(const Cel &cel, QPoint pos) {
+  if (cel.rect().contains(pos)) {
+    pos -= cel.pos;
+    const int depth = cel.img.depth() / 8;
+    const int idx = pos.y() * cel.img.bytesPerLine() + pos.x() * depth;
+    const uchar *bits = cel.img.bits() + idx;
     QRgb pixel = 0;
     std::memcpy(&pixel, bits, depth);
     return pixel;

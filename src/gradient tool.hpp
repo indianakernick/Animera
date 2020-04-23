@@ -10,7 +10,7 @@
 #define animera_gradient_tool_hpp
 
 #include "tool.hpp"
-#include "cell.hpp"
+#include "cel.hpp"
 
 class LinearGradientTool final : public Tool {
 public:
@@ -21,7 +21,7 @@ public:
 
 private:
   QPoint startPos;
-  Cell cleanCell;
+  Cel cleanCel;
   LineGradMode mode = LineGradMode::hori;
   
   void drawGradient(QRect, QPoint);

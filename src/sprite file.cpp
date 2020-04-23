@@ -11,7 +11,7 @@
 #include "zlib.hpp"
 #include "strings.hpp"
 #include "chunk io.hpp"
-#include "cell span.hpp"
+#include "cel span.hpp"
 #include "scope time.hpp"
 #include <Graphics/format.hpp>
 
@@ -215,14 +215,14 @@ Error writeLHDR(QIODevice &dev, const Layer &layer) try {
   return e.msg();
 }
 
-Error writeCHDR(QIODevice &dev, const CellSpan &span) try {
+Error writeCHDR(QIODevice &dev, const CelSpan &span) try {
   SCOPE_TIME("writeCHDR");
 
   ChunkWriter writer{dev};
-  writer.begin(chunk_cell_header);
+  writer.begin(chunk_cel_header);
   writer.writeInt(static_cast<std::uint32_t>(span.len));
-  if (*span.cell) {
-    const QRect rect = span.cell->rect();
+  if (*span.cel) {
+    const QRect rect = span.cel->rect();
     writer.writeInt(rect.x());
     writer.writeInt(rect.y());
     writer.writeInt(rect.width());
@@ -257,7 +257,7 @@ Error writeCDAT(QIODevice &dev, const QImage &image, const Format format) try {
   stream.avail_out = outBuffSize;
   
   ChunkWriter writer{dev};
-  writer.begin(chunk_cell_data);
+  writer.begin(chunk_cel_data);
   
   int rowIdx = 0;
   std::uint32_t remainingChunk = ~std::uint32_t{};
@@ -503,12 +503,12 @@ Error readLHDR(QIODevice &dev, Layer &layer) try {
   return e.msg();
 }
 
-Error readCHDR(QIODevice &dev, CellSpan &span, const Format format) try {
+Error readCHDR(QIODevice &dev, CelSpan &span, const Format format) try {
   SCOPE_TIME("readCHDR");
 
   ChunkReader reader{dev};
   const ChunkStart start = reader.begin();
-  TRY(expectedName(start, chunk_cell_header));
+  TRY(expectedName(start, chunk_cel_header));
   if (start.length != file_int_size && start.length != 5 * file_int_size) {
     return chunkLengthInvalid(start);
   }
@@ -525,17 +525,17 @@ Error readCHDR(QIODevice &dev, CellSpan &span, const Format format) try {
   
   TRY(reader.end());
   
-  if (+span.len <= 0) return "Negative cell span length";
-  span.cell = std::make_unique<Cell>();
+  if (+span.len <= 0) return "Negative cel span length";
+  span.cel = std::make_unique<Cel>();
   if (start.length == 5 * file_int_size) {
     if (size.width() <= 0 || max_image_width < size.width()) {
-      return "Cell width out-of-range";
+      return "Cel width out-of-range";
     }
     if (size.height() <= 0 || max_image_height < size.height()) {
-      return "Cell height out-of-range";
+      return "Cel height out-of-range";
     }
-    span.cell->pos = pos;
-    span.cell->img = {size, qimageFormat(format)};
+    span.cel->pos = pos;
+    span.cel->img = {size, qimageFormat(format)};
   }
   
   return {};
@@ -565,7 +565,7 @@ Error readCDAT(QIODevice &dev, QImage &image, const Format format) try {
   
   ChunkReader reader{dev};
   const ChunkStart start = reader.begin();
-  TRY(expectedName(start, chunk_cell_data));
+  TRY(expectedName(start, chunk_cel_data));
   
   int rowIdx = 0;
   std::uint32_t remainingChunk = start.length;

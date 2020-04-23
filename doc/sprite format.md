@@ -8,8 +8,8 @@
   * [AHDR (Animation Header)](#ahdr-animation-header)
   * [PLTE (Palette)](#plte-palette)
   * [LHDR (Layer Header)](#plte-palette)
-  * [CHDR (Cell Header)](#chdr-cell-header)
-  * [CDAT (Cell Data)](#cdat-cell-data)
+  * [CHDR (Cel Header)](#chdr-cel-header)
+  * [CDAT (Cel Data)](#cdat-cel-data)
   * [AEND (Animation End)](#aend-animation-end)
 
 ## Introduction
@@ -126,40 +126,40 @@ PNG optimizes its PLTE and tRNS chunks.
 Each layer contains a number of spans. The number of spans corresponds to the
 number of CHDR chunks that follow this chunk.
 
-### CHDR (Cell Header)
+### CHDR (Cel Header)
 
 The format of the CHDR chunk depends on whether the span is null or not. 
 
-If the span is non-null, the cell rectangle is stored. This is a rectangle on
-the canvas where the cell is placed. All pixels outside of the rectangle are
+If the span is non-null, the cel rectangle is stored. This is a rectangle on the
+canvas where the cel is placed. All pixels outside of the rectangle are
 considered zero.
 
-| Type | Description                                  |
-|------|----------------------------------------------|
-| Int  | Number of cells in this span [1, 2147483647] |
-| Int  | Cell X coordinate [-2147483648, 2147483647]  |
-| Int  | Cell Y coordinate [-2147483648, 2147483647]  |
-| Int  | Cell width [1, 1073741823]                   |
-| Int  | Cell height [1, 1073741823]                  |
+| Type | Description                                 |
+|------|---------------------------------------------|
+| Int  | Number of cels in this span [1, 2147483647] |
+| Int  | Cel X coordinate [-2147483648, 2147483647]  |
+| Int  | Cel Y coordinate [-2147483648, 2147483647]  |
+| Int  | Cel width [1, 1073741823]                   |
+| Int  | Cel height [1, 1073741823]                  |
 
-If the span is null, the cell rectangle is not stored (because there is no cell
-to have a rectangle).
+If the span is null, the cel rectangle is not stored (because there is no cel to
+have a rectangle).
 
-| Type | Description                                  |
-|------|----------------------------------------------|
-| Int  | Number of cells in this span [1, 2147483647] |
+| Type | Description                                 |
+|------|---------------------------------------------|
+| Int  | Number of cels in this span [1, 2147483647] |
 
 If the span is non-null, the following chunk will be a CDAT chunk.
 
-### CDAT (Cell Data)
+### CDAT (Cel Data)
 
-Cell data is compressed using zlib's `deflate` function at the default
+Cel data is compressed using zlib's `deflate` function at the default
 compression level. Before being compressed, the pixels are written in the order
 you would expect. That is, pixels are written from left to right into scanlines,
 and scanlines are written from top to bottom. Scanlines are not filtered as they
 are in PNG so scanlines do not begin with a filter-type byte.
 
-The pixel format of the cell data is defined by the pixel format in the AHDR
+The pixel format of the cel data is defined by the pixel format in the AHDR
 chunk.
 
 * Indexed

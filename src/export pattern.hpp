@@ -9,7 +9,7 @@
 #ifndef animera_export_pattern_hpp
 #define animera_export_pattern_hpp
 
-#include "cell.hpp"
+#include "cel.hpp"
 #include <QtCore/qstring.h>
 #include <QtGui/qvalidator.h>
 #include "export options.hpp"

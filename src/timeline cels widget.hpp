@@ -1,24 +1,24 @@
 //
-//  timeline cells widget.hpp
+//  timeline cels widget.hpp
 //  Animera
 //
 //  Created by Indiana Kernick on 24/6/19.
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef animera_timeline_cells_widget_hpp
-#define animera_timeline_cells_widget_hpp
+#ifndef animera_timeline_cels_widget_hpp
+#define animera_timeline_cels_widget_hpp
 
 #include <span>
-#include "cell.hpp"
+#include "cel.hpp"
 #include <QtCore/qtimer.h>
 #include "scroll bar widget.hpp"
 
-class CellsWidget final : public QWidget {
+class CelsWidget final : public QWidget {
   Q_OBJECT
   
 public:
-  explicit CellsWidget(QWidget *);
+  explicit CelsWidget(QWidget *);
 
 Q_SIGNALS:
   void resized();
@@ -27,17 +27,17 @@ Q_SIGNALS:
   void shouldContinueSelection();
   void shouldEndSelection();
   void shouldClearSelection();
-  void shouldSetPos(CellPos);
+  void shouldSetPos(CelPos);
   
 public Q_SLOTS:
-  void setSelection(CellRect);
-  void setPos(CellPos);
-  void setLayer(LayerIdx, std::span<const CellSpan>);
+  void setSelection(CelRect);
+  void setPos(CelPos);
+  void setLayer(LayerIdx, std::span<const CelSpan>);
   void setFrameCount(FrameIdx);
   void setLayerCount(LayerIdx);
 
 private:
-  QPixmap cellPix;
+  QPixmap celPix;
   QPixmap beginLinkPix;
   QPixmap endLinkPix;
   
@@ -53,19 +53,19 @@ private:
   void paintEvent(QPaintEvent *) override;
   void focusOutEvent(QFocusEvent *) override;
   
-  CellPos getPos(QMouseEvent *event);
+  CelPos getPos(QMouseEvent *event);
   void mousePressEvent(QMouseEvent *) override;
   void mouseMoveEvent(QMouseEvent *) override;
   void mouseReleaseEvent(QMouseEvent *) override;
 };
 
-class CellScrollWidget final : public ScrollAreaWidget {
+class CelScrollWidget final : public ScrollAreaWidget {
   Q_OBJECT
   
 public:
-  explicit CellScrollWidget(QWidget *);
+  explicit CelScrollWidget(QWidget *);
 
-  CellsWidget *getChild();
+  CelsWidget *getChild();
 
 Q_SIGNALS:
   void rightMarginChanged(int);

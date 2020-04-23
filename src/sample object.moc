@@ -23,7 +23,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_SampleObject_t {
     QByteArrayData data[12];
-    char stringdata0[114];
+    char stringdata0[112];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -39,16 +39,16 @@ QT_MOC_LITERAL(3, 29, 4), // "QRgb"
 QT_MOC_LITERAL(4, 34, 14), // "shouldSetIndex"
 QT_MOC_LITERAL(5, 49, 10), // "initCanvas"
 QT_MOC_LITERAL(6, 60, 6), // "Format"
-QT_MOC_LITERAL(7, 67, 7), // "setCell"
-QT_MOC_LITERAL(8, 75, 11), // "const Cell*"
-QT_MOC_LITERAL(9, 87, 9), // "mouseMove"
-QT_MOC_LITERAL(10, 97, 8), // "keyPress"
-QT_MOC_LITERAL(11, 106, 7) // "Qt::Key"
+QT_MOC_LITERAL(7, 67, 6), // "setCel"
+QT_MOC_LITERAL(8, 74, 10), // "const Cel*"
+QT_MOC_LITERAL(9, 85, 9), // "mouseMove"
+QT_MOC_LITERAL(10, 95, 8), // "keyPress"
+QT_MOC_LITERAL(11, 104, 7) // "Qt::Key"
 
     },
     "SampleObject\0shouldSetColor\0\0QRgb\0"
     "shouldSetIndex\0initCanvas\0Format\0"
-    "setCell\0const Cell*\0mouseMove\0keyPress\0"
+    "setCel\0const Cel*\0mouseMove\0keyPress\0"
     "Qt::Key"
 };
 #undef QT_MOC_LITERAL
@@ -98,7 +98,7 @@ void SampleObject::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         case 0: _t->shouldSetColor((*reinterpret_cast< QRgb(*)>(_a[1]))); break;
         case 1: _t->shouldSetIndex((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 2: _t->initCanvas((*reinterpret_cast< Format(*)>(_a[1]))); break;
-        case 3: _t->setCell((*reinterpret_cast< const Cell*(*)>(_a[1]))); break;
+        case 3: _t->setCel((*reinterpret_cast< const Cel*(*)>(_a[1]))); break;
         case 4: _t->mouseMove((*reinterpret_cast< QPoint(*)>(_a[1]))); break;
         case 5: _t->keyPress((*reinterpret_cast< Qt::Key(*)>(_a[1]))); break;
         default: ;
