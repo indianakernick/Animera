@@ -171,15 +171,7 @@ void ToolSelectWidget::unlockTool() {
 }
 
 void ToolSelectWidget::ensureVisible(ToolWidget *tool) {
-  // TODO: Qt bug
-  // https://bugreports.qt.io/browse/QTBUG-80093
-  QScrollBar *vbar = verticalScrollBar();
-  const int before = vbar->value();
   ensureWidgetVisible(tool, glob_margin, glob_margin);
-  const int now = vbar->value();
-  if (now > before) {
-    vbar->setValue(now + 1);
-  }
   repaint();
 }
 

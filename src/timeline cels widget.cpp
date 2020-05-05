@@ -249,9 +249,7 @@ void CelScrollWidget::changeMargins() {
 }
 
 void CelScrollWidget::ensureVisible(const QPoint pos) {
-  // TODO: Qt bug
-  // https://bugreports.qt.io/browse/QTBUG-80093
-  rect->setGeometry(pos.x(), pos.y(), cel_width + 1, cel_height + 1);
+  rect->setGeometry(pos.x(), pos.y(), cel_width, cel_height);
   ensureWidgetVisible(rect, 0, 0);
 }
 
