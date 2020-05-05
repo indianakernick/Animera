@@ -273,9 +273,13 @@ growCel overflows
 editor scaling is sometimes a pixel off
   this might be due to QPainter using floats
   might have to do scaling myself
+  I think this might have been fixed! Need to investigate further
 
 remember there's a workaround for a bug in Xcode
   https://stackoverflow.com/q/60896739/4093378
+
+resizing the timeline looks horrible
+  I don't remember it always being this bad
 
 -------------------------------- minor features --------------------------------
 

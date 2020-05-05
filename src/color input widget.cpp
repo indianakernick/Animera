@@ -93,6 +93,7 @@ NumberInputWidget::NumberInputWidget(
 ) : TextInputWidget{parent, rect},
     boxValidator{parent, range, skipZero},
     skipZero{skipZero} {
+  setAlignment(Qt::AlignRight);
   setValidator(&boxValidator);
   setValue(range.def);
   CONNECT(this, textEdited,      this, textChanged);

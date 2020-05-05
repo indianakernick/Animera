@@ -63,11 +63,20 @@ void TextInputWidget::hideCursor() {
   repaint();
 }
 
+int TextInputWidget::getAlignOffset() const {
+  if (alignment() & Qt::AlignRight) {
+    return rect.inner().width() - (text().size() * glob_font_stride_px + glob_font_kern_px);
+  } else if (alignment() & Qt::AlignLeft) {
+    return 0;
+  } else Q_UNREACHABLE();
+}
+
 int TextInputWidget::getCursorPos(const int chars) const {
   return rect.pos().x()
     + chars * glob_font_stride_px
     - glob_text_margin
-    + offset;
+    + offset
+    + getAlignOffset();
 }
 
 int TextInputWidget::getMinCursorPos() const {
@@ -99,13 +108,19 @@ void TextInputWidget::setOffset(int, const int newCursor) {
 }
 
 void TextInputWidget::constrainOffset() {
-  offset = std::max(offset, getMinOffset());
-  offset = std::min(offset, 0);
+  // Don't use std::clamp
+  if (alignment() & Qt::AlignRight) {
+    offset = std::min(offset, -getMinOffset());
+    offset = std::max(offset, 0);
+  } else if (alignment() & Qt::AlignLeft) {
+    offset = std::max(offset, getMinOffset());
+    offset = std::min(offset, 0);
+  } else Q_UNREACHABLE();
 }
 
 void TextInputWidget::updateMargins() {
   setTextMargins(
-    rect.pos().x() + offset,
+    rect.pos().x() + offset + getAlignOffset(),
     rect.pos().y(),
     rect.widget().right() - rect.inner().right(),
     rect.widget().bottom() - rect.inner().bottom()
@@ -124,7 +139,7 @@ void TextInputWidget::paintText(QPainter &painter) {
   painter.setPen(glob_text_color);
   painter.setClipRect(rect.inner());
   QPoint textPos = rect.pos();
-  textPos.rx() += offset;
+  textPos.rx() += offset + getAlignOffset();
   textPos.ry() += glob_font_accent_px;
   painter.drawText(textPos, text());
 }

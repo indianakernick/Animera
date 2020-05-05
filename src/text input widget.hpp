@@ -32,6 +32,7 @@ private:
   QTimer cursorBlinkTimer;
   bool cursorBlinkStatus = true;
 
+  int getAlignOffset() const;
   int getCursorPos(int) const;
   int getMinCursorPos() const;
   int getMaxCursorPos() const;
