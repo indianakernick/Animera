@@ -198,19 +198,20 @@ quicklook plugin
   https://fespinoza.github.io/creating-a-quicklook-plugin-for-a-document-based-macos-application
   https://developer.apple.com/library/archive/documentation/UserExperience/Conceptual/Quicklook_Programming_Guide/Introduction/Introduction.html
 
-are frame tags useful?
-  being able to give a name to a span of frames
-  you can kind of achieve this by using layers (layer for each tag)
-    i think that's what I used to do with the old pixel animator
-  another way would be to split it into multiple files (file for each tag)
-  how would the interface look?
-    a table of tags above timeline
-      table would contain the names and a visual
-      takes a lot of space
-    a space for horizontal lines
-      the lines would stack on top of each other if tags are overlapping
-      tooltip would show the name
-      uses signficantly less space
+frame groups
+  take the same amount of space as a layer
+  text box on the left
+  spans in the timeline
+  spans act like a radio button
+    one can be selected at a time
+  the selected group's name appears in the text box on the left
+  groups are selected by clicking on them
+  double clicking on a frame will make it the start of a new group
+  the border between groups can be dragged
+    a group cannot be dragged to zero length
+  deleting a group could be done by right clicking
+  could add a delete button to balance frame group text box
+    right clicking to delete is a little but unintuitive
   
 resize the canvas
   maybe a sprite info dialog that shows size, format and cels
@@ -244,6 +245,17 @@ scale tool
   it's possible now that we have dynamically resizable cels
   
 Maybe an ellipse tool
+
+checkerboard pattern tool
+  select a rectangle to repeat
+  select a rectangle to enclose the repetition
+  
+generating noise
+  like a wood texture
+  instead of solid brown, a random mix of many shades of brown
+  random, not a gradient
+  should be uniform random
+    maintain a constant color when all pixels are mixed together
 
 ---------------------------------- minor bugs ----------------------------------
 
@@ -280,6 +292,9 @@ remember there's a workaround for a bug in Xcode
 
 resizing the timeline looks horrible
   I don't remember it always being this bad
+  
+if cells widget is larger than the space it has in the timeline,
+  restrict scrolling to avoid the ugly double border
 
 -------------------------------- minor features --------------------------------
 
@@ -293,6 +308,12 @@ should the editor keys go in a menubar?
 ignore the waking click
 
 if another application edits the sprite file, ask to reload
+
+Use wand select tool between different cels
+
+click on a color that's already selected to update the selected palette with the index of the color
+
+use primary and secondary keys to rotate and flip
 
 ------------------------------- minor refactoring ------------------------------
 
