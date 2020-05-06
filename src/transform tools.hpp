@@ -30,6 +30,7 @@ class FlipTool final : public Tool {
 public:
   void attachCel() override;
   void mouseLeave(const ToolLeaveEvent &) override;
+  void mouseDown(const ToolMouseDownEvent &) override;
   void mouseMove(const ToolMouseMoveEvent &) override;
   void keyPress(const ToolKeyEvent &) override;
   
@@ -37,6 +38,7 @@ private:
   bool flipX = false;
   bool flipY = false;
   
+  void flip(bool, bool);
   void updateStatus();
 };
 
@@ -44,12 +46,14 @@ class RotateTool final : public Tool {
 public:
   void attachCel() override;
   void mouseLeave(const ToolLeaveEvent &) override;
+  void mouseDown(const ToolMouseDownEvent &) override;
   void mouseMove(const ToolMouseMoveEvent &) override;
   void keyPress(const ToolKeyEvent &) override;
 
 private:
   int angle = 0;
   
+  void rotate(int);
   void updateStatus();
 };
 

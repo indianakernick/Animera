@@ -85,6 +85,24 @@ void FlipTool::mouseLeave(const ToolLeaveEvent &) {
 
 namespace {
 
+bool flipXChanged(const ButtonType button, bool &flipX) {
+  if (button == ButtonType::primary) {
+    flipX = !flipX;
+    return true;
+  } else {
+    return false;
+  }
+}
+
+bool flipYChanged(const ButtonType button, bool &flipY) {
+  if (button == ButtonType::secondary) {
+    flipY = !flipY;
+    return true;
+  } else {
+    return false;
+  }
+}
+
 bool flipXChanged(const Qt::Key key, bool &flipX) {
   switch (key) {
     case key_flp_on_x: return !std::exchange(flipX, true);
@@ -103,14 +121,23 @@ bool flipYChanged(const Qt::Key key, bool &flipY) {
 
 }
 
+void FlipTool::mouseDown(const ToolMouseDownEvent &event) {
+  flip(flipXChanged(event.button, flipX), flipYChanged(event.button, flipY));
+}
+
 void FlipTool::mouseMove(const ToolMouseMoveEvent &) {
   updateStatus();
 }
 
 void FlipTool::keyPress(const ToolKeyEvent &event) {
+  flip(flipXChanged(event.key, flipX), flipYChanged(event.key, flipY));
+}
+
+void FlipTool::flip(const bool x, const bool y) {
   if (ctx->cel->isNull()) return;
   const QRect rect = ctx->cel->rect();
-  if (flipXChanged(event.key, flipX)) {
+  
+  if (x) {
     QImage &src = ctx->cel->img;
     QImage flipped{src.size(), src.format()};
     visitSurfaces(flipped, src, [](auto flipped, auto src) {
@@ -118,7 +145,7 @@ void FlipTool::keyPress(const ToolKeyEvent &event) {
     });
     ctx->cel->pos.setX(ctx->size.width() - (ctx->cel->pos.x() + src.width()));
     src = std::move(flipped);
-  } else if (flipYChanged(event.key, flipY)) {
+  } else if (y) {
     QImage &src = ctx->cel->img;
     QImage flipped{src.size(), src.format()};
     visitSurfaces(flipped, src, [](auto flipped, auto src) {
@@ -129,6 +156,7 @@ void FlipTool::keyPress(const ToolKeyEvent &event) {
   } else {
     return;
   }
+  
   updateStatus();
   ctx->changeCel(rect.united({ctx->cel->pos, rect.size()}));
   ctx->finishChange();
@@ -153,6 +181,14 @@ void RotateTool::mouseLeave(const ToolLeaveEvent &) {
 
 namespace {
 
+int buttonToRot(const ButtonType button) {
+  switch (button) {
+    case ButtonType::primary:   return 1;
+    case ButtonType::secondary: return 3;
+    default: return 0;
+  }
+}
+
 int arrowToRot(const Qt::Key key) {
   switch (key) {
     case key_rot_cw_a:
@@ -165,14 +201,22 @@ int arrowToRot(const Qt::Key key) {
 
 }
 
+void RotateTool::mouseDown(const ToolMouseDownEvent &event) {
+  rotate(buttonToRot(event.button));
+}
+
 void RotateTool::mouseMove(const ToolMouseMoveEvent &) {
   updateStatus();
 }
 
 void RotateTool::keyPress(const ToolKeyEvent &event) {
+  rotate(arrowToRot(event.key));
+}
+
+void RotateTool::rotate(const int rot) {
   if (ctx->cel->isNull()) return;
-  const int rot = arrowToRot(event.key);
   if (rot == 0) return;
+  
   const QRect rect = ctx->cel->rect();
   angle = (angle + rot) & 3;
   QImage &src = ctx->cel->img;
@@ -180,12 +224,14 @@ void RotateTool::keyPress(const ToolKeyEvent &event) {
   visitSurfaces(rotated, src, [rot](auto rotated, auto src) {
     gfx::rotate(rotated, src, rot);
   });
+  
   QSize size = ctx->size;
   if (size.width() % 2 > size.height() % 2) {
     size = {size.width() - 1, size.height()};
   } else if (size.width() % 2 < size.height() % 2) {
     size = {size.width(), size.height() - 1};
   }
+  
   const QPoint pos = ctx->cel->pos;
   if (rot == 1) {
     ctx->cel->pos = {
@@ -198,6 +244,7 @@ void RotateTool::keyPress(const ToolKeyEvent &event) {
       size.height() / 2 + (size.width() + 1) / 2 - pos.x() - src.width()
     };
   } else Q_UNREACHABLE();
+  
   src = std::move(rotated);
   updateStatus();
   ctx->changeCel(rect.united(ctx->cel->rect()));

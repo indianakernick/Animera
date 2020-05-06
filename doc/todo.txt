@@ -313,8 +313,6 @@ Use wand select tool between different cels
 
 click on a color that's already selected to update the selected palette with the index of the color
 
-use primary and secondary keys to rotate and flip
-
 ------------------------------- minor refactoring ------------------------------
 
 there might be a few random constants that should be in config.hpp but aren't
