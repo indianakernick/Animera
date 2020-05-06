@@ -285,7 +285,6 @@ growCel overflows
 editor scaling is sometimes a pixel off
   this might be due to QPainter using floats
   might have to do scaling myself
-  I think this might have been fixed! Need to investigate further
 
 remember there's a workaround for a bug in Xcode
   https://stackoverflow.com/q/60896739/4093378
@@ -295,6 +294,7 @@ resizing the timeline looks horrible
   
 if cells widget is larger than the space it has in the timeline,
   restrict scrolling to avoid the ugly double border
+  maybe lock into place after scrolling to avoid the double border
 
 -------------------------------- minor features --------------------------------
 
@@ -329,5 +329,3 @@ Fast-forward all submodules
 
 Clone with submodules
   git clone --recurse-submodules <url>
-
-lock into place after scrolling to avoid the double border

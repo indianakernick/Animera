@@ -249,7 +249,8 @@ void CelScrollWidget::changeMargins() {
 }
 
 void CelScrollWidget::ensureVisible(const QPoint pos) {
-  rect->setGeometry(pos.x(), pos.y(), cel_width, cel_height);
+  const int border = bottomMargin() ? 0 : glob_border_width;
+  rect->setGeometry(pos.x(), pos.y(), cel_width, cel_height - border);
   ensureWidgetVisible(rect, 0, 0);
 }
 
