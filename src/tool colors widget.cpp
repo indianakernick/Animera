@@ -25,7 +25,7 @@ public:
     : RadioButtonWidget{parent}, name{name}, color{color}, format{format} {
     setFixedSize(tool_color_rect.widget().size());
     if (format == Format::index) {
-      CONNECT(this, toggled, this, attachIndex);
+      CONNECT(this, clicked, this, attachIndex);
     } else {
       CONNECT(this, toggled, this, attachColor);
     }

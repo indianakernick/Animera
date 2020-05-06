@@ -311,8 +311,6 @@ if another application edits the sprite file, ask to reload
 
 Use wand select tool between different cels
 
-click on a color that's already selected to update the selected palette with the index of the color
-
 ------------------------------- minor refactoring ------------------------------
 
 there might be a few random constants that should be in config.hpp but aren't
@@ -331,3 +329,5 @@ Fast-forward all submodules
 
 Clone with submodules
   git clone --recurse-submodules <url>
+
+lock into place after scrolling to avoid the double border

@@ -25,7 +25,7 @@ void RadioButtonWidget::uncheck() {
 
 void RadioButtonWidget::mousePressEvent(QMouseEvent *event) {
   if (event->button() == Qt::LeftButton) {
-    nextCheckState();
+    click();
   }
 }
 
