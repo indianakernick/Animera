@@ -30,17 +30,9 @@ enum class ExportVis {
   all
 };
 
-template <typename Idx>
-struct Line {
-  Idx stride;
-  Idx offset;
-};
-
 struct ExportOptions {
   QString name;
   QString directory;
-  Line<LayerIdx> layerLine;
-  Line<FrameIdx> frameLine;
   CelRect selection;
   ExportFormat format;
   ExportVis visibility;

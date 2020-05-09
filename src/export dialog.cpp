@@ -98,10 +98,6 @@ void ExportDialog::submit() {
     options.selection.maxF = selection.maxF;
   } else Q_UNREACHABLE();
   
-  options.layerLine.stride = LayerIdx{layerStride->value()};
-  options.layerLine.offset = LayerIdx{layerOffset->value()};
-  options.frameLine.stride = FrameIdx{frameStride->value()};
-  options.frameLine.offset = FrameIdx{frameOffset->value()};
   options.format = formatFromString(formatSelect->currentText());
   options.visibility = ExportVis{visibility->currentIndex()};
   options.scaleX = scaleX->value();
@@ -146,35 +142,40 @@ void ExportDialog::createWidgets() {
   auto *validator = new ExportPatternValidator{name};
   name->setValidator(validator);
   name->setText(validator->defaultText());
+  
   dir = new FileInputWidget{this, 40};
-  layerStride = new NumberInputWidget{this, textBoxRect(3), expt_stride, true};
-  layerOffset = new NumberInputWidget{this, textBoxRect(3), expt_offset};
-  frameStride = new NumberInputWidget{this, textBoxRect(3), expt_stride, true};
-  frameOffset = new NumberInputWidget{this, textBoxRect(3), expt_offset};
+  
   layerSelect = new ComboBoxWidget{this, 14};
   layerSelect->addItem("All");
   layerSelect->addItem("Current");
   layerSelect->addItem("Selected");
+  
   frameSelect = new ComboBoxWidget{this, 14};
   frameSelect->addItem("All");
   frameSelect->addItem("Current");
   frameSelect->addItem("Selected");
+  
   composite = new ComboBoxWidget{this, 10};
   composite->addItem("Enabled");
   composite->addItem("Disabled");
+  
   visibility = new ComboBoxWidget{this, 10};
   visibility->addItem("Visible");
   visibility->addItem("Hidden");
   visibility->addItem("All");
+  
   scaleX = new NumberInputWidget{this, textBoxRect(3), expt_scale, true};
   scaleY = new NumberInputWidget{this, textBoxRect(3), expt_scale, true};
+  
   rotate = new ComboBoxWidget{this, 14};
   rotate->addItem("0");
   rotate->addItem("90");
   rotate->addItem("180");
   rotate->addItem("270");
+  
   formatSelect = new ComboBoxWidget{this, 14};
   addFormatOptions();
+  
   ok = new TextPushButtonWidget{this, textBoxRect(8), "Export"};
   cancel = new TextPushButtonWidget{this, textBoxRect(8), "Cancel"};
 }
@@ -212,19 +213,17 @@ void ExportDialog::setupLayout() {
   nameLayout->addWidget(formatSelect);
   
   auto *layerLayout = makeLayout<QHBoxLayout>(layout);
-  layerLayout->addWidget(makeLabel(this, QString{"L = layer × "}));
-  layerLayout->addWidget(layerStride);
-  layerLayout->addWidget(makeLabel(this, " + "));
-  layerLayout->addWidget(layerOffset);
+  layerLayout->addWidget(makeLabel(this, "Composite: "));
+  layerLayout->addSpacing(2_px);
+  layerLayout->addWidget(composite);
   layerLayout->addStretch();
   layerLayout->addWidget(makeLabel(this, "Layers: "));
   layerLayout->addWidget(layerSelect);
   
   auto *frameLayout = makeLayout<QHBoxLayout>(layout);
-  frameLayout->addWidget(makeLabel(this, QString{"F = frame × "}));
-  frameLayout->addWidget(frameStride);
-  frameLayout->addWidget(makeLabel(this, " + "));
-  frameLayout->addWidget(frameOffset);
+  frameLayout->addWidget(makeLabel(this, "Layer vis: "));
+  frameLayout->addSpacing(2_px);
+  frameLayout->addWidget(visibility);
   frameLayout->addStretch();
   frameLayout->addWidget(makeLabel(this, "Frames: "));
   frameLayout->addWidget(frameSelect);
@@ -237,14 +236,6 @@ void ExportDialog::setupLayout() {
   transformLayout->addStretch();
   transformLayout->addWidget(makeLabel(this, "Rotate: "));
   transformLayout->addWidget(rotate);
-  
-  auto *compositeLayout = makeLayout<QHBoxLayout>(layout);
-  compositeLayout->addWidget(makeLabel(this, "Composite: "));
-  compositeLayout->addSpacing(2_px);
-  compositeLayout->addWidget(composite);
-  compositeLayout->addStretch();
-  compositeLayout->addWidget(makeLabel(this, "Visibility: "));
-  compositeLayout->addWidget(visibility);
   
   auto *buttonLayout = makeLayout<QHBoxLayout>(layout);
   buttonLayout->addStretch();

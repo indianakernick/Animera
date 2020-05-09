@@ -28,24 +28,6 @@ const QString idxName<LayerIdx> = "Layer";
 template <>
 const QString idxName<FrameIdx> = "Frame";
 
-template <typename Idx>
-Error setStride(Line<Idx> &line, const docopt::value &strideValue) {
-  const QString name = idxName<Idx> + " stride";
-  int stride;
-  TRY(setNonZeroInt(stride, strideValue, name, expt_stride));
-  line.stride = Idx{stride};
-  return {};
-}
-
-template <typename Idx>
-Error setOffset(Line<Idx> &line, const docopt::value &offsetValue) {
-  const QString name = idxName<Idx> + " offset";
-  int offset;
-  TRY(setInt(offset, offsetValue, name, expt_offset));
-  line.offset = static_cast<Idx>(offset);
-  return {};
-}
-
 const char *formatNames[] = {
   "rgba",
   "index",
@@ -216,22 +198,6 @@ Error setNameDir(ExportOptions &options, const std::map<std::string, docopt::val
   return {};
 }
 
-Error setStrideOffset(ExportOptions &options, const std::map<std::string, docopt::value> &flags) {
-  if (const docopt::value &stride = flags.at("--layer-stride"); stride) {
-    TRY(setStride(options.layerLine, stride));
-  }
-  if (const docopt::value &offset = flags.at("--layer-offset"); offset) {
-    TRY(setOffset(options.layerLine, offset));
-  }
-  if (const docopt::value &stride = flags.at("--frame-stride"); stride) {
-    TRY(setStride(options.frameLine, stride));
-  }
-  if (const docopt::value &offset = flags.at("--frame-offset"); offset) {
-    TRY(setOffset(options.frameLine, offset));
-  }
-  return {};
-}
-
 Error setLayerFrame(
   ExportOptions &options,
   const ExportSpriteInfo info,
@@ -292,7 +258,6 @@ Error readExportOptions(
   const std::map<std::string, docopt::value> &flags
 ) {
   TRY(setNameDir(options, flags));
-  TRY(setStrideOffset(options, flags));
   TRY(setLayerFrame(options, info, flags));
   options.composite = !flags.at("--no-composite").asBool();
   TRY(setFormat(options, info, flags));

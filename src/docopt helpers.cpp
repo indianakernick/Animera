@@ -64,7 +64,7 @@ Error setNonZeroInt(
   if (longNumber == 0) {
     return name + " cannot be 0" + nonZeroRangeStr(range);
   }
-  if (longNumber < expt_stride.min || longNumber > expt_stride.max) {
+  if (longNumber < range.min || longNumber > range.max) {
     return name + " is out of range" + nonZeroRangeStr(range);
   }
   number = static_cast<int>(longNumber);

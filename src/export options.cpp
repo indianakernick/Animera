@@ -23,33 +23,17 @@ ExportSpriteInfo getSpriteInfo(const Sprite &sprite) {
   };
 }
 
-namespace {
-
-template <typename Idx>
-Idx applyLine(const Line<Idx> line, const Idx value) {
-  return value * line.stride + line.offset;
-}
-
-}
-
 QString getExportPath(const ExportOptions &options, ExportState state) {
   QString path = options.directory;
   if (path.back() != QDir::separator()) {
     path.push_back(QDir::separator());
   }
-  state.pos.l = applyLine(options.layerLine, state.pos.l);
-  state.pos.f = applyLine(options.frameLine, state.pos.f);
   path += evalExportPattern(options.name, state);
   path += ".png";
   return path;
 }
 
 namespace {
-
-void setDefaultLines(ExportOptions &options) {
-  options.layerLine = {LayerIdx{1}, LayerIdx{0}};
-  options.frameLine = {FrameIdx{1}, FrameIdx{0}};
-}
 
 void setFullSelection(ExportOptions &options, const ExportSpriteInfo &info) {
   options.selection.minL = LayerIdx{};
@@ -93,7 +77,6 @@ void setPath(ExportOptions &options, const QString &path) {
 void initDefaultOptions(ExportOptions &options, const ExportSpriteInfo &info) {
   options.name = "sprite_%000F";
   options.directory = ".";
-  setDefaultLines(options);
   setFullSelection(options, info);
   setFormat(options, info);
   options.visibility = ExportVis::visible;
@@ -104,7 +87,6 @@ void initDefaultOptions(ExportOptions &options, const ExportSpriteInfo &info) {
 ExportOptions exportFrameOptions(const QString &path, const ExportSpriteInfo &info) {
   ExportOptions options;
   setPath(options, path);
-  setDefaultLines(options);
   options.selection.minL = LayerIdx{};
   options.selection.minF = info.frame;
   options.selection.maxL = info.layers - LayerIdx{1};
@@ -119,7 +101,6 @@ ExportOptions exportFrameOptions(const QString &path, const ExportSpriteInfo &in
 ExportOptions exportCelOptions(const QString &path, const ExportSpriteInfo &info) {
   ExportOptions options;
   setPath(options, path);
-  setDefaultLines(options);
   options.selection.minL = info.layer;
   options.selection.minF = info.frame;
   options.selection.maxL = info.layer;

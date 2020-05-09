@@ -46,10 +46,6 @@ private:
   
   TextInputWidget *name = nullptr;
   FileInputWidget *dir = nullptr;
-  NumberInputWidget *layerStride = nullptr;
-  NumberInputWidget *layerOffset = nullptr;
-  NumberInputWidget *frameStride = nullptr;
-  NumberInputWidget *frameOffset = nullptr;
   ComboBoxWidget *layerSelect = nullptr;
   ComboBoxWidget *frameSelect = nullptr;
   ComboBoxWidget *formatSelect = nullptr;

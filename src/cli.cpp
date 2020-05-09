@@ -26,8 +26,6 @@ R"(Usage:
     Animera open <file>
     Animera info [--layer-names --json] <file>
     Animera export [--name=<pattern> --directory=<path>]
-                   [--layer-stride=<int> --layer-offset=<int>]
-                   [--frame-stride=<int> --frame-offset=<int>]
                    [--layer=<range> --frame=<range>]
                    [--no-composite --format=<format> --visibility=<mode>]
                    [--scale-x=<int> --scale-y=<int> --scale=<int>]
@@ -38,10 +36,8 @@ R"(Usage:
     Animera [--help | --long-help]
     Animera new <width> <height> [<format>]
     Animera open <file>
-    Animera info [--json] <file>
+    Animera info [--layer-names --json] <file>
     Animera export [--name=<pattern> --directory=<path>]
-                   [--layer-stride=<int> --layer-offset=<int>]
-                   [--frame-stride=<int> --frame-offset=<int>]
                    [--layer=<range> --frame=<range>]
                    [--no-composite --format=<format> --visibility=<mode>]
                    [[--scale-x=<int> --scale-y=<int>] | --scale=<int>]
@@ -58,10 +54,6 @@ R"(Options:
     -j, --json                Output info as JSON.
     -n, --name <pattern>      Name pattern for the sprite.
     -d, --directory <path>    Directory to write files to.
-    --layer-stride <int>      Stride multiplied by layer number.
-    --layer-offset <int>      Offset added to layer number.
-    --frame-stride <int>      Stride multiplied by frame number.
-    --frame-offset <int>      Offset added to frame number.
     -l, --layer <range>       Range of layers to export.
     -f, --frame <range>       Range of frames to export.
     -c, --no-composite        Don't composite layers.
@@ -119,27 +111,6 @@ R"(Options:
             <path> "/" <pattern> ".png"
         Paths ending with a / are accepted.
         
-    --layer-stride <integer>
-        This is similar to the --frame-stride option but for layers.
-        
-    --layer-offset <integer>
-        This is similar to the --frame-offset option but for layers.
-    
-    --frame-stride <integer>
-        A stride that is multiplied by the frame number before evaluating the
-        name pattern. The stride cannot be 0 but can be negative.
-        Examples assuming that "e.animera" contains 2 frames:
-            Animera export -n "a_%F" --frame-stride 2 e.animera   a_0 a_2
-            Animera export -n "b_%F" --frame-stride -1 e.animera  b_0 b_-1
-        This option is useful when combined with the --frame-offset option.
-    
-    --frame-offset <integer>
-        An offset that is added to the frame number before evaluating the name
-        pattern. Examples assuming that "e.animera" contains 2 frames:
-            Animera export -n "a_%F" --frame-offset 2 e.animera   a_2 a_3
-            Animera export -n "b_%F" --frame-offset -1 e.animera  b_-1 b_0
-        The offset is applied after the stride is applied.
-    
     -l, --layer <range>
         This is similar to the --frame option but for layers.
     
@@ -250,6 +221,7 @@ int CLI::exec() {
 }
 
 Error CLI::parseArgs(std::map<std::string, docopt::value> &flags) const {
+  // https://stackoverflow.com/a/10242200/4093378
   char **first = argv + 1;
   if (argc == 2 && std::strncmp(*first, "-psn_", 5) == 0) {
     ++first;

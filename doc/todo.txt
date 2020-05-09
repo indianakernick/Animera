@@ -256,6 +256,7 @@ generating noise
   random, not a gradient
   should be uniform random
     maintain a constant color when all pixels are mixed together
+  select some colors from palette (and maybe proportions) then use brush
 
 ---------------------------------- minor bugs ----------------------------------
 
@@ -309,7 +310,9 @@ ignore the waking click
 
 if another application edits the sprite file, ask to reload
 
-Use wand select tool between different cels
+use wand select tool between different cels
+
+try to make the most common key bindings possible with left hand
 
 ------------------------------- minor refactoring ------------------------------
 
