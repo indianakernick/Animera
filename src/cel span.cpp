@@ -177,9 +177,8 @@ void LayerCels::replaceSpan(FrameIdx idx, LayerCels &newCels) {
       span = insertSpan(spans, span, newSpans) + newSpans.size();
       removeSpan(spans, span, len - span->len);
     } else if (span->len > len) {
-      CelPtr copy = std::move(span->cel);
-      span = insertSpan(spans, span, newSpans) + newSpans.size();
-      spans.insert(span, {std::move(copy), span->len - len});
+      span->len -= len;
+      insertSpan(spans, span, newSpans);
     } else {
       span = spans.erase(span);
       insertSpan(spans, span, newSpans);
