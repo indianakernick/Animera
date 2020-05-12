@@ -47,7 +47,7 @@ void ChunkWriter::writeByte(const std::uint8_t byte) {
 
 void ChunkWriter::writeInt(std::uint32_t num) {
   static_assert(sizeof(std::uint32_t) == file_int_size);
-  num = qToBigEndian(num);
+  num = qToLittleEndian(num);
   writeData(&num, file_int_size);
 }
 
@@ -124,7 +124,7 @@ std::uint32_t ChunkReader::readInt() {
   static_assert(sizeof(std::uint32_t) == file_int_size);
   std::uint32_t num;
   readData(&num, file_int_size);
-  return qFromBigEndian(num);
+  return qFromLittleEndian(num);
 }
 
 void ChunkReader::readString(char *dat, const std::uint32_t len) {

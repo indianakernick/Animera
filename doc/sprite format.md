@@ -60,11 +60,9 @@ definitions of standard chunks.
 | Type   | Description                                      |
 |--------|--------------------------------------------------|
 | Byte   | 1 byte, unsigned                                 |
-| Int    | 4 bytes, big-endian, signed (2s-complement)      |
-| Uint   | 4 bytes, big-endian, unsigned                    |
+| Int    | 4 bytes, little-endian, signed (2s-complement)   |
+| Uint   | 4 bytes, little-endian, unsigned                 |
 | String | Sequence of printable ASCII characters [32, 126] |
-
-See also: [PNG integer byte order](http://www.libpng.org/pub/png/spec/1.2/PNG-DataRep.html#DR.Integers-and-byte-order)
 
 ## Chunk Layout
 
