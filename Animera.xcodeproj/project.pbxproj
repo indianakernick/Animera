@@ -894,7 +894,7 @@
 			name = Tools;
 			sourceTree = "<group>";
 		};
-		453C783C2234DECE00818B19 /* Cells */ = {
+		453C783C2234DECE00818B19 /* Cels */ = {
 			isa = PBXGroup;
 			children = (
 				45B284912218E38800D6D055 /* image.cpp */,
@@ -923,7 +923,7 @@
 				454E99092348200B0059274C /* sprite export.cpp */,
 				454E990A2348200B0059274C /* sprite export.hpp */,
 			);
-			name = Cells;
+			name = Cels;
 			sourceTree = "<group>";
 		};
 		453C783D2234DEF100818B19 /* Widgets */ = {
@@ -1897,7 +1897,7 @@
 				458F84052249DF97005F91D0 /* Utilities */,
 				45E3FFA824417976007A1FE8 /* CLI */,
 				453B7C76227ECF62003BB799 /* Graphics */,
-				453C783C2234DECE00818B19 /* Cells */,
+				453C783C2234DECE00818B19 /* Cels */,
 				453C783B2234DEBA00818B19 /* Tools */,
 				453C783D2234DEF100818B19 /* Widgets */,
 			);
