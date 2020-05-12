@@ -297,6 +297,8 @@ if cells widget is larger than the space it has in the timeline,
   restrict scrolling to avoid the ugly double border
   maybe lock into place after scrolling to avoid the double border
 
+tool color is unchecked when checking palette color
+
 -------------------------------- minor features --------------------------------
 
 remove layer button appears when hovering layer name
@@ -313,6 +315,10 @@ if another application edits the sprite file, ask to reload
 use wand select tool between different cels
 
 try to make the most common key bindings possible with left hand
+
+why is it so tedious to create an animation by modifying the previous frame?
+  perhaps a button that creates new frame that links to previous frame
+  like extend linked cell and new frame combined
 
 ------------------------------- minor refactoring ------------------------------
 
@@ -331,4 +337,4 @@ Fast-forward all submodules
   git submodule update --remote --merge
 
 Clone with submodules
-  git clone --recurse-submodules <url>
+  git clone --recurse-submodules --shallow-submodules <url>
