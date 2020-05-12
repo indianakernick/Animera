@@ -297,8 +297,6 @@ if cells widget is larger than the space it has in the timeline,
   restrict scrolling to avoid the ugly double border
   maybe lock into place after scrolling to avoid the double border
 
-tool color is unchecked when checking palette color
-
 -------------------------------- minor features --------------------------------
 
 remove layer button appears when hovering layer name
