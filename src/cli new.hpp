@@ -11,6 +11,6 @@
 
 #include <docopt.h>
 
-int cliNew(int &, char **, const std::map<std::string, docopt::value> &);
+int cliNew(int &, char **, const docopt::Options &);
 
 #endif

@@ -179,7 +179,7 @@ Error setFrame(
   return {};
 }
 
-Error setNameDir(ExportOptions &options, const std::map<std::string, docopt::value> &flags) {
+Error setNameDir(ExportOptions &options, const docopt::Options &flags) {
   if (const docopt::value &name = flags.at("--name"); name) {
     QString nameStr = toLatinString(name.asString());
     TRY(checkExportPattern(nameStr));
@@ -201,7 +201,7 @@ Error setNameDir(ExportOptions &options, const std::map<std::string, docopt::val
 Error setLayerFrame(
   ExportOptions &options,
   const ExportSpriteInfo info,
-  const std::map<std::string, docopt::value> &flags
+  const docopt::Options &flags
 ) {
   if (const docopt::value &layer = flags.at("--layer"); layer) {
     TRY(setLayer(options.selection, info, layer));
@@ -215,7 +215,7 @@ Error setLayerFrame(
 Error setFormat(
   ExportOptions &options,
   const ExportSpriteInfo info,
-  const std::map<std::string, docopt::value> &flags
+  const docopt::Options &flags
 ) {
   if (const docopt::value &value = flags.at("--format"); value) {
     TRY(setFormat(options.format, value));
@@ -224,14 +224,14 @@ Error setFormat(
   return {};
 }
 
-Error setVisibility(ExportOptions &options, const std::map<std::string, docopt::value> &flags) {
+Error setVisibility(ExportOptions &options, const docopt::Options &flags) {
   if (const docopt::value &value = flags.at("--visibility"); value) {
     TRY(setVisibility(options.visibility, value));
   }
   return {};
 }
 
-Error setScaleAngle(ExportOptions &options, const std::map<std::string, docopt::value> &flags) {
+Error setScaleAngle(ExportOptions &options, const docopt::Options &flags) {
   if (const docopt::value &scaleX = flags.at("--scale-x"); scaleX) {
     TRY(setNonZeroInt(options.scaleX, scaleX, "scale-x", expt_scale));
   }
@@ -255,7 +255,7 @@ Error setScaleAngle(ExportOptions &options, const std::map<std::string, docopt::
 Error readExportOptions(
   ExportOptions &options,
   const ExportSpriteInfo &info,
-  const std::map<std::string, docopt::value> &flags
+  const docopt::Options &flags
 ) {
   TRY(setNameDir(options, flags));
   TRY(setLayerFrame(options, info, flags));
@@ -268,7 +268,7 @@ Error readExportOptions(
 
 }
 
-int cliExport(int &argc, char **argv, const std::map<std::string, docopt::value> &flags) {
+int cliExport(int &argc, char **argv, const docopt::Options &flags) {
   QCoreApplication app{argc, argv};
   QTextStream console{stdout};
   

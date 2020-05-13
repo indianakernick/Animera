@@ -11,6 +11,6 @@
 
 #include <docopt.h>
 
-int cliInfo(int &, char **, const std::map<std::string, docopt::value> &);
+int cliInfo(int &, char **, const docopt::Options &);
 
 #endif

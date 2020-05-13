@@ -143,7 +143,7 @@ Error printInfo(const QString &path, const bool layers, const bool json) {
 
 }
 
-int cliInfo(int &argc, char **argv, const std::map<std::string, docopt::value> &flags) {
+int cliInfo(int &argc, char **argv, const docopt::Options &flags) {
   QCoreApplication app{argc, argv};
   QTextStream console{stdout};
   

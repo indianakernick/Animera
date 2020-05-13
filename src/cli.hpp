@@ -22,9 +22,9 @@ private:
   int &argc;
   char **argv;
   
-  Error parseArgs(std::map<std::string, docopt::value> &) const;
-  int execDefault(const std::map<std::string, docopt::value> &) const;
-  int execOpen(const std::map<std::string, docopt::value> &) const;
+  Error parseArgs(docopt::Options &) const;
+  int execDefault(const docopt::Options &) const;
+  int execOpen(const docopt::Options &) const;
 };
 
 #endif

@@ -21,7 +21,7 @@ const char *formatNames[] = {
   "gray"
 };
 
-Error setFormatSize(Format &format, QSize &size, const std::map<std::string, docopt::value> &flags) {
+Error setFormatSize(Format &format, QSize &size, const docopt::Options &flags) {
   TRY(setInt(size.rwidth(), flags.at("<width>"), "width", init_size_range));
   TRY(setInt(size.rheight(), flags.at("<height>"), "height", init_size_range));
   if (const docopt::value &value = flags.at("<format>"); value) {
@@ -36,7 +36,7 @@ Error setFormatSize(Format &format, QSize &size, const std::map<std::string, doc
 
 }
 
-int cliNew(int &argc, char **argv, const std::map<std::string, docopt::value> &flags) {
+int cliNew(int &argc, char **argv, const docopt::Options &flags) {
   QTextStream console{stdout};
   
   Format format;

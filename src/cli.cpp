@@ -182,7 +182,7 @@ R"(Options:
         [0, 4] so --angle -3, --angle 1 and --angle 5 are all equivalent.
         The rotation is applied after the scale is applied.)";
 
-Error checkMutuallyExclusive(const std::map<std::string, docopt::value> &flags) {
+Error checkMutuallyExclusive(const docopt::Options &flags) {
   if (flags.at("--help").asBool() && flags.at("--long-help").asBool()) {
     return "--help must be mutually exclusive with --long-help";
   }
@@ -199,7 +199,7 @@ CLI::CLI(int &argc, char **argv)
   : argc{argc}, argv{argv} {}
 
 int CLI::exec() {
-  std::map<std::string, docopt::value> flags;
+  docopt::Options flags;
   if (Error err = parseArgs(flags); err) {
     QTextStream console{stdout};
     console << "Command line error\n" << err.msg() << '\n';
@@ -220,7 +220,7 @@ int CLI::exec() {
   }
 }
 
-Error CLI::parseArgs(std::map<std::string, docopt::value> &flags) const {
+Error CLI::parseArgs(docopt::Options &flags) const {
   // https://stackoverflow.com/a/10242200/4093378
   char **first = argv + 1;
   if (argc == 2 && std::strncmp(*first, "-psn_", 5) == 0) {
@@ -237,7 +237,7 @@ Error CLI::parseArgs(std::map<std::string, docopt::value> &flags) const {
   return checkMutuallyExclusive(flags);
 }
 
-int CLI::execDefault(const std::map<std::string, docopt::value> &flags) const {
+int CLI::execDefault(const docopt::Options &flags) const {
   QTextStream console{stdout};
   if (flags.at("--help").asBool()) {
     console << usage << "\n\n" << short_options << '\n';
@@ -252,7 +252,7 @@ int CLI::execDefault(const std::map<std::string, docopt::value> &flags) const {
   return app.exec();
 }
 
-int CLI::execOpen(const std::map<std::string, docopt::value> &flags) const {
+int CLI::execOpen(const docopt::Options &flags) const {
   Application app{argc, argv};
   app.openFile(toLatinString(flags.at("<file>").asString()));
   return app.exec();

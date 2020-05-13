@@ -11,6 +11,6 @@
 
 #include <docopt.h>
 
-int cliExport(int &, char **, const std::map<std::string, docopt::value> &);
+int cliExport(int &, char **, const docopt::Options &);
 
 #endif
