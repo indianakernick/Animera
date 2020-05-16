@@ -1,4 +1,4 @@
-﻿//
+//
 //  timeline cels widget.hpp
 //  Animera
 //
@@ -9,8 +9,8 @@
 #ifndef animera_timeline_cels_widget_hpp
 #define animera_timeline_cels_widget_hpp
 
-#include <span>
 #include "cel.hpp"
+#include <tcb/span.hpp>
 #include <QtCore/qtimer.h>
 #include "scroll bar widget.hpp"
 
@@ -32,7 +32,7 @@ Q_SIGNALS:
 public Q_SLOTS:
   void setSelection(CelRect);
   void setPos(CelPos);
-  void setLayer(LayerIdx, std::span<const CelSpan>);
+  void setLayer(LayerIdx, tcb::span<const CelSpan>);
   void setFrameCount(FrameIdx);
   void setLayerCount(LayerIdx);
 

@@ -1,4 +1,4 @@
-﻿//
+//
 //  palette.cpp
 //  Animera
 //
@@ -90,9 +90,7 @@ constexpr std::array<QRgb, 9> gray_palette = {
 };
 
 PaletteCSpan getUsedSpan(const PaletteCSpan colors) {
-  // Reminder to use std::size_t when the standard library is updated
-  static_assert(std::is_same_v<PaletteCSpan::index_type, std::ptrdiff_t>);
-  for (std::ptrdiff_t i = colors.size(); i != 0; --i) {
+  for (std::size_t i = colors.size(); i != 0; --i) {
     if (colors[i - 1] != 0) {
       return {colors.data(), i};
     }

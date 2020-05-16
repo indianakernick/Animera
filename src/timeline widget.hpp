@@ -1,4 +1,4 @@
-﻿//
+//
 //  timeline widget.hpp
 //  Animera
 //
@@ -9,8 +9,8 @@
 #ifndef animera_timeline_widget_hpp
 #define animera_timeline_widget_hpp
 
-#include <span>
 #include "cel.hpp"
+#include <tcb/span.hpp>
 #include <QtWidgets/qwidget.h>
 
 class ControlsWidget;
@@ -30,7 +30,7 @@ public Q_SLOTS:
   void setSelection(CelRect);
   void setVisibility(LayerIdx, bool);
   void setName(LayerIdx, std::string_view);
-  void setLayer(LayerIdx, std::span<const CelSpan>);
+  void setLayer(LayerIdx, tcb::span<const CelSpan>);
   void setFrameCount(FrameIdx);
   void setLayerCount(LayerIdx);
   void toggleAnimation();

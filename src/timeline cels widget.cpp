@@ -1,4 +1,4 @@
-﻿//
+//
 //  timeline cels widget.cpp
 //  Animera
 //
@@ -95,7 +95,7 @@ void apply(QPainter &a, QPainter &b, Func func) {
 
 }
 
-void CelsWidget::setLayer(const LayerIdx idx, std::span<const CelSpan> spans) {
+void CelsWidget::setLayer(const LayerIdx idx, tcb::span<const CelSpan> spans) {
   QPainter layers{&layersImg};
   layers.setCompositionMode(QPainter::CompositionMode_Source);
   QPainter borders{&bordersImg};

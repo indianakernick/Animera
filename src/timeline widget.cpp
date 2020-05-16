@@ -1,4 +1,4 @@
-﻿//
+//
 //  timeline widget.cpp
 //  Animera
 //
@@ -81,7 +81,7 @@ void TimelineWidget::setName(const LayerIdx layer, const std::string_view name) 
   layers->setName(layer, name);
 }
 
-void TimelineWidget::setLayer(const LayerIdx layer, std::span<const CelSpan> spans) {
+void TimelineWidget::setLayer(const LayerIdx layer, tcb::span<const CelSpan> spans) {
   cels->setLayer(layer, spans);
 }
 

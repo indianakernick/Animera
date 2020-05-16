@@ -1,4 +1,4 @@
-﻿//
+//
 //  timeline.hpp
 //  Animera
 //
@@ -110,7 +110,7 @@ Q_SIGNALS:
   void nameChanged(LayerIdx, std::string_view);
   
   void frameChanged(const Frame &);
-  void layerChanged(LayerIdx, std::span<const CelSpan>);
+  void layerChanged(LayerIdx, tcb::span<const CelSpan>);
   
   void frameCountChanged(FrameIdx);
   void layerCountChanged(LayerIdx);

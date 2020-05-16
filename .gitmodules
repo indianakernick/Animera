@@ -10,3 +10,7 @@
 	path = third_party/Catch2
 	url = https://github.com/catchorg/Catch2
 	shallow = true
+[submodule "third_party/span"]
+	path = third_party/span
+	url = https://github.com/tcbrindle/span
+	shallow = true

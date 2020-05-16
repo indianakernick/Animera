@@ -1,4 +1,4 @@
-﻿//
+//
 //  cel span.cpp
 //  Animera
 //
@@ -66,7 +66,7 @@ void LayerCels::optimize() {
       }
       prevNull = s->len;
     } else {
-      prevNull = {0};
+      prevNull = FrameIdx{0};
     }
   }
 }

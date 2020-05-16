@@ -1,4 +1,4 @@
-﻿//
+//
 //  composite.hpp
 //  Animera
 //
@@ -9,7 +9,6 @@
 #ifndef animera_composite_hpp
 #define animera_composite_hpp
 
-#include <span>
 #include "cel.hpp"
 #include "palette span.hpp"
 #include <Graphics/format.hpp>
