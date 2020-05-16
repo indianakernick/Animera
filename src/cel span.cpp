@@ -95,10 +95,10 @@ void LayerCels::insert(FrameIdx idx) {
     const FrameIdx rightSize = span->len - idx;
     span->len = leftSize;
     CelPtr copy = std::make_unique<Cel>(*span->cel);
-    span = spans.insert(++span, {std::make_unique<Cel>()});
+    span = spans.insert(++span, {std::make_unique<Cel>(), FrameIdx{1}});
     spans.insert(++span, {std::move(copy), rightSize});
   } else {
-    spans.insert(++span, {std::make_unique<Cel>()});
+    spans.insert(++span, {std::make_unique<Cel>(), FrameIdx{1}});
   }
 }
 
@@ -113,16 +113,16 @@ void LayerCels::replace(FrameIdx idx, const bool isolate) {
   const FrameIdx rightSize = span->len - idx - FrameIdx{1};
   if (leftSize == FrameIdx{0}) {
     span->len = rightSize;
-    spans.insert(span, {std::make_unique<Cel>()});
+    spans.insert(span, {std::make_unique<Cel>(), FrameIdx{1}});
     return;
   } else if (rightSize == FrameIdx{0}) {
     span->len = leftSize;
-    spans.insert(++span, {std::make_unique<Cel>()});
+    spans.insert(++span, {std::make_unique<Cel>(), FrameIdx{1}});
     return;
   }
   span->len = leftSize;
   CelPtr copy = std::make_unique<Cel>(*span->cel);
-  span = spans.insert(++span, {std::make_unique<Cel>()});
+  span = spans.insert(++span, {std::make_unique<Cel>(), FrameIdx{1}});
   spans.insert(++span, {std::move(copy), rightSize});
 }
 

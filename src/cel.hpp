@@ -1,4 +1,4 @@
-﻿//
+//
 //  cel.hpp
 //  Animera
 //
@@ -66,7 +66,7 @@ constexpr CelRect empty_rect = {LayerIdx{0}, FrameIdx{0}, LayerIdx{-1}, FrameIdx
 
 struct CelSpan {
   CelPtr cel;
-  FrameIdx len{1};
+  FrameIdx len;
 };
 
 using Frame = std::vector<const Cel *>;
