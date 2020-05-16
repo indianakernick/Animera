@@ -1,4 +1,4 @@
-﻿//
+//
 //  drag paint tools.hpp
 //  Animera
 //
@@ -37,6 +37,7 @@ private:
 
 class LineTool final : public DragPaintTool<LineTool> {
 public:
+  template <typename>
   friend class DragPaintTool;
 
   ~LineTool();
@@ -55,6 +56,7 @@ private:
 
 class StrokedCircleTool final : public DragPaintTool<StrokedCircleTool> {
 public:
+  template <typename>
   friend class DragPaintTool;
 
   ~StrokedCircleTool();
@@ -75,6 +77,7 @@ private:
 
 class FilledCircleTool final : public DragPaintTool<FilledCircleTool> {
 public:
+  template <typename>
   friend class DragPaintTool;
   
   ~FilledCircleTool();
@@ -93,6 +96,7 @@ private:
 
 class StrokedRectangleTool final : public DragPaintTool<StrokedRectangleTool> {
 public:
+  template <typename>
   friend class DragPaintTool;
   
   ~StrokedRectangleTool();
@@ -111,6 +115,7 @@ private:
 
 class FilledRectangleTool final : public DragPaintTool<FilledRectangleTool> {
 public:
+  template <typename>
   friend class DragPaintTool;
   
   ~FilledRectangleTool();

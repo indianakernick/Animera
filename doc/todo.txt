@@ -331,6 +331,10 @@ maybe paint functions should accept a cel
 
 ------------------------------- submodules notes -------------------------------
 
+Add submodule
+  git submodule add --depth 1 <url> <path>
+  git config -f .gitmodules submodule.<path>.shallow true
+
 Fast-forward all submodules
   git submodule update --remote --merge
 

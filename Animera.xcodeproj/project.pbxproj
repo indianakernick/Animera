@@ -674,6 +674,21 @@
 		455486BD234466F6001D5611 /* slider bar.animera */ = {isa = PBXFileReference; lastKnownFileType = file; path = "slider bar.animera"; sourceTree = "<group>"; };
 		455486BE23449254001D5611 /* native mac.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "native mac.mm"; sourceTree = "<group>"; };
 		455486C123449E70001D5611 /* native mac.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "native mac.hpp"; sourceTree = "<group>"; };
+		45571E20246FC473001FC61A /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		45571E22246FC473001FC61A /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		45571E23246FC473001FC61A /* catch_main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = catch_main.cpp; sourceTree = "<group>"; };
+		45571E24246FC473001FC61A /* catch.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = catch.hpp; sourceTree = "<group>"; };
+		45571E25246FC473001FC61A /* test_structured_bindings.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_structured_bindings.cpp; sourceTree = "<group>"; };
+		45571E26246FC473001FC61A /* test_deduction_guides.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_deduction_guides.cpp; sourceTree = "<group>"; };
+		45571E27246FC473001FC61A /* test_span.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_span.cpp; sourceTree = "<group>"; };
+		45571E28246FC473001FC61A /* test_contract_checking.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_contract_checking.cpp; sourceTree = "<group>"; };
+		45571E2B246FC473001FC61A /* span.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = span.hpp; sourceTree = "<group>"; };
+		45571E2C246FC473001FC61A /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		45571E2D246FC473001FC61A /* LICENSE_1_0.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE_1_0.txt; sourceTree = "<group>"; };
+		45571E2E246FC473001FC61A /* appveyor.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = appveyor.yml; sourceTree = "<group>"; };
+		45571E2F246FC473001FC61A /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		45571E30246FC473001FC61A /* .clang-format */ = {isa = PBXFileReference; lastKnownFileType = text; path = ".clang-format"; sourceTree = "<group>"; };
+		45571E31246FC473001FC61A /* .travis.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .travis.yml; sourceTree = "<group>"; };
 		455F2851220688FD00C73F39 /* Animera.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Animera.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		455F285B2206890300C73F39 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		455F28602206890300C73F39 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1046,6 +1061,7 @@
 		4549B969243BFB8800B1A62A /* third_party */ = {
 			isa = PBXGroup;
 			children = (
+				45571E1F246FC473001FC61A /* span */,
 				4549B96A243BFF3100B1A62A /* Catch2 */,
 				4549BB2D243BFF3200B1A62A /* docopt */,
 				4549BB0E243BFF3200B1A62A /* Graphics */,
@@ -1860,6 +1876,52 @@
 				455486C123449E70001D5611 /* native mac.hpp */,
 			);
 			name = Native;
+			sourceTree = "<group>";
+		};
+		45571E1F246FC473001FC61A /* span */ = {
+			isa = PBXGroup;
+			children = (
+				45571E20246FC473001FC61A /* CMakeLists.txt */,
+				45571E21246FC473001FC61A /* test */,
+				45571E29246FC473001FC61A /* include */,
+				45571E2C246FC473001FC61A /* README.md */,
+				45571E2D246FC473001FC61A /* LICENSE_1_0.txt */,
+				45571E2E246FC473001FC61A /* appveyor.yml */,
+				45571E2F246FC473001FC61A /* .gitignore */,
+				45571E30246FC473001FC61A /* .clang-format */,
+				45571E31246FC473001FC61A /* .travis.yml */,
+			);
+			path = span;
+			sourceTree = "<group>";
+		};
+		45571E21246FC473001FC61A /* test */ = {
+			isa = PBXGroup;
+			children = (
+				45571E22246FC473001FC61A /* CMakeLists.txt */,
+				45571E23246FC473001FC61A /* catch_main.cpp */,
+				45571E24246FC473001FC61A /* catch.hpp */,
+				45571E25246FC473001FC61A /* test_structured_bindings.cpp */,
+				45571E26246FC473001FC61A /* test_deduction_guides.cpp */,
+				45571E27246FC473001FC61A /* test_span.cpp */,
+				45571E28246FC473001FC61A /* test_contract_checking.cpp */,
+			);
+			path = test;
+			sourceTree = "<group>";
+		};
+		45571E29246FC473001FC61A /* include */ = {
+			isa = PBXGroup;
+			children = (
+				45571E2A246FC473001FC61A /* tcb */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		45571E2A246FC473001FC61A /* tcb */ = {
+			isa = PBXGroup;
+			children = (
+				45571E2B246FC473001FC61A /* span.hpp */,
+			);
+			path = tcb;
 			sourceTree = "<group>";
 		};
 		455F2848220688FC00C73F39 = {
@@ -3186,6 +3248,7 @@
 				);
 				HEADER_SEARCH_PATHS = (
 					$PROJECT_DIR/third_party/Graphics/include,
+					$PROJECT_DIR/third_party/span/include,
 					$PROJECT_DIR/third_party/docopt,
 					/usr/local/include,
 					/usr/local/opt/zlib/include,
@@ -3252,6 +3315,7 @@
 				);
 				HEADER_SEARCH_PATHS = (
 					$PROJECT_DIR/third_party/Graphics/include,
+					$PROJECT_DIR/third_party/span/include,
 					$PROJECT_DIR/third_party/docopt,
 					/usr/local/include,
 					/usr/local/opt/zlib/include,
