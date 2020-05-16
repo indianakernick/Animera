@@ -1,4 +1,4 @@
-//
+﻿//
 //  current tool.cpp
 //  Animera
 //

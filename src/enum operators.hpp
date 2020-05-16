@@ -1,4 +1,4 @@
-//
+﻿//
 //  enum operators.hpp
 //  Animera
 //

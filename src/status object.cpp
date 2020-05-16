@@ -1,4 +1,4 @@
-//
+﻿//
 //  status object.cpp
 //  Animera
 //

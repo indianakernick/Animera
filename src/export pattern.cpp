@@ -1,4 +1,4 @@
-//
+﻿//
 //  export pattern.cpp
 //  Animera
 //

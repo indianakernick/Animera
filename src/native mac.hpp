@@ -1,4 +1,4 @@
-//
+﻿//
 //  native mac.hpp
 //  Animera
 //

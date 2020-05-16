@@ -1,4 +1,4 @@
-//
+﻿//
 //  text input widget.cpp
 //  Animera
 //

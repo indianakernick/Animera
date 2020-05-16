@@ -1,4 +1,4 @@
-//
+﻿//
 //  label widget.hpp
 //  Animera
 //

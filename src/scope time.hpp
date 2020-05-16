@@ -1,4 +1,4 @@
-//
+﻿//
 //  scope time.hpp
 //  Animera
 //

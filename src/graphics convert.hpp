@@ -1,4 +1,4 @@
-//
+﻿//
 //  graphics convert.hpp
 //  Animera
 //

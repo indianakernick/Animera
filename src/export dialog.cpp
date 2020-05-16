@@ -1,4 +1,4 @@
-//
+﻿//
 //  export dialog.cpp
 //  Animera
 //

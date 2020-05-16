@@ -1,4 +1,4 @@
-//
+﻿//
 //  undo object.hpp
 //  Animera
 //

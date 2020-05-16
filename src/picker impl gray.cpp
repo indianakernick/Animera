@@ -1,4 +1,4 @@
-//
+﻿//
 //  picker impl gray.cpp
 //  Animera
 //

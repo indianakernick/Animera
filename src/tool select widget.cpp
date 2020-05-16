@@ -1,4 +1,4 @@
-//
+﻿//
 //  tools select widget.cpp
 //  Animera
 //

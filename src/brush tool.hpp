@@ -1,4 +1,4 @@
-//
+﻿//
 //  brush tool.hpp
 //  Animera
 //

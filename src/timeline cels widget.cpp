@@ -1,4 +1,4 @@
-//
+﻿//
 //  timeline cels widget.cpp
 //  Animera
 //

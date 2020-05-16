@@ -1,4 +1,4 @@
-//
+﻿//
 //  status bar widget.cpp
 //  Animera
 //

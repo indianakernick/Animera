@@ -1,4 +1,4 @@
-//
+﻿//
 //  icon push button widget.cpp
 //  Animera
 //

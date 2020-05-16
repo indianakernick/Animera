@@ -1,4 +1,4 @@
-//
+﻿//
 //  sprite.hpp
 //  Animera
 //

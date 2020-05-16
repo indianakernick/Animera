@@ -1,4 +1,4 @@
-//
+﻿//
 //  cursor.mm
 //  Animera
 //

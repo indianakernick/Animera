@@ -1,4 +1,4 @@
-//
+﻿//
 //  timeline layers widget.hpp
 //  Animera
 //

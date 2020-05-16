@@ -1,4 +1,4 @@
-//
+﻿//
 //  color picker impl.hpp
 //  Animera
 //

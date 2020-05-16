@@ -1,4 +1,4 @@
-//
+﻿//
 //  transform tools.cpp
 //  Animera
 //

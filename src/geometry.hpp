@@ -1,4 +1,4 @@
-//
+﻿//
 //  geometry.hpp
 //  Animera
 //

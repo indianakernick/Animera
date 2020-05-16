@@ -1,4 +1,4 @@
-//
+﻿//
 //  color picker widget.hpp
 //  Animera
 //

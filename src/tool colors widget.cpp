@@ -1,4 +1,4 @@
-//
+﻿//
 //  tool colors widget.cpp
 //  Animera
 //

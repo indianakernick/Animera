@@ -1,4 +1,4 @@
-//
+﻿//
 //  current tool.hpp
 //  Animera
 //

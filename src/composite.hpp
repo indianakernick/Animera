@@ -1,4 +1,4 @@
-//
+﻿//
 //  composite.hpp
 //  Animera
 //

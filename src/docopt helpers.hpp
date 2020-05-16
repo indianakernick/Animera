@@ -1,4 +1,4 @@
-//
+﻿//
 //  docopt helpers.hpp
 //  Animera
 //

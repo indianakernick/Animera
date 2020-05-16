@@ -1,4 +1,4 @@
-//
+﻿//
 //  undo.hpp
 //  Animera
 //

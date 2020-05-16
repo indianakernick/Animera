@@ -1,4 +1,4 @@
-//
+﻿//
 //  cel span.hpp
 //  Animera
 //

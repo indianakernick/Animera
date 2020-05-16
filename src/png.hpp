@@ -1,4 +1,4 @@
-//
+﻿//
 //  png.hpp
 //  Animera
 //

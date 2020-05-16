@@ -1,4 +1,4 @@
-//
+﻿//
 //  color handle.hpp
 //  Animera
 //

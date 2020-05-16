@@ -1,4 +1,4 @@
-//
+﻿//
 //  status msg.hpp
 //  Animera
 //

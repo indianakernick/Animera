@@ -1,4 +1,4 @@
-//
+﻿//
 //  quit dialog.hpp
 //  Animera
 //

@@ -1,4 +1,4 @@
-//
+﻿//
 //  error dialog.cpp
 //  Animera
 //

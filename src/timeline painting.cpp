@@ -1,4 +1,4 @@
-//
+﻿//
 //  timeline painting.cpp
 //  Animera
 //

@@ -1,4 +1,4 @@
-//
+﻿//
 //  radio button widget.hpp
 //  Animera
 //

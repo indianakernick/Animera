@@ -1,4 +1,4 @@
-//
+﻿//
 //  color input widget.hpp
 //  Animera
 //

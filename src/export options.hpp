@@ -1,4 +1,4 @@
-//
+﻿//
 //  export options.hpp
 //  Animera
 //

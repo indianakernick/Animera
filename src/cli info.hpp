@@ -1,4 +1,4 @@
-//
+﻿//
 //  cli info.hpp
 //  Animera
 //

@@ -1,4 +1,4 @@
-//
+﻿//
 //  color slider widget.cpp
 //  Animera
 //

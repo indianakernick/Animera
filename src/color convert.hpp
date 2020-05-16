@@ -1,4 +1,4 @@
-//
+﻿//
 //  color convert.hpp
 //  Animera
 //

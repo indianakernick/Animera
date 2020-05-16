@@ -1,4 +1,4 @@
-//
+﻿//
 //  painting.hpp
 //  Animera
 //

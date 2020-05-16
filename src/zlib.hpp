@@ -1,4 +1,4 @@
-//
+﻿//
 //  zlib.hpp
 //  Animera
 //

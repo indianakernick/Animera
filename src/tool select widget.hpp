@@ -1,4 +1,4 @@
-//
+﻿//
 //  tool select widget.hpp
 //  Animera
 //

@@ -1,4 +1,4 @@
-//
+﻿//
 //  image.cpp
 //  Animera
 //

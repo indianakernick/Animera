@@ -1,4 +1,4 @@
-//
+﻿//
 //  scroll bar widget.hpp
 //  Animera
 //

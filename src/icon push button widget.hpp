@@ -1,4 +1,4 @@
-//
+﻿//
 //  icon push button widget.hpp
 //  Animera
 //

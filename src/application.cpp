@@ -1,4 +1,4 @@
-//
+﻿//
 //  application.cpp
 //  Animera
 //

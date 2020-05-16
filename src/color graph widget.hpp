@@ -1,4 +1,4 @@
-//
+﻿//
 //  color graph widget.hpp
 //  Animera
 //

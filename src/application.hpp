@@ -1,4 +1,4 @@
-//
+﻿//
 //  application.hpp
 //  Animera
 //

@@ -1,4 +1,4 @@
-//
+﻿//
 //  widget rect.hpp
 //  Animera
 //

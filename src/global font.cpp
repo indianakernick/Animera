@@ -1,4 +1,4 @@
-//
+﻿//
 //  global font.cpp
 //  Animera
 //

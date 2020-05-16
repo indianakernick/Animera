@@ -1,4 +1,4 @@
-//
+﻿//
 //  paint params.hpp
 //  Animera
 //
