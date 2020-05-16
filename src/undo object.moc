@@ -7,7 +7,7 @@
 *****************************************************************************/
 
 #include <memory>
-#include "/Users/indikernick/Dev/Projects/C++/Animera/src/undo object.hpp"
+#include "undo object.hpp"
 #include <QtCore/qbytearray.h>
 #include <QtCore/qmetatype.h>
 #if !defined(Q_MOC_OUTPUT_REVISION)
