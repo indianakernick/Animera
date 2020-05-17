@@ -181,6 +181,8 @@ void SelectTool<Derived>::toggleMode() {
   } else Q_UNREACHABLE();
 }
 
+RectangleSelectTool::~RectangleSelectTool() = default;
+
 void RectangleSelectTool::attachCel() {
   SCOPE_TIME("RectangleSelectTool::attachCel");
   
@@ -280,6 +282,8 @@ void RectangleSelectTool::mouseUp(const ToolMouseUpEvent &event) {
   status.append(overlayRect(event.pos));
   ctx->showStatus(status);
 }
+
+PolygonSelectTool::~PolygonSelectTool() = default;
 
 void PolygonSelectTool::attachCel() {
   SCOPE_TIME("PolygonSelectTool::attachCel");
@@ -404,6 +408,8 @@ WandSelectTool::WandSelectTool() {
   animTimer.setInterval(wand_interval);
   CONNECT_LAMBDA(animTimer, timeout, [this]{ animate(); });
 }
+
+WandSelectTool::~WandSelectTool() = default;
 
 void WandSelectTool::attachCel() {
   SCOPE_TIME("WandSelectTool::attachCel");

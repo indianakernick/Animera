@@ -39,6 +39,8 @@ protected:
 
 class RectangleSelectTool final : public SelectTool<RectangleSelectTool> {
 public:
+  ~RectangleSelectTool();
+
   void attachCel() override;
   void mouseLeave(const ToolLeaveEvent &) override;
   void mouseDown(const ToolMouseDownEvent &) override;
@@ -51,6 +53,8 @@ private:
 
 class PolygonSelectTool final : public SelectTool<PolygonSelectTool> {
 public:
+  ~PolygonSelectTool();
+
   void attachCel() override;
   void mouseLeave(const ToolLeaveEvent &) override;
   void mouseDown(const ToolMouseDownEvent &) override;
@@ -69,6 +73,7 @@ private:
 class WandSelectTool final : public SelectTool<WandSelectTool> {
 public:
   WandSelectTool();
+  ~WandSelectTool();
   
   void attachCel() override;
   void detachCel() override;
