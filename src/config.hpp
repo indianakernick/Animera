@@ -1,4 +1,4 @@
-﻿//
+//
 //  config.hpp
 //  Animera
 //
@@ -30,7 +30,12 @@ constexpr int       glob_font_stride_px = glob_font_width_px + glob_font_kern_px
 constexpr int       glob_font_accent_px = 7_px;
 constexpr int       glob_font_decent_px = 0_px;
 constexpr int       glob_font_px = glob_font_accent_px + glob_font_decent_px;
-constexpr int       glob_font_pt = 8_px; // 8 pt for 72 dpi. 6 pt for 96 dpi
+
+#ifdef Q_OS_WIN
+constexpr int       glob_font_pt = 6_px; // 6 pt for 96 dpi
+#else
+constexpr int       glob_font_pt = 8_px; // 8 pt for 72 dpi
+#endif
 
 constexpr QSize     glob_window_size = {640_px, 360_px};
 

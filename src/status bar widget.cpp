@@ -1,4 +1,4 @@
-﻿//
+//
 //  status bar widget.cpp
 //  Animera
 //
@@ -55,6 +55,7 @@ void StatusBarWidget::paintEvent(QPaintEvent *) {
   QPainter painter{this};
   painter.fillRect(rect(), stat_background);
   painter.setFont(getGlobalFont());
+  painter.setBrush(Qt::NoBrush);
   painter.setPen(glob_text_color);
   const QPoint pos = stat_rect.pos() + QPoint{0, glob_font_accent_px};
   

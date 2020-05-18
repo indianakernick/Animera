@@ -1,4 +1,4 @@
-﻿//
+//
 //  label widget.cpp
 //  Animera
 //
@@ -30,9 +30,9 @@ void LabelWidget::paintEvent(QPaintEvent *) {
   painter.setFont(getGlobalFont());
   painter.setBrush(Qt::NoBrush);
   painter.setPen(glob_text_color);
-  const QPoint pos = rect.pos() - rect.inner().topLeft();
-  const QRect bounds = rect.inner().translated(pos);
-  painter.drawText(bounds, Qt::AlignTop | Qt::AlignLeft, text);
+  QPoint pos = rect.pos();
+  pos.ry() += glob_font_accent_px;
+  painter.drawText(pos, text);
 }
 
 QSize wrapToWidth(QString &text, const int width, const WrapMode mode) {
