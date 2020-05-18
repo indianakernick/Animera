@@ -1,0 +1,248 @@
+# cxx_std_20 added in 3.12
+cmake_minimum_required(VERSION 3.12)
+project(Animera)
+
+add_executable(Animera
+    src/application.cpp
+    src/application.hpp
+    src/application.moc
+    "src/brush tool.cpp"
+    "src/brush tool.hpp"
+    "src/cel span.cpp"
+    "src/cel span.hpp"
+    src/cel.cpp
+    src/cel.hpp
+    "src/chunk io.cpp"
+    "src/chunk io.hpp"
+    "src/cli export.cpp"
+    "src/cli export.hpp"
+    "src/cli info.cpp"
+    "src/cli info.hpp"
+    "src/cli new.cpp"
+    "src/cli new.hpp"
+    src/cli.cpp
+    src/cli.hpp
+    "src/color convert.cpp"
+    "src/color convert.hpp"
+    "src/color graph widget.cpp"
+    "src/color graph widget.hpp"
+    "src/color graph widget.moc"
+    "src/color handle.cpp"
+    "src/color handle.hpp"
+    "src/color input widget.cpp"
+    "src/color input widget.hpp"
+    "src/color input widget.moc"
+    "src/color picker impl.cpp"
+    "src/color picker impl.hpp"
+    "src/color picker impl.moc"
+    "src/color picker widget.cpp"
+    "src/color picker widget.hpp"
+    "src/color picker widget.moc"
+    "src/color slider widget.cpp"
+    "src/color slider widget.hpp"
+    "src/color slider widget.moc"
+    "src/combo box widget.cpp"
+    "src/combo box widget.hpp"
+    "src/combo box widget.moc"
+    src/composite.cpp
+    src/composite.hpp
+    src/config.hpp
+    src/connect.hpp
+    "src/current tool.cpp"
+    "src/current tool.hpp"
+    src/dialog.cpp
+    src/dialog.hpp
+    "src/docopt helpers.cpp"
+    "src/docopt helpers.hpp"
+    "src/drag paint tools.cpp"
+    "src/drag paint tools.hpp"
+    "src/editor widget.cpp"
+    "src/editor widget.hpp"
+    "src/editor widget.moc"
+    "src/enum operators.hpp"
+    "src/error dialog.cpp"
+    "src/error dialog.hpp"
+    src/error.hpp
+    "src/export dialog.cpp"
+    "src/export dialog.hpp"
+    "src/export dialog.moc"
+    "src/export options.cpp"
+    "src/export options.hpp"
+    "src/export pattern.cpp"
+    "src/export pattern.hpp"
+    "src/export png.cpp"
+    "src/export png.hpp"
+    "src/file input widget.cpp"
+    "src/file input widget.hpp"
+    "src/file input widget.moc"
+    "src/file io error.hpp"
+    "src/file io.cpp"
+    "src/file io.hpp"
+    "src/flood fill tool.cpp"
+    "src/flood fill tool.hpp"
+    src/geometry.hpp
+    "src/global font.cpp"
+    "src/global font.hpp"
+    "src/gradient tool.cpp"
+    "src/gradient tool.hpp"
+    "src/graphics convert.hpp"
+    "src/icon push button widget.cpp"
+    "src/icon push button widget.hpp"
+    "src/icon radio button widget.cpp"
+    "src/icon radio button widget.hpp"
+    src/image.cpp
+    src/image.hpp
+    "src/init canvas dialog.cpp"
+    "src/init canvas dialog.hpp"
+    "src/init canvas dialog.moc"
+    "src/label widget.cpp"
+    "src/label widget.hpp"
+    src/main.cpp
+    src/main.moc
+    src/math.hpp
+    #"src/native mac.hpp"
+    #"src/native mac.mm"
+    "src/paint params.hpp"
+    src/painting.cpp
+    src/painting.hpp
+    "src/palette span.hpp"
+    "src/palette widget.cpp"
+    "src/palette widget.hpp"
+    "src/palette widget.moc"
+    src/palette.cpp
+    src/palette.hpp
+    src/palette.moc
+    "src/picker impl gray.cpp"
+    "src/picker impl gray.hpp"
+    "src/picker impl rgba.cpp"
+    "src/picker impl rgba.hpp"
+    src/png.cpp
+    src/png.hpp
+    "src/quit dialog.cpp"
+    "src/quit dialog.hpp"
+    "src/quit dialog.moc"
+    "src/radio button widget.cpp"
+    "src/radio button widget.hpp"
+    src/resources.cpp
+    "src/sample object.cpp"
+    "src/sample object.hpp"
+    "src/sample object.moc"
+    "src/scope time.cpp"
+    "src/scope time.hpp"
+    "src/scroll bar widget.cpp"
+    "src/scroll bar widget.hpp"
+    "src/select tools.cpp"
+    "src/select tools.hpp"
+    "src/separator widget.cpp"
+    "src/separator widget.hpp"
+    src/settings.cpp
+    src/settings.hpp
+    "src/sprite export.cpp"
+    "src/sprite export.hpp"
+    "src/sprite file.cpp"
+    "src/sprite file.hpp"
+    src/sprite.cpp
+    src/sprite.hpp
+    src/sprite.moc
+    "src/status bar widget.cpp"
+    "src/status bar widget.hpp"
+    "src/status bar widget.moc"
+    "src/status msg.cpp"
+    "src/status msg.hpp"
+    "src/status object.cpp"
+    "src/status object.hpp"
+    "src/status object.moc"
+    src/strings.hpp
+    "src/surface factory.hpp"
+    "src/text input widget.cpp"
+    "src/text input widget.hpp"
+    "src/text input widget.moc"
+    "src/text push button widget.cpp"
+    "src/text push button widget.hpp"
+    "src/timeline cels widget.cpp"
+    "src/timeline cels widget.hpp"
+    "src/timeline cels widget.moc"
+    "src/timeline controls widget.cpp"
+    "src/timeline controls widget.hpp"
+    "src/timeline controls widget.moc"
+    "src/timeline frames widget.cpp"
+    "src/timeline frames widget.hpp"
+    "src/timeline frames widget.moc"
+    "src/timeline layers widget.cpp"
+    "src/timeline layers widget.hpp"
+    "src/timeline layers widget.moc"
+    "src/timeline painting.cpp"
+    "src/timeline painting.hpp"
+    "src/timeline widget.cpp"
+    "src/timeline widget.hpp"
+    "src/timeline widget.moc"
+    src/timeline.cpp
+    src/timeline.hpp
+    src/timeline.moc
+    "src/tool colors widget.cpp"
+    "src/tool colors widget.hpp"
+    "src/tool colors widget.moc"
+    "src/tool param bar widget.cpp"
+    "src/tool param bar widget.hpp"
+    "src/tool param widget.cpp"
+    "src/tool param widget.hpp"
+    "src/tool select widget.cpp"
+    "src/tool select widget.hpp"
+    "src/tool select widget.moc"
+    "src/tool widgets.cpp"
+    "src/tool widgets.hpp"
+    "src/tool widgets.moc"
+    src/tool.cpp
+    src/tool.hpp
+    src/tool.moc
+    "src/transform tools.cpp"
+    "src/transform tools.hpp"
+    "src/undo object.cpp"
+    "src/undo object.hpp"
+    "src/undo object.moc"
+    src/undo.cpp
+    src/undo.hpp
+    "src/widget painting.cpp"
+    "src/widget painting.hpp"
+    "src/widget rect.hpp"
+    src/window.cpp
+    src/window.hpp
+    src/window.moc
+    src/zlib.hpp
+)
+
+target_compile_features(Animera
+    PRIVATE
+    cxx_std_20
+)
+
+target_include_directories(Animera
+    PRIVATE
+    src
+    third_party/Graphics/include
+    third_party/span/include
+)
+
+add_subdirectory(third_party/docopt)
+
+target_link_libraries(Animera
+    PRIVATE
+    docopt_s
+)
+
+find_package(libpng CONFIG REQUIRED)
+find_package(Qt5Core CONFIG REQUIRED)
+find_package(Qt5Gui CONFIG REQUIRED)
+find_package(Qt5Widgets CONFIG REQUIRED)
+
+target_link_libraries(Animera
+    PRIVATE
+    png
+    Qt5::Core
+    Qt5::CorePrivate
+    Qt5::WinMain
+    Qt5::Gui
+    Qt5::GuiPrivate
+    Qt5::Widgets
+    Qt5::WidgetsPrivate
+)

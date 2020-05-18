@@ -2311,7 +2311,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(PROJECT_DIR)/src/resources.rcc",
+				"$(PROJECT_DIR)/src/resources.cpp",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
