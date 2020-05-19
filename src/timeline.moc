@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
 ** Meta object code from reading C++ file 'timeline.hpp'
 **
 ** Created by: The Qt Meta Object Compiler version 67 (Qt 5.14.2)
@@ -7,7 +7,6 @@
 *****************************************************************************/
 
 #include <memory>
-#include "timeline.hpp"
 #include <QtCore/qbytearray.h>
 #include <QtCore/qmetatype.h>
 #if !defined(Q_MOC_OUTPUT_REVISION)
@@ -47,7 +46,7 @@ QT_MOC_LITERAL(11, 108, 16), // "std::string_view"
 QT_MOC_LITERAL(12, 125, 12), // "frameChanged"
 QT_MOC_LITERAL(13, 138, 5), // "Frame"
 QT_MOC_LITERAL(14, 144, 12), // "layerChanged"
-QT_MOC_LITERAL(15, 157, 24), // "std::span<const CelSpan>"
+QT_MOC_LITERAL(15, 157, 24), // "tcb::span<const CelSpan>"
 QT_MOC_LITERAL(16, 182, 17), // "frameCountChanged"
 QT_MOC_LITERAL(17, 200, 8), // "FrameIdx"
 QT_MOC_LITERAL(18, 209, 17), // "layerCountChanged"
@@ -91,7 +90,7 @@ QT_MOC_LITERAL(52, 604, 6) // "unlock"
     "Cel*\0selectionChanged\0CelRect\0"
     "visibilityChanged\0LayerIdx\0nameChanged\0"
     "std::string_view\0frameChanged\0Frame\0"
-    "layerChanged\0std::span<const CelSpan>\0"
+    "layerChanged\0tcb::span<const CelSpan>\0"
     "frameCountChanged\0FrameIdx\0layerCountChanged\0"
     "delayChanged\0modified\0celModified\0"
     "initCanvas\0Format\0nextFrame\0prevFrame\0"
@@ -227,7 +226,7 @@ void Timeline::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, vo
         case 3: _t->visibilityChanged((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
         case 4: _t->nameChanged((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< std::string_view(*)>(_a[2]))); break;
         case 5: _t->frameChanged((*reinterpret_cast< const Frame(*)>(_a[1]))); break;
-        case 6: _t->layerChanged((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< std::span<const CelSpan>(*)>(_a[2]))); break;
+        case 6: _t->layerChanged((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< tcb::span<const CelSpan>(*)>(_a[2]))); break;
         case 7: _t->frameCountChanged((*reinterpret_cast< FrameIdx(*)>(_a[1]))); break;
         case 8: _t->layerCountChanged((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;
         case 9: _t->delayChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
@@ -310,7 +309,7 @@ void Timeline::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, vo
             }
         }
         {
-            using _t = void (Timeline::*)(LayerIdx , std::span<const CelSpan> );
+            using _t = void (Timeline::*)(LayerIdx , tcb::span<const CelSpan> );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&Timeline::layerChanged)) {
                 *result = 6;
                 return;
@@ -437,7 +436,7 @@ void Timeline::frameChanged(const Frame & _t1)
 }
 
 // SIGNAL 6
-void Timeline::layerChanged(LayerIdx _t1, std::span<const CelSpan> _t2)
+void Timeline::layerChanged(LayerIdx _t1, tcb::span<const CelSpan> _t2)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))) };
     QMetaObject::activate(this, &staticMetaObject, 6, _a);

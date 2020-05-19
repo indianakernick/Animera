@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
 ** Meta object code from reading C++ file 'timeline widget.hpp'
 **
 ** Created by: The Qt Meta Object Compiler version 67 (Qt 5.14.2)
@@ -7,7 +7,6 @@
 *****************************************************************************/
 
 #include <memory>
-#include "timeline widget.hpp"
 #include <QtCore/qbytearray.h>
 #include <QtCore/qmetatype.h>
 #if !defined(Q_MOC_OUTPUT_REVISION)
@@ -60,7 +59,7 @@ QT_MOC_LITERAL(24, 383, 7), // "CelRect"
 QT_MOC_LITERAL(25, 391, 13), // "setVisibility"
 QT_MOC_LITERAL(26, 405, 7), // "setName"
 QT_MOC_LITERAL(27, 413, 8), // "setLayer"
-QT_MOC_LITERAL(28, 422, 24), // "std::span<const CelSpan>"
+QT_MOC_LITERAL(28, 422, 24), // "tcb::span<const CelSpan>"
 QT_MOC_LITERAL(29, 447, 13), // "setFrameCount"
 QT_MOC_LITERAL(30, 461, 8), // "FrameIdx"
 QT_MOC_LITERAL(31, 470, 13), // "setLayerCount"
@@ -80,7 +79,7 @@ QT_MOC_LITERAL(33, 500, 8) // "setDelay"
     "shouldClearSelection\0shouldSetPos\0"
     "CelPos\0setPos\0setSelection\0CelRect\0"
     "setVisibility\0setName\0setLayer\0"
-    "std::span<const CelSpan>\0setFrameCount\0"
+    "tcb::span<const CelSpan>\0setFrameCount\0"
     "FrameIdx\0setLayerCount\0toggleAnimation\0"
     "setDelay"
 };
@@ -189,7 +188,7 @@ void TimelineWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
         case 18: _t->setSelection((*reinterpret_cast< CelRect(*)>(_a[1]))); break;
         case 19: _t->setVisibility((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
         case 20: _t->setName((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< std::string_view(*)>(_a[2]))); break;
-        case 21: _t->setLayer((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< std::span<const CelSpan>(*)>(_a[2]))); break;
+        case 21: _t->setLayer((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< tcb::span<const CelSpan>(*)>(_a[2]))); break;
         case 22: _t->setFrameCount((*reinterpret_cast< FrameIdx(*)>(_a[1]))); break;
         case 23: _t->setLayerCount((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;
         case 24: _t->toggleAnimation(); break;

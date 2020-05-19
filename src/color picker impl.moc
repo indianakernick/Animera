@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
 ** Meta object code from reading C++ file 'color picker impl.hpp'
 **
 ** Created by: The Qt Meta Object Compiler version 67 (Qt 5.14.2)
@@ -7,7 +7,6 @@
 *****************************************************************************/
 
 #include <memory>
-#include "color picker impl.hpp"
 #include <QtCore/qbytearray.h>
 #include <QtCore/qmetatype.h>
 #if !defined(Q_MOC_OUTPUT_REVISION)
