@@ -1,4 +1,4 @@
-//
+﻿//
 //  config.hpp
 //  Animera
 //

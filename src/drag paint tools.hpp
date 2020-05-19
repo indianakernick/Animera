@@ -1,4 +1,4 @@
-//
+﻿//
 //  drag paint tools.hpp
 //  Animera
 //
