@@ -1,4 +1,4 @@
-﻿//
+//
 //  cli.cpp
 //  Animera
 //
@@ -199,6 +199,14 @@ CLI::CLI(int &argc, char **argv)
   : argc{argc}, argv{argv} {}
 
 int CLI::exec() {
+  #ifdef Q_OS_WIN
+  
+  Application app{argc, argv};
+  app.waitForOpenEvent();
+  return app.exec();
+  
+  #else
+
   docopt::Options flags;
   if (Error err = parseArgs(flags); err) {
     QTextStream console{stdout};
@@ -218,6 +226,8 @@ int CLI::exec() {
   } else {
     return execDefault(flags);
   }
+  
+  #endif
 }
 
 Error CLI::parseArgs(docopt::Options &flags) const {

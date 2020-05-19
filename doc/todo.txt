@@ -340,3 +340,5 @@ Fast-forward all submodules
 
 Clone with submodules
   git clone --recurse-submodules --shallow-submodules <url>
+
+Fix CLI on Windows
