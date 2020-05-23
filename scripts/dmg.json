@@ -1,7 +1,7 @@
 {
   "title": "Animera",
-  "background": "$PROJECT_DIR/Resources/Logo/dmg background.png",
-  "icon-size": 128,
+  "background": "background.png",
+  "icon-size": 96,
   "window": {
     "size": {
       "width": 512,

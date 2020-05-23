@@ -798,8 +798,6 @@
 		45DC981124791A1200429465 /* createico.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = createico.sh; sourceTree = "<group>"; };
 		45DC981224793B0500429465 /* dmg.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = dmg.json; sourceTree = "<group>"; };
 		45DC981324793B0500429465 /* createdmg.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = createdmg.sh; sourceTree = "<group>"; };
-		45DC9818247959DF00429465 /* dmg background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dmg background@2x.png"; sourceTree = "<group>"; };
-		45DC981A247959DF00429465 /* dmg background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dmg background.png"; sourceTree = "<group>"; };
 		45DC981B247959F000429465 /* icon.ico */ = {isa = PBXFileReference; lastKnownFileType = image.ico; path = icon.ico; sourceTree = "<group>"; };
 		45DC981C24795A1200429465 /* social.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = social.png; sourceTree = "<group>"; };
 		45DC981D24795A4700429465 /* dmg background.animera */ = {isa = PBXFileReference; lastKnownFileType = file; path = "dmg background.animera"; sourceTree = "<group>"; };
@@ -1854,8 +1852,6 @@
 		4554868F23433711001D5611 /* Logo */ = {
 			isa = PBXGroup;
 			children = (
-				45DC981A247959DF00429465 /* dmg background.png */,
-				45DC9818247959DF00429465 /* dmg background@2x.png */,
 				45DC981B247959F000429465 /* icon.ico */,
 				45B284972219003B00D6D055 /* icon.png */,
 				452926E222BB607E00B17E0D /* screenshot.png */,
