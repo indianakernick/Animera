@@ -793,6 +793,9 @@
 		45DC2562224A0AEA00F40116 /* title.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = title.png; sourceTree = "<group>"; };
 		45DC2564224B137C00F40116 /* status msg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "status msg.cpp"; sourceTree = "<group>"; };
 		45DC2565224B137C00F40116 /* status msg.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "status msg.hpp"; sourceTree = "<group>"; };
+		45DC980F24791A1200429465 /* exporticon.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = exporticon.sh; sourceTree = "<group>"; };
+		45DC981024791A1200429465 /* addbom.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = addbom.sh; sourceTree = "<group>"; };
+		45DC981124791A1200429465 /* createico.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = createico.sh; sourceTree = "<group>"; };
 		45DECE1422813AA2000920A9 /* surface factory.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "surface factory.hpp"; sourceTree = "<group>"; };
 		45DFE497224DE89E00EA40C5 /* global font.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "global font.cpp"; sourceTree = "<group>"; };
 		45DFE498224DE89E00EA40C5 /* global font.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "global font.hpp"; sourceTree = "<group>"; };
@@ -1931,6 +1934,7 @@
 				455F285B2206890300C73F39 /* Assets.xcassets */,
 				455F28602206890300C73F39 /* Info.plist */,
 				455F28612206890300C73F39 /* Animera.entitlements */,
+				45DC980D247903BF00429465 /* scripts */,
 				45CEB6AC243C062100661D78 /* doc */,
 				4549B969243BFB8800B1A62A /* third_party */,
 				453C78222234CB5500818B19 /* Resources */,
@@ -2063,6 +2067,16 @@
 			path = doc;
 			sourceTree = "<group>";
 		};
+		45DC980D247903BF00429465 /* scripts */ = {
+			isa = PBXGroup;
+			children = (
+				45DC981024791A1200429465 /* addbom.sh */,
+				45DC981124791A1200429465 /* createico.sh */,
+				45DC980F24791A1200429465 /* exporticon.sh */,
+			);
+			path = scripts;
+			sourceTree = "<group>";
+		};
 		45E3FFA824417976007A1FE8 /* CLI */ = {
 			isa = PBXGroup;
 			children = (
@@ -2146,7 +2160,6 @@
 				453C787B2235D63B00818B19 /* RCC */,
 				455F284D220688FD00C73F39 /* Sources */,
 				455F284E220688FD00C73F39 /* Frameworks */,
-				452162832439552F00719467 /* Export Icon */,
 				455F284F220688FD00C73F39 /* Resources */,
 				455F288A2206A17600C73F39 /* Mac Deploy */,
 				457D74FC239F8B06009B4E4B /* Trim */,
@@ -2249,32 +2262,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		452162832439552F00719467 /* Export Icon */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"$(PROJECT_DIR)/Sprites/icon.animera",
-			);
-			name = "Export Icon";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(PROJECT_DIR)/Assets.xcassets/AppIcon.appiconset/16.png",
-				"$(PROJECT_DIR)/Assets.xcassets/AppIcon.appiconset/32.png",
-				"$(PROJECT_DIR)/Assets.xcassets/AppIcon.appiconset/64.png",
-				"$(PROJECT_DIR)/Assets.xcassets/AppIcon.appiconset/128.png",
-				"$(PROJECT_DIR)/Assets.xcassets/AppIcon.appiconset/256.png",
-				"$(PROJECT_DIR)/Assets.xcassets/AppIcon.appiconset/512.png",
-				"$(PROJECT_DIR)/Assets.xcassets/AppIcon.appiconset/1024.png",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "alias Animera=\"$BUILT_PRODUCTS_DIR/$EXECUTABLE_PATH\"\nOUT=\"$PROJECT_DIR/Assets.xcassets/AppIcon.appiconset/\"\nIN=\"$PROJECT_DIR/Resources/Sprites/icon.animera\"\n\nfunction ex {\n  Animera export --name=\"$1\" --directory=\"$OUT\" --no-composite --scale=$2 \"$IN\"\n}\n\nex 16 1\nex 32 2\nex 64 4\nex 128 8\nex 256 16\nex 512 32\nex 1024 64\n";
-		};
 		4529AA0A239CE3D00034A014 /* Moc - quit dialog */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
