@@ -2,7 +2,7 @@
 
 # Creates the Windows ico file from the appiconset.
 
-# Requires PROJECT_DIR.
+# Requires PROJECT_DIR
 # Requires icotool from icoutils
 
 ICONS="$PROJECT_DIR/Assets.xcassets/AppIcon.appiconset"
