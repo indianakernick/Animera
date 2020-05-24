@@ -99,6 +99,7 @@
 		45D109B222E304A300D1F1CB /* combo box widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45D109B022E304A300D1F1CB /* combo box widget.cpp */; };
 		45DC2566224B137C00F40116 /* status msg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45DC2564224B137C00F40116 /* status msg.cpp */; };
 		45DC98202479FA7800429465 /* create-doc-icon.sh in Resources */ = {isa = PBXBuildFile; fileRef = 45DC981F2479FA7800429465 /* create-doc-icon.sh */; };
+		45DC9823247A033F00429465 /* create-dmg-icon.sh in Resources */ = {isa = PBXBuildFile; fileRef = 45DC9822247A033F00429465 /* create-dmg-icon.sh */; };
 		45DFE499224DE89E00EA40C5 /* global font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45DFE497224DE89E00EA40C5 /* global font.cpp */; };
 		45E3340623A1F4F4009F5EC1 /* libz.1.2.11.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 45E3340523A1F4F4009F5EC1 /* libz.1.2.11.dylib */; };
 		45E3340823A1F514009F5EC1 /* libpng16.16.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 45E3340723A1F513009F5EC1 /* libpng16.16.dylib */; };
@@ -803,6 +804,7 @@
 		45DC981C24795A1200429465 /* social.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = social.png; sourceTree = "<group>"; };
 		45DC981D24795A4700429465 /* dmg background.animera */ = {isa = PBXFileReference; lastKnownFileType = file; path = "dmg background.animera"; sourceTree = "<group>"; };
 		45DC981F2479FA7800429465 /* create-doc-icon.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "create-doc-icon.sh"; sourceTree = "<group>"; };
+		45DC9822247A033F00429465 /* create-dmg-icon.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "create-dmg-icon.sh"; sourceTree = "<group>"; };
 		45DECE1422813AA2000920A9 /* surface factory.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "surface factory.hpp"; sourceTree = "<group>"; };
 		45DFE497224DE89E00EA40C5 /* global font.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "global font.cpp"; sourceTree = "<group>"; };
 		45DFE498224DE89E00EA40C5 /* global font.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "global font.hpp"; sourceTree = "<group>"; };
@@ -2086,6 +2088,7 @@
 				45DC981124791A1200429465 /* create-ico.sh */,
 				45DC980F24791A1200429465 /* create-app-icon.sh */,
 				45DC981F2479FA7800429465 /* create-doc-icon.sh */,
+				45DC9822247A033F00429465 /* create-dmg-icon.sh */,
 			);
 			path = scripts;
 			sourceTree = "<group>";
@@ -2269,6 +2272,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				45DC98202479FA7800429465 /* create-doc-icon.sh in Resources */,
+				45DC9823247A033F00429465 /* create-dmg-icon.sh in Resources */,
 				457D74FF239F97A6009B4E4B /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2333,7 +2337,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [[ \"$CONFIGURATION\" = \"Release\" ]]; then\n  /usr/local/opt/qt/bin/macdeployqt \"$CODESIGNING_FOLDER_PATH\" -codesign=$EXPANDED_CODE_SIGN_IDENTITY -verbose=2\nelse\n  /usr/local/opt/qt/bin/macdeployqt \"$CODESIGNING_FOLDER_PATH\" -codesign=$EXPANDED_CODE_SIGN_IDENTITY -verbose=2 -no-strip\nfi\n";
+			shellScript = "if [[ \"$CONFIGURATION\" = \"Release\" ]]; then\n  /usr/local/opt/qt/bin/macdeployqt \"$CODESIGNING_FOLDER_PATH\" -codesign=$EXPANDED_CODE_SIGN_IDENTITY -verbose=2\nelse\n  /usr/local/opt/qt/bin/macdeployqt \"$CODESIGNING_FOLDER_PATH\" -codesign=$EXPANDED_CODE_SIGN_IDENTITY -verbose=2 -no-strip\nfi\n\n";
 		};
 		457D74FC239F8B06009B4E4B /* Trim */ = {
 			isa = PBXShellScriptBuildPhase;

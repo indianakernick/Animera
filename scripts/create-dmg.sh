@@ -19,3 +19,4 @@ appdmg expanded.json "$PROJECT_DIR/Animera.dmg"
 rm expanded.json
 rm background.png
 rm background@2x.png
+rm VolumeIcon.icns

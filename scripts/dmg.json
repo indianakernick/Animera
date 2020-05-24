@@ -1,5 +1,6 @@
 {
   "title": "Animera",
+  "icon": "VolumeIcon.icns",
   "background": "background.png",
   "icon-size": 96,
   "window": {
