@@ -1,4 +1,4 @@
-﻿//
+//
 //  editor widget.cpp
 //  Animera
 //
@@ -54,13 +54,13 @@ public:
     clearImage(editor);
     scale = getFittingScale();
     setFixedSize(size * scale);
-    updateCheckers();
+    updateCheckers(true);
     Q_EMIT resized();
     repaint();
   }
   
   void resize() {
-    updateCheckers();
+    updateCheckers(false);
   }
   
   QImage *getOverlay() {
@@ -78,7 +78,7 @@ public:
     if (scale == oldScale) return;
     zoomIntoCenter(oldScale);
     updateMouse();
-    updateCheckers();
+    updateCheckers(true);
     Q_EMIT resized();
     Q_EMIT scaleChanged(scale);
     repaint();
@@ -163,11 +163,13 @@ private:
     return {getViewPos(), getViewSize()};
   }
   
-  void updateCheckers() {
+  void updateCheckers(const bool scaleChanged) {
     QSize size = getViewSize();
     size.rwidth() += 3 * scale - size.width() % scale;
     size.rheight() += 3 * scale - size.height() % scale;
-    updateCheckers(size);
+    if (scaleChanged || size != checkers.size()) {
+      updateCheckers(size);
+    }
   }
   
   void updateCheckers(const QSize size) {
