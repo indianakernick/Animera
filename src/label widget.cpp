@@ -22,7 +22,7 @@ LabelWidget::LabelWidget(
 
 void LabelWidget::setText(const QString &newText) {
   text = newText;
-  repaint();
+  update();
 }
 
 void LabelWidget::paintEvent(QPaintEvent *) {

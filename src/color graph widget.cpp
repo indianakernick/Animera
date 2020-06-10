@@ -1,4 +1,4 @@
-﻿//
+//
 //  color graph widget.cpp
 //  Animera
 //
@@ -39,19 +39,19 @@ SVGraphWidget::SVGraphWidget(QWidget *parent, const HSV color, const int alpha)
 void SVGraphWidget::setHue(const int hue) {
   color.h = hue;
   plotGraph(hue);
-  repaint();
+  update();
 }
 
 void SVGraphWidget::setSV(const int sat, const int val) {
   color.s = sat;
   color.v = val;
-  repaint();
+  update();
 }
 
 void SVGraphWidget::setHSV(const HSV hsv) {
   color = hsv;
   plotGraph(hsv.h);
-  repaint();
+  update();
 }
 
 void SVGraphWidget::setAlpha(const int alp) {
@@ -134,7 +134,7 @@ void SVGraphWidget::updateSV(const int sat, const int val) {
   if (sat != color.s || val != color.v) {
     color.s = sat;
     color.v = val;
-    repaint();
+    update();
     Q_EMIT svChanged(sat, val);
   }
 }

@@ -1,4 +1,4 @@
-﻿//
+//
 //  timeline cels widget.cpp
 //  Animera
 //
@@ -56,7 +56,7 @@ void CelsWidget::setSelection(const CelRect rect) {
     selectionRect = {};
   }
   updateSelectionImg();
-  repaint();
+  update();
 }
 
 void CelsWidget::setPos(const CelPos pos) {
@@ -74,7 +74,7 @@ void CelsWidget::setPos(const CelPos pos) {
     painter.drawRect(+pos.f * cel_width, 0, size, height());
   }
   painter.end();
-  repaint();
+  update();
 }
 
 namespace {
@@ -152,7 +152,7 @@ void CelsWidget::setLayer(const LayerIdx idx, tcb::span<const CelSpan> spans) {
   borders.end();
   layers.end();
   updateSelectionImg();
-  repaint();
+  update();
 }
 
 void CelsWidget::setFrameCount(const FrameIdx count) {

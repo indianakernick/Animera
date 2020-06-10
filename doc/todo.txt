@@ -290,9 +290,6 @@ editor scaling is sometimes a pixel off
 remember there's a workaround for a bug in Xcode
   https://stackoverflow.com/q/60896739/4093378
 
-resizing the timeline looks horrible
-  I don't remember it always being this bad
-  
 if cells widget is larger than the space it has in the timeline,
   restrict scrolling to avoid the ugly double border
   maybe lock into place after scrolling to avoid the double border
@@ -321,8 +318,6 @@ why is it so tedious to create an animation by modifying the previous frame?
 ------------------------------- minor refactoring ------------------------------
 
 there might be a few random constants that should be in config.hpp but aren't
-
-Should probably be calling update() instead of repaint() in most places
 
 Should probably be using mouse release instead of mouse press in some places
 

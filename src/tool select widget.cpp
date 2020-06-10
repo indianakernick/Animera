@@ -1,4 +1,4 @@
-﻿//
+//
 //  tools select widget.cpp
 //  Animera
 //
@@ -172,7 +172,7 @@ void ToolSelectWidget::unlockTool() {
 
 void ToolSelectWidget::ensureVisible(ToolWidget *tool) {
   ensureWidgetVisible(tool, glob_margin, glob_margin);
-  repaint();
+  update();
 }
 
 namespace {

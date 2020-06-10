@@ -1,4 +1,4 @@
-﻿//
+//
 //  timeline frames widget.cpp
 //  Animera
 //
@@ -21,13 +21,13 @@ FramesWidget::FramesWidget(QWidget *parent)
 void FramesWidget::setFrameCount(const FrameIdx count) {
   frames = count;
   setWidth();
-  repaint();
+  update();
 }
 
 void FramesWidget::setMargin(const int newMargin) {
   margin = newMargin;
   setWidth();
-  repaint();
+  update();
 }
 
 int FramesWidget::roundUpFrames() const {

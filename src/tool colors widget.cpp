@@ -1,4 +1,4 @@
-﻿//
+//
 //  tool colors widget.cpp
 //  Animera
 //
@@ -38,13 +38,13 @@ public Q_SLOTS:
   void setIndex(const int index) {
     if (isChecked()) {
       color = index;
-      repaint();
+      update();
       Q_EMIT colorChanged();
     }
   }
   void updatePaletteColors() {
     if (format == Format::index) {
-      repaint();
+      update();
     }
   }
 
@@ -52,13 +52,13 @@ private Q_SLOTS:
   void attachColor(const bool checked) {
     if (checked) {
       Q_EMIT shouldAttachColor(this);
-      repaint();
+      update();
     }
   }
   void attachIndex(const bool checked) {
     if (checked) {
       Q_EMIT shouldAttachIndex(color);
-      repaint();
+      update();
     }
   }
 
@@ -105,7 +105,7 @@ private:
   }
   void setColor(const QRgb newColor) override {
     color = newColor;
-    repaint();
+    update();
     Q_EMIT colorChanged();
   }
   QString getName() const override {

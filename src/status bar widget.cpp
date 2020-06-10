@@ -1,4 +1,4 @@
-﻿//
+//
 //  status bar widget.cpp
 //  Animera
 //
@@ -30,23 +30,23 @@ StatusBarWidget::StatusBarWidget(QWidget *parent)
 void StatusBarWidget::showTemp(const std::string_view text) {
   tempText = toLatinString(text);
   tempTimer.start();
-  repaint();
+  update();
 }
 
 void StatusBarWidget::showNorm(const std::string_view text) {
   normText = toLatinString(text);
-  repaint();
+  update();
 }
 
 void StatusBarWidget::showPerm(const std::string_view text) {
   permText = toLatinString(text);
-  repaint();
+  update();
 }
 
 void StatusBarWidget::showApnd(const std::string_view text) {
   apndText = toLatinString(text);
   apndTimer.start();
-  repaint();
+  update();
 }
 
 void StatusBarWidget::paintEvent(QPaintEvent *) {
@@ -77,12 +77,12 @@ void StatusBarWidget::paintEvent(QPaintEvent *) {
 
 void StatusBarWidget::hideTemp() {
   tempText.clear();
-  repaint();
+  update();
 }
 
 void StatusBarWidget::hideApnd() {
   apndText.clear();
-  repaint();
+  update();
 }
 
 #include "status bar widget.moc"

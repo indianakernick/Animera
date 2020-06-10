@@ -1,4 +1,4 @@
-﻿//
+//
 //  palette widget.cpp
 //  Animera
 //
@@ -155,7 +155,7 @@ private:
   }
   void setColor(const QRgb newColor) override {
     color = newColor;
-    repaint();
+    update();
     Q_EMIT paletteColorChanged();
   }
   QString getName() const override {
@@ -190,7 +190,7 @@ public Q_SLOTS:
         break;
       }
     }
-    repaint();
+    update();
     Q_EMIT paletteColorChanged();
   }
 

@@ -1,4 +1,4 @@
-﻿//
+//
 //  text input widget.cpp
 //  Animera
 //
@@ -41,26 +41,26 @@ TextInputWidget::TextInputWidget(QWidget *parent, const WidgetRect rect)
 void TextInputWidget::setText(const QString &text) {
   QLineEdit::setText(text);
   offset = 0;
-  repaint();
+  update();
 }
 
 void TextInputWidget::blink() {
   cursorBlinkStatus = !cursorBlinkStatus;
-  repaint();
+  update();
 }
 
 void TextInputWidget::showCursor() {
   cursorBlinkStatus = true;
   cursorBlinkTimer.stop();
   cursorBlinkTimer.start();
-  repaint();
+  update();
 }
 
 void TextInputWidget::hideCursor() {
   cursorBlinkStatus = false;
   cursorBlinkTimer.stop();
   cursorBlinkTimer.start();
-  repaint();
+  update();
 }
 
 int TextInputWidget::getAlignOffset() const {
@@ -192,7 +192,7 @@ void TextInputWidget::wheelEvent(QWheelEvent *event) {
   offset += event->pixelDelta().x();
   constrainOffset();
   updateMargins();
-  repaint();
+  update();
 }
 
 void TextInputWidget::paintEvent(QPaintEvent *) {

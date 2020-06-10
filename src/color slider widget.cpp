@@ -1,4 +1,4 @@
-﻿//
+//
 //  color slider widget.cpp
 //  Animera
 //
@@ -125,20 +125,20 @@ HueSliderWidget::HueSliderWidget(QWidget *parent, const HSV color, const int alp
 
 void HueSliderWidget::setHue(const int hue) {
   color.h = hue;
-  repaint();
+  update();
 }
 
 void HueSliderWidget::setSV(const int sat, const int val) {
   color.s = sat;
   color.v = val;
   plotGraph();
-  repaint();
+  update();
 }
 
 void HueSliderWidget::setHSV(const HSV hsv) {
   color = hsv;
   plotGraph();
-  repaint();
+  update();
 }
 
 void HueSliderWidget::setAlpha(const int newAlpha) {
@@ -171,7 +171,7 @@ int pix2hue(const int pix) {
 void HueSliderWidget::updateHue(const int hue) {
   if (hue != color.h) {
     color.h = hue;
-    repaint();
+    update();
     Q_EMIT hueChanged(hue);
   }
 }
@@ -215,14 +215,14 @@ AlphaSliderWidget::AlphaSliderWidget(
 
 void AlphaSliderWidget::setAlpha(const int newAlpha) {
   alpha = newAlpha;
-  repaint();
+  update();
 }
 
 void AlphaSliderWidget::setRgba(const RGB rgb, const int alp) {
   color = rgb;
   alpha = alp;
   plotGraph();
-  repaint();
+  update();
 }
 
 void AlphaSliderWidget::plotGraph() {
@@ -254,7 +254,7 @@ int pix2alp(const int pix) {
 void AlphaSliderWidget::updateAlpha(const int alp) {
   if (alp != alpha) {
     alpha = alp;
-    repaint();
+    update();
     Q_EMIT alphaChanged(alpha);
   }
 }
@@ -296,7 +296,7 @@ GraySliderWidget::GraySliderWidget(QWidget *parent, const int gray, const int al
 
 void GraySliderWidget::setGray(const int newGray) {
   gray = newGray;
-  repaint();
+  update();
 }
 
 void GraySliderWidget::setAlpha(const int newAlpha) {
@@ -317,7 +317,7 @@ void GraySliderWidget::renderBackground(QPainter &) {}
 void GraySliderWidget::updateGray(const int newGray) {
   if (newGray != gray) {
     gray = newGray;
-    repaint();
+    update();
     Q_EMIT grayChanged(gray);
   }
 }
