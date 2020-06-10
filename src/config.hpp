@@ -1,4 +1,4 @@
-﻿//
+//
 //  config.hpp
 //  Animera
 //
@@ -342,6 +342,10 @@ constexpr IntRange   expt_scale = {-64, 64, 1};
 // ------------------------------ error dialog ------------------------------ //
 
 constexpr int        erro_wrap_width = 40;
+
+// ------------------------------- keys dialog ------------------------------ //
+
+constexpr int        keys_width = 20;
 
 // ------------------------------- file format ------------------------------ //
 

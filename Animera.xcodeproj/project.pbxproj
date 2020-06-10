@@ -86,6 +86,7 @@
 		45C5C8D22389219C0056CEE7 /* cli.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45C5C8D02389219C0056CEE7 /* cli.cpp */; };
 		45C5C8D4238A13AA0056CEE7 /* export options.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45C5C8D3238A13AA0056CEE7 /* export options.cpp */; };
 		45CAC92922CC7B5800F945BF /* sample object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45CAC92722CC7B5800F945BF /* sample object.cpp */; };
+		45CB77E92490964A00EC11A7 /* keys dialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45CB77E72490964A00EC11A7 /* keys dialog.cpp */; };
 		45CFA7CF22A4C1C40059DB41 /* palette widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45CFA7CD22A4C1C40059DB41 /* palette widget.cpp */; };
 		45D1099222DAF70000D1F1CB /* brush tool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45D1099022DAF70000D1F1CB /* brush tool.cpp */; };
 		45D1099522DAFA1D00D1F1CB /* flood fill tool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45D1099322DAFA1D00D1F1CB /* flood fill tool.cpp */; };
@@ -767,6 +768,8 @@
 		45C5C8D3238A13AA0056CEE7 /* export options.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "export options.cpp"; sourceTree = "<group>"; };
 		45CAC92722CC7B5800F945BF /* sample object.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "sample object.cpp"; sourceTree = "<group>"; };
 		45CAC92822CC7B5800F945BF /* sample object.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "sample object.hpp"; sourceTree = "<group>"; };
+		45CB77E72490964A00EC11A7 /* keys dialog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "keys dialog.cpp"; sourceTree = "<group>"; };
+		45CB77E82490964A00EC11A7 /* keys dialog.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "keys dialog.hpp"; sourceTree = "<group>"; };
 		45CFA7CD22A4C1C40059DB41 /* palette widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "palette widget.cpp"; sourceTree = "<group>"; };
 		45CFA7CE22A4C1C40059DB41 /* palette widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "palette widget.hpp"; sourceTree = "<group>"; };
 		45D1098F22DAAFAC00D1F1CB /* enum operators.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "enum operators.hpp"; sourceTree = "<group>"; };
@@ -2121,6 +2124,8 @@
 				45A6103B2307E1EF000A0BD6 /* error dialog.hpp */,
 				4529AA07239CDF4F0034A014 /* quit dialog.cpp */,
 				4529AA08239CDF4F0034A014 /* quit dialog.hpp */,
+				45CB77E72490964A00EC11A7 /* keys dialog.cpp */,
+				45CB77E82490964A00EC11A7 /* keys dialog.hpp */,
 			);
 			name = Dialogs;
 			sourceTree = "<group>";
@@ -3033,6 +3038,7 @@
 				453C78192234935000818B19 /* timeline widget.cpp in Sources */,
 				45D109B222E304A300D1F1CB /* combo box widget.cpp in Sources */,
 				4529A9FD239263110034A014 /* docopt helpers.cpp in Sources */,
+				45CB77E92490964A00EC11A7 /* keys dialog.cpp in Sources */,
 				457D74F5239F67D7009B4E4B /* resources.cpp in Sources */,
 				45DC2566224B137C00F40116 /* status msg.cpp in Sources */,
 				45F065F22222998300BCE863 /* current tool.cpp in Sources */,

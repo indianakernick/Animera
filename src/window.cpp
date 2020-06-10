@@ -1,4 +1,4 @@
-﻿//
+//
 //  window.cpp
 //  Animera
 //
@@ -13,6 +13,7 @@
 #include "settings.hpp"
 #include <QtGui/qevent.h>
 #include "quit dialog.hpp"
+#include "keys dialog.hpp"
 #include "application.hpp"
 #include "global font.hpp"
 #include "undo object.hpp"
@@ -369,6 +370,10 @@ void Window::populateMenubar() {
   ADD_ACTION(pal, "Open", key_open_palette, *this, openPaletteDialog);
   ADD_ACTION(pal, "Save", key_save_palette, *this, savePaletteDialog);
   
+  QMenu *help = menubar->addMenu("Help");
+  help->setFont(getGlobalFont());
+  ADD_ACTION(help, "Key Bindings", {}, *this, keysDialog);
+  
   menubar->adjustSize();
 }
 
@@ -626,6 +631,12 @@ void Window::savePaletteDialog() {
 void Window::resetPalette() {
   sprite.palette.reset();
   palette->updatePalette();
+}
+
+void Window::keysDialog() {
+  auto *app = static_cast<QApplication *>(QApplication::instance());
+  auto *dialog = new KeysDialog{app->desktop()};
+  dialog->open();
 }
 
 void Window::closeEvent(QCloseEvent *event) {

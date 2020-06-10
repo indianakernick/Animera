@@ -1,4 +1,4 @@
-﻿//
+//
 //  window.hpp
 //  Animera
 //
@@ -86,6 +86,7 @@ private:
   void openPaletteDialog();
   void savePaletteDialog();
   void resetPalette();
+  void keysDialog();
   
   void closeEvent(QCloseEvent *) override;
 };

@@ -95,6 +95,8 @@ add_executable(Animera
     "src/init canvas dialog.cpp"
     "src/init canvas dialog.hpp"
     "src/init canvas dialog.moc"
+    "src/keys dialog.cpp"
+    "src/keys dialog.hpp"
     "src/label widget.cpp"
     "src/label widget.hpp"
     src/main.cpp
