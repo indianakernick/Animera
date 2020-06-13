@@ -30,6 +30,31 @@
 #define SET_DEBUG_PAINT(VALUE)
 #endif
 
+#include <Graphics/traits.hpp>
+
+template <typename Pixel>
+void tileCopy(const gfx::Surface<Pixel> dst, const gfx::CSurface<gfx::identity_t<Pixel>> pat) noexcept {
+  const auto patRowBeg = gfx::begin(pat);
+  const auto patRowEnd = gfx::end(pat);
+  auto patRowIter = patRowBeg;
+  
+  for (auto dstRow : dst) {
+    const Pixel *const patColBeg = patRowIter.begin();
+    const Pixel *const patColEnd = patRowIter.end();
+    const Pixel *patColIter = patColBeg;
+    
+    for (Pixel &dstPixel : dstRow) {
+      dstPixel = *patColIter;
+      
+      ++patColIter;
+      if (patColIter == patColEnd) patColIter = patColBeg;
+    }
+    
+    ++patRowIter;
+    if (patRowIter == patRowEnd) patRowIter = patRowBeg;
+  }
+}
+
 class EditorImage final : public QWidget {
   Q_OBJECT
   
@@ -187,11 +212,11 @@ private:
     * * O * O O
     
     */
-  
-    checkers = QImage{size, QImage::Format_ARGB32};
+    
+    QImage pattern{scale * 2, scale * 2, QImage::Format_ARGB32};
     const int lilScale = scale / 2;
     const int bigScale = lilScale + scale % 2;
-    gfx::Surface surface = makeSurface<QRgb>(checkers);
+    gfx::Surface surface = makeSurface<QRgb>(pattern);
     int x = 0;
     int y = 0;
     for (auto row : gfx::range(surface)) {
@@ -204,6 +229,9 @@ private:
       y = (y + 1) % (scale * 2);
       x = 0;
     }
+    
+    checkers = QImage{size, QImage::Format_ARGB32};
+    tileCopy(makeSurface<QRgb>(checkers), surface);
   }
   
   void paintEvent([[maybe_unused]] QPaintEvent *event) override {

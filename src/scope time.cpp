@@ -1,4 +1,4 @@
-﻿//
+//
 //  scope time.cpp
 //  Animera
 //
@@ -17,10 +17,10 @@
 void ScopeTime::print() {
   std::cout << std::setw(name_width) << std::left << "Name";
   std::cout << std::setw(rest_width) << std::left << "Total Count";
-  std::cout << std::setw(rest_width) << std::left << "Avg Count per parent";
+  std::cout << std::setw(rest_width) << std::left << "Avg Count Per Parent";
   std::cout << std::setw(rest_width) << std::left << "Total Time (ms)";
   std::cout << std::setw(rest_width) << std::left << "Average Time (ms)";
-  std::cout << std::setw(rest_width) << std::left << "Percent of parent time";
+  std::cout << std::setw(rest_width) << std::left << "Percent of Parent Time";
   std::cout << '\n';
 
   const std::size_t prec = std::cout.precision(num_prec);
@@ -49,7 +49,7 @@ void ScopeTime::printImpl(const TreeNode *node, const int depth) {
     
     std::cout << std::setw(rest_width) << std::left << node->calls;
     
-    //not child of root
+    // not child of root
     if (node->parent->parent) {
       const double avg = static_cast<double>(node->calls) / node->parent->calls;
       std::cout << std::setw(rest_width) << std::left << avg;
@@ -67,7 +67,7 @@ void ScopeTime::printImpl(const TreeNode *node, const int depth) {
       std::cout << std::setw(rest_width) << 0;
     }
     
-    //not child of root
+    // not child of root
     if (node->parent->parent) {
       const double percent = (100.0 * node->time.count()) / node->parent->time.count();
       std::cout << percent << '%';
@@ -76,14 +76,14 @@ void ScopeTime::printImpl(const TreeNode *node, const int depth) {
     std::cout << '\n';
   }
   
-  //copy children into a vector
+  // copy children into a vector
   std::vector<const TreeNode *> children;
   children.reserve(node->children.size());
   for (auto i = node->children.begin(); i != node->children.end(); ++i) {
     children.push_back(&(i->second));
   }
   
-  //sort by total time in accending order
+  // sort by total time in accending order
   std::sort(children.begin(), children.end(), [](const TreeNode *a, const TreeNode *b) {
     return a->time > b->time;
   });
