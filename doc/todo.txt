@@ -294,6 +294,8 @@ if cells widget is larger than the space it has in the timeline,
   restrict scrolling to avoid the ugly double border
   maybe lock into place after scrolling to avoid the double border
 
+should probably shrink imported cels
+
 -------------------------------- minor features --------------------------------
 
 remove layer button appears when hovering layer name

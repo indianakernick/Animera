@@ -188,7 +188,7 @@ private:
     
     */
     
-    QImage pattern{scale * 2, scale * 2, QImage::Format_ARGB32};
+    QImage pattern{scale * 2, scale * 2, QImage::Format_ARGB32_Premultiplied};
     const int lilScale = scale / 2;
     const int bigScale = lilScale + scale % 2;
     gfx::Surface surface = makeSurface<QRgb>(pattern);
@@ -205,7 +205,7 @@ private:
       x = 0;
     }
     
-    checkers = QImage{size, QImage::Format_ARGB32};
+    checkers = QImage{size, QImage::Format_ARGB32_Premultiplied};
     gfx::patternCopy(makeSurface<QRgb>(checkers), surface);
   }
   
