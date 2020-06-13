@@ -15,9 +15,9 @@
 #include "scope time.hpp"
 #include <QtGui/qevent.h>
 #include <QtGui/qpainter.h>
+#include <Graphics/copy.hpp>
 #include "surface factory.hpp"
 #include <QtWidgets/qgesture.h>
-#include <Graphics/iterator.hpp>
 #include <QtWidgets/qscrollbar.h>
 
 #define ENABLE_DEBUG_COMPOSITE 0
@@ -29,31 +29,6 @@
 #else
 #define SET_DEBUG_PAINT(VALUE)
 #endif
-
-#include <Graphics/traits.hpp>
-
-template <typename Pixel>
-void tileCopy(const gfx::Surface<Pixel> dst, const gfx::CSurface<gfx::identity_t<Pixel>> pat) noexcept {
-  const auto patRowBeg = gfx::begin(pat);
-  const auto patRowEnd = gfx::end(pat);
-  auto patRowIter = patRowBeg;
-  
-  for (auto dstRow : dst) {
-    const Pixel *const patColBeg = patRowIter.begin();
-    const Pixel *const patColEnd = patRowIter.end();
-    const Pixel *patColIter = patColBeg;
-    
-    for (Pixel &dstPixel : dstRow) {
-      dstPixel = *patColIter;
-      
-      ++patColIter;
-      if (patColIter == patColEnd) patColIter = patColBeg;
-    }
-    
-    ++patRowIter;
-    if (patRowIter == patRowEnd) patRowIter = patRowBeg;
-  }
-}
 
 class EditorImage final : public QWidget {
   Q_OBJECT
@@ -231,7 +206,7 @@ private:
     }
     
     checkers = QImage{size, QImage::Format_ARGB32};
-    tileCopy(makeSurface<QRgb>(checkers), surface);
+    gfx::patternCopy(makeSurface<QRgb>(checkers), surface);
   }
   
   void paintEvent([[maybe_unused]] QPaintEvent *event) override {
