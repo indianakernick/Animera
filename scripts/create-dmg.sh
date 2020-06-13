@@ -13,7 +13,7 @@ BACKGROUND="$PROJECT_DIR/Resources/Sprites/dmg background.animera"
 animera export --name=background --scale=4 "$BACKGROUND"
 animera export --name=background@2x --scale=8 "$BACKGROUND"
 
-cat "$PROJECT_DIR/scripts/dmg.json" | envsubst > expanded.json
+envsubst < "$PROJECT_DIR/scripts/dmg.json" > expanded.json
 appdmg expanded.json "$PROJECT_DIR/Animera.dmg"
 
 rm expanded.json

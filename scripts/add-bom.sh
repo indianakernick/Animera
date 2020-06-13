@@ -14,7 +14,7 @@ for file in "$PROJECT_DIR"/src/*; do
     echo Not a file: "$file" 1>&2
     exit 1
   fi
-  TYPE=`file - < "$file" | cut -d: -f2`
+  TYPE=$(file - < "$file" | cut -d: -f2)
   if echo "$TYPE" | grep -q '(with BOM)'; then
     echo "# $file already has BOM, skipping." 1>&2
   else

@@ -225,12 +225,7 @@ target_include_directories(Animera
     third_party/span/include
 )
 
-add_subdirectory(third_party/docopt)
-
-target_link_libraries(Animera
-    PRIVATE
-    docopt_s
-)
+add_subdirectory(third_party/docopt EXCLUDE_FROM_ALL)
 
 find_package(libpng CONFIG REQUIRED)
 find_package(Qt5Core CONFIG REQUIRED)
@@ -239,6 +234,7 @@ find_package(Qt5Widgets CONFIG REQUIRED)
 
 target_link_libraries(Animera
     PRIVATE
+    docopt_s
     png
     Qt5::Core
     Qt5::CorePrivate
