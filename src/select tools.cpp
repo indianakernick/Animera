@@ -1,4 +1,4 @@
-﻿//
+//
 //  select tools.cpp
 //  Animera
 //
@@ -576,28 +576,24 @@ void WandSelectTool::addToSelection(const ToolMouseDownEvent &event) {
   const gfx::Rect celRect = convert(rect.translated(-ctx->cel->pos));
   bool removedFromSelection = false;
 
+  auto floodFill = [&](auto pixel) {
+    using Pixel = std::decay_t<decltype(pixel)>;
+    gfx::Surface surface = makeCSurface<Pixel>(ctx->cel->img).view(celRect);
+    WandPolicy policy{maskSurface, surface};
+    bounds = bounds.united(convert(gfx::floodFill(policy, celPos)).translated(rect.topLeft()));
+    removedFromSelection = policy.removed();
+  };
+
   switch (ctx->format) {
-    case Format::rgba: {
-      gfx::Surface surface = makeCSurface<PixelRgba>(ctx->cel->img).view(celRect);
-      WandPolicy policy{maskSurface, surface};
-      bounds = bounds.united(convert(gfx::floodFill(policy, celPos)).translated(rect.topLeft()));
-      removedFromSelection = policy.removed();
+    case Format::rgba:
+      floodFill(PixelRgba{});
       break;
-    }
-    case Format::index: {
-      gfx::Surface surface = makeCSurface<PixelIndex>(ctx->cel->img).view(celRect);
-      WandPolicy policy{maskSurface, surface};
-      bounds = bounds.united(convert(gfx::floodFill(policy, celPos)).translated(rect.topLeft()));
-      removedFromSelection = policy.removed();
+    case Format::index:
+      floodFill(PixelIndex{});
       break;
-    }
-    case Format::gray: {
-      gfx::Surface surface = makeCSurface<PixelGray>(ctx->cel->img).view(celRect);
-      WandPolicy policy{maskSurface, surface};
-      bounds = bounds.united(convert(gfx::floodFill(policy, celPos)).translated(rect.topLeft()));
-      removedFromSelection = policy.removed();
+    case Format::gray:
+      floodFill(PixelGray{});
       break;
-    }
   }
   
   if (removedFromSelection) {

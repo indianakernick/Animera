@@ -1,4 +1,4 @@
-﻿//
+//
 //  surface factory.hpp
 //  Animera
 //
@@ -14,12 +14,12 @@
 
 template <typename Pixel>
 gfx::Surface<Pixel> makeSurface(QImage &image) {
+  // QImage::bits is different so we can't call the const version
   assert(!image.isNull());
   assert(image.depth() == sizeof(Pixel) * CHAR_BIT);
   // QImage::bits() is aligned to 4 bytes
   assert(image.bytesPerLine() % sizeof(Pixel) == 0);
   return {
-    // non-const QImage::bits calls QImage::detach
     reinterpret_cast<Pixel *>(image.bits()),
     image.bytesPerLine() / std::ptrdiff_t{sizeof(Pixel)},
     image.width(),
