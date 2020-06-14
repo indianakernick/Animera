@@ -400,6 +400,7 @@ void Window::connectSignals() {
   CONNECT(sprite.timeline, modified,                this,            modify);
   
   CONNECT(timeline,        shouldSetVisibility,     sprite.timeline, setVisibility);
+  CONNECT(timeline,        shouldIsolateVisibility, sprite.timeline, isolateVisibility);
   CONNECT(timeline,        shouldSetName,           sprite.timeline, setName);
   CONNECT(timeline,        shouldNextFrame,         sprite.timeline, nextFrame);
   CONNECT(timeline,        shouldInsertLayer,       sprite.timeline, insertLayer);

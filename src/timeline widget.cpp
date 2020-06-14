@@ -1,4 +1,4 @@
-﻿//
+//
 //  timeline widget.cpp
 //  Animera
 //
@@ -37,6 +37,7 @@ TimelineWidget::TimelineWidget(QWidget *parent)
   CONNECT(celScroll, bottomMarginChanged, layerScroll, shouldSetBottomMargin);
   
   CONNECT(layers,   shouldSetVisibility,     this, shouldSetVisibility);
+  CONNECT(layers,   shouldIsolateVisibility, this, shouldIsolateVisibility);
   CONNECT(layers,   shouldSetName,           this, shouldSetName);
   
   CONNECT(controls, shouldNextFrame,         this, shouldNextFrame);
