@@ -32,7 +32,7 @@ bool SelectTool<Derived>::resizeImages() {
     clearImage(selection);
   }
   if (overlay.size() != ctx->size) {
-    overlay = {ctx->size, qimageFormat(Format::rgba)};
+    overlay = {ctx->size, QImage::Format_ARGB32}; // premul
     return true;
   }
   return false;
@@ -602,12 +602,12 @@ void WandSelectTool::addToSelection(const ToolMouseDownEvent &event) {
   paintOverlay();
 }
 
-PixelRgba WandSelectTool::getOverlayColor() const {
+QRgb WandSelectTool::getOverlayColor() const {
   static_assert(wand_frames % 2 == 0);
   constexpr int half_frames = wand_frames / 2;
   const int mirroredFrame = animFrame > half_frames ? wand_frames - animFrame : animFrame;
   const int gray = scale(mirroredFrame, half_frames, 255);
-  return FmtRgba::pixel(gray, gray, gray, wand_alpha);
+  return qRgba(gray, gray, gray, wand_alpha); // premul
 }
 
 void WandSelectTool::paintOverlay() const {

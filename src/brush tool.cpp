@@ -123,7 +123,7 @@ void BrushTool::symPointStatus(const QPoint point) {
   ctx->showStatus(status);
 }
 
-void BrushTool::symPointOverlay(const QPoint point, const PixelRgba col) {
+void BrushTool::symPointOverlay(const QPoint point, const QRgb col) {
   SCOPE_TIME("BrushTool::symPointOverlay");
   
   visit(point, [this, col](const QPoint point) {

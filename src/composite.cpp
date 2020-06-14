@@ -107,16 +107,6 @@ void compositeFrame(
 template void compositeFrame<FmtRgba>(QImage &, PaletteCSpan, const Frame &, Format, QRect);
 template void compositeFrame<FmtGray>(QImage &, PaletteCSpan, const Frame &, Format, QRect);
 
-void compositeOverlay(QImage &drawing, const QImage &overlay) {
-  gfx::porterDuff(
-    gfx::mode_src_over,
-    makeSurface<PixelRgba>(drawing),
-    makeSurface<PixelRgba>(overlay),
-    FmtRgba{},
-    FmtRgba{}
-  );
-}
-
 void blitImage(QImage &dst, const QImage &src, const QPoint pos) {
   visitSurfaces(dst, src, [pos](auto dst, auto src) {
     gfx::copyRegion(dst, src, convert(pos));
@@ -144,34 +134,34 @@ void fillMaskImage(QImage &dst, const QImage &mask, const PixelVar color, const 
 
 namespace {
 
-PixelRgba rgbaToOverlayPx(const PixelRgba pixel) {
+QRgb rgbaToOverlayPx(const PixelRgba pixel) {
   const gfx::Color color = FmtRgba::color(pixel);
   const std::uint8_t gray = gfx::gray(color);
   const std::uint8_t alpha = scaleOverlayAlpha(color.a);
-  return FmtRgba::pixel(gray, gray, gray, alpha);
+  return qRgba(gray, gray, gray, alpha); // premul
 }
 
-PixelRgba paletteToOverlayPx(const PaletteCSpan palette, const PixelIndex pixel) {
+QRgb paletteToOverlayPx(const PaletteCSpan palette, const PixelIndex pixel) {
   return rgbaToOverlayPx(static_cast<PixelRgba>(palette[pixel]));
 }
 
-PixelRgba grayToOverlayPx(const PixelGray pixel) {
+QRgb grayToOverlayPx(const PixelGray pixel) {
   const int gray = scaleOverlayGray(FmtGray::gray(pixel));
   const int alpha = scaleOverlayAlpha(FmtGray::alpha(pixel));
-  return FmtRgba::pixel(0, 0, gray, alpha);
+  return qRgba(0, 0, gray, alpha); // premul
 }
 
-void rgbaToOverlay(gfx::Surface<PixelRgba> overlay, gfx::CSurface<PixelRgba> source) {
+void rgbaToOverlay(gfx::Surface<QRgb> overlay, gfx::CSurface<PixelRgba> source) {
   gfx::transform(overlay, source, rgbaToOverlayPx);
 }
 
-void paletteToOverlay(gfx::Surface<PixelRgba> overlay, gfx::CSurface<PixelIndex> source, PaletteCSpan palette) {
+void paletteToOverlay(gfx::Surface<QRgb> overlay, gfx::CSurface<PixelIndex> source, PaletteCSpan palette) {
   gfx::transform(overlay, source, [palette](const PixelIndex pixel) {
     return paletteToOverlayPx(palette, pixel);
   });
 }
 
-void grayToOverlay(gfx::Surface<PixelRgba> overlay, gfx::CSurface<PixelGray> source) {
+void grayToOverlay(gfx::Surface<QRgb> overlay, gfx::CSurface<PixelGray> source) {
   gfx::transform(overlay, source, grayToOverlayPx);
 }
 
@@ -201,7 +191,7 @@ void writeOverlay(
   const QImage &source
 ) {
   assert(overlay.size() == source.size());
-  gfx::Surface overlaySurface = makeSurface<PixelRgba>(overlay);
+  gfx::Surface overlaySurface = makeSurface<QRgb>(overlay);
   switch (format) {
     case Format::rgba:
       rgbaToOverlay(overlaySurface, makeSurface<PixelRgba>(source));
@@ -226,7 +216,7 @@ void writeOverlay(
   assert(overlay.size() == source.size());
   assert(overlay.size() == mask.size());
   writeOverlay(palette, format, overlay, source);
-  gfx::maskClip(makeSurface<PixelRgba>(overlay), makeCSurface<PixelMask>(mask));
+  gfx::maskClip(makeSurface<QRgb>(overlay), makeCSurface<PixelMask>(mask));
 }
 
 void growCel(Cel &cel, const Format format, const QRect rect) {

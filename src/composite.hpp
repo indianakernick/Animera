@@ -17,8 +17,6 @@
 /// a single image
 template <typename Fmt = FmtRgba>
 void compositeFrame(QImage &, PaletteCSpan, const Frame &, Format, QRect);
-/// Composite the overlay on top of the frame
-void compositeOverlay(QImage &, const QImage &);
 
 /// Copy an image onto another image at a position
 void blitImage(QImage &, const QImage &, QPoint);

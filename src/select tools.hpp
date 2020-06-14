@@ -89,7 +89,7 @@ private:
   QRect celRect() const;
   void toggleMode(const ToolMouseDownEvent &);
   void addToSelection(const ToolMouseDownEvent &);
-  PixelRgba getOverlayColor() const;
+  QRgb getOverlayColor() const;
   void paintOverlay() const;
   void animate();
 };

@@ -35,7 +35,7 @@ private:
   void visit(QLine, Func, bool = true) const;
   
   void symPointStatus(QPoint);
-  void symPointOverlay(QPoint, PixelRgba);
+  void symPointOverlay(QPoint, QRgb);
   void symChangeOverlay(QLine);
   void symPoint(QPoint);
   void symLine(QLine);
