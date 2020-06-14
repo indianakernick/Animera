@@ -162,17 +162,17 @@ PixelRgba grayToOverlayPx(const PixelGray pixel) {
 }
 
 void rgbaToOverlay(gfx::Surface<PixelRgba> overlay, gfx::CSurface<PixelRgba> source) {
-  gfx::pureEach(overlay, source, rgbaToOverlayPx);
+  gfx::transform(overlay, source, rgbaToOverlayPx);
 }
 
 void paletteToOverlay(gfx::Surface<PixelRgba> overlay, gfx::CSurface<PixelIndex> source, PaletteCSpan palette) {
-  gfx::pureEach(overlay, source, [palette](const PixelIndex pixel) {
+  gfx::transform(overlay, source, [palette](const PixelIndex pixel) {
     return paletteToOverlayPx(palette, pixel);
   });
 }
 
 void grayToOverlay(gfx::Surface<PixelRgba> overlay, gfx::CSurface<PixelGray> source) {
-  gfx::pureEach(overlay, source, grayToOverlayPx);
+  gfx::transform(overlay, source, grayToOverlayPx);
 }
 
 }
@@ -275,6 +275,7 @@ void shrinkCel(Cel &cel, const QRect rect) {
       ++y;
     }
   });
+  
   const QRect newRect{min, max};
   if (newRect.isEmpty()) {
     cel = {};
