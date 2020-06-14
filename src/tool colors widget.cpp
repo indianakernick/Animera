@@ -66,7 +66,7 @@ private Q_SLOTS:
 Q_SIGNALS:
   void colorChanged();
   void shouldAttachColor(ColorHandle *);
-  void shouldAttachIndex(int);
+  void shouldAttachIndex(PixelIndex);
   void shouldShowNorm(std::string_view);
   
 private:

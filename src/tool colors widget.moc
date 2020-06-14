@@ -260,13 +260,13 @@ QT_MOC_LITERAL(2, 31, 0), // ""
 QT_MOC_LITERAL(3, 32, 17), // "shouldAttachColor"
 QT_MOC_LITERAL(4, 50, 12), // "ColorHandle*"
 QT_MOC_LITERAL(5, 63, 17), // "shouldAttachIndex"
-QT_MOC_LITERAL(6, 81, 14), // "shouldShowNorm"
-QT_MOC_LITERAL(7, 96, 16), // "std::string_view"
-QT_MOC_LITERAL(8, 113, 10), // "setPalette"
-QT_MOC_LITERAL(9, 124, 12), // "PaletteCSpan"
-QT_MOC_LITERAL(10, 137, 10), // "newPalette"
-QT_MOC_LITERAL(11, 148, 8), // "setIndex"
-QT_MOC_LITERAL(12, 157, 10), // "PixelIndex"
+QT_MOC_LITERAL(6, 81, 10), // "PixelIndex"
+QT_MOC_LITERAL(7, 92, 14), // "shouldShowNorm"
+QT_MOC_LITERAL(8, 107, 16), // "std::string_view"
+QT_MOC_LITERAL(9, 124, 10), // "setPalette"
+QT_MOC_LITERAL(10, 135, 12), // "PaletteCSpan"
+QT_MOC_LITERAL(11, 148, 10), // "newPalette"
+QT_MOC_LITERAL(12, 159, 8), // "setIndex"
 QT_MOC_LITERAL(13, 168, 5), // "index"
 QT_MOC_LITERAL(14, 174, 19), // "updatePaletteColors"
 QT_MOC_LITERAL(15, 194, 11), // "attachColor"
@@ -276,11 +276,11 @@ QT_MOC_LITERAL(17, 214, 11) // "attachIndex"
     },
     "ActiveColorWidget\0colorChanged\0\0"
     "shouldAttachColor\0ColorHandle*\0"
-    "shouldAttachIndex\0shouldShowNorm\0"
-    "std::string_view\0setPalette\0PaletteCSpan\0"
-    "newPalette\0setIndex\0PixelIndex\0index\0"
-    "updatePaletteColors\0attachColor\0checked\0"
-    "attachIndex"
+    "shouldAttachIndex\0PixelIndex\0"
+    "shouldShowNorm\0std::string_view\0"
+    "setPalette\0PaletteCSpan\0newPalette\0"
+    "setIndex\0index\0updatePaletteColors\0"
+    "attachColor\0checked\0attachIndex"
 };
 #undef QT_MOC_LITERAL
 
@@ -301,11 +301,11 @@ static const uint qt_meta_data_ActiveColorWidget[] = {
        1,    0,   59,    2, 0x06 /* Public */,
        3,    1,   60,    2, 0x06 /* Public */,
        5,    1,   63,    2, 0x06 /* Public */,
-       6,    1,   66,    2, 0x06 /* Public */,
+       7,    1,   66,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       8,    1,   69,    2, 0x0a /* Public */,
-      11,    1,   72,    2, 0x0a /* Public */,
+       9,    1,   69,    2, 0x0a /* Public */,
+      12,    1,   72,    2, 0x0a /* Public */,
       14,    0,   75,    2, 0x0a /* Public */,
       15,    1,   76,    2, 0x08 /* Private */,
       17,    1,   79,    2, 0x08 /* Private */,
@@ -313,12 +313,12 @@ static const uint qt_meta_data_ActiveColorWidget[] = {
  // signals: parameters
     QMetaType::Void,
     QMetaType::Void, 0x80000000 | 4,    2,
-    QMetaType::Void, QMetaType::Int,    2,
-    QMetaType::Void, 0x80000000 | 7,    2,
+    QMetaType::Void, 0x80000000 | 6,    2,
+    QMetaType::Void, 0x80000000 | 8,    2,
 
  // slots: parameters
-    QMetaType::Void, 0x80000000 | 9,   10,
-    QMetaType::Void, 0x80000000 | 12,   13,
+    QMetaType::Void, 0x80000000 | 10,   11,
+    QMetaType::Void, 0x80000000 | 6,   13,
     QMetaType::Void,
     QMetaType::Void, QMetaType::Bool,   16,
     QMetaType::Void, QMetaType::Bool,   16,
@@ -334,7 +334,7 @@ void ActiveColorWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, in
         switch (_id) {
         case 0: _t->colorChanged(); break;
         case 1: _t->shouldAttachColor((*reinterpret_cast< ColorHandle*(*)>(_a[1]))); break;
-        case 2: _t->shouldAttachIndex((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 2: _t->shouldAttachIndex((*reinterpret_cast< PixelIndex(*)>(_a[1]))); break;
         case 3: _t->shouldShowNorm((*reinterpret_cast< std::string_view(*)>(_a[1]))); break;
         case 4: _t->setPalette((*reinterpret_cast< const PaletteCSpan(*)>(_a[1]))); break;
         case 5: _t->setIndex((*reinterpret_cast< const PixelIndex(*)>(_a[1]))); break;
@@ -360,7 +360,7 @@ void ActiveColorWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, in
             }
         }
         {
-            using _t = void (ActiveColorWidget::*)(int );
+            using _t = void (ActiveColorWidget::*)(PixelIndex );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ActiveColorWidget::shouldAttachIndex)) {
                 *result = 2;
                 return;
@@ -432,7 +432,7 @@ void ActiveColorWidget::shouldAttachColor(ColorHandle * _t1)
 }
 
 // SIGNAL 2
-void ActiveColorWidget::shouldAttachIndex(int _t1)
+void ActiveColorWidget::shouldAttachIndex(PixelIndex _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 2, _a);
