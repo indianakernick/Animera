@@ -1,4 +1,4 @@
-﻿//
+//
 //  composite.cpp
 //  Animera
 //
@@ -94,7 +94,8 @@ void compositeFrame(
       compositeFrame<PxFmt>(dstSurface, frame, rect.topLeft(), gfx::ARGB{});
       break;
     case Format::index:
-      compositeFrame<PxFmt>(dstSurface, frame, rect.topLeft(), gfx::I<>{palette.data()});
+      static_assert(sizeof(PixelVar) == sizeof(PixelRgba));
+      compositeFrame<PxFmt>(dstSurface, frame, rect.topLeft(), gfx::I<>{&palette[0].underlying()});
       break;
     case Format::gray:
       compositeFrame<PxFmt>(dstSurface, frame, rect.topLeft(), gfx::YA{});
@@ -135,8 +136,8 @@ void blitMaskImage(QImage &dst, const QImage &mask, const QImage &src, const QPo
   });
 }
 
-void fillMaskImage(QImage &dst, const QImage &mask, const QRgb color, const QPoint pos) {
-  visitSurface(dst, [&mask, pos, color](auto dst) {
+void fillMaskImage(QImage &dst, const QImage &mask, const PixelVar color, const QPoint pos) {
+  visitSurfaces(dst, color, [&mask, pos](auto dst, auto color) {
     gfx::maskFillRegion(dst, makeCSurface<PixelMask>(mask), color, convert(pos));
   });
 }
@@ -147,17 +148,17 @@ PixelRgba rgbaToOverlayPx(const PixelRgba pixel) {
   const gfx::Color color = gfx::ARGB::color(pixel);
   const std::uint8_t gray = gfx::gray(color);
   const std::uint8_t alpha = scaleOverlayAlpha(color.a);
-  return qRgba(gray, gray, gray, alpha);
+  return gfx::ARGB::pixel(gray, gray, gray, alpha);
 }
 
 PixelRgba paletteToOverlayPx(const PaletteCSpan palette, const PixelIndex pixel) {
-  return rgbaToOverlayPx(palette[pixel]);
+  return rgbaToOverlayPx(static_cast<PixelRgba>(palette[pixel]));
 }
 
 PixelRgba grayToOverlayPx(const PixelGray pixel) {
   const int gray = scaleOverlayGray(gfx::YA::gray(pixel));
   const int alpha = scaleOverlayAlpha(gfx::YA::alpha(pixel));
-  return qRgba(0, 0, gray, alpha);
+  return gfx::ARGB::pixel(0, 0, gray, alpha);
 }
 
 void rgbaToOverlay(gfx::Surface<PixelRgba> overlay, gfx::CSurface<PixelRgba> source) {
@@ -285,15 +286,15 @@ void shrinkCel(Cel &cel, const QRect rect) {
   cel.pos += newRect.topLeft();
 }
 
-QRgb sampleCel(const Cel &cel, QPoint pos) {
+PixelVar sampleCel(const Cel &cel, QPoint pos) {
   if (cel.rect().contains(pos)) {
     pos -= cel.pos;
     const int depth = cel.img.depth() / 8;
     const int idx = pos.y() * cel.img.bytesPerLine() + pos.x() * depth;
     const uchar *bits = cel.img.bits() + idx;
-    QRgb pixel = 0;
-    std::memcpy(&pixel, bits, depth);
+    PixelVar pixel;
+    std::memcpy(&pixel.underlying(), bits, depth);
     return pixel;
   }
-  return 0;
+  return {};
 }

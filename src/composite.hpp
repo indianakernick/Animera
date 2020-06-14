@@ -1,4 +1,4 @@
-﻿//
+//
 //  composite.hpp
 //  Animera
 //
@@ -27,7 +27,7 @@ void blitImage(QImage &, const QImage &, QPoint);
 /// an image
 void blitMaskImage(QImage &, const QImage &, const QImage &, QPoint);
 /// Set all pixels on the mask (shifted to the position) to the color
-void fillMaskImage(QImage &, const QImage &, QRgb, QPoint);
+void fillMaskImage(QImage &, const QImage &, PixelVar, QPoint);
 
 /// Create a blank RGBA overlay image
 void writeOverlay(PaletteCSpan, Format, QImage &);
@@ -43,6 +43,6 @@ void growCel(Cel &, Format, QRect);
 /// Shrink the cel to occupy the smallest amount of space
 void shrinkCel(Cel &, QRect);
 /// Sample a pixel from a cel. Returns 0 if the position is out of range
-QRgb sampleCel(const Cel &, QPoint);
+PixelVar sampleCel(const Cel &, QPoint);
 
 #endif

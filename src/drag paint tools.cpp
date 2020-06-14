@@ -1,4 +1,4 @@
-﻿//
+//
 //  drag paint tools.cpp
 //  Animera
 //
@@ -29,7 +29,7 @@ void DragPaintTool<Derived>::mouseLeave(const ToolLeaveEvent &event) {
   SCOPE_TIME("DragPaintTool::mouseLeave");
 
   ctx->clearStatus();
-  that()->drawPoint(*ctx->overlay, 0, event.lastPos);
+  that()->drawPoint(*ctx->overlay, {}, event.lastPos);
   ctx->changeOverlay(that()->pointRect(event.lastPos));
 }
 
@@ -44,7 +44,7 @@ void DragPaintTool<Derived>::mouseDown(const ToolMouseDownEvent &event) {
   startPos = event.pos;
   color = ctx->selectColor(event.button);
   const QRect rect = that()->pointRect(event.pos);
-  if (color != 0) ctx->growCel(rect);
+  if (!color.zero()) ctx->growCel(rect);
   cleanCel = *ctx->cel;
   const QPoint pos = ctx->cel->pos;
   that()->drawPoint(ctx->cel->img, color, startPos - pos);
@@ -56,8 +56,8 @@ template <typename Derived>
 void DragPaintTool<Derived>::mouseMove(const ToolMouseMoveEvent &event) {
   SCOPE_TIME("DragPaintTool::mouseMove");
 
-  that()->drawPoint(*ctx->overlay, 0, event.lastPos);
-  that()->drawPoint(*ctx->overlay, tool_overlay_color, event.pos);
+  that()->drawPoint(*ctx->overlay, {}, event.lastPos);
+  that()->drawPoint(*ctx->overlay, PixelVar{tool_overlay_color}, event.pos);
   
   if (event.button == ButtonType::none) {
     ctx->showStatus(StatusMsg{}.appendLabeled(event.pos));
@@ -72,7 +72,7 @@ void DragPaintTool<Derived>::mouseMove(const ToolMouseMoveEvent &event) {
   
   *ctx->cel = cleanCel;
   const QRect rect = that()->dragRect(startPos, event.pos);
-  if (color != 0) ctx->growCel(rect);
+  if (!color.zero()) ctx->growCel(rect);
   const QPoint pos = ctx->cel->pos;
   that()->drawDrag(ctx->cel->img, startPos - pos, event.pos - pos);
   ctx->changeCel(rect.united(that()->dragRect(startPos, event.lastPos)));
@@ -84,12 +84,12 @@ void DragPaintTool<Derived>::mouseUp(const ToolMouseUpEvent &event) {
 
   ctx->showStatus(StatusMsg{}.appendLabeled(event.pos));
   ctx->unlock();
-  if (color == 0) ctx->shrinkCel(that()->dragRect(startPos, event.pos));
+  if (color.zero()) ctx->shrinkCel(that()->dragRect(startPos, event.pos));
   ctx->finishChange();
 }
 
 template <typename Derived>
-QRgb DragPaintTool<Derived>::getColor() const {
+PixelVar DragPaintTool<Derived>::getColor() const {
   return color;
 }
 
@@ -105,7 +105,7 @@ void LineTool::setRadius(const int newRadius) {
   radius = newRadius;
 }
 
-bool LineTool::drawPoint(QImage &image, const QRgb col, const QPoint pos) {
+bool LineTool::drawPoint(QImage &image, const PixelVar col, const QPoint pos) {
   return drawRoundPoint(image, col, pos, radius);
 }
 
@@ -139,7 +139,7 @@ void StrokedCircleTool::setThick(const int newThick) {
   thickness = newThick;
 }
 
-bool StrokedCircleTool::drawPoint(QImage &image, const QRgb col, const QPoint pos) {
+bool StrokedCircleTool::drawPoint(QImage &image, const PixelVar col, const QPoint pos) {
   return drawSquarePoint(image, col, pos, shape);
 }
 
@@ -182,7 +182,7 @@ void FilledCircleTool::setShape(const gfx::CircleShape newShape) {
   shape = newShape;
 }
 
-bool FilledCircleTool::drawPoint(QImage &image, const QRgb col, const QPoint pos) {
+bool FilledCircleTool::drawPoint(QImage &image, const PixelVar col, const QPoint pos) {
   return drawSquarePoint(image, col, pos, shape);
 }
 
@@ -212,7 +212,7 @@ void StrokedRectangleTool::setThick(const int newThick) {
   thickness = newThick;
 }
 
-bool StrokedRectangleTool::drawPoint(QImage &image, const QRgb col, const QPoint pos) {
+bool StrokedRectangleTool::drawPoint(QImage &image, const PixelVar col, const QPoint pos) {
   return drawSquarePoint(image, col, pos);
 }
 
@@ -235,7 +235,7 @@ QRect StrokedRectangleTool::dragRect(const QPoint start, const QPoint end) {
 
 FilledRectangleTool::~FilledRectangleTool() = default;
 
-bool FilledRectangleTool::drawPoint(QImage &image, const QRgb col, const QPoint pos) {
+bool FilledRectangleTool::drawPoint(QImage &image, const PixelVar col, const QPoint pos) {
   return drawSquarePoint(image, col, pos);
 }
 

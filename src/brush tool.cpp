@@ -1,4 +1,4 @@
-﻿//
+//
 //  brush tool.cpp
 //  Animera
 //
@@ -26,7 +26,7 @@ void BrushTool::mouseDown(const ToolMouseDownEvent &event) {
   
   color = ctx->selectColor(event.button);
   const QRect rect = symPointRect(event.pos);
-  if (color == 0) {
+  if (color.zero()) {
     bounds = rect;
   } else {
     ctx->growCel(rect);
@@ -46,7 +46,7 @@ void BrushTool::mouseMove(const ToolMouseMoveEvent &event) {
     return;
   }
   const QRect rect = symPointRect(event.pos);
-  if (color == 0) {
+  if (color.zero()) {
     bounds = bounds.united(rect);
   } else {
     ctx->growCel(rect);
@@ -58,7 +58,7 @@ void BrushTool::mouseUp(const ToolMouseUpEvent &) {
   SCOPE_TIME("BrushTool::mouseUp");
   
   ctx->unlock();
-  if (color == 0) ctx->shrinkCel(bounds);
+  if (color.zero()) ctx->shrinkCel(bounds);
   ctx->finishChange();
 }
 
@@ -123,11 +123,11 @@ void BrushTool::symPointStatus(const QPoint point) {
   ctx->showStatus(status);
 }
 
-void BrushTool::symPointOverlay(const QPoint point, const QRgb col) {
+void BrushTool::symPointOverlay(const QPoint point, const PixelRgba col) {
   SCOPE_TIME("BrushTool::symPointOverlay");
   
   visit(point, [this, col](const QPoint point) {
-    drawRoundPoint(*ctx->overlay, col, point, radius);
+    drawRoundPoint(*ctx->overlay, PixelVar{col}, point, radius);
   });
 }
 

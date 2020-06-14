@@ -1,4 +1,4 @@
-﻿//
+//
 //  color picker impl.hpp
 //  Animera
 //
@@ -9,7 +9,7 @@
 #ifndef animera_color_picker_impl_hpp
 #define animera_color_picker_impl_hpp
 
-#include <QtGui/qrgb.h>
+#include "image.hpp"
 #include <QtCore/qobject.h>
 #include <QtWidgets/qgridlayout.h>
 
@@ -22,10 +22,10 @@ public:
   virtual void init(QWidget *) = 0;
   virtual void setupLayout(QGridLayout *) = 0;
   virtual void connectSignals() = 0;
-  virtual void setColor(QRgb) = 0;
+  virtual void setColor(PixelVar) = 0;
 
 Q_SIGNALS:
-  void colorChanged(QRgb);
+  void colorChanged(PixelVar);
   void shouldShowNorm(std::string_view);
 };
 

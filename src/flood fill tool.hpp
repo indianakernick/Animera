@@ -1,4 +1,4 @@
-﻿//
+//
 //  flood fill tool.hpp
 //  Animera
 //
@@ -19,9 +19,9 @@ public:
 
 private:
   template <typename Pixel>
-  QRect fill(QRect, QPoint, QRgb);
-  QRect fill(QRect, QPoint, QRgb);
-  void fillOpen(QPoint, QRgb);
+  QRect fill(QRect, QPoint, PixelVar);
+  QRect fill(QRect, QPoint, PixelVar);
+  void fillOpen(QPoint, PixelVar);
 };
 
 #endif

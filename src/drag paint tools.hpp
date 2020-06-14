@@ -1,4 +1,4 @@
-﻿//
+//
 //  drag paint tools.hpp
 //  Animera
 //
@@ -25,12 +25,12 @@ public:
   void mouseUp(const ToolMouseUpEvent &) override final;
 
 protected:
-  QRgb getColor() const;
+  PixelVar getColor() const;
 
 private:
   QPoint startPos = no_point;
   Cel cleanCel;
-  QRgb color = 0;
+  PixelVar color;
   
   Derived *that();
 };
@@ -47,7 +47,7 @@ public:
 private:
   int radius = line_radius.def;
  
-  bool drawPoint(QImage &, QRgb, QPoint);
+  bool drawPoint(QImage &, PixelVar, QPoint);
   bool drawDrag(QImage &, QPoint, QPoint);
   void updateStatus(StatusMsg &, QPoint, QPoint);
   QRect pointRect(QPoint);
@@ -68,7 +68,7 @@ private:
   gfx::CircleShape shape = gfx::CircleShape::c1x1;
   int thickness = circ_thick.def;
 
-  bool drawPoint(QImage &, QRgb, QPoint);
+  bool drawPoint(QImage &, PixelVar, QPoint);
   bool drawDrag(QImage &, QPoint, QPoint);
   void updateStatus(StatusMsg &, QPoint, QPoint);
   QRect pointRect(QPoint);
@@ -87,7 +87,7 @@ public:
 private:
   gfx::CircleShape shape = gfx::CircleShape::c1x1;
   
-  bool drawPoint(QImage &, QRgb, QPoint);
+  bool drawPoint(QImage &, PixelVar, QPoint);
   bool drawDrag(QImage &, QPoint, QPoint);
   void updateStatus(StatusMsg &, QPoint, QPoint);
   QRect pointRect(QPoint);
@@ -106,7 +106,7 @@ public:
 private:
   int thickness = rect_thick.def;
 
-  bool drawPoint(QImage &, QRgb, QPoint);
+  bool drawPoint(QImage &, PixelVar, QPoint);
   bool drawDrag(QImage &, QPoint, QPoint);
   void updateStatus(StatusMsg &, QPoint, QPoint);
   QRect pointRect(QPoint);
@@ -121,7 +121,7 @@ public:
   ~FilledRectangleTool();
 
 private:
-  bool drawPoint(QImage &, QRgb, QPoint);
+  bool drawPoint(QImage &, PixelVar, QPoint);
   bool drawDrag(QImage &, QPoint, QPoint);
   void updateStatus(StatusMsg &, QPoint, QPoint);
   QRect pointRect(QPoint);

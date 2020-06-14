@@ -1,4 +1,4 @@
-﻿//
+//
 //  painting.hpp
 //  Animera
 //
@@ -9,24 +9,35 @@
 #ifndef animera_painting_hpp
 #define animera_painting_hpp
 
-#include <QtGui/qimage.h>
+#include "image.hpp"
 #include "paint params.hpp"
 
-bool drawSquarePoint  (QImage &, QRgb, QPoint, gfx::CircleShape = gfx::CircleShape::c1x1);
-bool drawRoundPoint   (QImage &, QRgb, QPoint, int = 1, gfx::CircleShape = gfx::CircleShape::c1x1);
+/*
+Why don't you use QPainter?
 
-bool drawFloodFill    (QImage &, QRgb, QPoint, QRect);
+Qt doesn't have a flood fill function.
 
-bool drawFilledCircle (QImage &, QRgb, QPoint, int, gfx::CircleShape = gfx::CircleShape::c1x1);
-bool drawStrokedCircle(QImage &, QRgb, QPoint, int, int = 1, gfx::CircleShape = gfx::CircleShape::c1x1);
+Qt seems to have trouble drawing circles.
+https://stackoverflow.com/questions/54776781/drawing-pixel-perfect-circles-with-qt
 
-bool drawFilledRect   (QImage &, QRgb, QRect);
-bool drawStrokedRect  (QImage &, QRgb, QRect, int = 1);
+Everything else is there for consistency and because it's fun to implement.
+*/
 
-bool drawHoriGradient (QImage &, QRgb, QRgb, QRect);
-bool drawVertGradient (QImage &, QRgb, QRgb, QRect);
+bool drawSquarePoint  (QImage &, PixelVar, QPoint, gfx::CircleShape = gfx::CircleShape::c1x1);
+bool drawRoundPoint   (QImage &, PixelVar, QPoint, int = 1, gfx::CircleShape = gfx::CircleShape::c1x1);
 
-bool drawLine         (QImage &, QRgb, QLine, int = 1);
+bool drawFloodFill    (QImage &, PixelVar, QPoint, QRect);
+
+bool drawFilledCircle (QImage &, PixelVar, QPoint, int, gfx::CircleShape = gfx::CircleShape::c1x1);
+bool drawStrokedCircle(QImage &, PixelVar, QPoint, int, int = 1, gfx::CircleShape = gfx::CircleShape::c1x1);
+
+bool drawFilledRect   (QImage &, PixelVar, QRect);
+bool drawStrokedRect  (QImage &, PixelVar, QRect, int = 1);
+
+bool drawHoriGradient (QImage &, PixelVar, PixelVar, QRect);
+bool drawVertGradient (QImage &, PixelVar, PixelVar, QRect);
+
+bool drawLine         (QImage &, PixelVar, QLine, int = 1);
 
 bool drawFilledPolygon(QImage &, QRgb, const std::vector<QPoint> &);
 

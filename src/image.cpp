@@ -1,4 +1,4 @@
-﻿//
+//
 //  image.cpp
 //  Animera
 //
@@ -12,33 +12,14 @@
 #include "surface factory.hpp"
 #include "graphics convert.hpp"
 
-bool compatible(const QImage &a, const QImage &b) {
-  return a.size() == b.size() && a.format() == b.format();
-}
-
-QImage makeCompatible(const QImage &img) {
-  return QImage{img.size(), img.format()};
-}
-
-QImage makeMask(const QSize size) {
-  return QImage{size, mask_format};
-}
-
 void copyImage(QImage &dst, const QImage &src) {
-  assert(compatible(dst, src));
-  dst.detach();
+  assert(dst.size() == src.size());
+  assert(dst.format() == src.format());
   std::memcpy(dst.bits(), src.constBits(), dst.sizeInBytes());
 }
 
 void clearImage(QImage &dst) {
-  dst.detach();
   std::memset(dst.bits(), 0, dst.sizeInBytes());
-}
-
-void clearImage(QImage &dst, const QRgb color) {
-  visitSurfaces(dst, color, [](auto dst, auto color) {
-    gfx::overFill(dst, color);
-  });
 }
 
 void clearImage(QImage &dst, const QRect rect) {

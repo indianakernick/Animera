@@ -1,4 +1,4 @@
-﻿//
+//
 //  sprite file.cpp
 //  Animera
 //
@@ -55,7 +55,7 @@ void copyToByteOrder(
   assert(size % byteDepth(format) == 0);
   switch (format) {
     case Format::rgba: {
-      const auto *srcPx = reinterpret_cast<const gfx::ARGB::Pixel *>(src);
+      const auto *srcPx = reinterpret_cast<const PixelRgba *>(src);
       unsigned char *dstEnd = dst + size;
       while (dst != dstEnd) {
         const gfx::Color color = gfx::ARGB::color(*srcPx++);
@@ -67,11 +67,11 @@ void copyToByteOrder(
       break;
     }
     case Format::index:
-      static_assert(sizeof(gfx::I<>::Pixel) == 1);
+      static_assert(sizeof(PixelIndex) == 1);
       std::memcpy(dst, src, size);
       break;
     case Format::gray: {
-      auto *srcPx = reinterpret_cast<const gfx::YA::Pixel *>(src);
+      auto *srcPx = reinterpret_cast<const PixelGray *>(src);
       unsigned char *dstEnd = dst + size;
       while (dst != dstEnd) {
         const gfx::Color color = gfx::YA::color(*srcPx++);
@@ -94,7 +94,7 @@ void copyFromByteOrder(
   assert(size % byteDepth(format) == 0);
   switch (format) {
     case Format::rgba: {
-      auto *dstPx = reinterpret_cast<gfx::ARGB::Pixel *>(dst);
+      auto *dstPx = reinterpret_cast<PixelRgba *>(dst);
       const unsigned char *srcEnd = src + size;
       while (src != srcEnd) {
         gfx::Color color;
@@ -107,11 +107,11 @@ void copyFromByteOrder(
       break;
     }
     case Format::index:
-      static_assert(sizeof(gfx::I<>::Pixel) == 1);
+      static_assert(sizeof(PixelIndex) == 1);
       std::memcpy(dst, src, size);
       break;
     case Format::gray: {
-      auto *dstPx = reinterpret_cast<gfx::YA::Pixel *>(dst);
+      auto *dstPx = reinterpret_cast<PixelGray *>(dst);
       const unsigned char *srcEnd = src + size;
       while (src != srcEnd) {
         gfx::Color color;
@@ -158,7 +158,7 @@ Error writeRgba(QIODevice &dev, const PaletteCSpan colors) try {
   ChunkWriter writer{dev};
   writer.begin(static_cast<std::uint32_t>(colors.size()) * 4, chunk_palette);
   for (std::size_t i = 0; i != colors.size(); ++i) {
-    const gfx::Color color = gfx::ARGB::color(colors[i]);
+    const gfx::Color color = gfx::ARGB::color(static_cast<PixelRgba>(colors[i]));
     writer.writeByte(color.r);
     writer.writeByte(color.g);
     writer.writeByte(color.b);
@@ -174,7 +174,7 @@ Error writeGray(QIODevice &dev, const PaletteCSpan colors) try {
   ChunkWriter writer{dev};
   writer.begin(static_cast<std::uint32_t>(colors.size()) * 2, chunk_palette);
   for (std::size_t i = 0; i != colors.size(); ++i) {
-    const gfx::Color color = gfx::YA::color(colors[i]);
+    const gfx::Color color = gfx::YA::color(static_cast<PixelGray>(colors[i]));
     writer.writeByte(color.r);
     writer.writeByte(color.a);
   };
@@ -399,10 +399,10 @@ Error readRgba(QIODevice &dev, const PaletteSpan colors) try {
     color.g = reader.readByte();
     color.b = reader.readByte();
     color.a = reader.readByte();
-    *iter = gfx::ARGB::pixel(color);
+    *iter = PixelVar{gfx::ARGB::pixel(color)};
   }
   TRY(reader.end());
-  std::fill(iter, colors.end(), 0);
+  std::fill(iter, colors.end(), PixelVar{});
   return {};
 } catch (FileIOError &e) {
   return e.msg();
@@ -418,10 +418,10 @@ Error readGray(QIODevice &dev, const PaletteSpan colors) try {
     gfx::Color color;
     color.r = reader.readByte();
     color.a = reader.readByte();
-    *iter = gfx::YA::pixel(color);
+    *iter = PixelVar{gfx::YA::pixel(color)};
   }
   TRY(reader.end());
-  std::fill(iter, colors.end(), 0);
+  std::fill(iter, colors.end(), PixelVar{});
   return {};
 } catch (FileIOError &e) {
   return e.msg();

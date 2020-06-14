@@ -22,7 +22,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_ColorPickerImpl_t {
     QByteArrayData data[6];
-    char stringdata0[67];
+    char stringdata0[71];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -34,12 +34,12 @@ static const qt_meta_stringdata_ColorPickerImpl_t qt_meta_stringdata_ColorPicker
 QT_MOC_LITERAL(0, 0, 15), // "ColorPickerImpl"
 QT_MOC_LITERAL(1, 16, 12), // "colorChanged"
 QT_MOC_LITERAL(2, 29, 0), // ""
-QT_MOC_LITERAL(3, 30, 4), // "QRgb"
-QT_MOC_LITERAL(4, 35, 14), // "shouldShowNorm"
-QT_MOC_LITERAL(5, 50, 16) // "std::string_view"
+QT_MOC_LITERAL(3, 30, 8), // "PixelVar"
+QT_MOC_LITERAL(4, 39, 14), // "shouldShowNorm"
+QT_MOC_LITERAL(5, 54, 16) // "std::string_view"
 
     },
-    "ColorPickerImpl\0colorChanged\0\0QRgb\0"
+    "ColorPickerImpl\0colorChanged\0\0PixelVar\0"
     "shouldShowNorm\0std::string_view"
 };
 #undef QT_MOC_LITERAL
@@ -74,14 +74,14 @@ void ColorPickerImpl::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int 
         auto *_t = static_cast<ColorPickerImpl *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->colorChanged((*reinterpret_cast< QRgb(*)>(_a[1]))); break;
+        case 0: _t->colorChanged((*reinterpret_cast< PixelVar(*)>(_a[1]))); break;
         case 1: _t->shouldShowNorm((*reinterpret_cast< std::string_view(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
         int *result = reinterpret_cast<int *>(_a[0]);
         {
-            using _t = void (ColorPickerImpl::*)(QRgb );
+            using _t = void (ColorPickerImpl::*)(PixelVar );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ColorPickerImpl::colorChanged)) {
                 *result = 0;
                 return;
@@ -138,7 +138,7 @@ int ColorPickerImpl::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void ColorPickerImpl::colorChanged(QRgb _t1)
+void ColorPickerImpl::colorChanged(PixelVar _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);

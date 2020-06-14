@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_PaletteWidget_t {
-    QByteArrayData data[16];
-    char stringdata0[200];
+    QByteArrayData data[17];
+    char stringdata0[215];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -36,22 +36,23 @@ QT_MOC_LITERAL(1, 14, 17), // "shouldAttachColor"
 QT_MOC_LITERAL(2, 32, 0), // ""
 QT_MOC_LITERAL(3, 33, 12), // "ColorHandle*"
 QT_MOC_LITERAL(4, 46, 14), // "shouldSetColor"
-QT_MOC_LITERAL(5, 61, 4), // "QRgb"
-QT_MOC_LITERAL(6, 66, 14), // "shouldSetIndex"
-QT_MOC_LITERAL(7, 81, 19), // "paletteColorChanged"
-QT_MOC_LITERAL(8, 101, 14), // "shouldShowNorm"
-QT_MOC_LITERAL(9, 116, 16), // "std::string_view"
-QT_MOC_LITERAL(10, 133, 10), // "initCanvas"
-QT_MOC_LITERAL(11, 144, 6), // "Format"
-QT_MOC_LITERAL(12, 151, 10), // "setPalette"
-QT_MOC_LITERAL(13, 162, 11), // "PaletteSpan"
-QT_MOC_LITERAL(14, 174, 11), // "attachIndex"
-QT_MOC_LITERAL(15, 186, 13) // "updatePalette"
+QT_MOC_LITERAL(5, 61, 8), // "PixelVar"
+QT_MOC_LITERAL(6, 70, 14), // "shouldSetIndex"
+QT_MOC_LITERAL(7, 85, 10), // "PixelIndex"
+QT_MOC_LITERAL(8, 96, 19), // "paletteColorChanged"
+QT_MOC_LITERAL(9, 116, 14), // "shouldShowNorm"
+QT_MOC_LITERAL(10, 131, 16), // "std::string_view"
+QT_MOC_LITERAL(11, 148, 10), // "initCanvas"
+QT_MOC_LITERAL(12, 159, 6), // "Format"
+QT_MOC_LITERAL(13, 166, 10), // "setPalette"
+QT_MOC_LITERAL(14, 177, 11), // "PaletteSpan"
+QT_MOC_LITERAL(15, 189, 11), // "attachIndex"
+QT_MOC_LITERAL(16, 201, 13) // "updatePalette"
 
     },
     "PaletteWidget\0shouldAttachColor\0\0"
-    "ColorHandle*\0shouldSetColor\0QRgb\0"
-    "shouldSetIndex\0paletteColorChanged\0"
+    "ColorHandle*\0shouldSetColor\0PixelVar\0"
+    "shouldSetIndex\0PixelIndex\0paletteColorChanged\0"
     "shouldShowNorm\0std::string_view\0"
     "initCanvas\0Format\0setPalette\0PaletteSpan\0"
     "attachIndex\0updatePalette"
@@ -75,26 +76,26 @@ static const uint qt_meta_data_PaletteWidget[] = {
        1,    1,   59,    2, 0x06 /* Public */,
        4,    1,   62,    2, 0x06 /* Public */,
        6,    1,   65,    2, 0x06 /* Public */,
-       7,    0,   68,    2, 0x06 /* Public */,
-       8,    1,   69,    2, 0x06 /* Public */,
+       8,    0,   68,    2, 0x06 /* Public */,
+       9,    1,   69,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      10,    1,   72,    2, 0x0a /* Public */,
-      12,    1,   75,    2, 0x0a /* Public */,
-      14,    1,   78,    2, 0x0a /* Public */,
-      15,    0,   81,    2, 0x0a /* Public */,
+      11,    1,   72,    2, 0x0a /* Public */,
+      13,    1,   75,    2, 0x0a /* Public */,
+      15,    1,   78,    2, 0x0a /* Public */,
+      16,    0,   81,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, 0x80000000 | 3,    2,
     QMetaType::Void, 0x80000000 | 5,    2,
-    QMetaType::Void, QMetaType::Int,    2,
+    QMetaType::Void, 0x80000000 | 7,    2,
     QMetaType::Void,
-    QMetaType::Void, 0x80000000 | 9,    2,
+    QMetaType::Void, 0x80000000 | 10,    2,
 
  // slots: parameters
-    QMetaType::Void, 0x80000000 | 11,    2,
-    QMetaType::Void, 0x80000000 | 13,    2,
-    QMetaType::Void, QMetaType::Int,    2,
+    QMetaType::Void, 0x80000000 | 12,    2,
+    QMetaType::Void, 0x80000000 | 14,    2,
+    QMetaType::Void, 0x80000000 | 7,    2,
     QMetaType::Void,
 
        0        // eod
@@ -107,13 +108,13 @@ void PaletteWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _i
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->shouldAttachColor((*reinterpret_cast< ColorHandle*(*)>(_a[1]))); break;
-        case 1: _t->shouldSetColor((*reinterpret_cast< QRgb(*)>(_a[1]))); break;
-        case 2: _t->shouldSetIndex((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 1: _t->shouldSetColor((*reinterpret_cast< PixelVar(*)>(_a[1]))); break;
+        case 2: _t->shouldSetIndex((*reinterpret_cast< PixelIndex(*)>(_a[1]))); break;
         case 3: _t->paletteColorChanged(); break;
         case 4: _t->shouldShowNorm((*reinterpret_cast< std::string_view(*)>(_a[1]))); break;
         case 5: _t->initCanvas((*reinterpret_cast< Format(*)>(_a[1]))); break;
         case 6: _t->setPalette((*reinterpret_cast< PaletteSpan(*)>(_a[1]))); break;
-        case 7: _t->attachIndex((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 7: _t->attachIndex((*reinterpret_cast< PixelIndex(*)>(_a[1]))); break;
         case 8: _t->updatePalette(); break;
         default: ;
         }
@@ -127,14 +128,14 @@ void PaletteWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _i
             }
         }
         {
-            using _t = void (PaletteWidget::*)(QRgb );
+            using _t = void (PaletteWidget::*)(PixelVar );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&PaletteWidget::shouldSetColor)) {
                 *result = 1;
                 return;
             }
         }
         {
-            using _t = void (PaletteWidget::*)(int );
+            using _t = void (PaletteWidget::*)(PixelIndex );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&PaletteWidget::shouldSetIndex)) {
                 *result = 2;
                 return;
@@ -205,14 +206,14 @@ void PaletteWidget::shouldAttachColor(ColorHandle * _t1)
 }
 
 // SIGNAL 1
-void PaletteWidget::shouldSetColor(QRgb _t1)
+void PaletteWidget::shouldSetColor(PixelVar _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 1, _a);
 }
 
 // SIGNAL 2
-void PaletteWidget::shouldSetIndex(int _t1)
+void PaletteWidget::shouldSetIndex(PixelIndex _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 2, _a);
@@ -256,8 +257,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_PaletteColorWidget_t {
-    QByteArrayData data[11];
-    char stringdata0[150];
+    QByteArrayData data[12];
+    char stringdata0[165];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -271,17 +272,18 @@ QT_MOC_LITERAL(1, 19, 17), // "shouldAttachColor"
 QT_MOC_LITERAL(2, 37, 0), // ""
 QT_MOC_LITERAL(3, 38, 12), // "ColorHandle*"
 QT_MOC_LITERAL(4, 51, 14), // "shouldSetColor"
-QT_MOC_LITERAL(5, 66, 4), // "QRgb"
-QT_MOC_LITERAL(6, 71, 14), // "shouldSetIndex"
-QT_MOC_LITERAL(7, 86, 19), // "paletteColorChanged"
-QT_MOC_LITERAL(8, 106, 14), // "shouldShowNorm"
-QT_MOC_LITERAL(9, 121, 16), // "std::string_view"
-QT_MOC_LITERAL(10, 138, 11) // "attachColor"
+QT_MOC_LITERAL(5, 66, 8), // "PixelVar"
+QT_MOC_LITERAL(6, 75, 14), // "shouldSetIndex"
+QT_MOC_LITERAL(7, 90, 10), // "PixelIndex"
+QT_MOC_LITERAL(8, 101, 19), // "paletteColorChanged"
+QT_MOC_LITERAL(9, 121, 14), // "shouldShowNorm"
+QT_MOC_LITERAL(10, 136, 16), // "std::string_view"
+QT_MOC_LITERAL(11, 153, 11) // "attachColor"
 
     },
     "PaletteColorWidget\0shouldAttachColor\0"
-    "\0ColorHandle*\0shouldSetColor\0QRgb\0"
-    "shouldSetIndex\0paletteColorChanged\0"
+    "\0ColorHandle*\0shouldSetColor\0PixelVar\0"
+    "shouldSetIndex\0PixelIndex\0paletteColorChanged\0"
     "shouldShowNorm\0std::string_view\0"
     "attachColor"
 };
@@ -304,18 +306,18 @@ static const uint qt_meta_data_PaletteColorWidget[] = {
        1,    1,   44,    2, 0x06 /* Public */,
        4,    1,   47,    2, 0x06 /* Public */,
        6,    1,   50,    2, 0x06 /* Public */,
-       7,    0,   53,    2, 0x06 /* Public */,
-       8,    1,   54,    2, 0x06 /* Public */,
+       8,    0,   53,    2, 0x06 /* Public */,
+       9,    1,   54,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      10,    0,   57,    2, 0x08 /* Private */,
+      11,    0,   57,    2, 0x08 /* Private */,
 
  // signals: parameters
     QMetaType::Void, 0x80000000 | 3,    2,
     QMetaType::Void, 0x80000000 | 5,    2,
-    QMetaType::Void, QMetaType::Int,    2,
+    QMetaType::Void, 0x80000000 | 7,    2,
     QMetaType::Void,
-    QMetaType::Void, 0x80000000 | 9,    2,
+    QMetaType::Void, 0x80000000 | 10,    2,
 
  // slots: parameters
     QMetaType::Void,
@@ -330,8 +332,8 @@ void PaletteColorWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, i
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->shouldAttachColor((*reinterpret_cast< ColorHandle*(*)>(_a[1]))); break;
-        case 1: _t->shouldSetColor((*reinterpret_cast< QRgb(*)>(_a[1]))); break;
-        case 2: _t->shouldSetIndex((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 1: _t->shouldSetColor((*reinterpret_cast< PixelVar(*)>(_a[1]))); break;
+        case 2: _t->shouldSetIndex((*reinterpret_cast< PixelIndex(*)>(_a[1]))); break;
         case 3: _t->paletteColorChanged(); break;
         case 4: _t->shouldShowNorm((*reinterpret_cast< std::string_view(*)>(_a[1]))); break;
         case 5: _t->attachColor(); break;
@@ -347,14 +349,14 @@ void PaletteColorWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, i
             }
         }
         {
-            using _t = void (PaletteColorWidget::*)(QRgb );
+            using _t = void (PaletteColorWidget::*)(PixelVar );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&PaletteColorWidget::shouldSetColor)) {
                 *result = 1;
                 return;
             }
         }
         {
-            using _t = void (PaletteColorWidget::*)(int );
+            using _t = void (PaletteColorWidget::*)(PixelIndex );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&PaletteColorWidget::shouldSetIndex)) {
                 *result = 2;
                 return;
@@ -427,14 +429,14 @@ void PaletteColorWidget::shouldAttachColor(ColorHandle * _t1)
 }
 
 // SIGNAL 1
-void PaletteColorWidget::shouldSetColor(QRgb _t1)
+void PaletteColorWidget::shouldSetColor(PixelVar _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 1, _a);
 }
 
 // SIGNAL 2
-void PaletteColorWidget::shouldSetIndex(int _t1)
+void PaletteColorWidget::shouldSetIndex(PixelIndex _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 2, _a);
@@ -453,8 +455,8 @@ void PaletteColorWidget::shouldShowNorm(std::string_view _t1)
     QMetaObject::activate(this, &staticMetaObject, 4, _a);
 }
 struct qt_meta_stringdata_PaletteTableWidget_t {
-    QByteArrayData data[17];
-    char stringdata0[216];
+    QByteArrayData data[18];
+    char stringdata0[231];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -468,26 +470,28 @@ QT_MOC_LITERAL(1, 19, 17), // "shouldAttachColor"
 QT_MOC_LITERAL(2, 37, 0), // ""
 QT_MOC_LITERAL(3, 38, 12), // "ColorHandle*"
 QT_MOC_LITERAL(4, 51, 14), // "shouldSetColor"
-QT_MOC_LITERAL(5, 66, 4), // "QRgb"
-QT_MOC_LITERAL(6, 71, 14), // "shouldSetIndex"
-QT_MOC_LITERAL(7, 86, 14), // "paletteChanged"
-QT_MOC_LITERAL(8, 101, 11), // "PaletteSpan"
-QT_MOC_LITERAL(9, 113, 19), // "paletteColorChanged"
-QT_MOC_LITERAL(10, 133, 14), // "shouldShowNorm"
-QT_MOC_LITERAL(11, 148, 16), // "std::string_view"
-QT_MOC_LITERAL(12, 165, 10), // "setPalette"
-QT_MOC_LITERAL(13, 176, 7), // "palette"
-QT_MOC_LITERAL(14, 184, 11), // "attachIndex"
-QT_MOC_LITERAL(15, 196, 5), // "index"
-QT_MOC_LITERAL(16, 202, 13) // "updatePalette"
+QT_MOC_LITERAL(5, 66, 8), // "PixelVar"
+QT_MOC_LITERAL(6, 75, 14), // "shouldSetIndex"
+QT_MOC_LITERAL(7, 90, 10), // "PixelIndex"
+QT_MOC_LITERAL(8, 101, 14), // "paletteChanged"
+QT_MOC_LITERAL(9, 116, 11), // "PaletteSpan"
+QT_MOC_LITERAL(10, 128, 19), // "paletteColorChanged"
+QT_MOC_LITERAL(11, 148, 14), // "shouldShowNorm"
+QT_MOC_LITERAL(12, 163, 16), // "std::string_view"
+QT_MOC_LITERAL(13, 180, 10), // "setPalette"
+QT_MOC_LITERAL(14, 191, 7), // "palette"
+QT_MOC_LITERAL(15, 199, 11), // "attachIndex"
+QT_MOC_LITERAL(16, 211, 5), // "index"
+QT_MOC_LITERAL(17, 217, 13) // "updatePalette"
 
     },
     "PaletteTableWidget\0shouldAttachColor\0"
-    "\0ColorHandle*\0shouldSetColor\0QRgb\0"
-    "shouldSetIndex\0paletteChanged\0PaletteSpan\0"
-    "paletteColorChanged\0shouldShowNorm\0"
-    "std::string_view\0setPalette\0palette\0"
-    "attachIndex\0index\0updatePalette"
+    "\0ColorHandle*\0shouldSetColor\0PixelVar\0"
+    "shouldSetIndex\0PixelIndex\0paletteChanged\0"
+    "PaletteSpan\0paletteColorChanged\0"
+    "shouldShowNorm\0std::string_view\0"
+    "setPalette\0palette\0attachIndex\0index\0"
+    "updatePalette"
 };
 #undef QT_MOC_LITERAL
 
@@ -508,26 +512,26 @@ static const uint qt_meta_data_PaletteTableWidget[] = {
        1,    1,   59,    2, 0x06 /* Public */,
        4,    1,   62,    2, 0x06 /* Public */,
        6,    1,   65,    2, 0x06 /* Public */,
-       7,    1,   68,    2, 0x06 /* Public */,
-       9,    0,   71,    2, 0x06 /* Public */,
-      10,    1,   72,    2, 0x06 /* Public */,
+       8,    1,   68,    2, 0x06 /* Public */,
+      10,    0,   71,    2, 0x06 /* Public */,
+      11,    1,   72,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      12,    1,   75,    2, 0x0a /* Public */,
-      14,    1,   78,    2, 0x0a /* Public */,
-      16,    0,   81,    2, 0x0a /* Public */,
+      13,    1,   75,    2, 0x0a /* Public */,
+      15,    1,   78,    2, 0x0a /* Public */,
+      17,    0,   81,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, 0x80000000 | 3,    2,
     QMetaType::Void, 0x80000000 | 5,    2,
-    QMetaType::Void, QMetaType::Int,    2,
-    QMetaType::Void, 0x80000000 | 8,    2,
+    QMetaType::Void, 0x80000000 | 7,    2,
+    QMetaType::Void, 0x80000000 | 9,    2,
     QMetaType::Void,
-    QMetaType::Void, 0x80000000 | 11,    2,
+    QMetaType::Void, 0x80000000 | 12,    2,
 
  // slots: parameters
-    QMetaType::Void, 0x80000000 | 8,   13,
-    QMetaType::Void, QMetaType::Int,   15,
+    QMetaType::Void, 0x80000000 | 9,   14,
+    QMetaType::Void, 0x80000000 | 7,   16,
     QMetaType::Void,
 
        0        // eod
@@ -540,13 +544,13 @@ void PaletteTableWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, i
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->shouldAttachColor((*reinterpret_cast< ColorHandle*(*)>(_a[1]))); break;
-        case 1: _t->shouldSetColor((*reinterpret_cast< QRgb(*)>(_a[1]))); break;
-        case 2: _t->shouldSetIndex((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 1: _t->shouldSetColor((*reinterpret_cast< PixelVar(*)>(_a[1]))); break;
+        case 2: _t->shouldSetIndex((*reinterpret_cast< PixelIndex(*)>(_a[1]))); break;
         case 3: _t->paletteChanged((*reinterpret_cast< PaletteSpan(*)>(_a[1]))); break;
         case 4: _t->paletteColorChanged(); break;
         case 5: _t->shouldShowNorm((*reinterpret_cast< std::string_view(*)>(_a[1]))); break;
         case 6: _t->setPalette((*reinterpret_cast< const PaletteSpan(*)>(_a[1]))); break;
-        case 7: _t->attachIndex((*reinterpret_cast< const int(*)>(_a[1]))); break;
+        case 7: _t->attachIndex((*reinterpret_cast< const PixelIndex(*)>(_a[1]))); break;
         case 8: _t->updatePalette(); break;
         default: ;
         }
@@ -560,14 +564,14 @@ void PaletteTableWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, i
             }
         }
         {
-            using _t = void (PaletteTableWidget::*)(QRgb );
+            using _t = void (PaletteTableWidget::*)(PixelVar );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&PaletteTableWidget::shouldSetColor)) {
                 *result = 1;
                 return;
             }
         }
         {
-            using _t = void (PaletteTableWidget::*)(int );
+            using _t = void (PaletteTableWidget::*)(PixelIndex );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&PaletteTableWidget::shouldSetIndex)) {
                 *result = 2;
                 return;
@@ -645,14 +649,14 @@ void PaletteTableWidget::shouldAttachColor(ColorHandle * _t1)
 }
 
 // SIGNAL 1
-void PaletteTableWidget::shouldSetColor(QRgb _t1)
+void PaletteTableWidget::shouldSetColor(PixelVar _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 1, _a);
 }
 
 // SIGNAL 2
-void PaletteTableWidget::shouldSetIndex(int _t1)
+void PaletteTableWidget::shouldSetIndex(PixelIndex _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 2, _a);

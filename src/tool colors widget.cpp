@@ -14,6 +14,7 @@
 #include "color handle.hpp"
 #include <Graphics/format.hpp>
 #include "widget painting.hpp"
+#include "graphics convert.hpp"
 #include <QtWidgets/qboxlayout.h>
 #include "radio button widget.hpp"
 
@@ -21,7 +22,7 @@ class ActiveColorWidget final : public RadioButtonWidget, public ColorHandle {
   Q_OBJECT
   
 public:
-  ActiveColorWidget(QWidget *parent, const QString &name, QRgb &color, const Format format)
+  ActiveColorWidget(QWidget *parent, const QString &name, PixelVar &color, const Format format)
     : RadioButtonWidget{parent}, name{name}, color{color}, format{format} {
     setFixedSize(tool_color_rect.widget().size());
     if (format == Format::index) {
@@ -35,9 +36,9 @@ public Q_SLOTS:
   void setPalette(const PaletteCSpan newPalette) {
     palette = newPalette;
   }
-  void setIndex(const int index) {
+  void setIndex(const PixelIndex index) {
     if (isChecked()) {
-      color = index;
+      color = PixelVar{index};
       update();
       Q_EMIT colorChanged();
     }
@@ -57,7 +58,7 @@ private Q_SLOTS:
   }
   void attachIndex(const bool checked) {
     if (checked) {
-      Q_EMIT shouldAttachIndex(color);
+      Q_EMIT shouldAttachIndex(static_cast<PixelIndex>(color));
       update();
     }
   }
@@ -70,20 +71,18 @@ Q_SIGNALS:
   
 private:
   QString name;
-  QRgb &color;
+  PixelVar &color;
   Format format;
   PaletteCSpan palette;
   
-  QColor getQColor() const {
+  gfx::Color getGColor() const {
     switch (format) {
       case Format::rgba:
-        return QColor::fromRgba(color);
+        return gfx::ARGB::color(static_cast<PixelRgba>(color));
       case Format::index:
-        return QColor::fromRgba(palette[color]);
+        return gfx::ARGB::color(static_cast<PixelRgba>(palette[static_cast<PixelIndex>(color)]));
       case Format::gray:
-        const int gray = gfx::YA::gray(color);
-        const int alpha = gfx::YA::alpha(color);
-        return QColor{gray, gray, gray, alpha};
+        return gfx::YA::color(static_cast<PixelGray>(color));
     }
   }
   
@@ -92,18 +91,18 @@ private:
     QPainter painter{this};
     paintChecker(painter, tool_color_rect, tool_color_tiles);
     if (isChecked()) {
-      painter.fillRect(active_color_rect.inner(), getQColor());
+      painter.fillRect(active_color_rect.inner(), convert(getGColor()));
       paintBorder(painter, active_color_rect, glob_border_color);
     } else {
-      painter.fillRect(tool_color_rect.inner(), getQColor());
+      painter.fillRect(tool_color_rect.inner(), convert(getGColor()));
       paintBorder(painter, tool_color_rect, glob_border_color);
     }
   }
   
-  QRgb getInitialColor() const override {
+  PixelVar getInitialColor() const override {
     return color;
   }
-  void setColor(const QRgb newColor) override {
+  void setColor(const PixelVar newColor) override {
     color = newColor;
     update();
     Q_EMIT colorChanged();
@@ -121,19 +120,19 @@ private:
     switch (format) {
       case Format::rgba:
         status.append("Color: ");
-        gColor = gfx::ARGB::color(color);
+        gColor = getGColor();
         status.append(gColor.r, gColor.g, gColor.b, gColor.a);
         break;
       case Format::index:
         status.append("Index: ");
-        status.append(static_cast<int>(color));
+        status.append(static_cast<PixelIndex>(color));
         status.append(" Color: ");
-        gColor = gfx::ARGB::color(palette[color]);
+        gColor = getGColor();
         status.append(gColor.r, gColor.g, gColor.b, gColor.a);
         break;
       case Format::gray:
         status.append("Color: ");
-        gColor = gfx::YA::color(color);
+        gColor = getGColor();
         status.append(gColor.r, gColor.a);
         break;
     }
@@ -166,7 +165,7 @@ void ToolColorsWidget::setPalette(const PaletteCSpan palette) {
   widgets[0]->click();
 }
 
-void ToolColorsWidget::setIndex(const int index) {
+void ToolColorsWidget::setIndex(const PixelIndex index) {
   for (auto *widget : widgets) {
     widget->setIndex(index);
   }
@@ -186,17 +185,21 @@ ToolColors ToolColorsWidget::getInitialColors(const Format format) {
   switch (format) {
     case Format::rgba:
       return {
-        gfx::ARGB::pixel(255, 0, 0),
-        gfx::ARGB::pixel(0, 0, 255),
-        gfx::ARGB::pixel(0, 0, 0, 0),
+        PixelVar{gfx::ARGB::pixel(255, 0, 0)},
+        PixelVar{gfx::ARGB::pixel(0, 0, 255)},
+        PixelVar{gfx::ARGB::pixel(0, 0, 0, 0)},
       };
     case Format::index:
-      return {1, 2, 0};
+      return {
+        PixelVar{PixelIndex{1}},
+        PixelVar{PixelIndex{2}},
+        PixelVar{PixelIndex{0}}
+      };
     case Format::gray:
       return {
-        gfx::YA::pixel(255, 255),
-        gfx::YA::pixel(0, 255),
-        gfx::YA::pixel(0, 0)
+        PixelVar{gfx::YA::pixel(255, 255)},
+        PixelVar{gfx::YA::pixel(0, 255)},
+        PixelVar{gfx::YA::pixel(0, 0)}
       };
   }
 }

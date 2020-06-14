@@ -1,4 +1,4 @@
-﻿//
+//
 //  tool.cpp
 //  Animera
 //
@@ -36,7 +36,7 @@ void ToolCtx::shrinkCel() const {
   Q_EMIT shrinkRequested(toRect(size));
 }
 
-QRgb ToolCtx::selectColor(const ButtonType button) const {
+PixelVar ToolCtx::selectColor(const ButtonType button) const {
   switch (button) {
     case ButtonType::primary:   return colors.primary;
     case ButtonType::secondary: return colors.secondary;

@@ -1,4 +1,4 @@
-﻿//
+//
 //  gradient tool.cpp
 //  Animera
 //
@@ -15,7 +15,7 @@ void LinearGradientTool::mouseLeave(const ToolLeaveEvent &event) {
   SCOPE_TIME("LinearGradientTool::mouseLeave");
   
   ctx->clearStatus();
-  drawSquarePoint(*ctx->overlay, 0, event.lastPos);
+  drawSquarePoint(*ctx->overlay, {}, event.lastPos);
   ctx->changeOverlay(event.lastPos);
 }
 
@@ -38,7 +38,7 @@ void LinearGradientTool::mouseDown(const ToolMouseDownEvent &event) {
   status.append({event.pos, QSize{1, 1}});
   ctx->showStatus(status);
   startPos = event.pos;
-  if (ctx->colors.primary != 0 || ctx->colors.secondary != 0) {
+  if (!ctx->colors.primary.zero() || !ctx->colors.secondary.zero()) {
     ctx->growCel(toRect(startPos));
   }
   cleanCel = *ctx->cel;
@@ -51,8 +51,8 @@ void LinearGradientTool::mouseDown(const ToolMouseDownEvent &event) {
 void LinearGradientTool::mouseMove(const ToolMouseMoveEvent &event) {
   SCOPE_TIME("LinearGradientTool::mouseMove");
 
-  drawSquarePoint(*ctx->overlay, 0, event.lastPos);
-  drawSquarePoint(*ctx->overlay, tool_overlay_color, event.pos);
+  drawSquarePoint(*ctx->overlay, {}, event.lastPos);
+  drawSquarePoint(*ctx->overlay, PixelVar{tool_overlay_color}, event.pos);
   
   StatusMsg status;
   status.appendLabeled(mode);
@@ -68,7 +68,7 @@ void LinearGradientTool::mouseMove(const ToolMouseMoveEvent &event) {
   status.append(rect);
   ctx->showStatus(status);
   *ctx->cel = cleanCel;
-  if (ctx->colors.primary != 0 || ctx->colors.secondary != 0) {
+  if (!ctx->colors.primary.zero() || !ctx->colors.secondary.zero()) {
     ctx->growCel(rect);
   }
   drawGradient(rect, event.pos);
@@ -85,8 +85,8 @@ void LinearGradientTool::mouseUp(const ToolMouseUpEvent &event) {
   ctx->showStatus(status);
   ctx->unlock();
   
-  const bool primaryZero = ctx->colors.primary == 0;
-  const bool secondaryZero = ctx->colors.secondary == 0;
+  const bool primaryZero = ctx->colors.primary.zero();
+  const bool secondaryZero = ctx->colors.secondary.zero();
   const QRect rect = unite(startPos, event.pos);
   if (primaryZero && secondaryZero) {
     ctx->shrinkCel(rect);
@@ -107,8 +107,8 @@ void LinearGradientTool::drawGradient(QRect rect, const QPoint endPos) {
   
   QImage &img = ctx->cel->img;
   const QPoint pos = ctx->cel->pos;
-  QRgb first = ctx->colors.primary;
-  QRgb second = ctx->colors.secondary;
+  PixelVar first = ctx->colors.primary;
+  PixelVar second = ctx->colors.secondary;
   if (mode == LineGradMode::hori) {
     if (startPos.x() > endPos.x()) {
       std::swap(first, second);

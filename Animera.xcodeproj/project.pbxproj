@@ -159,6 +159,7 @@
 		4529AA05239CA4090034A014 /* tool param widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "tool param widget.hpp"; sourceTree = "<group>"; };
 		4529AA07239CDF4F0034A014 /* quit dialog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "quit dialog.cpp"; sourceTree = "<group>"; };
 		4529AA08239CDF4F0034A014 /* quit dialog.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "quit dialog.hpp"; sourceTree = "<group>"; };
+		452D32F62495C30C009FA8F0 /* pixel variant.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "pixel variant.hpp"; sourceTree = "<group>"; };
 		453A20C4231A078100F055BA /* sprite file.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "sprite file.cpp"; sourceTree = "<group>"; };
 		453A20C5231A078100F055BA /* sprite file.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "sprite file.hpp"; sourceTree = "<group>"; };
 		453A20C7231A139100F055BA /* palette span.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "palette span.hpp"; sourceTree = "<group>"; };
@@ -1788,6 +1789,7 @@
 				4549BB29243BFF3200B1A62A /* format.hpp */,
 				4549BB2A243BFF3200B1A62A /* mask.hpp */,
 				4549BB2B243BFF3200B1A62A /* convert.hpp */,
+				452D32F62495C30C009FA8F0 /* pixel variant.hpp */,
 			);
 			path = Graphics;
 			sourceTree = "<group>";

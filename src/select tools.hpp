@@ -1,4 +1,4 @@
-﻿//
+//
 //  select tools.hpp
 //  Animera
 //
@@ -89,7 +89,7 @@ private:
   QRect celRect() const;
   void toggleMode(const ToolMouseDownEvent &);
   void addToSelection(const ToolMouseDownEvent &);
-  QRgb getOverlayColor() const;
+  PixelRgba getOverlayColor() const;
   void paintOverlay() const;
   void animate();
 };

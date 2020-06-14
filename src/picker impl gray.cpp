@@ -1,4 +1,4 @@
-﻿//
+//
 //  picker impl gray.cpp
 //  Animera
 //
@@ -70,9 +70,10 @@ void PickerImplGray::connectSignals() {
   CONNECT(alphaSlider, shouldShowNorm, this,        shouldShowNorm);
 }
 
-void PickerImplGray::setColor(const QRgb color) {
-  gray = gfx::YA::gray(color);
-  alpha = gfx::YA::alpha(color);
+void PickerImplGray::setColor(const PixelVar color) {
+  const gfx::Color gColor = gfx::YA::color(static_cast<PixelGray>(color));
+  gray = gColor.r;
+  alpha = gColor.a;
   graySlider->setGray(gray);
   alphaSlider->setRgba({gray, gray, gray}, alpha);
   boxA->setValue(alpha);
@@ -103,5 +104,5 @@ void PickerImplGray::setAlpha(const int newAlpha) {
 }
 
 void PickerImplGray::changeColor() {
-  Q_EMIT colorChanged(gfx::YA::pixel(gray, alpha));
+  Q_EMIT colorChanged(PixelVar{gfx::YA::pixel(gray, alpha)});
 }

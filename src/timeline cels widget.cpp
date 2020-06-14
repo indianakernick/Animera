@@ -184,7 +184,7 @@ void CelsWidget::updateSelectionImg() {
   painter.fillRect(selectionRect, cel_select_color);
   drawStrokedRect(
     selectionImg,
-    cel_select_border_color.rgba(),
+    PixelVar{cel_select_border_color.rgba()},
     selectionRect,
     glob_border_width
   );

@@ -10,6 +10,7 @@
 #define animera_config_hpp
 
 #include "math.hpp"
+#include "image.hpp"
 #include "geometry.hpp"
 #include <QtGui/qcolor.h>
 #include "widget rect.hpp"
@@ -212,7 +213,7 @@ inline const QColor tool_shape_enabled = glob_light_1;
 
 constexpr IntRange  tool_overlay_gray = {32, 223, 127};
 constexpr IntRange  tool_overlay_alpha = {32, 191, 127};
-constexpr QRgb      tool_overlay_color = qRgba(
+constexpr PixelRgba tool_overlay_color = gfx::ARGB::pixel(
   tool_overlay_gray.def,
   tool_overlay_gray.def,
   tool_overlay_gray.def,

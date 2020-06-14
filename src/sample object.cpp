@@ -1,4 +1,4 @@
-﻿//
+//
 //  sample object.cpp
 //  Animera
 //
@@ -29,10 +29,10 @@ void SampleObject::mouseMove(const QPoint newPos) {
 
 void SampleObject::keyPress(const Qt::Key key) {
   if (key == key_sample) {
-    const QRgb pixel = sampleCel(*cel, pos);
+    const PixelVar pixel = sampleCel(*cel, pos);
     // similar to right-clicking on a palette color
     if (format == Format::index) {
-      Q_EMIT shouldSetIndex(pixel);
+      Q_EMIT shouldSetIndex(static_cast<PixelIndex>(pixel));
     } else {
       Q_EMIT shouldSetColor(pixel);
     }

@@ -1,4 +1,4 @@
-﻿//
+//
 //  picker impl gray.hpp
 //  Animera
 //
@@ -22,7 +22,7 @@ public:
   void init(QWidget *) override;
   void setupLayout(QGridLayout *) override;
   void connectSignals() override;
-  void setColor(QRgb) override;
+  void setColor(PixelVar) override;
 
 private Q_SLOTS:
   void setValue(int);

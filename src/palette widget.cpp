@@ -17,6 +17,7 @@
 #include "color handle.hpp"
 #include <Graphics/format.hpp>
 #include "widget painting.hpp"
+#include "graphics convert.hpp"
 #include "radio button widget.hpp"
 #include <QtWidgets/qgridlayout.h>
 
@@ -24,7 +25,7 @@ class PaletteColorWidget final : public RadioButtonWidget, public ColorHandle {
   Q_OBJECT
   
 public:
-  PaletteColorWidget(QWidget *parent, QRgb &color, const int index, const Format format)
+  PaletteColorWidget(QWidget *parent, PixelVar &color, const PixelIndex index, const Format format)
     : RadioButtonWidget{parent}, color{color}, index{index}, format{format} {
     setFixedSize(pal_tile_size, pal_tile_size);
     CONNECT(this, toggled, this, attachColor);
@@ -33,8 +34,8 @@ public:
 
 Q_SIGNALS:
   void shouldAttachColor(ColorHandle *);
-  void shouldSetColor(QRgb);
-  void shouldSetIndex(int);
+  void shouldSetColor(PixelVar);
+  void shouldSetIndex(PixelIndex);
   void paletteColorChanged();
   void shouldShowNorm(std::string_view);
 
@@ -44,8 +45,8 @@ private Q_SLOTS:
   }
 
 private:
-  QRgb &color;
-  int index;
+  PixelVar &color;
+  PixelIndex index;
   Format format;
   QPixmap selectBlack;
   QPixmap selectWhite;
@@ -69,17 +70,13 @@ private:
     painter.drawRect(bord, bord + half, half, half);
   }
   
-  static QColor toQColor(const gfx::Color color) {
-    return QColor{color.r, color.g, color.b, color.a};
-  }
-  
   gfx::Color getGColor() const {
     switch (format) {
       case Format::index:
       case Format::rgba:
-        return gfx::ARGB::color(color);
+        return gfx::ARGB::color(static_cast<PixelRgba>(color));
       case Format::gray:
-        return gfx::YA::color(color);
+        return gfx::YA::color(static_cast<PixelGray>(color));
     }
   }
   
@@ -89,7 +86,7 @@ private:
   }
   
   void paintColor(QPainter &painter) {
-    painter.setBrush(toQColor(getGColor()));
+    painter.setBrush(convert(getGColor()));
     painter.drawRect(
       glob_border_width, glob_border_width,
       pal_tile_size - glob_border_width, pal_tile_size - glob_border_width
@@ -150,10 +147,10 @@ private:
     Q_EMIT shouldShowNorm("");
   }
   
-  QRgb getInitialColor() const override {
+  PixelVar getInitialColor() const override {
     return color;
   }
-  void setColor(const QRgb newColor) override {
+  void setColor(const PixelVar newColor) override {
     color = newColor;
     update();
     Q_EMIT paletteColorChanged();
@@ -179,7 +176,7 @@ public Q_SLOTS:
     setupLayout();
     connectSignals();
   }
-  void attachIndex(const int index) {
+  void attachIndex(const PixelIndex index) {
     colors[index]->click();
   }
   void updatePalette() {
@@ -196,8 +193,8 @@ public Q_SLOTS:
 
 Q_SIGNALS:
   void shouldAttachColor(ColorHandle *);
-  void shouldSetColor(QRgb);
-  void shouldSetIndex(int);
+  void shouldSetColor(PixelVar);
+  void shouldSetIndex(PixelIndex);
   void paletteChanged(PaletteSpan);
   void paletteColorChanged();
   void shouldShowNorm(std::string_view);
@@ -209,7 +206,9 @@ private:
   void createWidgets(const PaletteSpan palette) {
     colors.reserve(pal_colors);
     for (int i = 0; i != pal_colors; ++i) {
-      colors.push_back(new PaletteColorWidget{this, palette[i], i, format});
+      colors.push_back(new PaletteColorWidget{
+        this, palette[i], static_cast<PixelIndex>(i), format
+      });
     }
   }
   
@@ -273,7 +272,7 @@ void PaletteWidget::setPalette(PaletteSpan palette) {
   table->setPalette(palette);
 }
 
-void PaletteWidget::attachIndex(const int index) {
+void PaletteWidget::attachIndex(const PixelIndex index) {
   table->attachIndex(index);
 }
 

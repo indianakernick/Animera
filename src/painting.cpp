@@ -1,4 +1,4 @@
-﻿//
+//
 //  painting.cpp
 //  Animera
 //
@@ -18,19 +18,19 @@
 
 bool drawSquarePoint(
   QImage &img,
-  const QRgb color,
+  const PixelVar color,
   const QPoint pos,
   const gfx::CircleShape shape
 ) {
   if (img.isNull()) return false;
-  return visitSurface(img, [color, pos, shape](auto surface) {
+  return visitSurfaces(img, color, [=](auto surface, auto color) {
     return gfx::drawFilledRect(surface, color, gfx::centerRect(convert(pos), shape));
   });
 }
 
 bool drawRoundPoint(
   QImage &img,
-  const QRgb color,
+  const PixelVar color,
   const QPoint pos,
   const int radius,
   const gfx::CircleShape shape
@@ -44,32 +44,32 @@ bool drawRoundPoint(
   }
 }
 
-bool drawFloodFill(QImage &img, const QRgb color, QPoint pos, QRect rect) {
+bool drawFloodFill(QImage &img, const PixelVar color, QPoint pos, QRect rect) {
   assert(!rect.isEmpty());
   if (img.isNull()) return false;
   if (!img.rect().contains(pos)) return false;
   pos -= rect.topLeft();
-  return visitSurface(img, [pos, color, rect](auto surface) {
+  return visitSurfaces(img, color, [=](auto surface, auto color) {
     return gfx::drawFloodFill(surface.view(convert(rect)), color, convert(pos));
   });
 }
 
 bool drawFilledCircle(
   QImage &img,
-  const QRgb color,
+  const PixelVar color,
   const QPoint center,
   const int radius,
   const gfx::CircleShape shape
 ) {
   if (img.isNull()) return false;
-  return visitSurface(img, [center, radius, shape, color](auto surface) {
+  return visitSurfaces(img, color, [=](auto surface, auto color) {
     return gfx::drawFilledCircle(surface, color, convert(center), radius, shape);
   });
 }
 
 bool drawStrokedCircle(
   QImage &img,
-  const QRgb color,
+  const PixelVar color,
   const QPoint center,
   const int radius,
   const int thickness,
@@ -77,28 +77,28 @@ bool drawStrokedCircle(
 ) {
   assert(thickness > 0);
   if (img.isNull()) return false;
-  return visitSurface(img, [center, radius, thickness, shape, color](auto surface) {
+  return visitSurfaces(img, color, [=](auto surface, auto color) {
     return gfx::drawStrokedCircle(surface, color, convert(center), radius, radius - thickness + 1, shape);
   });
 }
 
-bool drawFilledRect(QImage &img, const QRgb color, const QRect rect) {
+bool drawFilledRect(QImage &img, const PixelVar color, const QRect rect) {
   if (img.isNull()) return false;
-  return visitSurface(img, [rect, color](auto surface) {
+  return visitSurfaces(img, color, [=](auto surface, auto color) {
     return gfx::drawFilledRect(surface, color, convert(rect));
   });
 }
 
 bool drawStrokedRect(
   QImage &img,
-  const QRgb color,
+  const PixelVar color,
   const QRect rect,
   const int thickness
 ) {
   assert(thickness > 0);
   if (img.isNull()) return false;
   if (!img.rect().intersects(rect)) return false;
-  return visitSurface(img, [rect, thickness, color](auto surface) {
+  return visitSurfaces(img, color, [=](auto surface, auto color) {
     const QRect inner = rect.marginsRemoved({thickness, thickness, thickness, thickness});
     return gfx::drawStrokedRect(surface, color, convert(rect), convert(inner));
   });
@@ -112,18 +112,18 @@ template <typename Pixel>
 struct PixelFormat;
 
 template <>
-struct PixelFormat<std::uint8_t> {
+struct PixelFormat<PixelIndex> {
   // TODO: Interpolating indexed colors. Is this the best we can do?
   using type = gfx::Y;
 };
 
 template <>
-struct PixelFormat<std::uint16_t> {
+struct PixelFormat<PixelGray> {
   using type = gfx::YA;
 };
 
 template <>
-struct PixelFormat<std::uint32_t> {
+struct PixelFormat<PixelRgba> {
   using type = gfx::ARGB;
 };
 
@@ -156,12 +156,12 @@ auto makeInterpolator(const Pixel first, const Pixel second) {
 
 bool drawHoriGradient(
   QImage &img,
-  const QRgb left,
-  const QRgb right,
+  const PixelVar left,
+  const PixelVar right,
   const QRect rect
 ) {
   if (img.isNull()) return false;
-  return visitSurface(img, [left, right, rect](auto surface) {
+  return visitSurfaces(img, left, right, [=](auto surface, auto left, auto right) {
     using Pixel = typename decltype(surface)::Pixel;
     auto func = makeInterpolator<Pixel>(left, right);
     return gfx::drawHoriGradient(surface, convert(rect), func);
@@ -170,21 +170,21 @@ bool drawHoriGradient(
 
 bool drawVertGradient(
   QImage &img,
-  const QRgb top,
-  const QRgb bottom,
+  const PixelVar top,
+  const PixelVar bottom,
   const QRect rect
 ) {
   if (img.isNull()) return false;
-  return visitSurface(img, [top, bottom, rect](auto surface) {
+  return visitSurfaces(img, top, bottom, [=](auto surface, auto top, auto bottom) {
     using Pixel = typename decltype(surface)::Pixel;
     auto func = makeInterpolator<Pixel>(top, bottom);
     return gfx::drawVertGradient(surface, convert(rect), func);
   });
 }
 
-bool drawLine(QImage &img, const QRgb color, const QLine line, const int radius) {
+bool drawLine(QImage &img, const PixelVar color, const QLine line, const int radius) {
   if (img.isNull()) return false;
-  return visitSurface(img, [line, radius, color](auto surface) {
+  return visitSurfaces(img, color, [=](auto surface, auto color) {
     return gfx::drawLine(surface, color, convert(line.p1()), convert(line.p2()), radius);
   });
 }

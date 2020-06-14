@@ -1,4 +1,4 @@
-﻿//
+//
 //  palette widget.hpp
 //  Animera
 //
@@ -25,13 +25,13 @@ public:
 public Q_SLOTS:
   void initCanvas(Format);
   void setPalette(PaletteSpan);
-  void attachIndex(int);
+  void attachIndex(PixelIndex);
   void updatePalette();
   
 Q_SIGNALS:
   void shouldAttachColor(ColorHandle *);
-  void shouldSetColor(QRgb);
-  void shouldSetIndex(int);
+  void shouldSetColor(PixelVar);
+  void shouldSetIndex(PixelIndex);
   void paletteColorChanged();
   void shouldShowNorm(std::string_view);
 

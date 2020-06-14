@@ -1,4 +1,4 @@
-﻿//
+//
 //  palette.hpp
 //  Animera
 //
@@ -11,7 +11,6 @@
 
 #include "error.hpp"
 #include "image.hpp"
-#include <QtGui/qrgb.h>
 #include "palette span.hpp"
 #include <QtCore/qobject.h>
 

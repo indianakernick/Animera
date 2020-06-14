@@ -1,4 +1,4 @@
-﻿//
+//
 //  color picker widget.hpp
 //  Animera
 //
@@ -29,10 +29,10 @@ Q_SIGNALS:
 public Q_SLOTS:
   void initCanvas(Format);
   void attach(ColorHandle *);
-  void setColor(QRgb);
+  void setColor(PixelVar);
 
 private Q_SLOTS:
-  void setHandleColor(QRgb);
+  void setHandleColor(PixelVar);
   
 private:
   void setImpl(Format);

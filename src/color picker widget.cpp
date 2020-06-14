@@ -1,4 +1,4 @@
-﻿//
+//
 //  color picker widget.cpp
 //  Animera
 //
@@ -37,11 +37,11 @@ void ColorPickerWidget::attach(ColorHandle *newHandle) {
   handle = newHandle;
 }
 
-void ColorPickerWidget::setColor(const QRgb color) {
+void ColorPickerWidget::setColor(const PixelVar color) {
   impl->setColor(color);
 }
 
-void ColorPickerWidget::setHandleColor(const QRgb color) {
+void ColorPickerWidget::setHandleColor(const PixelVar color) {
   if (handle) {
     handle->setColor(color);
   }

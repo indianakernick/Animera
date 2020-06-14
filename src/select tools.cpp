@@ -106,10 +106,10 @@ void SelectTool<Derived>::paste(
     blitImage(ctx->cel->img, cview(selection, bounds), rect.topLeft() - celPos);
     ctx->shrinkCel(rect);
   } else if (button == ButtonType::erase) {
-    if (ctx->colors.erase != 0) ctx->growCel(rect);
+    if (!ctx->colors.erase.zero()) ctx->growCel(rect);
     const QPoint celPos = ctx->cel->pos;
     drawFilledRect(ctx->cel->img, ctx->colors.erase, rect.translated(-celPos));
-    if (ctx->colors.erase == 0) ctx->shrinkCel(rect);
+    if (ctx->colors.erase.zero()) ctx->shrinkCel(rect);
   }
   ctx->changeCel(rect);
   ctx->finishChange();
@@ -133,10 +133,10 @@ void SelectTool<Derived>::pasteWithMask(
     blitMaskImage(ctx->cel->img, cview(mask, bounds), cview(selection, bounds), offsetPos);
     ctx->shrinkCel(rect);
   } else if (button == ButtonType::erase) {
-    if (ctx->colors.erase != 0) ctx->growCel(rect);
+    if (!ctx->colors.erase.zero()) ctx->growCel(rect);
     const QPoint offsetPos = rect.topLeft() - ctx->cel->pos;
     fillMaskImage(ctx->cel->img, cview(mask, bounds), ctx->colors.erase, offsetPos);
-    if (ctx->colors.erase == 0) ctx->shrinkCel(rect);
+    if (ctx->colors.erase.zero()) ctx->shrinkCel(rect);
   }
   ctx->changeCel(rect);
   ctx->finishChange();
@@ -164,7 +164,7 @@ void SelectTool<Derived>::clearOverlay(const QPoint pos) {
 template <typename Derived>
 void SelectTool<Derived>::clearOverlay(const SelectMode currMode, const QPoint pos) {
   if (currMode == SelectMode::copy) {
-    drawSquarePoint(*ctx->overlay, 0, pos);
+    drawSquarePoint(*ctx->overlay, {}, pos);
     ctx->changeOverlay(pos);
   } else if (currMode == SelectMode::paste) {
     clearOverlay(pos);
@@ -219,7 +219,7 @@ void RectangleSelectTool::mouseDown(const ToolMouseDownEvent &event) {
     } else {
       status.appendLabeled(event.pos);
     }
-    drawSquarePoint(*ctx->overlay, tool_overlay_color, event.pos);
+    drawSquarePoint(*ctx->overlay, PixelVar{tool_overlay_color}, event.pos);
     ctx->changeOverlay(event.pos);
   } else if (mode == SelectMode::paste) {
     status.append("Selection: ");
@@ -239,15 +239,15 @@ void RectangleSelectTool::mouseMove(const ToolMouseMoveEvent &event) {
   
   if (mode == SelectMode::copy) {
     if (event.button == ButtonType::primary) {
-      drawStrokedRect(*ctx->overlay, 0, bounds);
+      drawStrokedRect(*ctx->overlay, {}, bounds);
       bounds = unite(startPos, event.pos);
-      drawStrokedRect(*ctx->overlay, tool_overlay_color, bounds);
+      drawStrokedRect(*ctx->overlay, PixelVar{tool_overlay_color}, bounds);
       ctx->changeOverlay(bounds.united(toRect(event.lastPos)));
       status.append("Selection: ");
       status.append(bounds);
     } else {
-      drawSquarePoint(*ctx->overlay, 0, event.lastPos);
-      drawSquarePoint(*ctx->overlay, tool_overlay_color, event.pos);
+      drawSquarePoint(*ctx->overlay, {}, event.lastPos);
+      drawSquarePoint(*ctx->overlay, PixelVar{tool_overlay_color}, event.pos);
       ctx->changeOverlay(unite(event.lastPos, event.pos));
       status.appendLabeled(event.pos);
     }
@@ -289,7 +289,7 @@ void PolygonSelectTool::attachCel() {
   SCOPE_TIME("PolygonSelectTool::attachCel");
   
   if (resizeImages()) {
-    mask = {ctx->size, mask_format};
+    mask = {ctx->size, qimageFormat<PixelMask>()};
     clearImage(mask);
   }
 }
@@ -324,7 +324,7 @@ void PolygonSelectTool::mouseDown(const ToolMouseDownEvent &event) {
     } else {
       status.appendLabeled(event.pos);
     }
-    drawSquarePoint(*ctx->overlay, tool_overlay_color, event.pos);
+    drawSquarePoint(*ctx->overlay, PixelVar{tool_overlay_color}, event.pos);
     ctx->changeOverlay(event.pos);
   } else if (mode == SelectMode::paste) {
     status.append("Selection: ");
@@ -351,8 +351,8 @@ void PolygonSelectTool::mouseMove(const ToolMouseMoveEvent &event) {
       status.append("Selection: ");
       status.append(bounds);
     } else {
-      drawSquarePoint(*ctx->overlay, 0, event.lastPos);
-      drawSquarePoint(*ctx->overlay, tool_overlay_color, event.pos);
+      drawSquarePoint(*ctx->overlay, {}, event.lastPos);
+      drawSquarePoint(*ctx->overlay, PixelVar{tool_overlay_color}, event.pos);
       ctx->changeOverlay(unite(event.lastPos, event.pos));
       status.appendLabeled(event.pos);
     }
@@ -416,7 +416,7 @@ void WandSelectTool::attachCel() {
   
   mode = SelectMode::copy;
   if (resizeImages()) {
-    mask = {ctx->size, mask_format};
+    mask = {ctx->size, qimageFormat<PixelMask>()};
     clearImage(mask);
   } else {
     clearImage(mask, bounds);
@@ -566,7 +566,7 @@ void WandSelectTool::addToSelection(const ToolMouseDownEvent &event) {
   
   // TODO: flood fill optimization
   QRect rect = toRect(ctx->size);
-  if (sampleCel(*ctx->cel, event.pos) == 0) {
+  if (sampleCel(*ctx->cel, event.pos).zero()) {
     ctx->growCel(rect);
   } else {
     rect = rect.intersected(ctx->cel->rect());
@@ -602,12 +602,12 @@ void WandSelectTool::addToSelection(const ToolMouseDownEvent &event) {
   paintOverlay();
 }
 
-QRgb WandSelectTool::getOverlayColor() const {
+PixelRgba WandSelectTool::getOverlayColor() const {
   static_assert(wand_frames % 2 == 0);
   constexpr int half_frames = wand_frames / 2;
   const int mirroredFrame = animFrame > half_frames ? wand_frames - animFrame : animFrame;
   const int gray = scale(mirroredFrame, half_frames, 255);
-  return qRgba(gray, gray, gray, wand_alpha);
+  return gfx::ARGB::pixel(gray, gray, gray, wand_alpha);
 }
 
 void WandSelectTool::paintOverlay() const {
@@ -615,7 +615,7 @@ void WandSelectTool::paintOverlay() const {
   
   if (mode != SelectMode::copy) return;
   if (bounds.isEmpty()) return;
-  fillMaskImage(*ctx->overlay, cview(mask, bounds), getOverlayColor(), bounds.topLeft());
+  fillMaskImage(*ctx->overlay, cview(mask, bounds), PixelVar{getOverlayColor()}, bounds.topLeft());
   ctx->changeOverlay(bounds);
 }
 

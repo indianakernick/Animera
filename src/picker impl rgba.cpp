@@ -1,4 +1,4 @@
-﻿//
+//
 //  picker impl rgba.cpp
 //  Animera
 //
@@ -98,11 +98,12 @@ void PickerImplRGBA::connectSignals() {
   CONNECT(alphaSlider, shouldShowNorm, this,        shouldShowNorm);
 }
 
-void PickerImplRGBA::setColor(const QRgb color) {
-  colorRgb.r = qRed(color);
-  colorRgb.g = qGreen(color);
-  colorRgb.b = qBlue(color);
-  alpha = qAlpha(color);
+void PickerImplRGBA::setColor(const PixelVar color) {
+  const gfx::Color gColor = gfx::ARGB::color(static_cast<PixelRgba>(color));
+  colorRgb.r = gColor.r;
+  colorRgb.g = gColor.g;
+  colorRgb.b = gColor.b;
+  alpha = gColor.a;
   setRGBA(colorRgb, alpha);
   boxHex->setRgba(colorRgb, alpha);
 }
@@ -199,5 +200,5 @@ void PickerImplRGBA::changeHSV() {
 }
 
 void PickerImplRGBA::changeColor() {
-  Q_EMIT colorChanged(gfx::ARGB::pixel(colorRgb.r, colorRgb.g, colorRgb.b, alpha));
+  Q_EMIT colorChanged(PixelVar{gfx::ARGB::pixel(colorRgb.r, colorRgb.g, colorRgb.b, alpha)});
 }

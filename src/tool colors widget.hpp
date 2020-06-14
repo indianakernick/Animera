@@ -1,4 +1,4 @@
-﻿//
+//
 //  tool colors widget.hpp
 //  Animera
 //
@@ -25,13 +25,13 @@ public:
 public Q_SLOTS:
   void initCanvas(Format);
   void setPalette(PaletteCSpan);
-  void setIndex(int);
+  void setIndex(PixelIndex);
   void updatePaletteColors();
 
 Q_SIGNALS:
   void colorsChanged(ToolColors);
   void shouldAttachColor(ColorHandle *);
-  void shouldAttachIndex(int);
+  void shouldAttachIndex(PixelIndex);
   void shouldShowNorm(std::string_view);
 
 private Q_SLOTS:

@@ -1,4 +1,4 @@
-﻿//
+//
 //  tool.hpp
 //  Animera
 //
@@ -31,9 +31,9 @@ enum class ToolChanges {
 };
 
 struct ToolColors {
-  QRgb primary;
-  QRgb secondary;
-  QRgb erase;
+  PixelVar primary;
+  PixelVar secondary;
+  PixelVar erase;
 };
 
 struct ToolLeaveEvent {
@@ -91,7 +91,7 @@ public:
   void shrinkCel(QRect) const;
   [[deprecated]] void shrinkCel() const;
   
-  QRgb selectColor(ButtonType) const;
+  PixelVar selectColor(ButtonType) const;
   
   void showStatus(const StatusMsg &) const;
   void clearStatus() const;

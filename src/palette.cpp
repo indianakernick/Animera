@@ -1,4 +1,4 @@
-﻿//
+//
 //  palette.cpp
 //  Animera
 //
@@ -21,20 +21,20 @@ constexpr int quantColor(const int size, const int color) {
   return scale(color, size, 255);
 }
 
-constexpr QRgb quantColor(const int size, const int r, const int g, const int b) {
-  return gfx::ARGB::pixel(quantColor(size, r), quantColor(size, g), quantColor(size, b));
+constexpr PixelVar quantColor(const int size, const int r, const int g, const int b) {
+  return PixelVar{gfx::ARGB::pixel(quantColor(size, r), quantColor(size, g), quantColor(size, b))};
 }
 
-constexpr QRgb quantGrayColor(const int size, const int y) {
+constexpr PixelVar quantGrayColor(const int size, const int y) {
   const int gray = quantColor(size, y);
-  return gfx::ARGB::pixel(gray, gray, gray);
+  return PixelVar{gfx::ARGB::pixel(gray, gray, gray)};
 }
 
-constexpr QRgb quantGray(const int size, const int y) {
-  return gfx::YA::pixel(quantColor(size, y), 255);
+constexpr PixelVar quantGray(const int size, const int y) {
+  return PixelVar{gfx::YA::pixel(quantColor(size, y), 255)};
 }
 
-constexpr std::array<QRgb, 24> hue_palette = {
+constexpr std::array<PixelVar, 24> hue_palette = {
   quantColor(4, 4, 0, 0),
   quantColor(4, 4, 1, 0),
   quantColor(4, 4, 2, 0),
@@ -63,7 +63,7 @@ constexpr std::array<QRgb, 24> hue_palette = {
   quantColor(4, 4, 0, 1),
 };
 
-constexpr std::array<QRgb, 9> gray_color_palette = {
+constexpr std::array<PixelVar, 9> gray_color_palette = {
   quantGrayColor(8, 0),
   quantGrayColor(8, 1),
   quantGrayColor(8, 2),
@@ -76,7 +76,7 @@ constexpr std::array<QRgb, 9> gray_color_palette = {
   quantGrayColor(8, 8),
 };
 
-constexpr std::array<QRgb, 9> gray_palette = {
+constexpr std::array<PixelVar, 9> gray_palette = {
   quantGray(8, 0),
   quantGray(8, 1),
   quantGray(8, 2),
@@ -91,7 +91,7 @@ constexpr std::array<QRgb, 9> gray_palette = {
 
 PaletteCSpan getUsedSpan(const PaletteCSpan colors) {
   for (std::size_t i = colors.size(); i != 0; --i) {
-    if (colors[i - 1] != 0) {
+    if (!colors[i - 1].zero()) {
       return {colors.data(), i};
     }
   }
@@ -104,9 +104,9 @@ void Palette::reset() {
   auto iter = colors.begin();
   switch (canvasFormat) {
     case Format::index:
-      *iter++ = 0;
-      *iter++ = gfx::ARGB::pixel(0, 0, 0);
-      *iter++ = gfx::ARGB::pixel(255, 255, 255);
+      *iter++ = PixelVar{gfx::ARGB::pixel(0, 0, 0, 0)};
+      *iter++ = PixelVar{gfx::ARGB::pixel(0, 0, 0, 255)};
+      *iter++ = PixelVar{gfx::ARGB::pixel(255, 255, 255, 255)};
       break;
     case Format::rgba:
       iter = std::copy(hue_palette.cbegin(), hue_palette.cend(), iter);
@@ -115,7 +115,7 @@ void Palette::reset() {
     case Format::gray:
       iter = std::copy(gray_palette.cbegin(), gray_palette.cend(), iter);
   }
-  std::fill(iter, colors.end(), 0);
+  std::fill(iter, colors.end(), PixelVar{});
 }
 
 void Palette::initDefault() {

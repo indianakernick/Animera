@@ -1,4 +1,4 @@
-﻿//
+//
 //  image.hpp
 //  Animera
 //
@@ -10,60 +10,63 @@
 #define animera_image_hpp
 
 #include <QtGui/qimage.h>
+#include <Graphics/format.hpp>
+#include <Graphics/pixel variant.hpp>
 
 enum class Format : std::uint8_t {
-  // cli.cpp depends on the order
+  // cli new.cpp depends on the order
   rgba,
   index,
   gray
 };
 
-constexpr QImage::Format mask_format = QImage::Format_Grayscale8;
 constexpr QRgb mask_color_on = 0xFFFFFFFF;
 constexpr QRgb mask_color_off = 0;
 
-constexpr QImage::Format qimageFormat(const Format format) {
-  switch (format) {
-    case Format::rgba:
-      return QImage::Format_ARGB32;
-    case Format::index:
-      return QImage::Format_Grayscale8;
-    case Format::gray:
-      return QImage::Format_Grayscale16; // Qt doesn't have a gray-alpha format
-    default:
-      Q_UNREACHABLE();
-  }
-}
+using PixelRgba = gfx::ARGB::Pixel;
+using PixelIndex = gfx::I<>::Pixel;
+using PixelGray = gfx::YA::Pixel;
+using PixelMask = std::uint8_t;
+using PixelVar = gfx::PixelVariant<PixelRgba, PixelIndex, PixelGray>;
 
 template <typename Pixel>
 constexpr QImage::Format qimageFormat();
 
 template <>
-constexpr QImage::Format qimageFormat<std::uint8_t>() {
+constexpr QImage::Format qimageFormat<PixelRgba>() {
+  return QImage::Format_ARGB32;
+}
+
+template <>
+constexpr QImage::Format qimageFormat<PixelIndex>() {
   return QImage::Format_Grayscale8;
 }
 
 template <>
-constexpr QImage::Format qimageFormat<std::uint16_t>() {
-  return QImage::Format_Grayscale16;
+constexpr QImage::Format qimageFormat<PixelGray>() {
+  return QImage::Format_Grayscale16; // Qt doesn't have a gray-alpha format
 }
 
-template <>
-constexpr QImage::Format qimageFormat<std::uint32_t>() {
-  return QImage::Format_ARGB32;
+// template <>
+// constexpr QImage::Format qimageFormat<PixelMask>() {
+//   return QImage::Format_Grayscale8;
+// }
+
+constexpr QImage::Format qimageFormat(const Format format) {
+  switch (format) {
+    case Format::rgba:
+      return qimageFormat<PixelRgba>();
+    case Format::index:
+      return qimageFormat<PixelIndex>();
+    case Format::gray:
+      return qimageFormat<PixelGray>();
+    default:
+      Q_UNREACHABLE();
+  }
 }
 
-using PixelRgba = QRgb;
-using PixelIndex = std::uint8_t;
-using PixelGray = std::uint16_t;
-using PixelMask = std::uint8_t;
-
-bool compatible(const QImage &, const QImage &);
-QImage makeCompatible(const QImage &);
-QImage makeMask(QSize);
 void copyImage(QImage &, const QImage &);
 void clearImage(QImage &);
-void clearImage(QImage &, QRgb);
 void clearImage(QImage &, QRect);
 
 // TODO: Is a custom image worth considering?

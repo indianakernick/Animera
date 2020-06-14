@@ -1,4 +1,4 @@
-﻿//
+//
 //  brush tool.hpp
 //  Animera
 //
@@ -24,7 +24,7 @@ public:
 private:
   int radius = brsh_radius.def;
   SymmetryMode mode = SymmetryMode::none;
-  QRgb color = 0;
+  PixelVar color;
   QRect bounds;
   
   template <typename Func>
@@ -35,7 +35,7 @@ private:
   void visit(QLine, Func, bool = true) const;
   
   void symPointStatus(QPoint);
-  void symPointOverlay(QPoint, QRgb);
+  void symPointOverlay(QPoint, PixelRgba);
   void symChangeOverlay(QLine);
   void symPoint(QPoint);
   void symLine(QLine);

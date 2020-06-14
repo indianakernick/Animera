@@ -1,4 +1,4 @@
-﻿//
+//
 //  export png.cpp
 //  Animera
 //
@@ -137,7 +137,7 @@ void writePalette(WriteContext &ctx, PaletteCSpan palette) {
   
   int i = pal_colors - 1;
   for (; i != -1; --i) {
-    if (palette[i] != 0) break;
+    if (!palette[i].zero()) break;
   }
   if (i == -1) {
     plte[0] = {0, 0, 0};
@@ -149,14 +149,14 @@ void writePalette(WriteContext &ctx, PaletteCSpan palette) {
   
   const int plteSize = i + 1;
   for (; i != -1; --i) {
-    const gfx::Color color = gfx::ARGB::color(palette[i]);
+    const gfx::Color color = gfx::ARGB::color(static_cast<PixelRgba>(palette[i]));
     if (color.a != 255) break;
     plte[i] = toPngColor(color);
   }
   
   const int trnsSize = i + 1;
   for (; i != -1; --i) {
-    const gfx::Color color = gfx::ARGB::color(palette[i]);
+    const gfx::Color color = gfx::ARGB::color(static_cast<PixelRgba>(palette[i]));
     plte[i] = toPngColor(color);
     trns[i] = color.a;
   }
@@ -225,13 +225,13 @@ void readPalette(ReadContext &ctx, PaletteSpan palette) {
   }
   std::size_t i = 0;
   for (; i != static_cast<std::size_t>(trnsSize); ++i) {
-    palette[i] = gfx::ARGB::pixel(plte[i].red, plte[i].green, plte[i].blue, trns[i]);
+    palette[i] = PixelVar{gfx::ARGB::pixel(plte[i].red, plte[i].green, plte[i].blue, trns[i])};
   }
   for (; i != static_cast<std::size_t>(plteSize); ++i) {
-    palette[i] = gfx::ARGB::pixel(plte[i].red, plte[i].green, plte[i].blue);
+    palette[i] = PixelVar{gfx::ARGB::pixel(plte[i].red, plte[i].green, plte[i].blue)};
   }
   for (; i != pal_colors; ++i) {
-    palette[i] = 0;
+    palette[i] = PixelVar{};
   }
 }
 
@@ -290,14 +290,14 @@ Error exportCelPng(
       break;
     case ExportFormat::gray:
       if (canvasFormat == Format::gray) {
-        gfx::convertInplace(makeSurface<gfx::YA::Pixel>(image), gfx::Y{}, gfx::YA{});
+        gfx::convertInplace(makeSurface<PixelGray>(image), gfx::Y{}, gfx::YA{});
       }
       break;
     case ExportFormat::gray_alpha:
       break;
     case ExportFormat::monochrome:
       if (canvasFormat == Format::gray) {
-        gfx::convertToMono<gfx::YA, 128>(makeSurface<gfx::YA::Pixel>(image));
+        gfx::convertToMono<gfx::YA, 128>(makeSurface<PixelGray>(image));
       } else if (canvasFormat == Format::index) {
         gfx::convertToMono<gfx::Y, 1>(makeSurface<gfx::Y::Pixel>(image));
       } else Q_UNREACHABLE();
@@ -451,13 +451,15 @@ Error exportPalettePng(
   png_write_info(ctx.png, ctx.info);
   
   if (format == Format::gray) {
-    gfx::YA::Pixel rowDat[pal_colors];
-    std::copy(palette.begin(), palette.end(), rowDat);
+    PixelGray rowDat[pal_colors];
+    for (std::size_t p = 0; p != palette.size(); ++p) {
+      rowDat[p] = static_cast<PixelGray>(palette[p]);
+    }
     png_write_row(ctx.png, reinterpret_cast<png_bytep>(rowDat));
   } else if (format == Format::rgba || format == Format::index) {
     png_set_bgr(ctx.png);
     png_write_row(ctx.png, reinterpret_cast<png_bytep>(
-      const_cast<QRgb *>(palette.data())
+      const_cast<PixelVar *>(palette.data())
     ));
   }
   
@@ -521,7 +523,7 @@ Error importPalettePng(
       src += bytes;
       ++dst;
     }
-    std::fill(dst, palette.end(), 0);
+    std::fill(dst, palette.end(), PixelVar{});
   };
   
   if (format == Format::gray) {

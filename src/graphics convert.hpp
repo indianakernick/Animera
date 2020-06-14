@@ -1,4 +1,4 @@
-﻿//
+//
 //  graphics convert.hpp
 //  Animera
 //
@@ -9,7 +9,9 @@
 #ifndef animera_graphics_convert_hpp
 #define animera_graphics_convert_hpp
 
+#include <QtGui/qcolor.h>
 #include <QtCore/qrect.h>
+#include <Graphics/color.hpp>
 #include <Graphics/geometry.hpp>
 
 constexpr gfx::Point convert(const QPoint p) {
@@ -34,6 +36,19 @@ constexpr QSize convert(const gfx::Size s) {
 
 constexpr QRect convert(const gfx::Rect r) {
   return {r.p.x, r.p.y, r.s.w, r.s.h};
+}
+
+inline gfx::Color convert(const QColor &c) {
+  return {
+    static_cast<std::uint8_t>(c.red()),
+    static_cast<std::uint8_t>(c.green()),
+    static_cast<std::uint8_t>(c.blue()),
+    static_cast<std::uint8_t>(c.alpha())
+  };
+}
+
+inline QColor convert(const gfx::Color c) {
+  return {c.r, c.g, c.b, c.a};
 }
 
 #endif

@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_SampleObject_t {
-    QByteArrayData data[12];
-    char stringdata0[112];
+    QByteArrayData data[13];
+    char stringdata0[127];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -34,21 +34,22 @@ static const qt_meta_stringdata_SampleObject_t qt_meta_stringdata_SampleObject =
 QT_MOC_LITERAL(0, 0, 12), // "SampleObject"
 QT_MOC_LITERAL(1, 13, 14), // "shouldSetColor"
 QT_MOC_LITERAL(2, 28, 0), // ""
-QT_MOC_LITERAL(3, 29, 4), // "QRgb"
-QT_MOC_LITERAL(4, 34, 14), // "shouldSetIndex"
-QT_MOC_LITERAL(5, 49, 10), // "initCanvas"
-QT_MOC_LITERAL(6, 60, 6), // "Format"
-QT_MOC_LITERAL(7, 67, 6), // "setCel"
-QT_MOC_LITERAL(8, 74, 10), // "const Cel*"
-QT_MOC_LITERAL(9, 85, 9), // "mouseMove"
-QT_MOC_LITERAL(10, 95, 8), // "keyPress"
-QT_MOC_LITERAL(11, 104, 7) // "Qt::Key"
+QT_MOC_LITERAL(3, 29, 8), // "PixelVar"
+QT_MOC_LITERAL(4, 38, 14), // "shouldSetIndex"
+QT_MOC_LITERAL(5, 53, 10), // "PixelIndex"
+QT_MOC_LITERAL(6, 64, 10), // "initCanvas"
+QT_MOC_LITERAL(7, 75, 6), // "Format"
+QT_MOC_LITERAL(8, 82, 6), // "setCel"
+QT_MOC_LITERAL(9, 89, 10), // "const Cel*"
+QT_MOC_LITERAL(10, 100, 9), // "mouseMove"
+QT_MOC_LITERAL(11, 110, 8), // "keyPress"
+QT_MOC_LITERAL(12, 119, 7) // "Qt::Key"
 
     },
-    "SampleObject\0shouldSetColor\0\0QRgb\0"
-    "shouldSetIndex\0initCanvas\0Format\0"
-    "setCel\0const Cel*\0mouseMove\0keyPress\0"
-    "Qt::Key"
+    "SampleObject\0shouldSetColor\0\0PixelVar\0"
+    "shouldSetIndex\0PixelIndex\0initCanvas\0"
+    "Format\0setCel\0const Cel*\0mouseMove\0"
+    "keyPress\0Qt::Key"
 };
 #undef QT_MOC_LITERAL
 
@@ -70,20 +71,20 @@ static const uint qt_meta_data_SampleObject[] = {
        4,    1,   47,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       5,    1,   50,    2, 0x0a /* Public */,
-       7,    1,   53,    2, 0x0a /* Public */,
-       9,    1,   56,    2, 0x0a /* Public */,
-      10,    1,   59,    2, 0x0a /* Public */,
+       6,    1,   50,    2, 0x0a /* Public */,
+       8,    1,   53,    2, 0x0a /* Public */,
+      10,    1,   56,    2, 0x0a /* Public */,
+      11,    1,   59,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, 0x80000000 | 3,    2,
-    QMetaType::Void, QMetaType::Int,    2,
+    QMetaType::Void, 0x80000000 | 5,    2,
 
  // slots: parameters
-    QMetaType::Void, 0x80000000 | 6,    2,
-    QMetaType::Void, 0x80000000 | 8,    2,
+    QMetaType::Void, 0x80000000 | 7,    2,
+    QMetaType::Void, 0x80000000 | 9,    2,
     QMetaType::Void, QMetaType::QPoint,    2,
-    QMetaType::Void, 0x80000000 | 11,    2,
+    QMetaType::Void, 0x80000000 | 12,    2,
 
        0        // eod
 };
@@ -94,8 +95,8 @@ void SampleObject::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         auto *_t = static_cast<SampleObject *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->shouldSetColor((*reinterpret_cast< QRgb(*)>(_a[1]))); break;
-        case 1: _t->shouldSetIndex((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 0: _t->shouldSetColor((*reinterpret_cast< PixelVar(*)>(_a[1]))); break;
+        case 1: _t->shouldSetIndex((*reinterpret_cast< PixelIndex(*)>(_a[1]))); break;
         case 2: _t->initCanvas((*reinterpret_cast< Format(*)>(_a[1]))); break;
         case 3: _t->setCel((*reinterpret_cast< const Cel*(*)>(_a[1]))); break;
         case 4: _t->mouseMove((*reinterpret_cast< QPoint(*)>(_a[1]))); break;
@@ -105,14 +106,14 @@ void SampleObject::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
     } else if (_c == QMetaObject::IndexOfMethod) {
         int *result = reinterpret_cast<int *>(_a[0]);
         {
-            using _t = void (SampleObject::*)(QRgb );
+            using _t = void (SampleObject::*)(PixelVar );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&SampleObject::shouldSetColor)) {
                 *result = 0;
                 return;
             }
         }
         {
-            using _t = void (SampleObject::*)(int );
+            using _t = void (SampleObject::*)(PixelIndex );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&SampleObject::shouldSetIndex)) {
                 *result = 1;
                 return;
@@ -162,14 +163,14 @@ int SampleObject::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void SampleObject::shouldSetColor(QRgb _t1)
+void SampleObject::shouldSetColor(PixelVar _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);
 }
 
 // SIGNAL 1
-void SampleObject::shouldSetIndex(int _t1)
+void SampleObject::shouldSetIndex(PixelIndex _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 1, _a);

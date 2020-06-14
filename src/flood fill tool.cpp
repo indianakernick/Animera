@@ -1,4 +1,4 @@
-﻿//
+//
 //  flood fill tool.cpp
 //  Animera
 //
@@ -20,18 +20,18 @@ void FloodFillTool::mouseLeave(const ToolLeaveEvent &event) {
   SCOPE_TIME("FloodFillTool::mouseLeave");
   
   ctx->clearStatus();
-  drawSquarePoint(*ctx->overlay, 0, event.lastPos);
+  drawSquarePoint(*ctx->overlay, {}, event.lastPos);
   ctx->changeOverlay(event.lastPos);
 }
 
 void FloodFillTool::mouseDown(const ToolMouseDownEvent &event) {
   SCOPE_TIME("FloodFillTool::mouseDown");
 
-  const QRgb fillColor = ctx->selectColor(event.button);
-  const QRgb startColor = sampleCel(*ctx->cel, event.pos);
+  const PixelVar fillColor = ctx->selectColor(event.button);
+  const PixelVar startColor = sampleCel(*ctx->cel, event.pos);
   if (fillColor == startColor) return;
   const QRect rect = toRect(ctx->size).intersected(ctx->cel->rect());
-  if (startColor == 0) {
+  if (startColor.zero()) {
     if (rect.contains(event.pos)) {
       fillOpen(event.pos, fillColor);
     } else if (ctx->cel->isNull()) {
@@ -46,7 +46,7 @@ void FloodFillTool::mouseDown(const ToolMouseDownEvent &event) {
     }
   } else {
     const QRect fillRect = fill(rect, event.pos, fillColor);
-    if (fillColor == 0) ctx->shrinkCel(fillRect);
+    if (fillColor.zero()) ctx->shrinkCel(fillRect);
     ctx->changeCel(fillRect);
   }
   ctx->finishChange();
@@ -56,13 +56,13 @@ void FloodFillTool::mouseMove(const ToolMouseMoveEvent &event) {
   SCOPE_TIME("FloodFillTool::mouseMove");
 
   ctx->showStatus(StatusMsg{}.appendLabeled(event.pos));
-  drawSquarePoint(*ctx->overlay, 0, event.lastPos);
-  drawSquarePoint(*ctx->overlay, tool_overlay_color, event.pos);
+  drawSquarePoint(*ctx->overlay, {}, event.lastPos);
+  drawSquarePoint(*ctx->overlay, PixelVar{tool_overlay_color}, event.pos);
   ctx->changeOverlay(unite(event.lastPos, event.pos));
 }
 
 template <typename Pixel>
-QRect FloodFillTool::fill(const QRect rect, const QPoint pos, const QRgb color) {
+QRect FloodFillTool::fill(const QRect rect, const QPoint pos, const PixelVar color) {
   SCOPE_TIME("FloodFillTool::fill");
 
   gfx::Surface surface = makeSurface<Pixel>(ctx->cel->img);
@@ -71,7 +71,7 @@ QRect FloodFillTool::fill(const QRect rect, const QPoint pos, const QRgb color) 
   return convert(gfx::floodFill(policy, convert(pos - rect.topLeft()))).translated(rect.topLeft());
 }
 
-QRect FloodFillTool::fill(const QRect rect, const QPoint pos, const QRgb color) {
+QRect FloodFillTool::fill(const QRect rect, const QPoint pos, const PixelVar color) {
   switch (ctx->format) {
     case Format::rgba:  return fill<PixelRgba> (rect, pos, color);
     case Format::index: return fill<PixelIndex>(rect, pos, color);
@@ -88,7 +88,7 @@ bool sideSpill(const QRect fill, const QRect cel, const QRect canvas) {
 
 }
 
-void FloodFillTool::fillOpen(const QPoint pos, const QRgb color) {
+void FloodFillTool::fillOpen(const QPoint pos, const PixelVar color) {
   const QRect canvasRect = toRect(ctx->size);
   const QRect celRect = canvasRect.intersected(ctx->cel->rect());
   QRect fillRect = fill(celRect, pos, color);

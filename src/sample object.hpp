@@ -1,4 +1,4 @@
-﻿//
+//
 //  sample object.hpp
 //  Animera
 //
@@ -10,7 +10,6 @@
 #define animera_sample_object_hpp
 
 #include "image.hpp"
-#include <QtGui/qrgb.h>
 #include <QtCore/qpoint.h>
 #include <QtCore/qobject.h>
 
@@ -29,8 +28,8 @@ public Q_SLOTS:
   void keyPress(Qt::Key);
 
 Q_SIGNALS:
-  void shouldSetColor(QRgb);
-  void shouldSetIndex(int);
+  void shouldSetColor(PixelVar);
+  void shouldSetIndex(PixelIndex);
   
 private:
   const Cel *cel = nullptr;

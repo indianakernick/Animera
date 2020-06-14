@@ -1,4 +1,4 @@
-﻿//
+//
 //  palette span.hpp
 //  Animera
 //
@@ -13,8 +13,8 @@
 #include "config.hpp"
 #include <tcb/span.hpp>
 
-using PaletteColors = std::array<QRgb, pal_colors>;
-using PaletteSpan = tcb::span<QRgb>;
-using PaletteCSpan = tcb::span<const QRgb>;
+using PaletteColors = std::array<PixelVar, pal_colors>;
+using PaletteSpan = tcb::span<PixelVar>;
+using PaletteCSpan = tcb::span<const PixelVar>;
 
 #endif
