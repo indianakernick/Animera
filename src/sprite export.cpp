@@ -1,4 +1,4 @@
-﻿//
+//
 //  sprite export.cpp
 //  Animera
 //
@@ -69,9 +69,9 @@ void Exporter::setImageFrom(const Frame &frame) {
   SCOPE_TIME("Exporter::setImageFrom (frame)");
 
   if (format == Format::gray) {
-    compositeFrame<gfx::YA>(image, palette, frame, format, image.rect());
+    compositeFrame<FmtGray>(image, palette, frame, format, image.rect());
   } else {
-    compositeFrame<gfx::ARGB>(image, palette, frame, format, image.rect());
+    compositeFrame<FmtRgba>(image, palette, frame, format, image.rect());
   }
 }
 

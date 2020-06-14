@@ -23,9 +23,13 @@ enum class Format : std::uint8_t {
 constexpr QRgb mask_color_on = 0xFFFFFFFF;
 constexpr QRgb mask_color_off = 0;
 
-using PixelRgba = gfx::ARGB::Pixel;
-using PixelIndex = gfx::I<>::Pixel;
-using PixelGray = gfx::YA::Pixel;
+using FmtRgba = gfx::ARGB;
+using FmtIndex = gfx::I<FmtRgba>;
+using FmtGray = gfx::YA;
+
+using PixelRgba = FmtRgba::Pixel;
+using PixelIndex = FmtIndex::Pixel;
+using PixelGray = FmtGray::Pixel;
 using PixelMask = std::uint8_t;
 using PixelVar = gfx::PixelVariant<PixelRgba, PixelIndex, PixelGray>;
 

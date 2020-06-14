@@ -74,9 +74,9 @@ private:
     switch (format) {
       case Format::index:
       case Format::rgba:
-        return gfx::ARGB::color(static_cast<PixelRgba>(color));
+        return FmtRgba::color(static_cast<PixelRgba>(color));
       case Format::gray:
-        return gfx::YA::color(static_cast<PixelGray>(color));
+        return FmtGray::color(static_cast<PixelGray>(color));
     }
   }
   

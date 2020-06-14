@@ -346,7 +346,7 @@ void PolygonSelectTool::mouseMove(const ToolMouseMoveEvent &event) {
     if (event.button == ButtonType::primary) {
       clearImage(*ctx->overlay, bounds);
       pushPoly(event.pos);
-      drawFilledPolygon(*ctx->overlay, tool_overlay_color, polygon);
+      drawFilledPolygon(*ctx->overlay, tool_overlay_color, polygon); // TODO: QRgb
       ctx->changeOverlay(bounds);
       status.append("Selection: ");
       status.append(bounds);
@@ -375,7 +375,7 @@ void PolygonSelectTool::mouseUp(const ToolMouseUpEvent &event) {
     ctx->unlock();
     pushPoly(event.pos);
     clearImage(mask, lastBounds);
-    drawFilledPolygon(mask, mask_color_on, polygon);
+    drawFilledPolygon(mask, mask_color_on, polygon); // TODO: QRgb
     clearImage(selection, lastBounds);
     lastBounds = bounds;
     copyWithMask(event.pos, mask);
@@ -607,7 +607,7 @@ PixelRgba WandSelectTool::getOverlayColor() const {
   constexpr int half_frames = wand_frames / 2;
   const int mirroredFrame = animFrame > half_frames ? wand_frames - animFrame : animFrame;
   const int gray = scale(mirroredFrame, half_frames, 255);
-  return gfx::ARGB::pixel(gray, gray, gray, wand_alpha);
+  return FmtRgba::pixel(gray, gray, gray, wand_alpha);
 }
 
 void WandSelectTool::paintOverlay() const {

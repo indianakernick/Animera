@@ -78,11 +78,11 @@ private:
   gfx::Color getGColor() const {
     switch (format) {
       case Format::rgba:
-        return gfx::ARGB::color(static_cast<PixelRgba>(color));
+        return FmtRgba::color(static_cast<PixelRgba>(color));
       case Format::index:
-        return gfx::ARGB::color(static_cast<PixelRgba>(palette[static_cast<PixelIndex>(color)]));
+        return FmtRgba::color(static_cast<PixelRgba>(palette[static_cast<PixelIndex>(color)]));
       case Format::gray:
-        return gfx::YA::color(static_cast<PixelGray>(color));
+        return FmtGray::color(static_cast<PixelGray>(color));
     }
   }
   
@@ -185,9 +185,9 @@ ToolColors ToolColorsWidget::getInitialColors(const Format format) {
   switch (format) {
     case Format::rgba:
       return {
-        PixelVar{gfx::ARGB::pixel(255, 0, 0)},
-        PixelVar{gfx::ARGB::pixel(0, 0, 255)},
-        PixelVar{gfx::ARGB::pixel(0, 0, 0, 0)},
+        PixelVar{FmtRgba::pixel(255, 0, 0)},
+        PixelVar{FmtRgba::pixel(0, 0, 255)},
+        PixelVar{FmtRgba::pixel(0, 0, 0, 0)},
       };
     case Format::index:
       return {
@@ -197,9 +197,9 @@ ToolColors ToolColorsWidget::getInitialColors(const Format format) {
       };
     case Format::gray:
       return {
-        PixelVar{gfx::YA::pixel(255, 255)},
-        PixelVar{gfx::YA::pixel(0, 255)},
-        PixelVar{gfx::YA::pixel(0, 0)}
+        PixelVar{FmtGray::pixel(255, 255)},
+        PixelVar{FmtGray::pixel(0, 255)},
+        PixelVar{FmtGray::pixel(0, 0)}
       };
   }
 }

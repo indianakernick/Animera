@@ -22,16 +22,16 @@ constexpr int quantColor(const int size, const int color) {
 }
 
 constexpr PixelVar quantColor(const int size, const int r, const int g, const int b) {
-  return PixelVar{gfx::ARGB::pixel(quantColor(size, r), quantColor(size, g), quantColor(size, b))};
+  return PixelVar{FmtRgba::pixel(quantColor(size, r), quantColor(size, g), quantColor(size, b))};
 }
 
 constexpr PixelVar quantGrayColor(const int size, const int y) {
   const int gray = quantColor(size, y);
-  return PixelVar{gfx::ARGB::pixel(gray, gray, gray)};
+  return PixelVar{FmtRgba::pixel(gray, gray, gray)};
 }
 
 constexpr PixelVar quantGray(const int size, const int y) {
-  return PixelVar{gfx::YA::pixel(quantColor(size, y), 255)};
+  return PixelVar{FmtGray::pixel(quantColor(size, y), 255)};
 }
 
 constexpr std::array<PixelVar, 24> hue_palette = {
@@ -104,9 +104,9 @@ void Palette::reset() {
   auto iter = colors.begin();
   switch (canvasFormat) {
     case Format::index:
-      *iter++ = PixelVar{gfx::ARGB::pixel(0, 0, 0, 0)};
-      *iter++ = PixelVar{gfx::ARGB::pixel(0, 0, 0, 255)};
-      *iter++ = PixelVar{gfx::ARGB::pixel(255, 255, 255, 255)};
+      *iter++ = PixelVar{FmtRgba::pixel(0, 0, 0, 0)};
+      *iter++ = PixelVar{FmtRgba::pixel(0, 0, 0, 255)};
+      *iter++ = PixelVar{FmtRgba::pixel(255, 255, 255, 255)};
       break;
     case Format::rgba:
       iter = std::copy(hue_palette.cbegin(), hue_palette.cend(), iter);

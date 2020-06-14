@@ -20,36 +20,36 @@
 
 namespace {
 
-template <typename Format>
-using Surface = gfx::Surface<gfx::Pixel<Format>>;
+template <typename Fmt>
+using Surface = gfx::Surface<gfx::Pixel<Fmt>>;
 
-template <typename DstFormat, typename SrcFormat>
-void copy(Surface<DstFormat> dst, const Cel &cel, const QPoint dstPos, SrcFormat srcFmt) {
-  gfx::Surface src = makeCSurface<gfx::Pixel<SrcFormat>>(cel.img);
+template <typename DstFmt, typename SrcFmt>
+void copy(Surface<DstFmt> dst, const Cel &cel, const QPoint dstPos, SrcFmt srcFmt) {
+  gfx::Surface src = makeCSurface<gfx::Pixel<SrcFmt>>(cel.img);
   const gfx::Point pos = convert(cel.pos - dstPos);
-  if constexpr (std::is_same_v<DstFormat, SrcFormat>) {
+  if constexpr (std::is_same_v<DstFmt, SrcFmt>) {
     gfx::copyRegion(dst, src, pos);
   } else {
     gfx::eachRegion(dst, src, pos, [srcFmt](auto &dst, const auto src) {
-      dst = DstFormat::pixel(srcFmt.color(src));
+      dst = DstFmt::pixel(srcFmt.color(src));
     });
   }
 }
 
-template <typename DstFormat, typename SrcFormat>
-void composite(Surface<DstFormat> dst, const Cel &cel, const QPoint dstPos, SrcFormat srcFmt) {
+template <typename DstFmt, typename SrcFmt>
+void composite(Surface<DstFmt> dst, const Cel &cel, const QPoint dstPos, SrcFmt srcFmt) {
   gfx::porterDuffRegion(
     gfx::mode_src_over,
     dst,
-    makeCSurface<gfx::Pixel<SrcFormat>>(cel.img),
-    DstFormat{},
+    makeCSurface<gfx::Pixel<SrcFmt>>(cel.img),
+    DstFmt{},
     srcFmt,
     convert(cel.pos - dstPos)
   );
 }
 
-template <typename DstFormat, typename SrcFormat>
-void compositeFrame(Surface<DstFormat> dst, const Frame &frame, const QPoint dstPos, SrcFormat srcFmt) {
+template <typename DstFmt, typename SrcFmt>
+void compositeFrame(Surface<DstFmt> dst, const Frame &frame, const QPoint dstPos, SrcFmt srcFmt) {
   // Layer 0 is on top of layer 1
   const QRect dstRect = {dstPos, convert(dst.size())};
   for (std::size_t c = frame.size() - 1; c != ~std::size_t{}; --c) {
@@ -64,16 +64,16 @@ void compositeFrame(Surface<DstFormat> dst, const Frame &frame, const QPoint dst
       }
     }
     if (overlap) {
-      composite<DstFormat>(dst, cel, dstPos, srcFmt);
+      composite<DstFmt>(dst, cel, dstPos, srcFmt);
     } else {
-      copy<DstFormat>(dst, cel, dstPos, srcFmt);
+      copy<DstFmt>(dst, cel, dstPos, srcFmt);
     }
   }
 }
 
 }
 
-template <typename PxFmt>
+template <typename Fmt>
 void compositeFrame(
   QImage &dst,
   PaletteCSpan palette,
@@ -85,35 +85,35 @@ void compositeFrame(
   
   rect = rect.intersected(dst.rect());
   if (rect.isEmpty()) return;
-  auto dstSurface = makeSurface<gfx::Pixel<PxFmt>>(dst).view(convert(rect));
+  auto dstSurface = makeSurface<gfx::Pixel<Fmt>>(dst).view(convert(rect));
   
   gfx::fill(dstSurface);
   
   switch (format) {
     case Format::rgba:
-      compositeFrame<PxFmt>(dstSurface, frame, rect.topLeft(), gfx::ARGB{});
+      compositeFrame<Fmt>(dstSurface, frame, rect.topLeft(), FmtRgba{});
       break;
     case Format::index:
       static_assert(sizeof(PixelVar) == sizeof(PixelRgba));
-      compositeFrame<PxFmt>(dstSurface, frame, rect.topLeft(), gfx::I<>{&palette[0].underlying()});
+      compositeFrame<Fmt>(dstSurface, frame, rect.topLeft(), FmtIndex{&palette[0].underlying()});
       break;
     case Format::gray:
-      compositeFrame<PxFmt>(dstSurface, frame, rect.topLeft(), gfx::YA{});
+      compositeFrame<Fmt>(dstSurface, frame, rect.topLeft(), FmtGray{});
       break;
     default: Q_UNREACHABLE();
   }
 }
 
-template void compositeFrame<gfx::ARGB>(QImage &, PaletteCSpan, const Frame &, Format, QRect);
-template void compositeFrame<gfx::YA>(QImage &, PaletteCSpan, const Frame &, Format, QRect);
+template void compositeFrame<FmtRgba>(QImage &, PaletteCSpan, const Frame &, Format, QRect);
+template void compositeFrame<FmtGray>(QImage &, PaletteCSpan, const Frame &, Format, QRect);
 
 void compositeOverlay(QImage &drawing, const QImage &overlay) {
   gfx::porterDuff(
     gfx::mode_src_over,
     makeSurface<PixelRgba>(drawing),
     makeSurface<PixelRgba>(overlay),
-    gfx::ARGB{},
-    gfx::ARGB{}
+    FmtRgba{},
+    FmtRgba{}
   );
 }
 
@@ -145,10 +145,10 @@ void fillMaskImage(QImage &dst, const QImage &mask, const PixelVar color, const 
 namespace {
 
 PixelRgba rgbaToOverlayPx(const PixelRgba pixel) {
-  const gfx::Color color = gfx::ARGB::color(pixel);
+  const gfx::Color color = FmtRgba::color(pixel);
   const std::uint8_t gray = gfx::gray(color);
   const std::uint8_t alpha = scaleOverlayAlpha(color.a);
-  return gfx::ARGB::pixel(gray, gray, gray, alpha);
+  return FmtRgba::pixel(gray, gray, gray, alpha);
 }
 
 PixelRgba paletteToOverlayPx(const PaletteCSpan palette, const PixelIndex pixel) {
@@ -156,9 +156,9 @@ PixelRgba paletteToOverlayPx(const PaletteCSpan palette, const PixelIndex pixel)
 }
 
 PixelRgba grayToOverlayPx(const PixelGray pixel) {
-  const int gray = scaleOverlayGray(gfx::YA::gray(pixel));
-  const int alpha = scaleOverlayAlpha(gfx::YA::alpha(pixel));
-  return gfx::ARGB::pixel(0, 0, gray, alpha);
+  const int gray = scaleOverlayGray(FmtGray::gray(pixel));
+  const int alpha = scaleOverlayAlpha(FmtGray::alpha(pixel));
+  return FmtRgba::pixel(0, 0, gray, alpha);
 }
 
 void rgbaToOverlay(gfx::Surface<PixelRgba> overlay, gfx::CSurface<PixelRgba> source) {

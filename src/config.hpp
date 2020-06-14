@@ -213,7 +213,7 @@ inline const QColor tool_shape_enabled = glob_light_1;
 
 constexpr IntRange  tool_overlay_gray = {32, 223, 127};
 constexpr IntRange  tool_overlay_alpha = {32, 191, 127};
-constexpr PixelRgba tool_overlay_color = gfx::ARGB::pixel(
+constexpr PixelRgba tool_overlay_color = FmtRgba::pixel(
   tool_overlay_gray.def,
   tool_overlay_gray.def,
   tool_overlay_gray.def,

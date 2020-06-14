@@ -149,14 +149,14 @@ void writePalette(WriteContext &ctx, PaletteCSpan palette) {
   
   const int plteSize = i + 1;
   for (; i != -1; --i) {
-    const gfx::Color color = gfx::ARGB::color(static_cast<PixelRgba>(palette[i]));
+    const gfx::Color color = FmtRgba::color(static_cast<PixelRgba>(palette[i]));
     if (color.a != 255) break;
     plte[i] = toPngColor(color);
   }
   
   const int trnsSize = i + 1;
   for (; i != -1; --i) {
-    const gfx::Color color = gfx::ARGB::color(static_cast<PixelRgba>(palette[i]));
+    const gfx::Color color = FmtRgba::color(static_cast<PixelRgba>(palette[i]));
     plte[i] = toPngColor(color);
     trns[i] = color.a;
   }
@@ -225,10 +225,10 @@ void readPalette(ReadContext &ctx, PaletteSpan palette) {
   }
   std::size_t i = 0;
   for (; i != static_cast<std::size_t>(trnsSize); ++i) {
-    palette[i] = PixelVar{gfx::ARGB::pixel(plte[i].red, plte[i].green, plte[i].blue, trns[i])};
+    palette[i] = PixelVar{FmtRgba::pixel(plte[i].red, plte[i].green, plte[i].blue, trns[i])};
   }
   for (; i != static_cast<std::size_t>(plteSize); ++i) {
-    palette[i] = PixelVar{gfx::ARGB::pixel(plte[i].red, plte[i].green, plte[i].blue)};
+    palette[i] = PixelVar{FmtRgba::pixel(plte[i].red, plte[i].green, plte[i].blue)};
   }
   for (; i != pal_colors; ++i) {
     palette[i] = PixelVar{};
@@ -290,14 +290,14 @@ Error exportCelPng(
       break;
     case ExportFormat::gray:
       if (canvasFormat == Format::gray) {
-        gfx::convertInplace(makeSurface<PixelGray>(image), gfx::Y{}, gfx::YA{});
+        gfx::convertInplace(makeSurface<PixelGray>(image), gfx::Y{}, FmtGray{});
       }
       break;
     case ExportFormat::gray_alpha:
       break;
     case ExportFormat::monochrome:
       if (canvasFormat == Format::gray) {
-        gfx::convertToMono<gfx::YA, 128>(makeSurface<PixelGray>(image));
+        gfx::convertToMono<FmtGray, 128>(makeSurface<PixelGray>(image));
       } else if (canvasFormat == Format::index) {
         gfx::convertToMono<gfx::Y, 1>(makeSurface<gfx::Y::Pixel>(image));
       } else Q_UNREACHABLE();

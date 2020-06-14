@@ -71,7 +71,7 @@ void PickerImplGray::connectSignals() {
 }
 
 void PickerImplGray::setColor(const PixelVar color) {
-  const gfx::Color gColor = gfx::YA::color(static_cast<PixelGray>(color));
+  const gfx::Color gColor = FmtGray::color(static_cast<PixelGray>(color));
   gray = gColor.r;
   alpha = gColor.a;
   graySlider->setGray(gray);
@@ -104,5 +104,5 @@ void PickerImplGray::setAlpha(const int newAlpha) {
 }
 
 void PickerImplGray::changeColor() {
-  Q_EMIT colorChanged(PixelVar{gfx::YA::pixel(gray, alpha)});
+  Q_EMIT colorChanged(PixelVar{FmtGray::pixel(gray, alpha)});
 }

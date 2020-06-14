@@ -119,12 +119,12 @@ struct PixelFormat<PixelIndex> {
 
 template <>
 struct PixelFormat<PixelGray> {
-  using type = gfx::YA;
+  using type = FmtGray;
 };
 
 template <>
 struct PixelFormat<PixelRgba> {
-  using type = gfx::ARGB;
+  using type = FmtRgba;
 };
 
 std::uint8_t interpolate(const std::uint8_t a, const std::uint8_t b, const int index, const int size) {

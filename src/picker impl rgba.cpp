@@ -99,7 +99,7 @@ void PickerImplRGBA::connectSignals() {
 }
 
 void PickerImplRGBA::setColor(const PixelVar color) {
-  const gfx::Color gColor = gfx::ARGB::color(static_cast<PixelRgba>(color));
+  const gfx::Color gColor = FmtRgba::color(static_cast<PixelRgba>(color));
   colorRgb.r = gColor.r;
   colorRgb.g = gColor.g;
   colorRgb.b = gColor.b;
@@ -200,5 +200,5 @@ void PickerImplRGBA::changeHSV() {
 }
 
 void PickerImplRGBA::changeColor() {
-  Q_EMIT colorChanged(PixelVar{gfx::ARGB::pixel(colorRgb.r, colorRgb.g, colorRgb.b, alpha)});
+  Q_EMIT colorChanged(PixelVar{FmtRgba::pixel(colorRgb.r, colorRgb.g, colorRgb.b, alpha)});
 }
