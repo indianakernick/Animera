@@ -48,7 +48,7 @@ public:
   }
   
   void setSize(const QSize size) {
-    overlay = {size, QImage::Format_ARGB32};
+    overlay = {size, QImage::Format_ARGB32}; // premul
     editor = {size, QImage::Format_ARGB32};
     clearImage(overlay);
     clearImage(editor);

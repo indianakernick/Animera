@@ -295,7 +295,8 @@ constexpr WidgetRect tool_colors_rect = basicRect(
 constexpr int       pal_colors = 256;
 constexpr int       pal_width = 8;
 constexpr int       pal_height = pal_colors / pal_width;
-constexpr int       pal_tile_size = 13_px;
+constexpr int       pal_tile_size = 12_px;
+constexpr int       pal_tile_stride = pal_tile_size + glob_border_width;
 
 // -------------------------------- timeline -------------------------------- //
 

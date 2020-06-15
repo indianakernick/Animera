@@ -319,9 +319,6 @@ there might be a few random constants that should be in config.hpp but aren't
 
 Should probably be using mouse release instead of mouse press in some places
 
-maybe paint functions should accept a cel
-  overlay would have to be a cel (or wrapped in a cel)
-
 ------------------------------- submodules notes -------------------------------
 
 Add submodule
