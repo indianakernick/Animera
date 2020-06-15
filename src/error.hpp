@@ -19,6 +19,9 @@ inline void assertEval([[maybe_unused]] const bool cond) noexcept {
 class [[nodiscard]] Error {
 public:
   Error() = default;
+  Error(Error &&) = default;
+  Error &operator=(Error &&) = default;
+  
   Error(const QString &m)
     : m{m} {}
   
@@ -41,6 +44,6 @@ private:
   QString m;
 };
 
-#define TRY(...) if (Error _error = (__VA_ARGS__)) return _error
+#define TRY(...) if (Error error_ = (__VA_ARGS__)) return error_
 
 #endif
