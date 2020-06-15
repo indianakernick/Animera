@@ -1,4 +1,4 @@
-﻿//
+//
 //  docopt helpers.hpp
 //  Animera
 //
@@ -10,6 +10,7 @@
 #define animera_docopt_helpers_hpp
 
 #include "error.hpp"
+#include "int range.hpp"
 #include <QtCore/qstring.h>
 
 namespace docopt {
@@ -17,8 +18,6 @@ namespace docopt {
 struct value;
 
 }
-
-struct IntRange;
 
 QString nonZeroRangeStr(IntRange);
 QString rangeStr(IntRange);

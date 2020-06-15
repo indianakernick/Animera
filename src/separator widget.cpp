@@ -1,4 +1,4 @@
-﻿//
+//
 //  separator widget.cpp
 //  Animera
 //
@@ -8,8 +8,9 @@
 
 #include "separator widget.hpp"
 
-#include "config.hpp"
 #include <QtGui/qpainter.h>
+#include "config colors.hpp"
+#include "config geometry.hpp"
 
 HoriSeparator::HoriSeparator(QWidget *parent)
   : QWidget{parent} {

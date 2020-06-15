@@ -1,4 +1,4 @@
-﻿//
+//
 //  color input widget.cpp
 //  Animera
 //
@@ -8,7 +8,6 @@
 
 #include "color input widget.hpp"
 
-#include "config.hpp"
 #include "connect.hpp"
 #include <QtGui/qevent.h>
 

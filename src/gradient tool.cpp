@@ -10,6 +10,7 @@
 
 #include "painting.hpp"
 #include "scope time.hpp"
+#include "config colors.hpp"
 
 void LinearGradientTool::mouseLeave(const ToolLeaveEvent &event) {
   SCOPE_TIME("LinearGradientTool::mouseLeave");

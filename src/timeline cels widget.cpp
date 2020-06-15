@@ -8,11 +8,12 @@
 
 #include "timeline cels widget.hpp"
 
-#include "config.hpp"
 #include "connect.hpp"
 #include "painting.hpp"
 #include <QtGui/qevent.h>
 #include <QtGui/qpainter.h>
+#include "config colors.hpp"
+#include "config geometry.hpp"
 #include "widget painting.hpp"
 
 namespace {

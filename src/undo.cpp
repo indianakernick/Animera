@@ -1,4 +1,4 @@
-﻿//
+//
 //  undo.cpp
 //  Animera
 //
@@ -8,7 +8,7 @@
 
 #include "undo.hpp"
 
-#include "config.hpp"
+#include "config geometry.hpp"
 
 UndoStack::UndoStack() {
   stack.reserve(edit_undo_stack);

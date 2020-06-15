@@ -8,7 +8,6 @@
 
 #include "color picker widget.hpp"
 
-#include "config.hpp"
 #include "connect.hpp"
 #include "label widget.hpp"
 #include "picker impl rgba.hpp"
@@ -60,7 +59,7 @@ void ColorPickerWidget::setImpl(const Format format) {
 }
 
 void ColorPickerWidget::init() {
-  nameLabel = new LabelWidget{this, pick_name_rect, "PALETTE 42"};
+  nameLabel = new LabelWidget{this, pick_name_rect, "Uninitialized"};
   impl->init(this);
 }
 

@@ -13,6 +13,7 @@
 #include "painting.hpp"
 #include "composite.hpp"
 #include "scope time.hpp"
+#include "config colors.hpp"
 #include "surface factory.hpp"
 #include "graphics convert.hpp"
 #include <Graphics/flood fill.hpp>

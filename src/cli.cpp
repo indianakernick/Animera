@@ -1,4 +1,4 @@
-﻿//
+//
 //  cli.cpp
 //  Animera
 //
@@ -199,10 +199,17 @@ CLI::CLI(int &argc, char **argv)
   : argc{argc}, argv{argv} {}
 
 int CLI::exec() {
-  #ifdef Q_OS_WIN
+  #if 1
   
   Application app{argc, argv};
-  app.waitForOpenEvent();
+  docopt::Options flags;
+  if (Error err = parseArgs(flags); err) {
+    QTextStream console{stdout};
+    console << "Command line error\n" << err.msg() << '\n';
+    console << usage << '\n';
+    return 1;
+  }
+  app.openFile(toLatinString(flags.at("<file>").asString()));
   return app.exec();
   
   #else

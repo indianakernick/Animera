@@ -1,4 +1,4 @@
-﻿//
+//
 //  docopt helpers.cpp
 //  Animera
 //
@@ -9,7 +9,6 @@
 #include "docopt helpers.hpp"
 
 #include <docopt.h>
-#include "config.hpp"
 
 QString nonZeroRangeStr(const IntRange range) {
   QString str = "\nValid range is: [";

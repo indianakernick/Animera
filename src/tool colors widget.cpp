@@ -8,10 +8,10 @@
 
 #include "tool colors widget.hpp"
 
-#include "config.hpp"
 #include "connect.hpp"
 #include <QtGui/qpainter.h>
 #include "color handle.hpp"
+#include "config colors.hpp"
 #include <Graphics/format.hpp>
 #include "widget painting.hpp"
 #include "graphics convert.hpp"

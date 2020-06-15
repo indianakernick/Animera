@@ -1,4 +1,4 @@
-﻿//
+//
 //  timeline layers widget.cpp
 //  Animera
 //
@@ -8,13 +8,14 @@
 
 #include "timeline layers widget.hpp"
 
-#include "config.hpp"
 #include "connect.hpp"
 #include "strings.hpp"
 #include <QtGui/qevent.h>
 #include <QtGui/qpainter.h>
+#include "config colors.hpp"
 #include <QtGui/qvalidator.h>
 #include "widget painting.hpp"
+#include "config geometry.hpp"
 #include "timeline painting.hpp"
 #include "text input widget.hpp"
 #include <QtWidgets/qboxlayout.h>

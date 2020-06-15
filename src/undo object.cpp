@@ -1,4 +1,4 @@
-﻿//
+//
 //  undo object.cpp
 //  Animera
 //
@@ -8,8 +8,8 @@
 
 #include "undo object.hpp"
 
-#include "config.hpp"
 #include "scope time.hpp"
+#include "config keys.hpp"
 
 UndoObject::UndoObject(QObject *parent)
   : QObject{parent} {}

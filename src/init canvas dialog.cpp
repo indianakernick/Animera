@@ -1,4 +1,4 @@
-﻿//
+//
 //  init canvas dialog.cpp
 //  Animera
 //
@@ -13,6 +13,7 @@
 #include <QtGui/qbitmap.h>
 #include <QtGui/qpainter.h>
 #include "label widget.hpp"
+#include "config colors.hpp"
 #include "color input widget.hpp"
 #include "radio button widget.hpp"
 #include <QtWidgets/qgridlayout.h>

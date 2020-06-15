@@ -8,10 +8,11 @@
 
 #include "timeline frames widget.hpp"
 
-#include "config.hpp"
 #include "connect.hpp"
 #include "global font.hpp"
 #include <QtGui/qpainter.h>
+#include "config colors.hpp"
+#include "config geometry.hpp"
 
 FramesWidget::FramesWidget(QWidget *parent)
   : QWidget{parent} {

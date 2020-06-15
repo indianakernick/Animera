@@ -1,4 +1,4 @@
-﻿//
+//
 //  widget rect.hpp
 //  Animera
 //
@@ -11,7 +11,7 @@
 
 #include <QtCore/qrect.h>
 
-class WidgetRect final {
+class WidgetRect {
 public:
   constexpr WidgetRect(QRect widget, QRect outer, QRect inner, QPoint pos)
     : widget_{widget}, outer_{outer}, inner_{inner}, pos_{pos} {}

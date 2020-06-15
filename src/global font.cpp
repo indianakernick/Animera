@@ -1,4 +1,4 @@
-﻿//
+//
 //  global font.cpp
 //  Animera
 //
@@ -8,7 +8,7 @@
 
 #include "global font.hpp"
 
-#include "config.hpp"
+#include "config geometry.hpp"
 #include <QtGui/qfontdatabase.h>
 
 namespace {

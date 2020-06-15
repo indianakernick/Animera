@@ -1,4 +1,4 @@
-﻿//
+//
 //  label widget.hpp
 //  Animera
 //
@@ -9,7 +9,7 @@
 #ifndef animera_label_widget_hpp
 #define animera_label_widget_hpp
 
-#include "config.hpp"
+#include "config geometry.hpp"
 #include <QtWidgets/qwidget.h>
 
 class LabelWidget final : public QWidget {

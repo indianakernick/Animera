@@ -1,4 +1,4 @@
-﻿//
+//
 //  timeline painting.cpp
 //  Animera
 //
@@ -8,9 +8,10 @@
 
 #include "timeline painting.hpp"
 
-#include "config.hpp"
 #include <QtGui/qbitmap.h>
 #include <QtGui/qpainter.h>
+#include "config colors.hpp"
+#include "config geometry.hpp"
 
 void paintTimelineButtonBack(QPixmap &pixmap) {
   QPainter painter{&pixmap};

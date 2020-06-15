@@ -8,10 +8,11 @@
 
 #include "color slider widget.hpp"
 
-#include "config.hpp"
 #include "status msg.hpp"
 #include <QtGui/qevent.h>
 #include <QtGui/qpainter.h>
+#include "config colors.hpp"
+#include "config geometry.hpp"
 #include "widget painting.hpp"
 #include "surface factory.hpp"
 #include <Graphics/iterator.hpp>

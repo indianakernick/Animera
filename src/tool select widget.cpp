@@ -8,11 +8,13 @@
 
 #include "tool select widget.hpp"
 
-#include "config.hpp"
 #include "connect.hpp"
+#include "config keys.hpp"
 #include <QtGui/qbitmap.h>
 #include "tool widgets.hpp"
 #include <QtGui/qpainter.h>
+#include "config colors.hpp"
+#include "config geometry.hpp"
 #include "widget painting.hpp"
 #include <QtWidgets/qboxlayout.h>
 #include <QtWidgets/qscrollbar.h>

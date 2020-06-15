@@ -1,4 +1,4 @@
-﻿//
+//
 //  tool param widget.cpp
 //  Animera
 //
@@ -8,7 +8,7 @@
 
 #include "tool param widget.hpp"
 
-#include "config.hpp"
+#include "config geometry.hpp"
 
 ToolParamWidget::ToolParamWidget(QWidget *parent)
   : QWidget{parent} {

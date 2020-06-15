@@ -1,4 +1,4 @@
-﻿//
+//
 //  sprite.cpp
 //  Animera
 //
@@ -13,6 +13,8 @@
 #include "sprite file.hpp"
 
 void Sprite::newFile(const Format newFormat, const QSize newSize) {
+  SCOPE_TIME("Sprite::newFile");
+  
   format = newFormat;
   size = newSize;
   Q_EMIT canvasInitialized(format, size);

@@ -160,6 +160,9 @@
 		4529AA07239CDF4F0034A014 /* quit dialog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "quit dialog.cpp"; sourceTree = "<group>"; };
 		4529AA08239CDF4F0034A014 /* quit dialog.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "quit dialog.hpp"; sourceTree = "<group>"; };
 		452D32F62495C30C009FA8F0 /* pixel variant.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "pixel variant.hpp"; sourceTree = "<group>"; };
+		452D32F924974B40009FA8F0 /* config keys.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "config keys.hpp"; sourceTree = "<group>"; };
+		452D32FA24974BC2009FA8F0 /* config colors.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "config colors.hpp"; sourceTree = "<group>"; };
+		452D32FB24974E40009FA8F0 /* int range.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "int range.hpp"; sourceTree = "<group>"; };
 		453A20C4231A078100F055BA /* sprite file.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "sprite file.cpp"; sourceTree = "<group>"; };
 		453A20C5231A078100F055BA /* sprite file.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "sprite file.hpp"; sourceTree = "<group>"; };
 		453A20C7231A139100F055BA /* palette span.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "palette span.hpp"; sourceTree = "<group>"; };
@@ -719,7 +722,7 @@
 		457DC0C122E9518A0000777B /* cel span.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "cel span.hpp"; sourceTree = "<group>"; };
 		457DC0C422EA93FC0000777B /* export pattern.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "export pattern.cpp"; sourceTree = "<group>"; };
 		457DC0C522EA93FC0000777B /* export pattern.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "export pattern.hpp"; sourceTree = "<group>"; };
-		458F84032249CB7C005F91D0 /* config.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = config.hpp; sourceTree = "<group>"; };
+		458F84032249CB7C005F91D0 /* config geometry.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "config geometry.hpp"; sourceTree = "<group>"; };
 		4595D48422BCA0E000607D64 /* scroll bar widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "scroll bar widget.cpp"; sourceTree = "<group>"; };
 		4595D48522BCA0E000607D64 /* scroll bar widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "scroll bar widget.hpp"; sourceTree = "<group>"; };
 		4595D48A22C05E5400607D64 /* timeline cels widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "timeline cels widget.cpp"; sourceTree = "<group>"; };
@@ -868,6 +871,20 @@
 				455486A823445A8C001D5611 /* hidden.png */,
 			);
 			path = Timeline;
+			sourceTree = "<group>";
+		};
+		452D32F824974AE7009FA8F0 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				458F84032249CB7C005F91D0 /* config geometry.hpp */,
+				452D32F924974B40009FA8F0 /* config keys.hpp */,
+				452D32FA24974BC2009FA8F0 /* config colors.hpp */,
+				45DFE497224DE89E00EA40C5 /* global font.cpp */,
+				45DFE498224DE89E00EA40C5 /* global font.hpp */,
+				457DC0BE22E7FB2B0000777B /* widget rect.hpp */,
+				452D32FB24974E40009FA8F0 /* int range.hpp */,
+			);
+			name = Config;
 			sourceTree = "<group>";
 		};
 		453B7C76227ECF62003BB799 /* Graphics */ = {
@@ -1972,8 +1989,8 @@
 			isa = PBXGroup;
 			children = (
 				457D74F4239F67D6009B4E4B /* resources.cpp */,
-				458F84032249CB7C005F91D0 /* config.hpp */,
 				455F2867220690A600C73F39 /* main.cpp */,
+				452D32F824974AE7009FA8F0 /* Config */,
 				455486C023449E43001D5611 /* Native */,
 				458F84052249DF97005F91D0 /* Utilities */,
 				45E3FFA824417976007A1FE8 /* CLI */,
@@ -2019,8 +2036,6 @@
 				45B284AC221A59EB00D6D055 /* undo.hpp */,
 				45B284AE221A83C300D6D055 /* composite.cpp */,
 				45B284AF221A83C300D6D055 /* composite.hpp */,
-				45DFE497224DE89E00EA40C5 /* global font.cpp */,
-				45DFE498224DE89E00EA40C5 /* global font.hpp */,
 				453D28BA22768B2B00D0E5F9 /* geometry.hpp */,
 				453D28C1227698F200D0E5F9 /* widget painting.cpp */,
 				453D28C2227698F200D0E5F9 /* widget painting.hpp */,
@@ -2028,7 +2043,6 @@
 				453D28CF2276A9DF00D0E5F9 /* color convert.hpp */,
 				453D28D42277129800D0E5F9 /* connect.hpp */,
 				45D1098F22DAAFAC00D1F1CB /* enum operators.hpp */,
-				457DC0BE22E7FB2B0000777B /* widget rect.hpp */,
 				45A61039230775CE000A0BD6 /* error.hpp */,
 				45C447F922F6B57000B65AD3 /* png.cpp */,
 				45C447FA22F6B57000B65AD3 /* png.hpp */,

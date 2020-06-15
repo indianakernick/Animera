@@ -12,6 +12,8 @@
 #include <QtGui/qevent.h>
 #include "global font.hpp"
 #include <QtGui/qpainter.h>
+#include "config colors.hpp"
+#include "config geometry.hpp"
 #include "widget painting.hpp"
 
 #ifdef Q_OS_MACOS

@@ -1,4 +1,4 @@
-﻿//
+//
 //  file input widget.cpp
 //  Animera
 //
@@ -11,7 +11,9 @@
 #include "connect.hpp"
 #include <QtCore/qdir.h>
 #include <QtGui/qpainter.h>
+#include "config colors.hpp"
 #include <QtGui/qvalidator.h>
+#include "config geometry.hpp"
 #include "widget painting.hpp"
 #include "text input widget.hpp"
 #include <QtWidgets/qboxlayout.h>

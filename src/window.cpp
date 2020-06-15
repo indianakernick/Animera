@@ -8,7 +8,6 @@
 
 #include "window.hpp"
 
-#include "config.hpp"
 #include "connect.hpp"
 #include "settings.hpp"
 #include <QtGui/qevent.h>
@@ -17,7 +16,9 @@
 #include "application.hpp"
 #include "global font.hpp"
 #include "undo object.hpp"
+#include "config keys.hpp"
 #include "error dialog.hpp"
+#include "config colors.hpp"
 #include "status object.hpp"
 #include "export dialog.hpp"
 #include "sample object.hpp"

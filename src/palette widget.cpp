@@ -8,13 +8,14 @@
 
 #include "palette widget.hpp"
 
-#include "config.hpp"
 #include "connect.hpp"
 #include "status msg.hpp"
 #include <QtGui/qevent.h>
 #include <QtGui/qbitmap.h>
 #include <QtGui/qpainter.h>
 #include "color handle.hpp"
+#include "config colors.hpp"
+#include "config geometry.hpp"
 #include "widget painting.hpp"
 #include "graphics convert.hpp"
 

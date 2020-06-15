@@ -1,4 +1,4 @@
-﻿//
+//
 //  text push button widget.hpp
 //  Animera
 //
@@ -9,7 +9,7 @@
 #ifndef animera_text_push_button_widget_hpp
 #define animera_text_push_button_widget_hpp
 
-#include "config.hpp"
+#include "widget rect.hpp"
 #include <QtWidgets/qabstractbutton.h>
 
 class TextPushButtonWidget : public QAbstractButton {

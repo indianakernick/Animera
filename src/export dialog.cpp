@@ -1,4 +1,4 @@
-﻿//
+//
 //  export dialog.cpp
 //  Animera
 //
@@ -12,6 +12,7 @@
 #include <QtCore/qdir.h>
 #include <QtGui/qevent.h>
 #include "label widget.hpp"
+#include "config colors.hpp"
 #include "export pattern.hpp"
 #include "export options.hpp"
 #include "combo box widget.hpp"

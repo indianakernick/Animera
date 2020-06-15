@@ -1,4 +1,4 @@
-﻿//
+//
 //  tool param bar widget.cpp
 //  Animera
 //
@@ -8,7 +8,8 @@
 
 #include "tool param bar widget.hpp"
 
-#include "config.hpp"
+#include "config colors.hpp"
+#include "config geometry.hpp"
 #include "tool param widget.hpp"
 
 ToolParamBarWidget::ToolParamBarWidget(QWidget *parent)

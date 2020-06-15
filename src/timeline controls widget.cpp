@@ -1,4 +1,4 @@
-﻿//
+//
 //  timeline controls widget.cpp
 //  Animera
 //
@@ -8,8 +8,8 @@
 
 #include "timeline controls widget.hpp"
 
-#include "config.hpp"
 #include "connect.hpp"
+#include "config geometry.hpp"
 #include "timeline painting.hpp"
 #include <QtWidgets/qboxlayout.h>
 

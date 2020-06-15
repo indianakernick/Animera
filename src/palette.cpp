@@ -8,6 +8,7 @@
 
 #include "palette.hpp"
 
+#include "math.hpp"
 #include "file io.hpp"
 #include "chunk io.hpp"
 #include "export png.hpp"

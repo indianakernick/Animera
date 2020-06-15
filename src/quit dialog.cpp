@@ -1,4 +1,4 @@
-﻿//
+//
 //  quit dialog.cpp
 //  Animera
 //
@@ -10,6 +10,7 @@
 
 #include "connect.hpp"
 #include "label widget.hpp"
+#include "config colors.hpp"
 #include <QtWidgets/qboxlayout.h>
 #include "text push button widget.hpp"
 

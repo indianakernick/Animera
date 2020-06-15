@@ -9,13 +9,15 @@
 #include "editor widget.hpp"
 
 #include <cmath>
-#include "config.hpp"
 #include "connect.hpp"
 #include "composite.hpp"
 #include "scope time.hpp"
 #include <QtGui/qevent.h>
+#include "config keys.hpp"
 #include <QtGui/qpainter.h>
 #include <Graphics/copy.hpp>
+#include "config colors.hpp"
+#include "config geometry.hpp"
 #include "surface factory.hpp"
 #include <QtWidgets/qgesture.h>
 #include <QtWidgets/qscrollbar.h>
@@ -409,6 +411,8 @@ void EditorWidget::setPalette(const PaletteCSpan newPalette) {
 }
 
 void EditorWidget::initCanvas(const Format newFormat, const QSize newSize) {
+  SCOPE_TIME("EditorWidget::initCanvas");
+  
   format = newFormat;
   size = newSize;
   view->setSize(size);

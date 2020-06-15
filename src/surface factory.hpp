@@ -9,7 +9,7 @@
 #ifndef animera_surface_factory_hpp
 #define animera_surface_factory_hpp
 
-#include <QtGui/qimage.h>
+#include "image.hpp"
 #include <Graphics/surface.hpp>
 
 template <typename Pixel>

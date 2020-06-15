@@ -1,4 +1,4 @@
-﻿//
+//
 //  application.cpp
 //  Animera
 //
@@ -13,6 +13,7 @@
 #include "settings.hpp"
 #include <QtGui/qevent.h>
 #include "global font.hpp"
+#include "config colors.hpp"
 #include <QtWidgets/qtooltip.h>
 #include "init canvas dialog.hpp"
 #include <QtWidgets/qfiledialog.h>

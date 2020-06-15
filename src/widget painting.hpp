@@ -1,4 +1,4 @@
-﻿//
+//
 //  widget painting.hpp
 //  Animera
 //
@@ -9,7 +9,7 @@
 #ifndef animera_widget_painting_hpp
 #define animera_widget_painting_hpp
 
-#include "config.hpp"
+#include "widget rect.hpp"
 #include <QtGui/qpixmap.h>
 
 QPixmap bakeColoredBitmap(const QString &, QColor);

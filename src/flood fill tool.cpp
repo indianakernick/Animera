@@ -12,6 +12,7 @@
 #include "painting.hpp"
 #include "composite.hpp"
 #include "scope time.hpp"
+#include "config colors.hpp"
 #include <Graphics/draw.hpp>
 #include "surface factory.hpp"
 #include "graphics convert.hpp"

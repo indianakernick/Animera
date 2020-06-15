@@ -1,4 +1,4 @@
-﻿//
+//
 //  scroll bar widget.cpp
 //  Animera
 //
@@ -8,8 +8,9 @@
 
 #include "scroll bar widget.hpp"
 
-#include "config.hpp"
 #include <QtGui/qpainter.h>
+#include "config colors.hpp"
+#include "config geometry.hpp"
 
 namespace {
 

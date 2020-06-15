@@ -1,4 +1,4 @@
-﻿//
+//
 //  color input widget.hpp
 //  Animera
 //
@@ -9,6 +9,7 @@
 #ifndef animera_color_input_widget_hpp
 #define animera_color_input_widget_hpp
 
+#include "int range.hpp"
 #include "color convert.hpp"
 #include <QtGui/qvalidator.h>
 #include "text input widget.hpp"

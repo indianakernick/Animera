@@ -1,4 +1,4 @@
-﻿//
+//
 //  text push button widget.cpp
 //  Animera
 //
@@ -11,6 +11,8 @@
 #include "global font.hpp"
 #include <QtGui/qbitmap.h>
 #include <QtGui/qpainter.h>
+#include "config colors.hpp"
+#include "config geometry.hpp"
 
 TextPushButtonWidget::TextPushButtonWidget(
   QWidget *parent, const WidgetRect rect, const QString &text

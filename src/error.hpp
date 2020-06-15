@@ -1,4 +1,4 @@
-﻿//
+//
 //  error.hpp
 //  Animera
 //

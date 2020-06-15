@@ -8,12 +8,13 @@
 
 #include "status bar widget.hpp"
 
-#include "config.hpp"
 #include "connect.hpp"
 #include "strings.hpp"
 #include "scope time.hpp"
 #include "global font.hpp"
 #include <QtGui/qpainter.h>
+#include "config colors.hpp"
+#include "config geometry.hpp"
 
 StatusBarWidget::StatusBarWidget(QWidget *parent)
   : QWidget{parent} {

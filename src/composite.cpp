@@ -9,8 +9,8 @@
 #include "composite.hpp"
 
 #include <limits>
-#include "config.hpp"
 #include "scope time.hpp"
+#include "config colors.hpp"
 #include <Graphics/copy.hpp>
 #include <Graphics/fill.hpp>
 #include <Graphics/mask.hpp>

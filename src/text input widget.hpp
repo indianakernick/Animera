@@ -1,4 +1,4 @@
-﻿//
+//
 //  text input widget.hpp
 //  Animera
 //
@@ -9,7 +9,7 @@
 #ifndef animera_text_input_widget_hpp
 #define animera_text_input_widget_hpp
 
-#include "config.hpp"
+#include "widget rect.hpp"
 #include <QtCore/qtimer.h>
 #include <QtWidgets/qlineedit.h>
 

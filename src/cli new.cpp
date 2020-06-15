@@ -1,4 +1,4 @@
-﻿//
+//
 //  cli new.cpp
 //  Animera
 //
@@ -8,9 +8,9 @@
 
 #include "cli new.hpp"
 
-#include "config.hpp"
 #include "application.hpp"
 #include "docopt helpers.hpp"
+#include "config geometry.hpp"
 #include <QtCore/qtextstream.h>
 
 namespace {

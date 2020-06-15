@@ -1,4 +1,4 @@
-﻿//
+//
 //  combo box widget.cpp
 //  Animera
 //
@@ -12,6 +12,7 @@
 #include <QtGui/qevent.h>
 #include "global font.hpp"
 #include <QtGui/qpainter.h>
+#include "config colors.hpp"
 #include "widget painting.hpp"
 #include <QtWidgets/qboxlayout.h>
 #include <QtWidgets/qmainwindow.h>

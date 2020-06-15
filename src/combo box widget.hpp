@@ -1,4 +1,4 @@
-﻿//
+//
 //  combo box widget.hpp
 //  Animera
 //
@@ -9,7 +9,7 @@
 #ifndef animera_combo_box_widget_hpp
 #define animera_combo_box_widget_hpp
 
-#include "config.hpp"
+#include "config geometry.hpp"
 #include <QtWidgets/qwidget.h>
 
 class ComboBoxPopup;

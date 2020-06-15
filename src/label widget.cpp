@@ -10,6 +10,7 @@
 
 #include "global font.hpp"
 #include <QtGui/qpainter.h>
+#include "config colors.hpp"
 
 LabelWidget::LabelWidget(
   QWidget *parent,

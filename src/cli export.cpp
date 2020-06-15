@@ -1,4 +1,4 @@
-﻿//
+//
 //  cli export.cpp
 //  Animera
 //
@@ -10,7 +10,6 @@
 
 #include <charconv>
 #include "sprite.hpp"
-#include "config.hpp"
 #include "strings.hpp"
 #include <QtCore/qdir.h>
 #include "docopt helpers.hpp"

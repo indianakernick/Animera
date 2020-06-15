@@ -11,6 +11,7 @@
 #include <cmath>
 #include "painting.hpp"
 #include "scope time.hpp"
+#include "config colors.hpp"
 #include "graphics convert.hpp"
 
 template <typename Derived>

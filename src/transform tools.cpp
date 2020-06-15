@@ -1,4 +1,4 @@
-﻿//
+//
 //  transform tools.cpp
 //  Animera
 //
@@ -9,6 +9,7 @@
 #include "transform tools.hpp"
 
 #include "cel.hpp"
+#include "config keys.hpp"
 #include <Graphics/fill.hpp>
 #include <Graphics/mask.hpp>
 #include "surface factory.hpp"

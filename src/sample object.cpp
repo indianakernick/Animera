@@ -9,8 +9,8 @@
 #include "sample object.hpp"
 
 #include "cel.hpp"
-#include "config.hpp"
 #include "composite.hpp"
+#include "config keys.hpp"
 
 SampleObject::SampleObject(QObject *parent)
   : QObject{parent} {}

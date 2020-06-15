@@ -1,4 +1,4 @@
-﻿//
+//
 //  chunk io.hpp
 //  Animera
 //
@@ -10,8 +10,8 @@
 #define animera_chunk_io_hpp
 
 #include "error.hpp"
-#include "config.hpp"
 #include "file io error.hpp"
+#include "config geometry.hpp"
 
 class QIODevice;
 

@@ -8,9 +8,9 @@
 
 #include "picker impl rgba.hpp"
 
-#include "config.hpp"
 #include "connect.hpp"
 #include "label widget.hpp"
+#include "config colors.hpp"
 #include <Graphics/format.hpp>
 #include "color input widget.hpp"
 #include "color graph widget.hpp"

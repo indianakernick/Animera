@@ -8,8 +8,9 @@
 
 #include "keys dialog.hpp"
 
-#include "config.hpp"
+#include "config keys.hpp"
 #include "label widget.hpp"
+#include "config colors.hpp"
 #include "separator widget.hpp"
 #include <QtWidgets/qboxlayout.h>
 

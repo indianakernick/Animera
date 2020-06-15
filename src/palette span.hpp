@@ -10,8 +10,9 @@
 #define animera_palette_span_hpp
 
 #include <array>
-#include "config.hpp"
+#include "image.hpp"
 #include <tcb/span.hpp>
+#include "config geometry.hpp"
 
 using PaletteColors = std::array<PixelVar, pal_colors>;
 using PaletteSpan = tcb::span<PixelVar>;

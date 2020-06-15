@@ -46,7 +46,9 @@ add_executable(Animera
     "src/combo box widget.moc"
     src/composite.cpp
     src/composite.hpp
-    src/config.hpp
+    "src/config colors.hpp"
+    "src/config geometry.hpp"
+    "src/config keys.hpp"
     src/connect.hpp
     "src/current tool.cpp"
     "src/current tool.hpp"
@@ -95,6 +97,7 @@ add_executable(Animera
     "src/init canvas dialog.cpp"
     "src/init canvas dialog.hpp"
     "src/init canvas dialog.moc"
+    "src/int range.hpp"
     "src/keys dialog.cpp"
     "src/keys dialog.hpp"
     "src/label widget.cpp"
@@ -193,7 +196,6 @@ add_executable(Animera
     "src/tool select widget.moc"
     "src/tool widgets.cpp"
     "src/tool widgets.hpp"
-    "src/tool widgets.moc"
     src/tool.cpp
     src/tool.hpp
     src/tool.moc
