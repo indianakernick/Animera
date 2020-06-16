@@ -245,7 +245,7 @@ PaletteWidget::PaletteWidget(QWidget *parent)
   setFrameShape(NoFrame);
   setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
   setFixedWidth(pick_svgraph_rect.widget().width() + 2 * glob_border_width);
-  setMinimumHeight(pal_tile_size + glob_border_width);
+  setMinimumHeight(pal_tile_stride + glob_border_width);
   setAlignment(Qt::AlignHCenter);
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }
