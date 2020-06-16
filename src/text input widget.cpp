@@ -42,8 +42,10 @@ TextInputWidget::TextInputWidget(QWidget *parent, const WidgetRect rect)
 
 void TextInputWidget::setText(const QString &text) {
   QLineEdit::setText(text);
-  offset = 0;
-  update();
+  if (!hasFocus()) {
+    offset = 0;
+    updateMargins();
+  }
 }
 
 void TextInputWidget::blink() {
@@ -171,7 +173,9 @@ void TextInputWidget::paintSelection(QPainter &painter) {
 }
 
 void TextInputWidget::keyPressEvent(QKeyEvent *event) {
-  QLineEdit::keyPressEvent(event);
+  if (event->key() != Qt::Key_Up && event->key() != Qt::Key_Down) {
+    QLineEdit::keyPressEvent(event);
+  }
   
   // TODO: Qt bug
   // https://bugreports.qt.io/browse/QTBUG-78933
@@ -187,6 +191,7 @@ void TextInputWidget::focusInEvent(QFocusEvent *event) {
 
 void TextInputWidget::focusOutEvent(QFocusEvent *event) {
   offset = 0;
+  updateMargins();
   QLineEdit::focusOutEvent(event);
 }
 
@@ -194,7 +199,6 @@ void TextInputWidget::wheelEvent(QWheelEvent *event) {
   offset += event->pixelDelta().x();
   constrainOffset();
   updateMargins();
-  update();
 }
 
 void TextInputWidget::paintEvent(QPaintEvent *) {

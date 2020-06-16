@@ -11,10 +11,6 @@
 #include "connect.hpp"
 #include <QtGui/qevent.h>
 
-#ifdef Q_OS_MACOS
-#include "native mac.hpp"
-#endif
-
 NumberValidator::NumberValidator(QWidget *parent, const IntRange range, const bool skipZero)
   : QIntValidator{range.min, range.max, parent}, skipZero{skipZero} {}
 
@@ -144,15 +140,8 @@ void NumberInputWidget::keyPressEvent(QKeyEvent *event) {
     }
     setText(QString::number(std::max(newVal, boxValidator.bottom())));
     textChanged();
-  } else {
-    return TextInputWidget::keyPressEvent(event);
   }
-  
-  // TODO: Qt bug
-  // https://bugreports.qt.io/browse/QTBUG-78933
-  #ifdef Q_OS_MACOS
-  hideMouseUntilMouseMoves();
-  #endif
+  TextInputWidget::keyPressEvent(event);
 }
 
 HexInputWidget::HexInputWidget(
