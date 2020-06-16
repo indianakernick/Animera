@@ -1,4 +1,4 @@
-﻿//
+//
 //  settings.cpp
 //  Animera
 //
@@ -8,12 +8,14 @@
 
 #include "settings.hpp"
 
+#include <iostream>
 #include "connect.hpp"
 #include <QtWidgets/qfiledialog.h>
 
 QSettings &getSettings() {
   static QSettings settings;
   settings.setFallbacksEnabled(false);
+  std::cout << "Settings file: " << settings.fileName().toStdString() << '\n';
   return settings;
 }
 

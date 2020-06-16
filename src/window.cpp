@@ -517,7 +517,7 @@ void Window::saveFileDialog() {
   if (closeAfterSave) {
     CONNECT(dialog, rejected, this, close);
   }
-  updateDirSettings(dialog, "Sprite Directory");
+  updateDirSettings(dialog, pref_sprite_dir);
   dialog->open();
 }
 
@@ -552,7 +552,7 @@ void Window::exportFrameDialog() {
   dialog->setNameFilter("PNG Image (*.png)");
   dialog->setDefaultSuffix("png");
   CONNECT(dialog, fileSelected, this, exportFrame);
-  updateDirSettings(dialog, "Export Directory");
+  updateDirSettings(dialog, pref_export_dir);
   dialog->open();
 }
 
@@ -569,7 +569,7 @@ void Window::exportCelDialog() {
   dialog->setNameFilter("PNG Image (*.png)");
   dialog->setDefaultSuffix("png");
   CONNECT(dialog, fileSelected, this, exportCel);
-  updateDirSettings(dialog, "Export Directory");
+  updateDirSettings(dialog, pref_export_dir);
   dialog->open();
 }
 
@@ -587,7 +587,7 @@ void Window::importCelDialog() {
   dialog->setNameFilter("PNG Image (*.png)");
   dialog->setFileMode(QFileDialog::ExistingFile);
   CONNECT(dialog, fileSelected, this, importCel);
-  updateDirSettings(dialog, "Import Directory");
+  updateDirSettings(dialog, pref_import_dir);
   dialog->open();
 }
 
@@ -615,7 +615,7 @@ void Window::openPaletteDialog() {
   dialog->setNameFilter("PNG Image (*.png)");
   dialog->setFileMode(QFileDialog::ExistingFile);
   CONNECT(dialog, fileSelected, this, openPalette);
-  updateDirSettings(dialog, "Palette Directory");
+  updateDirSettings(dialog, pref_palette_dir);
   dialog->open();
 }
 
@@ -626,7 +626,7 @@ void Window::savePaletteDialog() {
   dialog->setNameFilter("PNG Image (*.png)");
   dialog->setDefaultSuffix("png");
   CONNECT(dialog, fileSelected, this, savePalette);
-  updateDirSettings(dialog, "Palette Directory");
+  updateDirSettings(dialog, pref_palette_dir);
   dialog->open();
 }
 

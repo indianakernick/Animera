@@ -45,7 +45,7 @@ void Application::openFileDialog() {
   dialog->setNameFilter("*.animera *.png");
   dialog->setFileMode(QFileDialog::ExistingFile);
   CONNECT(dialog, fileSelected, this, openFile);
-  updateDirSettings(dialog, "Sprite Directory");
+  updateDirSettings(dialog, pref_sprite_dir);
   // TODO: why can't I use open instead of exec?
   // https://forum.qt.io/topic/109616/how-to-open-an-asynchronous-application-modal-file-dialog
   dialog->exec();
