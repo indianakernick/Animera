@@ -14,7 +14,7 @@
 
 LabelWidget::LabelWidget(
   QWidget *parent,
-  const WidgetRect rect,
+  const WidgetRect &rect,
   const QString &text
 ) : QWidget{parent}, text{text}, rect{rect} {
   setFixedSize(rect.widget().size());

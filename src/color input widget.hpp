@@ -42,7 +42,7 @@ private:
 class NumberInputWidget final : public TextInputWidget {
   Q_OBJECT
 public:
-  NumberInputWidget(QWidget *, WidgetRect, IntRange, bool = false);
+  NumberInputWidget(QWidget *, const WidgetRect &, IntRange, bool = false);
   
   int value() const;
   
@@ -67,7 +67,7 @@ private:
 class HexInputWidget final : public TextInputWidget {
   Q_OBJECT
 public:
-  HexInputWidget(QWidget *, WidgetRect, RGB, int);
+  HexInputWidget(QWidget *, const WidgetRect &, RGB, int);
 
 Q_SIGNALS:
   void rgbaChanged(RGB, int);

@@ -14,7 +14,7 @@
 
 class TextPushButtonWidget : public QAbstractButton {
 public:
-  TextPushButtonWidget(QWidget *, WidgetRect, const QString &);
+  TextPushButtonWidget(QWidget *, const WidgetRect &, const QString &);
 
 private:
   WidgetRect rect;

@@ -22,7 +22,7 @@ namespace {
 
 class PopupList final : public QWidget {
 public:
-  PopupList(QWidget *parent, const WidgetRect rect)
+  PopupList(QWidget *parent, const WidgetRect &rect)
     : QWidget{parent}, rect{rect} {
     setFixedSize(rect.widget().size());
   }
@@ -83,7 +83,7 @@ public:
     setWindowFlags(Qt::Popup | Qt::FramelessWindowHint);
   }
   
-  void init(const WidgetRect rect) {
+  void init(const WidgetRect &rect) {
     const WidgetRect adjusted = adjustRect(rect);
     setFixedSize(adjusted.widget().size());
     QPoint pos = box->mapToGlobal(rect.widget().topLeft());
@@ -108,7 +108,7 @@ private:
     return rect;
   }
   
-  WidgetRect adjustRect(const WidgetRect rect) const {
+  WidgetRect adjustRect(const WidgetRect &rect) const {
     const QPoint topLeft = rect.widget().topLeft();
     const int extraHeight = rect.inner().height() * (box->count() - 1);
     return {

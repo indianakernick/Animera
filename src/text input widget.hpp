@@ -17,7 +17,7 @@ class TextInputWidget : public QLineEdit {
   Q_OBJECT
   
 public:
-  TextInputWidget(QWidget *, WidgetRect);
+  TextInputWidget(QWidget *, const WidgetRect &);
 
   void setText(const QString &);
 

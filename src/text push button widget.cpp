@@ -15,7 +15,7 @@
 #include "config geometry.hpp"
 
 TextPushButtonWidget::TextPushButtonWidget(
-  QWidget *parent, const WidgetRect rect, const QString &text
+  QWidget *parent, const WidgetRect &rect, const QString &text
 ) : QAbstractButton{parent}, rect{rect}, pixmap{rect.widget().size()} {
   setFixedSize(rect.widget().size());
   setCursor(Qt::PointingHandCursor);

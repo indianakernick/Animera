@@ -23,7 +23,7 @@
 
 class FileInputButton final : public QAbstractButton {
 public:
-  FileInputButton(QWidget *parent, const WidgetRect rect)
+  FileInputButton(QWidget *parent, const WidgetRect &rect)
     : QAbstractButton{parent}, rect{rect} {
     setCursor(Qt::PointingHandCursor);
     arrow = bakeColoredBitmap(":/General/down arrow.png", glob_light_2);
@@ -96,7 +96,7 @@ myself rebuilding the thing from the ground up.
 
 class PathInputWidget final : public TextInputWidget {
 public:
-  PathInputWidget(QWidget *parent, const WidgetRect rect)
+  PathInputWidget(QWidget *parent, const WidgetRect &rect)
     : TextInputWidget{parent, rect} {
     setText(QDir::rootPath());
     setValidator(new DirValidator{this});

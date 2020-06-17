@@ -132,7 +132,7 @@ constexpr TextIconRects textBoxIconRect(const int chars) {
 }
 
 constexpr WidgetRect addMargins(
-  const WidgetRect rect,
+  const WidgetRect &rect,
   const int left,
   const int top,
   const int right,
@@ -151,7 +151,7 @@ constexpr WidgetRect addMargins(
 }
 
 constexpr WidgetRect addMargins(
-  const WidgetRect rect,
+  const WidgetRect &rect,
   const bool left,
   const bool top,
   const bool right,
@@ -166,7 +166,7 @@ constexpr WidgetRect addMargins(
   );
 }
 
-constexpr WidgetRect addMargins(const WidgetRect rect) {
+constexpr WidgetRect addMargins(const WidgetRect &rect) {
   return addMargins(rect, true, true, true, true);
 }
 

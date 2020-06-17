@@ -20,7 +20,7 @@
 #include "native mac.hpp"
 #endif
 
-TextInputWidget::TextInputWidget(QWidget *parent, const WidgetRect rect)
+TextInputWidget::TextInputWidget(QWidget *parent, const WidgetRect &rect)
   : QLineEdit{parent},
     rect{rect},
     cursorBlinkTimer{this} {

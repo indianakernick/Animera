@@ -64,7 +64,7 @@ QPixmap bakeColoredBitmaps(
   return pixmap;
 }
 
-void paintBorder(QPainter &painter, const WidgetRect rect, const QColor color) {
+void paintBorder(QPainter &painter, const WidgetRect &rect, const QColor color) {
   /*const QSize innerSize = rect.inner().size();
   const int widgetSpace = rect.outer().x() - rect.widget().x();
   const int borderWidth = rect.inner().x() - rect.outer().x();
@@ -97,7 +97,7 @@ void paintBorder(QPainter &painter, const WidgetRect rect, const QColor color) {
 
 void paintChecker(
   QPainter &painter,
-  const WidgetRect rect,
+  const WidgetRect &rect,
   const int vertTiles
 ) {
   const QRect inner = rect.inner();

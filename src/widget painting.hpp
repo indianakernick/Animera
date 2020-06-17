@@ -16,7 +16,7 @@ QPixmap bakeColoredBitmap(const QString &, QColor);
 QPixmap bakeColoredBitmap(const QBitmap &, QColor);
 QPixmap bakeColoredBitmaps(const QString &, const QString &, QColor, QColor);
 QPixmap bakeColoredBitmaps(const QBitmap &, const QBitmap &, QColor, QColor);
-void paintBorder(QPainter &, WidgetRect, QColor);
-void paintChecker(QPainter &, WidgetRect, int);
+void paintBorder(QPainter &, const WidgetRect &, QColor);
+void paintChecker(QPainter &, const WidgetRect &, int);
 
 #endif
