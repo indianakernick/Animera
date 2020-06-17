@@ -57,10 +57,16 @@ public:
     }
   }
   
-  State validate(QString &input, int &) const override {
+  State validate(QString &input, int &pos) const override {
     QDir::toNativeSeparators(input);
     if (input.isEmpty()) {
+      input = QDir::rootPath();
+      pos = input.size();
       return State::Intermediate;
+    }
+    const int colon = input.indexOf(':');
+    if (colon == 0 || colon > 1) {
+      return State::Invalid;
     }
     if (QDir::isRelativePath(input)) {
       return State::Invalid;
@@ -68,34 +74,13 @@ public:
     if (QDir{input}.exists()) {
       return State::Acceptable;
     }
-    const int lastSlash = input.lastIndexOf(QDir::separator());
-    if (lastSlash != -1) {
-      if (QDir{QString{input.data(), lastSlash}}.exists()) {
-        return State::Intermediate;
-      }
+    const int slash = input.lastIndexOf(QDir::separator());
+    if (slash != -1 && QDir{input.left(slash)}.exists()) {
+      return State::Intermediate;
     }
     return State::Invalid;
   }
 };
-
-/*
-Popup completer seems to work how I want the inline completer to work
-
-Pressing backspace
-  default action
-  if suggestion is shown, hides suggestion
-Pressing enter
-  if suggestion is shown, materializes suggestion
-Pressing right or left
-  default action
-  if suggestion is shown, materializes suggestion
-Pressing up or down
-  if suggestion is shown, cycles suggestions
-Pressing valid path char
-  default action
-  show suggestion
-  if the current suggestion fits the new char, it should remain
-*/
 
 /*
 The inline completer for QFileSystemModel has a few problems that are difficult
@@ -119,89 +104,114 @@ public:
   }
 
 private:
-  QDir baseDir;
+  QString baseDir;
+  QString filterName;
   QStringList entries;
+  int beginIndex = -1;
+  int endIndex = -1;
   int index = -1;
   bool shown = false;
 
-  void next() {
-    if (shown) {
-      ++index;
-      if (index >= entries.size()) index = 0;
-      suggest();
-    } else if (!entries.isEmpty()) {
-      shown = true;
-      recalculateBaseDir();
-      suggest();
-    }
-  }
-  
-  void prev() {
-    if (shown) {
-      --index;
-      if (index < 0) index = entries.size() - 1;
-      suggest();
-    } else if (!entries.isEmpty()) {
-      shown = true;
-      recalculateBaseDir();
-      suggest();
-    }
-  }
-  
-  static constexpr QDir::Filters filter
-    = QDir::Dirs
-    | QDir::Drives
-    | QDir::NoDotAndDotDot
-    | QDir::CaseSensitive;
-  
-  static constexpr QDir::SortFlags sort = QDir::Name | QDir::IgnoreCase;
-  
-  static QDir getBaseDir(const QString &path) {
-    const int lastSlash = path.lastIndexOf('/');
-    if (lastSlash == -1) {
-      return QDir{QDir::rootPath(), path + "*", sort, filter};
+  bool splitPath(const QString &path) {
+    const int slash = path.lastIndexOf(QDir::separator());
+    QString newBaseDir;
+    if (slash == -1) {
+      newBaseDir = QDir::rootPath();
+      filterName = path;
     } else {
-      return QDir{
-        path.left(lastSlash + 1),
-        path.right(path.size() - lastSlash - 1) + "*",
-        sort, filter
-      };
+      newBaseDir = path.left(slash + 1);
+      filterName = path.right(path.size() - slash - 1);
+    }
+    if (newBaseDir != baseDir) {
+      baseDir = newBaseDir;
+      return true;
+    } else {
+      return false;
     }
   }
   
-  void recalculateBaseDir() {
-    QString path = text();
-    const int lastSlash = path.lastIndexOf('/');
-    QString name = lastSlash == -1 ? path : path.right(path.size() - lastSlash - 1);
-    path = lastSlash == -1 ? QString{} : path.left(lastSlash + 1);
-    setText(path);
-    baseDir = getBaseDir(path);
-    entries = baseDir.entryList();
-    index = entries.indexOf(QRegularExpression{name + ".*"});
+  void updateEntries() {
+    const QDir::SortFlags sort = QDir::Name;
+    const QDir::Filters filter = QDir::Dirs | QDir::Drives | QDir::NoDotAndDotDot;
+    entries = QDir{baseDir, {}, sort, filter}.entryList();
+  }
+  
+  int findFirstMatch() const {
+    // TODO: binary search
+    // Also consider using QDir::IgnoreCase
+    for (int i = 0; i != entries.size(); ++i) {
+      if (entries[i].startsWith(filterName)) {
+        return i;
+      }
+    }
+    return -1;
+  }
+  
+  void updateFilteredRange() {
+    if (filterName.isEmpty()) {
+      beginIndex = 0;
+      endIndex = entries.size();
+      return;
+    }
+    beginIndex = findFirstMatch();
+    if (beginIndex == -1) {
+      endIndex = -1;
+    } else {
+      endIndex = beginIndex + 1;
+      while (endIndex < entries.size() && entries[endIndex].startsWith(filterName)) {
+        ++endIndex;
+      }
+    }
+  }
+  
+  void resetSuggestion() {
+    if (splitPath(text())) {
+      updateEntries();
+      index = findFirstMatch();
+    }
+    filterName.clear();
+    updateFilteredRange();
+    setText(baseDir);
+  }
+
+  void cycle(const int dir) {
+    if (shown) {
+      if (beginIndex == -1) {
+        index = -1;
+      } else {
+        index = std::clamp(index + dir, beginIndex, endIndex - 1);
+      }
+      suggest();
+    } else if (!entries.isEmpty()) {
+      shown = true;
+      resetSuggestion();
+      suggest();
+    }
   }
   
   void suggest() {
-    if (!entries.isEmpty()) {
-      const int start = selectionStart();
-      QString oldText = start == -1 ? text() : text().left(start);
-      QString newText = baseDir.path();
-      if (!newText.endsWith('/')) newText.append('/');
-      if (index == -1) index = 0;
-      newText.append(entries[index]);
-      setText(newText);
-      setSelection(oldText.size(), newText.length() - oldText.length());
-    }
+    if (entries.isEmpty()) return;
+    if (beginIndex == -1) return;
+    if (index == -1) index = beginIndex;
+    
+    setText(baseDir + entries[index]);
+    setSelection(
+      baseDir.size() + filterName.size(),
+      entries[index].size() - filterName.size()
+    );
   }
   
   void updateText(const QString &path) {
     if (!shown) return;
-    baseDir = getBaseDir(path);
-    if (index != -1) {
-      QString oldEntry = std::move(entries[index]);
-      entries = baseDir.entryList();
-      index = entries.indexOf(std::move(oldEntry));
+    if (splitPath(path)) {
+      updateEntries();
+      updateFilteredRange();
+      index = beginIndex;
     } else {
-      entries = baseDir.entryList();
+      updateFilteredRange();
+      if (index != -1 && !entries[index].startsWith(filterName)) {
+        index = beginIndex;
+      }
     }
     suggest();
   }
@@ -216,10 +226,10 @@ private:
         shown = false;
         break;
       case Qt::Key_Up:
-        prev();
+        cycle(-1);
         break;
       case Qt::Key_Down:
-        next();
+        cycle(1);
         break;
       default:
         if (!event->text().isEmpty()) {
