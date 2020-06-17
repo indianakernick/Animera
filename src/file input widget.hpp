@@ -1,4 +1,4 @@
-﻿//
+//
 //  file input widget.hpp
 //  Animera
 //
@@ -11,9 +11,8 @@
 
 #include <QtWidgets/qwidget.h>
 
-class TextInputWidget;
+class PathInputWidget;
 class FileInputButton;
-class DirValidator;
 
 class FileInputWidget final : public QWidget {
   Q_OBJECT
@@ -33,11 +32,9 @@ private Q_SLOTS:
   void changePath();
 
 private:
-  TextInputWidget *text = nullptr;
+  PathInputWidget *text = nullptr;
   FileInputButton *icon = nullptr;
-  DirValidator *validator = nullptr;
 
-  void initText();
   void connectSignals();
 };
 
