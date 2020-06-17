@@ -58,8 +58,12 @@ public:
   }
   
   State validate(QString &input, int &) const override {
+    QDir::toNativeSeparators(input);
     if (input.isEmpty()) {
       return State::Intermediate;
+    }
+    if (QDir::isRelativePath(input)) {
+      return State::Invalid;
     }
     if (QDir{input}.exists()) {
       return State::Acceptable;
@@ -265,13 +269,12 @@ void FileInputWidget::setPathFromDialog() {
 }
 
 void FileInputWidget::setPath(const QString &newDir) {
-  text->setText(QDir::cleanPath(newDir));
+  text->setText(QDir{newDir}.absolutePath());
   changePath();
 }
 
 void FileInputWidget::simplifyPath() {
-  // TODO: can the validator do this job?
-  text->setText(QDir::cleanPath(path()));
+  text->setText(QDir{path()}.absolutePath());
 }
 
 void FileInputWidget::changePath() {
