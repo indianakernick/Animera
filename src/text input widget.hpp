@@ -32,6 +32,7 @@ private:
   QTimer cursorBlinkTimer;
   bool cursorBlinkStatus = true;
 
+  int getTextWidth(int = 0, int = -1) const;
   int getAlignOffset() const;
   int getCursorPos(int) const;
   int getMinCursorPos() const;

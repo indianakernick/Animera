@@ -67,9 +67,32 @@ void TextInputWidget::hideCursor() {
   update();
 }
 
+int TextInputWidget::getTextWidth(const int start, int length) const {
+  // I'm still not sure if fontMetrics is really necessary...
+  #if 0
+  
+  (void)start;
+  if (length == -1) {
+    return text().size() * glob_font_stride_px;
+  } else {
+    return length * glob_font_stride_px;
+  }
+  
+  #else
+  
+  if (start == 0) {
+    return fontMetrics().horizontalAdvance(text(), length);
+  } else {
+    if (length == -1) length = text().size() - start;
+    return fontMetrics().horizontalAdvance(QString{text().data() + start, length});
+  }
+  
+  #endif
+}
+
 int TextInputWidget::getAlignOffset() const {
   if (alignment() & Qt::AlignRight) {
-    return rect.inner().width() - (text().size() * glob_font_stride_px + glob_font_kern_px);
+    return getMinOffset();
   } else if (alignment() & Qt::AlignLeft) {
     return 0;
   } else Q_UNREACHABLE();
@@ -77,8 +100,8 @@ int TextInputWidget::getAlignOffset() const {
 
 int TextInputWidget::getCursorPos(const int chars) const {
   return rect.pos().x()
-    + chars * glob_font_stride_px
-    - glob_text_margin
+    + getTextWidth(0, chars)
+    - glob_font_kern_px
     + offset
     + getAlignOffset();
 }
@@ -92,10 +115,12 @@ int TextInputWidget::getMaxCursorPos() const {
 }
 
 int TextInputWidget::getMinOffset() const {
-  // Should we consider rect.pos()?
   return rect.inner().width()
+    - getTextWidth()
+    + glob_font_kern_px
     - glob_text_margin
-    - text().length() * glob_font_stride_px;
+    - rect.pos().x()
+    + rect.inner().left();
 }
 
 void TextInputWidget::setOffset(int, const int newCursor) {
@@ -167,7 +192,7 @@ void TextInputWidget::paintSelection(QPainter &painter) {
   painter.drawRect(
     getCursorPos(selectionStart()),
     rect.inner().y(),
-    selectionLength() * glob_font_stride_px + glob_font_kern_px,
+    getTextWidth(selectionStart(), selectionLength()) + glob_font_kern_px,
     rect.inner().height()
   );
 }

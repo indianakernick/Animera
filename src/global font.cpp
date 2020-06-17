@@ -17,7 +17,8 @@ QFont loadGlobalFont() {
   const int id = QFontDatabase::addApplicationFont(":/Fonts/5x7ascii.ttf");
   assert(id != -1);
   QFont font{QFontDatabase::applicationFontFamilies(id).at(0), glob_font_pt};
-  font.setStyleStrategy(QFont::NoAntialias);
+  font.setStyleHint(QFont::Monospace, QFont::StyleStrategy(QFont::NoAntialias));
+  font.setKerning(false);
   return font;
 }
 

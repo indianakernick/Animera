@@ -102,8 +102,7 @@ void LayerNameWidget::createWidgets() {
   visible->setToolTip("Toggle Visibility");
   name = new TextInputWidget{this, layer_text_rect};
   name->setMaxLength(layer_name_max_len);
-  auto *validator = new NameValidator{name};
-  name->setValidator(validator);
+  name->setValidator(new NameValidator{name});
 }
 
 void LayerNameWidget::setupLayout() {
