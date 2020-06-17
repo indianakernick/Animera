@@ -22,12 +22,14 @@ public:
 
   QString path() const;
 
+public Q_SLOTS:
+  void setPath(const QString &);
+
 Q_SIGNALS:
   void pathChanged(const QString &);
 
 private Q_SLOTS:
   void setPathFromDialog();
-  void setPath(const QString &);
   void simplifyPath();
   void changePath();
 

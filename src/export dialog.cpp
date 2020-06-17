@@ -9,6 +9,7 @@
 #include "export dialog.hpp"
 
 #include "connect.hpp"
+#include "settings.hpp"
 #include <QtCore/qdir.h>
 #include <QtGui/qevent.h>
 #include "label widget.hpp"
@@ -145,6 +146,9 @@ void ExportDialog::createWidgets() {
   name->setText(validator->defaultText());
   
   dir = new FileInputWidget{this, 40};
+  QString path = getSettings().value(pref_export_dir, QDir::homePath()).toString();
+  getSettings().setValue(pref_export_dir, path);
+  dir->setPath(path);
   
   layerSelect = new ComboBoxWidget{this, 14};
   layerSelect->addItem("All");
@@ -250,6 +254,9 @@ void ExportDialog::connectSignals() {
   CONNECT(ok,        pressed,            this, accept);
   CONNECT(cancel,    pressed,            this, reject);
   CONNECT(this,      accepted,           this, submit);
+  CONNECT_LAMBDA(dir, pathChanged, [](const QString &path) {
+    getSettings().setValue(pref_export_dir, path);
+  });
 }
 
 #include "export dialog.moc"

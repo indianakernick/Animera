@@ -98,7 +98,7 @@ class PathInputWidget final : public TextInputWidget {
 public:
   PathInputWidget(QWidget *parent, const WidgetRect rect)
     : TextInputWidget{parent, rect} {
-    setText(QDir::homePath());
+    setText(QDir::rootPath());
     setValidator(new DirValidator{this});
     CONNECT(this, textEdited, this, updateText);
   }
@@ -268,6 +268,11 @@ QString FileInputWidget::path() const {
   return text->text();
 }
 
+void FileInputWidget::setPath(const QString &newDir) {
+  text->setText(QDir{newDir}.absolutePath());
+  changePath();
+}
+
 void FileInputWidget::setPathFromDialog() {
   auto *dialog = new QFileDialog{parentWidget()};
   dialog->setAcceptMode(QFileDialog::AcceptOpen);
@@ -276,11 +281,6 @@ void FileInputWidget::setPathFromDialog() {
   dialog->setDirectory(path());
   CONNECT(dialog, fileSelected, this, setPath);
   dialog->open();
-}
-
-void FileInputWidget::setPath(const QString &newDir) {
-  text->setText(QDir{newDir}.absolutePath());
-  changePath();
 }
 
 void FileInputWidget::simplifyPath() {

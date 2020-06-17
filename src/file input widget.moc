@@ -34,14 +34,14 @@ static const qt_meta_stringdata_FileInputWidget_t qt_meta_stringdata_FileInputWi
 QT_MOC_LITERAL(0, 0, 15), // "FileInputWidget"
 QT_MOC_LITERAL(1, 16, 11), // "pathChanged"
 QT_MOC_LITERAL(2, 28, 0), // ""
-QT_MOC_LITERAL(3, 29, 17), // "setPathFromDialog"
-QT_MOC_LITERAL(4, 47, 7), // "setPath"
+QT_MOC_LITERAL(3, 29, 7), // "setPath"
+QT_MOC_LITERAL(4, 37, 17), // "setPathFromDialog"
 QT_MOC_LITERAL(5, 55, 12), // "simplifyPath"
 QT_MOC_LITERAL(6, 68, 10) // "changePath"
 
     },
-    "FileInputWidget\0pathChanged\0\0"
-    "setPathFromDialog\0setPath\0simplifyPath\0"
+    "FileInputWidget\0pathChanged\0\0setPath\0"
+    "setPathFromDialog\0simplifyPath\0"
     "changePath"
 };
 #undef QT_MOC_LITERAL
@@ -63,8 +63,8 @@ static const uint qt_meta_data_FileInputWidget[] = {
        1,    1,   39,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       3,    0,   42,    2, 0x08 /* Private */,
-       4,    1,   43,    2, 0x08 /* Private */,
+       3,    1,   42,    2, 0x0a /* Public */,
+       4,    0,   45,    2, 0x08 /* Private */,
        5,    0,   46,    2, 0x08 /* Private */,
        6,    0,   47,    2, 0x08 /* Private */,
 
@@ -72,8 +72,8 @@ static const uint qt_meta_data_FileInputWidget[] = {
     QMetaType::Void, QMetaType::QString,    2,
 
  // slots: parameters
-    QMetaType::Void,
     QMetaType::Void, QMetaType::QString,    2,
+    QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
 
@@ -87,8 +87,8 @@ void FileInputWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int 
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->pathChanged((*reinterpret_cast< const QString(*)>(_a[1]))); break;
-        case 1: _t->setPathFromDialog(); break;
-        case 2: _t->setPath((*reinterpret_cast< const QString(*)>(_a[1]))); break;
+        case 1: _t->setPath((*reinterpret_cast< const QString(*)>(_a[1]))); break;
+        case 2: _t->setPathFromDialog(); break;
         case 3: _t->simplifyPath(); break;
         case 4: _t->changePath(); break;
         default: ;
