@@ -169,7 +169,7 @@ void TextInputWidget::paintText(QPainter &painter) {
   painter.setClipRect(rect.inner());
   QPoint textPos = rect.pos();
   textPos.rx() += offset + getAlignOffset();
-  textPos.ry() += glob_font_accent_px;
+  textPos.ry() += glob_font_ascent_px;
   painter.drawText(textPos, text());
 }
 

@@ -68,7 +68,7 @@ private:
     painter.setBrush(Qt::NoBrush);
     painter.setPen(glob_text_color);
     painter.drawText(
-      QPoint{glob_text_margin, glob_text_margin + glob_font_accent_px},
+      QPoint{glob_text_margin, glob_text_margin + glob_font_ascent_px},
       text
     );
   }
@@ -245,7 +245,7 @@ void ComboBoxWidget::paintEvent(QPaintEvent *) {
   painter.setFont(getGlobalFont());
   painter.setClipRect(rects.text.inner());
   QPoint textPos = rects.text.pos();
-  textPos.ry() += glob_font_accent_px;
+  textPos.ry() += glob_font_ascent_px;
   painter.drawText(textPos, currentText());
 }
 

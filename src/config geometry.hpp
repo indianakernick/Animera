@@ -24,9 +24,9 @@ constexpr int operator""_px(const unsigned long long literal) {
 constexpr int       glob_font_width_px = 5_px;
 constexpr int       glob_font_kern_px = 1_px;
 constexpr int       glob_font_stride_px = glob_font_width_px + glob_font_kern_px;
-constexpr int       glob_font_accent_px = 7_px;
-constexpr int       glob_font_decent_px = 0_px;
-constexpr int       glob_font_px = glob_font_accent_px + glob_font_decent_px;
+constexpr int       glob_font_ascent_px = 7_px;
+constexpr int       glob_font_descent_px = 0_px;
+constexpr int       glob_font_px = glob_font_ascent_px + glob_font_descent_px;
 
 #ifdef Q_OS_WIN
 constexpr int       glob_font_pt = 6_px; // 6 pt for 96 dpi
