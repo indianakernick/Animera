@@ -62,13 +62,6 @@ void TextInputWidget::showCursor() {
   update();
 }
 
-void TextInputWidget::hideCursor() {
-  cursorBlinkStatus = false;
-  cursorBlinkTimer.stop();
-  cursorBlinkTimer.start();
-  update();
-}
-
 int TextInputWidget::getTextWidth(const int start, int length) const {
   // I'm still not sure if fontMetrics is really necessary...
   #if 0

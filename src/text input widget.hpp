@@ -24,7 +24,6 @@ public:
 private Q_SLOTS:
   void blink();
   void showCursor();
-  void hideCursor();
 
 private:
   WidgetRect rect;
