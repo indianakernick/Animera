@@ -146,9 +146,7 @@ void ExportDialog::createWidgets() {
   name->setText(validator->defaultText());
   
   dir = new FileInputWidget{this, 40};
-  QString path = getSettings().value(pref_export_dir, QDir::homePath()).toString();
-  getSettings().setValue(pref_export_dir, path);
-  dir->setPath(path);
+  dir->setPath(getDirSettings(pref_export_dir));
   
   layerSelect = new ComboBoxWidget{this, 14};
   layerSelect->addItem("All");
@@ -250,13 +248,11 @@ void ExportDialog::setupLayout() {
 }
 
 void ExportDialog::connectSignals() {
-  CONNECT(composite, currentTextChanged, this, updateFormatItems);
-  CONNECT(ok,        pressed,            this, accept);
-  CONNECT(cancel,    pressed,            this, reject);
-  CONNECT(this,      accepted,           this, submit);
-  CONNECT_LAMBDA(dir, pathChanged, [](const QString &path) {
-    getSettings().setValue(pref_export_dir, path);
-  });
+  CONNECT(composite,  currentTextChanged, this, updateFormatItems);
+  CONNECT(ok,         pressed,            this, accept);
+  CONNECT(cancel,     pressed,            this, reject);
+  CONNECT(this,       accepted,           this, submit);
+  CONNECT_LAMBDA(dir, pathChanged,        setDirSettings(pref_export_dir));
 }
 
 #include "export dialog.moc"

@@ -14,16 +14,19 @@
 
 QSettings &getSettings() {
   static QSettings settings;
-  settings.setFallbacksEnabled(false);
-  std::cout << "Settings file: " << settings.fileName().toStdString() << '\n';
+  static bool init = false;
+  if (!std::exchange(init, true)) {
+    settings.setFallbacksEnabled(false);
+    std::cout << "Settings file: " << settings.fileName().toStdString() << '\n';
+  }
   return settings;
 }
 
 void updateDirSettings(QFileDialog *dialog, const QString &key) {
-  const QString dir = getSettings().value(key, QDir::homePath()).toString();
-  getSettings().setValue(key, dir);
-  dialog->setDirectory(dir);
-  CONNECT_LAMBDA(dialog, directoryEntered, [key](const QString &dir) {
-    getSettings().setValue(key, dir);
-  });
+  dialog->setDirectory(getDirSettings(key));
+  CONNECT_LAMBDA(dialog, directoryEntered, setDirSettings(key));
+}
+
+QString getDirSettings(const QString &key) {
+  return getSettings().value(key, QDir::homePath()).toString();
 }
