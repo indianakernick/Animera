@@ -1,4 +1,4 @@
-﻿//
+//
 //  timeline controls widget.hpp
 //  Animera
 //
@@ -10,7 +10,7 @@
 #define animera_timeline_controls_widget_hpp
 
 #include <QtCore/qtimer.h>
-#include "color input widget.hpp"
+#include "number input widget.hpp"
 #include "icon push button widget.hpp"
 #include "icon radio button widget.hpp"
 

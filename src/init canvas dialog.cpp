@@ -14,7 +14,7 @@
 #include <QtGui/qpainter.h>
 #include "label widget.hpp"
 #include "config colors.hpp"
-#include "color input widget.hpp"
+#include "number input widget.hpp"
 #include "radio button widget.hpp"
 #include <QtWidgets/qgridlayout.h>
 #include "text push button widget.hpp"

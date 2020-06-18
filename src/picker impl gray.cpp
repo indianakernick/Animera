@@ -12,7 +12,7 @@
 #include "label widget.hpp"
 #include "config colors.hpp"
 #include <Graphics/format.hpp>
-#include "color input widget.hpp"
+#include "number input widget.hpp"
 #include "color slider widget.hpp"
 
 namespace {

@@ -23,6 +23,7 @@
 		4529AA03239CA0D40034A014 /* tool param bar widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4529AA01239CA0D40034A014 /* tool param bar widget.cpp */; };
 		4529AA06239CA4090034A014 /* tool param widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4529AA04239CA4090034A014 /* tool param widget.cpp */; };
 		4529AA09239CDF4F0034A014 /* quit dialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4529AA07239CDF4F0034A014 /* quit dialog.cpp */; };
+		452D32FE249AF5E0009FA8F0 /* number input widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 452D32FC249AF5E0009FA8F0 /* number input widget.cpp */; };
 		453A20C6231A078100F055BA /* sprite file.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453A20C4231A078100F055BA /* sprite file.cpp */; };
 		453C78192234935000818B19 /* timeline widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C78172234935000818B19 /* timeline widget.cpp */; };
 		453C781C22349BBD00818B19 /* editor widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C781A22349BBD00818B19 /* editor widget.cpp */; };
@@ -31,7 +32,7 @@
 		453C78432234E13E00818B19 /* window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C78412234E13E00818B19 /* window.cpp */; };
 		453C78462234F3C600818B19 /* status bar widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453C78442234F3C600818B19 /* status bar widget.cpp */; };
 		453D28BD22768D9900D0E5F9 /* text input widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453D28BB22768D9900D0E5F9 /* text input widget.cpp */; };
-		453D28C02276956A00D0E5F9 /* color input widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453D28BE2276956A00D0E5F9 /* color input widget.cpp */; };
+		453D28C02276956A00D0E5F9 /* hex input widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453D28BE2276956A00D0E5F9 /* hex input widget.cpp */; };
 		453D28C3227698F200D0E5F9 /* widget painting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453D28C1227698F200D0E5F9 /* widget painting.cpp */; };
 		453D28C622769EC000D0E5F9 /* color slider widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453D28C422769EC000D0E5F9 /* color slider widget.cpp */; };
 		453D28C92276A7DD00D0E5F9 /* color graph widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 453D28C72276A7DD00D0E5F9 /* color graph widget.cpp */; };
@@ -163,6 +164,9 @@
 		452D32F924974B40009FA8F0 /* config keys.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "config keys.hpp"; sourceTree = "<group>"; };
 		452D32FA24974BC2009FA8F0 /* config colors.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "config colors.hpp"; sourceTree = "<group>"; };
 		452D32FB24974E40009FA8F0 /* int range.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "int range.hpp"; sourceTree = "<group>"; };
+		452D32FC249AF5E0009FA8F0 /* number input widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "number input widget.cpp"; sourceTree = "<group>"; };
+		452D32FD249AF5E0009FA8F0 /* number input widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "number input widget.hpp"; sourceTree = "<group>"; };
+		452D3300249AF95A009FA8F0 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		453A20C4231A078100F055BA /* sprite file.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "sprite file.cpp"; sourceTree = "<group>"; };
 		453A20C5231A078100F055BA /* sprite file.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "sprite file.hpp"; sourceTree = "<group>"; };
 		453A20C7231A139100F055BA /* palette span.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "palette span.hpp"; sourceTree = "<group>"; };
@@ -183,8 +187,8 @@
 		453D28BA22768B2B00D0E5F9 /* geometry.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = geometry.hpp; sourceTree = "<group>"; };
 		453D28BB22768D9900D0E5F9 /* text input widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "text input widget.cpp"; sourceTree = "<group>"; };
 		453D28BC22768D9900D0E5F9 /* text input widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "text input widget.hpp"; sourceTree = "<group>"; };
-		453D28BE2276956A00D0E5F9 /* color input widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "color input widget.cpp"; sourceTree = "<group>"; };
-		453D28BF2276956A00D0E5F9 /* color input widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "color input widget.hpp"; sourceTree = "<group>"; };
+		453D28BE2276956A00D0E5F9 /* hex input widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "hex input widget.cpp"; sourceTree = "<group>"; };
+		453D28BF2276956A00D0E5F9 /* hex input widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hex input widget.hpp"; sourceTree = "<group>"; };
 		453D28C1227698F200D0E5F9 /* widget painting.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "widget painting.cpp"; sourceTree = "<group>"; };
 		453D28C2227698F200D0E5F9 /* widget painting.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "widget painting.hpp"; sourceTree = "<group>"; };
 		453D28C422769EC000D0E5F9 /* color slider widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "color slider widget.cpp"; sourceTree = "<group>"; };
@@ -1022,8 +1026,8 @@
 				4513145722D5A29800D66262 /* picker impl rgba.hpp */,
 				4513145922D5A2A500D66262 /* picker impl gray.cpp */,
 				4513145A22D5A2A500D66262 /* picker impl gray.hpp */,
-				453D28BE2276956A00D0E5F9 /* color input widget.cpp */,
-				453D28BF2276956A00D0E5F9 /* color input widget.hpp */,
+				453D28BE2276956A00D0E5F9 /* hex input widget.cpp */,
+				453D28BF2276956A00D0E5F9 /* hex input widget.hpp */,
 				453D28C422769EC000D0E5F9 /* color slider widget.cpp */,
 				453D28C522769EC000D0E5F9 /* color slider widget.hpp */,
 				453D28C72276A7DD00D0E5F9 /* color graph widget.cpp */,
@@ -1855,6 +1859,8 @@
 				4571C131227C383A00479006 /* radio button widget.hpp */,
 				453D28BB22768D9900D0E5F9 /* text input widget.cpp */,
 				453D28BC22768D9900D0E5F9 /* text input widget.hpp */,
+				452D32FC249AF5E0009FA8F0 /* number input widget.cpp */,
+				452D32FD249AF5E0009FA8F0 /* number input widget.hpp */,
 				453D28D12276F0FD00D0E5F9 /* label widget.cpp */,
 				453D28D22276F0FD00D0E5F9 /* label widget.hpp */,
 				45D109A422DBFAF200D1F1CB /* icon radio button widget.cpp */,
@@ -1966,6 +1972,7 @@
 				455F285B2206890300C73F39 /* Assets.xcassets */,
 				455F28602206890300C73F39 /* Info.plist */,
 				455F28612206890300C73F39 /* Animera.entitlements */,
+				452D3300249AF95A009FA8F0 /* CMakeLists.txt */,
 				45DC980D247903BF00429465 /* scripts */,
 				45CEB6AC243C062100661D78 /* doc */,
 				4549B969243BFB8800B1A62A /* third_party */,
@@ -2165,11 +2172,11 @@
 				45AA32C822F5256500005DD8 /* Moc - timeline frames widget */,
 				45AA32C922F525C700005DD8 /* Moc - timeline layers widget */,
 				45AA32CA22F5263200005DD8 /* Moc - timeline cels widget */,
+				452D32FF249AF818009FA8F0 /* Moc - number input widget */,
 				45AA32CB22F526CB00005DD8 /* Moc - color picker widget */,
 				45AA32CC22F526FC00005DD8 /* Moc - color slider widget */,
 				45AA32CD22F5272A00005DD8 /* Moc - color graph widget */,
 				45AA32CE22F5275F00005DD8 /* Moc - tool select widget */,
-				45AA32CF22F5279000005DD8 /* Moc - color input widget */,
 				45AA32D022F527C600005DD8 /* Moc - tool colors widget */,
 				45AA32D122F5281400005DD8 /* Moc - init canvas dialog */,
 				45AA32D222F5284B00005DD8 /* Moc - file input widget */,
@@ -2177,6 +2184,7 @@
 				45AA32D422F528C300005DD8 /* Moc - text input widget */,
 				45AA32D522F528F300005DD8 /* Moc - status bar widget */,
 				45AA32D622F5292400005DD8 /* Moc - combo box widget */,
+				45AA32CF22F5279000005DD8 /* Moc - hex input widget */,
 				45AA32D722F5295B00005DD8 /* Moc - timeline widget */,
 				45AA32D822F529A800005DD8 /* Moc - palette widget */,
 				45C5C8BB237A660A0056CEE7 /* Moc - status object */,
@@ -2313,6 +2321,27 @@
 			);
 			outputPaths = (
 				"$(PROJECT_DIR)/src/quit dialog.moc",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+		};
+		452D32FF249AF818009FA8F0 /* Moc - number input widget */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(PROJECT_DIR)/src/number input widget.hpp",
+				"$(PROJECT_DIR)/src/number input widget.cpp",
+			);
+			name = "Moc - number input widget";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(PROJECT_DIR)/src/number input widget.moc",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -2563,7 +2592,7 @@
 			shellPath = /bin/sh;
 			shellScript = "/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
 		};
-		45AA32CF22F5279000005DD8 /* Moc - color input widget */ = {
+		45AA32CF22F5279000005DD8 /* Moc - hex input widget */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -2571,14 +2600,14 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"$(PROJECT_DIR)/src/color input widget.hpp",
-				"$(PROJECT_DIR)/src/color input widget.cpp",
+				"$(PROJECT_DIR)/src/hex input widget.hpp",
+				"$(PROJECT_DIR)/src/hex input widget.cpp",
 			);
-			name = "Moc - color input widget";
+			name = "Moc - hex input widget";
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(PROJECT_DIR)/src/color input widget.moc",
+				"$(PROJECT_DIR)/src/hex input widget.moc",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -3039,6 +3068,7 @@
 				4513145822D5A29800D66262 /* picker impl rgba.cpp in Sources */,
 				453D28BD22768D9900D0E5F9 /* text input widget.cpp in Sources */,
 				4513145B22D5A2A500D66262 /* picker impl gray.cpp in Sources */,
+				452D32FE249AF5E0009FA8F0 /* number input widget.cpp in Sources */,
 				45161F0622F1399A0036BBED /* timeline painting.cpp in Sources */,
 				454E990B2348200B0059274C /* sprite export.cpp in Sources */,
 				4529AA03239CA0D40034A014 /* tool param bar widget.cpp in Sources */,
@@ -3062,7 +3092,7 @@
 				45A6103C2307E1EF000A0BD6 /* error dialog.cpp in Sources */,
 				4512636622781D7B00C66A19 /* tool colors widget.cpp in Sources */,
 				4571C132227C383A00479006 /* radio button widget.cpp in Sources */,
-				453D28C02276956A00D0E5F9 /* color input widget.cpp in Sources */,
+				453D28C02276956A00D0E5F9 /* hex input widget.cpp in Sources */,
 				457DC0C622EA93FC0000777B /* export pattern.cpp in Sources */,
 				45B284932218E38800D6D055 /* image.cpp in Sources */,
 				45054F732259C9AB0078350B /* color picker widget.cpp in Sources */,

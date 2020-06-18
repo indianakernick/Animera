@@ -12,9 +12,10 @@
 #include "label widget.hpp"
 #include "config colors.hpp"
 #include <Graphics/format.hpp>
-#include "color input widget.hpp"
+#include "hex input widget.hpp"
 #include "color graph widget.hpp"
 #include "color slider widget.hpp"
+#include "number input widget.hpp"
 
 void PickerImplRGBA::init(QWidget *parent) {
   colorHsv = color2hsv(pick_default_color);

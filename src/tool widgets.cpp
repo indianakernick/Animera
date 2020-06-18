@@ -1,4 +1,4 @@
-﻿//
+//
 //  tool widgets.cpp
 //  Animera
 //
@@ -11,8 +11,8 @@
 #include "connect.hpp"
 #include "label widget.hpp"
 #include "combo box widget.hpp"
-#include "color input widget.hpp"
 #include <QtWidgets/qboxlayout.h>
+#include "number input widget.hpp"
 
 namespace {
 

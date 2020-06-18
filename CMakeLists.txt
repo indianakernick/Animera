@@ -29,9 +29,6 @@ add_executable(Animera
     "src/color graph widget.moc"
     "src/color handle.cpp"
     "src/color handle.hpp"
-    "src/color input widget.cpp"
-    "src/color input widget.hpp"
-    "src/color input widget.moc"
     "src/color picker impl.cpp"
     "src/color picker impl.hpp"
     "src/color picker impl.moc"
@@ -88,6 +85,9 @@ add_executable(Animera
     "src/gradient tool.cpp"
     "src/gradient tool.hpp"
     "src/graphics convert.hpp"
+    "src/hex input widget.cpp"
+    "src/hex input widget.hpp"
+    "src/hex input widget.moc"
     "src/icon push button widget.cpp"
     "src/icon push button widget.hpp"
     "src/icon radio button widget.cpp"
@@ -107,6 +107,9 @@ add_executable(Animera
     src/math.hpp
     #"src/native mac.hpp"
     #"src/native mac.mm"
+    "src/number input widget.cpp"
+    "src/number input widget.hpp"
+    "src/number input widget.moc"
     "src/paint params.hpp"
     src/painting.cpp
     src/painting.hpp

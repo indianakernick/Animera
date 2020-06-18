@@ -18,9 +18,9 @@
 #include "export options.hpp"
 #include "combo box widget.hpp"
 #include "file input widget.hpp"
-#include "color input widget.hpp"
 #include <QtWidgets/qboxlayout.h>
 #include <QtWidgets/qgridlayout.h>
+#include "number input widget.hpp"
 #include "text push button widget.hpp"
 
 ExportDialog::ExportDialog(QWidget *parent, const Format format)
