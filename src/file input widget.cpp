@@ -179,7 +179,9 @@ private:
       if (beginIndex == -1) {
         index = -1;
       } else {
-        index = std::clamp(index + dir, beginIndex, endIndex - 1);
+        index += dir;
+        if (index >= endIndex) index = beginIndex;
+        if (index < beginIndex) index = endIndex - 1;
       }
       suggest();
     } else if (!entries.isEmpty()) {
