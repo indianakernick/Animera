@@ -50,7 +50,9 @@ void TextInputWidget::setText(const QString &text) {
 
 void TextInputWidget::blink() {
   cursorBlinkStatus = !cursorBlinkStatus;
-  update();
+  if (hasFocus() && selectionStart() == -1) {
+    update();
+  }
 }
 
 void TextInputWidget::showCursor() {
@@ -174,7 +176,7 @@ void TextInputWidget::paintText(QPainter &painter) {
 }
 
 void TextInputWidget::paintCursor(QPainter &painter) {
-  if (!hasFocus() || !cursorBlinkStatus || selectionStart() != -1) return;
+  if (!cursorBlinkStatus || !hasFocus() || selectionStart() != -1) return;
   painter.setBrush(glob_text_color);
   painter.setPen(Qt::NoPen);
   painter.drawRect(

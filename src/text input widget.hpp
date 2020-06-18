@@ -38,6 +38,7 @@ private:
   int getMinCursorPos() const;
   int getMaxCursorPos() const;
   int getMinOffset() const;
+  
   void setOffset(int, int);
   void constrainOffset();
   void updateMargins();
