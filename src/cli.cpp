@@ -202,6 +202,9 @@ int CLI::exec() {
   #ifdef Q_OS_WIN
   
   Application app{argc, argv};
+  QTextStream console{stdout};
+  console << app.arguments().join(" | ") << '\n';
+  console.flush();
   return app.exec();
   
   #else
