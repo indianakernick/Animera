@@ -28,26 +28,28 @@ StatusBarWidget::StatusBarWidget(QWidget *parent)
   setFixedHeight(stat_rect.widget().height());
 }
 
+// update causes flicker and repaint fixes it
+
 void StatusBarWidget::showTemp(const std::string_view text) {
   tempText = toLatinString(text);
   tempTimer.start();
-  update();
+  repaint();
 }
 
 void StatusBarWidget::showNorm(const std::string_view text) {
   normText = toLatinString(text);
-  update();
+  repaint();
 }
 
 void StatusBarWidget::showPerm(const std::string_view text) {
   permText = toLatinString(text);
-  update();
+  repaint();
 }
 
 void StatusBarWidget::showApnd(const std::string_view text) {
   apndText = toLatinString(text);
   apndTimer.start();
-  update();
+  repaint();
 }
 
 void StatusBarWidget::paintEvent(QPaintEvent *) {
@@ -78,12 +80,12 @@ void StatusBarWidget::paintEvent(QPaintEvent *) {
 
 void StatusBarWidget::hideTemp() {
   tempText.clear();
-  update();
+  repaint();
 }
 
 void StatusBarWidget::hideApnd() {
   apndText.clear();
-  update();
+  repaint();
 }
 
 #include "status bar widget.moc"

@@ -150,8 +150,7 @@ void HueSliderWidget::plotGraph() {
   int idx = 0;
   for (QRgb &pixel : *gfx::begin(makeSurface<QRgb>(graph))) {
     // can't use pix2hue here
-    const qreal hue = idx++ * 360.0 / slider_width;
-    pixel = hsv2rgb(hue, color.s, color.v);
+    pixel = hsv2rgb(idx++ * 360.0 / slider_width, color.s, color.v);
   }
 }
 
