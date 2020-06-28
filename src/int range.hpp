@@ -1,4 +1,4 @@
-//
+﻿//
 //  int range.hpp
 //  Animera
 //

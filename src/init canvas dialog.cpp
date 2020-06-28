@@ -1,4 +1,4 @@
-//
+﻿//
 //  init canvas dialog.cpp
 //  Animera
 //

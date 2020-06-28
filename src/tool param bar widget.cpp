@@ -1,4 +1,4 @@
-//
+﻿//
 //  tool param bar widget.cpp
 //  Animera
 //

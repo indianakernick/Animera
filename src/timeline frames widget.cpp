@@ -1,4 +1,4 @@
-//
+﻿//
 //  timeline frames widget.cpp
 //  Animera
 //

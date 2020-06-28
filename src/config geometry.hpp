@@ -1,4 +1,4 @@
-//
+﻿//
 //  config geometry.hpp
 //  Animera
 //

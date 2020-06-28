@@ -1,4 +1,4 @@
-//
+﻿//
 //  surface factory.hpp
 //  Animera
 //

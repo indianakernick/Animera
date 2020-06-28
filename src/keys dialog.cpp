@@ -1,4 +1,4 @@
-//
+﻿//
 //  keys dialog.cpp
 //  Animera
 //

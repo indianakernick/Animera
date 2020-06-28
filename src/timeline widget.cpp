@@ -1,4 +1,4 @@
-//
+﻿//
 //  timeline widget.cpp
 //  Animera
 //

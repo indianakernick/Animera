@@ -1,4 +1,4 @@
-//
+﻿//
 //  sprite file.cpp
 //  Animera
 //

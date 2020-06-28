@@ -1,4 +1,4 @@
-//
+﻿//
 //  cli.cpp
 //  Animera
 //
@@ -202,9 +202,7 @@ int CLI::exec() {
   #ifdef Q_OS_WIN
   
   Application app{argc, argv};
-  QTextStream console{stdout};
-  console << app.arguments().join(" | ") << '\n';
-  console.flush();
+  app.waitForOpenEvent();
   return app.exec();
   
   #else

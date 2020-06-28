@@ -1,4 +1,4 @@
-//
+﻿//
 //  sample object.hpp
 //  Animera
 //

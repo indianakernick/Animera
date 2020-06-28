@@ -1,4 +1,4 @@
-//
+﻿//
 //  palette widget.cpp
 //  Animera
 //

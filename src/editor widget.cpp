@@ -1,4 +1,4 @@
-//
+﻿//
 //  editor widget.cpp
 //  Animera
 //

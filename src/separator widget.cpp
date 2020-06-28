@@ -1,4 +1,4 @@
-//
+﻿//
 //  separator widget.cpp
 //  Animera
 //

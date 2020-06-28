@@ -1,4 +1,4 @@
-//
+﻿//
 //  combo box widget.cpp
 //  Animera
 //

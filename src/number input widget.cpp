@@ -1,4 +1,4 @@
-//
+﻿//
 //  number input widget.cpp
 //  Animera
 //

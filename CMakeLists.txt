@@ -1,6 +1,11 @@
 # cxx_std_20 added in 3.12
 cmake_minimum_required(VERSION 3.12)
-project(Animera)
+project(Animera
+    VERSION 0.1.0
+    DESCRIPTION "A cross-platform Qt tool for making pixel-art animations for games"
+    HOMEPAGE_URL "https://github.com/Kerndog73/Animera"
+    LANGUAGES CXX
+)
 
 add_executable(Animera
     src/application.cpp
@@ -249,3 +254,22 @@ target_link_libraries(Animera
     Qt5::Widgets
     Qt5::WidgetsPrivate
 )
+
+install(
+    DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIGURATION>/"
+    DESTINATION "bin"
+    FILES_MATCHING
+    PATTERN "*.dll"
+    PATTERN "qt.conf"
+)
+
+install(TARGETS Animera)
+
+set(CMAKE_INSTALL_UCRT_LIBRARIES TRUE)
+include(InstallRequiredSystemLibraries)
+
+set(CPACK_PACKAGE_NAME "Animera")
+set(CPACK_PACKAGE_VENDOR "Indiana Kernick")
+set(CPACK_GENERATOR "NSIS64")
+set(CPACK_NSIS_MUI_ICON "${CMAKE_SOURCE_DIR}/Resources/Logo/icon.ico")
+include(CPack)

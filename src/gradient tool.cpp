@@ -1,4 +1,4 @@
-//
+﻿//
 //  gradient tool.cpp
 //  Animera
 //

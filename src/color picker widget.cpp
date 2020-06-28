@@ -1,4 +1,4 @@
-//
+﻿//
 //  color picker widget.cpp
 //  Animera
 //

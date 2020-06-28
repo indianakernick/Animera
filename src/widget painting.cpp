@@ -1,4 +1,4 @@
-//
+﻿//
 //  widget painting.cpp
 //  Animera
 //

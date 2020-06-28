@@ -1,4 +1,4 @@
-//
+﻿//
 //  palette span.hpp
 //  Animera
 //

@@ -1,4 +1,4 @@
-//
+﻿//
 //  hex input widget.cpp
 //  Animera
 //
