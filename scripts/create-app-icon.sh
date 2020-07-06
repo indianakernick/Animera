@@ -1,13 +1,13 @@
 #!/bin/sh
 
-# Exports the icon.animera file to the appiconset using the Animera CLI.
+# Exports the appicon.animera file to the appiconset using the Animera CLI.
 
 # Requires BUILT_PRODUCTS_DIR, EXECUTABLE_PATH and PROJECT_DIR
 # Requires that Animera be built
 
 alias animera="$BUILT_PRODUCTS_DIR/$EXECUTABLE_PATH"
 OUT="$PROJECT_DIR/Assets.xcassets/AppIcon.appiconset/"
-IN="$PROJECT_DIR/Resources/Sprites/icon.animera"
+IN="$PROJECT_DIR/Resources/Sprites/appicon.animera"
 
 function ex {
   animera export --name="$1" --directory="$OUT" --no-composite --scale="$2" "$IN"

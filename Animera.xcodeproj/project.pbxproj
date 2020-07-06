@@ -636,7 +636,7 @@
 		454E990C234992BD0059274C /* linear gradient.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "linear gradient.png"; sourceTree = "<group>"; };
 		454E990D2349A9B40059274C /* gradient tool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "gradient tool.cpp"; sourceTree = "<group>"; };
 		454E990E2349A9B40059274C /* gradient tool.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "gradient tool.hpp"; sourceTree = "<group>"; };
-		45548691234432AA001D5611 /* icon.animera */ = {isa = PBXFileReference; lastKnownFileType = file; path = icon.animera; sourceTree = "<group>"; };
+		45548691234432AA001D5611 /* appicon.animera */ = {isa = PBXFileReference; lastKnownFileType = file; path = appicon.animera; sourceTree = "<group>"; };
 		4554869223443B97001D5611 /* formats.animera */ = {isa = PBXFileReference; lastKnownFileType = file; path = formats.animera; sourceTree = "<group>"; };
 		4554869323443E26001D5611 /* title.animera */ = {isa = PBXFileReference; lastKnownFileType = file; path = title.animera; sourceTree = "<group>"; };
 		4554869423444C38001D5611 /* tools.animera */ = {isa = PBXFileReference; lastKnownFileType = file; path = tools.animera; sourceTree = "<group>"; };
@@ -698,6 +698,7 @@
 		45571E2F246FC473001FC61A /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		45571E30246FC473001FC61A /* .clang-format */ = {isa = PBXFileReference; lastKnownFileType = text; path = ".clang-format"; sourceTree = "<group>"; };
 		45571E31246FC473001FC61A /* .travis.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .travis.yml; sourceTree = "<group>"; };
+		455D223124B0290A0037FD5B /* docicon.ico */ = {isa = PBXFileReference; lastKnownFileType = image.ico; path = docicon.ico; sourceTree = "<group>"; };
 		455F2851220688FD00C73F39 /* Animera.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Animera.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		455F285B2206890300C73F39 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		455F28602206890300C73F39 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -711,6 +712,7 @@
 		455F28842206930800C73F39 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		455F28862206930D00C73F39 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		455F28882206942200C73F39 /* libqcocoa.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libqcocoa.dylib; path = ../../../../../../usr/local/opt/qt/plugins/platforms/libqcocoa.dylib; sourceTree = "<group>"; };
+		45689A2224B2D23300C9BB06 /* docicon.animera */ = {isa = PBXFileReference; lastKnownFileType = file; path = docicon.animera; sourceTree = "<group>"; };
 		4571C130227C383A00479006 /* radio button widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "radio button widget.cpp"; sourceTree = "<group>"; };
 		4571C131227C383A00479006 /* radio button widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "radio button widget.hpp"; sourceTree = "<group>"; };
 		4576DFE62298DB2D00FDECA3 /* separator widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "separator widget.cpp"; sourceTree = "<group>"; };
@@ -809,7 +811,7 @@
 		45DC981124791A1200429465 /* create-ico.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "create-ico.sh"; sourceTree = "<group>"; };
 		45DC981224793B0500429465 /* dmg.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = dmg.json; sourceTree = "<group>"; };
 		45DC981324793B0500429465 /* create-dmg.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "create-dmg.sh"; sourceTree = "<group>"; };
-		45DC981B247959F000429465 /* icon.ico */ = {isa = PBXFileReference; lastKnownFileType = image.ico; path = icon.ico; sourceTree = "<group>"; };
+		45DC981B247959F000429465 /* appicon.ico */ = {isa = PBXFileReference; lastKnownFileType = image.ico; path = appicon.ico; sourceTree = "<group>"; };
 		45DC981C24795A1200429465 /* social.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = social.png; sourceTree = "<group>"; };
 		45DC981D24795A4700429465 /* dmg background.animera */ = {isa = PBXFileReference; lastKnownFileType = file; path = "dmg background.animera"; sourceTree = "<group>"; };
 		45DC981F2479FA7800429465 /* create-doc-icon.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "create-doc-icon.sh"; sourceTree = "<group>"; };
@@ -1882,7 +1884,8 @@
 		4554868F23433711001D5611 /* Logo */ = {
 			isa = PBXGroup;
 			children = (
-				45DC981B247959F000429465 /* icon.ico */,
+				45DC981B247959F000429465 /* appicon.ico */,
+				455D223124B0290A0037FD5B /* docicon.ico */,
 				45B284972219003B00D6D055 /* icon.png */,
 				452926E222BB607E00B17E0D /* screenshot.png */,
 				45DC981C24795A1200429465 /* social.png */,
@@ -1898,7 +1901,8 @@
 				45DC981D24795A4700429465 /* dmg background.animera */,
 				4554869223443B97001D5611 /* formats.animera */,
 				455486B623446472001D5611 /* graph circle.animera */,
-				45548691234432AA001D5611 /* icon.animera */,
+				45548691234432AA001D5611 /* appicon.animera */,
+				45689A2224B2D23300C9BB06 /* docicon.animera */,
 				455486BC234466F6001D5611 /* palette select.animera */,
 				455486BD234466F6001D5611 /* slider bar.animera */,
 				455486B523446257001D5611 /* text box icon.animera */,

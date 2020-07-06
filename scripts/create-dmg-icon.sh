@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Creates the document icon by compositing the app icon with the generic
+# Creates the volume icon by compositing the app icon with the generic
 # volume icon template.
 
 # Requires PROJECT_DIR
