@@ -4,7 +4,7 @@
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/b1edeadecabb45c49787c50084aa913a)](https://www.codacy.com/manual/kerndog73/Animera?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Kerndog73/Animera&amp;utm_campaign=Badge_Grade)
 
-![Screenshot](https://i.imgur.com/jnUKQik.png)
+![Screenshot](https://i.imgur.com/BlyJOCe.png)
 
 ---
 
