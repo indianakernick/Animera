@@ -1,5 +1,5 @@
 ﻿//
-//  cursor.mm
+//  native mac.mm
 //  Animera
 //
 //  Created by Indiana Kernick on 2/10/19.
