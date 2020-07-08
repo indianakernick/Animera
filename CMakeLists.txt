@@ -8,6 +8,7 @@ project(Animera
 )
 
 add_executable(Animera
+    Animera.rc
     src/application.cpp
     src/application.hpp
     src/application.moc
@@ -228,6 +229,11 @@ target_compile_features(Animera
     cxx_std_20
 )
 
+target_link_options(Animera
+    PRIVATE
+    /SUBSYSTEM:WINDOWS # stop the command prompt window from showing
+)
+
 target_include_directories(Animera
     PRIVATE
     src
@@ -235,6 +241,8 @@ target_include_directories(Animera
     third_party/span/include
 )
 
+set(USE_BOOST_REGEX ON CACHE BOOL "Use boost-regex")
+set(WITH_STATIC ON)
 add_subdirectory(third_party/docopt EXCLUDE_FROM_ALL)
 
 find_package(libpng CONFIG REQUIRED)
@@ -263,13 +271,48 @@ install(
     PATTERN "qt.conf"
 )
 
-install(TARGETS Animera)
+install(
+    TARGETS Animera
+    DESTINATION "bin"
+)
 
 set(CMAKE_INSTALL_UCRT_LIBRARIES TRUE)
 include(InstallRequiredSystemLibraries)
 
 set(CPACK_PACKAGE_NAME "Animera")
 set(CPACK_PACKAGE_VENDOR "Indiana Kernick")
+set(CPACK_STRIP_FILES ON)
 set(CPACK_GENERATOR "NSIS64")
-set(CPACK_NSIS_MUI_ICON "${CMAKE_SOURCE_DIR}/Resources/Logo/icon.ico")
+set(CPACK_NSIS_MUI_ICON "${CMAKE_SOURCE_DIR}/Resources/Logo/appicon.ico")
+set(CPACK_NSIS_MUI_UNIICON "${CMAKE_SOURCE_DIR}/Resources/Logo/appicon.ico")
+set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
+set(CPACK_NSIS_MODIFY_PATH ON)
+set(CPACK_NSIS_DISPLAY_NAME "Animera")
+set(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\Animera.exe")
+set(CPACK_NSIS_URL_INFO_ABOUT "${CMAKE_PROJECT_HOMEPAGE_URL}")
+set(CPACK_PACKAGE_EXECUTABLES "Animera;Animera")
+
+set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
+    WriteRegStr HKCR '.animera' '' 'Animera.Sprite'
+    WriteRegStr HKCR 'Animera.Sprite' '' 'Animera Sprite'
+    WriteRegStr HKCR 'Animera.Sprite\\\\shell' '' 'open'
+    WriteRegStr HKCR 'Animera.Sprite\\\\shell\\\\open\\\\command' '' '\\\"\$INSTDIR\\\\bin\\\\Animera.exe\\\" open \\\"%1\\\"'
+    WriteRegStr HKCR 'Animera.Sprite\\\\shell\\\\edit\\\\command' '' '\\\"\$INSTDIR\\\\bin\\\\Animera.exe\\\" open \\\"%1\\\"'
+    WriteRegStr HKCR 'Animera.Sprite\\\\DefaultIcon' '' '\$INSTDIR\\\\bin\\\\Animera.exe,1'
+    
+    WriteRegStr HKCR '.png\\\\OpenWithProgids' 'Animera.PNG' ''
+    WriteRegStr HKCR 'Animera.PNG\\\\shell' '' 'open'
+    WriteRegStr HKCR 'Animera.PNG\\\\shell\\\\open\\\\command' '' '\\\"\$INSTDIR\\\\bin\\\\Animera.exe\\\" open \\\"%1\\\"'
+    WriteRegStr HKCR 'Animera.PNG\\\\Application' 'ApplicationName' 'Animera'
+    WriteRegStr HKCR 'Animera.PNG\\\\Application' 'ApplicationCompany' 'Indiana Kernick'
+    WriteRegStr HKCR 'Animera.PNG\\\\Application' 'ApplicationIcon' '\$INSTDIR\\\\bin\\\\Animera.exe'
+")
+
+set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "
+    DeleteRegKey HKCR '.animera' ''
+    DeleteRegKey HKCR 'Animera.Sprite' ''
+    DeleteRegValue HKCR '.png\\\\OpenWithProgids' 'Animera.PNG'
+    DeleteRegKey HKCR 'Animera.PNG' ''
+")
+
 include(CPack)

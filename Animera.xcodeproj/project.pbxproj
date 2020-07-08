@@ -698,6 +698,8 @@
 		45571E2F246FC473001FC61A /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		45571E30246FC473001FC61A /* .clang-format */ = {isa = PBXFileReference; lastKnownFileType = text; path = ".clang-format"; sourceTree = "<group>"; };
 		45571E31246FC473001FC61A /* .travis.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .travis.yml; sourceTree = "<group>"; };
+		455CE07E24B591D70050EEDB /* Animera.rc */ = {isa = PBXFileReference; lastKnownFileType = text; path = Animera.rc; sourceTree = "<group>"; };
+		455CE08024B591E20050EEDB /* CMakeSettings.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CMakeSettings.json; sourceTree = "<group>"; };
 		455D223124B0290A0037FD5B /* docicon.ico */ = {isa = PBXFileReference; lastKnownFileType = image.ico; path = docicon.ico; sourceTree = "<group>"; };
 		455F2851220688FD00C73F39 /* Animera.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Animera.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		455F285B2206890300C73F39 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -1972,11 +1974,13 @@
 		455F2848220688FC00C73F39 = {
 			isa = PBXGroup;
 			children = (
+				455CE07E24B591D70050EEDB /* Animera.rc */,
 				45DC255F224A034200F40116 /* README.md */,
 				455F285B2206890300C73F39 /* Assets.xcassets */,
 				455F28602206890300C73F39 /* Info.plist */,
 				455F28612206890300C73F39 /* Animera.entitlements */,
 				452D3300249AF95A009FA8F0 /* CMakeLists.txt */,
+				455CE08024B591E20050EEDB /* CMakeSettings.json */,
 				45DC980D247903BF00429465 /* scripts */,
 				45CEB6AC243C062100661D78 /* doc */,
 				4549B969243BFB8800B1A62A /* third_party */,
