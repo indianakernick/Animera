@@ -50,7 +50,7 @@ public:
   
   void fixup(QString &input) const override {
     while (!input.isEmpty() && !QDir{input}.exists()) {
-      input.truncate(input.lastIndexOf(QDir::separator()));
+      input.truncate(input.lastIndexOf('/'));
     }
     if (input.isEmpty()) {
       input = QDir::rootPath();
@@ -58,7 +58,6 @@ public:
   }
   
   State validate(QString &input, int &pos) const override {
-    QDir::toNativeSeparators(input);
     if (input.isEmpty()) {
       input = QDir::rootPath();
       pos = input.size();
@@ -74,7 +73,7 @@ public:
     if (QDir{input}.exists()) {
       return State::Acceptable;
     }
-    const int slash = input.lastIndexOf(QDir::separator());
+    const int slash = input.lastIndexOf('/');
     if (slash != -1 && QDir{input.left(slash)}.exists()) {
       return State::Intermediate;
     }
@@ -113,7 +112,7 @@ private:
   bool shown = false;
 
   bool splitPath(const QString &path) {
-    const int slash = path.lastIndexOf(QDir::separator());
+    const int slash = path.lastIndexOf('/');
     QString newBaseDir;
     if (slash == -1) {
       newBaseDir = QDir::rootPath();
@@ -271,7 +270,7 @@ QString FileInputWidget::path() const {
 }
 
 void FileInputWidget::setPath(const QString &newDir) {
-  text->setText(QDir{newDir}.absolutePath());
+  text->setText(QDir::cleanPath(newDir));
   changePath();
 }
 
@@ -286,7 +285,7 @@ void FileInputWidget::setPathFromDialog() {
 }
 
 void FileInputWidget::simplifyPath() {
-  text->setText(QDir{path()}.absolutePath());
+  text->setText(QDir::cleanPath(path()));
 }
 
 void FileInputWidget::changePath() {
