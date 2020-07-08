@@ -301,9 +301,9 @@ should probably shrink imported cels
 remove layer button appears when hovering layer name
   would this be more intuitive than a button that removes the current layer?
 
-ignore the waking click
-
 if another application edits the sprite file, ask to reload
+  https://doc.qt.io/qt-5/qfilesystemwatcher.html#fileChanged
+  also see "file io.cpp" FileWriter uses a buffer
 
 use wand select tool between different cels
 
@@ -319,6 +319,8 @@ there might be a few random constants that should be in config.hpp but aren't
 
 Should probably be using mouse release instead of mouse press in some places
 
+Might want to consider adding the license notice to every source file
+
 ------------------------------- submodules notes -------------------------------
 
 Add submodule
@@ -330,5 +332,3 @@ Fast-forward all submodules
 
 Clone with submodules
   git clone --recurse-submodules --shallow-submodules <url>
-
-Fix CLI on Windows

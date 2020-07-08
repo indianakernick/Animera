@@ -276,20 +276,27 @@ install(
     DESTINATION "bin"
 )
 
+install(
+    FILES COPYING
+    DESTINATION "."
+)
+
 set(CMAKE_INSTALL_UCRT_LIBRARIES TRUE)
 include(InstallRequiredSystemLibraries)
 
 set(CPACK_PACKAGE_NAME "Animera")
 set(CPACK_PACKAGE_VENDOR "Indiana Kernick")
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/COPYING")
 set(CPACK_STRIP_FILES ON)
 set(CPACK_GENERATOR "NSIS64")
 set(CPACK_NSIS_MUI_ICON "${CMAKE_SOURCE_DIR}/Resources/Logo/appicon.ico")
 set(CPACK_NSIS_MUI_UNIICON "${CMAKE_SOURCE_DIR}/Resources/Logo/appicon.ico")
 set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
-set(CPACK_NSIS_MODIFY_PATH ON)
+# Control panel
 set(CPACK_NSIS_DISPLAY_NAME "Animera")
 set(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\Animera.exe")
 set(CPACK_NSIS_URL_INFO_ABOUT "${CMAKE_PROJECT_HOMEPAGE_URL}")
+# Start menu
 set(CPACK_PACKAGE_EXECUTABLES "Animera;Animera")
 
 set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
@@ -303,6 +310,7 @@ set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
     WriteRegStr HKCR '.png\\\\OpenWithProgids' 'Animera.PNG' ''
     WriteRegStr HKCR 'Animera.PNG\\\\shell' '' 'open'
     WriteRegStr HKCR 'Animera.PNG\\\\shell\\\\open\\\\command' '' '\\\"\$INSTDIR\\\\bin\\\\Animera.exe\\\" open \\\"%1\\\"'
+    ; These are required for some reason
     WriteRegStr HKCR 'Animera.PNG\\\\Application' 'ApplicationName' 'Animera'
     WriteRegStr HKCR 'Animera.PNG\\\\Application' 'ApplicationCompany' 'Indiana Kernick'
     WriteRegStr HKCR 'Animera.PNG\\\\Application' 'ApplicationIcon' '\$INSTDIR\\\\bin\\\\Animera.exe'

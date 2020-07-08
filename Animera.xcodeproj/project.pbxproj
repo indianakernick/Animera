@@ -51,6 +51,7 @@
 		454E990B2348200B0059274C /* sprite export.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 454E99092348200B0059274C /* sprite export.cpp */; };
 		454E990F2349A9B40059274C /* gradient tool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 454E990D2349A9B40059274C /* gradient tool.cpp */; };
 		455486BF23449254001D5611 /* native mac.mm in Sources */ = {isa = PBXBuildFile; fileRef = 455486BE23449254001D5611 /* native mac.mm */; };
+		455CE08224B59B750050EEDB /* COPYING in Resources */ = {isa = PBXBuildFile; fileRef = 455CE08124B59B750050EEDB /* COPYING */; };
 		455F2868220690A600C73F39 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 455F2867220690A600C73F39 /* main.cpp */; };
 		455F2879220691DE00C73F39 /* QtCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455F286E220691DD00C73F39 /* QtCore.framework */; };
 		455F287D220691DE00C73F39 /* QtWidgets.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455F2872220691DD00C73F39 /* QtWidgets.framework */; };
@@ -700,6 +701,8 @@
 		45571E31246FC473001FC61A /* .travis.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .travis.yml; sourceTree = "<group>"; };
 		455CE07E24B591D70050EEDB /* Animera.rc */ = {isa = PBXFileReference; lastKnownFileType = text; path = Animera.rc; sourceTree = "<group>"; };
 		455CE08024B591E20050EEDB /* CMakeSettings.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CMakeSettings.json; sourceTree = "<group>"; };
+		455CE08124B59B750050EEDB /* COPYING */ = {isa = PBXFileReference; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
+		455CE08324B5A2160050EEDB /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		455D223124B0290A0037FD5B /* docicon.ico */ = {isa = PBXFileReference; lastKnownFileType = image.ico; path = docicon.ico; sourceTree = "<group>"; };
 		455F2851220688FD00C73F39 /* Animera.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Animera.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		455F285B2206890300C73F39 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -1767,6 +1770,7 @@
 				4549BB0F243BFF3200B1A62A /* test */,
 				4549BB18243BFF3200B1A62A /* include */,
 				4549BB2C243BFF3200B1A62A /* .gitignore */,
+				455CE08324B5A2160050EEDB /* LICENSE */,
 			);
 			path = Graphics;
 			sourceTree = "<group>";
@@ -1974,6 +1978,7 @@
 		455F2848220688FC00C73F39 = {
 			isa = PBXGroup;
 			children = (
+				455CE08124B59B750050EEDB /* COPYING */,
 				455CE07E24B591D70050EEDB /* Animera.rc */,
 				45DC255F224A034200F40116 /* README.md */,
 				455F285B2206890300C73F39 /* Assets.xcassets */,
@@ -2306,6 +2311,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				455CE08224B59B750050EEDB /* COPYING in Resources */,
 				457D74FF239F97A6009B4E4B /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
