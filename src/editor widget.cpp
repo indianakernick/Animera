@@ -1,4 +1,4 @@
-﻿//
+//
 //  editor widget.cpp
 //  Animera
 //
@@ -21,6 +21,7 @@
 #include "surface factory.hpp"
 #include <QtWidgets/qgesture.h>
 #include <QtWidgets/qscrollbar.h>
+#include <QtGui/qguiapplication.h>
 
 #define ENABLE_DEBUG_COMPOSITE 0
 #define ENABLE_DEBUG_PAINT ENABLE_DEBUG_COMPOSITE ? 0 : 0
@@ -421,8 +422,8 @@ void EditorWidget::initCanvas(const Format newFormat, const QSize newSize) {
 
 bool EditorWidget::event(QEvent *event) {
   if (event->type() == QEvent::Gesture) {
-    auto *gstEvent = static_cast<QGestureEvent *>(event);
-    QGesture *gesture = gstEvent->gesture(Qt::PinchGesture);
+    auto *gestureEvent = static_cast<QGestureEvent *>(event);
+    QGesture *gesture = gestureEvent->gesture(Qt::PinchGesture);
     auto *pinch = static_cast<QPinchGesture *>(gesture);
     switch (pinch->state()) {
       case Qt::GestureStarted:
@@ -439,7 +440,28 @@ bool EditorWidget::event(QEvent *event) {
     }
     return true;
   } else {
-    return QScrollArea::event(event);
+    return ScrollAreaWidget::event(event);
+  }
+}
+
+void EditorWidget::wheelEvent(QWheelEvent *event) {
+  if (QGuiApplication::keyboardModifiers() & Qt::ControlModifier) {
+    scrollAccum += (event->inverted() ? -1 : 1) * event->angleDelta().y();
+    // angleDelta is in eighths of a degree
+    // most scroll wheels move in steps of 15 degrees
+    // 8 * 15 = 120
+    // need the accumulator for trackpads and fancy scroll wheels
+    constexpr int stepSize = 120;
+    int steps = scrollAccum / stepSize;
+    int remainder = scrollAccum % stepSize;
+    if (remainder < 0) {
+      --steps;
+      remainder += stepSize;
+    }
+    scrollAccum = remainder;
+    view->setScale(view->getScale() + steps);
+  } else {
+    ScrollAreaWidget::wheelEvent(event);
   }
 }
 
@@ -454,7 +476,7 @@ void EditorWidget::resizeEvent(QResizeEvent *event) {
   
   view->resize();
   adjustMargins();
-  QScrollArea::resizeEvent(event);
+  ScrollAreaWidget::resizeEvent(event);
 }
 
 #include "editor widget.moc"

@@ -1,4 +1,4 @@
-﻿//
+//
 //  editor widget.hpp
 //  Animera
 //
@@ -47,9 +47,11 @@ private:
   QSize size;
   Format format;
   int startScale;
+  int scrollAccum = 0;
   bool shown = false;
 
   bool event(QEvent *) override;
+  void wheelEvent(QWheelEvent *) override;
   void showEvent(QShowEvent *) override;
   void resizeEvent(QResizeEvent *) override;
 };
