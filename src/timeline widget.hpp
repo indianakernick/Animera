@@ -10,6 +10,7 @@
 #define animera_timeline_widget_hpp
 
 #include "cel.hpp"
+#include "cel span.hpp"
 #include <tcb/span.hpp>
 #include <QtWidgets/qwidget.h>
 
@@ -30,6 +31,9 @@ public:
 public Q_SLOTS:
   void setPos(CelPos);
   void setSelection(CelRect);
+  void setGroup(GroupSpan);
+  void setGroupName(std::string_view);
+  void setGroups(tcb::span<const Group>);
   void setVisibility(LayerIdx, bool);
   void setLayerName(LayerIdx, std::string_view);
   void setLayer(LayerIdx, tcb::span<const CelSpan>);
@@ -58,6 +62,9 @@ Q_SIGNALS:
   void shouldEndSelection();
   void shouldClearSelection();
   void shouldSetPos(CelPos);
+  
+  void shouldSetGroup(FrameIdx);
+  void shouldSetGroupName(std::string_view);
   
 private:
   ControlsWidget *controls = nullptr;

@@ -88,10 +88,13 @@ public Q_SLOTS:
   void growCel(QRect);
   void shrinkCel(QRect);
   
+  void setGroup(FrameIdx);
+  void setGroupName(std::string_view);
+  
   void setPos(CelPos);
   void setVisibility(LayerIdx, bool);
   void isolateVisibility(LayerIdx);
-  void setName(LayerIdx, std::string_view);
+  void setLayerName(LayerIdx, std::string_view);
   void setDelay(int);
   
   void clearSelected();
@@ -105,10 +108,13 @@ Q_SIGNALS:
   void posChanged(CelPos);
   void celChanged(Cel *);
   void selectionChanged(CelRect);
+  void groupChanged(GroupSpan);
   
+  void groupNameChanged(std::string_view);
   void visibilityChanged(LayerIdx, bool);
-  void nameChanged(LayerIdx, std::string_view);
+  void layerNameChanged(LayerIdx, std::string_view);
   
+  void groupsChanged(tcb::span<const Group>);
   void frameChanged(const Frame &);
   void layerChanged(LayerIdx, tcb::span<const CelSpan>);
   
@@ -126,6 +132,7 @@ private:
   GroupArray groups;
   CelPos pos;
   CelRect selection;
+  GroupIdx group;
   FrameIdx frameCount;
   QSize canvasSize;
   Format canvasFormat;

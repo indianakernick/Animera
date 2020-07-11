@@ -117,7 +117,8 @@ public:
   }
 
   void setFrames(FrameIdx);
-  Group *find(FrameIdx);
+  GroupSpan findSpan(FrameIdx);
+  GroupSpan getSpan(GroupIdx);
   void split(FrameIdx);
   
 private:

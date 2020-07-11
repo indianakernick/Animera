@@ -281,9 +281,22 @@ void GroupArray::setFrames(const FrameIdx frames) {
   }
 }
 
-Group *GroupArray::find(FrameIdx idx) {
-  auto iter = findIter(idx);
-  return iter == groups.end() ? nullptr : &*iter;
+GroupSpan GroupArray::findSpan(FrameIdx idx) {
+  const auto iter = findIter(idx);
+  assert(iter != groups.end());
+  GroupSpan span;
+  span.group = static_cast<GroupIdx>(iter - groups.begin());
+  span.begin = iter == groups.begin() ? FrameIdx{0} : std::prev(iter)->end;
+  span.end = iter->end;
+  return span;
+}
+
+GroupSpan GroupArray::getSpan(const GroupIdx idx) {
+  GroupSpan span;
+  span.group = idx;
+  span.begin = idx == GroupIdx{0} ? FrameIdx{0} : groups[+idx - 1].end;
+  span.end = groups[+idx].end;
+  return span;
 }
 
 void GroupArray::split(const FrameIdx idx) {

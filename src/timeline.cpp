@@ -26,6 +26,7 @@ void Timeline::initDefault() {
   layers.push_back(std::move(layer));
   groups.setFrames(frameCount);
   selection = empty_rect;
+  group = GroupIdx{0};
   delay = ctrl_delay.def;
   change();
 }
@@ -53,6 +54,9 @@ void Timeline::change() {
   Q_EMIT selectionChanged(selection);
   changeLayers(LayerIdx{0}, layerCount());
   Q_EMIT delayChanged(delay);
+  Q_EMIT groupChanged(groups.getSpan(group));
+  Q_EMIT groupNameChanged(groups.underlying()[+group].name);
+  Q_EMIT groupsChanged(groups.underlying());
 }
 
 Error Timeline::openImage(
@@ -77,6 +81,7 @@ Error Timeline::openImage(
   layers.push_back(std::move(layer));
   groups.setFrames(frameCount);
   selection = empty_rect;
+  group = GroupIdx{0};
   delay = ctrl_delay.def;
   return {};
 }
@@ -162,6 +167,7 @@ Error Timeline::deserializeTail(QIODevice &dev) {
 
   TRY(readAEND(dev));
   selection = empty_rect;
+  group = GroupIdx{0};
   change();
   return {};
 }
@@ -329,6 +335,8 @@ void Timeline::moveLayerDown() {
 void Timeline::insertFrame() {
   if (locked) return;
   ++frameCount;
+  // TODO: Insert into group
+  groups.setFrames(frameCount);
   changeFrameCount();
   for (LayerIdx l = {}; l != layerCount(); ++l) {
     layers[+l].spans.insert(pos.f);
@@ -336,6 +344,8 @@ void Timeline::insertFrame() {
   }
   Q_EMIT selectionChanged(selection);
   nextFrame();
+  Q_EMIT groupsChanged(groups.underlying());
+  Q_EMIT groupChanged(groups.getSpan(group));
   Q_EMIT modified();
 }
 
@@ -348,6 +358,8 @@ void Timeline::removeFrame() {
     }
   } else {
     --frameCount;
+    // TODO: Remove from group
+    groups.setFrames(frameCount);
     changeFrameCount();
     for (LayerIdx l = {}; l != layerCount(); ++l) {
       layers[+l].spans.remove(pos.f);
@@ -359,6 +371,8 @@ void Timeline::removeFrame() {
   changeFrame();
   changeCel();
   changePos();
+  Q_EMIT groupsChanged(groups.underlying());
+  Q_EMIT groupChanged(groups.getSpan(group));
   Q_EMIT modified();
 }
 
@@ -420,6 +434,22 @@ void Timeline::shrinkCel(const QRect rect) {
   Q_EMIT modified();
 }
 
+void Timeline::setGroup(const FrameIdx frame) {
+  assert(FrameIdx{0} <= frame);
+  assert(frame < frameCount);
+  if (locked) return;
+  const GroupSpan span = groups.findSpan(frame);
+  group = span.group;
+  assert(group != GroupIdx{-1});
+  Q_EMIT groupChanged(span);
+  Q_EMIT groupNameChanged(groups.underlying()[+group].name);
+}
+
+void Timeline::setGroupName(const std::string_view name) {
+  groups.underlying()[+group].name = name;
+  Q_EMIT modified();
+}
+
 void Timeline::setPos(const CelPos newPos) {
   assert(LayerIdx{0} <= newPos.l);
   assert(newPos.l < layerCount());
@@ -471,7 +501,7 @@ void Timeline::isolateVisibility(const LayerIdx idx) {
   }
 }
 
-void Timeline::setName(const LayerIdx idx, const std::string_view name) {
+void Timeline::setLayerName(const LayerIdx idx, const std::string_view name) {
   assert(LayerIdx{0} <= idx);
   assert(idx < layerCount());
   layers[+idx].name = name;
@@ -574,7 +604,7 @@ void Timeline::changeLayers(const LayerIdx begin, const LayerIdx end) {
   for (LayerIdx l = begin; l != end; ++l) {
     Q_EMIT layerChanged(l, layers[+l].spans);
     Q_EMIT visibilityChanged(l, layers[+l].visible);
-    Q_EMIT nameChanged(l, layers[+l].name);
+    Q_EMIT layerNameChanged(l, layers[+l].name);
   }
 }
 

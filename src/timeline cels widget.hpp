@@ -88,21 +88,28 @@ class GroupsWidget final : public QWidget {
 public:
   explicit GroupsWidget(QWidget *);
 
+Q_SIGNALS:
+  void shouldSetGroup(FrameIdx);
+
 public Q_SLOTS:
   void setGroups(tcb::span<const Group>);
+  void setGroup(GroupSpan);
   void setFrameCount(FrameIdx);
   void setMargin(int);
 
 private:
   CelSpanPainter celPainter;
   QImage groupImg;
+  QImage selectionImg;
   
   FrameIdx frames = {};
   int margin = 0;
 
   void setWidth();
+  FrameIdx getPos(QMouseEvent *);
 
   void paintEvent(QPaintEvent *);
+  void mousePressEvent(QMouseEvent *);
 };
 
 class GroupScrollWidget final : public QScrollArea {

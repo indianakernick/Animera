@@ -119,9 +119,12 @@ GroupNameWidget::GroupNameWidget(QWidget *parent)
   name = new TextInputWidget{this, timelineTextBox(layer_width - glob_border_width)};
   name->setMaxLength(layer_name_max_len);
   name->setValidator(new NameValidator{name});
+  CONNECT_LAMBDA(name, textEdited, [this](const QString &text) {
+    Q_EMIT shouldSetName(text.toStdString());
+  });
 }
 
-void GroupNameWidget::setName(const GroupIdx idx, const std::string_view text) {
+void GroupNameWidget::setName(const std::string_view text) {
   name->setText(toLatinString(text));
 }
 

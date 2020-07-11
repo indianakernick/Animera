@@ -1,4 +1,4 @@
-//
+﻿//
 //  timeline cels widget.cpp
 //  Animera
 //
@@ -217,19 +217,18 @@ void CelScrollWidget::resizeEvent(QResizeEvent *event) {
 
 GroupsWidget::GroupsWidget(QWidget *parent)
   : QWidget{parent},
-    groupImg{0, 0, QImage::Format_ARGB32_Premultiplied} {
+    groupImg{0, 0, QImage::Format_ARGB32_Premultiplied},
+    selectionImg{0, 0, QImage::Format_ARGB32_Premultiplied} {
   setFixedSize(0, cel_height);
 }
 
 void GroupsWidget::setGroups(const tcb::span<const Group> groups) {
   groupImg.fill(0);
-  
   QPainter painter{&groupImg};
-  painter.setCompositionMode(QPainter::CompositionMode_Source);
-  
-  celPainter.start();
   
   FrameIdx prevEnd = {};
+  celPainter.start();
+  
   for (const Group &group : groups) {
     const FrameIdx len = group.end - std::exchange(prevEnd, group.end);
     celPainter.span(painter, len);
@@ -241,9 +240,25 @@ void GroupsWidget::setGroups(const tcb::span<const Group> groups) {
   update();
 }
 
+void GroupsWidget::setGroup(const GroupSpan span) {
+  selectionImg.fill(0);
+  QPainter painter{&selectionImg};
+  painter.setCompositionMode(QPainter::CompositionMode_Source);
+  
+  painter.fillRect(
+    +span.begin * cel_width, 0,
+    +(span.end - span.begin) * cel_width - glob_border_width, cel_height - glob_border_width,
+    cel_pos_color
+  );
+  
+  painter.end();
+  update();
+}
+
 void GroupsWidget::setFrameCount(const FrameIdx count) {
   frames = count;
   resizeImage(groupImg, {+frames * cel_width, cel_height});
+  resizeImage(selectionImg, {+frames * cel_width, cel_height});
   setWidth();
 }
 
@@ -257,8 +272,17 @@ void GroupsWidget::setWidth() {
   setFixedWidth(+frames * cel_width + margin);
 }
 
+FrameIdx GroupsWidget::getPos(QMouseEvent *event) {
+  return FrameIdx{std::clamp(event->pos().x(), 0, width() - 1) / cel_width};
+}
+
+void GroupsWidget::mousePressEvent(QMouseEvent *event) {
+  Q_EMIT shouldSetGroup(getPos(event));
+}
+
 void GroupsWidget::paintEvent(QPaintEvent *) {
   QPainter painter{this};
+  painter.drawImage(0, 0, selectionImg);
   painter.drawImage(0, 0, groupImg);
 }
 

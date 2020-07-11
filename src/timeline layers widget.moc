@@ -183,8 +183,8 @@ void LayerNameWidget::shouldSetName(LayerIdx _t1, std::string_view _t2)
     QMetaObject::activate(this, &staticMetaObject, 2, _a);
 }
 struct qt_meta_stringdata_GroupNameWidget_t {
-    QByteArrayData data[6];
-    char stringdata0[65];
+    QByteArrayData data[5];
+    char stringdata0[56];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -196,12 +196,11 @@ static const qt_meta_stringdata_GroupNameWidget_t qt_meta_stringdata_GroupNameWi
 QT_MOC_LITERAL(0, 0, 15), // "GroupNameWidget"
 QT_MOC_LITERAL(1, 16, 13), // "shouldSetName"
 QT_MOC_LITERAL(2, 30, 0), // ""
-QT_MOC_LITERAL(3, 31, 8), // "GroupIdx"
-QT_MOC_LITERAL(4, 40, 16), // "std::string_view"
-QT_MOC_LITERAL(5, 57, 7) // "setName"
+QT_MOC_LITERAL(3, 31, 16), // "std::string_view"
+QT_MOC_LITERAL(4, 48, 7) // "setName"
 
     },
-    "GroupNameWidget\0shouldSetName\0\0GroupIdx\0"
+    "GroupNameWidget\0shouldSetName\0\0"
     "std::string_view\0setName"
 };
 #undef QT_MOC_LITERAL
@@ -220,16 +219,16 @@ static const uint qt_meta_data_GroupNameWidget[] = {
        1,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    2,   24,    2, 0x06 /* Public */,
+       1,    1,   24,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       5,    2,   29,    2, 0x0a /* Public */,
+       4,    1,   27,    2, 0x0a /* Public */,
 
  // signals: parameters
-    QMetaType::Void, 0x80000000 | 3, 0x80000000 | 4,    2,    2,
+    QMetaType::Void, 0x80000000 | 3,    2,
 
  // slots: parameters
-    QMetaType::Void, 0x80000000 | 3, 0x80000000 | 4,    2,    2,
+    QMetaType::Void, 0x80000000 | 3,    2,
 
        0        // eod
 };
@@ -240,14 +239,14 @@ void GroupNameWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int 
         auto *_t = static_cast<GroupNameWidget *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->shouldSetName((*reinterpret_cast< GroupIdx(*)>(_a[1])),(*reinterpret_cast< std::string_view(*)>(_a[2]))); break;
-        case 1: _t->setName((*reinterpret_cast< GroupIdx(*)>(_a[1])),(*reinterpret_cast< std::string_view(*)>(_a[2]))); break;
+        case 0: _t->shouldSetName((*reinterpret_cast< std::string_view(*)>(_a[1]))); break;
+        case 1: _t->setName((*reinterpret_cast< std::string_view(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
         int *result = reinterpret_cast<int *>(_a[0]);
         {
-            using _t = void (GroupNameWidget::*)(GroupIdx , std::string_view );
+            using _t = void (GroupNameWidget::*)(std::string_view );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&GroupNameWidget::shouldSetName)) {
                 *result = 0;
                 return;
@@ -297,9 +296,9 @@ int GroupNameWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void GroupNameWidget::shouldSetName(GroupIdx _t1, std::string_view _t2)
+void GroupNameWidget::shouldSetName(std::string_view _t1)
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);
 }
 struct qt_meta_stringdata_LayersWidget_t {

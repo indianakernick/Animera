@@ -47,10 +47,10 @@ public:
   explicit GroupNameWidget(QWidget *);
   
 Q_SIGNALS:
-  void shouldSetName(GroupIdx, std::string_view);
+  void shouldSetName(std::string_view);
 
 public Q_SLOTS:
-  void setName(GroupIdx, std::string_view);
+  void setName(std::string_view);
 
 private:
   TextInputWidget *name = nullptr;

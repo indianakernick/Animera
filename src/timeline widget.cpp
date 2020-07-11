@@ -44,25 +44,28 @@ TimelineWidget::TimelineWidget(QWidget *parent)
   CONNECT(celScroll, rightMarginChanged, groupScroll, shouldSetRightMargin);
   CONNECT(celScroll, bottomMarginChanged, layerScroll, shouldSetBottomMargin);
   
-  CONNECT(layers,   shouldSetVisibility,     this, shouldSetVisibility);
-  CONNECT(layers,   shouldIsolateVisibility, this, shouldIsolateVisibility);
-  CONNECT(layers,   shouldSetName,           this, shouldSetLayerName);
+  CONNECT(layers,    shouldSetVisibility,     this, shouldSetVisibility);
+  CONNECT(layers,    shouldIsolateVisibility, this, shouldIsolateVisibility);
+  CONNECT(layers,    shouldSetName,           this, shouldSetLayerName);
   
-  CONNECT(controls, shouldNextFrame,         this, shouldNextFrame);
-  CONNECT(controls, shouldInsertLayer,       this, shouldInsertLayer);
-  CONNECT(controls, shouldRemoveLayer,       this, shouldRemoveLayer);
-  CONNECT(controls, shouldMoveLayerUp,       this, shouldMoveLayerUp);
-  CONNECT(controls, shouldMoveLayerDown,     this, shouldMoveLayerDown);
-  CONNECT(controls, shouldExtendCel,         this, shouldExtendCel);
-  CONNECT(controls, shouldSplitCel,          this, shouldSplitCel);
-  CONNECT(controls, shouldSetDelay,          this, shouldSetDelay);
-  CONNECT(controls, shouldToggleAnimation,   this, shouldToggleAnimation);
+  CONNECT(controls,  shouldNextFrame,         this, shouldNextFrame);
+  CONNECT(controls,  shouldInsertLayer,       this, shouldInsertLayer);
+  CONNECT(controls,  shouldRemoveLayer,       this, shouldRemoveLayer);
+  CONNECT(controls,  shouldMoveLayerUp,       this, shouldMoveLayerUp);
+  CONNECT(controls,  shouldMoveLayerDown,     this, shouldMoveLayerDown);
+  CONNECT(controls,  shouldExtendCel,         this, shouldExtendCel);
+  CONNECT(controls,  shouldSplitCel,          this, shouldSplitCel);
+  CONNECT(controls,  shouldSetDelay,          this, shouldSetDelay);
+  CONNECT(controls,  shouldToggleAnimation,   this, shouldToggleAnimation);
   
-  CONNECT(cels,     shouldBeginSelection,    this, shouldBeginSelection);
-  CONNECT(cels,     shouldContinueSelection, this, shouldContinueSelection);
-  CONNECT(cels,     shouldEndSelection,      this, shouldEndSelection);
-  CONNECT(cels,     shouldClearSelection,    this, shouldClearSelection);
-  CONNECT(cels,     shouldSetPos,            this, shouldSetPos);
+  CONNECT(cels,      shouldBeginSelection,    this, shouldBeginSelection);
+  CONNECT(cels,      shouldContinueSelection, this, shouldContinueSelection);
+  CONNECT(cels,      shouldEndSelection,      this, shouldEndSelection);
+  CONNECT(cels,      shouldClearSelection,    this, shouldClearSelection);
+  CONNECT(cels,      shouldSetPos,            this, shouldSetPos);
+  
+  CONNECT(groups,    shouldSetGroup,          this, shouldSetGroup);
+  CONNECT(groupName, shouldSetName,           this, shouldSetGroupName);
   
   auto *grid = new QGridLayout{this};
   grid->setSpacing(0);
@@ -84,6 +87,18 @@ void TimelineWidget::setSelection(const CelRect rect) {
   cels->setSelection(rect);
 }
 
+void TimelineWidget::setGroup(const GroupSpan span) {
+  groups->setGroup(span);
+}
+
+void TimelineWidget::setGroupName(const std::string_view name) {
+  groupName->setName(name);
+}
+
+void TimelineWidget::setGroups(const tcb::span<const Group> span) {
+  groups->setGroups(span);
+}
+
 void TimelineWidget::setVisibility(const LayerIdx layer, const bool visible) {
   layers->setVisibility(layer, visible);
 }
@@ -100,16 +115,6 @@ void TimelineWidget::setFrameCount(const FrameIdx count) {
   frames->setFrameCount(count);
   groups->setFrameCount(count);
   cels->setFrameCount(count);
-  
-  
-  
-  
-  
-  
-  
-  Group group{count, "Group 0"};
-  groups->setGroups({&group, 1});
-  groupName->setName(GroupIdx{0}, group.name);
 }
 
 void TimelineWidget::setLayerCount(const LayerIdx count) {

@@ -78,4 +78,10 @@ struct CelSpan {
 
 using Frame = std::vector<const Cel *>;
 
+struct GroupSpan {
+  GroupIdx group;
+  FrameIdx begin;
+  FrameIdx end;
+};
+
 #endif

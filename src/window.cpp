@@ -388,8 +388,11 @@ void Window::connectSignals() {
   CONNECT(sprite.timeline, celModified,             editor,          composite);
   CONNECT(sprite.timeline, posChanged,              timeline,        setPos);
   CONNECT(sprite.timeline, selectionChanged,        timeline,        setSelection);
+  CONNECT(sprite.timeline, groupChanged,            timeline,        setGroup);
+  CONNECT(sprite.timeline, groupNameChanged,        timeline,        setGroupName);
+  CONNECT(sprite.timeline, groupsChanged,           timeline,        setGroups);
   CONNECT(sprite.timeline, visibilityChanged,       timeline,        setVisibility);
-  CONNECT(sprite.timeline, nameChanged,             timeline,        setLayerName);
+  CONNECT(sprite.timeline, layerNameChanged,        timeline,        setLayerName);
   CONNECT(sprite.timeline, layerChanged,            timeline,        setLayer);
   CONNECT(sprite.timeline, frameCountChanged,       timeline,        setFrameCount);
   CONNECT(sprite.timeline, layerCountChanged,       timeline,        setLayerCount);
@@ -402,7 +405,7 @@ void Window::connectSignals() {
   
   CONNECT(timeline,        shouldSetVisibility,     sprite.timeline, setVisibility);
   CONNECT(timeline,        shouldIsolateVisibility, sprite.timeline, isolateVisibility);
-  CONNECT(timeline,        shouldSetLayerName,      sprite.timeline, setName);
+  CONNECT(timeline,        shouldSetLayerName,      sprite.timeline, setLayerName);
   CONNECT(timeline,        shouldNextFrame,         sprite.timeline, nextFrame);
   CONNECT(timeline,        shouldInsertLayer,       sprite.timeline, insertLayer);
   CONNECT(timeline,        shouldRemoveLayer,       sprite.timeline, removeLayer);
@@ -414,6 +417,8 @@ void Window::connectSignals() {
   CONNECT(timeline,        shouldContinueSelection, sprite.timeline, continueSelection);
   CONNECT(timeline,        shouldEndSelection,      sprite.timeline, endSelection);
   CONNECT(timeline,        shouldClearSelection,    sprite.timeline, clearSelection);
+  CONNECT(timeline,        shouldSetGroup,          sprite.timeline, setGroup);
+  CONNECT(timeline,        shouldSetGroupName,      sprite.timeline, setGroupName);
   CONNECT(timeline,        shouldSetPos,            sprite.timeline, setPos);
   CONNECT(timeline,        shouldSetDelay,          sprite.timeline, setDelay);
   
