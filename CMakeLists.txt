@@ -14,6 +14,8 @@ add_executable(Animera
     src/application.moc
     "src/brush tool.cpp"
     "src/brush tool.hpp"
+    "src/cel span painter.cpp"
+    "src/cel span painter.hpp"
     "src/cel span.cpp"
     "src/cel span.hpp"
     src/cel.cpp

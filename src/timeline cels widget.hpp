@@ -13,7 +13,10 @@
 #include <tcb/span.hpp>
 #include "cel span.hpp"
 #include <QtCore/qtimer.h>
+#include "cel span painter.hpp"
 #include "scroll bar widget.hpp"
+
+// TODO: Share CelSpanPainter between CelsWidget and GroupsWidget
 
 class CelsWidget final : public QWidget {
   Q_OBJECT
@@ -38,10 +41,7 @@ public Q_SLOTS:
   void setLayerCount(LayerIdx);
 
 private:
-  QPixmap celPix;
-  QPixmap beginLinkPix;
-  QPixmap endLinkPix;
-  
+  CelSpanPainter celPainter;
   QImage posImg;
   QImage selectionImg;
   QImage bordersImg;
@@ -94,10 +94,7 @@ public Q_SLOTS:
   void setMargin(int);
 
 private:
-  QPixmap celPix;
-  QPixmap beginLinkPix;
-  QPixmap endLinkPix;
-
+  CelSpanPainter celPainter;
   QImage groupImg;
   
   FrameIdx frames = {};
