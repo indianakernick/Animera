@@ -249,3 +249,61 @@ void LayerCels::clear(const FrameIdx len) {
 
 LayerCels::LayerCels(std::vector<CelSpan> spans)
   : spans{std::move(spans)} {}
+
+void GroupArray::setFrames(const FrameIdx frames) {
+  if (groups.empty()) {
+    if (frames > FrameIdx{0}) {
+      groups.push_back({frames, "Group 0"});
+    }
+    return;
+  }
+  
+  if (frames <= FrameIdx{0}) {
+    groups.clear();
+    return;
+  }
+  
+  if (frames >= groups.back().end) {
+    groups.back().end = frames;
+    return;
+  }
+  
+  std::size_t idx = groups.size() - 1;
+  while (!groups.empty()) {
+    const FrameIdx previous = idx == 0 ? FrameIdx{0} : groups[idx - 1].end;
+    const FrameIdx current = previous + FrameIdx{1};
+    if (frames >= current) {
+      groups[idx].end = current;
+      break;
+    }
+    --idx;
+    groups.pop_back();
+  }
+}
+
+Group *GroupArray::find(FrameIdx idx) {
+  auto iter = findIter(idx);
+  return iter == groups.end() ? nullptr : &*iter;
+}
+
+void GroupArray::split(const FrameIdx idx) {
+  FrameIdx offset = idx;
+  auto iter = findIter(offset);
+  if (iter == groups.end()) return;
+  if (offset == FrameIdx{0}) return;
+  
+  Group group{iter->end, "Group " + std::to_string(groups.size())};
+  iter->end = idx;
+  groups.insert(++iter, std::move(group));
+}
+
+std::vector<Group>::iterator GroupArray::findIter(FrameIdx &idx) {
+  const auto compare = [](const FrameIdx idx, const Group &group) {
+    return idx < group.end;
+  };
+  const auto iter =  std::upper_bound(groups.begin(), groups.end(), idx, compare);
+  if (iter != groups.begin()) {
+    idx -= std::prev(iter)->end;
+  }
+  return iter;
+}

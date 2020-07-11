@@ -1,4 +1,4 @@
-//
+﻿//
 //  editor widget.hpp
 //  Animera
 //

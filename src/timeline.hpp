@@ -123,6 +123,7 @@ Q_SIGNALS:
 private:
   std::vector<Layer> layers;
   std::vector<LayerCels> clipboard;
+  GroupArray groups;
   CelPos pos;
   CelRect selection;
   FrameIdx frameCount;

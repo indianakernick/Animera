@@ -24,6 +24,7 @@ void Timeline::initDefault() {
   layer.spans.pushNull(frameCount);
   layer.name = "Layer 0";
   layers.push_back(std::move(layer));
+  groups.setFrames(frameCount);
   selection = empty_rect;
   delay = ctrl_delay.def;
   change();
@@ -74,6 +75,7 @@ Error Timeline::openImage(
   layer.spans.begin()->cel->img = std::move(image);
   layer.name = "Layer 0";
   layers.push_back(std::move(layer));
+  groups.setFrames(frameCount);
   selection = empty_rect;
   delay = ctrl_delay.def;
   return {};

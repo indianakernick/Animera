@@ -102,4 +102,21 @@ struct Layer {
   bool visible = true;
 };
 
+struct Group {
+  FrameIdx end;
+  std::string name;
+};
+
+class GroupArray {
+public:
+  void setFrames(FrameIdx);
+  Group *find(FrameIdx);
+  void split(FrameIdx);
+  
+private:
+  std::vector<Group> groups;
+  
+  std::vector<Group>::iterator findIter(FrameIdx &);
+};
+
 #endif
