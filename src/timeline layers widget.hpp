@@ -40,6 +40,22 @@ private:
   void setupLayout();
 };
 
+class GroupNameWidget final : public QWidget {
+  Q_OBJECT
+
+public:
+  explicit GroupNameWidget(QWidget *);
+  
+Q_SIGNALS:
+  void shouldSetName(GroupIdx, std::string_view);
+
+public Q_SLOTS:
+  void setName(GroupIdx, std::string_view);
+
+private:
+  TextInputWidget *name = nullptr;
+};
+
 class LayersWidget final : public QWidget {
   Q_OBJECT
 

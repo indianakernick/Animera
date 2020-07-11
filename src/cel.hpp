@@ -36,16 +36,23 @@ public:
 };
 
 enum class LayerIdx {};
+enum class GroupIdx {};
 enum class FrameIdx {};
 
 template <>
 struct enum_unary_plus<LayerIdx> : std::true_type {};
 
 template <>
+struct enum_unary_plus<GroupIdx> : std::true_type {};
+
+template <>
 struct enum_unary_plus<FrameIdx> : std::true_type {};
 
 template <>
 struct enum_math<LayerIdx> : std::true_type {};
+
+template <>
+struct enum_math<GroupIdx> : std::true_type {};
 
 template <>
 struct enum_math<FrameIdx> : std::true_type {};

@@ -260,4 +260,98 @@ void CelScrollWidget::resizeEvent(QResizeEvent *event) {
   ScrollAreaWidget::resizeEvent(event);
 }
 
+GroupsWidget::GroupsWidget(QWidget *parent)
+  : QWidget{parent},
+    groupImg{0, 0, QImage::Format_ARGB32_Premultiplied} {
+  celPix = bakeColoredBitmap(":/Timeline/cel.png", cel_icon_color);
+  beginLinkPix = bakeColoredBitmap(":/Timeline/begin linked cel.png", cel_icon_color);
+  endLinkPix = bakeColoredBitmap(":/Timeline/end linked cel.png", cel_icon_color);
+  setFixedSize(0, cel_height);
+}
+
+// TODO: Move cell span painting into a single class
+// Also try to share the resources (pixmaps)
+
+void GroupsWidget::setGroups(const tcb::span<const Group> groups) {
+  groupImg.fill(0);
+  
+  QPainter painter{&groupImg};
+  painter.setCompositionMode(QPainter::CompositionMode_Source);
+  
+  int x = cel_icon_pad;
+  FrameIdx prevEnd = {};
+  for (const Group &group : groups) {
+    const FrameIdx len = group.end - prevEnd;
+    prevEnd = group.end;
+    if (len == FrameIdx{1}) {
+      painter.drawPixmap(x, cel_icon_pad, celPix);
+      x += cel_width;
+      paintBorder(painter, x, 0);
+    } else if (len > FrameIdx{1}) {
+      const int between = +(len - FrameIdx{2}) * cel_width;
+      painter.drawPixmap(x, cel_icon_pad, beginLinkPix);
+      x += cel_width;
+      painter.fillRect(
+        x - cel_icon_pad - cel_border_offset, cel_icon_pad,
+        between + cel_icon_pad + cel_border_offset, cel_icon_size,
+        cel_icon_color
+      );
+      x += between;
+      painter.drawPixmap(x, cel_icon_pad, endLinkPix);
+      x += cel_width;
+      paintBorder(painter, x, 0);
+    } else Q_UNREACHABLE();
+  }
+  
+  painter.end();
+  update();
+}
+
+void GroupsWidget::setFrameCount(const FrameIdx count) {
+  frames = count;
+  resizeImage(groupImg, {+frames * cel_width, cel_height});
+  setWidth();
+}
+
+void GroupsWidget::setMargin(const int newMargin) {
+  margin = newMargin;
+  setWidth();
+  update();
+}
+
+void GroupsWidget::setWidth() {
+  setFixedWidth(+frames * cel_width + margin);
+}
+
+void GroupsWidget::paintEvent(QPaintEvent *) {
+  QPainter painter{this};
+  painter.drawImage(0, 0, groupImg);
+}
+
+GroupScrollWidget::GroupScrollWidget(QWidget *parent)
+  : QScrollArea{parent} {
+  setFrameShape(NoFrame);
+  setFixedHeight(cel_height);
+  setStyleSheet("background-color:" + glob_main.name());
+  setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+}
+
+GroupsWidget *GroupScrollWidget::getChild() {
+  auto *groups = new GroupsWidget{this};
+  // We cannot simply call setViewportMargins
+  CONNECT(this, shouldSetRightMargin, groups, setMargin);
+  setWidget(groups);
+  return groups;
+}
+
+void GroupScrollWidget::paintEvent(QPaintEvent *) {
+  QPainter painter{viewport()};
+  painter.setCompositionMode(QPainter::CompositionMode_Source);
+  painter.fillRect(
+    0, height() - glob_border_width,
+    width(), glob_border_width,
+    glob_border_color
+  );
+}
+
 #include "timeline cels widget.moc"

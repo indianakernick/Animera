@@ -389,7 +389,7 @@ void Window::connectSignals() {
   CONNECT(sprite.timeline, posChanged,              timeline,        setPos);
   CONNECT(sprite.timeline, selectionChanged,        timeline,        setSelection);
   CONNECT(sprite.timeline, visibilityChanged,       timeline,        setVisibility);
-  CONNECT(sprite.timeline, nameChanged,             timeline,        setName);
+  CONNECT(sprite.timeline, nameChanged,             timeline,        setLayerName);
   CONNECT(sprite.timeline, layerChanged,            timeline,        setLayer);
   CONNECT(sprite.timeline, frameCountChanged,       timeline,        setFrameCount);
   CONNECT(sprite.timeline, layerCountChanged,       timeline,        setLayerCount);
@@ -402,7 +402,7 @@ void Window::connectSignals() {
   
   CONNECT(timeline,        shouldSetVisibility,     sprite.timeline, setVisibility);
   CONNECT(timeline,        shouldIsolateVisibility, sprite.timeline, isolateVisibility);
-  CONNECT(timeline,        shouldSetName,           sprite.timeline, setName);
+  CONNECT(timeline,        shouldSetLayerName,      sprite.timeline, setName);
   CONNECT(timeline,        shouldNextFrame,         sprite.timeline, nextFrame);
   CONNECT(timeline,        shouldInsertLayer,       sprite.timeline, insertLayer);
   CONNECT(timeline,        shouldRemoveLayer,       sprite.timeline, removeLayer);

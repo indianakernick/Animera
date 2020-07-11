@@ -114,6 +114,17 @@ void LayerNameWidget::setupLayout() {
   layout->addWidget(name);
 }
 
+GroupNameWidget::GroupNameWidget(QWidget *parent)
+  : QWidget{parent} {
+  name = new TextInputWidget{this, timelineTextBox(layer_width - glob_border_width)};
+  name->setMaxLength(layer_name_max_len);
+  name->setValidator(new NameValidator{name});
+}
+
+void GroupNameWidget::setName(const GroupIdx idx, const std::string_view text) {
+  name->setText(toLatinString(text));
+}
+
 LayersWidget::LayersWidget(QWidget *parent)
   : QWidget{parent}, layout{new QVBoxLayout{this}} {
   layout->setSpacing(0);

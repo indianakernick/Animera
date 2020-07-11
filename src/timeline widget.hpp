@@ -14,8 +14,10 @@
 #include <QtWidgets/qwidget.h>
 
 class ControlsWidget;
+class GroupNameWidget;
 class LayersWidget;
 class FramesWidget;
+class GroupsWidget;
 class CelsWidget;
 class StatusObject;
 
@@ -29,7 +31,7 @@ public Q_SLOTS:
   void setPos(CelPos);
   void setSelection(CelRect);
   void setVisibility(LayerIdx, bool);
-  void setName(LayerIdx, std::string_view);
+  void setLayerName(LayerIdx, std::string_view);
   void setLayer(LayerIdx, tcb::span<const CelSpan>);
   void setFrameCount(FrameIdx);
   void setLayerCount(LayerIdx);
@@ -39,7 +41,7 @@ public Q_SLOTS:
 Q_SIGNALS:
   void shouldSetVisibility(LayerIdx, bool);
   void shouldIsolateVisibility(LayerIdx);
-  void shouldSetName(LayerIdx, std::string_view);
+  void shouldSetLayerName(LayerIdx, std::string_view);
   
   void shouldNextFrame();
   void shouldInsertLayer();
@@ -59,8 +61,10 @@ Q_SIGNALS:
   
 private:
   ControlsWidget *controls = nullptr;
+  GroupNameWidget *groupName = nullptr;
   LayersWidget *layers = nullptr;
   FramesWidget *frames = nullptr;
+  GroupsWidget *groups = nullptr;
   CelsWidget *cels = nullptr;
 };
 

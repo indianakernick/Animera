@@ -41,6 +41,7 @@ void FramesWidget::setWidth() {
 
 void FramesWidget::paintEvent(QPaintEvent *) {
   QPainter painter{this};
+  painter.setCompositionMode(QPainter::CompositionMode_Source);
   painter.setFont(getGlobalFont());
   painter.setBrush(Qt::NoBrush);
   painter.setPen(glob_text_color);
@@ -74,7 +75,7 @@ FrameScrollWidget::FrameScrollWidget(QWidget *parent)
 }
 
 FramesWidget *FrameScrollWidget::getChild() {
-  auto frames = new FramesWidget{this};
+  auto *frames = new FramesWidget{this};
   // We cannot simply call setViewportMargins
   CONNECT(this, shouldSetRightMargin, frames, setMargin);
   setWidget(frames);
@@ -83,6 +84,7 @@ FramesWidget *FrameScrollWidget::getChild() {
 
 void FrameScrollWidget::paintEvent(QPaintEvent *) {
   QPainter painter{viewport()};
+  painter.setCompositionMode(QPainter::CompositionMode_Source);
   painter.fillRect(
     0, height() - glob_border_width,
     width(), glob_border_width,

@@ -11,6 +11,7 @@
 
 #include "cel.hpp"
 #include <tcb/span.hpp>
+#include "cel span.hpp"
 #include <QtCore/qtimer.h>
 #include "scroll bar widget.hpp"
 
@@ -79,6 +80,47 @@ private:
   QWidget *rect = nullptr;
 
   void resizeEvent(QResizeEvent *) override;
+};
+
+class GroupsWidget final : public QWidget {
+  Q_OBJECT
+
+public:
+  explicit GroupsWidget(QWidget *);
+
+public Q_SLOTS:
+  void setGroups(tcb::span<const Group>);
+  void setFrameCount(FrameIdx);
+  void setMargin(int);
+
+private:
+  QPixmap celPix;
+  QPixmap beginLinkPix;
+  QPixmap endLinkPix;
+
+  QImage groupImg;
+  
+  FrameIdx frames = {};
+  int margin = 0;
+
+  void setWidth();
+
+  void paintEvent(QPaintEvent *);
+};
+
+class GroupScrollWidget final : public QScrollArea {
+  Q_OBJECT
+
+public:
+  explicit GroupScrollWidget(QWidget *);
+
+  GroupsWidget *getChild();
+
+Q_SIGNALS:
+  void shouldSetRightMargin(int);
+
+private:
+  void paintEvent(QPaintEvent *) override;
 };
 
 #endif

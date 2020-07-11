@@ -20,25 +20,33 @@ TimelineWidget::TimelineWidget(QWidget *parent)
   setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
   
   controls = new ControlsWidget{this};
+  groupName = new GroupNameWidget{this};
   auto *layerScroll = new LayerScrollWidget{this};
   auto *frameScroll = new FrameScrollWidget{this};
+  auto *groupScroll = new GroupScrollWidget{this};
   auto *celScroll = new CelScrollWidget{this};
   layers = layerScroll->getChild();
   frames = frameScroll->getChild();
+  groups = groupScroll->getChild();
   cels = celScroll->getChild();
   
   CONNECT(layerScroll->verticalScrollBar(), valueChanged, celScroll->verticalScrollBar(), setValue);
   CONNECT(celScroll->verticalScrollBar(), valueChanged, layerScroll->verticalScrollBar(), setValue);
   
   CONNECT(frameScroll->horizontalScrollBar(), valueChanged, celScroll->horizontalScrollBar(), setValue);
+  CONNECT(frameScroll->horizontalScrollBar(), valueChanged, groupScroll->horizontalScrollBar(), setValue);
   CONNECT(celScroll->horizontalScrollBar(), valueChanged, frameScroll->horizontalScrollBar(), setValue);
+  CONNECT(celScroll->horizontalScrollBar(), valueChanged, groupScroll->horizontalScrollBar(), setValue);
+  CONNECT(groupScroll->horizontalScrollBar(), valueChanged, frameScroll->horizontalScrollBar(), setValue);
+  CONNECT(groupScroll->horizontalScrollBar(), valueChanged, celScroll->horizontalScrollBar(), setValue);
   
   CONNECT(celScroll, rightMarginChanged, frameScroll, shouldSetRightMargin);
+  CONNECT(celScroll, rightMarginChanged, groupScroll, shouldSetRightMargin);
   CONNECT(celScroll, bottomMarginChanged, layerScroll, shouldSetBottomMargin);
   
   CONNECT(layers,   shouldSetVisibility,     this, shouldSetVisibility);
   CONNECT(layers,   shouldIsolateVisibility, this, shouldIsolateVisibility);
-  CONNECT(layers,   shouldSetName,           this, shouldSetName);
+  CONNECT(layers,   shouldSetName,           this, shouldSetLayerName);
   
   CONNECT(controls, shouldNextFrame,         this, shouldNextFrame);
   CONNECT(controls, shouldInsertLayer,       this, shouldInsertLayer);
@@ -59,10 +67,12 @@ TimelineWidget::TimelineWidget(QWidget *parent)
   auto *grid = new QGridLayout{this};
   grid->setSpacing(0);
   grid->setContentsMargins(0, 0, 0, 0);
-  grid->addWidget(controls, 0, 0);
-  grid->addWidget(layerScroll, 1, 0);
+  grid->addWidget(controls,    0, 0);
+  grid->addWidget(groupName,   1, 0);
+  grid->addWidget(layerScroll, 2, 0);
   grid->addWidget(frameScroll, 0, 1);
-  grid->addWidget(celScroll, 1, 1);
+  grid->addWidget(groupScroll, 1, 1);
+  grid->addWidget(celScroll,   2, 1);
 }
 
 
@@ -78,7 +88,7 @@ void TimelineWidget::setVisibility(const LayerIdx layer, const bool visible) {
   layers->setVisibility(layer, visible);
 }
 
-void TimelineWidget::setName(const LayerIdx layer, const std::string_view name) {
+void TimelineWidget::setLayerName(const LayerIdx layer, const std::string_view name) {
   layers->setName(layer, name);
 }
 
@@ -88,7 +98,18 @@ void TimelineWidget::setLayer(const LayerIdx layer, tcb::span<const CelSpan> spa
 
 void TimelineWidget::setFrameCount(const FrameIdx count) {
   frames->setFrameCount(count);
+  groups->setFrameCount(count);
   cels->setFrameCount(count);
+  
+  
+  
+  
+  
+  
+  
+  Group group{count, "Group 0"};
+  groups->setGroups({&group, 1});
+  groupName->setName(GroupIdx{0}, group.name);
 }
 
 void TimelineWidget::setLayerCount(const LayerIdx count) {
