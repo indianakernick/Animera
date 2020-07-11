@@ -109,6 +109,13 @@ struct Group {
 
 class GroupArray {
 public:
+  std::vector<Group> &underlying() {
+    return groups;
+  }
+  const std::vector<Group> &underlying() const {
+    return groups;
+  }
+
   void setFrames(FrameIdx);
   Group *find(FrameIdx);
   void split(FrameIdx);

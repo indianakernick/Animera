@@ -280,8 +280,9 @@ constexpr std::size_t file_sig_len = 8;
 constexpr char file_sig[file_sig_len] = "animera";
 
 constexpr std::size_t chunk_name_len = 4;
-constexpr char chunk_palette[chunk_name_len + 1] = "PLTE";
 constexpr char chunk_anim_header[chunk_name_len + 1] = "AHDR";
+constexpr char chunk_palette[chunk_name_len + 1] = "PLTE";
+constexpr char chunk_groups[chunk_name_len + 1] = "GRUP";
 constexpr char chunk_layer_header[chunk_name_len + 1] = "LHDR";
 constexpr char chunk_cel_header[chunk_name_len + 1] = "CHDR";
 constexpr char chunk_cel_data[chunk_name_len + 1] = "CDAT";

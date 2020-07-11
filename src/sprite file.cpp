@@ -200,6 +200,23 @@ Error writePLTE(QIODevice &dev, const PaletteCSpan colors, const Format format) 
   return e.msg();
 }
 
+Error writeGRUP(QIODevice &dev, const GroupArray &groups) try {
+  SCOPE_TIME("writeGRUP");
+  
+  ChunkWriter writer{dev};
+  writer.begin(chunk_groups);
+  for (const Group &group : groups.underlying()) {
+    const std::uint32_t nameLen = static_cast<std::uint32_t>(group.name.size());
+    writer.writeInt(static_cast<std::uint32_t>(group.end));
+    writer.writeInt(nameLen);
+    writer.writeString(group.name.data(), nameLen);
+  }
+  writer.end();
+  return {};
+} catch (FileIOError &e) {
+  return e.msg();
+}
+
 Error writeLHDR(QIODevice &dev, const Layer &layer) try {
   SCOPE_TIME("writeLHDR");
 
@@ -448,6 +465,61 @@ Error readPLTE(QIODevice &dev, const PaletteSpan colors, const Format format) tr
 
 namespace {
 
+bool validName(const std::string_view name) {
+  for (const char ch : name) {
+    if (!printable(ch)) return false;
+  }
+  return true;
+}
+
+}
+
+Error readGRUP(QIODevice &dev, GroupArray &groups) try {
+  SCOPE_TIME("readGRUP");
+  
+  ChunkReader reader{dev};
+  const ChunkStart start = reader.begin();
+  TRY(expectedName(start, chunk_groups));
+  std::size_t remaining = start.length;
+  
+  std::uint32_t prevEnd = 0;
+  while (remaining > 2 * file_int_size) {
+    const std::uint32_t end = reader.readInt();
+    const std::uint32_t nameLen = reader.readInt();
+    remaining -= 2 * file_int_size;
+    
+    if (end <= prevEnd) {
+      return "Group boundaries are invalid";
+    }
+    prevEnd = end;
+    
+    if (nameLen > layer_name_max_len || nameLen > remaining) {
+      return "Group name exceeds maximum length";
+    }
+    remaining -= nameLen;
+    
+    Group group;
+    group.end = static_cast<FrameIdx>(end);
+    group.name.resize(nameLen);
+    reader.readString(group.name.data(), nameLen);
+    
+    if (!validName(group.name)) {
+      return "Group name contains non-ASCII characters";
+    }
+    groups.underlying().push_back(std::move(group));
+  }
+  
+  if (remaining != 0) {
+    return chunkLengthInvalid(start);
+  }
+  
+  return {};
+} catch (FileIOError &e) {
+  return e.msg();
+}
+
+namespace {
+
 Error readVisibleByte(bool &visible, const std::uint8_t byte) {
   switch (byte) {
     case 0:
@@ -460,13 +532,6 @@ Error readVisibleByte(bool &visible, const std::uint8_t byte) {
       return "Invalid visibility (" + QString::number(byte) + ")";
   }
   return {};
-}
-
-bool validLayerName(const std::string_view name) {
-  for (const char ch : name) {
-    if (!printable(ch)) return false;
-  }
-  return true;
 }
 
 }
@@ -491,7 +556,7 @@ Error readLHDR(QIODevice &dev, Layer &layer) try {
   TRY(reader.end());
   
   if (spans == 0) return "Layer spans out-of-range";
-  if (!validLayerName(layer.name)) {
+  if (!validName(layer.name)) {
     return "Layer name contains non-ASCII characters";
   }
   TRY(readVisibleByte(layer.visible, visible));

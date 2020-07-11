@@ -15,6 +15,7 @@
 #include "palette span.hpp"
 
 class QIODevice;
+class GroupArray;
 struct Layer;
 struct CelSpan;
 
@@ -30,6 +31,7 @@ struct SpriteInfo {
 Error writeSignature(QIODevice &);
 Error writeAHDR(QIODevice &, const SpriteInfo &);
 Error writePLTE(QIODevice &, PaletteCSpan, Format);
+Error writeGRUP(QIODevice &, const GroupArray &);
 Error writeLHDR(QIODevice &, const Layer &);
 Error writeCHDR(QIODevice &, const CelSpan &);
 Error writeCDAT(QIODevice &, const QImage &, Format);
@@ -38,6 +40,7 @@ Error writeAEND(QIODevice &);
 Error readSignature(QIODevice &);
 Error readAHDR(QIODevice &, SpriteInfo &);
 Error readPLTE(QIODevice &, PaletteSpan, Format);
+Error readGRUP(QIODevice &, GroupArray &);
 Error readLHDR(QIODevice &, Layer &);
 Error readCHDR(QIODevice &, CelSpan &, Format);
 Error readCDAT(QIODevice &, QImage &, Format);
