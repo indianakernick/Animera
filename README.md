@@ -6,7 +6,7 @@
 [![GitHub Release Version](https://img.shields.io/github/v/release/Kerndog73/Animera?include_prereleases&sort=semver)](https://github.com/Kerndog73/Animera/releases/latest)
 [![License](https://img.shields.io/github/license/Kerndog73/Animera)](https://github.com/Kerndog73/Animera/blob/master/COPYING)
 
-![Screenshot](https://i.imgur.com/BlyJOCe.png)
+![Screenshot](https://i.imgur.com/1Rfn3x2.png)
 
 ---
 
