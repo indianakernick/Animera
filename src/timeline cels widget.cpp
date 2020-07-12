@@ -220,9 +220,12 @@ GroupsWidget::GroupsWidget(QWidget *parent)
     groupImg{0, 0, QImage::Format_ARGB32_Premultiplied},
     selectionImg{0, 0, QImage::Format_ARGB32_Premultiplied} {
   setFixedSize(0, cel_height);
+  setMouseTracking(true);
 }
 
-void GroupsWidget::setGroups(const tcb::span<const Group> groups) {
+void GroupsWidget::setGroupArray(const tcb::span<const Group> groups) {
+  groupArray = groups;
+  
   groupImg.fill(0);
   QPainter painter{&groupImg};
   
@@ -240,14 +243,14 @@ void GroupsWidget::setGroups(const tcb::span<const Group> groups) {
   update();
 }
 
-void GroupsWidget::setGroup(const GroupSpan span) {
+void GroupsWidget::setGroup(const GroupInfo info) {
   selectionImg.fill(0);
   QPainter painter{&selectionImg};
   painter.setCompositionMode(QPainter::CompositionMode_Source);
   
   painter.fillRect(
-    +span.begin * cel_width, 0,
-    +(span.end - span.begin) * cel_width - glob_border_width, cel_height - glob_border_width,
+    +info.begin * cel_width, 0,
+    +(info.end - info.begin) * cel_width - glob_border_width, cel_height - glob_border_width,
     cel_pos_color
   );
   
@@ -272,12 +275,72 @@ void GroupsWidget::setWidth() {
   setFixedWidth(+frames * cel_width + margin);
 }
 
-FrameIdx GroupsWidget::getPos(QMouseEvent *event) {
-  return FrameIdx{std::clamp(event->pos().x(), 0, width() - 1) / cel_width};
+int GroupsWidget::clampPos(QMouseEvent *event) const {
+  return std::clamp(event->pos().x(), 0, width() - 1);
+}
+
+FrameIdx GroupsWidget::framePos(const int pos) const {
+  return FrameIdx{pos / cel_width};
+}
+
+// returns left group
+std::optional<GroupIdx> findGroupEdge(tcb::span<const Group> groups, const FrameIdx rightFrame) {
+  if (groups.empty()) return std::nullopt;
+  if (rightFrame <= FrameIdx{0} || rightFrame >= groups.back().end) return std::nullopt;
+  
+  const auto compare = [](const Group &group, const FrameIdx frame) {
+    return group.end < frame;
+  };
+  const auto iter = std::lower_bound(groups.begin(), groups.end(), rightFrame, compare);
+  if (iter == groups.end()) return std::nullopt;
+  if (iter->end != rightFrame) return std::nullopt;
+  
+  return static_cast<GroupIdx>(iter - groups.begin());
+}
+
+// returns right frame
+std::optional<FrameIdx> GroupsWidget::edgePos(const int pos) const {
+  const int relPos = pos % cel_width;
+  const int frame = pos / cel_width;
+  if (relPos < 1_px) {
+    return FrameIdx{frame};
+  } else if (relPos >= cel_width - glob_border_width - 1_px) {
+    return FrameIdx{frame + 1};
+  } else {
+    return std::nullopt;
+  }
 }
 
 void GroupsWidget::mousePressEvent(QMouseEvent *event) {
-  Q_EMIT shouldSetGroup(getPos(event));
+  const int pos = clampPos(event);
+  if (auto edge = edgePos(pos)) {
+    if (auto group = findGroupEdge(groupArray, *edge)) {
+      dragGroup = group;
+      return;
+    }
+  }
+  Q_EMIT shouldSetGroup(framePos(pos));
+}
+
+void GroupsWidget::mouseMoveEvent(QMouseEvent *event) {
+  const int pos = clampPos(event);
+  if (dragGroup) {
+    if (auto edge = edgePos(pos)) {
+      Q_EMIT shouldMoveGroup(*dragGroup, *edge);
+    }
+  } else {
+    if (auto edge = edgePos(pos)) {
+      if (findGroupEdge(groupArray, *edge)) {
+        setCursor(Qt::SplitHCursor);
+        return;
+      }
+    }
+    setCursor(Qt::ArrowCursor);
+  }
+}
+
+void GroupsWidget::mouseReleaseEvent(QMouseEvent *) {
+  dragGroup = std::nullopt;
 }
 
 void GroupsWidget::paintEvent(QPaintEvent *) {

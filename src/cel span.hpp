@@ -107,6 +107,10 @@ struct Group {
   std::string name;
 };
 
+// TODO: this doesn't need to be a class
+// just have a bunch of functions that operate on tcb::span and std::vector
+// let the UI use it
+
 class GroupArray {
 public:
   std::vector<Group> &underlying() {
@@ -117,9 +121,10 @@ public:
   }
 
   void setFrames(FrameIdx);
-  GroupSpan findSpan(FrameIdx);
-  GroupSpan getSpan(GroupIdx);
+  GroupInfo findSpan(FrameIdx);
+  GroupInfo getSpan(GroupIdx);
   void split(FrameIdx);
+  bool move(GroupIdx, FrameIdx);
   
 private:
   std::vector<Group> groups;

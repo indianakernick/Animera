@@ -90,6 +90,7 @@ public Q_SLOTS:
   
   void setGroup(FrameIdx);
   void setGroupName(std::string_view);
+  void moveGroup(GroupIdx, FrameIdx);
   
   void setPos(CelPos);
   void setVisibility(LayerIdx, bool);
@@ -108,13 +109,13 @@ Q_SIGNALS:
   void posChanged(CelPos);
   void celChanged(Cel *);
   void selectionChanged(CelRect);
-  void groupChanged(GroupSpan);
+  void groupChanged(GroupInfo);
   
   void groupNameChanged(std::string_view);
   void visibilityChanged(LayerIdx, bool);
   void layerNameChanged(LayerIdx, std::string_view);
   
-  void groupsChanged(tcb::span<const Group>);
+  void groupArrayChanged(tcb::span<const Group>);
   void frameChanged(const Frame &);
   void layerChanged(LayerIdx, tcb::span<const CelSpan>);
   

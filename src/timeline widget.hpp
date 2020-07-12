@@ -31,9 +31,9 @@ public:
 public Q_SLOTS:
   void setPos(CelPos);
   void setSelection(CelRect);
-  void setGroup(GroupSpan);
+  void setGroup(GroupInfo);
   void setGroupName(std::string_view);
-  void setGroups(tcb::span<const Group>);
+  void setGroupArray(tcb::span<const Group>);
   void setVisibility(LayerIdx, bool);
   void setLayerName(LayerIdx, std::string_view);
   void setLayer(LayerIdx, tcb::span<const CelSpan>);
@@ -65,6 +65,7 @@ Q_SIGNALS:
   
   void shouldSetGroup(FrameIdx);
   void shouldSetGroupName(std::string_view);
+  void shouldMoveGroup(GroupIdx, FrameIdx);
   
 private:
   ControlsWidget *controls = nullptr;

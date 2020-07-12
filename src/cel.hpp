@@ -78,7 +78,7 @@ struct CelSpan {
 
 using Frame = std::vector<const Cel *>;
 
-struct GroupSpan {
+struct GroupInfo {
   GroupIdx group;
   FrameIdx begin;
   FrameIdx end;

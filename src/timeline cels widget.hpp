@@ -90,10 +90,11 @@ public:
 
 Q_SIGNALS:
   void shouldSetGroup(FrameIdx);
+  void shouldMoveGroup(GroupIdx, FrameIdx);
 
 public Q_SLOTS:
-  void setGroups(tcb::span<const Group>);
-  void setGroup(GroupSpan);
+  void setGroupArray(tcb::span<const Group>);
+  void setGroup(GroupInfo);
   void setFrameCount(FrameIdx);
   void setMargin(int);
 
@@ -101,15 +102,20 @@ private:
   CelSpanPainter celPainter;
   QImage groupImg;
   QImage selectionImg;
-  
+  tcb::span<const Group> groupArray;
   FrameIdx frames = {};
   int margin = 0;
+  std::optional<GroupIdx> dragGroup;
 
   void setWidth();
-  FrameIdx getPos(QMouseEvent *);
+  int clampPos(QMouseEvent *) const;
+  FrameIdx framePos(int) const;
+  std::optional<FrameIdx> edgePos(int) const;
 
-  void paintEvent(QPaintEvent *);
-  void mousePressEvent(QMouseEvent *);
+  void mousePressEvent(QMouseEvent *) override;
+  void mouseMoveEvent(QMouseEvent *) override;
+  void mouseReleaseEvent(QMouseEvent *) override;
+  void paintEvent(QPaintEvent *) override;
 };
 
 class GroupScrollWidget final : public QScrollArea {

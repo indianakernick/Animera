@@ -65,6 +65,8 @@ TimelineWidget::TimelineWidget(QWidget *parent)
   CONNECT(cels,      shouldSetPos,            this, shouldSetPos);
   
   CONNECT(groups,    shouldSetGroup,          this, shouldSetGroup);
+  CONNECT(groups,    shouldMoveGroup,         this, shouldMoveGroup);
+  
   CONNECT(groupName, shouldSetName,           this, shouldSetGroupName);
   
   auto *grid = new QGridLayout{this};
@@ -87,16 +89,16 @@ void TimelineWidget::setSelection(const CelRect rect) {
   cels->setSelection(rect);
 }
 
-void TimelineWidget::setGroup(const GroupSpan span) {
-  groups->setGroup(span);
+void TimelineWidget::setGroup(const GroupInfo info) {
+  groups->setGroup(info);
 }
 
 void TimelineWidget::setGroupName(const std::string_view name) {
   groupName->setName(name);
 }
 
-void TimelineWidget::setGroups(const tcb::span<const Group> span) {
-  groups->setGroups(span);
+void TimelineWidget::setGroupArray(const tcb::span<const Group> array) {
+  groups->setGroupArray(array);
 }
 
 void TimelineWidget::setVisibility(const LayerIdx layer, const bool visible) {

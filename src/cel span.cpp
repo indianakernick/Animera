@@ -251,7 +251,51 @@ LayerCels::LayerCels(std::vector<CelSpan> spans)
   : spans{std::move(spans)} {}
 
 void GroupArray::setFrames(const FrameIdx frames) {
-  if (groups.empty()) {
+  if (frames <= FrameIdx{0}) {
+    groups.clear();
+  } else if (frames == FrameIdx{1}) {
+    if (groups.empty()) {
+      groups.push_back({frames, "Group 0"});
+    }
+    if (groups.size() > 1) {
+      groups.erase(groups.begin() + 1, groups.end());
+      groups.front().end = frames;
+    }
+  } else {
+    const FrameIdx half = frames / FrameIdx{2};
+    if (groups.size() == 0) {
+      groups.push_back({half, "Group 0"});
+    } else {
+      groups[0].end = half;
+    }
+    if (groups.size() == 1) {
+      groups.push_back({frames, "Group 1"});
+    } else {
+      groups[1].end = frames;
+    }
+    if (groups.size() > 2) {
+      groups.erase(groups.begin() + 2, groups.end());
+    }
+  }
+  
+  /*const auto frameCount = static_cast<std::size_t>(frames);
+  while (groups.size() < frameCount) {
+    groups.push_back({
+      static_cast<FrameIdx>(groups.size() + 1),
+      "Group " + std::to_string(groups.size())
+    });
+  }
+  if (groups.size() > frameCount) {
+    groups.erase(groups.begin() + frameCount, groups.end());
+  }*/
+  
+  /*if (groups.empty()) {
+    groups.push_back({frames, "Group 0"});
+  } else {
+    groups.front().end = frames;
+  }*/
+  
+  /*if (groups.empty()) {
     if (frames > FrameIdx{0}) {
       groups.push_back({frames, "Group 0"});
     }
@@ -278,21 +322,21 @@ void GroupArray::setFrames(const FrameIdx frames) {
     }
     --idx;
     groups.pop_back();
-  }
+  }*/
 }
 
-GroupSpan GroupArray::findSpan(FrameIdx idx) {
+GroupInfo GroupArray::findSpan(FrameIdx idx) {
   const auto iter = findIter(idx);
   assert(iter != groups.end());
-  GroupSpan span;
+  GroupInfo span;
   span.group = static_cast<GroupIdx>(iter - groups.begin());
   span.begin = iter == groups.begin() ? FrameIdx{0} : std::prev(iter)->end;
   span.end = iter->end;
   return span;
 }
 
-GroupSpan GroupArray::getSpan(const GroupIdx idx) {
-  GroupSpan span;
+GroupInfo GroupArray::getSpan(const GroupIdx idx) {
+  GroupInfo span;
   span.group = idx;
   span.begin = idx == GroupIdx{0} ? FrameIdx{0} : groups[+idx - 1].end;
   span.end = groups[+idx].end;
@@ -308,6 +352,20 @@ void GroupArray::split(const FrameIdx idx) {
   Group group{iter->end, "Group " + std::to_string(groups.size())};
   iter->end = idx;
   groups.insert(++iter, std::move(group));
+}
+
+bool GroupArray::move(const GroupIdx group, FrameIdx end) {
+  assert(GroupIdx{0} <= group);
+  assert(static_cast<std::size_t>(group) < groups.size() - 1);
+  const FrameIdx min = group == GroupIdx{0} ? FrameIdx{1} : groups[+group - 1].end + FrameIdx{1};
+  const FrameIdx max = groups[+group + 1].end - FrameIdx{1};
+  end = std::clamp(end, min, max);
+  if (groups[+group].end != end) {
+    groups[+group].end = end;
+    return true;
+  } else {
+    return false;
+  }
 }
 
 std::vector<Group>::iterator GroupArray::findIter(FrameIdx &idx) {
