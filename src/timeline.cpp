@@ -24,7 +24,10 @@ void Timeline::initDefault() {
   layer.spans.pushNull(frameCount);
   layer.name = "Layer 0";
   layers.push_back(std::move(layer));
-  groups.setFrames(frameCount);
+  Group newGroup;
+  newGroup.end = frameCount;
+  newGroup.name = "Group 0";
+  groups.push_back(std::move(newGroup));
   selection = empty_rect;
   group = GroupIdx{0};
   delay = ctrl_delay.def;
@@ -54,9 +57,9 @@ void Timeline::change() {
   Q_EMIT selectionChanged(selection);
   changeLayers(LayerIdx{0}, layerCount());
   Q_EMIT delayChanged(delay);
-  Q_EMIT groupChanged(groups.getSpan(group));
-  Q_EMIT groupNameChanged(groups.underlying()[+group].name);
-  Q_EMIT groupArrayChanged(groups.underlying());
+  Q_EMIT groupChanged(getGroup(groups, group));
+  Q_EMIT groupNameChanged(groups[+group].name);
+  Q_EMIT groupArrayChanged(groups);
 }
 
 Error Timeline::openImage(
@@ -74,12 +77,18 @@ Error Timeline::openImage(
   canvasSize = size = image.size();
   
   frameCount = FrameIdx{1};
+  
   Layer layer;
   layer.spans.pushNull(frameCount);
   layer.spans.begin()->cel->img = std::move(image);
   layer.name = "Layer 0";
   layers.push_back(std::move(layer));
-  groups.setFrames(frameCount);
+  
+  Group newGroup;
+  newGroup.end = frameCount;
+  newGroup.name = "Group 0";
+  groups.push_back(std::move(newGroup));
+  
   selection = empty_rect;
   group = GroupIdx{0};
   delay = ctrl_delay.def;
@@ -335,17 +344,16 @@ void Timeline::moveLayerDown() {
 void Timeline::insertFrame() {
   if (locked) return;
   ++frameCount;
-  // TODO: Insert into group
-  groups.setFrames(frameCount);
   changeFrameCount();
   for (LayerIdx l = {}; l != layerCount(); ++l) {
     layers[+l].spans.insert(pos.f);
     changeSpan(l);
   }
   Q_EMIT selectionChanged(selection);
+  insertGroupFrame(groups, pos.f);
+  Q_EMIT groupArrayChanged(groups);
+  Q_EMIT groupChanged(getGroup(groups, group));
   nextFrame();
-  Q_EMIT groupArrayChanged(groups.underlying());
-  Q_EMIT groupChanged(groups.getSpan(group));
   Q_EMIT modified();
 }
 
@@ -358,21 +366,23 @@ void Timeline::removeFrame() {
     }
   } else {
     --frameCount;
-    // TODO: Remove from group
-    groups.setFrames(frameCount);
     changeFrameCount();
     for (LayerIdx l = {}; l != layerCount(); ++l) {
       layers[+l].spans.remove(pos.f);
       changeSpan(l);
     }
     Q_EMIT selectionChanged(selection);
+    std::optional<GroupIdx> removed = removeGroupFrame(groups, pos.f);
+    if (removed && *removed < group) {
+      --group;
+    }
+    Q_EMIT groupArrayChanged(groups);
+    Q_EMIT groupChanged(getGroup(groups, group));
   }
   pos.f = std::max(pos.f - FrameIdx{1}, FrameIdx{0});
   changeFrame();
   changeCel();
   changePos();
-  Q_EMIT groupArrayChanged(groups.underlying());
-  Q_EMIT groupChanged(groups.getSpan(group));
   Q_EMIT modified();
 }
 
@@ -438,26 +448,23 @@ void Timeline::setGroup(const FrameIdx frame) {
   assert(FrameIdx{0} <= frame);
   assert(frame < frameCount);
   if (locked) return;
-  const GroupInfo span = groups.findSpan(frame);
-  group = span.group;
-  assert(group != GroupIdx{-1});
-  Q_EMIT groupChanged(span);
-  Q_EMIT groupNameChanged(groups.underlying()[+group].name);
+  const GroupInfo info = findGroup(groups, frame);
+  group = info.group;
+  Q_EMIT groupChanged(info);
+  Q_EMIT groupNameChanged(groups[+group].name);
 }
 
 void Timeline::setGroupName(const std::string_view name) {
-  groups.underlying()[+group].name = name;
+  groups[+group].name = name;
   Q_EMIT modified();
 }
 
 void Timeline::moveGroup(const GroupIdx idx, const FrameIdx end) {
-  assert(GroupIdx{0} <= idx);
-  assert(static_cast<std::size_t>(idx) < groups.underlying().size() - 1);
   if (locked) return;
-  if (groups.move(idx, end)) {
-    Q_EMIT groupArrayChanged(groups.underlying());
+  if (moveGroupBoundary(groups, idx, end)) {
+    Q_EMIT groupArrayChanged(groups);
     if (idx == group || idx + GroupIdx{1} == group) {
-      Q_EMIT groupChanged(groups.getSpan(group));
+      Q_EMIT groupChanged(getGroup(groups, group));
     }
   }
 }

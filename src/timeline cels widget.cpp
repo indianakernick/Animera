@@ -11,6 +11,7 @@
 #include "connect.hpp"
 #include "painting.hpp"
 #include <QtGui/qevent.h>
+#include "group array.hpp"
 #include <QtGui/qpainter.h>
 #include "config colors.hpp"
 #include "config geometry.hpp"
@@ -283,23 +284,7 @@ FrameIdx GroupsWidget::framePos(const int pos) const {
   return FrameIdx{pos / cel_width};
 }
 
-// returns left group
-std::optional<GroupIdx> findGroupEdge(tcb::span<const Group> groups, const FrameIdx rightFrame) {
-  if (groups.empty()) return std::nullopt;
-  if (rightFrame <= FrameIdx{0} || rightFrame >= groups.back().end) return std::nullopt;
-  
-  const auto compare = [](const Group &group, const FrameIdx frame) {
-    return group.end < frame;
-  };
-  const auto iter = std::lower_bound(groups.begin(), groups.end(), rightFrame, compare);
-  if (iter == groups.end()) return std::nullopt;
-  if (iter->end != rightFrame) return std::nullopt;
-  
-  return static_cast<GroupIdx>(iter - groups.begin());
-}
-
-// returns right frame
-std::optional<FrameIdx> GroupsWidget::edgePos(const int pos) const {
+std::optional<FrameIdx> GroupsWidget::boundaryPos(const int pos) const {
   const int relPos = pos % cel_width;
   const int frame = pos / cel_width;
   if (relPos < 1_px) {
@@ -313,8 +298,8 @@ std::optional<FrameIdx> GroupsWidget::edgePos(const int pos) const {
 
 void GroupsWidget::mousePressEvent(QMouseEvent *event) {
   const int pos = clampPos(event);
-  if (auto edge = edgePos(pos)) {
-    if (auto group = findGroupEdge(groupArray, *edge)) {
+  if (auto end = boundaryPos(pos)) {
+    if (auto group = findGroupBoundary(groupArray, *end)) {
       dragGroup = group;
       return;
     }
@@ -325,12 +310,12 @@ void GroupsWidget::mousePressEvent(QMouseEvent *event) {
 void GroupsWidget::mouseMoveEvent(QMouseEvent *event) {
   const int pos = clampPos(event);
   if (dragGroup) {
-    if (auto edge = edgePos(pos)) {
-      Q_EMIT shouldMoveGroup(*dragGroup, *edge);
+    if (auto end = boundaryPos(pos)) {
+      Q_EMIT shouldMoveGroup(*dragGroup, *end);
     }
   } else {
-    if (auto edge = edgePos(pos)) {
-      if (findGroupEdge(groupArray, *edge)) {
+    if (auto end = boundaryPos(pos)) {
+      if (findGroupBoundary(groupArray, *end)) {
         setCursor(Qt::SplitHCursor);
         return;
       }

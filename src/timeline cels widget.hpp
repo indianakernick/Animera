@@ -10,8 +10,8 @@
 #define animera_timeline_cels_widget_hpp
 
 #include "cel.hpp"
-#include <tcb/span.hpp>
 #include "cel span.hpp"
+#include "group array.hpp"
 #include <QtCore/qtimer.h>
 #include "cel span painter.hpp"
 #include "scroll bar widget.hpp"
@@ -110,7 +110,7 @@ private:
   void setWidth();
   int clampPos(QMouseEvent *) const;
   FrameIdx framePos(int) const;
-  std::optional<FrameIdx> edgePos(int) const;
+  std::optional<FrameIdx> boundaryPos(int) const;
 
   void mousePressEvent(QMouseEvent *) override;
   void mouseMoveEvent(QMouseEvent *) override;

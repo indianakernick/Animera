@@ -11,6 +11,7 @@
 
 #include "error.hpp"
 #include "cel span.hpp"
+#include "group array.hpp"
 #include "palette span.hpp"
 #include "export options.hpp"
 
@@ -130,7 +131,7 @@ Q_SIGNALS:
 private:
   std::vector<Layer> layers;
   std::vector<LayerCels> clipboard;
-  GroupArray groups;
+  std::vector<Group> groups;
   CelPos pos;
   CelRect selection;
   GroupIdx group;

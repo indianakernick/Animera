@@ -1,4 +1,4 @@
-﻿//
+//
 //  sprite file.cpp
 //  Animera
 //
@@ -200,12 +200,12 @@ Error writePLTE(QIODevice &dev, const PaletteCSpan colors, const Format format) 
   return e.msg();
 }
 
-Error writeGRUP(QIODevice &dev, const GroupArray &groups) try {
+Error writeGRUP(QIODevice &dev, const std::vector<Group> &groups) try {
   SCOPE_TIME("writeGRUP");
   
   ChunkWriter writer{dev};
   writer.begin(chunk_groups);
-  for (const Group &group : groups.underlying()) {
+  for (const Group &group : groups) {
     const std::uint32_t nameLen = static_cast<std::uint32_t>(group.name.size());
     writer.writeInt(static_cast<std::uint32_t>(group.end));
     writer.writeInt(nameLen);
@@ -474,7 +474,7 @@ bool validName(const std::string_view name) {
 
 }
 
-Error readGRUP(QIODevice &dev, GroupArray &groups) try {
+Error readGRUP(QIODevice &dev, std::vector<Group> &groups) try {
   SCOPE_TIME("readGRUP");
   
   ChunkReader reader{dev};
@@ -506,7 +506,7 @@ Error readGRUP(QIODevice &dev, GroupArray &groups) try {
     if (!validName(group.name)) {
       return "Group name contains non-ASCII characters";
     }
-    groups.underlying().push_back(std::move(group));
+    groups.push_back(std::move(group));
   }
   
   if (remaining != 0) {

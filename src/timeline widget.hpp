@@ -11,7 +11,7 @@
 
 #include "cel.hpp"
 #include "cel span.hpp"
-#include <tcb/span.hpp>
+#include "group array.hpp"
 #include <QtWidgets/qwidget.h>
 
 class ControlsWidget;

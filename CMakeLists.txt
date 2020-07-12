@@ -93,6 +93,8 @@ add_executable(Animera
     "src/gradient tool.cpp"
     "src/gradient tool.hpp"
     "src/graphics convert.hpp"
+    "src/group array.cpp"
+    "src/group array.hpp"
     "src/hex input widget.cpp"
     "src/hex input widget.hpp"
     "src/hex input widget.moc"
