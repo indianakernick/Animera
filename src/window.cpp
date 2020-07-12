@@ -334,6 +334,13 @@ void Window::populateMenubar() {
   ADD_ACTION(layer, "Layer Above", key_layer_above, sprite.timeline, layerAbove);
   ADD_ACTION(layer, "Layer Below", key_layer_below, sprite.timeline, layerBelow);
   
+  QMenu *group = menubar->addMenu("Group");
+  group->setFont(getGlobalFont());
+  ADD_ACTION(group, "Split to Left", {}, sprite.timeline, splitGroupLeft);
+  ADD_ACTION(group, "Split to Right", {}, sprite.timeline, splitGroupRight);
+  ADD_ACTION(group, "Merge with Left", {}, sprite.timeline, mergeGroupLeft);
+  ADD_ACTION(group, "Merge with Right", {}, sprite.timeline, mergeGroupRight);
+  
   QMenu *frame = menubar->addMenu("Frame");
   frame->setFont(getGlobalFont());
   ADD_ACTION(frame, "New Frame", key_new_frame, sprite.timeline, insertFrame);

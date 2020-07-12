@@ -92,6 +92,10 @@ public Q_SLOTS:
   void setGroup(FrameIdx);
   void setGroupName(std::string_view);
   void moveGroup(GroupIdx, FrameIdx);
+  void splitGroupLeft();
+  void splitGroupRight();
+  void mergeGroupLeft();
+  void mergeGroupRight();
   
   void setPos(CelPos);
   void setVisibility(LayerIdx, bool);
@@ -153,6 +157,8 @@ private:
   void changeLayerCount();
   void changeCel(QRect);
   void changeCel();
+  GroupInfo changeGroup(FrameIdx);
+  void changeGroupArray();
 };
 
 #endif

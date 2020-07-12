@@ -15,7 +15,9 @@
 #include <tcb/span.hpp>
 
 struct Group {
+  /// One-past-the-end frame for this group or the beginning of the next group.
   FrameIdx end;
+  /// Name of the group.
   std::string name;
 };
 
@@ -50,16 +52,55 @@ void insertGroupFrame(std::vector<Group> &array, FrameIdx frame);
 /// resized.
 std::optional<GroupIdx> removeGroupFrame(std::vector<Group> &array, FrameIdx frame);
 
-/// @brief Split a group at the given boundary.
+/// @brief Split a group at the given boundary, creating a new group on the
+/// left.
+///
+/// The given frame becomes the "end" frame for a new group created on the left
+/// side of the group under the frame. The group cannot be resized to zero size.
+///
+/// @sa splitGroupRight
+///
+/// @param array Group array.
+/// @param frame Desired "end" frame for the left group.
+/// @returns Whether the group was actually split.
+bool splitGroupLeft(std::vector<Group> &array, FrameIdx frame);
+
+/// @brief Split a group at the given boundary, creating a new group on the
+/// right.
 ///
 /// The given frame becomes the "end" frame for the group under the frame. A new
 /// group is created on the right side of the existing one to fill the space.
 /// The group cannot be resized to zero size.
 ///
+/// @sa splitGroupLeft
+///
 /// @param array Group array.
 /// @param frame Desired "end" frame for the left group.
 /// @returns Whether the group was actually split.
-bool splitGroup(std::vector<Group> &array, FrameIdx frame);
+bool splitGroupRight(std::vector<Group> &array, FrameIdx frame);
+
+/// @brief Merge the given group with the group on its left.
+///
+/// The group on the left is removed if it exists.
+///
+/// @sa mergeGroupRight
+///
+/// @param array Group array.
+/// @param group Index of the group to merge.
+/// @returns Whether the group was actually merged.
+bool mergeGroupLeft(std::vector<Group> &array, GroupIdx group);
+
+/// @brief Merge the given group with the group on its right.
+///
+/// The group on the right is removed if it exists and the given group is
+/// resized to fill the space.
+///
+/// @sa mergeGroupLeft
+///
+/// @param array Group array.
+/// @param group Index of the group to merge.
+/// @returns Whether the group was actually merged.
+bool mergeGroupRight(std::vector<Group> &array, GroupIdx group);
 
 /// @brief Find a group given its boundary.
 ///

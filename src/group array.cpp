@@ -81,7 +81,18 @@ std::optional<GroupIdx> removeGroupFrame(
   return group;
 }
 
-bool splitGroup(std::vector<Group> &groups, const FrameIdx frame) {
+bool splitGroupLeft(std::vector<Group> &groups, const FrameIdx frame) {
+  FrameIdx offset = frame;
+  auto iter = findGroupIter(groups.begin(), groups.end(), offset);
+  assert(iter != groups.end());
+  if (offset == FrameIdx{0}) return false;
+  
+  Group group{frame, "Group " + std::to_string(groups.size())};
+  groups.insert(iter, std::move(group));
+  return true;
+}
+
+bool splitGroupRight(std::vector<Group> &groups, const FrameIdx frame) {
   FrameIdx offset = frame;
   auto iter = findGroupIter(groups.begin(), groups.end(), offset);
   assert(iter != groups.end());
@@ -90,6 +101,26 @@ bool splitGroup(std::vector<Group> &groups, const FrameIdx frame) {
   Group group{iter->end, "Group " + std::to_string(groups.size())};
   iter->end = frame;
   groups.insert(++iter, std::move(group));
+  return true;
+}
+
+bool mergeGroupLeft(std::vector<Group> &groups, const GroupIdx group) {
+  assert(group >= GroupIdx{0});
+  assert(static_cast<std::size_t>(group) < groups.size());
+  if (group == GroupIdx{0}) return false;
+  
+  groups.erase(groups.begin() + (+group - 1));
+  return true;
+}
+
+bool mergeGroupRight(std::vector<Group> &groups, const GroupIdx group) {
+  assert(group >= GroupIdx{0});
+  assert(static_cast<std::size_t>(group) < groups.size());
+  if (static_cast<std::size_t>(group) == groups.size() - 1) return false;
+  
+  const auto next = groups.begin() + (+group + 1);
+  groups[+group].end = next->end;
+  groups.erase(next);
   return true;
 }
 

@@ -214,6 +214,7 @@ void Timeline::nextFrame() {
   changeFrame();
   changeCel();
   changePos();
+  changeGroup(pos.f);
 }
 
 void Timeline::prevFrame() {
@@ -223,6 +224,7 @@ void Timeline::prevFrame() {
   changeFrame();
   changeCel();
   changePos();
+  changeGroup(pos.f);
 }
 
 void Timeline::layerBelow() {
@@ -351,9 +353,11 @@ void Timeline::insertFrame() {
   }
   Q_EMIT selectionChanged(selection);
   insertGroupFrame(groups, pos.f);
-  Q_EMIT groupArrayChanged(groups);
-  Q_EMIT groupChanged(getGroup(groups, group));
-  nextFrame();
+  ++pos.f;
+  changeGroupArray();
+  changeFrame();
+  changeCel();
+  changePos();
   Q_EMIT modified();
 }
 
@@ -372,12 +376,12 @@ void Timeline::removeFrame() {
       changeSpan(l);
     }
     Q_EMIT selectionChanged(selection);
-    std::optional<GroupIdx> removed = removeGroupFrame(groups, pos.f);
+    const std::optional<GroupIdx> removed = removeGroupFrame(groups, pos.f);
     if (removed && *removed < group) {
       --group;
+      Q_EMIT groupNameChanged(groups[+group].name);
     }
-    Q_EMIT groupArrayChanged(groups);
-    Q_EMIT groupChanged(getGroup(groups, group));
+    changeGroupArray();
   }
   pos.f = std::max(pos.f - FrameIdx{1}, FrameIdx{0});
   changeFrame();
@@ -448,10 +452,10 @@ void Timeline::setGroup(const FrameIdx frame) {
   assert(FrameIdx{0} <= frame);
   assert(frame < frameCount);
   if (locked) return;
-  const GroupInfo info = findGroup(groups, frame);
-  group = info.group;
-  Q_EMIT groupChanged(info);
-  Q_EMIT groupNameChanged(groups[+group].name);
+  pos.f = changeGroup(frame).begin;
+  changeFrame();
+  changeCel();
+  changePos();
 }
 
 void Timeline::setGroupName(const std::string_view name) {
@@ -464,8 +468,40 @@ void Timeline::moveGroup(const GroupIdx idx, const FrameIdx end) {
   if (moveGroupBoundary(groups, idx, end)) {
     Q_EMIT groupArrayChanged(groups);
     if (idx == group || idx + GroupIdx{1} == group) {
-      Q_EMIT groupChanged(getGroup(groups, group));
+      changeGroup(pos.f);
     }
+  }
+}
+
+void Timeline::splitGroupLeft() {
+  if (locked) return;
+  if (::splitGroupLeft(groups, pos.f)) {
+    ++group;
+    changeGroupArray();
+  }
+}
+
+void Timeline::splitGroupRight() {
+  if (locked) return;
+  if (::splitGroupRight(groups, pos.f)) {
+    ++group;
+    changeGroupArray();
+    Q_EMIT groupNameChanged(groups[+group].name);
+  }
+}
+
+void Timeline::mergeGroupLeft() {
+  if (locked) return;
+  if (::mergeGroupLeft(groups, group)) {
+    --group;
+    changeGroupArray();
+  }
+}
+
+void Timeline::mergeGroupRight() {
+  if (locked) return;
+  if (::mergeGroupRight(groups, group)) {
+    changeGroupArray();
   }
 }
 
@@ -480,6 +516,7 @@ void Timeline::setPos(const CelPos newPos) {
     changeFrame();
     changeCel();
     changePos();
+    changeGroup(pos.f);
   } else if (pos.l != newPos.l) {
     pos.l = newPos.l;
     changePos();
@@ -641,6 +678,19 @@ void Timeline::changeCel(const QRect rect) {
 
 void Timeline::changeCel() {
   changeCel(toRect(canvasSize));
+}
+
+GroupInfo Timeline::changeGroup(const FrameIdx frame) {
+  const GroupInfo info = findGroup(groups, frame);
+  group = info.group;
+  Q_EMIT groupChanged(info);
+  Q_EMIT groupNameChanged(groups[+group].name);
+  return info;
+}
+
+void Timeline::changeGroupArray() {
+  Q_EMIT groupArrayChanged(groups);
+  Q_EMIT groupChanged(getGroup(groups, group));
 }
 
 #include "timeline.moc"
