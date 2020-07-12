@@ -7,7 +7,8 @@
 * [Standard Chunks](#standard-chunks)
   * [AHDR (Animation Header)](#ahdr-animation-header)
   * [PLTE (Palette)](#plte-palette)
-  * [LHDR (Layer Header)](#plte-palette)
+  * [GRPS (Groups)](#grps-groups)
+  * [LHDR (Layer Header)](#lhdr-layer-header)
   * [CHDR (Cel Header)](#chdr-cel-header)
   * [CDAT (Cel Data)](#cdat-cel-data)
   * [AEND (Animation End)](#aend-animation-end)
@@ -43,6 +44,7 @@ defined by the following pseudo-code.
 ```
 AHDR
 PLTE
+GRPS
 for each layer:
   LHDR
   for each span in layer:
@@ -84,13 +86,15 @@ See also: [PNG chunk layout](http://www.libpng.org/pub/png/spec/1.2/PNG-Structur
 | Int  | Width of the canvas in pixels [1, 32768]  |
 | Int  | Height of the canvas in pixels [1, 32768] |
 | Int  | Number of layers [1, 2147483647]          |
+| Int  | Number of groups [1, 2147483647]          |
 | Int  | Number of frames [1, 2147483647]          |
 | Int  | Animation delay in milliseconds [1, 999]  |
 | Byte | Pixel format (explained below)            |
 
-The number of layers corresponds to the number of LHDR chunks that follow this
-chunk. There are three valid values for the pixel format byte. These values
-happen to be the byte depth of the pixel format.
+The number of layers corresponds to the number of LHDR chunks. The number of
+groups corresponds to the number of groups in the GRPS chunk. There are three
+valid values for the pixel format byte. These values happen to be the byte depth
+of the pixel format.
 
 | Value | Description |
 |-------|-------------|
@@ -112,6 +116,19 @@ There can be no more than 256 palette entries. Trailing all-zero entries are
 assumed if they're not present. In other words, if the last few entries are
 all-zeros, they don't need to be written to the file. This is similar to the way
 PNG optimizes its PLTE and tRNS chunks.
+
+### GRPS (Groups)
+
+| Type   | Description                                              |
+|--------|----------------------------------------------------------|
+| Uint   | The end of this group or the beginning of the next group |
+| Uint   | Length of the name [0, 256]                              |
+| String | Name of this group [0, 256]                              |
+
+This chunk contains an array of groups. Each group has a boundary and a name.
+The boundary of the group is represented as the end frame. This is the frame
+after the last frame in the group, or equivalently, the first frame of the next
+group.
 
 ### LHDR (Layer Header)
 

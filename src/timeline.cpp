@@ -120,6 +120,7 @@ Error Timeline::serializeHead(QIODevice &dev) const {
   info.width = canvasSize.width();
   info.height = canvasSize.height();
   info.layers = layerCount();
+  info.groups = static_cast<GroupIdx>(groups.size());
   info.frames = frameCount;
   info.delay = delay;
   info.format = canvasFormat;
@@ -129,6 +130,7 @@ Error Timeline::serializeHead(QIODevice &dev) const {
 Error Timeline::serializeBody(QIODevice &dev) const {
   SCOPE_TIME("Timeline::serializeBody");
 
+  TRY(writeGRPS(dev, groups));
   for (const Layer &layer : layers) {
     TRY(writeLHDR(dev, layer));
     for (const CelSpan &span : layer.spans) {
@@ -152,6 +154,7 @@ Error Timeline::deserializeHead(QIODevice &dev, Format &format, QSize &size) {
   TRY(readAHDR(dev, info));
   canvasSize = size = {info.width, info.height};
   layers.resize(+info.layers);
+  groups.resize(+info.groups);
   frameCount = info.frames;
   canvasFormat = format = info.format;
   delay = info.delay;
@@ -161,6 +164,7 @@ Error Timeline::deserializeHead(QIODevice &dev, Format &format, QSize &size) {
 Error Timeline::deserializeBody(QIODevice &dev) {
   SCOPE_TIME("Timeline::deserializeBody");
 
+  TRY(readGRPS(dev, groups, frameCount));
   for (Layer &layer : layers) {
     TRY(readLHDR(dev, layer));
     for (CelSpan &span : layer.spans) {

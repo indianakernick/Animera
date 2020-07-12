@@ -397,7 +397,7 @@ void Window::connectSignals() {
   CONNECT(sprite.timeline, selectionChanged,        timeline,        setSelection);
   CONNECT(sprite.timeline, groupChanged,            timeline,        setGroup);
   CONNECT(sprite.timeline, groupNameChanged,        timeline,        setGroupName);
-  CONNECT(sprite.timeline, groupArrayChanged,           timeline,        setGroupArray);
+  CONNECT(sprite.timeline, groupArrayChanged,       timeline,        setGroupArray);
   CONNECT(sprite.timeline, visibilityChanged,       timeline,        setVisibility);
   CONNECT(sprite.timeline, layerNameChanged,        timeline,        setLayerName);
   CONNECT(sprite.timeline, layerChanged,            timeline,        setLayer);

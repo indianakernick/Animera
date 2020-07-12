@@ -1,4 +1,4 @@
-//
+﻿//
 //  sprite file.cpp
 //  Animera
 //
@@ -139,10 +139,11 @@ Error writeAHDR(QIODevice &dev, const SpriteInfo &info) try {
   SCOPE_TIME("writeAHDR");
 
   ChunkWriter writer{dev};
-  writer.begin(5 * file_int_size + 1, chunk_anim_header);
+  writer.begin(6 * file_int_size + 1, chunk_anim_header);
   writer.writeInt(info.width);
   writer.writeInt(info.height);
   writer.writeInt(static_cast<std::uint32_t>(info.layers));
+  writer.writeInt(static_cast<std::uint32_t>(info.groups));
   writer.writeInt(static_cast<std::uint32_t>(info.frames));
   writer.writeInt(info.delay);
   writer.writeByte(formatByte(info.format));
@@ -200,8 +201,8 @@ Error writePLTE(QIODevice &dev, const PaletteCSpan colors, const Format format) 
   return e.msg();
 }
 
-Error writeGRUP(QIODevice &dev, const std::vector<Group> &groups) try {
-  SCOPE_TIME("writeGRUP");
+Error writeGRPS(QIODevice &dev, const std::vector<Group> &groups) try {
+  SCOPE_TIME("writeGRPS");
   
   ChunkWriter writer{dev};
   writer.begin(chunk_groups);
@@ -363,13 +364,14 @@ Error readAHDR(QIODevice &dev, SpriteInfo &info) try {
   ChunkReader reader{dev};
   const ChunkStart start = reader.begin();
   TRY(expectedName(start, chunk_anim_header));
-  if (start.length != 5 * file_int_size + 1) {
+  if (start.length != 6 * file_int_size + 1) {
     return chunkLengthInvalid(start);
   }
   
   info.width = reader.readInt();
   info.height = reader.readInt();
   info.layers = static_cast<LayerIdx>(reader.readInt());
+  info.groups = static_cast<GroupIdx>(reader.readInt());
   info.frames = static_cast<FrameIdx>(reader.readInt());
   info.delay = reader.readInt();
   const std::uint8_t format = reader.readByte();
@@ -383,6 +385,7 @@ Error readAHDR(QIODevice &dev, SpriteInfo &info) try {
     return "Canvas height is out-of-range";
   }
   if (+info.layers <= 0) return "Layer count is out-of-range";
+  if (+info.groups <= 0) return "Group count is out-of-range";
   if (+info.frames <= 0) return "Frame count is out-of-range";
   if (info.delay < ctrl_delay.min || ctrl_delay.max < info.delay) {
     return "Animation delay is out-of-range";
@@ -474,16 +477,21 @@ bool validName(const std::string_view name) {
 
 }
 
-Error readGRUP(QIODevice &dev, std::vector<Group> &groups) try {
-  SCOPE_TIME("readGRUP");
+Error readGRPS(QIODevice &dev, std::vector<Group> &groups, const FrameIdx frameCount) try {
+  SCOPE_TIME("readGRPS");
   
   ChunkReader reader{dev};
   const ChunkStart start = reader.begin();
   TRY(expectedName(start, chunk_groups));
   std::size_t remaining = start.length;
-  
   std::uint32_t prevEnd = 0;
+  std::size_t index = 0;
+  
   while (remaining > 2 * file_int_size) {
+    if (index >= groups.size()) {
+      return "Group count is smaller than the number of groups found";
+    }
+    
     const std::uint32_t end = reader.readInt();
     const std::uint32_t nameLen = reader.readInt();
     remaining -= 2 * file_int_size;
@@ -498,19 +506,26 @@ Error readGRUP(QIODevice &dev, std::vector<Group> &groups) try {
     }
     remaining -= nameLen;
     
-    Group group;
-    group.end = static_cast<FrameIdx>(end);
-    group.name.resize(nameLen);
-    reader.readString(group.name.data(), nameLen);
+    groups[index].end = static_cast<FrameIdx>(end);
+    groups[index].name.resize(nameLen);
+    reader.readString(groups[index].name.data(), nameLen);
     
-    if (!validName(group.name)) {
+    if (!validName(groups[index].name)) {
       return "Group name contains non-ASCII characters";
     }
-    groups.push_back(std::move(group));
+    ++index;
   }
+  
+  TRY(reader.end());
   
   if (remaining != 0) {
     return chunkLengthInvalid(start);
+  }
+  if (groups.back().end != frameCount) {
+    return "Group boundaries are invalid";
+  }
+  if (index < groups.size()) {
+    return "Group count is larger than the number of groups found";
   }
   
   return {};
