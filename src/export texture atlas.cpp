@@ -41,10 +41,13 @@ Error eachFrame(const SpriteExportParams &params, const Sprite &sprite, Func fun
     celIters.push_back(layers[+l].spans.find(frameRange.min));
   }
   GroupIterator groupIter{sprite.timeline.getGroupArray(), frameRange.min};
+  bool changedGroup = true;
   
   ExportNameState state;
+  state.layer = layerRange.min;
   state.layerCount = LayerIdx{1};
   state.groupCount = sprite.timeline.getGroups();
+  state.layerName = layers[+layerRange.min].name;
   
   for (FrameIdx f = frameRange.min; f <= frameRange.max; ++f) {
     frame.clear();
@@ -56,15 +59,15 @@ Error eachFrame(const SpriteExportParams &params, const Sprite &sprite, Func fun
       ++celIters[+l];
     }
     
-    const GroupInfo info = groupIter.info();
-    state.layer = layerRange.min;
-    state.group = info.group;
-    state.frame = f - info.begin;
-    state.frameCount = info.end - info.begin;
-    state.groupBegin = info.begin;
-    state.layerName = layers[+layerRange.min].name;
-    state.groupName = groupIter.name();
-    ++groupIter;
+    if (changedGroup) {
+      const GroupInfo info = groupIter.info();
+      state.group = info.group;
+      state.frameCount = info.end - info.begin;
+      state.groupBegin = info.begin;
+      state.groupName = groupIter.name();
+    }
+    state.frame = f - state.groupBegin;
+    changedGroup = groupIter.incr();
     
     TRY(func(frame, state));
   }
@@ -74,8 +77,6 @@ Error eachFrame(const SpriteExportParams &params, const Sprite &sprite, Func fun
 
 template <typename Func>
 Error eachCel(const SpriteExportParams &params, const Sprite &sprite, Func func) {
-  // constexpr bool calculate_state = std::is_invocable_v<Func, const Cel *, const ExportNameState &>;
-  
   const tcb::span<const Layer> layers = sprite.timeline.getLayerArray();
   const LayerRange layerRange = params.layers;
   const FrameRange frameRange = params.frames;
@@ -89,22 +90,27 @@ Error eachCel(const SpriteExportParams &params, const Sprite &sprite, Func func)
     if (!includeLayer(layerRange.vis, layer.visible)) continue;
     auto celIter = layer.spans.find(frameRange.min);
     GroupIterator groupIter{sprite.timeline.getGroupArray(), frameRange.min};
+    bool changedGroup = true;
     
     state.layer = l;
     state.layerName = layer.name;
     
     for (FrameIdx f = frameRange.min; f <= frameRange.max; ++f) {
-      if (const Cel *cel = *celIter; *cel) {
+      if (changedGroup) {
         const GroupInfo info = groupIter.info();
         state.group = info.group;
-        state.frame = f - info.begin;
         state.frameCount = info.end - info.begin;
         state.groupBegin = info.begin;
         state.groupName = groupIter.name();
+      }
+      
+      if (const Cel *cel = *celIter; *cel) {
+        state.frame = f - state.groupBegin;
         TRY(func(cel, state));
       }
+      
       ++celIter;
-      ++groupIter;
+      changedGroup = groupIter.incr();
     }
   }
   
