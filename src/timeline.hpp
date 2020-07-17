@@ -13,7 +13,6 @@
 #include "cel span.hpp"
 #include "group array.hpp"
 #include "palette span.hpp"
-#include "export options.hpp"
 
 // TODO: can we make the interface of Timeline smaller?
 
@@ -55,12 +54,14 @@ public:
   Error deserializeBody(QIODevice &);
   Error deserializeTail(QIODevice &);
 
-  Error exportTimeline(const ExportOptions &, PaletteCSpan) const;
-
   LayerIdx getLayers() const;
+  GroupIdx getGroups() const;
   FrameIdx getFrames() const;
   CelPos getPos() const;
   CelRect getSelection() const;
+  
+  tcb::span<const Layer> getLayerArray() const;
+  tcb::span<const Group> getGroupArray() const;
 
 public Q_SLOTS:
   void initCanvas(Format, QSize);

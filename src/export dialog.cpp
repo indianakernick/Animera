@@ -14,11 +14,11 @@
 #include <QtGui/qevent.h>
 #include "label widget.hpp"
 #include "config colors.hpp"
-#include "export pattern.hpp"
-#include "export options.hpp"
+#include "export params.hpp"
 #include "combo box widget.hpp"
 #include "file input widget.hpp"
 #include <QtWidgets/qboxlayout.h>
+#include "png export backend.hpp"
 #include <QtWidgets/qgridlayout.h>
 #include "number input widget.hpp"
 #include "text push button widget.hpp"
@@ -32,20 +32,18 @@ ExportDialog::ExportDialog(QWidget *parent, const Format format)
   connectSignals();
 }
 
-void ExportDialog::setLayers(const LayerIdx count) {
-  layers = count;
+void ExportDialog::setPath(const QString &path) {
+  if (name->text().isEmpty()) {
+    int begin = path.lastIndexOf(QDir::separator());
+    int end = path.lastIndexOf('.');
+    begin += 1;
+    end = end == -1 ? path.size() : end;
+    name->setText(QString{path.data() + begin, end - begin});
+  }
 }
 
-void ExportDialog::setFrames(const FrameIdx count) {
-  frames = count;
-}
-
-void ExportDialog::setPos(const CelPos newPos) {
-  pos = newPos;
-}
-
-void ExportDialog::setSelection(const CelRect rect) {
-  selection = rect;
+void ExportDialog::setInfo(const ExportSpriteInfo &newInfo) {
+  info = newInfo;
 }
 
 namespace {
@@ -58,66 +56,55 @@ const char *formatNames[] = {
   "Monochrome"
 };
 
-ExportFormat formatFromString(const QString &format) {
+PixelFormat formatFromString(const QString &format) {
   for (std::size_t f = 0; f != std::size(formatNames); ++f) {
     if (format == formatNames[f]) {
-      return static_cast<ExportFormat>(f);
+      return static_cast<PixelFormat>(f);
     }
   }
   Q_UNREACHABLE();
 }
 
-QString formatToString(const ExportFormat format) {
+QString formatToString(const PixelFormat format) {
   return formatNames[static_cast<std::size_t>(format)];
 }
 
 }
 
 void ExportDialog::submit() {
-  ExportOptions options;
-  options.name = name->text();
-  options.directory = dir->path();
+  ExportParams params;
+  params.name = "";
+  params.directory = dir->path();
+  params.pixelFormat = formatFromString(formatSelect->currentText());
+  params.backend = std::make_unique<PngExportBackend>();
   
-  const QString layerStr = layerSelect->currentText();
-         if (layerStr == "All") {
-    options.selection.minL = LayerIdx{};
-    options.selection.maxL = layers - LayerIdx{1};
-  } else if (layerStr == "Current") {
-    options.selection.minL = options.selection.maxL = pos.l;
-  } else if (layerStr == "Selected") {
-    options.selection.minL = selection.minL;
-    options.selection.maxL = selection.maxL;
-  } else Q_UNREACHABLE();
+  SpriteExportParams &spriteParams = params.sprites.emplace_back();
   
-  const QString frameStr = frameSelect->currentText();
-         if (frameStr == "All") {
-    options.selection.minF = FrameIdx{};
-    options.selection.maxF = frames - FrameIdx{1};
-  } else if (frameStr == "Current") {
-    options.selection.minF = options.selection.maxF = pos.f;
-  } else if (frameStr == "Selected") {
-    options.selection.minF = selection.minF;
-    options.selection.maxF = selection.maxF;
-  } else Q_UNREACHABLE();
+  spriteParams.name.name = name->text();
+  spriteParams.name.layerName = LayerNameMode{layerName->currentIndex()};
+  spriteParams.name.groupName = GroupNameMode{groupName->currentIndex()};
+  spriteParams.name.frameName = FrameNameMode{frameName->currentIndex()};
   
-  options.format = formatFromString(formatSelect->currentText());
-  options.visibility = ExportVis{visibility->currentIndex()};
-  options.scaleX = scaleX->value();
-  options.scaleY = scaleY->value();
-  options.angle = rotate->currentIndex();
-  options.composite = composite->currentText() == "Enabled";
+  spriteParams.transform.scaleX = scaleX->value();
+  spriteParams.transform.scaleY = scaleY->value();
+  spriteParams.transform.angle = rotate->currentIndex();
   
-  Q_EMIT exportSprite(options);
+  spriteParams.layers = selectLayers(info, LayerSelection{layerSelect->currentIndex()});
+  spriteParams.frames = selectFrames(info, FrameSelection{frameSelect->currentIndex()});
+  
+  spriteParams.composite = composite->currentText() == "Enabled";
+  
+  Q_EMIT exportSprite(params);
 }
 
 void ExportDialog::updateFormatItems(const QString &compositeStr) {
   if (format == Format::index) {
     if (compositeStr == "Enabled" && formatSelect->count() == 3) {
-      formatSelect->clearWithItem(formatToString(ExportFormat::rgba));
+      formatSelect->clearWithItem(formatToString(PixelFormat::rgba));
     } else if (formatSelect->count() == 1) {
-      formatSelect->clearWithItem(formatToString(ExportFormat::index));
-      formatSelect->addItem(formatToString(ExportFormat::gray));
-      formatSelect->addItem(formatToString(ExportFormat::monochrome));
+      formatSelect->clearWithItem(formatToString(PixelFormat::index));
+      formatSelect->addItem(formatToString(PixelFormat::gray));
+      formatSelect->addItem(formatToString(PixelFormat::monochrome));
     }
   }
 }
@@ -125,15 +112,15 @@ void ExportDialog::updateFormatItems(const QString &compositeStr) {
 void ExportDialog::addFormatOptions() {
   switch (format) {
     case Format::rgba:
-      formatSelect->addItem(formatToString(ExportFormat::rgba));
+      formatSelect->addItem(formatToString(PixelFormat::rgba));
       break;
     case Format::index:
-      formatSelect->addItem(formatToString(ExportFormat::rgba));
+      formatSelect->addItem(formatToString(PixelFormat::rgba));
       break;
     case Format::gray:
-      formatSelect->addItem(formatToString(ExportFormat::gray_alpha));
-      formatSelect->addItem(formatToString(ExportFormat::gray));
-      formatSelect->addItem(formatToString(ExportFormat::monochrome));
+      formatSelect->addItem(formatToString(PixelFormat::gray_alpha));
+      formatSelect->addItem(formatToString(PixelFormat::gray));
+      formatSelect->addItem(formatToString(PixelFormat::monochrome));
       break;
     default: Q_UNREACHABLE();
   }
@@ -141,42 +128,54 @@ void ExportDialog::addFormatOptions() {
 
 void ExportDialog::createWidgets() {
   name = new TextInputWidget{this, textBoxRect(16)};
-  auto *validator = new ExportPatternValidator{name};
-  name->setValidator(validator);
-  name->setText(validator->defaultText());
   
-  dir = new FileInputWidget{this, 40};
+  dir = new FileInputWidget{this, 55};
   dir->setPath(getDirSettings(pref_export_dir));
   
-  layerSelect = new ComboBoxWidget{this, 14};
+  layerName = new ComboBoxWidget{this, 11};
+  layerName->addItem("Auto layer");
+  layerName->addItem("Layer name");
+  layerName->addItem("Layer index");
+  layerName->addItem("Empty");
+  
+  groupName = new ComboBoxWidget{this, 11};
+  groupName->addItem("Auto group");
+  groupName->addItem("Group name");
+  groupName->addItem("Group index");
+  groupName->addItem("Empty");
+  
+  frameName = new ComboBoxWidget{this, 14};
+  frameName->addItem("Auto frame");
+  frameName->addItem("Relative frame");
+  frameName->addItem("Absolute frame");
+  frameName->addItem("Empty");
+  
+  layerSelect = new ComboBoxWidget{this, 8};
+  layerSelect->addItem("Visible");
+  layerSelect->addItem("Hidden");
   layerSelect->addItem("All");
   layerSelect->addItem("Current");
   layerSelect->addItem("Selected");
   
-  frameSelect = new ComboBoxWidget{this, 14};
+  frameSelect = new ComboBoxWidget{this, 8};
   frameSelect->addItem("All");
   frameSelect->addItem("Current");
   frameSelect->addItem("Selected");
   
-  composite = new ComboBoxWidget{this, 10};
+  composite = new ComboBoxWidget{this, 8};
   composite->addItem("Enabled");
   composite->addItem("Disabled");
-  
-  visibility = new ComboBoxWidget{this, 10};
-  visibility->addItem("Visible");
-  visibility->addItem("Hidden");
-  visibility->addItem("All");
   
   scaleX = new NumberInputWidget{this, textBoxRect(3), expt_scale, true};
   scaleY = new NumberInputWidget{this, textBoxRect(3), expt_scale, true};
   
-  rotate = new ComboBoxWidget{this, 14};
+  rotate = new ComboBoxWidget{this, 10};
   rotate->addItem("0");
   rotate->addItem("90");
   rotate->addItem("180");
   rotate->addItem("270");
   
-  formatSelect = new ComboBoxWidget{this, 14};
+  formatSelect = new ComboBoxWidget{this, 11};
   addFormatOptions();
   
   ok = new TextPushButtonWidget{this, textBoxRect(8), "Export"};
@@ -204,41 +203,39 @@ void ExportDialog::setupLayout() {
   
   auto *dirLayout = makeLayout<QHBoxLayout>(layout);
   dirLayout->addWidget(makeLabel(this, "Folder: "));
+  dirLayout->addSpacing(1_px);
   dirLayout->addWidget(dir);
   dirLayout->addStretch();
   
   auto *nameLayout = makeLayout<QHBoxLayout>(layout);
   nameLayout->addWidget(makeLabel(this, "Name: "));
-  nameLayout->addSpacing(4_px);
   nameLayout->addWidget(name);
-  nameLayout->addStretch();
-  nameLayout->addWidget(makeLabel(this, "Format: "));
-  nameLayout->addWidget(formatSelect);
+  nameLayout->addWidget(layerName);
+  nameLayout->addWidget(groupName);
+  nameLayout->addWidget(frameName);
   
-  auto *layerLayout = makeLayout<QHBoxLayout>(layout);
-  layerLayout->addWidget(makeLabel(this, "Composite: "));
-  layerLayout->addSpacing(2_px);
-  layerLayout->addWidget(composite);
-  layerLayout->addStretch();
-  layerLayout->addWidget(makeLabel(this, "Layers: "));
-  layerLayout->addWidget(layerSelect);
+  auto *firstLayout = makeLayout<QHBoxLayout>(layout);
+  firstLayout->addWidget(makeLabel(this, "Composite: "));
+  firstLayout->addWidget(composite);
+  firstLayout->addStretch();
+  firstLayout->addWidget(makeLabel(this, "Layers: "));
+  firstLayout->addWidget(layerSelect);
+  firstLayout->addStretch();
+  firstLayout->addWidget(makeLabel(this, "Scale: X "));
+  firstLayout->addWidget(scaleX);
+  firstLayout->addWidget(makeLabel(this, " Y "));
+  firstLayout->addWidget(scaleY);
   
-  auto *frameLayout = makeLayout<QHBoxLayout>(layout);
-  frameLayout->addWidget(makeLabel(this, "Layer vis: "));
-  frameLayout->addSpacing(2_px);
-  frameLayout->addWidget(visibility);
-  frameLayout->addStretch();
-  frameLayout->addWidget(makeLabel(this, "Frames: "));
-  frameLayout->addWidget(frameSelect);
-  
-  auto *transformLayout = makeLayout<QHBoxLayout>(layout);
-  transformLayout->addWidget(makeLabel(this, "Scale by: X "));
-  transformLayout->addWidget(scaleX);
-  transformLayout->addWidget(makeLabel(this, " Y "));
-  transformLayout->addWidget(scaleY);
-  transformLayout->addStretch();
-  transformLayout->addWidget(makeLabel(this, "Rotate: "));
-  transformLayout->addWidget(rotate);
+  auto *secondLayout = makeLayout<QHBoxLayout>(layout);
+  secondLayout->addWidget(makeLabel(this, "Format: "));
+  secondLayout->addWidget(formatSelect);
+  secondLayout->addStretch();
+  secondLayout->addWidget(makeLabel(this, "Frames: "));
+  secondLayout->addWidget(frameSelect);
+  secondLayout->addStretch();
+  secondLayout->addWidget(makeLabel(this, "Rotate: "));
+  secondLayout->addSpacing(2_px);
+  secondLayout->addWidget(rotate);
   
   auto *buttonLayout = makeLayout<QHBoxLayout>(layout);
   buttonLayout->addStretch();

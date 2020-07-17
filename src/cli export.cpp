@@ -8,13 +8,14 @@
 
 #include "cli export.hpp"
 
+#if 0
+
 #include <charconv>
 #include "sprite.hpp"
 #include "strings.hpp"
 #include <QtCore/qdir.h>
+#include "export params.hpp"
 #include "docopt helpers.hpp"
-#include "export pattern.hpp"
-#include "export options.hpp"
 #include <QtCore/qtextstream.h>
 #include <QtCore/qcoreapplication.h>
 
@@ -35,13 +36,13 @@ const char *formatNames[] = {
   "monochrome"
 };
 
-QString formatNamesList(std::initializer_list<ExportFormat> formats) {
+QString formatNamesList(std::initializer_list<PixelFormat> formats) {
   return validListStr("formats", formats.size(), [formats](QString &str, std::size_t i) {
     str += formatNames[static_cast<std::size_t>(formats.begin()[i])];
   });
 }
 
-Error setFormat(ExportFormat &format, const docopt::value &formatValue) {
+Error setFormat(PixelFormat &format, const docopt::value &formatValue) {
   if (!setEnum(format, formatValue.asString(), formatNames)) {
     return "Invalid export format" + validListStr("formats", formatNames);
   }
@@ -49,9 +50,9 @@ Error setFormat(ExportFormat &format, const docopt::value &formatValue) {
 }
 
 Error checkFormat(
-  const ExportFormat format,
+  const PixelFormat format,
   const QString &canvasFormat,
-  std::initializer_list<ExportFormat> formats
+  std::initializer_list<PixelFormat> formats
 ) {
   if (std::find(formats.begin(), formats.end(), format) == formats.end()) {
     QString msg = "Invalid export format for ";
@@ -66,18 +67,18 @@ Error checkFormat(
 Error checkFormat(const ExportOptions &options, const Format canvasFormat) {
   switch (canvasFormat) {
     case Format::rgba:
-      return checkFormat(options.format, "rgba", {ExportFormat::rgba});
+      return checkFormat(options.format, "rgba", {PixelFormat::rgba});
     case Format::index:
       if (options.composite) {
-        return checkFormat(options.format, "index", {ExportFormat::rgba});
+        return checkFormat(options.format, "index", {PixelFormat::rgba});
       } else {
         return checkFormat(options.format, "index", {
-          ExportFormat::index, ExportFormat::gray, ExportFormat::monochrome
+          PixelFormat::index, PixelFormat::gray, PixelFormat::monochrome
         });
       }
     case Format::gray:
       return checkFormat(options.format, "gray", {
-        ExportFormat::gray_alpha, ExportFormat::gray, ExportFormat::monochrome
+        PixelFormat::gray_alpha, PixelFormat::gray, PixelFormat::monochrome
       });
   }
   return {};
@@ -295,3 +296,5 @@ int cliExport(int &argc, char **argv, const docopt::Options &flags) {
   
   return 0;
 }
+
+#endif

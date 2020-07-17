@@ -159,3 +159,32 @@ GroupInfo getGroup(const tcb::span<const Group> groups, const GroupIdx group) {
   info.end = groups[+group].end;
   return info;
 }
+
+GroupIterator::GroupIterator(const tcb::span<const Group> array, FrameIdx frame)
+  : array{array},
+    iter{findGroupIter(array.begin(), array.end(), frame)},
+    frame{frame} {
+  assert(iter != array.end());
+}
+
+GroupIterator &GroupIterator::operator++() {
+  assert(iter != array.end());
+  assert(FrameIdx{0} <= frame);
+  assert(frame < iter->end);
+  if (++frame == iter->end) ++iter;
+  return *this;
+}
+
+GroupInfo GroupIterator::info() const {
+  assert(iter != array.end());
+  GroupInfo info;
+  info.group = static_cast<GroupIdx>(iter - array.begin());
+  info.begin = iter == array.begin() ? FrameIdx{0} : std::prev(iter)->end;
+  info.end = iter->end;
+  return info;
+}
+
+std::string_view GroupIterator::name() const {
+  assert(iter != array.end());
+  return iter->name;
+}

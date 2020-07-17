@@ -214,7 +214,7 @@ int CLI::exec() {
   } else if (flags.at("info").asBool()) {
     return cliInfo(argc, argv, flags);
   } else if (flags.at("export").asBool()) {
-    return cliExport(argc, argv, flags);
+    return {}; //cliExport(argc, argv, flags);
   } else {
     return execDefault(flags);
   }

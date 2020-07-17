@@ -22,7 +22,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_ExportDialog_t {
     QByteArrayData data[6];
-    char stringdata0[66];
+    char stringdata0[65];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -34,12 +34,12 @@ static const qt_meta_stringdata_ExportDialog_t qt_meta_stringdata_ExportDialog =
 QT_MOC_LITERAL(0, 0, 12), // "ExportDialog"
 QT_MOC_LITERAL(1, 13, 12), // "exportSprite"
 QT_MOC_LITERAL(2, 26, 0), // ""
-QT_MOC_LITERAL(3, 27, 13), // "ExportOptions"
-QT_MOC_LITERAL(4, 41, 6), // "submit"
-QT_MOC_LITERAL(5, 48, 17) // "updateFormatItems"
+QT_MOC_LITERAL(3, 27, 12), // "ExportParams"
+QT_MOC_LITERAL(4, 40, 6), // "submit"
+QT_MOC_LITERAL(5, 47, 17) // "updateFormatItems"
 
     },
-    "ExportDialog\0exportSprite\0\0ExportOptions\0"
+    "ExportDialog\0exportSprite\0\0ExportParams\0"
     "submit\0updateFormatItems"
 };
 #undef QT_MOC_LITERAL
@@ -80,7 +80,7 @@ void ExportDialog::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         auto *_t = static_cast<ExportDialog *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->exportSprite((*reinterpret_cast< const ExportOptions(*)>(_a[1]))); break;
+        case 0: _t->exportSprite((*reinterpret_cast< const ExportParams(*)>(_a[1]))); break;
         case 1: _t->submit(); break;
         case 2: _t->updateFormatItems((*reinterpret_cast< const QString(*)>(_a[1]))); break;
         default: ;
@@ -88,7 +88,7 @@ void ExportDialog::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
     } else if (_c == QMetaObject::IndexOfMethod) {
         int *result = reinterpret_cast<int *>(_a[0]);
         {
-            using _t = void (ExportDialog::*)(const ExportOptions & );
+            using _t = void (ExportDialog::*)(const ExportParams & );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ExportDialog::exportSprite)) {
                 *result = 0;
                 return;
@@ -138,7 +138,7 @@ int ExportDialog::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void ExportDialog::exportSprite(const ExportOptions & _t1)
+void ExportDialog::exportSprite(const ExportParams & _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);

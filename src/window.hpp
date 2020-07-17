@@ -27,6 +27,7 @@ class ColorPickerWidget;
 class QMenuBar;
 class ExportDialog;
 class StatusObject;
+struct ExportParams;
 
 class Window final : public QMainWindow {
   Q_OBJECT
@@ -73,7 +74,7 @@ private:
   void saveToPath(const QString &);
   void saveFile();
   void saveFileDialog();
-  void exportSprite(const ExportOptions &);
+  void exportSprite(const ExportParams &);
   void exportDialog();
   void exportFrame(const QString &);
   void exportFrameDialog();

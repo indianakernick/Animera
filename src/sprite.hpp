@@ -25,7 +25,6 @@ public Q_SLOTS:
   Error saveFile(const QString &) const;
   Error openFile(const QString &);
   Error openImage(const QString &);
-  Error exportSprite(const ExportOptions &) const;
   
 Q_SIGNALS:
   void canvasInitialized(Format, QSize);

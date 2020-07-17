@@ -18,6 +18,12 @@
 		4513145822D5A29800D66262 /* picker impl rgba.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4513145622D5A29800D66262 /* picker impl rgba.cpp */; };
 		4513145B22D5A2A500D66262 /* picker impl gray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4513145922D5A2A500D66262 /* picker impl gray.cpp */; };
 		4515AB9E24BAA17A0052C8BF /* group array.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4515AB9C24BAA17A0052C8BF /* group array.cpp */; };
+		4515ABA324BE81D00052C8BF /* export params.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4515ABA124BE81D00052C8BF /* export params.cpp */; };
+		4515ABA624BE95670052C8BF /* export name.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4515ABA424BE95670052C8BF /* export name.cpp */; };
+		4515ABA924BE9C740052C8BF /* abstract export params.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4515ABA724BE9C740052C8BF /* abstract export params.cpp */; };
+		4515ABAC24BE9E2E0052C8BF /* export backend.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4515ABAA24BE9E2E0052C8BF /* export backend.cpp */; };
+		4515ABAF24BE9FCD0052C8BF /* export texture atlas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4515ABAD24BE9FCD0052C8BF /* export texture atlas.cpp */; };
+		4515ABB424C000F50052C8BF /* png export backend.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4515ABB224C000F50052C8BF /* png export backend.cpp */; };
 		45161F0622F1399A0036BBED /* timeline painting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45161F0422F1399A0036BBED /* timeline painting.cpp */; };
 		451A237D24B979B700160390 /* cel span painter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 451A237B24B979B600160390 /* cel span painter.cpp */; };
 		4529A9FD239263110034A014 /* docopt helpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4529A9FB239263110034A014 /* docopt helpers.cpp */; };
@@ -50,7 +56,6 @@
 		4549BB47243BFF4D00B1A62A /* common.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 4549BB16243BFF3200B1A62A /* common.hpp */; };
 		4549BB48243BFF4D00B1A62A /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4549BB17243BFF3200B1A62A /* main.cpp */; };
 		4549BB49243BFFF700B1A62A /* docopt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4549BB3D243BFF3200B1A62A /* docopt.cpp */; };
-		454E990B2348200B0059274C /* sprite export.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 454E99092348200B0059274C /* sprite export.cpp */; };
 		454E990F2349A9B40059274C /* gradient tool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 454E990D2349A9B40059274C /* gradient tool.cpp */; };
 		455486BF23449254001D5611 /* native mac.mm in Sources */ = {isa = PBXBuildFile; fileRef = 455486BE23449254001D5611 /* native mac.mm */; };
 		455CE08224B59B750050EEDB /* COPYING in Resources */ = {isa = PBXBuildFile; fileRef = 455CE08124B59B750050EEDB /* COPYING */; };
@@ -69,7 +74,6 @@
 		457D74FF239F97A6009B4E4B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 455F285B2206890300C73F39 /* Assets.xcassets */; };
 		457DC0BD22E7D6160000777B /* file input widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 457DC0BB22E7D6160000777B /* file input widget.cpp */; };
 		457DC0C222E9518A0000777B /* cel span.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 457DC0C022E9518A0000777B /* cel span.cpp */; };
-		457DC0C622EA93FC0000777B /* export pattern.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 457DC0C422EA93FC0000777B /* export pattern.cpp */; };
 		4595D48622BCA0E000607D64 /* scroll bar widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4595D48422BCA0E000607D64 /* scroll bar widget.cpp */; };
 		4595D48C22C05E5400607D64 /* timeline cels widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4595D48A22C05E5400607D64 /* timeline cels widget.cpp */; };
 		4595D48F22C061DF00607D64 /* timeline layers widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4595D48D22C061DF00607D64 /* timeline layers widget.cpp */; };
@@ -88,7 +92,6 @@
 		45C447FB22F6B57000B65AD3 /* png.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45C447F922F6B57000B65AD3 /* png.cpp */; };
 		45C5C8BA237A65820056CEE7 /* status object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45C5C8B8237A65820056CEE7 /* status object.cpp */; };
 		45C5C8D22389219C0056CEE7 /* cli.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45C5C8D02389219C0056CEE7 /* cli.cpp */; };
-		45C5C8D4238A13AA0056CEE7 /* export options.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45C5C8D3238A13AA0056CEE7 /* export options.cpp */; };
 		45CAC92922CC7B5800F945BF /* sample object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45CAC92722CC7B5800F945BF /* sample object.cpp */; };
 		45CB77E92490964A00EC11A7 /* keys dialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45CB77E72490964A00EC11A7 /* keys dialog.cpp */; };
 		45CFA7CF22A4C1C40059DB41 /* palette widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45CFA7CD22A4C1C40059DB41 /* palette widget.cpp */; };
@@ -150,6 +153,18 @@
 		4513145A22D5A2A500D66262 /* picker impl gray.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "picker impl gray.hpp"; sourceTree = "<group>"; };
 		4515AB9C24BAA17A0052C8BF /* group array.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "group array.cpp"; sourceTree = "<group>"; };
 		4515AB9D24BAA17A0052C8BF /* group array.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "group array.hpp"; sourceTree = "<group>"; };
+		4515ABA124BE81D00052C8BF /* export params.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "export params.cpp"; sourceTree = "<group>"; };
+		4515ABA224BE81D00052C8BF /* export params.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "export params.hpp"; sourceTree = "<group>"; };
+		4515ABA424BE95670052C8BF /* export name.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "export name.cpp"; sourceTree = "<group>"; };
+		4515ABA524BE95670052C8BF /* export name.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "export name.hpp"; sourceTree = "<group>"; };
+		4515ABA724BE9C740052C8BF /* abstract export params.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "abstract export params.cpp"; sourceTree = "<group>"; };
+		4515ABA824BE9C740052C8BF /* abstract export params.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "abstract export params.hpp"; sourceTree = "<group>"; };
+		4515ABAA24BE9E2E0052C8BF /* export backend.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "export backend.cpp"; sourceTree = "<group>"; };
+		4515ABAB24BE9E2E0052C8BF /* export backend.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "export backend.hpp"; sourceTree = "<group>"; };
+		4515ABAD24BE9FCD0052C8BF /* export texture atlas.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "export texture atlas.cpp"; sourceTree = "<group>"; };
+		4515ABAE24BE9FCD0052C8BF /* export texture atlas.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "export texture atlas.hpp"; sourceTree = "<group>"; };
+		4515ABB224C000F50052C8BF /* png export backend.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "png export backend.cpp"; sourceTree = "<group>"; };
+		4515ABB324C000F50052C8BF /* png export backend.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "png export backend.hpp"; sourceTree = "<group>"; };
 		45161F0022F11EB60036BBED /* todo.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = todo.txt; sourceTree = "<group>"; };
 		45161F0422F1399A0036BBED /* timeline painting.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "timeline painting.cpp"; sourceTree = "<group>"; };
 		45161F0522F1399A0036BBED /* timeline painting.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "timeline painting.hpp"; sourceTree = "<group>"; };
@@ -638,8 +653,6 @@
 		4549BB3E243BFF3200B1A62A /* docopt.pc.in */ = {isa = PBXFileReference; lastKnownFileType = text; path = docopt.pc.in; sourceTree = "<group>"; };
 		4549BB3F243BFF3200B1A62A /* LICENSE-MIT */ = {isa = PBXFileReference; lastKnownFileType = text; path = "LICENSE-MIT"; sourceTree = "<group>"; };
 		4549BB40243BFF3200B1A62A /* docopt_private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = docopt_private.h; sourceTree = "<group>"; };
-		454E99092348200B0059274C /* sprite export.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "sprite export.cpp"; sourceTree = "<group>"; };
-		454E990A2348200B0059274C /* sprite export.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "sprite export.hpp"; sourceTree = "<group>"; };
 		454E990C234992BD0059274C /* linear gradient.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "linear gradient.png"; sourceTree = "<group>"; };
 		454E990D2349A9B40059274C /* gradient tool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "gradient tool.cpp"; sourceTree = "<group>"; };
 		454E990E2349A9B40059274C /* gradient tool.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "gradient tool.hpp"; sourceTree = "<group>"; };
@@ -734,11 +747,8 @@
 		457DC0BB22E7D6160000777B /* file input widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "file input widget.cpp"; sourceTree = "<group>"; };
 		457DC0BC22E7D6160000777B /* file input widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "file input widget.hpp"; sourceTree = "<group>"; };
 		457DC0BE22E7FB2B0000777B /* widget rect.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "widget rect.hpp"; sourceTree = "<group>"; };
-		457DC0BF22E94EC00000777B /* export options.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "export options.hpp"; sourceTree = "<group>"; };
 		457DC0C022E9518A0000777B /* cel span.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "cel span.cpp"; sourceTree = "<group>"; };
 		457DC0C122E9518A0000777B /* cel span.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "cel span.hpp"; sourceTree = "<group>"; };
-		457DC0C422EA93FC0000777B /* export pattern.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "export pattern.cpp"; sourceTree = "<group>"; };
-		457DC0C522EA93FC0000777B /* export pattern.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "export pattern.hpp"; sourceTree = "<group>"; };
 		458F84032249CB7C005F91D0 /* config geometry.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "config geometry.hpp"; sourceTree = "<group>"; };
 		4595D48422BCA0E000607D64 /* scroll bar widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "scroll bar widget.cpp"; sourceTree = "<group>"; };
 		4595D48522BCA0E000607D64 /* scroll bar widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "scroll bar widget.hpp"; sourceTree = "<group>"; };
@@ -784,7 +794,6 @@
 		45C5C8BC237CC2950056CEE7 /* math.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = math.hpp; sourceTree = "<group>"; };
 		45C5C8D02389219C0056CEE7 /* cli.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = cli.cpp; sourceTree = "<group>"; };
 		45C5C8D12389219C0056CEE7 /* cli.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = cli.hpp; sourceTree = "<group>"; };
-		45C5C8D3238A13AA0056CEE7 /* export options.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "export options.cpp"; sourceTree = "<group>"; };
 		45CAC92722CC7B5800F945BF /* sample object.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "sample object.cpp"; sourceTree = "<group>"; };
 		45CAC92822CC7B5800F945BF /* sample object.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "sample object.hpp"; sourceTree = "<group>"; };
 		45CB77E72490964A00EC11A7 /* keys dialog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "keys dialog.cpp"; sourceTree = "<group>"; };
@@ -870,6 +879,35 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4515ABA024BE7E650052C8BF /* Export */ = {
+			isa = PBXGroup;
+			children = (
+				4515ABB124C000D60052C8BF /* Backends */,
+				45A61041230BE989000A0BD6 /* export png.cpp */,
+				45A61042230BE989000A0BD6 /* export png.hpp */,
+				4515ABA124BE81D00052C8BF /* export params.cpp */,
+				4515ABA224BE81D00052C8BF /* export params.hpp */,
+				4515ABA424BE95670052C8BF /* export name.cpp */,
+				4515ABA524BE95670052C8BF /* export name.hpp */,
+				4515ABA724BE9C740052C8BF /* abstract export params.cpp */,
+				4515ABA824BE9C740052C8BF /* abstract export params.hpp */,
+				4515ABAA24BE9E2E0052C8BF /* export backend.cpp */,
+				4515ABAB24BE9E2E0052C8BF /* export backend.hpp */,
+				4515ABAD24BE9FCD0052C8BF /* export texture atlas.cpp */,
+				4515ABAE24BE9FCD0052C8BF /* export texture atlas.hpp */,
+			);
+			name = Export;
+			sourceTree = "<group>";
+		};
+		4515ABB124C000D60052C8BF /* Backends */ = {
+			isa = PBXGroup;
+			children = (
+				4515ABB224C000F50052C8BF /* png export backend.cpp */,
+				4515ABB324C000F50052C8BF /* png export backend.hpp */,
+			);
+			name = Backends;
+			sourceTree = "<group>";
+		};
 		452926E322BB607E00B17E0D /* Timeline */ = {
 			isa = PBXGroup;
 			children = (
@@ -977,16 +1015,8 @@
 				457DC0C122E9518A0000777B /* cel span.hpp */,
 				4515AB9C24BAA17A0052C8BF /* group array.cpp */,
 				4515AB9D24BAA17A0052C8BF /* group array.hpp */,
-				45C5C8D3238A13AA0056CEE7 /* export options.cpp */,
-				457DC0BF22E94EC00000777B /* export options.hpp */,
-				457DC0C422EA93FC0000777B /* export pattern.cpp */,
-				457DC0C522EA93FC0000777B /* export pattern.hpp */,
-				45A61041230BE989000A0BD6 /* export png.cpp */,
-				45A61042230BE989000A0BD6 /* export png.hpp */,
 				453A20C4231A078100F055BA /* sprite file.cpp */,
 				453A20C5231A078100F055BA /* sprite file.hpp */,
-				454E99092348200B0059274C /* sprite export.cpp */,
-				454E990A2348200B0059274C /* sprite export.hpp */,
 			);
 			name = Cels;
 			sourceTree = "<group>";
@@ -2026,6 +2056,7 @@
 				45E3FFA824417976007A1FE8 /* CLI */,
 				453B7C76227ECF62003BB799 /* Graphics */,
 				453C783C2234DECE00818B19 /* Cels */,
+				4515ABA024BE7E650052C8BF /* Export */,
 				453C783B2234DEBA00818B19 /* Tools */,
 				453C783D2234DEF100818B19 /* Widgets */,
 			);
@@ -3074,13 +3105,16 @@
 				457DC0C222E9518A0000777B /* cel span.cpp in Sources */,
 				4513144D22D1B06F00D66262 /* timeline controls widget.cpp in Sources */,
 				45E3FFAC244179C2007A1FE8 /* cli export.cpp in Sources */,
+				4515ABA624BE95670052C8BF /* export name.cpp in Sources */,
 				45C5C8BA237A65820056CEE7 /* status object.cpp in Sources */,
 				45D109A922DC01A200D1F1CB /* icon push button widget.cpp in Sources */,
+				4515ABB424C000F50052C8BF /* png export backend.cpp in Sources */,
 				4513144722D0503700D66262 /* timeline.cpp in Sources */,
 				453D28C622769EC000D0E5F9 /* color slider widget.cpp in Sources */,
 				45D109A622DBFAF200D1F1CB /* icon radio button widget.cpp in Sources */,
 				45DFE499224DE89E00EA40C5 /* global font.cpp in Sources */,
 				45B284B9221E110F00D6D055 /* painting.cpp in Sources */,
+				4515ABAF24BE9FCD0052C8BF /* export texture atlas.cpp in Sources */,
 				45B284B3221A919000D6D055 /* tool.cpp in Sources */,
 				45D1099E22DB09C100D1F1CB /* transform tools.cpp in Sources */,
 				4529AA09239CDF4F0034A014 /* quit dialog.cpp in Sources */,
@@ -3094,7 +3128,6 @@
 				4513145B22D5A2A500D66262 /* picker impl gray.cpp in Sources */,
 				452D32FE249AF5E0009FA8F0 /* number input widget.cpp in Sources */,
 				45161F0622F1399A0036BBED /* timeline painting.cpp in Sources */,
-				454E990B2348200B0059274C /* sprite export.cpp in Sources */,
 				4529AA03239CA0D40034A014 /* tool param bar widget.cpp in Sources */,
 				45D109AF22E2D88500D1F1CB /* export dialog.cpp in Sources */,
 				45D1099822DAFD7000D1F1CB /* select tools.cpp in Sources */,
@@ -3109,6 +3142,7 @@
 				457D74F5239F67D7009B4E4B /* resources.cpp in Sources */,
 				45DC2566224B137C00F40116 /* status msg.cpp in Sources */,
 				45F065F22222998300BCE863 /* current tool.cpp in Sources */,
+				4515ABA924BE9C740052C8BF /* abstract export params.cpp in Sources */,
 				45D109AC22E2D4FD00D1F1CB /* text push button widget.cpp in Sources */,
 				453E8E4B236572250070B841 /* file io.cpp in Sources */,
 				4595D48C22C05E5400607D64 /* timeline cels widget.cpp in Sources */,
@@ -3118,7 +3152,6 @@
 				4512636622781D7B00C66A19 /* tool colors widget.cpp in Sources */,
 				4571C132227C383A00479006 /* radio button widget.cpp in Sources */,
 				453D28C02276956A00D0E5F9 /* hex input widget.cpp in Sources */,
-				457DC0C622EA93FC0000777B /* export pattern.cpp in Sources */,
 				45B284932218E38800D6D055 /* image.cpp in Sources */,
 				451A237D24B979B700160390 /* cel span painter.cpp in Sources */,
 				45054F732259C9AB0078350B /* color picker widget.cpp in Sources */,
@@ -3131,16 +3164,17 @@
 				45B284962218E39300D6D055 /* cel.cpp in Sources */,
 				45054F70225970150078350B /* undo object.cpp in Sources */,
 				453D28C92276A7DD00D0E5F9 /* color graph widget.cpp in Sources */,
+				4515ABA324BE81D00052C8BF /* export params.cpp in Sources */,
 				45D1099B22DB075A00D1F1CB /* drag paint tools.cpp in Sources */,
 				4513145522D59EA300D66262 /* color picker impl.cpp in Sources */,
 				45E3FFB224417D40007A1FE8 /* cli new.cpp in Sources */,
 				45C5C8D22389219C0056CEE7 /* cli.cpp in Sources */,
+				4515ABAC24BE9E2E0052C8BF /* export backend.cpp in Sources */,
 				4595D49222C0644B00607D64 /* timeline frames widget.cpp in Sources */,
 				4513145022D1BF8700D66262 /* palette.cpp in Sources */,
 				45BADA77224714A3000D095C /* tool widgets.cpp in Sources */,
 				45CFA7CF22A4C1C40059DB41 /* palette widget.cpp in Sources */,
 				453C78462234F3C600818B19 /* status bar widget.cpp in Sources */,
-				45C5C8D4238A13AA0056CEE7 /* export options.cpp in Sources */,
 				457DC0BD22E7D6160000777B /* file input widget.cpp in Sources */,
 				4529AA06239CA4090034A014 /* tool param widget.cpp in Sources */,
 				4576DFE82298DB2D00FDECA3 /* separator widget.cpp in Sources */,

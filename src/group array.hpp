@@ -124,4 +124,17 @@ GroupInfo findGroup(tcb::span<const Group> array, FrameIdx frame);
 /// @returns The index of the group and its boundaries.
 GroupInfo getGroup(tcb::span<const Group> array, GroupIdx group);
 
+class GroupIterator {
+public:
+  GroupIterator(tcb::span<const Group>, FrameIdx);
+  GroupIterator &operator++();
+  GroupInfo info() const;
+  std::string_view name() const;
+  
+private:
+  tcb::span<const Group> array;
+  tcb::span<const Group>::iterator iter;
+  FrameIdx frame;
+};
+
 #endif

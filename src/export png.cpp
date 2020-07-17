@@ -17,21 +17,21 @@
 
 namespace {
 
-int getBitDepth(const ExportFormat format) {
-  return format == ExportFormat::monochrome ? 1 : 8;
+int getBitDepth(const PixelFormat format) {
+  return format == PixelFormat::monochrome ? 1 : 8;
 }
 
-int getColorType(const ExportFormat format) {
+int getColorType(const PixelFormat format) {
   switch (format) {
-    case ExportFormat::rgba:
+    case PixelFormat::rgba:
       return PNG_COLOR_TYPE_RGB_ALPHA;
-    case ExportFormat::index:
+    case PixelFormat::index:
       return PNG_COLOR_TYPE_PALETTE;
-    case ExportFormat::gray:
+    case PixelFormat::gray:
       return PNG_COLOR_TYPE_GRAY;
-    case ExportFormat::gray_alpha:
+    case PixelFormat::gray_alpha:
       return PNG_COLOR_TYPE_GRAY_ALPHA;
-    case ExportFormat::monochrome:
+    case PixelFormat::monochrome:
       return PNG_COLOR_TYPE_GRAY;
   }
 }
@@ -256,7 +256,7 @@ Error exportCelPng(
   const PaletteCSpan palette,
   QImage image,
   const Format canvasFormat,
-  const ExportFormat exportFormat
+  const PixelFormat PixelFormat
 ) {
   SCOPE_TIME("exportCelPng");
 
@@ -273,29 +273,29 @@ Error exportCelPng(
     ctx.info,
     image.width(),
     image.height(),
-    getBitDepth(exportFormat),
-    getColorType(exportFormat),
+    getBitDepth(PixelFormat),
+    getColorType(PixelFormat),
     PNG_INTERLACE_NONE,
     PNG_COMPRESSION_TYPE_DEFAULT,
     PNG_FILTER_TYPE_DEFAULT
   );
   
-  switch (exportFormat) {
-    case ExportFormat::rgba:
+  switch (PixelFormat) {
+    case PixelFormat::rgba:
       // TODO: Make ARGB endian aware so that we don't need to do this
       png_set_bgr(ctx.png);
       break;
-    case ExportFormat::index:
+    case PixelFormat::index:
       writePalette(ctx, palette);
       break;
-    case ExportFormat::gray:
+    case PixelFormat::gray:
       if (canvasFormat == Format::gray) {
         gfx::convertInplace(makeSurface<PixelGray>(image), gfx::Y{}, FmtGray{});
       }
       break;
-    case ExportFormat::gray_alpha:
+    case PixelFormat::gray_alpha:
       break;
-    case ExportFormat::monochrome:
+    case PixelFormat::monochrome:
       if (canvasFormat == Format::gray) {
         gfx::convertToMono<FmtGray, 128>(makeSurface<PixelGray>(image));
       } else if (canvasFormat == Format::index) {

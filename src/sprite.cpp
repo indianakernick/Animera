@@ -70,10 +70,6 @@ Error Sprite::openImage(const QString &path) {
   return {};
 }
 
-Error Sprite::exportSprite(const ExportOptions &options) const {
-  return timeline.exportTimeline(options, palette.getPalette());
-}
-
 Format Sprite::getFormat() const {
   return format;
 }

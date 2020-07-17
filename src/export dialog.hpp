@@ -11,7 +11,7 @@
 
 #include "image.hpp"
 #include "dialog.hpp"
-#include "export options.hpp"
+#include "abstract export params.hpp"
 
 class ComboBoxWidget;
 class FileInputWidget;
@@ -25,13 +25,11 @@ class ExportDialog final : public Dialog {
 public:
   ExportDialog(QWidget *, Format);
   
-  void setLayers(LayerIdx);
-  void setFrames(FrameIdx);
-  void setPos(CelPos);
-  void setSelection(CelRect);
+  void setPath(const QString &);
+  void setInfo(const ExportSpriteInfo &);
   
 Q_SIGNALS:
-  void exportSprite(const ExportOptions &);
+  void exportSprite(const ExportParams &);
 
 private Q_SLOTS:
   void submit();
@@ -39,18 +37,17 @@ private Q_SLOTS:
 
 private:
   Format format;
-  LayerIdx layers;
-  FrameIdx frames;
-  CelPos pos;
-  CelRect selection;
+  ExportSpriteInfo info; // format is also in here
   
   TextInputWidget *name = nullptr;
   FileInputWidget *dir = nullptr;
+  ComboBoxWidget *layerName = nullptr;
+  ComboBoxWidget *groupName = nullptr;
+  ComboBoxWidget *frameName = nullptr;
   ComboBoxWidget *layerSelect = nullptr;
   ComboBoxWidget *frameSelect = nullptr;
   ComboBoxWidget *formatSelect = nullptr;
   ComboBoxWidget *composite = nullptr;
-  ComboBoxWidget *visibility = nullptr;
   NumberInputWidget *scaleX = nullptr;
   NumberInputWidget *scaleY = nullptr;
   ComboBoxWidget *rotate = nullptr;

@@ -313,6 +313,17 @@ why is it so tedious to create an animation by modifying the previous frame?
   perhaps a button that creates new frame that links to previous frame
   like extend linked cell and new frame combined
 
+export frame and export cel dialog could maybe evaluate name to get default
+
+whitepixel for indexed format
+
+should the C++ backend also have a map for looking up the sprite ID enum by string name?
+
+what we currently call a sprite is probably more appropriately named an animation
+  or maybe a sprite set?
+  currently, sprite means two different things in the export code which is kind
+  or confusing
+
 ------------------------------- minor refactoring ------------------------------
 
 there might be a few random constants that should be in config.hpp but aren't

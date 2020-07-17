@@ -36,8 +36,10 @@
 #include "tool select widget.hpp"
 #include "color picker widget.hpp"
 #include <QtWidgets/qfiledialog.h>
+#include "export texture atlas.hpp"
 #include "tool param bar widget.hpp"
 #include <QtWidgets/qdesktopwidget.h>
+#include "abstract export params.hpp"
 
 Window::Window(QWidget *parent, const Window *previous)
   : QMainWindow{parent} {
@@ -534,8 +536,8 @@ void Window::saveFileDialog() {
   dialog->open();
 }
 
-void Window::exportSprite(const ExportOptions &options) {
-  if (Error err = sprite.exportSprite(options); err) {
+void Window::exportSprite(const ExportParams &params) {
+  if (Error err = exportTextureAtlas(params, sprite); err) {
     (new ErrorDialog{this, "Export error", err.msg()})->open();
   } else {
     statusBar->showTemp("Exported!");
@@ -547,15 +549,13 @@ void Window::exportDialog() {
     exporter = new ExportDialog{this, sprite.getFormat()};
     CONNECT(exporter, exportSprite, this, exportSprite);
   }
-  exporter->setLayers(sprite.timeline.getLayers());
-  exporter->setFrames(sprite.timeline.getFrames());
-  exporter->setPos(sprite.timeline.getPos());
-  exporter->setSelection(sprite.timeline.getSelection());
+  exporter->setPath(windowFilePath());
+  exporter->setInfo(getSpriteInfo(sprite));
   exporter->open();
 }
 
 void Window::exportFrame(const QString &path) {
-  exportSprite(exportFrameOptions(path, getSpriteInfo(sprite)));
+  exportSprite(exportFrameParams(getSpriteInfo(sprite), path));
 }
 
 void Window::exportFrameDialog() {
@@ -570,7 +570,7 @@ void Window::exportFrameDialog() {
 }
 
 void Window::exportCel(const QString &path) {
-  exportSprite(exportCelOptions(path, getSpriteInfo(sprite)));
+  exportSprite(exportCelParams(getSpriteInfo(sprite), path));
 }
 
 void Window::exportCelDialog() {

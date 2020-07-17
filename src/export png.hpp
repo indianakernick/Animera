@@ -11,10 +11,10 @@
 
 #include "error.hpp"
 #include "palette span.hpp"
-#include "export options.hpp"
+#include "export params.hpp"
 
 /// Export a cel as a PNG
-Error exportCelPng(QIODevice &, PaletteCSpan, QImage, Format, ExportFormat);
+Error exportCelPng(QIODevice &, PaletteCSpan, QImage, Format, PixelFormat);
 /// Import a cel as a PNG
 Error importCelPng(QIODevice &, QImage &, Format);
 

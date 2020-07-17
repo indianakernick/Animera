@@ -13,7 +13,6 @@
 #include "scope time.hpp"
 #include "export png.hpp"
 #include "sprite file.hpp"
-#include "sprite export.hpp"
 
 Timeline::Timeline()
   : pos{LayerIdx{0}, FrameIdx{0}}, frameCount{0} {}
@@ -185,13 +184,12 @@ Error Timeline::deserializeTail(QIODevice &dev) {
   return {};
 }
 
-Error Timeline::exportTimeline(const ExportOptions &options, const PaletteCSpan palette) const {
-  Exporter exporter{options, palette, canvasFormat, canvasSize};
-  return exporter.exportSprite(layers);
-}
-
 LayerIdx Timeline::getLayers() const {
   return layerCount();
+}
+
+GroupIdx Timeline::getGroups() const {
+  return static_cast<GroupIdx>(groups.size());
 }
 
 FrameIdx Timeline::getFrames() const {
@@ -204,6 +202,14 @@ CelPos Timeline::getPos() const {
 
 CelRect Timeline::getSelection() const {
   return selection;
+}
+
+tcb::span<const Layer> Timeline::getLayerArray() const {
+  return layers;
+}
+
+tcb::span<const Group> Timeline::getGroupArray() const {
+  return groups;
 }
 
 void Timeline::initCanvas(const Format format, const QSize size) {
