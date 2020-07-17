@@ -9,6 +9,8 @@ project(Animera
 
 add_executable(Animera
     Animera.rc
+    "src/abstract export params.cpp"
+    "src/abstract export params.hpp"
     src/application.cpp
     src/application.hpp
     src/application.moc
@@ -70,15 +72,19 @@ add_executable(Animera
     "src/error dialog.cpp"
     "src/error dialog.hpp"
     src/error.hpp
+    "src/export backend.cpp"
+    "src/export backend.hpp"
     "src/export dialog.cpp"
     "src/export dialog.hpp"
     "src/export dialog.moc"
-    "src/export options.cpp"
-    "src/export options.hpp"
-    "src/export pattern.cpp"
-    "src/export pattern.hpp"
+    "src/export name.cpp"
+    "src/export name.hpp"
+    "src/export params.cpp"
+    "src/export params.hpp"
     "src/export png.cpp"
     "src/export png.hpp"
+    "src/export texture atlas.cpp"
+    "src/export texture atlas.hpp"
     "src/file input widget.cpp"
     "src/file input widget.hpp"
     "src/file input widget.moc"
@@ -134,6 +140,8 @@ add_executable(Animera
     "src/picker impl gray.hpp"
     "src/picker impl rgba.cpp"
     "src/picker impl rgba.hpp"
+    "src/png export backend.cpp"
+    "src/png export backend.hpp"
     src/png.cpp
     src/png.hpp
     "src/quit dialog.cpp"
