@@ -119,16 +119,15 @@ PNG optimizes its PLTE and tRNS chunks.
 
 ### GRPS (Groups)
 
-| Type   | Description                                              |
-|--------|----------------------------------------------------------|
-| Uint   | The end of this group or the beginning of the next group |
-| Uint   | Length of the name [0, 256]                              |
-| String | Name of this group [0, 256]                              |
+| Type   | Description                                    |
+|--------|------------------------------------------------|
+| Int    | Number of frames in this group [1, 2147483647] |
+| Uint   | Length of the name [0, 256]                    |
+| String | Name of this group [0, 256]                    |
 
-This chunk contains an array of groups. Each group has a boundary and a name.
-The boundary of the group is represented as the end frame. This is the frame
-after the last frame in the group, or equivalently, the first frame of the next
-group.
+This chunk contains an array of groups. Each group has a length and a name. The
+total length of all groups must be equal to the number of frames in the AHDR
+chunk.
 
 ### LHDR (Layer Header)
 

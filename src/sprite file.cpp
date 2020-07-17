@@ -206,12 +206,17 @@ Error writeGRPS(QIODevice &dev, const std::vector<Group> &groups) try {
   
   ChunkWriter writer{dev};
   writer.begin(chunk_groups);
+  FrameIdx prevEnd{};
+  
   for (const Group &group : groups) {
-    const std::uint32_t nameLen = static_cast<std::uint32_t>(group.name.size());
-    writer.writeInt(static_cast<std::uint32_t>(group.end));
+    const auto groupLen = static_cast<std::uint32_t>(group.end - prevEnd);
+    const auto nameLen = static_cast<std::uint32_t>(group.name.size());
+    prevEnd = group.end;
+    writer.writeInt(groupLen);
     writer.writeInt(nameLen);
     writer.writeString(group.name.data(), nameLen);
   }
+  
   writer.end();
   return {};
 } catch (FileIOError &e) {
@@ -484,29 +489,29 @@ Error readGRPS(QIODevice &dev, std::vector<Group> &groups, const FrameIdx frameC
   const ChunkStart start = reader.begin();
   TRY(expectedName(start, chunk_groups));
   std::size_t remaining = start.length;
-  std::uint32_t prevEnd = 0;
+  FrameIdx totalLen{};
   std::size_t index = 0;
   
   while (remaining > 2 * file_int_size) {
     if (index >= groups.size()) {
-      return "Group count is smaller than the number of groups found";
+      return "Number of groups found does not equal the group count";
     }
     
-    const std::uint32_t end = reader.readInt();
+    const auto groupLen = static_cast<FrameIdx>(reader.readInt());
     const std::uint32_t nameLen = reader.readInt();
     remaining -= 2 * file_int_size;
     
-    if (end <= prevEnd) {
-      return "Group boundaries are invalid";
+    if (groupLen <= FrameIdx{0}) {
+      return "Group length is negative";
     }
-    prevEnd = end;
+    totalLen += groupLen;
     
     if (nameLen > layer_name_max_len || nameLen > remaining) {
       return "Group name exceeds maximum length";
     }
     remaining -= nameLen;
     
-    groups[index].end = static_cast<FrameIdx>(end);
+    groups[index].end = totalLen;
     groups[index].name.resize(nameLen);
     reader.readString(groups[index].name.data(), nameLen);
     
@@ -521,11 +526,11 @@ Error readGRPS(QIODevice &dev, std::vector<Group> &groups, const FrameIdx frameC
   if (remaining != 0) {
     return chunkLengthInvalid(start);
   }
-  if (groups.back().end != frameCount) {
-    return "Group boundaries are invalid";
-  }
   if (index < groups.size()) {
-    return "Group count is larger than the number of groups found";
+    return "Number of groups found does not equal the group count";
+  }
+  if (groups.back().end != frameCount) {
+    return "Total length of groups does not equal the frame count";
   }
   
   return {};
