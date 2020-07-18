@@ -21,7 +21,7 @@ public:
 
 private:
   QPoint startPos;
-  Cel cleanCel;
+  CelImage cleanImage;
   LineGradMode mode = LineGradMode::hori;
   
   void drawGradient(QRect, QPoint);

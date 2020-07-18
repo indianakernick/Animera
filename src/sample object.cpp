@@ -19,7 +19,7 @@ void SampleObject::initCanvas(const Format newFormat) {
   format = newFormat;
 }
 
-void SampleObject::setCel(const Cel *newCel) {
+void SampleObject::setCelImage(const CelImage *newCel) {
   cel = newCel;
 }
 
@@ -29,7 +29,7 @@ void SampleObject::mouseMove(const QPoint newPos) {
 
 void SampleObject::keyPress(const Qt::Key key) {
   if (key == key_sample) {
-    const PixelVar pixel = sampleCel(*cel, pos);
+    const PixelVar pixel = sampleCelImage(*cel, pos);
     // similar to right-clicking on a palette color
     if (format == Format::index) {
       Q_EMIT shouldSetIndex(static_cast<PixelIndex>(pixel));

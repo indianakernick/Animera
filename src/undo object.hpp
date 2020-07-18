@@ -21,23 +21,23 @@ public:
   explicit UndoObject(QObject *);
   
 public Q_SLOTS:
-  void setCel(Cel *);
+  void setCelImage(CelImage *);
   void keyPress(Qt::Key);
-  void celModified();
+  void celImageModified();
 
 Q_SIGNALS:
-  void celReverted(QRect);
+  void celImageReverted(QRect);
   void shouldShowTemp(std::string_view);
   void shouldClearCel();
-  void shouldGrowCel(QRect);
+  void shouldGrowCelImage(QRect);
 
 private:
-  Cel *cel = nullptr;
+  CelImage *cel = nullptr;
   UndoStack stack;
   
   void undo();
   void redo();
-  void restore(const Cel &);
+  void restore(const CelImage &);
 };
 
 #endif

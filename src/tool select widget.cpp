@@ -132,7 +132,7 @@ void ToolSelectWidget::setOverlay(QImage *overlay) {
   ctx.overlay = overlay;
 }
 
-void ToolSelectWidget::setCel(Cel *cel) {
+void ToolSelectWidget::setCelImage(CelImage *cel) {
   ctx.cel = cel;
   if (mouseIn) currTool.mouseLeave();
   currTool.setCel(cel);
@@ -238,16 +238,16 @@ void ToolSelectWidget::setupLayout() {
 }
 
 void ToolSelectWidget::connectSignals() {
-  CONNECT(ctx, celModified,    this, celModified);
-  CONNECT(ctx, overlayModified, this, overlayModified);
-  CONNECT(ctx, shouldShowNorm,  this, shouldShowNorm);
-  CONNECT(ctx, changingAction,  this, changingAction);
-  CONNECT(ctx, growRequested,   this, growRequested);
-  CONNECT(ctx, shrinkRequested, this, shrinkRequested);
-  CONNECT(ctx, lockRequested,   this, lockRequested);
-  CONNECT(ctx, unlockRequested, this, unlockRequested);
-  CONNECT(ctx, lockRequested,   this, lockTool);
-  CONNECT(ctx, unlockRequested, this, unlockTool);
+  CONNECT(ctx, celImageModified,     this, celImageModified);
+  CONNECT(ctx, overlayModified,      this, overlayModified);
+  CONNECT(ctx, shouldShowNorm,       this, shouldShowNorm);
+  CONNECT(ctx, changingAction,       this, changingAction);
+  CONNECT(ctx, shouldGrowCelImage,   this, shouldGrowCelImage);
+  CONNECT(ctx, shouldShrinkCelImage, this, shouldShrinkCelImage);
+  CONNECT(ctx, shouldLock,           this, shouldLock);
+  CONNECT(ctx, shouldUnlock,         this, shouldUnlock);
+  CONNECT(ctx, shouldLock,           this, lockTool);
+  CONNECT(ctx, shouldUnlock,         this, unlockTool);
   for (ToolWidget *tool : tools) {
     CONNECT(tool, shouldChangeTool, this, setTool);
   }

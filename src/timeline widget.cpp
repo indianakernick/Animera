@@ -44,8 +44,8 @@ TimelineWidget::TimelineWidget(QWidget *parent)
   CONNECT(celScroll, rightMarginChanged, groupScroll, shouldSetRightMargin);
   CONNECT(celScroll, bottomMarginChanged, layerScroll, shouldSetBottomMargin);
   
-  CONNECT(layers,    shouldSetVisibility,     this, shouldSetVisibility);
-  CONNECT(layers,    shouldIsolateVisibility, this, shouldIsolateVisibility);
+  CONNECT(layers,    shouldSetVisibility,     this, shouldSetLayerVisibility);
+  CONNECT(layers,    shouldIsolateVisibility, this, shouldIsolateLayerVisibility);
   CONNECT(layers,    shouldSetName,           this, shouldSetLayerName);
   
   CONNECT(controls,  shouldNextFrame,         this, shouldNextFrame);
@@ -101,7 +101,7 @@ void TimelineWidget::setGroupArray(const tcb::span<const Group> array) {
   groups->setGroupArray(array);
 }
 
-void TimelineWidget::setVisibility(const LayerIdx layer, const bool visible) {
+void TimelineWidget::setLayerVisibility(const LayerIdx layer, const bool visible) {
   layers->setVisibility(layer, visible);
 }
 
@@ -109,8 +109,8 @@ void TimelineWidget::setLayerName(const LayerIdx layer, const std::string_view n
   layers->setName(layer, name);
 }
 
-void TimelineWidget::setLayer(const LayerIdx layer, tcb::span<const CelSpan> spans) {
-  cels->setLayer(layer, spans);
+void TimelineWidget::setLayerCels(const LayerIdx layer, tcb::span<const Cel> celArray) {
+  cels->setLayerCels(layer, celArray);
 }
 
 void TimelineWidget::setFrameCount(const FrameIdx count) {

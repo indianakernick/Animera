@@ -24,7 +24,7 @@ template <typename Fmt>
 using Surface = gfx::Surface<gfx::Pixel<Fmt>>;
 
 template <typename DstFmt, typename SrcFmt>
-void copy(Surface<DstFmt> dst, const Cel &cel, const QPoint dstPos, SrcFmt srcFmt) {
+void copy(Surface<DstFmt> dst, const CelImage &cel, const QPoint dstPos, SrcFmt srcFmt) {
   gfx::Surface src = makeCSurface<gfx::Pixel<SrcFmt>>(cel.img);
   const gfx::Point pos = convert(cel.pos - dstPos);
   if constexpr (std::is_same_v<DstFmt, SrcFmt>) {
@@ -37,7 +37,7 @@ void copy(Surface<DstFmt> dst, const Cel &cel, const QPoint dstPos, SrcFmt srcFm
 }
 
 template <typename DstFmt, typename SrcFmt>
-void composite(Surface<DstFmt> dst, const Cel &cel, const QPoint dstPos, SrcFmt srcFmt) {
+void composite(Surface<DstFmt> dst, const CelImage &cel, const QPoint dstPos, SrcFmt srcFmt) {
   gfx::porterDuffRegion(
     gfx::mode_src_over,
     dst,
@@ -53,7 +53,7 @@ void compositeFrame(Surface<DstFmt> dst, const Frame &frame, const QPoint dstPos
   // Layer 0 is on top of layer 1
   const QRect dstRect = {dstPos, convert(dst.size())};
   for (std::size_t c = frame.size() - 1; c != ~std::size_t{}; --c) {
-    const Cel &cel = *frame[c];
+    const CelImage &cel = *frame[c];
     const QRect celRect = dstRect.intersected(cel.rect());
     if (celRect.isEmpty()) continue;
     bool overlap = false;
@@ -219,8 +219,8 @@ void writeOverlay(
   gfx::maskClip(makeSurface<QRgb>(overlay), makeCSurface<PixelMask>(mask));
 }
 
-void growCel(Cel &cel, const Format format, const QRect rect) {
-  SCOPE_TIME("growCel");
+void growCelImage(CelImage &cel, const Format format, const QRect rect) {
+  SCOPE_TIME("growCelImage");
   
   if (!cel) {
     cel.img = {rect.size(), qimageFormat(format)};
@@ -239,8 +239,8 @@ void growCel(Cel &cel, const Format format, const QRect rect) {
   }
 }
 
-void shrinkCel(Cel &cel, const QRect rect) {
-  SCOPE_TIME("shrinkCel");
+void shrinkCelImage(CelImage &cel, const QRect rect) {
+  SCOPE_TIME("shrinkCelImage");
   
   if (!cel) return;
   if (rect.isEmpty()) return;
@@ -277,7 +277,7 @@ void shrinkCel(Cel &cel, const QRect rect) {
   cel.pos += newRect.topLeft();
 }
 
-PixelVar sampleCel(const Cel &cel, QPoint pos) {
+PixelVar sampleCelImage(const CelImage &cel, QPoint pos) {
   if (cel.rect().contains(pos)) {
     pos -= cel.pos;
     const int depth = cel.img.depth() / 8;

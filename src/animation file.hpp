@@ -17,7 +17,7 @@
 
 class QIODevice;
 struct Layer;
-struct CelSpan;
+struct Cel;
 
 struct AnimationInfo {
   int width;
@@ -34,7 +34,7 @@ Error writeAHDR(QIODevice &, const AnimationInfo &);
 Error writePLTE(QIODevice &, PaletteCSpan, Format);
 Error writeGRPS(QIODevice &, const std::vector<Group> &);
 Error writeLHDR(QIODevice &, const Layer &);
-Error writeCHDR(QIODevice &, const CelSpan &);
+Error writeCHDR(QIODevice &, const Cel &);
 Error writeCDAT(QIODevice &, const QImage &, Format);
 Error writeAEND(QIODevice &);
 
@@ -43,7 +43,7 @@ Error readAHDR(QIODevice &, AnimationInfo &);
 Error readPLTE(QIODevice &, PaletteSpan, Format);
 Error readGRPS(QIODevice &, std::vector<Group> &, FrameIdx);
 Error readLHDR(QIODevice &, Layer &);
-Error readCHDR(QIODevice &, CelSpan &, Format);
+Error readCHDR(QIODevice &, Cel &, Format);
 Error readCDAT(QIODevice &, QImage &, Format);
 Error readAEND(QIODevice &);
 

@@ -22,7 +22,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_ToolCtx_t {
     QByteArrayData data[11];
-    char stringdata0[144];
+    char stringdata0[153];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -32,23 +32,23 @@ struct qt_meta_stringdata_ToolCtx_t {
 static const qt_meta_stringdata_ToolCtx_t qt_meta_stringdata_ToolCtx = {
     {
 QT_MOC_LITERAL(0, 0, 7), // "ToolCtx"
-QT_MOC_LITERAL(1, 8, 11), // "celModified"
-QT_MOC_LITERAL(2, 20, 0), // ""
-QT_MOC_LITERAL(3, 21, 15), // "overlayModified"
-QT_MOC_LITERAL(4, 37, 14), // "shouldShowNorm"
-QT_MOC_LITERAL(5, 52, 16), // "std::string_view"
-QT_MOC_LITERAL(6, 69, 14), // "changingAction"
-QT_MOC_LITERAL(7, 84, 13), // "growRequested"
-QT_MOC_LITERAL(8, 98, 15), // "shrinkRequested"
-QT_MOC_LITERAL(9, 114, 13), // "lockRequested"
-QT_MOC_LITERAL(10, 128, 15) // "unlockRequested"
+QT_MOC_LITERAL(1, 8, 16), // "celImageModified"
+QT_MOC_LITERAL(2, 25, 0), // ""
+QT_MOC_LITERAL(3, 26, 15), // "overlayModified"
+QT_MOC_LITERAL(4, 42, 14), // "shouldShowNorm"
+QT_MOC_LITERAL(5, 57, 16), // "std::string_view"
+QT_MOC_LITERAL(6, 74, 14), // "changingAction"
+QT_MOC_LITERAL(7, 89, 18), // "shouldGrowCelImage"
+QT_MOC_LITERAL(8, 108, 20), // "shouldShrinkCelImage"
+QT_MOC_LITERAL(9, 129, 10), // "shouldLock"
+QT_MOC_LITERAL(10, 140, 12) // "shouldUnlock"
 
     },
-    "ToolCtx\0celModified\0\0overlayModified\0"
+    "ToolCtx\0celImageModified\0\0overlayModified\0"
     "shouldShowNorm\0std::string_view\0"
-    "changingAction\0growRequested\0"
-    "shrinkRequested\0lockRequested\0"
-    "unlockRequested"
+    "changingAction\0shouldGrowCelImage\0"
+    "shouldShrinkCelImage\0shouldLock\0"
+    "shouldUnlock"
 };
 #undef QT_MOC_LITERAL
 
@@ -94,21 +94,21 @@ void ToolCtx::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, voi
         auto *_t = static_cast<ToolCtx *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->celModified((*reinterpret_cast< QRect(*)>(_a[1]))); break;
+        case 0: _t->celImageModified((*reinterpret_cast< QRect(*)>(_a[1]))); break;
         case 1: _t->overlayModified((*reinterpret_cast< QRect(*)>(_a[1]))); break;
         case 2: _t->shouldShowNorm((*reinterpret_cast< std::string_view(*)>(_a[1]))); break;
         case 3: _t->changingAction(); break;
-        case 4: _t->growRequested((*reinterpret_cast< QRect(*)>(_a[1]))); break;
-        case 5: _t->shrinkRequested((*reinterpret_cast< QRect(*)>(_a[1]))); break;
-        case 6: _t->lockRequested(); break;
-        case 7: _t->unlockRequested(); break;
+        case 4: _t->shouldGrowCelImage((*reinterpret_cast< QRect(*)>(_a[1]))); break;
+        case 5: _t->shouldShrinkCelImage((*reinterpret_cast< QRect(*)>(_a[1]))); break;
+        case 6: _t->shouldLock(); break;
+        case 7: _t->shouldUnlock(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
         int *result = reinterpret_cast<int *>(_a[0]);
         {
             using _t = void (ToolCtx::*)(QRect ) const;
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ToolCtx::celModified)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ToolCtx::celImageModified)) {
                 *result = 0;
                 return;
             }
@@ -136,28 +136,28 @@ void ToolCtx::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, voi
         }
         {
             using _t = void (ToolCtx::*)(QRect ) const;
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ToolCtx::growRequested)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ToolCtx::shouldGrowCelImage)) {
                 *result = 4;
                 return;
             }
         }
         {
             using _t = void (ToolCtx::*)(QRect ) const;
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ToolCtx::shrinkRequested)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ToolCtx::shouldShrinkCelImage)) {
                 *result = 5;
                 return;
             }
         }
         {
             using _t = void (ToolCtx::*)() const;
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ToolCtx::lockRequested)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ToolCtx::shouldLock)) {
                 *result = 6;
                 return;
             }
         }
         {
             using _t = void (ToolCtx::*)() const;
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ToolCtx::unlockRequested)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ToolCtx::shouldUnlock)) {
                 *result = 7;
                 return;
             }
@@ -206,7 +206,7 @@ int ToolCtx::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void ToolCtx::celModified(QRect _t1)const
+void ToolCtx::celImageModified(QRect _t1)const
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(const_cast< ToolCtx *>(this), &staticMetaObject, 0, _a);
@@ -233,27 +233,27 @@ void ToolCtx::changingAction()const
 }
 
 // SIGNAL 4
-void ToolCtx::growRequested(QRect _t1)const
+void ToolCtx::shouldGrowCelImage(QRect _t1)const
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(const_cast< ToolCtx *>(this), &staticMetaObject, 4, _a);
 }
 
 // SIGNAL 5
-void ToolCtx::shrinkRequested(QRect _t1)const
+void ToolCtx::shouldShrinkCelImage(QRect _t1)const
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(const_cast< ToolCtx *>(this), &staticMetaObject, 5, _a);
 }
 
 // SIGNAL 6
-void ToolCtx::lockRequested()const
+void ToolCtx::shouldLock()const
 {
     QMetaObject::activate(const_cast< ToolCtx *>(this), &staticMetaObject, 6, nullptr);
 }
 
 // SIGNAL 7
-void ToolCtx::unlockRequested()const
+void ToolCtx::shouldUnlock()const
 {
     QMetaObject::activate(const_cast< ToolCtx *>(this), &staticMetaObject, 7, nullptr);
 }

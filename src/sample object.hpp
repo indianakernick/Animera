@@ -13,7 +13,7 @@
 #include <QtCore/qpoint.h>
 #include <QtCore/qobject.h>
 
-class Cel;
+class CelImage;
 
 class SampleObject final : public QObject {
   Q_OBJECT
@@ -23,7 +23,7 @@ public:
   
 public Q_SLOTS:
   void initCanvas(Format);
-  void setCel(const Cel *);
+  void setCelImage(const CelImage *);
   void mouseMove(QPoint);
   void keyPress(Qt::Key);
 
@@ -32,7 +32,7 @@ Q_SIGNALS:
   void shouldSetIndex(PixelIndex);
   
 private:
-  const Cel *cel = nullptr;
+  const CelImage *cel = nullptr;
   QPoint pos;
   Format format;
 };

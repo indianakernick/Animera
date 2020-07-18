@@ -35,10 +35,10 @@ Error eachFrame(const AnimExportParams &params, const Animation &anim, Func func
   Frame frame;
   frame.reserve(+layerCount);
   
-  std::vector<LayerCels::ConstIterator> celIters;
+  std::vector<CelIterator> celIters;
   celIters.reserve(+layerCount);
   for (LayerIdx l = layerRange.min; l <= layerRange.max; ++l) {
-    celIters.push_back(layers[+l].spans.find(frameRange.min));
+    celIters.emplace_back(layers[+l].cels, frameRange.min);
   }
   GroupIterator groupIter{anim.timeline.getGroupArray(), frameRange.min};
   bool changedGroup = true;
@@ -53,10 +53,10 @@ Error eachFrame(const AnimExportParams &params, const Animation &anim, Func func
     frame.clear();
     for (LayerIdx l = {}; l != layerCount; ++l) {
       if (!includeLayer(layerRange.vis, layers[+(l + layerRange.min)].visible)) continue;
-      if (const Cel *cel = *celIters[+l]; *cel) {
+      if (const CelImage *cel = celIters[+l].img(); *cel) {
         frame.push_back(cel);
       }
-      ++celIters[+l];
+      celIters[+l].incr();
     }
     
     if (changedGroup) {
@@ -88,7 +88,7 @@ Error eachCel(const AnimExportParams &params, const Animation &anim, Func func) 
   for (LayerIdx l = layerRange.min; l <= layerRange.max; ++l) {
     const Layer &layer = layers[+l];
     if (!includeLayer(layerRange.vis, layer.visible)) continue;
-    auto celIter = layer.spans.find(frameRange.min);
+    CelIterator celIter{layer.cels, frameRange.min};
     GroupIterator groupIter{anim.timeline.getGroupArray(), frameRange.min};
     bool changedGroup = true;
     
@@ -104,12 +104,12 @@ Error eachCel(const AnimExportParams &params, const Animation &anim, Func func) 
         state.groupName = groupIter.name();
       }
       
-      if (const Cel *cel = *celIter; *cel) {
+      if (const CelImage *cel = celIter.img(); *cel) {
         state.frame = f - state.groupBegin;
         TRY(func(cel, state));
       }
       
-      ++celIter;
+      celIter.incr();
       changedGroup = groupIter.incr();
     }
   }
@@ -187,7 +187,7 @@ void addCelNames(
   const AnimExportParams &animParams,
   const Animation &anim
 ) {
-  auto iterate = [&](const Cel *, const ExportNameState &state) {
+  auto iterate = [&](const CelImage *, const ExportNameState &state) {
     params.backend->addName(index++, animParams.name, state);
     return Error{};
   };
@@ -226,7 +226,7 @@ Error addCelImages(
   Images images;
   initImages(images, animParams, anim);
   
-  auto iterate = [&](const Cel *cel, const ExportNameState &) {
+  auto iterate = [&](const CelImage *cel, const ExportNameState &) {
     clearImage(images.canvas);
     blitImage(images.canvas, cel->img, cel->pos);
     return addImage(index++, params, animParams, images);

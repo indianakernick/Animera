@@ -27,14 +27,14 @@ public:
   ToolSelectWidget(QWidget *, ToolParamBarWidget *);
 
 Q_SIGNALS:
-  void celModified(QRect);
+  void celImageModified(QRect);
   void overlayModified(QRect);
   void shouldShowNorm(std::string_view);
   void changingAction();
-  void growRequested(QRect);
-  void shrinkRequested(QRect);
-  void lockRequested();
-  void unlockRequested();
+  void shouldGrowCelImage(QRect);
+  void shouldShrinkCelImage(QRect);
+  void shouldLock();
+  void shouldUnlock();
 
 public Q_SLOTS:
   void mouseEnter(QPoint);
@@ -45,7 +45,7 @@ public Q_SLOTS:
   void keyPress(Qt::Key);
   
   void setOverlay(QImage *);
-  void setCel(Cel *);
+  void setCelImage(CelImage *);
   void setColors(ToolColors);
   void setPalette(PaletteCSpan);
   void initCanvas(Format, QSize);

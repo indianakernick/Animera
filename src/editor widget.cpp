@@ -358,7 +358,7 @@ void EditorWidget::composite(const QRect rect) {
   
   #if ENABLE_DEBUG_COMPOSITE
   view->compRect = {};
-  for (const Cel *cel : frame) {
+  for (const CelImage *cel : frame) {
     view->compRect = view->compRect.united(cel->rect());
   }
   #endif
@@ -380,7 +380,7 @@ void EditorWidget::compositeOverlay(const QRect rect) {
   
   #if ENABLE_DEBUG_COMPOSITE
   view->compRect = {};
-  for (const Cel *cel : frame) {
+  for (const CelImage *cel : frame) {
     view->compRect = view->compRect.united(cel->rect());
   }
   #endif

@@ -1,20 +1,20 @@
 ﻿//
-//  cel span painter.hpp
+//  cel painter.hpp
 //  Animera
 //
 //  Created by Indiana Kernick on 11/7/20.
 //  Copyright © 2020 Indiana Kernick. All rights reserved.
 //
 
-#ifndef cel_span_painter_hpp
-#define cel_span_painter_hpp
+#ifndef cel_painter_hpp
+#define cel_painter_hpp
 
 #include "cel.hpp"
 #include <QtGui/qpixmap.h>
 
-class CelSpanPainter {
+class CelPainter {
 public:
-  CelSpanPainter();
+  CelPainter();
 
   void start(int, int);
   void start();

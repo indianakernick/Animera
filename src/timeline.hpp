@@ -10,7 +10,7 @@
 #define animera_timeline_hpp
 
 #include "error.hpp"
-#include "cel span.hpp"
+#include "cel array.hpp"
 #include "group array.hpp"
 #include "palette span.hpp"
 
@@ -19,7 +19,7 @@
 /*
 
 struct LayerData {
-  LayerCels spans;
+  std::vector<Cel> cels;
   std::string name;
   bool visible;
 };
@@ -87,8 +87,8 @@ public Q_SLOTS:
   void clearCel();
   void extendCel();
   void splitCel();
-  void growCel(QRect);
-  void shrinkCel(QRect);
+  void growCelImage(QRect);
+  void shrinkCelImage(QRect);
   
   void setGroup(FrameIdx);
   void setGroupName(std::string_view);
@@ -113,7 +113,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
   void posChanged(CelPos);
-  void celChanged(Cel *);
+  void celImageChanged(CelImage *);
   void selectionChanged(CelRect);
   void groupChanged(GroupInfo);
   
@@ -123,7 +123,7 @@ Q_SIGNALS:
   
   void groupArrayChanged(tcb::span<const Group>);
   void frameChanged(const Frame &);
-  void layerChanged(LayerIdx, tcb::span<const CelSpan>);
+  void layerCelsChanged(LayerIdx, tcb::span<const Cel>);
   
   void frameCountChanged(FrameIdx);
   void layerCountChanged(LayerIdx);
@@ -131,11 +131,11 @@ Q_SIGNALS:
   void delayChanged(int);
   
   void modified();
-  void celModified(QRect);
+  void celImageModified(QRect);
   
 private:
   std::vector<Layer> layers;
-  std::vector<LayerCels> clipboard;
+  std::vector<std::vector<Cel>> clipboard;
   std::vector<Group> groups;
   CelPos pos;
   CelRect selection;
@@ -146,18 +146,18 @@ private:
   int delay;
   bool locked = false;
   
-  Cel *getCel(CelPos);
+  CelImage *getCel(CelPos);
   Frame getFrame(FrameIdx) const;
   LayerIdx layerCount() const;
   
   void changePos();
   void changeFrame();
-  void changeSpan(LayerIdx);
+  void changeLayerCels(LayerIdx);
   void changeLayers(LayerIdx, LayerIdx);
   void changeFrameCount();
   void changeLayerCount();
-  void changeCel(QRect);
-  void changeCel();
+  void changeCelImage(QRect);
+  void changeCelImage();
   GroupInfo changeGroup(FrameIdx);
   void changeGroupArray();
 };

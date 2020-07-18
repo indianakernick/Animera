@@ -14,12 +14,13 @@
 #include "image.hpp"
 #include "enum operators.hpp"
 
-class Cel;
+class CelImage;
 
-// we need stable cel pointers
-using CelPtr = std::unique_ptr<Cel>;
+// TODO: Can we merge CelImage and Cel into one class?
+// do we really need stable cel image pointers?
+using CelImagePtr = std::unique_ptr<CelImage>;
 
-class Cel {
+class CelImage {
 public:
   QImage img;
   QPoint pos;
@@ -71,12 +72,7 @@ struct CelRect {
 
 constexpr CelRect empty_rect = {LayerIdx{0}, FrameIdx{0}, LayerIdx{-1}, FrameIdx{-1}};
 
-struct CelSpan {
-  CelPtr cel;
-  FrameIdx len;
-};
-
-using Frame = std::vector<const Cel *>;
+using Frame = std::vector<const CelImage *>;
 
 struct GroupInfo {
   GroupIdx group;

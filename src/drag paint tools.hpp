@@ -17,8 +17,8 @@ class DragPaintTool : public Tool {
 public:
   ~DragPaintTool();
   
-  void attachCel() override final;
-  void detachCel() override final;
+  void attachCelImage() override final;
+  void detachCelImage() override final;
   void mouseLeave(const ToolLeaveEvent &) override final;
   void mouseDown(const ToolMouseDownEvent &) override final;
   void mouseMove(const ToolMouseMoveEvent &) override final;
@@ -29,7 +29,7 @@ protected:
 
 private:
   QPoint startPos = no_point;
-  Cel cleanCel;
+  CelImage cleanImage;
   PixelVar color;
   
   Derived *that();

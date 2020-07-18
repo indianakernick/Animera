@@ -21,6 +21,50 @@ struct Group {
   std::string name;
 };
 
+/// @brief Group iterator that iterates frames.
+///
+/// Incrementing this iterator increments the frame. Information about the group
+/// under that frame is returned. This isn't a proper iterator (with all the
+/// types and operators) but it acts like one.
+class GroupIterator {
+public:
+  /// @brief Construct an iterator to the group under the given frame.
+  ///
+  /// @note Asserts if the frame is out of range.
+  /// @sa findGroup
+  ///
+  /// @param array Group array.
+  /// @param frame Index of the frame.
+  GroupIterator(tcb::span<const Group> array, FrameIdx frame);
+  
+  /// @brief Increment the iterator to the next frame.
+  ///
+  /// @note Asserts if incrementing past the end.
+  ///
+  /// @returns Whether the iterator advanced to a new group.
+  bool incr();
+  
+  /// @brief Get the group at the iterator.
+  ///
+  /// @note Asserts if the iterator is at the end.
+  /// @sa getGroup
+  ///
+  /// @returns The index of the group and its boundaries.
+  GroupInfo info() const;
+  
+  /// @brief Get the name of the group at the iterator.
+  ///
+  /// @note Asserts if the iterator is at the end.
+  ///
+  /// @returns The name of the group.
+  std::string_view name() const;
+  
+private:
+  tcb::span<const Group> array;
+  tcb::span<const Group>::iterator iter;
+  FrameIdx frame;
+};
+
 /// @brief Move the group boundary to the given frame.
 ///
 /// The frame is clamped so that moving the boundary doesn't resize any group to
@@ -137,49 +181,5 @@ GroupInfo findGroup(tcb::span<const Group> array, FrameIdx frame);
 /// @param group Index of the group to get.
 /// @returns The index of the group and its boundaries.
 GroupInfo getGroup(tcb::span<const Group> array, GroupIdx group);
-
-/// @brief Group iterator that iterates frames.
-///
-/// Incrementing this iterator increments the frame. Information about the group
-/// under that frame is returned. This isn't a proper iterator (with all the
-/// types and operators) but it acts like one.
-class GroupIterator {
-public:
-  /// @brief Construct an iterator to the group under the given frame.
-  ///
-  /// @note Asserts if the frame is out of range.
-  /// @sa findGroup
-  ///
-  /// @param array Group array.
-  /// @param frame Index of the frame.
-  GroupIterator(tcb::span<const Group> array, FrameIdx frame);
-  
-  /// @brief Increment the iterator to the next frame.
-  ///
-  /// @note Asserts if incrementing past the end.
-  ///
-  /// @returns Whether the iterator advanced to a new group.
-  bool incr();
-  
-  /// @brief Get the group at the iterator.
-  ///
-  /// @note Asserts if the iterator is at the end.
-  /// @sa getGroup
-  ///
-  /// @returns The index of the group and its boundaries.
-  GroupInfo info() const;
-  
-  /// @brief Get the name of the group at the iterator.
-  ///
-  /// @note Asserts if the iterator is at the end.
-  ///
-  /// @returns The name of the group.
-  std::string_view name() const;
-  
-private:
-  tcb::span<const Group> array;
-  tcb::span<const Group>::iterator iter;
-  FrameIdx frame;
-};
 
 #endif

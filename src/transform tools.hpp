@@ -28,7 +28,7 @@ private:
 
 class FlipTool final : public Tool {
 public:
-  void attachCel() override;
+  void attachCelImage() override;
   void mouseLeave(const ToolLeaveEvent &) override;
   void mouseDown(const ToolMouseDownEvent &) override;
   void mouseMove(const ToolMouseMoveEvent &) override;
@@ -44,7 +44,7 @@ private:
 
 class RotateTool final : public Tool {
 public:
-  void attachCel() override;
+  void attachCelImage() override;
   void mouseLeave(const ToolLeaveEvent &) override;
   void mouseDown(const ToolMouseDownEvent &) override;
   void mouseMove(const ToolMouseMoveEvent &) override;

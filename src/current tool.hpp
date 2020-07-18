@@ -14,7 +14,7 @@
 class CurrentTool {
 public:
   void setTool(Tool *);
-  void setCel(Cel *);
+  void setCel(CelImage *);
   
   void mouseEnter(QPoint);
   void mouseEnter();
@@ -26,7 +26,7 @@ public:
   
 private:
   Tool *tool = nullptr;
-  Cel *cel = nullptr;
+  CelImage *cel = nullptr;
   QPoint lastPos = {-1, -1};
   ButtonType button = ButtonType::none;
   

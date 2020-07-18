@@ -30,7 +30,7 @@ void BrushTool::mouseDown(const ToolMouseDownEvent &event) {
   if (color.zero()) {
     bounds = rect;
   } else {
-    ctx->growCel(rect);
+    ctx->growCelImage(rect);
   }
   symPoint(event.pos);
   ctx->lock();
@@ -50,7 +50,7 @@ void BrushTool::mouseMove(const ToolMouseMoveEvent &event) {
   if (color.zero()) {
     bounds = bounds.united(rect);
   } else {
-    ctx->growCel(rect);
+    ctx->growCelImage(rect);
   }
   symLine({event.lastPos, event.pos});
 }
@@ -59,7 +59,7 @@ void BrushTool::mouseUp(const ToolMouseUpEvent &) {
   SCOPE_TIME("BrushTool::mouseUp");
   
   ctx->unlock();
-  if (color.zero()) ctx->shrinkCel(bounds);
+  if (color.zero()) ctx->shrinkCelImage(bounds);
   ctx->finishChange();
 }
 
@@ -148,7 +148,7 @@ void BrushTool::symPoint(const QPoint point) {
     const QPoint pos = ctx->cel->pos;
     const QRect rect = pointRect(point);
     drawRoundPoint(img, color, point - pos, radius);
-    ctx->changeCel(rect);
+    ctx->changeCelImage(rect);
   });
 }
 
@@ -159,7 +159,7 @@ void BrushTool::symLine(const QLine line) {
     QImage &img = ctx->cel->img;
     const QPoint pos = ctx->cel->pos;
     drawLine(img, color, line.translated(-pos), radius);
-    ctx->changeCel(lineRect(line));
+    ctx->changeCelImage(lineRect(line));
   });
 }
 

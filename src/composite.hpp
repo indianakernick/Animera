@@ -36,11 +36,11 @@ void writeOverlay(PaletteCSpan, Format, QImage &, const QImage &);
 /// Colors are converted to grayscale
 void writeOverlay(PaletteCSpan, Format, QImage &, const QImage &, const QImage &);
 
-/// Ensure that the cel is large enough to enclose the given rectangle
-void growCel(Cel &, Format, QRect);
-/// Shrink the cel to occupy the smallest amount of space
-void shrinkCel(Cel &, QRect);
-/// Sample a pixel from a cel. Returns 0 if the position is out of range
-PixelVar sampleCel(const Cel &, QPoint);
+/// Ensure that the cel image is large enough to enclose the given rectangle
+void growCelImage(CelImage &, Format, QRect);
+/// Shrink the cel image to occupy the smallest amount of space
+void shrinkCelImage(CelImage &, QRect);
+/// Sample a pixel from a cel image. Returns 0 if the position is out of range
+PixelVar sampleCelImage(const CelImage &, QPoint);
 
 #endif

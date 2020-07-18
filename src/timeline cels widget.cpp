@@ -75,7 +75,7 @@ void CelsWidget::setPos(const CelPos pos) {
   update();
 }
 
-void CelsWidget::setLayer(const LayerIdx idx, tcb::span<const CelSpan> spans) {
+void CelsWidget::setLayerCels(const LayerIdx idx, tcb::span<const Cel> cels) {
   QPainter layers{&layersImg};
   layers.setCompositionMode(QPainter::CompositionMode_Source);
   QPainter borders{&bordersImg};
@@ -86,14 +86,14 @@ void CelsWidget::setLayer(const LayerIdx idx, tcb::span<const CelSpan> spans) {
   layers.fillRect(0, celPainter.posY(), width(), cel_height, QColor{0, 0, 0, 0});
   borders.fillRect(0, celPainter.posY(), width(), cel_height, QColor{0, 0, 0, 0});
   
-  for (const CelSpan &span : spans) {
-    if (*span.cel) {
-      celPainter.span(layers, span.len);
-      celPainter.span(borders, span.len);
-      celPainter.advance(span.len);
+  for (const Cel &cel : cels) {
+    if (*cel.cel) {
+      celPainter.span(layers, cel.len);
+      celPainter.span(borders, cel.len);
+      celPainter.advance(cel.len);
       celPainter.border(borders);
     } else {
-      for (FrameIdx f = {}; f != span.len; ++f) {
+      for (FrameIdx f = {}; f != cel.len; ++f) {
         celPainter.advance();
         celPainter.border(borders);
       }

@@ -10,7 +10,7 @@
 #define animera_timeline_widget_hpp
 
 #include "cel.hpp"
-#include "cel span.hpp"
+#include "cel array.hpp"
 #include "group array.hpp"
 #include <QtWidgets/qwidget.h>
 
@@ -34,17 +34,17 @@ public Q_SLOTS:
   void setGroup(GroupInfo);
   void setGroupName(std::string_view);
   void setGroupArray(tcb::span<const Group>);
-  void setVisibility(LayerIdx, bool);
+  void setLayerVisibility(LayerIdx, bool);
   void setLayerName(LayerIdx, std::string_view);
-  void setLayer(LayerIdx, tcb::span<const CelSpan>);
+  void setLayerCels(LayerIdx, tcb::span<const Cel>);
   void setFrameCount(FrameIdx);
   void setLayerCount(LayerIdx);
   void toggleAnimation();
   void setDelay(int);
 
 Q_SIGNALS:
-  void shouldSetVisibility(LayerIdx, bool);
-  void shouldIsolateVisibility(LayerIdx);
+  void shouldSetLayerVisibility(LayerIdx, bool);
+  void shouldIsolateLayerVisibility(LayerIdx);
   void shouldSetLayerName(LayerIdx, std::string_view);
   
   void shouldNextFrame();

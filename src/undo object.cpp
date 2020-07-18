@@ -14,7 +14,7 @@
 UndoObject::UndoObject(QObject *parent)
   : QObject{parent} {}
 
-void UndoObject::setCel(Cel *newCel) {
+void UndoObject::setCelImage(CelImage *newCel) {
   if (cel != newCel) {
     stack.reset(*newCel);
   }
@@ -29,8 +29,8 @@ void UndoObject::keyPress(const Qt::Key key) {
   }
 }
 
-void UndoObject::celModified() {
-  SCOPE_TIME("UndoObject::celModified");
+void UndoObject::celImageModified() {
+  SCOPE_TIME("UndoObject::celImageModified");
   
   // TODO: not notified of cels being cleared or pasted onto
   // maybe we could listen to the timeline.modified signal?
@@ -55,19 +55,19 @@ void UndoObject::redo() {
   }
 }
 
-void UndoObject::restore(const Cel &newCel) {
+void UndoObject::restore(const CelImage &newCel) {
   SCOPE_TIME("UndoObject::restore");
   
   if (cel->isNull() > newCel.isNull()) {
-    Q_EMIT shouldGrowCel(newCel.rect());
+    Q_EMIT shouldGrowCelImage(newCel.rect());
     copyImage(cel->img, newCel.img);
-    Q_EMIT celReverted(newCel.rect());
+    Q_EMIT celImageReverted(newCel.rect());
   } else if (cel->isNull() < newCel.isNull()) {
     Q_EMIT shouldClearCel();
   } else {
     const QRect rect = cel->rect().united(newCel.rect());
     *cel = newCel;
-    Q_EMIT celReverted(rect);
+    Q_EMIT celImageReverted(rect);
   }
 }
 

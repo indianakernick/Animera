@@ -22,7 +22,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_ToolSelectWidget_t {
     QByteArrayData data[34];
-    char stringdata0[371];
+    char stringdata0[390];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -32,52 +32,52 @@ struct qt_meta_stringdata_ToolSelectWidget_t {
 static const qt_meta_stringdata_ToolSelectWidget_t qt_meta_stringdata_ToolSelectWidget = {
     {
 QT_MOC_LITERAL(0, 0, 16), // "ToolSelectWidget"
-QT_MOC_LITERAL(1, 17, 11), // "celModified"
-QT_MOC_LITERAL(2, 29, 0), // ""
-QT_MOC_LITERAL(3, 30, 15), // "overlayModified"
-QT_MOC_LITERAL(4, 46, 14), // "shouldShowNorm"
-QT_MOC_LITERAL(5, 61, 16), // "std::string_view"
-QT_MOC_LITERAL(6, 78, 14), // "changingAction"
-QT_MOC_LITERAL(7, 93, 13), // "growRequested"
-QT_MOC_LITERAL(8, 107, 15), // "shrinkRequested"
-QT_MOC_LITERAL(9, 123, 13), // "lockRequested"
-QT_MOC_LITERAL(10, 137, 15), // "unlockRequested"
-QT_MOC_LITERAL(11, 153, 10), // "mouseEnter"
-QT_MOC_LITERAL(12, 164, 10), // "mouseLeave"
-QT_MOC_LITERAL(13, 175, 9), // "mouseDown"
-QT_MOC_LITERAL(14, 185, 10), // "ButtonType"
-QT_MOC_LITERAL(15, 196, 9), // "mouseMove"
-QT_MOC_LITERAL(16, 206, 7), // "mouseUp"
-QT_MOC_LITERAL(17, 214, 8), // "keyPress"
-QT_MOC_LITERAL(18, 223, 7), // "Qt::Key"
-QT_MOC_LITERAL(19, 231, 10), // "setOverlay"
-QT_MOC_LITERAL(20, 242, 7), // "QImage*"
-QT_MOC_LITERAL(21, 250, 6), // "setCel"
-QT_MOC_LITERAL(22, 257, 4), // "Cel*"
-QT_MOC_LITERAL(23, 262, 9), // "setColors"
-QT_MOC_LITERAL(24, 272, 10), // "ToolColors"
-QT_MOC_LITERAL(25, 283, 10), // "setPalette"
-QT_MOC_LITERAL(26, 294, 12), // "PaletteCSpan"
-QT_MOC_LITERAL(27, 307, 10), // "initCanvas"
-QT_MOC_LITERAL(28, 318, 6), // "Format"
-QT_MOC_LITERAL(29, 325, 7), // "setTool"
-QT_MOC_LITERAL(30, 333, 11), // "ToolWidget*"
-QT_MOC_LITERAL(31, 345, 5), // "Tool*"
-QT_MOC_LITERAL(32, 351, 8), // "lockTool"
-QT_MOC_LITERAL(33, 360, 10) // "unlockTool"
+QT_MOC_LITERAL(1, 17, 16), // "celImageModified"
+QT_MOC_LITERAL(2, 34, 0), // ""
+QT_MOC_LITERAL(3, 35, 15), // "overlayModified"
+QT_MOC_LITERAL(4, 51, 14), // "shouldShowNorm"
+QT_MOC_LITERAL(5, 66, 16), // "std::string_view"
+QT_MOC_LITERAL(6, 83, 14), // "changingAction"
+QT_MOC_LITERAL(7, 98, 18), // "shouldGrowCelImage"
+QT_MOC_LITERAL(8, 117, 20), // "shouldShrinkCelImage"
+QT_MOC_LITERAL(9, 138, 10), // "shouldLock"
+QT_MOC_LITERAL(10, 149, 12), // "shouldUnlock"
+QT_MOC_LITERAL(11, 162, 10), // "mouseEnter"
+QT_MOC_LITERAL(12, 173, 10), // "mouseLeave"
+QT_MOC_LITERAL(13, 184, 9), // "mouseDown"
+QT_MOC_LITERAL(14, 194, 10), // "ButtonType"
+QT_MOC_LITERAL(15, 205, 9), // "mouseMove"
+QT_MOC_LITERAL(16, 215, 7), // "mouseUp"
+QT_MOC_LITERAL(17, 223, 8), // "keyPress"
+QT_MOC_LITERAL(18, 232, 7), // "Qt::Key"
+QT_MOC_LITERAL(19, 240, 10), // "setOverlay"
+QT_MOC_LITERAL(20, 251, 7), // "QImage*"
+QT_MOC_LITERAL(21, 259, 11), // "setCelImage"
+QT_MOC_LITERAL(22, 271, 9), // "CelImage*"
+QT_MOC_LITERAL(23, 281, 9), // "setColors"
+QT_MOC_LITERAL(24, 291, 10), // "ToolColors"
+QT_MOC_LITERAL(25, 302, 10), // "setPalette"
+QT_MOC_LITERAL(26, 313, 12), // "PaletteCSpan"
+QT_MOC_LITERAL(27, 326, 10), // "initCanvas"
+QT_MOC_LITERAL(28, 337, 6), // "Format"
+QT_MOC_LITERAL(29, 344, 7), // "setTool"
+QT_MOC_LITERAL(30, 352, 11), // "ToolWidget*"
+QT_MOC_LITERAL(31, 364, 5), // "Tool*"
+QT_MOC_LITERAL(32, 370, 8), // "lockTool"
+QT_MOC_LITERAL(33, 379, 10) // "unlockTool"
 
     },
-    "ToolSelectWidget\0celModified\0\0"
+    "ToolSelectWidget\0celImageModified\0\0"
     "overlayModified\0shouldShowNorm\0"
     "std::string_view\0changingAction\0"
-    "growRequested\0shrinkRequested\0"
-    "lockRequested\0unlockRequested\0mouseEnter\0"
+    "shouldGrowCelImage\0shouldShrinkCelImage\0"
+    "shouldLock\0shouldUnlock\0mouseEnter\0"
     "mouseLeave\0mouseDown\0ButtonType\0"
     "mouseMove\0mouseUp\0keyPress\0Qt::Key\0"
-    "setOverlay\0QImage*\0setCel\0Cel*\0setColors\0"
-    "ToolColors\0setPalette\0PaletteCSpan\0"
-    "initCanvas\0Format\0setTool\0ToolWidget*\0"
-    "Tool*\0lockTool\0unlockTool"
+    "setOverlay\0QImage*\0setCelImage\0CelImage*\0"
+    "setColors\0ToolColors\0setPalette\0"
+    "PaletteCSpan\0initCanvas\0Format\0setTool\0"
+    "ToolWidget*\0Tool*\0lockTool\0unlockTool"
 };
 #undef QT_MOC_LITERAL
 
@@ -155,14 +155,14 @@ void ToolSelectWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
         auto *_t = static_cast<ToolSelectWidget *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->celModified((*reinterpret_cast< QRect(*)>(_a[1]))); break;
+        case 0: _t->celImageModified((*reinterpret_cast< QRect(*)>(_a[1]))); break;
         case 1: _t->overlayModified((*reinterpret_cast< QRect(*)>(_a[1]))); break;
         case 2: _t->shouldShowNorm((*reinterpret_cast< std::string_view(*)>(_a[1]))); break;
         case 3: _t->changingAction(); break;
-        case 4: _t->growRequested((*reinterpret_cast< QRect(*)>(_a[1]))); break;
-        case 5: _t->shrinkRequested((*reinterpret_cast< QRect(*)>(_a[1]))); break;
-        case 6: _t->lockRequested(); break;
-        case 7: _t->unlockRequested(); break;
+        case 4: _t->shouldGrowCelImage((*reinterpret_cast< QRect(*)>(_a[1]))); break;
+        case 5: _t->shouldShrinkCelImage((*reinterpret_cast< QRect(*)>(_a[1]))); break;
+        case 6: _t->shouldLock(); break;
+        case 7: _t->shouldUnlock(); break;
         case 8: _t->mouseEnter((*reinterpret_cast< QPoint(*)>(_a[1]))); break;
         case 9: _t->mouseLeave(); break;
         case 10: _t->mouseDown((*reinterpret_cast< QPoint(*)>(_a[1])),(*reinterpret_cast< ButtonType(*)>(_a[2]))); break;
@@ -170,7 +170,7 @@ void ToolSelectWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
         case 12: _t->mouseUp((*reinterpret_cast< QPoint(*)>(_a[1])),(*reinterpret_cast< ButtonType(*)>(_a[2]))); break;
         case 13: _t->keyPress((*reinterpret_cast< Qt::Key(*)>(_a[1]))); break;
         case 14: _t->setOverlay((*reinterpret_cast< QImage*(*)>(_a[1]))); break;
-        case 15: _t->setCel((*reinterpret_cast< Cel*(*)>(_a[1]))); break;
+        case 15: _t->setCelImage((*reinterpret_cast< CelImage*(*)>(_a[1]))); break;
         case 16: _t->setColors((*reinterpret_cast< ToolColors(*)>(_a[1]))); break;
         case 17: _t->setPalette((*reinterpret_cast< PaletteCSpan(*)>(_a[1]))); break;
         case 18: _t->initCanvas((*reinterpret_cast< Format(*)>(_a[1])),(*reinterpret_cast< QSize(*)>(_a[2]))); break;
@@ -183,7 +183,7 @@ void ToolSelectWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
         int *result = reinterpret_cast<int *>(_a[0]);
         {
             using _t = void (ToolSelectWidget::*)(QRect );
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ToolSelectWidget::celModified)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ToolSelectWidget::celImageModified)) {
                 *result = 0;
                 return;
             }
@@ -211,28 +211,28 @@ void ToolSelectWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
         }
         {
             using _t = void (ToolSelectWidget::*)(QRect );
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ToolSelectWidget::growRequested)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ToolSelectWidget::shouldGrowCelImage)) {
                 *result = 4;
                 return;
             }
         }
         {
             using _t = void (ToolSelectWidget::*)(QRect );
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ToolSelectWidget::shrinkRequested)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ToolSelectWidget::shouldShrinkCelImage)) {
                 *result = 5;
                 return;
             }
         }
         {
             using _t = void (ToolSelectWidget::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ToolSelectWidget::lockRequested)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ToolSelectWidget::shouldLock)) {
                 *result = 6;
                 return;
             }
         }
         {
             using _t = void (ToolSelectWidget::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ToolSelectWidget::unlockRequested)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ToolSelectWidget::shouldUnlock)) {
                 *result = 7;
                 return;
             }
@@ -281,7 +281,7 @@ int ToolSelectWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void ToolSelectWidget::celModified(QRect _t1)
+void ToolSelectWidget::celImageModified(QRect _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);
@@ -308,27 +308,27 @@ void ToolSelectWidget::changingAction()
 }
 
 // SIGNAL 4
-void ToolSelectWidget::growRequested(QRect _t1)
+void ToolSelectWidget::shouldGrowCelImage(QRect _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 4, _a);
 }
 
 // SIGNAL 5
-void ToolSelectWidget::shrinkRequested(QRect _t1)
+void ToolSelectWidget::shouldShrinkCelImage(QRect _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 5, _a);
 }
 
 // SIGNAL 6
-void ToolSelectWidget::lockRequested()
+void ToolSelectWidget::shouldLock()
 {
     QMetaObject::activate(this, &staticMetaObject, 6, nullptr);
 }
 
 // SIGNAL 7
-void ToolSelectWidget::unlockRequested()
+void ToolSelectWidget::shouldUnlock()
 {
     QMetaObject::activate(this, &staticMetaObject, 7, nullptr);
 }

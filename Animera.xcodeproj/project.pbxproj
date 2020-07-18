@@ -25,7 +25,7 @@
 		4515ABAF24BE9FCD0052C8BF /* export texture atlas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4515ABAD24BE9FCD0052C8BF /* export texture atlas.cpp */; };
 		4515ABB424C000F50052C8BF /* png export backend.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4515ABB224C000F50052C8BF /* png export backend.cpp */; };
 		45161F0622F1399A0036BBED /* timeline painting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45161F0422F1399A0036BBED /* timeline painting.cpp */; };
-		451A237D24B979B700160390 /* cel span painter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 451A237B24B979B600160390 /* cel span painter.cpp */; };
+		451A237D24B979B700160390 /* cel painter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 451A237B24B979B600160390 /* cel painter.cpp */; };
 		4529A9FD239263110034A014 /* docopt helpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4529A9FB239263110034A014 /* docopt helpers.cpp */; };
 		4529AA00239B4A420034A014 /* scope time.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4529A9FF239B4A420034A014 /* scope time.cpp */; };
 		4529AA03239CA0D40034A014 /* tool param bar widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4529AA01239CA0D40034A014 /* tool param bar widget.cpp */; };
@@ -73,7 +73,7 @@
 		457D74F5239F67D7009B4E4B /* resources.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 457D74F4239F67D6009B4E4B /* resources.cpp */; };
 		457D74FF239F97A6009B4E4B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 455F285B2206890300C73F39 /* Assets.xcassets */; };
 		457DC0BD22E7D6160000777B /* file input widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 457DC0BB22E7D6160000777B /* file input widget.cpp */; };
-		457DC0C222E9518A0000777B /* cel span.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 457DC0C022E9518A0000777B /* cel span.cpp */; };
+		457DC0C222E9518A0000777B /* cel array.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 457DC0C022E9518A0000777B /* cel array.cpp */; };
 		4595D48622BCA0E000607D64 /* scroll bar widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4595D48422BCA0E000607D64 /* scroll bar widget.cpp */; };
 		4595D48C22C05E5400607D64 /* timeline cels widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4595D48A22C05E5400607D64 /* timeline cels widget.cpp */; };
 		4595D48F22C061DF00607D64 /* timeline layers widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4595D48D22C061DF00607D64 /* timeline layers widget.cpp */; };
@@ -168,8 +168,8 @@
 		45161F0022F11EB60036BBED /* todo.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = todo.txt; sourceTree = "<group>"; };
 		45161F0422F1399A0036BBED /* timeline painting.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "timeline painting.cpp"; sourceTree = "<group>"; };
 		45161F0522F1399A0036BBED /* timeline painting.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "timeline painting.hpp"; sourceTree = "<group>"; };
-		451A237B24B979B600160390 /* cel span painter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "cel span painter.cpp"; sourceTree = "<group>"; };
-		451A237C24B979B700160390 /* cel span painter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "cel span painter.hpp"; sourceTree = "<group>"; };
+		451A237B24B979B600160390 /* cel painter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "cel painter.cpp"; sourceTree = "<group>"; };
+		451A237C24B979B700160390 /* cel painter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "cel painter.hpp"; sourceTree = "<group>"; };
 		45259062232E0D3600FE38A2 /* graphics convert.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "graphics convert.hpp"; sourceTree = "<group>"; };
 		452926E222BB607E00B17E0D /* screenshot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = screenshot.png; sourceTree = "<group>"; };
 		4529A9FB239263110034A014 /* docopt helpers.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "docopt helpers.cpp"; sourceTree = "<group>"; };
@@ -747,8 +747,8 @@
 		457DC0BB22E7D6160000777B /* file input widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "file input widget.cpp"; sourceTree = "<group>"; };
 		457DC0BC22E7D6160000777B /* file input widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "file input widget.hpp"; sourceTree = "<group>"; };
 		457DC0BE22E7FB2B0000777B /* widget rect.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "widget rect.hpp"; sourceTree = "<group>"; };
-		457DC0C022E9518A0000777B /* cel span.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "cel span.cpp"; sourceTree = "<group>"; };
-		457DC0C122E9518A0000777B /* cel span.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "cel span.hpp"; sourceTree = "<group>"; };
+		457DC0C022E9518A0000777B /* cel array.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "cel array.cpp"; sourceTree = "<group>"; };
+		457DC0C122E9518A0000777B /* cel array.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "cel array.hpp"; sourceTree = "<group>"; };
 		458F84032249CB7C005F91D0 /* config geometry.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "config geometry.hpp"; sourceTree = "<group>"; };
 		4595D48422BCA0E000607D64 /* scroll bar widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "scroll bar widget.cpp"; sourceTree = "<group>"; };
 		4595D48522BCA0E000607D64 /* scroll bar widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "scroll bar widget.hpp"; sourceTree = "<group>"; };
@@ -1011,8 +1011,8 @@
 				453A20C7231A139100F055BA /* palette span.hpp */,
 				4513144822D1828D00D66262 /* animation.cpp */,
 				4513144922D1828D00D66262 /* animation.hpp */,
-				457DC0C022E9518A0000777B /* cel span.cpp */,
-				457DC0C122E9518A0000777B /* cel span.hpp */,
+				457DC0C022E9518A0000777B /* cel array.cpp */,
+				457DC0C122E9518A0000777B /* cel array.hpp */,
 				4515AB9C24BAA17A0052C8BF /* group array.cpp */,
 				4515AB9D24BAA17A0052C8BF /* group array.hpp */,
 				453A20C4231A078100F055BA /* animation file.cpp */,
@@ -1122,8 +1122,8 @@
 				453C78452234F3C600818B19 /* status bar widget.hpp */,
 				453C78172234935000818B19 /* timeline widget.cpp */,
 				453C78182234935000818B19 /* timeline widget.hpp */,
-				451A237B24B979B600160390 /* cel span painter.cpp */,
-				451A237C24B979B700160390 /* cel span painter.hpp */,
+				451A237B24B979B600160390 /* cel painter.cpp */,
+				451A237C24B979B700160390 /* cel painter.hpp */,
 				4595D48A22C05E5400607D64 /* timeline cels widget.cpp */,
 				4595D48B22C05E5400607D64 /* timeline cels widget.hpp */,
 				4595D48D22C061DF00607D64 /* timeline layers widget.cpp */,
@@ -3102,7 +3102,7 @@
 				453A20C6231A078100F055BA /* animation file.cpp in Sources */,
 				45E3FFAF24417A47007A1FE8 /* cli info.cpp in Sources */,
 				453D28C3227698F200D0E5F9 /* widget painting.cpp in Sources */,
-				457DC0C222E9518A0000777B /* cel span.cpp in Sources */,
+				457DC0C222E9518A0000777B /* cel array.cpp in Sources */,
 				4513144D22D1B06F00D66262 /* timeline controls widget.cpp in Sources */,
 				45E3FFAC244179C2007A1FE8 /* cli export.cpp in Sources */,
 				4515ABA624BE95670052C8BF /* export name.cpp in Sources */,
@@ -3153,7 +3153,7 @@
 				4571C132227C383A00479006 /* radio button widget.cpp in Sources */,
 				453D28C02276956A00D0E5F9 /* hex input widget.cpp in Sources */,
 				45B284932218E38800D6D055 /* image.cpp in Sources */,
-				451A237D24B979B700160390 /* cel span painter.cpp in Sources */,
+				451A237D24B979B700160390 /* cel painter.cpp in Sources */,
 				45054F732259C9AB0078350B /* color picker widget.cpp in Sources */,
 				45D1099222DAF70000D1F1CB /* brush tool.cpp in Sources */,
 				454E990F2349A9B40059274C /* gradient tool.cpp in Sources */,

@@ -27,6 +27,39 @@ auto findGroupIter(const Iterator begin, const Iterator end, FrameIdx &idx) {
 
 }
 
+GroupIterator::GroupIterator(const tcb::span<const Group> array, FrameIdx frame)
+  : array{array},
+    iter{findGroupIter(array.begin(), array.end(), frame)},
+    frame{frame} {
+  assert(iter != array.end());
+}
+
+bool GroupIterator::incr() {
+  assert(iter != array.end());
+  assert(FrameIdx{0} <= frame);
+  assert(frame < iter->end);
+  if (++frame == iter->end) {
+    ++iter;
+    return true;
+  } else {
+    return false;
+  }
+}
+
+GroupInfo GroupIterator::info() const {
+  assert(iter != array.end());
+  GroupInfo info;
+  info.group = static_cast<GroupIdx>(iter - array.begin());
+  info.begin = iter == array.begin() ? FrameIdx{0} : std::prev(iter)->end;
+  info.end = iter->end;
+  return info;
+}
+
+std::string_view GroupIterator::name() const {
+  assert(iter != array.end());
+  return iter->name;
+}
+
 bool moveGroupBoundary(
   std::vector<Group> &groups,
   const GroupIdx group,
@@ -161,37 +194,4 @@ GroupInfo getGroup(const tcb::span<const Group> groups, const GroupIdx group) {
   info.begin = group == GroupIdx{0} ? FrameIdx{0} : groups[+group - 1].end;
   info.end = groups[+group].end;
   return info;
-}
-
-GroupIterator::GroupIterator(const tcb::span<const Group> array, FrameIdx frame)
-  : array{array},
-    iter{findGroupIter(array.begin(), array.end(), frame)},
-    frame{frame} {
-  assert(iter != array.end());
-}
-
-bool GroupIterator::incr() {
-  assert(iter != array.end());
-  assert(FrameIdx{0} <= frame);
-  assert(frame < iter->end);
-  if (++frame == iter->end) {
-    ++iter;
-    return true;
-  } else {
-    return false;
-  }
-}
-
-GroupInfo GroupIterator::info() const {
-  assert(iter != array.end());
-  GroupInfo info;
-  info.group = static_cast<GroupIdx>(iter - array.begin());
-  info.begin = iter == array.begin() ? FrameIdx{0} : std::prev(iter)->end;
-  info.end = iter->end;
-  return info;
-}
-
-std::string_view GroupIterator::name() const {
-  assert(iter != array.end());
-  return iter->name;
 }

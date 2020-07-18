@@ -24,14 +24,14 @@ void UndoStack::clear() {
   top = -1;
 }
 
-void UndoStack::reset(Cel cel) {
+void UndoStack::reset(CelImage cel) {
   stack.clear();
   cel.img.detach();
   stack.push_back(std::move(cel));
   top = 0;
 }
 
-void UndoStack::modify(Cel cel) {
+void UndoStack::modify(CelImage cel) {
   assert(!stack.empty());
   stack.erase(stack.begin() + top + 1, stack.end());
   if (stack.size() >= edit_undo_stack) {

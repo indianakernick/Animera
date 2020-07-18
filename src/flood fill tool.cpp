@@ -29,26 +29,26 @@ void FloodFillTool::mouseDown(const ToolMouseDownEvent &event) {
   SCOPE_TIME("FloodFillTool::mouseDown");
 
   const PixelVar fillColor = ctx->selectColor(event.button);
-  const PixelVar startColor = sampleCel(*ctx->cel, event.pos);
+  const PixelVar startColor = sampleCelImage(*ctx->cel, event.pos);
   if (fillColor == startColor) return;
   const QRect rect = toRect(ctx->size).intersected(ctx->cel->rect());
   if (startColor.zero()) {
     if (rect.contains(event.pos)) {
       fillOpen(event.pos, fillColor);
     } else if (ctx->cel->isNull()) {
-      ctx->growCel(toRect(ctx->size));
+      ctx->growCelImage(toRect(ctx->size));
       drawFilledRect(ctx->cel->img, fillColor, toRect(ctx->size));
-      ctx->changeCel(toRect(ctx->size));
+      ctx->changeCelImage(toRect(ctx->size));
     } else {
-      ctx->growCel(toRect(ctx->size));
+      ctx->growCelImage(toRect(ctx->size));
       const QRect fillRect = fill(toRect(ctx->size), event.pos, fillColor);
-      ctx->shrinkCel(toRect(ctx->size));
-      ctx->changeCel(fillRect);
+      ctx->shrinkCelImage(toRect(ctx->size));
+      ctx->changeCelImage(fillRect);
     }
   } else {
     const QRect fillRect = fill(rect, event.pos, fillColor);
-    if (fillColor.zero()) ctx->shrinkCel(fillRect);
-    ctx->changeCel(fillRect);
+    if (fillColor.zero()) ctx->shrinkCelImage(fillRect);
+    ctx->changeCelImage(fillRect);
   }
   ctx->finishChange();
 }
@@ -100,7 +100,7 @@ void FloodFillTool::fillOpen(const QPoint pos, const PixelVar color) {
   const bool bottom = sideSpill<&QRect::bottom>(fillRect, celRect, canvasRect);
   const bool any = left || top || right || bottom;
   
-  if (any) ctx->growCel(canvasRect);
+  if (any) ctx->growCelImage(canvasRect);
   
   if (left) {
     const QPoint leftPos = {celRect.left() - 1, celRect.top()};
@@ -119,7 +119,7 @@ void FloodFillTool::fillOpen(const QPoint pos, const PixelVar color) {
     fillRect = fillRect.united(fill(canvasRect, bottomPos, color));
   }
   
-  if (any && fillRect != canvasRect) ctx->shrinkCel(canvasRect);
+  if (any && fillRect != canvasRect) ctx->shrinkCelImage(canvasRect);
   
-  ctx->changeCel(fillRect);
+  ctx->changeCelImage(fillRect);
 }

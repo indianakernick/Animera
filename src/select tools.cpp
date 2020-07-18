@@ -102,17 +102,17 @@ void SelectTool<Derived>::paste(
     return ctx->changeOverlay(rect);
   }
   if (button == ButtonType::primary) {
-    ctx->growCel(rect);
+    ctx->growCelImage(rect);
     const QPoint celPos = ctx->cel->pos;
     blitImage(ctx->cel->img, cview(selection, bounds), rect.topLeft() - celPos);
-    ctx->shrinkCel(rect);
+    ctx->shrinkCelImage(rect);
   } else if (button == ButtonType::erase) {
-    if (!ctx->colors.erase.zero()) ctx->growCel(rect);
+    if (!ctx->colors.erase.zero()) ctx->growCelImage(rect);
     const QPoint celPos = ctx->cel->pos;
     drawFilledRect(ctx->cel->img, ctx->colors.erase, rect.translated(-celPos));
-    if (ctx->colors.erase.zero()) ctx->shrinkCel(rect);
+    if (ctx->colors.erase.zero()) ctx->shrinkCelImage(rect);
   }
-  ctx->changeCel(rect);
+  ctx->changeCelImage(rect);
   ctx->finishChange();
 }
 
@@ -129,17 +129,17 @@ void SelectTool<Derived>::pasteWithMask(
     return ctx->changeOverlay(rect);
   }
   if (button == ButtonType::primary) {
-    ctx->growCel(rect);
+    ctx->growCelImage(rect);
     const QPoint offsetPos = rect.topLeft() - ctx->cel->pos;
     blitMaskImage(ctx->cel->img, cview(mask, bounds), cview(selection, bounds), offsetPos);
-    ctx->shrinkCel(rect);
+    ctx->shrinkCelImage(rect);
   } else if (button == ButtonType::erase) {
-    if (!ctx->colors.erase.zero()) ctx->growCel(rect);
+    if (!ctx->colors.erase.zero()) ctx->growCelImage(rect);
     const QPoint offsetPos = rect.topLeft() - ctx->cel->pos;
     fillMaskImage(ctx->cel->img, cview(mask, bounds), ctx->colors.erase, offsetPos);
-    if (ctx->colors.erase.zero()) ctx->shrinkCel(rect);
+    if (ctx->colors.erase.zero()) ctx->shrinkCelImage(rect);
   }
-  ctx->changeCel(rect);
+  ctx->changeCelImage(rect);
   ctx->finishChange();
 }
 
@@ -184,8 +184,8 @@ void SelectTool<Derived>::toggleMode() {
 
 RectangleSelectTool::~RectangleSelectTool() = default;
 
-void RectangleSelectTool::attachCel() {
-  SCOPE_TIME("RectangleSelectTool::attachCel");
+void RectangleSelectTool::attachCelImage() {
+  SCOPE_TIME("RectangleSelectTool::attachCelImage");
   
   resizeImages();
 }
@@ -286,8 +286,8 @@ void RectangleSelectTool::mouseUp(const ToolMouseUpEvent &event) {
 
 PolygonSelectTool::~PolygonSelectTool() = default;
 
-void PolygonSelectTool::attachCel() {
-  SCOPE_TIME("PolygonSelectTool::attachCel");
+void PolygonSelectTool::attachCelImage() {
+  SCOPE_TIME("PolygonSelectTool::attachCelImage");
   
   if (resizeImages()) {
     mask = {ctx->size, qimageFormat<PixelMask>()};
@@ -412,8 +412,8 @@ WandSelectTool::WandSelectTool() {
 
 WandSelectTool::~WandSelectTool() = default;
 
-void WandSelectTool::attachCel() {
-  SCOPE_TIME("WandSelectTool::attachCel");
+void WandSelectTool::attachCelImage() {
+  SCOPE_TIME("WandSelectTool::attachCelImage");
   
   mode = SelectMode::copy;
   if (resizeImages()) {
@@ -426,8 +426,8 @@ void WandSelectTool::attachCel() {
   animTimer.start();
 }
 
-void WandSelectTool::detachCel() {
-  SCOPE_TIME("WandSelectTool::detachCel");
+void WandSelectTool::detachCelImage() {
+  SCOPE_TIME("WandSelectTool::detachCelImage");
   
   animTimer.stop();
   if (mode == SelectMode::copy) {
@@ -516,7 +516,7 @@ void WandSelectTool::toggleMode(const ToolMouseDownEvent &event) {
     clearImage(selection, bounds);
     copyWithMask(event.pos, mask);
     // TODO: flood fill optimization
-    ctx->shrinkCel();
+    ctx->shrinkCelImage();
   } else Q_UNREACHABLE();
 }
 
@@ -567,8 +567,8 @@ void WandSelectTool::addToSelection(const ToolMouseDownEvent &event) {
   
   // TODO: flood fill optimization
   QRect rect = toRect(ctx->size);
-  if (sampleCel(*ctx->cel, event.pos).zero()) {
-    ctx->growCel(rect);
+  if (sampleCelImage(*ctx->cel, event.pos).zero()) {
+    ctx->growCelImage(rect);
   } else {
     rect = rect.intersected(ctx->cel->rect());
   }

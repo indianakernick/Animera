@@ -21,10 +21,10 @@ add_executable(Animera
     src/application.moc
     "src/brush tool.cpp"
     "src/brush tool.hpp"
-    "src/cel span painter.cpp"
-    "src/cel span painter.hpp"
-    "src/cel span.cpp"
-    "src/cel span.hpp"
+    "src/cel array.cpp"
+    "src/cel array.hpp"
+    "src/cel painter.cpp"
+    "src/cel painter.hpp"
     src/cel.cpp
     src/cel.hpp
     "src/chunk io.cpp"

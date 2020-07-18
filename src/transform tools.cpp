@@ -69,14 +69,14 @@ void TranslateTool::keyPress(const ToolKeyEvent &event) {
 void TranslateTool::translate(const QPoint move) {
   const QRect rect = ctx->cel->rect();
   ctx->cel->pos += move;
-  ctx->changeCel(rect.united(rect.translated(move)));
+  ctx->changeCelImage(rect.united(rect.translated(move)));
 }
 
 void TranslateTool::updateStatus() {
   ctx->showStatus(StatusMsg{}.appendLabeled(ctx->cel->pos));
 }
 
-void FlipTool::attachCel() {
+void FlipTool::attachCelImage() {
   flipX = flipY = false;
 }
 
@@ -159,7 +159,7 @@ void FlipTool::flip(const bool x, const bool y) {
   }
   
   updateStatus();
-  ctx->changeCel(rect.united({ctx->cel->pos, rect.size()}));
+  ctx->changeCelImage(rect.united({ctx->cel->pos, rect.size()}));
   ctx->finishChange();
 }
 
@@ -172,7 +172,7 @@ void FlipTool::updateStatus() {
   ctx->showStatus(status);
 }
 
-void RotateTool::attachCel() {
+void RotateTool::attachCelImage() {
   angle = 0;
 }
 
@@ -248,7 +248,7 @@ void RotateTool::rotate(const int rot) {
   
   src = std::move(rotated);
   updateStatus();
-  ctx->changeCel(rect.united(ctx->cel->rect()));
+  ctx->changeCelImage(rect.united(ctx->cel->rect()));
   ctx->finishChange();
 }
 

@@ -8,12 +8,12 @@
 
 #include "tool.hpp"
 
-void ToolCtx::changeCel(const QRect rect) const {
-  Q_EMIT celModified(rect);
+void ToolCtx::changeCelImage(const QRect rect) const {
+  Q_EMIT celImageModified(rect);
 }
 
-void ToolCtx::changeCel(const QPoint point) const {
-  changeCel(toRect(point));
+void ToolCtx::changeCelImage(const QPoint point) const {
+  changeCelImage(toRect(point));
 }
 
 void ToolCtx::changeOverlay(const QRect rect) const {
@@ -24,16 +24,16 @@ void ToolCtx::changeOverlay(const QPoint point) const {
   changeOverlay(toRect(point));
 }
 
-void ToolCtx::growCel(const QRect rect) const {
-  Q_EMIT growRequested(rect);
+void ToolCtx::growCelImage(const QRect rect) const {
+  Q_EMIT shouldGrowCelImage(rect);
 }
 
-void ToolCtx::shrinkCel(const QRect rect) const {
-  Q_EMIT shrinkRequested(rect);
+void ToolCtx::shrinkCelImage(const QRect rect) const {
+  Q_EMIT shouldShrinkCelImage(rect);
 }
 
-void ToolCtx::shrinkCel() const {
-  Q_EMIT shrinkRequested(toRect(size));
+void ToolCtx::shrinkCelImage() const {
+  Q_EMIT shouldShrinkCelImage(toRect(size));
 }
 
 PixelVar ToolCtx::selectColor(const ButtonType button) const {
@@ -58,11 +58,11 @@ void ToolCtx::finishChange() const {
 }
 
 void ToolCtx::lock() const {
-  Q_EMIT lockRequested();
+  Q_EMIT shouldLock();
 }
 
 void ToolCtx::unlock() const {
-  Q_EMIT unlockRequested();
+  Q_EMIT shouldUnlock();
 }
 
 void Tool::setCtx(const ToolCtx *newCtx) {

@@ -13,7 +13,7 @@
 #include "cel.hpp"
 
 struct UndoState {
-  Cel cel;
+  CelImage cel;
   bool undid;
 };
 
@@ -23,13 +23,13 @@ public:
 
   bool empty() const;
   void clear();
-  void reset(Cel);
-  void modify(Cel);
+  void reset(CelImage);
+  void modify(CelImage);
   UndoState undo();
   UndoState redo();
   
 private:
-  std::vector<Cel> stack;
+  std::vector<CelImage> stack;
   std::size_t top;
 };
 

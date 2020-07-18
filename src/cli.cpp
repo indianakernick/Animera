@@ -87,7 +87,7 @@ R"(Options:
     
     --layer-names
         Outputs information about the layers. This includes the name, the number
-        of spans and the visibility.
+        of cels and the visibility.
     
     -j, --json
         By default, animation info is outputted in a pleasant-for-humans format.

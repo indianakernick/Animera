@@ -20,10 +20,10 @@ DragPaintTool<Derived>::~DragPaintTool() {
 }
 
 template <typename Derived>
-void DragPaintTool<Derived>::attachCel() {}
+void DragPaintTool<Derived>::attachCelImage() {}
 
 template <typename Derived>
-void DragPaintTool<Derived>::detachCel() {}
+void DragPaintTool<Derived>::detachCelImage() {}
 
 template <typename Derived>
 void DragPaintTool<Derived>::mouseLeave(const ToolLeaveEvent &event) {
@@ -45,11 +45,11 @@ void DragPaintTool<Derived>::mouseDown(const ToolMouseDownEvent &event) {
   startPos = event.pos;
   color = ctx->selectColor(event.button);
   const QRect rect = that()->pointRect(event.pos);
-  if (!color.zero()) ctx->growCel(rect);
-  cleanCel = *ctx->cel;
+  if (!color.zero()) ctx->growCelImage(rect);
+  cleanImage = *ctx->cel;
   const QPoint pos = ctx->cel->pos;
   that()->drawPoint(ctx->cel->img, color, startPos - pos);
-  ctx->changeCel(rect);
+  ctx->changeCelImage(rect);
   ctx->lock();
 }
 
@@ -71,12 +71,12 @@ void DragPaintTool<Derived>::mouseMove(const ToolMouseMoveEvent &event) {
   that()->updateStatus(status, startPos, event.pos);
   ctx->showStatus(status);
   
-  *ctx->cel = cleanCel;
+  *ctx->cel = cleanImage;
   const QRect rect = that()->dragRect(startPos, event.pos);
-  if (!color.zero()) ctx->growCel(rect);
+  if (!color.zero()) ctx->growCelImage(rect);
   const QPoint pos = ctx->cel->pos;
   that()->drawDrag(ctx->cel->img, startPos - pos, event.pos - pos);
-  ctx->changeCel(rect.united(that()->dragRect(startPos, event.lastPos)));
+  ctx->changeCelImage(rect.united(that()->dragRect(startPos, event.lastPos)));
 }
 
 template <typename Derived>
@@ -85,7 +85,7 @@ void DragPaintTool<Derived>::mouseUp(const ToolMouseUpEvent &event) {
 
   ctx->showStatus(StatusMsg{}.appendLabeled(event.pos));
   ctx->unlock();
-  if (color.zero()) ctx->shrinkCel(that()->dragRect(startPos, event.pos));
+  if (color.zero()) ctx->shrinkCelImage(that()->dragRect(startPos, event.pos));
   ctx->finishChange();
 }
 

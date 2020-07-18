@@ -11,7 +11,7 @@
 #include "file io.hpp"
 #include "strings.hpp"
 #include "chunk io.hpp"
-#include "cel span.hpp"
+#include "cel array.hpp"
 #include "animation file.hpp"
 #include <QtCore/qtextstream.h>
 #include <QtCore/qcoreapplication.h>
@@ -77,7 +77,7 @@ Error printLayers(QTextStream &console, QIODevice &dev, const bool json) try {
         console << ", ";
       }
       console << "{\n";
-      console << "      \"spans\": " << layer.spans.size() << ",\n";
+      console << "      \"cels\": " << layer.cels.size() << ",\n";
       console << "      \"visible\": " << (layer.visible ? "true" : "false") << ",\n";
       console << "      \"name\": \"";
       writeEscaped(console, layer.name);
@@ -85,7 +85,7 @@ Error printLayers(QTextStream &console, QIODevice &dev, const bool json) try {
     } else {
       console << "  Layer " << index << ":\n";
       console << "    Name:    " << toLatinString(layer.name) << '\n';
-      console << "    Spans:   " << layer.spans.size() << '\n';
+      console << "    Cels:   " << layer.cels.size() << '\n';
       console << "    Visible: " << (layer.visible ? "Yes" : "No") << '\n';
     }
     

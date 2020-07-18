@@ -10,13 +10,13 @@
 #define animera_timeline_cels_widget_hpp
 
 #include "cel.hpp"
-#include "cel span.hpp"
+#include "cel array.hpp"
 #include "group array.hpp"
 #include <QtCore/qtimer.h>
-#include "cel span painter.hpp"
+#include "cel painter.hpp"
 #include "scroll bar widget.hpp"
 
-// TODO: Share CelSpanPainter between CelsWidget and GroupsWidget
+// TODO: Share CelPainter between CelsWidget and GroupsWidget
 
 class CelsWidget final : public QWidget {
   Q_OBJECT
@@ -36,12 +36,12 @@ Q_SIGNALS:
 public Q_SLOTS:
   void setSelection(CelRect);
   void setPos(CelPos);
-  void setLayer(LayerIdx, tcb::span<const CelSpan>);
+  void setLayerCels(LayerIdx, tcb::span<const Cel>);
   void setFrameCount(FrameIdx);
   void setLayerCount(LayerIdx);
 
 private:
-  CelSpanPainter celPainter;
+  CelPainter celPainter;
   QImage posImg;
   QImage selectionImg;
   QImage bordersImg;
@@ -99,7 +99,7 @@ public Q_SLOTS:
   void setMargin(int);
 
 private:
-  CelSpanPainter celPainter;
+  CelPainter celPainter;
   QImage groupImg;
   QImage selectionImg;
   tcb::span<const Group> groupArray;

@@ -47,9 +47,9 @@ PLTE
 GRPS
 for each layer:
   LHDR
-  for each span in layer:
+  for each cel in layer:
     CHDR
-    if span is not null:
+    if cel is not null:
       CDAT
 AEND
 ```
@@ -133,37 +133,37 @@ chunk.
 
 | Type   | Description                                               |
 |--------|-----------------------------------------------------------|
-| Uint   | Number of spans in this layer [1, 4294967295]             |
+| Uint   | Number of cels in this layer [1, 4294967295]              |
 | Byte   | Visibility of this layer (0 for invisible, 1 for visible) |
 | String | Name of this layer [0, 256]                               |
 
-Each layer contains a number of spans. The number of spans corresponds to the
+Each layer contains a number of cels. The number of cels corresponds to the
 number of CHDR chunks that follow this chunk.
 
 ### CHDR (Cel Header)
 
-The format of the CHDR chunk depends on whether the span is null or not. 
+The format of the CHDR chunk depends on whether the cel is null or not.
 
-If the span is non-null, the cel rectangle is stored. This is a rectangle on the
+If the cel is non-null, the cel rectangle is stored. This is a rectangle on the
 canvas where the cel is placed. All pixels outside of the rectangle are
 considered zero.
 
-| Type | Description                                 |
-|------|---------------------------------------------|
-| Int  | Number of cels in this span [1, 2147483647] |
-| Int  | Cel X coordinate [-2147483648, 2147483647]  |
-| Int  | Cel Y coordinate [-2147483648, 2147483647]  |
-| Int  | Cel width [1, 1073741823]                   |
-| Int  | Cel height [1, 1073741823]                  |
+| Type | Description                                  |
+|------|----------------------------------------------|
+| Int  | Number of frames in this cel [1, 2147483647] |
+| Int  | Cel X coordinate [-2147483648, 2147483647]   |
+| Int  | Cel Y coordinate [-2147483648, 2147483647]   |
+| Int  | Cel width [1, 1073741823]                    |
+| Int  | Cel height [1, 1073741823]                   |
 
-If the span is null, the cel rectangle is not stored (because there is no cel to
+If the cel is null, the cel rectangle is not stored (because there is no cel to
 have a rectangle).
 
-| Type | Description                                 |
-|------|---------------------------------------------|
-| Int  | Number of cels in this span [1, 2147483647] |
+| Type | Description                                  |
+|------|----------------------------------------------|
+| Int  | Number of frames in this cel [1, 2147483647] |
 
-If the span is non-null, the following chunk will be a CDAT chunk.
+If the cel is non-null, the following chunk will be a CDAT chunk.
 
 ### CDAT (Cel Data)
 

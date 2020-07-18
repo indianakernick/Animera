@@ -15,7 +15,7 @@ void CurrentTool::setTool(Tool *newTool) {
   attach();
 }
 
-void CurrentTool::setCel(Cel *newCel) {
+void CurrentTool::setCel(CelImage *newCel) {
   assert(newCel);
   detach();
   cel = newCel;
@@ -89,9 +89,9 @@ void CurrentTool::keyPress(const Qt::Key eKey) {
 }
 
 void CurrentTool::attach() {
-  if (cel) tool->attachCel();
+  if (cel) tool->attachCelImage();
 }
 
 void CurrentTool::detach() {
-  if (cel) tool->detachCel();
+  if (cel) tool->detachCelImage();
 }

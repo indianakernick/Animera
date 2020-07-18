@@ -11,7 +11,7 @@
 #include "zlib.hpp"
 #include "strings.hpp"
 #include "chunk io.hpp"
-#include "cel span.hpp"
+#include "cel array.hpp"
 #include "scope time.hpp"
 #include <Graphics/format.hpp>
 
@@ -229,7 +229,7 @@ Error writeLHDR(QIODevice &dev, const Layer &layer) try {
   ChunkWriter writer{dev};
   const std::uint32_t nameLen = static_cast<std::uint32_t>(layer.name.size());
   writer.begin(file_int_size + 1 + nameLen, chunk_layer_header);
-  writer.writeInt(static_cast<std::uint32_t>(layer.spans.size()));
+  writer.writeInt(static_cast<std::uint32_t>(layer.cels.size()));
   writer.writeByte(layer.visible);
   writer.writeString(layer.name.data(), nameLen);
   writer.end();
@@ -238,14 +238,14 @@ Error writeLHDR(QIODevice &dev, const Layer &layer) try {
   return e.msg();
 }
 
-Error writeCHDR(QIODevice &dev, const CelSpan &span) try {
+Error writeCHDR(QIODevice &dev, const Cel &cel) try {
   SCOPE_TIME("writeCHDR");
 
   ChunkWriter writer{dev};
   writer.begin(chunk_cel_header);
-  writer.writeInt(static_cast<std::uint32_t>(span.len));
-  if (*span.cel) {
-    const QRect rect = span.cel->rect();
+  writer.writeInt(static_cast<std::uint32_t>(cel.len));
+  if (*cel.cel) {
+    const QRect rect = cel.cel->rect();
     writer.writeInt(rect.x());
     writer.writeInt(rect.y());
     writer.writeInt(rect.width());
@@ -567,7 +567,7 @@ Error readLHDR(QIODevice &dev, Layer &layer) try {
     return chunkLengthInvalid(start);
   }
   
-  const std::uint32_t spans = reader.readInt();
+  const std::uint32_t cels = reader.readInt();
   const std::uint8_t visible = reader.readByte();
   
   layer.name.resize(nameLen);
@@ -575,20 +575,20 @@ Error readLHDR(QIODevice &dev, Layer &layer) try {
   
   TRY(reader.end());
   
-  if (spans == 0) return "Layer spans out-of-range";
+  if (cels == 0) return "Layer cels out-of-range";
   if (!validName(layer.name)) {
     return "Layer name contains non-ASCII characters";
   }
   TRY(readVisibleByte(layer.visible, visible));
   
-  layer.spans.resize(spans);
+  layer.cels.resize(cels);
   
   return {};
 } catch (FileIOError &e) {
   return e.msg();
 }
 
-Error readCHDR(QIODevice &dev, CelSpan &span, const Format format) try {
+Error readCHDR(QIODevice &dev, Cel &cel, const Format format) try {
   SCOPE_TIME("readCHDR");
 
   ChunkReader reader{dev};
@@ -598,7 +598,7 @@ Error readCHDR(QIODevice &dev, CelSpan &span, const Format format) try {
     return chunkLengthInvalid(start);
   }
   
-  span.len = static_cast<FrameIdx>(reader.readInt());
+  cel.len = static_cast<FrameIdx>(reader.readInt());
   QPoint pos;
   QSize size;
   if (start.length == 5 * file_int_size) {
@@ -610,8 +610,8 @@ Error readCHDR(QIODevice &dev, CelSpan &span, const Format format) try {
   
   TRY(reader.end());
   
-  if (+span.len <= 0) return "Negative cel span length";
-  span.cel = std::make_unique<Cel>();
+  if (+cel.len <= 0) return "Negative cel length";
+  cel.cel = std::make_unique<CelImage>();
   if (start.length == 5 * file_int_size) {
     if (size.width() <= 0 || max_image_width < size.width()) {
       return "Cel width out-of-range";
@@ -619,8 +619,8 @@ Error readCHDR(QIODevice &dev, CelSpan &span, const Format format) try {
     if (size.height() <= 0 || max_image_height < size.height()) {
       return "Cel height out-of-range";
     }
-    span.cel->pos = pos;
-    span.cel->img = {size, qimageFormat(format)};
+    cel.cel->pos = pos;
+    cel.cel->img = {size, qimageFormat(format)};
   }
   
   return {};
