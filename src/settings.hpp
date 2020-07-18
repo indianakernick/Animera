@@ -23,7 +23,7 @@ inline auto setDirSettings(const QString &key) {
   };
 }
 
-inline const QString pref_sprite_dir = "Sprite Directory";
+inline const QString pref_animation_dir = "Animation Directory";
 inline const QString pref_export_dir = "Export Directory";
 inline const QString pref_import_dir = "Import Directory";
 inline const QString pref_palette_dir = "Palette Directory";

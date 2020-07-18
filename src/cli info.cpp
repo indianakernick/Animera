@@ -12,7 +12,7 @@
 #include "strings.hpp"
 #include "chunk io.hpp"
 #include "cel span.hpp"
-#include "sprite file.hpp"
+#include "animation file.hpp"
 #include <QtCore/qtextstream.h>
 #include <QtCore/qcoreapplication.h>
 
@@ -102,24 +102,24 @@ Error printInfo(const QString &path, const bool layers, const bool json) {
   FileReader reader;
   TRY(reader.open(path));
   
-  SpriteInfo sprite;
+  AnimationInfo anim;
   TRY(readSignature(reader.dev()));
-  TRY(readAHDR(reader.dev(), sprite));
+  TRY(readAHDR(reader.dev(), anim));
   
   if (json) {
     console << "{\n";
-    console << "  \"width\": " << sprite.width << ",\n";
-    console << "  \"height\": " << sprite.height << ",\n";
-    console << "  \"format\": \"" << formatToJsonString(sprite.format) << "\",\n";
-    console << "  \"layers\": " << static_cast<int>(sprite.layers) << ",\n";
-    console << "  \"frames\": " << static_cast<int>(sprite.frames) << ",\n";
-    console << "  \"delay\": " << sprite.delay;
+    console << "  \"width\": " << anim.width << ",\n";
+    console << "  \"height\": " << anim.height << ",\n";
+    console << "  \"format\": \"" << formatToJsonString(anim.format) << "\",\n";
+    console << "  \"layers\": " << static_cast<int>(anim.layers) << ",\n";
+    console << "  \"frames\": " << static_cast<int>(anim.frames) << ",\n";
+    console << "  \"delay\": " << anim.delay;
   } else {
-    console << "Size:   {" << sprite.width << ", " << sprite.height << "}\n";
-    console << "Format: " << formatToString(sprite.format) << '\n';
-    console << "Layers: " << static_cast<int>(sprite.layers) << '\n';
-    console << "Frames: " << static_cast<int>(sprite.frames) << '\n';
-    console << "Delay:  " << sprite.delay << " ms\n";
+    console << "Size:   {" << anim.width << ", " << anim.height << "}\n";
+    console << "Format: " << formatToString(anim.format) << '\n';
+    console << "Layers: " << static_cast<int>(anim.layers) << '\n';
+    console << "Frames: " << static_cast<int>(anim.frames) << '\n';
+    console << "Delay:  " << anim.delay << " ms\n";
   }
   
   if (layers) {

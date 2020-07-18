@@ -37,7 +37,7 @@ struct ExportTransform {
   int angle;
 };
 
-struct SpriteExportParams {
+struct AnimExportParams {
   ExportNameParams name;
   ExportTransform transform;
   LayerRange layers;
@@ -50,7 +50,7 @@ struct ExportParams {
   QString directory;
   PixelFormat pixelFormat;
   std::unique_ptr<ExportBackend> backend;
-  std::vector<SpriteExportParams> sprites;
+  std::vector<AnimExportParams> anims;
   bool whitepixel;
 };
 

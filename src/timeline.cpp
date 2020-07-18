@@ -12,7 +12,7 @@
 #include "composite.hpp"
 #include "scope time.hpp"
 #include "export png.hpp"
-#include "sprite file.hpp"
+#include "animation file.hpp"
 
 Timeline::Timeline()
   : pos{LayerIdx{0}, FrameIdx{0}}, frameCount{0} {}
@@ -70,7 +70,7 @@ Error Timeline::openImage(
   QImage image;
   FileReader reader;
   TRY(reader.open(path));
-  TRY(importSpritePng(reader.dev(), palette, image, format));
+  TRY(importAnimationPng(reader.dev(), palette, image, format));
   TRY(reader.flush());
   canvasFormat = format;
   canvasSize = size = image.size();
@@ -115,7 +115,7 @@ Error Timeline::importImage(const QString &path) {
 Error Timeline::serializeHead(QIODevice &dev) const {
   SCOPE_TIME("Timeline::serializeHead");
 
-  SpriteInfo info;
+  AnimationInfo info;
   info.width = canvasSize.width();
   info.height = canvasSize.height();
   info.layers = layerCount();
@@ -149,7 +149,7 @@ Error Timeline::serializeTail(QIODevice &dev) const {
 Error Timeline::deserializeHead(QIODevice &dev, Format &format, QSize &size) {
   SCOPE_TIME("Timeline::deserializeHead");
 
-  SpriteInfo info;
+  AnimationInfo info;
   TRY(readAHDR(dev, info));
   canvasSize = size = {info.width, info.height};
   layers.resize(+info.layers);

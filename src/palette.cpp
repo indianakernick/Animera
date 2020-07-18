@@ -13,7 +13,7 @@
 #include "chunk io.hpp"
 #include "export png.hpp"
 #include "scope time.hpp"
-#include "sprite file.hpp"
+#include "animation file.hpp"
 #include <Graphics/format.hpp>
 
 namespace {

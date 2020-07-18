@@ -42,7 +42,7 @@ void ExportDialog::setPath(const QString &path) {
   }
 }
 
-void ExportDialog::setInfo(const ExportSpriteInfo &newInfo) {
+void ExportDialog::setInfo(const ExportAnimationInfo &newInfo) {
   info = newInfo;
 }
 
@@ -78,23 +78,23 @@ void ExportDialog::submit() {
   params.pixelFormat = formatFromString(formatSelect->currentText());
   params.backend = std::make_unique<PngExportBackend>();
   
-  SpriteExportParams &spriteParams = params.sprites.emplace_back();
+  AnimExportParams &animParams = params.anims.emplace_back();
   
-  spriteParams.name.name = name->text();
-  spriteParams.name.layerName = LayerNameMode{layerName->currentIndex()};
-  spriteParams.name.groupName = GroupNameMode{groupName->currentIndex()};
-  spriteParams.name.frameName = FrameNameMode{frameName->currentIndex()};
+  animParams.name.name = name->text();
+  animParams.name.layerName = LayerNameMode{layerName->currentIndex()};
+  animParams.name.groupName = GroupNameMode{groupName->currentIndex()};
+  animParams.name.frameName = FrameNameMode{frameName->currentIndex()};
   
-  spriteParams.transform.scaleX = scaleX->value();
-  spriteParams.transform.scaleY = scaleY->value();
-  spriteParams.transform.angle = rotate->currentIndex();
+  animParams.transform.scaleX = scaleX->value();
+  animParams.transform.scaleY = scaleY->value();
+  animParams.transform.angle = rotate->currentIndex();
   
-  spriteParams.layers = selectLayers(info, LayerSelection{layerSelect->currentIndex()});
-  spriteParams.frames = selectFrames(info, FrameSelection{frameSelect->currentIndex()});
+  animParams.layers = selectLayers(info, LayerSelection{layerSelect->currentIndex()});
+  animParams.frames = selectFrames(info, FrameSelection{frameSelect->currentIndex()});
   
-  spriteParams.composite = composite->currentText() == "Enabled";
+  animParams.composite = composite->currentText() == "Enabled";
   
-  Q_EMIT exportSprite(params);
+  Q_EMIT exportAnimation(params);
 }
 
 void ExportDialog::updateFormatItems(const QString &compositeStr) {

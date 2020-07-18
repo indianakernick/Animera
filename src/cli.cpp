@@ -47,12 +47,12 @@ const char short_options[] =
 R"(Options:
     -h, --help                Display this help message.
     --long-help               Display a detailed help message.
-    <width>                   Width of the sprite to create.
-    <height>                  Height of the sprite to create.
-    <format>                  Format of the sprite to create.
+    <width>                   Width of the animation to create.
+    <height>                  Height of the animation to create.
+    <format>                  Format of the animation to create.
     --layer-names             Output the names of layers.
     -j, --json                Output info as JSON.
-    -n, --name <pattern>      Name pattern for the sprite.
+    -n, --name <pattern>      Name pattern for the animation.
     -d, --directory <path>    Directory to write files to.
     -l, --layer <range>       Range of layers to export.
     -f, --frame <range>       Range of frames to export.
@@ -73,13 +73,13 @@ R"(Options:
         Display this help message.
     
     <width>
-        Width (in pixels) of the sprite to create.
+        Width (in pixels) of the animation to create.
     
     <height>
-        Height (in pixels) of the sprite to create.
+        Height (in pixels) of the animation to create.
     
     <format>
-        Format of the sprite to create. Valid formats are:
+        Format of the animation to create. Valid formats are:
             rgba   (8-bit RGBA)
             index  (8-bit Indexed)
             gray   (8-bit Grayscale with alpha)
@@ -90,11 +90,11 @@ R"(Options:
         of spans and the visibility.
     
     -j, --json
-        By default, sprite info is outputted in a pleasant-for-humans format.
-        When this option is present, sprite info is outputted as JSON.
+        By default, animation info is outputted in a pleasant-for-humans format.
+        When this option is present, animation info is outputted as JSON.
     
     -n, --name <pattern>
-        Name pattern for the sprite. By default this is "sprite_%000F".
+        Name pattern for the animation. By default this is "sprite_%000F".
         This pattern may contain format sequences.
         The available format sequences are:
             %F  frame number
@@ -118,7 +118,7 @@ R"(Options:
         The range of frames to export. By default, all frames are exported. This
         may be a single frame such as 0 or an inclusive range such as 1..3.
         Either or both sides of the range may be omitted.
-        Examples assuming a sprite with 4 frames:
+        Examples assuming an animation with 4 frames:
             1..2            frames 1 and 2
             ..2   or  0..2  frames 0, 1 and 2
             1..   or  1..3  frames 1, 2 and 3
@@ -135,8 +135,8 @@ R"(Options:
     -F, --format <format>
         The resulting output files are always PNGs. This option corresponds to
         the color type of the PNGs. The output formats available depend on the
-        format of the input sprite. Given the input format, these are the valid
-        output formats (the first in each list is the default):
+        format of the input animation. Given the input format, these are the
+        valid output formats (the first in each list is the default):
             RGBA
                 rgba        (8-bit RGBA)
             Indexed (with --no-composite)

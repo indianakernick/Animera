@@ -12,9 +12,9 @@
 #include "error.hpp"
 #include "export params.hpp"
 
-class Sprite;
+class Animation;
 
 Error exportTextureAtlas(const ExportParams &, const std::vector<QString> &);
-Error exportTextureAtlas(const ExportParams &, const Sprite &);
+Error exportTextureAtlas(const ExportParams &, const Animation &);
 
 #endif

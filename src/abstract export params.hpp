@@ -30,7 +30,7 @@ enum class FrameSelection {
   selected,
 };
 
-struct ExportSpriteInfo {
+struct ExportAnimationInfo {
   CelPos pos;
   CelRect selection;
   LayerIdx layerCount;
@@ -38,15 +38,15 @@ struct ExportSpriteInfo {
   Format format;
 };
 
-class Sprite;
+class Animation;
 
-ExportSpriteInfo getSpriteInfo(const Sprite &);
+ExportAnimationInfo getAnimationInfo(const Animation &);
 
-LayerRange selectLayers(const ExportSpriteInfo &, LayerSelection);
-FrameRange selectFrames(const ExportSpriteInfo &, FrameSelection);
+LayerRange selectLayers(const ExportAnimationInfo &, LayerSelection);
+FrameRange selectFrames(const ExportAnimationInfo &, FrameSelection);
 FrameRange selectFrames(tcb::span<const Group>, GroupIdx);
 
-ExportParams exportFrameParams(const ExportSpriteInfo &, const QString &);
-ExportParams exportCelParams(const ExportSpriteInfo &, const QString &);
+ExportParams exportFrameParams(const ExportAnimationInfo &, const QString &);
+ExportParams exportCelParams(const ExportAnimationInfo &, const QString &);
 
 #endif

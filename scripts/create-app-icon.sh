@@ -7,7 +7,7 @@
 
 alias animera="$BUILT_PRODUCTS_DIR/$EXECUTABLE_PATH"
 OUT="$PROJECT_DIR/Assets.xcassets/AppIcon.appiconset/"
-IN="$PROJECT_DIR/Resources/Sprites/appicon.animera"
+IN="$PROJECT_DIR/Resources/Animations/appicon.animera"
 
 function ex {
   animera export --name="$1" --directory="$OUT" --no-composite --scale="$2" "$IN"

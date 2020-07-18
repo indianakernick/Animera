@@ -1,12 +1,12 @@
 ﻿//
-//  sprite file.cpp
+//  animation file.cpp
 //  Animera
 //
 //  Created by Indiana Kernick on 31/8/19.
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#include "sprite file.hpp"
+#include "animation file.hpp"
 
 #include "zlib.hpp"
 #include "strings.hpp"
@@ -135,7 +135,7 @@ Error writeSignature(QIODevice &dev) {
   return {};
 }
 
-Error writeAHDR(QIODevice &dev, const SpriteInfo &info) try {
+Error writeAHDR(QIODevice &dev, const AnimationInfo &info) try {
   SCOPE_TIME("writeAHDR");
 
   ChunkWriter writer{dev};
@@ -363,7 +363,7 @@ Error readFormatByte(Format &format, const std::uint8_t byte) {
 
 }
 
-Error readAHDR(QIODevice &dev, SpriteInfo &info) try {
+Error readAHDR(QIODevice &dev, AnimationInfo &info) try {
   SCOPE_TIME("readAHDR");
 
   ChunkReader reader{dev};

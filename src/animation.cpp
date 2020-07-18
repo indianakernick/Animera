@@ -1,19 +1,19 @@
 ﻿//
-//  sprite.cpp
+//  animation.cpp
 //  Animera
 //
 //  Created by Indiana Kernick on 7/7/19.
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#include "sprite.hpp"
+#include "animation.hpp"
 
 #include "file io.hpp"
 #include "scope time.hpp"
-#include "sprite file.hpp"
+#include "animation file.hpp"
 
-void Sprite::newFile(const Format newFormat, const QSize newSize) {
-  SCOPE_TIME("Sprite::newFile");
+void Animation::newFile(const Format newFormat, const QSize newSize) {
+  SCOPE_TIME("Animation::newFile");
   
   format = newFormat;
   size = newSize;
@@ -24,12 +24,12 @@ void Sprite::newFile(const Format newFormat, const QSize newSize) {
   timeline.initDefault();
 }
 
-void Sprite::optimize() {
+void Animation::optimize() {
   timeline.optimize();
 }
 
-Error Sprite::saveFile(const QString &path) const {
-  SCOPE_TIME("Sprite::saveFile");
+Error Animation::saveFile(const QString &path) const {
+  SCOPE_TIME("Animation::saveFile");
 
   FileWriter writer;
   TRY(writer.open(path));
@@ -41,8 +41,8 @@ Error Sprite::saveFile(const QString &path) const {
   return writer.flush();
 }
 
-Error Sprite::openFile(const QString &path) {
-  SCOPE_TIME("Sprite::openFile");
+Error Animation::openFile(const QString &path) {
+  SCOPE_TIME("Animation::openFile");
   
   FileReader reader;
   TRY(reader.open(path));
@@ -57,7 +57,7 @@ Error Sprite::openFile(const QString &path) {
   return reader.flush();
 }
 
-Error Sprite::openImage(const QString &path) {
+Error Animation::openImage(const QString &path) {
   TRY(timeline.openImage(path, palette.getPalette(), format, size));
   Q_EMIT canvasInitialized(format, size);
   palette.initCanvas(format);
@@ -70,12 +70,12 @@ Error Sprite::openImage(const QString &path) {
   return {};
 }
 
-Format Sprite::getFormat() const {
+Format Animation::getFormat() const {
   return format;
 }
 
-QSize Sprite::getSize() const {
+QSize Animation::getSize() const {
   return size;
 }
 
-#include "sprite.moc"
+#include "animation.moc"

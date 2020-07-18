@@ -11,8 +11,8 @@
 #if 0
 
 #include <charconv>
-#include "sprite.hpp"
 #include "strings.hpp"
+#include "animation.hpp"
 #include <QtCore/qdir.h>
 #include "export params.hpp"
 #include "docopt helpers.hpp"
@@ -57,7 +57,7 @@ Error checkFormat(
   if (std::find(formats.begin(), formats.end(), format) == formats.end()) {
     QString msg = "Invalid export format for ";
     msg += canvasFormat;
-    msg += " sprite format";
+    msg += " animation format";
     msg += formatNamesList(formats);
     return msg;
   }

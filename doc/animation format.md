@@ -1,4 +1,4 @@
-# Sprite Format
+# Animation Format
 
 * [Introduction](#introduction)
 * [File Layout](#file-layout)
@@ -15,7 +15,7 @@
 
 ## Introduction
 
-The sprite format (`.animera`) is heavily inspired by the PNG format. This is 
+The animation format (`.animera`) is heavily inspired by the PNG format. This is
 because the PNG format is very resistant to error (as it was originally designed
 to be sent over a network). If the file is corrupted somehow, the signature
 might not match up, or the chunk names might be invalid, or the CRC check won't
@@ -104,13 +104,13 @@ of the pixel format.
 
 ### PLTE (Palette)
 
-For indexed and RGBA sprites, the palette consists of RGBA entries. Each entry
-is four bytes. Each of the four bytes correspond to the red, green, blue and
-alpha channels respectively.
+For indexed and RGBA animations, the palette consists of RGBA entries. Each
+entry is four bytes. Each of the four bytes correspond to the red, green, blue
+and alpha channels respectively.
 
-For gray-alpha sprites, the palette consists of gray-alpha entries. Each entry
-is two bytes. Each of the two bytes correspond to the gray and alpha channels
-respectively.
+For gray-alpha animations, the palette consists of gray-alpha entries. Each
+entry is two bytes. Each of the two bytes correspond to the gray and alpha
+channels respectively.
 
 There can be no more than 256 palette entries. Trailing all-zero entries are
 assumed if they're not present. In other words, if the last few entries are

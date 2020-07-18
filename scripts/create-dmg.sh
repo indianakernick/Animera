@@ -7,8 +7,10 @@
 # Requires appdmg
 # Requires envsubst from gettext
 
+cmake configure_file
+
 alias animera="$BUILT_PRODUCTS_DIR/$EXECUTABLE_PATH"
-BACKGROUND="$PROJECT_DIR/Resources/Sprites/dmg background.animera"
+BACKGROUND="$PROJECT_DIR/Resources/Animations/dmg background.animera"
 
 animera export --name=background --scale=4 "$BACKGROUND"
 animera export --name=background@2x --scale=8 "$BACKGROUND"

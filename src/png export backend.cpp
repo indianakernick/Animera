@@ -107,7 +107,7 @@ QString PngExportBackend::hasNameCollision() {
   return {};
 }
 
-Error PngExportBackend::initSprite(Format newFormat, PaletteCSpan newPalette) {
+Error PngExportBackend::initAnimation(Format newFormat, PaletteCSpan newPalette) {
   format = newFormat;
   palette = newPalette;
   return {};

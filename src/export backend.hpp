@@ -36,7 +36,7 @@ public:
   
   // Second pass
   // Add the images
-  virtual Error initSprite(Format, PaletteCSpan) = 0;
+  virtual Error initAnimation(Format, PaletteCSpan) = 0;
   virtual Error addWhiteImage() = 0;
   virtual Error addImage(std::size_t, QImage) = 0;
   

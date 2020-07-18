@@ -1,13 +1,13 @@
 ﻿//
-//  sprite.hpp
+//  animation.hpp
 //  Animera
 //
 //  Created by Indiana Kernick on 7/7/19.
 //  Copyright © 2019 Indiana Kernick. All rights reserved.
 //
 
-#ifndef animera_sprite_hpp
-#define animera_sprite_hpp
+#ifndef animera_animation_hpp
+#define animera_animation_hpp
 
 #include "error.hpp"
 #include "palette.hpp"
@@ -16,7 +16,7 @@
 
 struct ExportOptions;
 
-class Sprite final : public QObject {
+class Animation final : public QObject {
   Q_OBJECT
 
 public Q_SLOTS:

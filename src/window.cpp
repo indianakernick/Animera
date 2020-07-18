@@ -56,12 +56,12 @@ Window::Window(QWidget *parent, const Window *previous)
 }
 
 void Window::newFile(const Format format, const QSize size) {
-  sprite.newFile(format, size);
+  anim.newFile(format, size);
   show();
 }
 
 void Window::openFile(const QString &path) {
-  if (Error err = sprite.openFile(path); err) {
+  if (Error err = anim.openFile(path); err) {
     QDesktopWidget *desktop = static_cast<Application *>(QApplication::instance())->desktop();
     (new ErrorDialog{desktop, "File open error", err.msg()})->open();
   } else {
@@ -72,7 +72,7 @@ void Window::openFile(const QString &path) {
 }
 
 void Window::openImage(const QString &path) {
-  if (Error err = sprite.openImage(path); err) {
+  if (Error err = anim.openImage(path); err) {
     QDesktopWidget *desktop = static_cast<Application *>(QApplication::instance())->desktop();
     (new ErrorDialog{desktop, "Image open error", err.msg()})->open();
   } else {
@@ -307,53 +307,53 @@ void Window::populateMenubar() {
   
   QMenu *layer = menubar->addMenu("Layer");
   layer->setFont(getGlobalFont());
-  ADD_ACTION(layer, "New Layer", key_new_layer, sprite.timeline, insertLayer);
-  ADD_ACTION(layer, "Delete Layer", key_delete_layer, sprite.timeline, removeLayer);
-  ADD_ACTION(layer, "Move Layer Up", key_move_layer_up, sprite.timeline, moveLayerUp);
-  ADD_ACTION(layer, "Move Layer Down", key_move_layer_down, sprite.timeline, moveLayerDown);
+  ADD_ACTION(layer, "New Layer", key_new_layer, anim.timeline, insertLayer);
+  ADD_ACTION(layer, "Delete Layer", key_delete_layer, anim.timeline, removeLayer);
+  ADD_ACTION(layer, "Move Layer Up", key_move_layer_up, anim.timeline, moveLayerUp);
+  ADD_ACTION(layer, "Move Layer Down", key_move_layer_down, anim.timeline, moveLayerDown);
   
   {
     QAction *action = layer->addAction("Hide Layer");
     action->setShortcut(key_toggle_layer_vis);
     auto *toggle = new ToggleLayerVis{action};
     CONNECT_LAMBDA(action, triggered, [toggle, this] {
-      toggle->toggleVis(sprite.timeline);
+      toggle->toggleVis(anim.timeline);
     });
-    CONNECT(sprite.timeline, posChanged,    toggle, setPos);
-    CONNECT(sprite.timeline, visibilityChanged, toggle, setVisibility);
-    CONNECT(sprite.timeline, layerCountChanged, toggle, setLayerCount);
+    CONNECT(anim.timeline, posChanged,    toggle, setPos);
+    CONNECT(anim.timeline, visibilityChanged, toggle, setVisibility);
+    CONNECT(anim.timeline, layerCountChanged, toggle, setLayerCount);
   }
   
   {
     QAction *action = layer->addAction("Isolate Layer");
     action->setShortcut(key_isolate_layer);
     CONNECT_LAMBDA(action, triggered, [this] {
-      sprite.timeline.isolateVisibility(sprite.timeline.getPos().l);
+      anim.timeline.isolateVisibility(anim.timeline.getPos().l);
     });
   }
   
   layer->addSeparator();
-  ADD_ACTION(layer, "Layer Above", key_layer_above, sprite.timeline, layerAbove);
-  ADD_ACTION(layer, "Layer Below", key_layer_below, sprite.timeline, layerBelow);
+  ADD_ACTION(layer, "Layer Above", key_layer_above, anim.timeline, layerAbove);
+  ADD_ACTION(layer, "Layer Below", key_layer_below, anim.timeline, layerBelow);
   
   QMenu *group = menubar->addMenu("Group");
   group->setFont(getGlobalFont());
-  ADD_ACTION(group, "Split to Left", {}, sprite.timeline, splitGroupLeft);
-  ADD_ACTION(group, "Split to Right", {}, sprite.timeline, splitGroupRight);
-  ADD_ACTION(group, "Merge with Left", {}, sprite.timeline, mergeGroupLeft);
-  ADD_ACTION(group, "Merge with Right", {}, sprite.timeline, mergeGroupRight);
+  ADD_ACTION(group, "Split to Left", {}, anim.timeline, splitGroupLeft);
+  ADD_ACTION(group, "Split to Right", {}, anim.timeline, splitGroupRight);
+  ADD_ACTION(group, "Merge with Left", {}, anim.timeline, mergeGroupLeft);
+  ADD_ACTION(group, "Merge with Right", {}, anim.timeline, mergeGroupRight);
   
   QMenu *frame = menubar->addMenu("Frame");
   frame->setFont(getGlobalFont());
-  ADD_ACTION(frame, "New Frame", key_new_frame, sprite.timeline, insertFrame);
-  ADD_ACTION(frame, "Delete Frame", key_delete_frame, sprite.timeline, removeFrame);
+  ADD_ACTION(frame, "New Frame", key_new_frame, anim.timeline, insertFrame);
+  ADD_ACTION(frame, "Delete Frame", key_delete_frame, anim.timeline, removeFrame);
   frame->addSeparator();
-  ADD_ACTION(frame, "Clear Cel", key_clear_cel, sprite.timeline, clearCel);
-  ADD_ACTION(frame, "Extend Linked Cel", key_extend_cel, sprite.timeline, extendCel);
-  ADD_ACTION(frame, "Split Linked Cel", key_split_cel, sprite.timeline, splitCel);
+  ADD_ACTION(frame, "Clear Cel", key_clear_cel, anim.timeline, clearCel);
+  ADD_ACTION(frame, "Extend Linked Cel", key_extend_cel, anim.timeline, extendCel);
+  ADD_ACTION(frame, "Split Linked Cel", key_split_cel, anim.timeline, splitCel);
   frame->addSeparator();
-  ADD_ACTION(frame, "Next Frame", key_next_frame, sprite.timeline, nextFrame);
-  ADD_ACTION(frame, "Previous Frame", key_prev_frame, sprite.timeline, prevFrame);
+  ADD_ACTION(frame, "Next Frame", key_next_frame, anim.timeline, nextFrame);
+  ADD_ACTION(frame, "Previous Frame", key_prev_frame, anim.timeline, prevFrame);
   
   {
     QAction *action = frame->addAction("Play Animation");
@@ -370,9 +370,9 @@ void Window::populateMenubar() {
   
   QMenu *selection = menubar->addMenu("Selection");
   selection->setFont(getGlobalFont());
-  ADD_ACTION(selection, "Clear", key_clear_selection, sprite.timeline, clearSelected);
-  ADD_ACTION(selection, "Copy", key_copy_selection, sprite.timeline, copySelected);
-  ADD_ACTION(selection, "Paste", key_paste_selection, sprite.timeline, pasteSelected);
+  ADD_ACTION(selection, "Clear", key_clear_selection, anim.timeline, clearSelected);
+  ADD_ACTION(selection, "Copy", key_copy_selection, anim.timeline, copySelected);
+  ADD_ACTION(selection, "Paste", key_paste_selection, anim.timeline, pasteSelected);
   
   QMenu *pal = menubar->addMenu("Palette");
   pal->setFont(getGlobalFont());
@@ -390,69 +390,69 @@ void Window::populateMenubar() {
 #undef ADD_ACTION
 
 void Window::connectSignals() {
-  CONNECT(sprite.timeline, celChanged,              tools,           setCel);
-  CONNECT(sprite.timeline, celChanged,              sample,          setCel);
-  CONNECT(sprite.timeline, celChanged,              undo,            setCel);
-  CONNECT(sprite.timeline, frameChanged,            editor,          setFrame);
-  CONNECT(sprite.timeline, celModified,             editor,          composite);
-  CONNECT(sprite.timeline, posChanged,              timeline,        setPos);
-  CONNECT(sprite.timeline, selectionChanged,        timeline,        setSelection);
-  CONNECT(sprite.timeline, groupChanged,            timeline,        setGroup);
-  CONNECT(sprite.timeline, groupNameChanged,        timeline,        setGroupName);
-  CONNECT(sprite.timeline, groupArrayChanged,       timeline,        setGroupArray);
-  CONNECT(sprite.timeline, visibilityChanged,       timeline,        setVisibility);
-  CONNECT(sprite.timeline, layerNameChanged,        timeline,        setLayerName);
-  CONNECT(sprite.timeline, layerChanged,            timeline,        setLayer);
-  CONNECT(sprite.timeline, frameCountChanged,       timeline,        setFrameCount);
-  CONNECT(sprite.timeline, layerCountChanged,       timeline,        setLayerCount);
-  CONNECT(sprite.timeline, delayChanged,            timeline,        setDelay);
-  CONNECT(sprite.timeline, posChanged,              status,          setPos);
-  CONNECT(sprite.timeline, selectionChanged,        status,          setSelection);
-  CONNECT(sprite.timeline, frameCountChanged,       status,          setFrameCount);
-  CONNECT(sprite.timeline, layerCountChanged,       status,          setLayerCount);
-  CONNECT(sprite.timeline, modified,                this,            modify);
+  CONNECT(anim.timeline,   celChanged,              tools,           setCel);
+  CONNECT(anim.timeline,   celChanged,              sample,          setCel);
+  CONNECT(anim.timeline,   celChanged,              undo,            setCel);
+  CONNECT(anim.timeline,   frameChanged,            editor,          setFrame);
+  CONNECT(anim.timeline,   celModified,             editor,          composite);
+  CONNECT(anim.timeline,   posChanged,              timeline,        setPos);
+  CONNECT(anim.timeline,   selectionChanged,        timeline,        setSelection);
+  CONNECT(anim.timeline,   groupChanged,            timeline,        setGroup);
+  CONNECT(anim.timeline,   groupNameChanged,        timeline,        setGroupName);
+  CONNECT(anim.timeline,   groupArrayChanged,       timeline,        setGroupArray);
+  CONNECT(anim.timeline,   visibilityChanged,       timeline,        setVisibility);
+  CONNECT(anim.timeline,   layerNameChanged,        timeline,        setLayerName);
+  CONNECT(anim.timeline,   layerChanged,            timeline,        setLayer);
+  CONNECT(anim.timeline,   frameCountChanged,       timeline,        setFrameCount);
+  CONNECT(anim.timeline,   layerCountChanged,       timeline,        setLayerCount);
+  CONNECT(anim.timeline,   delayChanged,            timeline,        setDelay);
+  CONNECT(anim.timeline,   posChanged,              status,          setPos);
+  CONNECT(anim.timeline,   selectionChanged,        status,          setSelection);
+  CONNECT(anim.timeline,   frameCountChanged,       status,          setFrameCount);
+  CONNECT(anim.timeline,   layerCountChanged,       status,          setLayerCount);
+  CONNECT(anim.timeline,   modified,                this,            modify);
   
-  CONNECT(timeline,        shouldSetVisibility,     sprite.timeline, setVisibility);
-  CONNECT(timeline,        shouldIsolateVisibility, sprite.timeline, isolateVisibility);
-  CONNECT(timeline,        shouldSetLayerName,      sprite.timeline, setLayerName);
-  CONNECT(timeline,        shouldNextFrame,         sprite.timeline, nextFrame);
-  CONNECT(timeline,        shouldInsertLayer,       sprite.timeline, insertLayer);
-  CONNECT(timeline,        shouldRemoveLayer,       sprite.timeline, removeLayer);
-  CONNECT(timeline,        shouldMoveLayerUp,       sprite.timeline, moveLayerUp);
-  CONNECT(timeline,        shouldMoveLayerDown,     sprite.timeline, moveLayerDown);
-  CONNECT(timeline,        shouldExtendCel,         sprite.timeline, extendCel);
-  CONNECT(timeline,        shouldSplitCel,          sprite.timeline, splitCel);
-  CONNECT(timeline,        shouldBeginSelection,    sprite.timeline, beginSelection);
-  CONNECT(timeline,        shouldContinueSelection, sprite.timeline, continueSelection);
-  CONNECT(timeline,        shouldEndSelection,      sprite.timeline, endSelection);
-  CONNECT(timeline,        shouldClearSelection,    sprite.timeline, clearSelection);
-  CONNECT(timeline,        shouldSetGroup,          sprite.timeline, setGroup);
-  CONNECT(timeline,        shouldSetGroupName,      sprite.timeline, setGroupName);
-  CONNECT(timeline,        shouldMoveGroup,         sprite.timeline, moveGroup);
-  CONNECT(timeline,        shouldSetPos,            sprite.timeline, setPos);
-  CONNECT(timeline,        shouldSetDelay,          sprite.timeline, setDelay);
+  CONNECT(timeline,        shouldSetVisibility,     anim.timeline,   setVisibility);
+  CONNECT(timeline,        shouldIsolateVisibility, anim.timeline,   isolateVisibility);
+  CONNECT(timeline,        shouldSetLayerName,      anim.timeline,   setLayerName);
+  CONNECT(timeline,        shouldNextFrame,         anim.timeline,   nextFrame);
+  CONNECT(timeline,        shouldInsertLayer,       anim.timeline,   insertLayer);
+  CONNECT(timeline,        shouldRemoveLayer,       anim.timeline,   removeLayer);
+  CONNECT(timeline,        shouldMoveLayerUp,       anim.timeline,   moveLayerUp);
+  CONNECT(timeline,        shouldMoveLayerDown,     anim.timeline,   moveLayerDown);
+  CONNECT(timeline,        shouldExtendCel,         anim.timeline,   extendCel);
+  CONNECT(timeline,        shouldSplitCel,          anim.timeline,   splitCel);
+  CONNECT(timeline,        shouldBeginSelection,    anim.timeline,   beginSelection);
+  CONNECT(timeline,        shouldContinueSelection, anim.timeline,   continueSelection);
+  CONNECT(timeline,        shouldEndSelection,      anim.timeline,   endSelection);
+  CONNECT(timeline,        shouldClearSelection,    anim.timeline,   clearSelection);
+  CONNECT(timeline,        shouldSetGroup,          anim.timeline,   setGroup);
+  CONNECT(timeline,        shouldSetGroupName,      anim.timeline,   setGroupName);
+  CONNECT(timeline,        shouldMoveGroup,         anim.timeline,   moveGroup);
+  CONNECT(timeline,        shouldSetPos,            anim.timeline,   setPos);
+  CONNECT(timeline,        shouldSetDelay,          anim.timeline,   setDelay);
   
-  CONNECT(sprite,          canvasInitialized,       colorPicker,     initCanvas);
-  CONNECT(sprite,          canvasInitialized,       colors,          initCanvas);
-  CONNECT(sprite,          canvasInitialized,       editor,          initCanvas);
-  CONNECT(sprite,          canvasInitialized,       palette,         initCanvas);
-  CONNECT(sprite,          canvasInitialized,       tools,           initCanvas);
-  CONNECT(sprite,          canvasInitialized,       sample,          initCanvas);
+  CONNECT(anim,            canvasInitialized,       colorPicker,     initCanvas);
+  CONNECT(anim,            canvasInitialized,       colors,          initCanvas);
+  CONNECT(anim,            canvasInitialized,       editor,          initCanvas);
+  CONNECT(anim,            canvasInitialized,       palette,         initCanvas);
+  CONNECT(anim,            canvasInitialized,       tools,           initCanvas);
+  CONNECT(anim,            canvasInitialized,       sample,          initCanvas);
   
-  CONNECT(sprite.palette,  paletteChanged,          palette,         setPalette);
-  CONNECT(sprite.palette,  paletteChanged,          editor,          setPalette);
-  CONNECT(sprite.palette,  paletteChanged,          tools,           setPalette);
-  CONNECT(sprite.palette,  paletteChanged,          colors,          setPalette);
+  CONNECT(anim.palette,    paletteChanged,          palette,         setPalette);
+  CONNECT(anim.palette,    paletteChanged,          editor,          setPalette);
+  CONNECT(anim.palette,    paletteChanged,          tools,           setPalette);
+  CONNECT(anim.palette,    paletteChanged,          colors,          setPalette);
   
   CONNECT(tools,           celModified,             editor,          composite);
   CONNECT(tools,           overlayModified,         editor,          compositeOverlay);
   CONNECT(tools,           shouldShowNorm,          statusBar,       showNorm);
-  CONNECT(tools,           growRequested,           sprite.timeline, growCel);
-  CONNECT(tools,           shrinkRequested,         sprite.timeline, shrinkCel);
+  CONNECT(tools,           growRequested,           anim.timeline,   growCel);
+  CONNECT(tools,           shrinkRequested,         anim.timeline,   shrinkCel);
   CONNECT(tools,           changingAction,          undo,            celModified);
   CONNECT(tools,           changingAction,          this,            modify);
-  CONNECT(tools,           lockRequested,           sprite.timeline, lock);
-  CONNECT(tools,           unlockRequested,         sprite.timeline, unlock);
+  CONNECT(tools,           lockRequested,           anim.timeline,   lock);
+  CONNECT(tools,           unlockRequested,         anim.timeline,   unlock);
   
   CONNECT(editor,          overlayChanged,          tools,           setOverlay);
   CONNECT(editor,          mouseEnter,              tools,           mouseEnter);
@@ -478,8 +478,8 @@ void Window::connectSignals() {
   CONNECT(undo,            celReverted,             editor,          composite);
   CONNECT(undo,            celReverted,             this,            modify);
   CONNECT(undo,            shouldShowTemp,          statusBar,       showTemp);
-  CONNECT(undo,            shouldClearCel,          sprite.timeline, clearCel);
-  CONNECT(undo,            shouldGrowCel,           sprite.timeline, growCel);
+  CONNECT(undo,            shouldClearCel,          anim.timeline,   clearCel);
+  CONNECT(undo,            shouldGrowCel,           anim.timeline,   growCel);
   
   CONNECT(palette,         shouldAttachColor,       colorPicker,     attach);
   CONNECT(palette,         shouldSetColor,          colorPicker,     setColor);
@@ -496,8 +496,8 @@ void Window::connectSignals() {
 }
 
 void Window::saveToPath(const QString &path) {
-  sprite.optimize();
-  if (Error err = sprite.saveFile(path); err) {
+  anim.optimize();
+  if (Error err = anim.saveFile(path); err) {
     auto *dialog = new ErrorDialog{this, "File save error", err.msg()};
     if (closeAfterSave) {
       CONNECT(dialog, finished, this, close);
@@ -526,18 +526,18 @@ void Window::saveFileDialog() {
   auto *dialog = new QFileDialog{this};
   dialog->setAttribute(Qt::WA_DeleteOnClose);
   dialog->setAcceptMode(QFileDialog::AcceptSave);
-  dialog->setNameFilter("Animera Sprite (*.animera)");
+  dialog->setNameFilter("Animera Animation (*.animera)");
   dialog->setDefaultSuffix("animera");
   CONNECT(dialog, fileSelected, this, saveToPath);
   if (closeAfterSave) {
     CONNECT(dialog, rejected, this, close);
   }
-  updateDirSettings(dialog, pref_sprite_dir);
+  updateDirSettings(dialog, pref_animation_dir);
   dialog->open();
 }
 
-void Window::exportSprite(const ExportParams &params) {
-  if (Error err = exportTextureAtlas(params, sprite); err) {
+void Window::exportAnimation(const ExportParams &params) {
+  if (Error err = exportTextureAtlas(params, anim); err) {
     (new ErrorDialog{this, "Export error", err.msg()})->open();
   } else {
     statusBar->showTemp("Exported!");
@@ -546,16 +546,16 @@ void Window::exportSprite(const ExportParams &params) {
 
 void Window::exportDialog() {
   if (!exporter) {
-    exporter = new ExportDialog{this, sprite.getFormat()};
-    CONNECT(exporter, exportSprite, this, exportSprite);
+    exporter = new ExportDialog{this, anim.getFormat()};
+    CONNECT(exporter, exportAnimation, this, exportAnimation);
   }
   exporter->setPath(windowFilePath());
-  exporter->setInfo(getSpriteInfo(sprite));
+  exporter->setInfo(getAnimationInfo(anim));
   exporter->open();
 }
 
 void Window::exportFrame(const QString &path) {
-  exportSprite(exportFrameParams(getSpriteInfo(sprite), path));
+  exportAnimation(exportFrameParams(getAnimationInfo(anim), path));
 }
 
 void Window::exportFrameDialog() {
@@ -570,7 +570,7 @@ void Window::exportFrameDialog() {
 }
 
 void Window::exportCel(const QString &path) {
-  exportSprite(exportCelParams(getSpriteInfo(sprite), path));
+  exportAnimation(exportCelParams(getAnimationInfo(anim), path));
 }
 
 void Window::exportCelDialog() {
@@ -587,7 +587,7 @@ void Window::exportCelDialog() {
 }
 
 void Window::importCel(const QString &path) {
-  if (Error err = sprite.timeline.importImage(path); err) {
+  if (Error err = anim.timeline.importImage(path); err) {
     (new ErrorDialog{this, "Import error", err.msg()})->open();
   }
 }
@@ -605,7 +605,7 @@ void Window::importCelDialog() {
 }
 
 void Window::openPalette(const QString &path) {
-  if (Error err = sprite.palette.open(path); err) {
+  if (Error err = anim.palette.open(path); err) {
     (new ErrorDialog{this, "Palette open error", err.msg()})->open();
   } else {
     setWindowModified(true);
@@ -614,7 +614,7 @@ void Window::openPalette(const QString &path) {
 }
 
 void Window::savePalette(const QString &path) {
-  if (Error err = sprite.palette.save(path); err) {
+  if (Error err = anim.palette.save(path); err) {
     (new ErrorDialog{this, "Palette save error", err.msg()})->open();
   } else {
     statusBar->showTemp("Palette Saved!");
@@ -644,7 +644,7 @@ void Window::savePaletteDialog() {
 }
 
 void Window::resetPalette() {
-  sprite.palette.reset();
+  anim.palette.reset();
   palette->updatePalette();
 }
 

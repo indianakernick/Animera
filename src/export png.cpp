@@ -332,7 +332,7 @@ Error importCelPng(
   QImage &image,
   const Format format
 ) {
-  // TODO: This is extemely similar to importSpritePng
+  // TODO: This is extemely similar to importAnimationPng
   SCOPE_TIME("importCelPng");
   
   ReadContext ctx;
@@ -362,7 +362,7 @@ Error importCelPng(
     // gray -> rgba
     // index -> rgba
     // TODO: If we import indexed into indexed, the palette might not match
-    return "Format of imported PNG does not match format of sprite";
+    return "Format of imported PNG does not match format of animation";
   }
   
   image = {static_cast<int>(width), static_cast<int>(height), qimageFormat(format)};
@@ -376,13 +376,13 @@ Error importCelPng(
   return destroyRead(ctx);
 }
 
-Error importSpritePng(
+Error importAnimationPng(
   QIODevice &dev,
   const PaletteSpan palette,
   QImage &image,
   Format &format
 ) {
-  SCOPE_TIME("importSpritePng");
+  SCOPE_TIME("importAnimationPng");
 
   ReadContext ctx;
   ctx.dev = &dev;

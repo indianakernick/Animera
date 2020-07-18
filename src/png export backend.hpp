@@ -20,7 +20,7 @@ public:
   void addSizes(std::size_t, QSize) override;
   QString hasNameCollision() override;
   
-  Error initSprite(Format, PaletteCSpan) override;
+  Error initAnimation(Format, PaletteCSpan) override;
   Error addWhiteImage() override;
   Error addImage(std::size_t, QImage) override;
   

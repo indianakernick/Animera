@@ -18,8 +18,8 @@ Error exportCelPng(QIODevice &, PaletteCSpan, QImage, Format, PixelFormat);
 /// Import a cel as a PNG
 Error importCelPng(QIODevice &, QImage &, Format);
 
-/// Import a sprite as a PNG
-Error importSpritePng(QIODevice &, PaletteSpan, QImage &, Format &);
+/// Import a animation as a PNG
+Error importAnimationPng(QIODevice &, PaletteSpan, QImage &, Format &);
 
 /// Export the palette as a PNG
 Error exportPalettePng(QIODevice &, PaletteCSpan, Format);

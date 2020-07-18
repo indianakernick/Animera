@@ -26,10 +26,10 @@ public:
   ExportDialog(QWidget *, Format);
   
   void setPath(const QString &);
-  void setInfo(const ExportSpriteInfo &);
+  void setInfo(const ExportAnimationInfo &);
   
 Q_SIGNALS:
-  void exportSprite(const ExportParams &);
+  void exportAnimation(const ExportParams &);
 
 private Q_SLOTS:
   void submit();
@@ -37,7 +37,7 @@ private Q_SLOTS:
 
 private:
   Format format;
-  ExportSpriteInfo info; // format is also in here
+  ExportAnimationInfo info; // format is also in here
   
   TextInputWidget *name = nullptr;
   FileInputWidget *dir = nullptr;

@@ -8,21 +8,21 @@
 
 #include "abstract export params.hpp"
 
-#include "sprite.hpp"
+#include "animation.hpp"
 #include <QtCore/qdir.h>
 #include "png export backend.hpp"
 
-ExportSpriteInfo getSpriteInfo(const Sprite &sprite) {
+ExportAnimationInfo getAnimationInfo(const Animation &anim) {
   return {
-    sprite.timeline.getPos(),
-    sprite.timeline.getSelection(),
-    sprite.timeline.getLayers(),
-    sprite.timeline.getFrames(),
-    sprite.getFormat()
+    anim.timeline.getPos(),
+    anim.timeline.getSelection(),
+    anim.timeline.getLayers(),
+    anim.timeline.getFrames(),
+    anim.getFormat()
   };
 }
 
-LayerRange selectLayers(const ExportSpriteInfo &info, const LayerSelection select) {
+LayerRange selectLayers(const ExportAnimationInfo &info, const LayerSelection select) {
   switch (select) {
     case LayerSelection::visible:
       return {LayerIdx{0}, info.layerCount - LayerIdx{1}, LayerVis::visible};
@@ -37,7 +37,7 @@ LayerRange selectLayers(const ExportSpriteInfo &info, const LayerSelection selec
   }
 }
 
-FrameRange selectFrames(const ExportSpriteInfo &info, const FrameSelection select) {
+FrameRange selectFrames(const ExportAnimationInfo &info, const FrameSelection select) {
   switch (select) {
     case FrameSelection::all:
       return {FrameIdx{0}, info.frameCount - FrameIdx{1}};
@@ -55,7 +55,7 @@ FrameRange selectFrames(const tcb::span<const Group> groups, const GroupIdx grou
 
 namespace {
 
-void setFormat(ExportParams &params, const ExportSpriteInfo &info) {
+void setFormat(ExportParams &params, const ExportAnimationInfo &info) {
   switch (info.format) {
     case Format::rgba:
       params.pixelFormat = PixelFormat::rgba;
@@ -83,36 +83,36 @@ void setPath(ExportParams &params, const QString &path) {
   dir.chop(nameLen);
   params.name = "";
   params.directory = std::move(dir);
-  params.sprites[0].name.name = std::move(name);
-  params.sprites[0].name.layerName = LayerNameMode::empty;
-  params.sprites[0].name.groupName = GroupNameMode::empty;
-  params.sprites[0].name.frameName = FrameNameMode::empty;
+  params.anims[0].name.name = std::move(name);
+  params.anims[0].name.layerName = LayerNameMode::empty;
+  params.anims[0].name.groupName = GroupNameMode::empty;
+  params.anims[0].name.frameName = FrameNameMode::empty;
 }
 
 }
 
-ExportParams exportFrameParams(const ExportSpriteInfo &info, const QString &path) {
+ExportParams exportFrameParams(const ExportAnimationInfo &info, const QString &path) {
   ExportParams params;
-  params.sprites.emplace_back();
+  params.anims.emplace_back();
   setPath(params, path);
-  setDefaultTransform(params.sprites[0].transform);
-  params.sprites[0].layers = {LayerIdx{}, info.layerCount - LayerIdx{1}, LayerVis::visible};
-  params.sprites[0].frames = {info.pos.f, info.pos.f};
-  params.sprites[0].composite = true;
+  setDefaultTransform(params.anims[0].transform);
+  params.anims[0].layers = {LayerIdx{}, info.layerCount - LayerIdx{1}, LayerVis::visible};
+  params.anims[0].frames = {info.pos.f, info.pos.f};
+  params.anims[0].composite = true;
   setFormat(params, info);
   params.backend = std::make_unique<PngExportBackend>();
   params.whitepixel = false;
   return params;
 }
 
-ExportParams exportCelParams(const ExportSpriteInfo &info, const QString &path) {
+ExportParams exportCelParams(const ExportAnimationInfo &info, const QString &path) {
   ExportParams params;
-  params.sprites.emplace_back();
+  params.anims.emplace_back();
   setPath(params, path);
-  setDefaultTransform(params.sprites[0].transform);
-  params.sprites[0].layers = {info.pos.l, info.pos.l, LayerVis::all};
-  params.sprites[0].frames = {info.pos.f, info.pos.f};
-  params.sprites[0].composite = false;
+  setDefaultTransform(params.anims[0].transform);
+  params.anims[0].layers = {info.pos.l, info.pos.l, LayerVis::all};
+  params.anims[0].frames = {info.pos.f, info.pos.f};
+  params.anims[0].composite = false;
   setFormat(params, info);
   params.backend = std::make_unique<PngExportBackend>();
   params.whitepixel = false;

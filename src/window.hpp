@@ -9,7 +9,7 @@
 #ifndef animera_window_hpp
 #define animera_window_hpp
 
-#include "sprite.hpp"
+#include "animation.hpp"
 #include <QtWidgets/qmainwindow.h>
 
 class QWidget;
@@ -43,7 +43,7 @@ private Q_SLOTS:
   void modify();
 
 private:
-  Sprite sprite;
+  Animation anim;
   QWidget *central = nullptr;
   QWidget *bottom = nullptr;
   QWidget *right = nullptr;
@@ -74,7 +74,7 @@ private:
   void saveToPath(const QString &);
   void saveFile();
   void saveFileDialog();
-  void exportSprite(const ExportParams &);
+  void exportAnimation(const ExportParams &);
   void exportDialog();
   void exportFrame(const QString &);
   void exportFrameDialog();

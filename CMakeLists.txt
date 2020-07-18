@@ -11,6 +11,11 @@ add_executable(Animera
     Animera.rc
     "src/abstract export params.cpp"
     "src/abstract export params.hpp"
+    "src/animation file.cpp"
+    "src/animation file.hpp"
+    src/animation.cpp
+    src/animation.hpp
+    src/animation.moc
     src/application.cpp
     src/application.hpp
     src/application.moc
@@ -163,13 +168,6 @@ add_executable(Animera
     "src/separator widget.hpp"
     src/settings.cpp
     src/settings.hpp
-    "src/sprite export.cpp"
-    "src/sprite export.hpp"
-    "src/sprite file.cpp"
-    "src/sprite file.hpp"
-    src/sprite.cpp
-    src/sprite.hpp
-    src/sprite.moc
     "src/status bar widget.cpp"
     "src/status bar widget.hpp"
     "src/status bar widget.moc"
