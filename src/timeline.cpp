@@ -34,17 +34,13 @@ void Timeline::initDefault() {
 }
 
 void Timeline::optimize() {
-  LayerIdx idx{};
-  for (Layer &layer : layers) {
-    for (Cel &cel : layer.cels) {
-      ::shrinkCelImage(*cel.cel, toRect(canvasSize));
-    }
-    optimizeCelArray(layer.cels);
-    changeLayerCels(idx);
-    ++idx;
+  // TODO: Do we really need to optimize the cel array?
+  // If this function actually ends up doing anything, doesn't that mean that
+  // there's a bug in the cel array?
+  for (LayerIdx l = {}; l != layerCount(); ++l) {
+    optimizeCelArray(layers[+l].cels);
+    changeLayerCels(l);
   }
-  changeFrame();
-  changePos();
 }
 
 void Timeline::change() {
@@ -79,7 +75,9 @@ Error Timeline::openImage(
   
   Layer layer;
   clearCelArray(layer.cels, frameCount);
-  layer.cels.front().cel->img = std::move(image);
+  CelImage &cel = *layer.cels.front().cel;
+  cel.img = std::move(image);
+  ::shrinkCelImage(cel, cel.rect());
   layer.name = "Layer 0";
   layers.push_back(std::move(layer));
   
@@ -104,6 +102,7 @@ Error Timeline::importImage(const QString &path) {
   CelImage *cel = getCel(pos);
   cel->pos = {};
   cel->img = std::move(image);
+  ::shrinkCelImage(*cel, cel->rect());
   
   changeFrame();
   changeCelImage();
