@@ -170,6 +170,8 @@ add_executable(Animera
     "src/separator widget.hpp"
     src/settings.cpp
     src/settings.hpp
+    "src/sprite packer.cpp"
+    "src/sprite packer.hpp"
     "src/status bar widget.cpp"
     "src/status bar widget.hpp"
     "src/status bar widget.moc"

@@ -33,12 +33,13 @@ public:
   virtual void addName(std::size_t, const ExportNameParams &, const ExportNameState &) = 0;
   virtual void addSizes(std::size_t, QSize) = 0;
   virtual QString hasNameCollision() = 0;
+  virtual Error packRectangles() = 0;
   
   // Second pass
   // Add the images
   virtual Error initAnimation(Format, PaletteCSpan) = 0;
   virtual Error addWhiteImage() = 0;
-  virtual Error addImage(std::size_t, QImage) = 0;
+  virtual Error addImage(std::size_t, const QImage &) = 0;
   
   virtual Error finalize() = 0;
 };

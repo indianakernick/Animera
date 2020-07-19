@@ -47,13 +47,17 @@ QString PngExportBackend::hasNameCollision() {
   return {};
 }
 
+Error PngExportBackend::packRectangles() {
+  return {};
+}
+
 Error PngExportBackend::initAnimation(Format newFormat, PaletteCSpan newPalette) {
   format = newFormat;
   palette = newPalette;
   return {};
 }
 
-Error PngExportBackend::addImage(const std::size_t idx, QImage image) {
+Error PngExportBackend::addImage(const std::size_t idx, const QImage &image) {
   FileWriter writer;
   TRY(writer.open(directory + QDir::separator() + names[idx] + ".png"));
   TRY(exportCelPng(writer.dev(), palette, image, format, pixelFormat));

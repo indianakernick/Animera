@@ -1,4 +1,4 @@
-﻿//
+//
 //  cpp export backend.hpp
 //  Animera
 //
@@ -10,7 +10,7 @@
 #define animera_cpp_export_backend_hpp
 
 #include <unordered_set>
-#include "stb_rect_pack.h"
+#include "sprite packer.hpp"
 #include "export backend.hpp"
 
 class CppExportBackend final : public ExportBackend {
@@ -21,26 +21,25 @@ public:
   void addSizes(std::size_t, QSize) override;
   void addWhiteName() override;
   QString hasNameCollision() override;
+  Error packRectangles() override;
   
   Error initAnimation(Format, PaletteCSpan) override;
-  Error addImage(std::size_t, QImage) override;
+  Error addImage(std::size_t, const QImage &) override;
   Error addWhiteImage() override;
   
   Error finalize() override;
 
 private:
+  SpritePacker packer;
   QString enumeration;
   QString array;
   std::unordered_set<QString> names;
   QString collision;
-  std::vector<stbrp_rect> rects;
-  int totalArea;
-  QImage texture;
   QString atlasDir;
   QString atlasName;
   
   void appendEnumerator(const QString &, const QString & = {});
-  void appendRectangle(const stbrp_rect &);
+  void appendRectangle(const QRect &);
   void insertName(const QString &);
   
   Error writeBytes(QIODevice &, const char *, std::size_t);

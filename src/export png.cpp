@@ -256,7 +256,7 @@ Error exportCelPng(
   const PaletteCSpan palette,
   QImage image,
   const Format canvasFormat,
-  const PixelFormat PixelFormat
+  const PixelFormat pixelFormat
 ) {
   SCOPE_TIME("exportCelPng");
 
@@ -273,14 +273,14 @@ Error exportCelPng(
     ctx.info,
     image.width(),
     image.height(),
-    getBitDepth(PixelFormat),
-    getColorType(PixelFormat),
+    getBitDepth(pixelFormat),
+    getColorType(pixelFormat),
     PNG_INTERLACE_NONE,
     PNG_COMPRESSION_TYPE_DEFAULT,
     PNG_FILTER_TYPE_DEFAULT
   );
   
-  switch (PixelFormat) {
+  switch (pixelFormat) {
     case PixelFormat::rgba:
       // TODO: Make ARGB endian aware so that we don't need to do this
       png_set_bgr(ctx.png);

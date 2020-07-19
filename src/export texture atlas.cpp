@@ -301,6 +301,8 @@ Error exportTextureAtlas(const ExportParams &params, const AnimArray &anims) {
     return "Sprite name collision \"" + name + "\"";
   }
   
+  TRY(params.backend->packRectangles());
+  
   spriteIndex = 0;
   for (std::size_t s = 0; s != anims.size(); ++s) {
     TRY(params.backend->initAnimation(

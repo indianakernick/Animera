@@ -77,6 +77,20 @@ constexpr SpriteID operator--(SpriteID &id, int) noexcept {
 }
 )";
 
+constexpr char sprite_rect_def[] = R"(
+#ifndef ANIMERA_SPRITE_RECT
+#define ANIMERA_SPRITE_RECT ::animera::SpriteRect
+struct SpriteRect {
+  int x = -1, y = -1;
+  int w = 0, h = 0;
+};
+#endif
+
+#ifndef ANIMERA_MAKE_SPRITE_RECT
+#define ANIMERA_MAKE_SPRITE_RECT(X, Y, W, H) ANIMERA_SPRITE_RECT{X, Y, W, H}
+#endif
+)";
+
 void convertToIdentifier(QString &str) {
   for (QChar &ch : str) {
     if (!ch.isLetterOrNumber()) {
@@ -90,15 +104,18 @@ void convertToIdentifier(QString &str) {
 
 }
 
-Error CppExportBackend::initAtlas(PixelFormat, const QString &name, const QString &dir) {
+Error CppExportBackend::initAtlas(PixelFormat format, const QString &name, const QString &dir) {
+  if (format == PixelFormat::index) {
+    return "C++ Export Backend does not support indexed pixel format";
+  }
+  
+  packer.init(format);
   enumeration.clear();
   appendEnumerator("null_", "-1");
   array.clear();
   names.clear();
   names.insert("null_");
   collision.clear();
-  rects.clear();
-  totalArea = 0;
   atlasDir = dir;
   atlasName = name.isEmpty() ? "atlas" : name;
   return {};
@@ -111,61 +128,38 @@ void CppExportBackend::addName(std::size_t, const ExportNameParams &params, cons
   insertName(name);
 }
 
-void CppExportBackend::addSizes(std::size_t len, const QSize size) {
-  stbrp_rect rect;
-  rect.w = size.width() + 2;
-  rect.h = size.height() + 2;
-  totalArea += len * rect.w * rect.h;
-  while (len--) {
-    rects.push_back(rect);
-  }
+void CppExportBackend::addSizes(const std::size_t count, const QSize size) {
+  packer.append(count, size);
 }
 
 void CppExportBackend::addWhiteName() {
   appendEnumerator("whitepixel_");
   insertName("whitepixel_");
-  addSizes(1, {1, 1});
+  packer.appendWhite();
 }
 
 QString CppExportBackend::hasNameCollision() {
-  int length = qNextPowerOfTwo(qRound(std::sqrt(totalArea)));
-  std::vector<stbrp_node> nodes;
-  stbrp_context ctx;
-  int packed = 0;
-  
-  while (length <= 65536) {
-    nodes.resize(length);
-    stbrp_init_target(&ctx, length, length, nodes.data(), static_cast<int>(nodes.size()));
-    packed = stbrp_pack_rects(&ctx, rects.data(), static_cast<int>(rects.size()));
-    if (packed) break;
-    length *= 2;
-  }
-  
-  assert(packed);
-  
-  texture = QImage{length, length, QImage::Format_ARGB32};
-  
   return collision;
 }
 
-Error CppExportBackend::initAnimation(const Format format, const PaletteCSpan palette) {
+Error CppExportBackend::packRectangles() {
+  return packer.pack();
+}
+
+Error CppExportBackend::initAnimation(const Format format, PaletteCSpan) {
+  if (format == Format::index) {
+    return "C++ Export Backend does not support indexed animation format";
+  }
   return {};
 }
 
-Error CppExportBackend::addImage(std::size_t i, QImage img) {
-  assert(i < rects.size());
-  assert(rects[i].w == img.width() + 2);
-  assert(rects[i].h == img.height() + 2);
-  appendRectangle(rects[i]);
-  blitImage(texture, img, {rects[i].x + 1, rects[i].y + 1});
+Error CppExportBackend::addImage(const std::size_t i, const QImage &img) {
+  appendRectangle(packer.copy(i, img));
   return {};
 }
 
 Error CppExportBackend::addWhiteImage() {
-  assert(rects.back().w == 3);
-  assert(rects.back().h == 3);
-  appendRectangle(rects.back());
-  texture.setPixel(rects.back().x, rects.back().y, 0xFFFFFFFF);
+  appendRectangle(packer.copyWhite(packer.count() - 1));
   return {};
 }
 
@@ -184,15 +178,15 @@ void CppExportBackend::appendEnumerator(const QString &name, const QString &valu
   enumeration += ",\n";
 }
 
-void CppExportBackend::appendRectangle(const stbrp_rect &rect) {
+void CppExportBackend::appendRectangle(const QRect &rect) {
   array += "  ANIMERA_MAKE_SPRITE_RECT(";
-  array += QString::number(rect.x + 1);
+  array += QString::number(rect.x());
   array += ", ";
-  array += QString::number(rect.y + 1);
+  array += QString::number(rect.y());
   array += ", ";
-  array += QString::number(rect.w - 2);
+  array += QString::number(rect.width());
   array += ", ";
-  array += QString::number(rect.h - 2);
+  array += QString::number(rect.height());
   array += "),\n";
 }
 
@@ -229,7 +223,7 @@ Error CppExportBackend::writeBytes(QIODevice &dev, const char *data, const std::
 Error CppExportBackend::writeCpp() {
   QBuffer textureBuffer;
   textureBuffer.open(QIODevice::ReadWrite);
-  TRY(exportCelPng(textureBuffer, {}, texture, Format::rgba, PixelFormat::rgba));
+  TRY(packer.writePng(textureBuffer));
   
   QString nameSpace = atlasName;
   convertToIdentifier(nameSpace);
@@ -287,23 +281,13 @@ Error CppExportBackend::writeHpp() {
   stream << "#include <cstddef>\n";
   stream << '\n';
   stream << "namespace animera {\n";
-  stream << '\n';
-  stream << "#ifndef ANIMERA_SPRITE_RECT\n";
-  stream << "#define ANIMERA_SPRITE_RECT ::animera::SpriteRect\n";
-  stream << "struct SpriteRect {\n";
-  stream << "  int x = -1, y = -1, w = 0, h = 0;\n";
-  stream << "};\n";
-  stream << "#endif\n";
-  stream << '\n';
-  stream << "#ifndef ANIMERA_MAKE_SPRITE_RECT\n";
-  stream << "#define ANIMERA_MAKE_SPRITE_RECT(X, Y, W, H) ANIMERA_SPRITE_RECT{X, Y, W, H}\n";
-  stream << "#endif\n";
+  stream << sprite_rect_def;
   stream << '\n';
   stream << "inline namespace " << nameSpace << " {\n";
   stream << '\n';
-  stream << "constexpr int sprite_count = " << rects.size() << ";\n";
-  stream << "constexpr int texture_width = " << texture.width() << ";\n";
-  stream << "constexpr int texture_height = " << texture.height() << ";\n";
+  stream << "constexpr int sprite_count = " << packer.count() << ";\n";
+  stream << "constexpr int texture_width = " << packer.width() << ";\n";
+  stream << "constexpr int texture_height = " << packer.height() << ";\n";
   stream << "extern const std::size_t texture_size;\n";
   stream << "extern const unsigned char texture_data[];\n";
   stream << '\n';

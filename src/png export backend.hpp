@@ -19,9 +19,10 @@ public:
   void addSizes(std::size_t, QSize) override;
   void addWhiteName() override;
   QString hasNameCollision() override;
+  Error packRectangles() override;
   
   Error initAnimation(Format, PaletteCSpan) override;
-  Error addImage(std::size_t, QImage) override;
+  Error addImage(std::size_t, const QImage &) override;
   Error addWhiteImage() override;
   
   Error finalize() override;
