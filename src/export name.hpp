@@ -57,4 +57,6 @@ struct ExportNameState {
   std::string_view groupName;
 };
 
+QString evaluateExportName(const ExportNameParams &, const ExportNameState &);
+
 #endif

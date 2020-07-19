@@ -11,18 +11,18 @@
 
 #include "export backend.hpp"
 
-class PngExportBackend : public ExportBackend {
+class PngExportBackend final : public ExportBackend {
 public:
   Error initAtlas(PixelFormat, const QString &, const QString &) override;
   
-  void addWhiteName() override;
   void addName(std::size_t, const ExportNameParams &, const ExportNameState &) override;
   void addSizes(std::size_t, QSize) override;
+  void addWhiteName() override;
   QString hasNameCollision() override;
   
   Error initAnimation(Format, PaletteCSpan) override;
-  Error addWhiteImage() override;
   Error addImage(std::size_t, QImage) override;
+  Error addWhiteImage() override;
   
   Error finalize() override;
 

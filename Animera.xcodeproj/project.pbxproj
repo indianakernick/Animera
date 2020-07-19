@@ -105,6 +105,8 @@
 		45D109AC22E2D4FD00D1F1CB /* text push button widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45D109AA22E2D4FD00D1F1CB /* text push button widget.cpp */; };
 		45D109AF22E2D88500D1F1CB /* export dialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45D109AD22E2D88500D1F1CB /* export dialog.cpp */; };
 		45D109B222E304A300D1F1CB /* combo box widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45D109B022E304A300D1F1CB /* combo box widget.cpp */; };
+		45D5847724C29CE9003C182C /* cpp export backend.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45D5847524C29CE9003C182C /* cpp export backend.cpp */; };
+		45D5847C24C3EE44003C182C /* stb_rect_pack.c in Sources */ = {isa = PBXBuildFile; fileRef = 45D5847B24C3EE44003C182C /* stb_rect_pack.c */; };
 		45DC2566224B137C00F40116 /* status msg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45DC2564224B137C00F40116 /* status msg.cpp */; };
 		45DFE499224DE89E00EA40C5 /* global font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45DFE497224DE89E00EA40C5 /* global font.cpp */; };
 		45E3340623A1F4F4009F5EC1 /* libz.1.2.11.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 45E3340523A1F4F4009F5EC1 /* libz.1.2.11.dylib */; };
@@ -821,6 +823,11 @@
 		45D109AE22E2D88500D1F1CB /* export dialog.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "export dialog.hpp"; sourceTree = "<group>"; };
 		45D109B022E304A300D1F1CB /* combo box widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "combo box widget.cpp"; sourceTree = "<group>"; };
 		45D109B122E304A300D1F1CB /* combo box widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "combo box widget.hpp"; sourceTree = "<group>"; };
+		45D5847524C29CE9003C182C /* cpp export backend.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "cpp export backend.cpp"; sourceTree = "<group>"; };
+		45D5847624C29CE9003C182C /* cpp export backend.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "cpp export backend.hpp"; sourceTree = "<group>"; };
+		45D5847824C2A480003C182C /* stb_rect_pack.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stb_rect_pack.h; sourceTree = "<group>"; };
+		45D5847924C3DF02003C182C /* social.animera */ = {isa = PBXFileReference; lastKnownFileType = file; path = social.animera; sourceTree = "<group>"; };
+		45D5847B24C3EE44003C182C /* stb_rect_pack.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = stb_rect_pack.c; sourceTree = "<group>"; };
 		45D9DC7C242F04B4001ACE37 /* title@8x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "title@8x.png"; sourceTree = "<group>"; };
 		45DC255F224A034200F40116 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		45DC2562224A0AEA00F40116 /* title.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = title.png; sourceTree = "<group>"; };
@@ -904,6 +911,8 @@
 			children = (
 				4515ABB224C000F50052C8BF /* png export backend.cpp */,
 				4515ABB324C000F50052C8BF /* png export backend.hpp */,
+				45D5847524C29CE9003C182C /* cpp export backend.cpp */,
+				45D5847624C29CE9003C182C /* cpp export backend.hpp */,
 			);
 			name = Backends;
 			sourceTree = "<group>";
@@ -1143,6 +1152,7 @@
 		4549B969243BFB8800B1A62A /* third_party */ = {
 			isa = PBXGroup;
 			children = (
+				45D5847A24C3EE30003C182C /* stb */,
 				45571E1F246FC473001FC61A /* span */,
 				4549B96A243BFF3100B1A62A /* Catch2 */,
 				4549BB2D243BFF3200B1A62A /* docopt */,
@@ -1951,6 +1961,7 @@
 				45689A2224B2D23300C9BB06 /* docicon.animera */,
 				455486BC234466F6001D5611 /* palette select.animera */,
 				455486BD234466F6001D5611 /* slider bar.animera */,
+				45D5847924C3DF02003C182C /* social.animera */,
 				455486B523446257001D5611 /* text box icon.animera */,
 				455486B423446257001D5611 /* text button.animera */,
 				455486B023445E82001D5611 /* timeline.animera */,
@@ -2155,6 +2166,15 @@
 				45064A20243C365E00A3FD8B /* animation format.md */,
 			);
 			path = doc;
+			sourceTree = "<group>";
+		};
+		45D5847A24C3EE30003C182C /* stb */ = {
+			isa = PBXGroup;
+			children = (
+				45D5847B24C3EE44003C182C /* stb_rect_pack.c */,
+				45D5847824C2A480003C182C /* stb_rect_pack.h */,
+			);
+			path = stb;
 			sourceTree = "<group>";
 		};
 		45DC980D247903BF00429465 /* scripts */ = {
@@ -3118,6 +3138,7 @@
 				45B284B3221A919000D6D055 /* tool.cpp in Sources */,
 				45D1099E22DB09C100D1F1CB /* transform tools.cpp in Sources */,
 				4529AA09239CDF4F0034A014 /* quit dialog.cpp in Sources */,
+				45D5847C24C3EE44003C182C /* stb_rect_pack.c in Sources */,
 				453C78402234DF3200818B19 /* application.cpp in Sources */,
 				45CAC92922CC7B5800F945BF /* sample object.cpp in Sources */,
 				455F2868220690A600C73F39 /* main.cpp in Sources */,
@@ -3148,6 +3169,7 @@
 				4595D48C22C05E5400607D64 /* timeline cels widget.cpp in Sources */,
 				457D74F3239E2488009B4E4B /* settings.cpp in Sources */,
 				453C78432234E13E00818B19 /* window.cpp in Sources */,
+				45D5847724C29CE9003C182C /* cpp export backend.cpp in Sources */,
 				45A6103C2307E1EF000A0BD6 /* error dialog.cpp in Sources */,
 				4512636622781D7B00C66A19 /* tool colors widget.cpp in Sources */,
 				4571C132227C383A00479006 /* radio button widget.cpp in Sources */,
@@ -3342,6 +3364,7 @@
 					$PROJECT_DIR/third_party/Graphics/include,
 					$PROJECT_DIR/third_party/span/include,
 					$PROJECT_DIR/third_party/docopt,
+					$PROJECT_DIR/third_party/stb,
 					/usr/local/include,
 					/usr/local/opt/zlib/include,
 				);
@@ -3411,6 +3434,7 @@
 					$PROJECT_DIR/third_party/Graphics/include,
 					$PROJECT_DIR/third_party/span/include,
 					$PROJECT_DIR/third_party/docopt,
+					$PROJECT_DIR/third_party/stb,
 					/usr/local/include,
 					/usr/local/opt/zlib/include,
 				);

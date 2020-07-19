@@ -62,6 +62,8 @@ add_executable(Animera
     "src/config geometry.hpp"
     "src/config keys.hpp"
     src/connect.hpp
+    "src/cpp export backend.cpp"
+    "src/cpp export backend.hpp"
     "src/current tool.cpp"
     "src/current tool.hpp"
     src/dialog.cpp
@@ -232,6 +234,8 @@ add_executable(Animera
     src/window.hpp
     src/window.moc
     src/zlib.hpp
+    third_paty/stb/stb_rect_pack.c
+    third_paty/stb/stb_rect_pack.h
 )
 
 target_compile_features(Animera

@@ -122,10 +122,11 @@ struct Images {
   QImage xformed;
 };
 
+bool isIdentity(const ExportTransform &transform) {
+  return transform.scaleX == 1 && transform.scaleY == 1 && transform.angle == 0;
+}
+
 QSize getTransformedSize(const QSize canvasSize, const ExportTransform &transform) {
-  if (transform.scaleX == 1 && transform.scaleY == 1 && transform.angle == 0) {
-    return {};
-  }
   QSize size;
   size.setWidth(canvasSize.width() * std::abs(transform.scaleX));
   size.setHeight(canvasSize.height() * std::abs(transform.scaleY));
@@ -138,8 +139,12 @@ void initImages(Images &images, const AnimExportParams &params, const Animation 
     imageFormat = Format::rgba;
   }
   images.canvas = {anim.getSize(), qimageFormat(imageFormat)};
-  const QSize xformedSize = getTransformedSize(images.canvas.size(), params.transform);
-  images.xformed = {xformedSize, images.canvas.format()};
+  if (isIdentity(params.transform)) {
+    images.xformed = {};
+  } else {
+    const QSize xformedSize = getTransformedSize(images.canvas.size(), params.transform);
+    images.xformed = {xformedSize, images.canvas.format()};
+  }
 }
 
 void applyTransform(Images &images, const ExportTransform &transform) {
@@ -274,10 +279,6 @@ Error exportTextureAtlas(const ExportParams &params, const AnimArray &anims) {
   
   TRY(params.backend->initAtlas(params.pixelFormat, params.name, params.directory));
   
-  if (params.whitepixel) {
-    params.backend->addWhiteName();
-  }
-  
   std::size_t spriteIndex = 0;
   for (std::size_t s = 0; s != anims.size(); ++s) {
     std::size_t indexBefore = spriteIndex;
@@ -292,12 +293,12 @@ Error exportTextureAtlas(const ExportParams &params, const AnimArray &anims) {
     );
   }
   
-  if (QString name = params.backend->hasNameCollision(); !name.isNull()) {
-    return "Sprite name collision \"" + name + "\"";
+  if (params.whitepixel) {
+    params.backend->addWhiteName();
   }
   
-  if (params.whitepixel) {
-    TRY(params.backend->addWhiteImage());
+  if (QString name = params.backend->hasNameCollision(); !name.isNull()) {
+    return "Sprite name collision \"" + name + "\"";
   }
   
   spriteIndex = 0;
@@ -311,6 +312,10 @@ Error exportTextureAtlas(const ExportParams &params, const AnimArray &anims) {
     } else {
       TRY(addCelImages(spriteIndex, params, params.anims[s], *anims[s]));
     }
+  }
+  
+  if (params.whitepixel) {
+    TRY(params.backend->addWhiteImage());
   }
   
   return params.backend->finalize();
