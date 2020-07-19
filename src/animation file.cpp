@@ -29,6 +29,23 @@ struct InflateDeleter {
   }
 };
 
+Bytef *getZlibBuffer() {
+  // TODO: std::make_unique_for_overwrite
+  static std::unique_ptr<Bytef[]> buffer = std::unique_ptr<Bytef[]>{new Bytef[file_buff_size]};
+  return buffer.get();
+}
+
+Bytef *getImageRowBuffer(const std::size_t newSize) {
+  static std::unique_ptr<Bytef[]> buffer;
+  static std::size_t size = 0;
+  if (size < newSize) {
+    // TODO: std::make_unique_for_overwrite
+    buffer = std::unique_ptr<Bytef[]>{new Bytef[newSize]};
+    size = newSize;
+  }
+  return buffer.get();
+}
+
 constexpr int byteDepth(const Format format) {
   switch (format) {
     case Format::rgba:
@@ -264,9 +281,9 @@ Error writeCDAT(QIODevice &dev, const QImage &image, const Format format) try {
   
   assert(!image.isNull());
   const std::uint32_t outBuffSize = file_buff_size;
-  std::vector<Bytef> outBuff(outBuffSize);
+  Bytef *outBuff = getZlibBuffer();
   const std::uint32_t inBuffSize = image.width() * byteDepth(format);
-  std::vector<Bytef> inBuff(inBuffSize);
+  Bytef *inBuff = getImageRowBuffer(inBuffSize);
   
   z_stream stream;
   stream.zalloc = nullptr;
@@ -276,7 +293,7 @@ Error writeCDAT(QIODevice &dev, const QImage &image, const Format format) try {
   assert(ret == Z_OK);
   const std::unique_ptr<z_stream, DeflateDeleter> deleter{&stream};
   stream.avail_in = 0;
-  stream.next_out = outBuff.data();
+  stream.next_out = outBuff;
   stream.avail_out = outBuffSize;
   
   ChunkWriter writer{dev};
@@ -287,17 +304,17 @@ Error writeCDAT(QIODevice &dev, const QImage &image, const Format format) try {
   
   do {
     if (stream.avail_in == 0 && rowIdx < image.height()) {
-      copyToByteOrder(inBuff.data(), image.scanLine(rowIdx), inBuffSize, format);
-      stream.next_in = inBuff.data();
+      copyToByteOrder(inBuff, image.scanLine(rowIdx), inBuffSize, format);
+      stream.next_in = inBuff;
       stream.avail_in = inBuffSize;
       ++rowIdx;
     }
     if (stream.avail_out == 0) {
       // This situation is near impossible. This might as well be an assert
       if (remainingChunk < outBuffSize) return "Chunk overflow";
-      writer.writeString(outBuff.data(), outBuffSize);
+      writer.writeString(outBuff, outBuffSize);
       remainingChunk -= outBuffSize;
-      stream.next_out = outBuff.data();
+      stream.next_out = outBuff;
       stream.avail_out = outBuffSize;
     }
     
@@ -308,7 +325,7 @@ Error writeCDAT(QIODevice &dev, const QImage &image, const Format format) try {
   assert(ret == Z_STREAM_END);
   
   if (stream.avail_out < outBuffSize) {
-    writer.writeString(outBuff.data(), outBuffSize - stream.avail_out);
+    writer.writeString(outBuff, outBuffSize - stream.avail_out);
   }
   
   writer.end();
@@ -633,9 +650,9 @@ Error readCDAT(QIODevice &dev, QImage &image, const Format format) try {
 
   assert(!image.isNull());
   const std::uint32_t outBuffSize = image.width() * byteDepth(format);
-  std::vector<Bytef> outBuff(outBuffSize);
+  Bytef *outBuff = getImageRowBuffer(outBuffSize);
   const std::uint32_t inBuffSize = file_buff_size;
-  std::vector<Bytef> inBuff(inBuffSize);
+  Bytef *inBuff = getZlibBuffer();
   
   z_stream stream;
   stream.zalloc = nullptr;
@@ -645,7 +662,7 @@ Error readCDAT(QIODevice &dev, QImage &image, const Format format) try {
   assert(ret == Z_OK);
   const std::unique_ptr<z_stream, InflateDeleter> deleter{&stream};
   stream.avail_in = 0;
-  stream.next_out = outBuff.data();
+  stream.next_out = outBuff;
   stream.avail_out = outBuffSize;
   
   ChunkReader reader{dev};
@@ -657,14 +674,14 @@ Error readCDAT(QIODevice &dev, QImage &image, const Format format) try {
   
   do {
     if (stream.avail_in == 0 && remainingChunk != 0) {
-      stream.next_in = inBuff.data();
+      stream.next_in = inBuff;
       stream.avail_in = std::min(inBuffSize, remainingChunk);
       remainingChunk -= stream.avail_in;
-      reader.readString(inBuff.data(), stream.avail_in);
+      reader.readString(inBuff, stream.avail_in);
     }
     if (stream.avail_out == 0 && rowIdx < image.height()) {
-      copyFromByteOrder(image.scanLine(rowIdx), outBuff.data(), outBuffSize, format);
-      stream.next_out = outBuff.data();
+      copyFromByteOrder(image.scanLine(rowIdx), outBuff, outBuffSize, format);
+      stream.next_out = outBuff;
       stream.avail_out = outBuffSize;
       ++rowIdx;
     }
@@ -684,7 +701,7 @@ Error readCDAT(QIODevice &dev, QImage &image, const Format format) try {
     if (stream.avail_out != 0) {
       return "Extra image data";
     }
-    copyFromByteOrder(image.scanLine(rowIdx), outBuff.data(), outBuffSize, format);
+    copyFromByteOrder(image.scanLine(rowIdx), outBuff, outBuffSize, format);
   } else if (rowIdx == image.height()) {
     if (stream.avail_out != outBuffSize) {
       return "Extra image data";
