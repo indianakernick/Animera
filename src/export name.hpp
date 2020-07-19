@@ -57,6 +57,9 @@ struct ExportNameState {
   std::string_view groupName;
 };
 
+void appendLayerName(QString &, const ExportNameParams &, const ExportNameState &);
+void appendGroupName(QString &, const ExportNameParams &, const ExportNameState &);
+void appendFrameName(QString &, const ExportNameParams &, const ExportNameState &);
 QString evaluateExportName(const ExportNameParams &, const ExportNameState &);
 
 #endif

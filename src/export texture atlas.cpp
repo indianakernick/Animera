@@ -66,7 +66,7 @@ Error eachFrame(const AnimExportParams &params, const Animation &anim, Func func
       state.groupBegin = info.begin;
       state.groupName = groupIter.name();
     }
-    state.frame = f - state.groupBegin;
+    state.frame = f;
     changedGroup = groupIter.incr();
     
     TRY(func(frame, state));
@@ -105,7 +105,7 @@ Error eachCel(const AnimExportParams &params, const Animation &anim, Func func) 
       }
       
       if (const CelImage *cel = celIter.img(); *cel) {
-        state.frame = f - state.groupBegin;
+        state.frame = f;
         TRY(func(cel, state));
       }
       

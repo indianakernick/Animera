@@ -18,9 +18,7 @@ void appendSep(QString &str) {
 
 }
 
-QString evaluateExportName(const ExportNameParams &params, const ExportNameState &state) {
-  QString name = params.name;
-  
+void appendLayerName(QString &name, const ExportNameParams &params, const ExportNameState &state) {
   switch (params.layerName) {
     case LayerNameMode::automatic:
       if (state.layerCount <= LayerIdx{1}) break;
@@ -35,7 +33,9 @@ QString evaluateExportName(const ExportNameParams &params, const ExportNameState
     case LayerNameMode::empty:
       break;
   }
-  
+}
+
+void appendGroupName(QString &name, const ExportNameParams &params, const ExportNameState &state) {
   switch (params.groupName) {
     case GroupNameMode::automatic:
       if (state.groupCount <= GroupIdx{1}) break;
@@ -50,7 +50,9 @@ QString evaluateExportName(const ExportNameParams &params, const ExportNameState
     case GroupNameMode::empty:
       break;
   }
-  
+}
+
+void appendFrameName(QString &name, const ExportNameParams &params, const ExportNameState &state) {
   switch (params.frameName) {
     case FrameNameMode::automatic:
       if (state.frameCount <= FrameIdx{1}) break;
@@ -65,6 +67,12 @@ QString evaluateExportName(const ExportNameParams &params, const ExportNameState
     case FrameNameMode::empty:
       break;
   }
-  
+}
+
+QString evaluateExportName(const ExportNameParams &params, const ExportNameState &state) {
+  QString name = params.name;
+  appendLayerName(name, params, state);
+  appendGroupName(name, params, state);
+  appendFrameName(name, params, state);
   return name;
 }

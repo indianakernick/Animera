@@ -38,7 +38,8 @@ private:
   QString atlasDir;
   QString atlasName;
   
-  void appendEnumerator(const QString &, const QString & = {});
+  void addAlias(QString, const char *, std::size_t);
+  void appendEnumerator(const QString &, std::size_t);
   void appendRectangle(const QRect &);
   void insertName(const QString &);
   

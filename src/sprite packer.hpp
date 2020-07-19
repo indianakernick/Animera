@@ -17,6 +17,8 @@
 // TODO: Move PixelFormat to a more appropriate header
 #include "export backend.hpp"
 
+// TODO: support indexed animation format
+
 class SpritePacker {
 public:
   static constexpr int padding = 1;

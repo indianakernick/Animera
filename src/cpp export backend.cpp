@@ -97,7 +97,7 @@ void convertToIdentifier(QString &str) {
       ch = '_';
     }
   }
-  if (str.front().isDigit()) {
+  if (str.isEmpty() || str.front().isDigit()) {
     str.prepend('_');
   }
 }
@@ -111,7 +111,7 @@ Error CppExportBackend::initAtlas(PixelFormat format, const QString &name, const
   
   packer.init(format);
   enumeration.clear();
-  appendEnumerator("null_", "-1");
+  appendEnumerator("null_", ~std::size_t{});
   array.clear();
   names.clear();
   names.insert("null_");
@@ -121,11 +121,58 @@ Error CppExportBackend::initAtlas(PixelFormat format, const QString &name, const
   return {};
 }
 
-void CppExportBackend::addName(std::size_t, const ExportNameParams &params, const ExportNameState &state) {
-  QString name = evaluateExportName(params, state);
-  convertToIdentifier(name);
-  appendEnumerator(name);
+void CppExportBackend::addName(
+  const std::size_t i,
+  const ExportNameParams &params,
+  const ExportNameState &state
+) {
+  QString name = params.name;
+  int baseName = name.size();
+  appendLayerName(name, params, state);
+  int layerName = name.size();
+  appendGroupName(name, params, state);
+  int groupName = name.size();
+  appendFrameName(name, params, state);
+  int frameName = name.size();
+  
+  {
+    // sometimes an underscore is prepended
+    const int sizeBefore = name.size();
+    convertToIdentifier(name);
+    if (name.size() == sizeBefore + 1) {
+      ++baseName;
+      ++layerName;
+      ++groupName;
+      ++frameName;
+    }
+  }
+  
+  const bool hasLayerName = layerName > baseName;
+  const bool hasGroupName = groupName > layerName;
+  const bool hasFrameName = frameName > groupName;
+  
+  if (hasFrameName && state.frame == state.groupBegin) {
+    if (hasGroupName && state.group == GroupIdx{0}) {
+      if (hasLayerName && state.layer == LayerIdx{0}) {
+        addAlias(name.left(baseName), "beg_", i);
+      }
+      addAlias(name.left(layerName), "beg_", i);
+    }
+    addAlias(name.left(groupName), "beg_", i);
+  }
+  
+  appendEnumerator(name, i);
   insertName(name);
+  
+  if (hasFrameName && state.frame - state.groupBegin == state.frameCount - FrameIdx{1}) {
+    addAlias(name.left(groupName), "end_", i + 1);
+    if (hasGroupName && state.group == state.groupCount - GroupIdx{1}) {
+      addAlias(name.left(layerName), "end_", i + 1);
+      if (hasLayerName && state.layer == state.layerCount - LayerIdx{1}) {
+        addAlias(name.left(baseName), "end_", i + 1);
+      }
+    }
+  }
 }
 
 void CppExportBackend::addSizes(const std::size_t count, const QSize size) {
@@ -133,7 +180,7 @@ void CppExportBackend::addSizes(const std::size_t count, const QSize size) {
 }
 
 void CppExportBackend::addWhiteName() {
-  appendEnumerator("whitepixel_");
+  appendEnumerator("whitepixel_", packer.count());
   insertName("whitepixel_");
   packer.appendWhite();
 }
@@ -168,12 +215,21 @@ Error CppExportBackend::finalize() {
   return writeHpp();
 }
 
-void CppExportBackend::appendEnumerator(const QString &name, const QString &value) {
+void CppExportBackend::addAlias(QString base, const char *alias, const std::size_t value) {
+  if (!base.isEmpty()) base += '_';
+  base += alias;
+  appendEnumerator(base, value);
+  insertName(base);
+}
+
+void CppExportBackend::appendEnumerator(const QString &name, const std::size_t value) {
   enumeration += "  ";
   enumeration += name;
-  if (!value.isEmpty()) {
-    enumeration += " = ";
-    enumeration += value;
+  enumeration += " = ";
+  if (value == ~std::size_t{}) {
+    enumeration += "-1";
+  } else {
+    enumeration += QString::number(value);
   }
   enumeration += ",\n";
 }
@@ -209,9 +265,9 @@ Error CppExportBackend::writeBytes(QIODevice &dev, const char *data, const std::
     }
     
     static_assert(CHAR_BIT == 8);
-    unsigned char byte = data[i];
-    hex[3] = hex_chars[byte & 15];
+    const unsigned char byte = data[i];
     hex[2] = hex_chars[byte >> 4];
+    hex[3] = hex_chars[byte & 15];
     if (dev.write(hex, 6) != 6) {
       return dev.errorString();
     }
