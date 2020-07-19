@@ -15,6 +15,8 @@
 
 class FileWriter {
 public:
+  static constexpr std::size_t compare_buff_size = 4 * 1024;
+
   Error open(const QString &);
   QIODevice &dev();
   Error flush() const;
@@ -22,6 +24,9 @@ public:
 private:
   QBuffer buff;
   QString path;
+  
+  qint64 filesEqual() const;
+  Error flushFrom(qint64) const;
 };
 
 class FileReader {

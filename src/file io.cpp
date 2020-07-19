@@ -46,17 +46,60 @@ QIODevice &FileWriter::dev() {
 
 Error FileWriter::flush() const {
   SCOPE_TIME("FileWriter::flush");
+  
+  // TODO: should we try to avoid opening the file twice?
+  const qint64 equal = filesEqual();
+  return equal == buff.size() ? Error{} : flushFrom(equal);
+}
 
+qint64 FileWriter::filesEqual() const {
+  SCOPE_TIME("FileWriter::filesEqual");
+ 
   QFile file{path};
-  if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+  if (!file.exists()) return 0;
+  if (file.size() != buff.size()) return 0;
+  
+  if (!file.open(QIODevice::ReadOnly)) return 0;
+  char fileBuffer[compare_buff_size];
+  qint64 equal = 0;
+  
+  while (!file.atEnd()) {
+    const qint64 read = file.read(fileBuffer, sizeof(fileBuffer));
+    if (read == -1) {
+      return equal;
+    }
+    if (std::memcmp(fileBuffer, buff.data().data() + equal, read) != 0) {
+      return equal;
+    }
+    equal += read;
+  }
+  
+  return equal;
+}
+
+Error FileWriter::flushFrom(const qint64 start) const {
+  SCOPE_TIME("FileWriter::flushFrom");
+  
+  QFile file{path};
+  QIODevice::OpenMode openMode = QIODevice::WriteOnly;
+  if (start != 0) openMode |= QIODevice::ReadOnly;
+  if (!file.open(openMode)) {
     return file.errorString() + "\n" + QDir::toNativeSeparators(path);
   }
-  const qint64 written = file.write(buff.data().data(), buff.data().size());
-  if (written != buff.data().size()) {
+  
+  if (start != 0 && !file.seek(start)) {
+    return file.errorString();
+  }
+  
+  const char *data = buff.data().data() + start;
+  const qint64 size = buff.data().size() - start;
+  const qint64 written = file.write(data, size);
+  if (written != size) {
     QString err = file.errorString();
     if (written > 0) file.remove();
     return std::move(err);
   }
+  
   return {};
 }
 
