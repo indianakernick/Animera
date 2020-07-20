@@ -8,27 +8,36 @@
 
 #include "cli export.hpp"
 
-#if 0
-
-#include <charconv>
-#include "strings.hpp"
-#include "animation.hpp"
+#include <iostream>
 #include <QtCore/qdir.h>
-#include "export params.hpp"
-#include "docopt helpers.hpp"
+#include <QtCore/qjsonarray.h>
+#include <QtCore/qjsonobject.h>
 #include <QtCore/qtextstream.h>
+#include <QtCore/qjsondocument.h>
+#include "png export backend.hpp"
+#include "cpp export backend.hpp"
+#include "export texture atlas.hpp"
 #include <QtCore/qcoreapplication.h>
 
 namespace {
 
-template <typename Idx>
-const QString idxName;
-template <>
-const QString idxName<LayerIdx> = "Layer";
-template <>
-const QString idxName<FrameIdx> = "Frame";
+QJsonDocument readDoc(QTextStream &console) {
+  QByteArray array;
+  while (!std::cin.eof()) {
+    char buffer[1024];
+    std::cin.read(buffer, sizeof(buffer));
+    array.append(buffer, static_cast<int>(std::cin.gcount()));
+  }
+  QJsonParseError error;
+  QJsonDocument doc = QJsonDocument::fromJson(array, &error);
+  if (doc.isNull()) {
+    console << "JSON error\n";
+    console << error.errorString() << '\n';
+  }
+  return doc;
+}
 
-const char *formatNames[] = {
+const QString pixelFormatNames[] = {
   "rgba",
   "index",
   "gray",
@@ -36,259 +45,409 @@ const char *formatNames[] = {
   "monochrome"
 };
 
-QString formatNamesList(std::initializer_list<PixelFormat> formats) {
-  return validListStr("formats", formats.size(), [formats](QString &str, std::size_t i) {
-    str += formatNames[static_cast<std::size_t>(formats.begin()[i])];
+template <typename Enum, std::size_t Size>
+Error parseEnum(Enum &e, const QString &str, const QString &key, const QString (&names)[Size]) {
+  for (std::size_t n = 0; n != std::size(names); ++n) {
+    if (names[n] == str) {
+      e = static_cast<Enum>(n);
+      return {};
+    }
+  }
+  QString err = "Invalid " + key + ". Valid values are:";
+  for (const QString &name : names) {
+    err += "\n - ";
+    err += name;
+  }
+  return err;
+}
+
+Error parsePixelFormat(PixelFormat &format, const QString &str) {
+  return parseEnum(format, str, "pixel format", pixelFormatNames);
+}
+
+Error parseBackend(std::unique_ptr<ExportBackend> &backend, const QString &str) {
+  if (str == "png") {
+    backend = std::make_unique<PngExportBackend>();
+  } else if (str == "cpp") {
+    backend = std::make_unique<CppExportBackend>();
+  } else {
+    QString err = "Invalid backend. Value values are:";
+    err += "\n - png";
+    err += "\n - cpp";
+    return err;
+  }
+  return {};
+}
+
+template <typename ParseFunc, typename DefaultFunc>
+Error getString(QJsonObject &obj, const QString &key, ParseFunc parse, DefaultFunc def) {
+  QJsonValue val = obj.take(key);
+  if (val.isString()) {
+    if constexpr (std::is_invocable_r_v<Error, ParseFunc, QString>) {
+      return parse(val.toString());
+    } else {
+      parse(val.toString());
+      return {};
+    }
+  } else if (val.isUndefined()) {
+    if constexpr (std::is_invocable_r_v<Error, DefaultFunc>) {
+      return def();
+    } else {
+      def();
+      return {};
+    }
+  } else {
+    return "Field \"" + key + "\" must be a string";
+  }
+}
+
+// TODO: maybe put this in export name.hpp
+// this is repeated in a few places
+QString getFileName(const QString &path) {
+  int begin = path.lastIndexOf('/');
+  int end = path.lastIndexOf('.');
+  begin += 1;
+  end = end == -1 ? path.size() : end;
+  QString name{path.data() + begin, end - begin};
+  // path.truncate(begin);
+  return name;
+}
+
+void setDefaultAnimation(AnimExportParams &anim, const QString &path) {
+  anim.name.baseName = getFileName(path);
+  anim.name.layerName = LayerNameMode::automatic;
+  anim.name.groupName = GroupNameMode::automatic;
+  anim.name.frameName = FrameNameMode::automatic;
+  
+  anim.transform.scaleX = 1;
+  anim.transform.scaleY = 1;
+  anim.transform.angle = 0;
+  
+  anim.layers.min = LayerIdx{0};
+  anim.layers.max = LayerIdx{-1};
+  anim.layers.vis = LayerVis::visible;
+  
+  anim.frames.min = FrameIdx{0};
+  anim.frames.max = FrameIdx{-1};
+  
+  anim.composite = true;
+}
+
+const QString layerNames[] = {
+  "automatic",
+  "name",
+  "index",
+  "empty"
+};
+
+const QString frameNames[] = {
+  "automatic",
+  "relative",
+  "absolute",
+  "empty"
+};
+
+Error parseLayerName(LayerNameMode &name, QJsonObject &obj) {
+  return getString(obj, "layer name", [&](const QString &val) {
+    return parseEnum(name, val, "layer name", layerNames);
+  }, [&] {
+    name = LayerNameMode::automatic;
   });
 }
 
-Error setFormat(PixelFormat &format, const docopt::value &formatValue) {
-  if (!setEnum(format, formatValue.asString(), formatNames)) {
-    return "Invalid export format" + validListStr("formats", formatNames);
+Error parseGroupName(GroupNameMode &name, QJsonObject &obj) {
+  return getString(obj, "group name", [&](const QString &val) {
+    return parseEnum(name, val, "group name", layerNames);
+  }, [&] {
+    name = GroupNameMode::automatic;
+  });
+}
+
+Error parseFrameName(FrameNameMode &name, QJsonObject &obj) {
+  return getString(obj, "frame name", [&](const QString &val) {
+    return parseEnum(name, val, "frame name", frameNames);
+  }, [&] {
+    name = FrameNameMode::automatic;
+  });
+}
+
+Error parseInt(int &intVal, const QString &key, const double doubleVal) {
+  intVal = static_cast<int>(doubleVal);
+  if (static_cast<double>(intVal) != doubleVal) {
+    return "Field \"" + key + "\" must be an integer";
   }
   return {};
 }
 
-Error checkFormat(
-  const PixelFormat format,
-  const QString &canvasFormat,
-  std::initializer_list<PixelFormat> formats
-) {
-  if (std::find(formats.begin(), formats.end(), format) == formats.end()) {
-    QString msg = "Invalid export format for ";
-    msg += canvasFormat;
-    msg += " animation format";
-    msg += formatNamesList(formats);
-    return msg;
+Error parseScale(ExportTransform &transform, QJsonObject &obj) {
+  const QJsonValue val = obj.take("scale");
+  if (val.isUndefined()) {
+    transform.scaleX = 1;
+    transform.scaleY = 1;
+  } else if (val.isArray()) {
+    const QJsonArray arr = val.toArray();
+    if (arr.size() != 2) {
+      return "Field \"scale\" must contain two elements";
+    }
+    if (!arr[0].isDouble() || !arr[1].isDouble()) {
+      return "Field \"scale\" must be an array of numbers";
+    }
+    // TODO: This is an odd error message
+    TRY(parseInt(transform.scaleX, "scale[0]", arr[0].toDouble()));
+    TRY(parseInt(transform.scaleY, "scale[1]", arr[1].toDouble()));
+    if (transform.scaleX == 0) {
+      return "First element of field \"scale\" cannot be zero";
+    } else if (transform.scaleY == 0) {
+      return "Second element of field \"scale\" cannot be zero";
+    }
+  } else if (val.isDouble()) {
+    int intVal;
+    TRY(parseInt(intVal, "scale", val.toDouble()));
+    if (intVal == 0) {
+      return "Field \"scale\" cannot be zero";
+    }
+    transform.scaleX = transform.scaleY = intVal;
+  } else {
+    return "Field \"scale\" must an array or a number";
   }
   return {};
 }
 
-Error checkFormat(const ExportOptions &options, const Format canvasFormat) {
-  switch (canvasFormat) {
-    case Format::rgba:
-      return checkFormat(options.format, "rgba", {PixelFormat::rgba});
-    case Format::index:
-      if (options.composite) {
-        return checkFormat(options.format, "index", {PixelFormat::rgba});
-      } else {
-        return checkFormat(options.format, "index", {
-          PixelFormat::index, PixelFormat::gray, PixelFormat::monochrome
-        });
-      }
-    case Format::gray:
-      return checkFormat(options.format, "gray", {
-        PixelFormat::gray_alpha, PixelFormat::gray, PixelFormat::monochrome
-      });
+Error parseAngle(ExportTransform &transform, QJsonObject &obj) {
+  const QJsonValue val = obj.take("angle");
+  if (val.isUndefined()) {
+    transform.angle = 0;
+  } else if (val.isDouble()) {
+    int intVal;
+    TRY(parseInt(intVal, "angle", val.toDouble()));
+    if (intVal < 0 || intVal > 3) {
+      return "Field \"angle\" must be in the range [0, 3]";
+    }
+    transform.angle = intVal;
+  } else {
+    return "Field \"angle\" must be a number";
   }
   return {};
 }
 
-const char *visNames[] = {
+const QString layerVisNames[] = {
   "visible",
   "hidden",
   "all"
 };
 
-Error setVisibility(ExportVis &visibility, const docopt::value &visValue) {
-  if (!setEnum(visibility, visValue.asString(), visNames)) {
-    return "Invalid visibility mode" + validListStr("modes", visNames);
-  }
-  return {};
-}
-
-const QString rangeFormats = "\nValid range formats are: {n, n..n, ..n, n.., ..}";
-
-template <typename Idx>
-Error setRange(IntRange &range, const Idx length, const docopt::value &value) {
-  // TODO: should we use long here?
-  // For consistency of error messages
-  // if we use long
-  //   3'000'000'000 is out of range
-  // if we use int
-  //   3'000'000'000 is not an integer
-  assert(value.isString());
-  const std::string &str = value.asString();
-  if (str.empty()) {
-    return idxName<Idx> + " range is empty" + rangeFormats;
-  }
-  const char *pos = str.data();
-  const char *const strEnd = pos + str.size();
-  if (pos[0] != '.') {
-    const auto [end, err] = std::from_chars(pos, strEnd, range.min);
-    if (err != std::errc{}) {
-      return idxName<Idx> + " range min must be an integer" + rangeFormats;
+Error parseLayers(LayerRange &range, QJsonObject &obj) {
+  const QJsonValue val = obj.take("layers");
+  if (val.isUndefined()) {
+    range.min = LayerIdx{0};
+    range.max = LayerIdx{-1};
+    range.vis = LayerVis::visible;
+  } else if (val.isArray()) {
+    const QJsonArray arr = val.toArray();
+    if (arr.size() != 2 && arr.size() != 3) {
+      return "Field \"layers\" must contain two elements or three elements";
     }
-    pos = end;
-    if (pos == strEnd) {
-      range.max = range.min;
-      if (range.min < 0 || range.min >= +length) {
-        return idxName<Idx> + " is out of range" + rangeStr({0, +length - 1});
+    if (!arr[0].isDouble() || !arr[1].isDouble()) {
+      return "First two elements of field \"layers\" must be numbers";
+    }
+    int min, max;
+    // TODO: This is an odd error message
+    TRY(parseInt(min, "layers[0]", arr[0].toDouble()));
+    TRY(parseInt(max, "layers[1]", arr[1].toDouble()));
+    range.min = LayerIdx{min};
+    range.max = LayerIdx{max};
+    if (arr.size() == 3) {
+      if (!arr[2].isString()) {
+        return "Third element of field \"layers\" must be a string";
       }
-      return {};
+      TRY(parseEnum(range.vis, arr[2].toString(), "layers[2]", layerVisNames));
+    } else {
+      range.vis = LayerVis::visible;
+    }
+  } else if (val.isDouble()) {
+    int intVal;
+    TRY(parseInt(intVal, "layers", val.toDouble()));
+    range.min = range.max = LayerIdx{intVal};
+  } else {
+    return "Field \"layers\" must be an array or a number";
+  }
+  return {};
+}
+
+Error parseFrames(FrameRange &range, QJsonObject &obj) {
+  const QJsonValue val = obj.take("frames");
+  if (val.isUndefined()) {
+    range.min = FrameIdx{0};
+    range.max = FrameIdx{-1};
+  } else if (val.isArray()) {
+    const QJsonArray arr = val.toArray();
+    if (arr.size() != 2) {
+      return "Field \"frames\" must contain two elements";
+    }
+    if (!arr[0].isDouble() || !arr[1].isDouble()) {
+      return "Field \"frames\" must be an array of numbers";
+    }
+    int min, max;
+    // TODO: This is an odd error message
+    TRY(parseInt(min, "frames[0]", arr[0].toDouble()));
+    TRY(parseInt(max, "frames[1]", arr[1].toDouble()));
+    range.min = FrameIdx{min};
+    range.max = FrameIdx{max};
+  } else if (val.isDouble()) {
+    int intVal;
+    TRY(parseInt(intVal, "frames", val.toDouble()));
+    range.min = range.max = FrameIdx{intVal};
+  } else {
+    return "Field \"frames\" must be an array or a number";
+  }
+  return {};
+}
+
+Error parseComposite(bool &composite, QJsonObject &obj) {
+  const QJsonValue val = obj.take("composite");
+  if (val.isUndefined()) {
+    composite = true;
+  } else if (val.isBool()) {
+    composite = val.toBool();
+  } else {
+    return "Field \"composite\" must be a boolean";
+  }
+  return {};
+}
+
+Error parseAnimation(AnimExportParams &anim, QString &path, const QJsonValue &doc) {
+  if (doc.isString()) {
+    path = QDir::fromNativeSeparators(doc.toString());
+    setDefaultAnimation(anim, path);
+    return {};
+  } else if (doc.isObject()) {
+    QJsonObject obj = doc.toObject();
+    
+    if (QJsonValue val = obj.take("file"); val.isString()) {
+      path = QDir::fromNativeSeparators(val.toString());
+    } else {
+      return "Required field \"file\" must be a string";
+    }
+    
+    TRY(getString(obj, "name", [&](const QString &val) {
+      anim.name.baseName = val;
+    }, [&] {
+      anim.name.baseName = getFileName(path);
+    }));
+    
+    TRY(parseLayerName(anim.name.layerName, obj));
+    TRY(parseGroupName(anim.name.groupName, obj));
+    TRY(parseFrameName(anim.name.frameName, obj));
+    TRY(parseScale(anim.transform, obj));
+    TRY(parseAngle(anim.transform, obj));
+    TRY(parseLayers(anim.layers, obj));
+    TRY(parseFrames(anim.frames, obj));
+    TRY(parseComposite(anim.composite, obj));
+    
+    if (!obj.isEmpty()) {
+      QString err = "Animation object contains unused fields:";
+      for (const QString &key : obj.keys()) {
+        err += "\n - ";
+        err += key;
+      }
+      return err;
+    }
+    
+    return {};
+  } else {
+    return "Animation array element must be a string or an object";
+  }
+}
+
+Error parseAnimationArray(
+  std::vector<AnimExportParams> &anims,
+  std::vector<QString> &paths,
+  const QJsonArray &arr
+) {
+  if (arr.isEmpty()) {
+    return "Animations array cannot be empty";
+  }
+  for (const QJsonValue &val : arr) {
+    TRY(parseAnimation(anims.emplace_back(), paths.emplace_back(), val));
+  }
+  return {};
+}
+
+Error parseParams(ExportParams &params, std::vector<QString> &paths, const QJsonDocument &doc) {
+  if (!doc.isObject()) {
+    return "JSON document must be an object";
+  }
+  QJsonObject obj = doc.object();
+  
+  if (QJsonValue val = obj.take("output name"); val.isString()) {
+    params.name = val.toString();
+  } else {
+    return "Required field \"output name\" must be a string";
+  }
+  
+  TRY(getString(obj, "output directory", [&](const QString &val) {
+    params.directory = val;
+  }, [&] {
+    params.directory = ".";
+  }));
+  
+  TRY(getString(obj, "pixel format", [&](const QString &val) {
+    return parsePixelFormat(params.pixelFormat, val);
+  }, [&] {
+    params.pixelFormat = PixelFormat::rgba;
+  }));
+  
+  if (QJsonValue val = obj.take("whitepixel"); !val.isUndefined()) {
+    if (val.isBool()) {
+      params.whitepixel = val.toBool();
+    } else {
+      return "Field \"whitepixel\" must be a boolean";
     }
   } else {
-    range.min = 0;
+    params.whitepixel = false;
   }
-  if (pos[0] != '.' || pos + 1 == strEnd || pos[1] != '.') {
-    return idxName<Idx> + " range separator must be .." + rangeFormats;
-  }
-  pos += 2;
-  if (pos == strEnd) {
-    range.max = +length - 1;
+  
+  TRY(getString(obj, "backend", [&](const QString &val) {
+    return parseBackend(params.backend, val);
+  }, [&] {
+    params.backend = std::make_unique<PngExportBackend>();
+  }));
+  
+  if (QJsonValue val = obj.take("animations"); val.isArray()) {
+    TRY(parseAnimationArray(params.anims, paths, val.toArray()));
   } else {
-    const auto [end, err] = std::from_chars(pos, strEnd, range.max);
-    pos = end;
-    if (err != std::errc{} || pos != strEnd) {
-      return idxName<Idx> + " range max must be an integer" + rangeFormats;
+    return "Required field \"animations\" must be an array";
+  }
+  
+  if (!obj.isEmpty()) {
+    QString err = "Document object contains unused fields:";
+    for (const QString &key : obj.keys()) {
+      err += "\n - ";
+      err += key;
     }
+    return err;
   }
-  if (range.min > range.max) {
-    return idxName<Idx> + " range min must be <= max";
-  }
-  if (range.min < 0 || range.min >= +length) {
-    return idxName<Idx> + " range min is out of range" + rangeStr({0, +length - 1});
-  }
-  if (range.max < 0 || range.max >= +length) {
-    return idxName<Idx> + " range max is out of range" + rangeStr({0, +length - 1});
-  }
-  return {};
-}
-
-Error setLayer(
-  CelRect &selection,
-  const ExportSpriteInfo info,
-  const docopt::value &value
-) {
-  IntRange range;
-  TRY(setRange(range, info.layers, value));
-  selection.minL = LayerIdx{range.min};
-  selection.maxL = LayerIdx{range.max};
-  return {};
-}
-
-Error setFrame(
-  CelRect &selection,
-  const ExportSpriteInfo info,
-  const docopt::value &value
-) {
-  IntRange range;
-  TRY(setRange(range, info.frames, value));
-  selection.minF = FrameIdx{range.min};
-  selection.maxF = FrameIdx{range.max};
-  return {};
-}
-
-Error setNameDir(ExportOptions &options, const docopt::Options &flags) {
-  if (const docopt::value &name = flags.at("--name"); name) {
-    QString nameStr = toLatinString(name.asString());
-    TRY(checkExportPattern(nameStr));
-    options.name = std::move(nameStr);
-  }
-  if (const docopt::value &dir = flags.at("--directory"); dir) {
-    QString dirStr = toLatinString(dir.asString());
-    if (dirStr.isEmpty()) {
-      return "Directory must not be empty";
-    }
-    if (!QDir{dirStr}.exists()) {
-      return "Invalid directory";
-    }
-    options.directory = std::move(dirStr);
-  }
-  return {};
-}
-
-Error setLayerFrame(
-  ExportOptions &options,
-  const ExportSpriteInfo info,
-  const docopt::Options &flags
-) {
-  if (const docopt::value &layer = flags.at("--layer"); layer) {
-    TRY(setLayer(options.selection, info, layer));
-  }
-  if (const docopt::value &frame = flags.at("--frame"); frame) {
-    TRY(setFrame(options.selection, info, frame));
-  }
-  return {};
-}
-
-Error setFormat(
-  ExportOptions &options,
-  const ExportSpriteInfo info,
-  const docopt::Options &flags
-) {
-  if (const docopt::value &value = flags.at("--format"); value) {
-    TRY(setFormat(options.format, value));
-    TRY(checkFormat(options, info.format));
-  }
-  return {};
-}
-
-Error setVisibility(ExportOptions &options, const docopt::Options &flags) {
-  if (const docopt::value &value = flags.at("--visibility"); value) {
-    TRY(setVisibility(options.visibility, value));
-  }
-  return {};
-}
-
-Error setScaleAngle(ExportOptions &options, const docopt::Options &flags) {
-  if (const docopt::value &scaleX = flags.at("--scale-x"); scaleX) {
-    TRY(setNonZeroInt(options.scaleX, scaleX, "scale-x", expt_scale));
-  }
-  if (const docopt::value &scaleY = flags.at("--scale-y"); scaleY) {
-    TRY(setNonZeroInt(options.scaleY, scaleY, "scale-y", expt_scale));
-  }
-  if (const docopt::value &scale = flags.at("--scale"); scale) {
-    int scaleXY;
-    TRY(setNonZeroInt(scaleXY, scale, "scale", expt_scale));
-    options.scaleX = options.scaleY = scaleXY;
-  }
-  if (const docopt::value &angle = flags.at("--angle"); angle) {
-    long angleLong;
-    TRY(setInt(angleLong, angle, "angle"));
-    angleLong &= 3;
-    options.angle = static_cast<int>(angleLong);
-  }
-  return {};
-}
-
-Error readExportOptions(
-  ExportOptions &options,
-  const ExportSpriteInfo &info,
-  const docopt::Options &flags
-) {
-  TRY(setNameDir(options, flags));
-  TRY(setLayerFrame(options, info, flags));
-  options.composite = !flags.at("--no-composite").asBool();
-  TRY(setFormat(options, info, flags));
-  TRY(setVisibility(options, flags));
-  TRY(setScaleAngle(options, flags));
+  
   return {};
 }
 
 }
 
-int cliExport(int &argc, char **argv, const docopt::Options &flags) {
+int cliExport(int &argc, char **argv) {
   QCoreApplication app{argc, argv};
   QTextStream console{stdout};
+  QJsonDocument doc = readDoc(console);
+  if (doc.isNull()) return 1;
   
-  Sprite sprite;
-  if (Error err = sprite.openFile(toLatinString(flags.at("<file>").asString())); err) {
-    console << "File open error\n";
-    console << err.msg() << '\n';
-    return 1;
-  }
-  
-  ExportOptions options;
-  const ExportSpriteInfo info = getSpriteInfo(sprite);
-  initDefaultOptions(options, info);
-  if (Error err = readExportOptions(options, info, flags); err) {
+  ExportParams params;
+  std::vector<QString> paths;
+  if (Error err = parseParams(params, paths, doc); err) {
     console << "Configuration error\n";
     console << err.msg() << '\n';
     return 1;
   }
-  
-  if (Error err = sprite.exportSprite(options); err) {
+
+  if (Error err = exportTextureAtlas(params, paths); err) {
     console << "Export error\n";
     console << err.msg() << '\n';
     return 1;
@@ -296,5 +455,3 @@ int cliExport(int &argc, char **argv, const docopt::Options &flags) {
   
   return 0;
 }
-
-#endif

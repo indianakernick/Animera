@@ -1,4 +1,4 @@
-﻿//
+//
 //  export dialog.cpp
 //  Animera
 //
@@ -80,7 +80,7 @@ void ExportDialog::submit() {
   
   AnimExportParams &animParams = params.anims.emplace_back();
   
-  animParams.name.name = name->text();
+  animParams.name.baseName = name->text();
   animParams.name.layerName = LayerNameMode{layerName->currentIndex()};
   animParams.name.groupName = GroupNameMode{groupName->currentIndex()};
   animParams.name.frameName = FrameNameMode{frameName->currentIndex()};

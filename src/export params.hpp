@@ -15,6 +15,7 @@
 #include "export backend.hpp"
 
 enum class LayerVis {
+  // export cli.cpp depends on order
   visible,
   hidden,
   all

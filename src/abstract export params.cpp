@@ -83,7 +83,7 @@ void setPath(ExportParams &params, const QString &path) {
   dir.chop(nameLen);
   params.name = "";
   params.directory = std::move(dir);
-  params.anims[0].name.name = std::move(name);
+  params.anims[0].name.baseName = std::move(name);
   params.anims[0].name.layerName = LayerNameMode::empty;
   params.anims[0].name.groupName = GroupNameMode::empty;
   params.anims[0].name.frameName = FrameNameMode::empty;

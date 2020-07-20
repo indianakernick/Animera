@@ -322,6 +322,51 @@ what we currently call a sprite is probably more appropriately named an animatio
   currently, sprite means two different things in the export code which is kind
   or confusing
 
+-------------------------------- export features -------------------------------
+
+automatic should choose index if name is empty
+
+allow parameters to be sent to the backend
+  e.g. telling the cpp backend to generate a png or raw image data
+
+select a group
+
+would generator be a better name than backend?
+  AtlasGenerator?
+  AtlasWriter?
+
+wrapper around QIODevice for Error
+  like ChunkWriter but more generic
+  could just be a handful of simple functions
+
+string lookup
+  std::string names;
+  std::unordered_map<std::string_view, SpriteID> ids;
+  SpriteID lookupSpriteID(std::string_view);
+
+maybe backend should announce which pixel formats it supports
+  also should announce pixel/animation format compatability
+
+might want to share the begin/end aliases with the json exporter
+
+exporter should properly validate parameters
+  empty path
+  empty name
+
+is "mandatory" a better word than "required"?
+
+maybe cli export should use an exception
+  would it be so bad if we throw Error directly?
+  
+macro on enum to generate names?
+
+maybe use verticies instead of rectangles
+  include the destination rectangle as well as the source rectangle
+  we could do transforms by just changing verticies
+  could also avoid putting the transparent edges into the texture by providing
+  a destination offset
+  SDL render API
+
 ------------------------------- minor refactoring ------------------------------
 
 there might be a few random constants that should be in config.hpp but aren't

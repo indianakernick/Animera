@@ -14,6 +14,7 @@
 #include "palette span.hpp"
 
 enum class PixelFormat {
+  // cli export.cpp depends on order
   rgba,
   index,
   gray,

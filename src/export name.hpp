@@ -12,7 +12,7 @@
 #include "cel.hpp"
 
 enum class LayerNameMode {
-  // export dialog.cpp depends on order
+  // export dialog.cpp and cli export.cpp depend on order
   automatic,
   name,
   index,
@@ -20,7 +20,7 @@ enum class LayerNameMode {
 };
 
 enum class GroupNameMode {
-  // export dialog.cpp depends on order
+  // export dialog.cpp and cli export.cpp depend on order
   automatic,
   name,
   index,
@@ -28,7 +28,7 @@ enum class GroupNameMode {
 };
 
 enum class FrameNameMode {
-  // export dialog.cpp depends on order
+  // export dialog.cpp and cli export.cpp depend on order
   automatic,
   relative,
   absolute,
@@ -36,7 +36,7 @@ enum class FrameNameMode {
 };
 
 struct ExportNameParams {
-  QString name;
+  QString baseName;
   LayerNameMode layerName;
   GroupNameMode groupName;
   FrameNameMode frameName;

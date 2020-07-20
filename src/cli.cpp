@@ -25,6 +25,7 @@ R"(Usage:
     Animera new <width> <height> [<format>]
     Animera open <file>
     Animera info [--layer-names --json] <file>
+    Animera export
     Animera export [--name=<pattern> --directory=<path>]
                    [--layer=<range> --frame=<range>]
                    [--no-composite --format=<format> --visibility=<mode>]
@@ -214,7 +215,7 @@ int CLI::exec() {
   } else if (flags.at("info").asBool()) {
     return cliInfo(argc, argv, flags);
   } else if (flags.at("export").asBool()) {
-    return {}; //cliExport(argc, argv, flags);
+    return cliExport(argc, argv);
   } else {
     return execDefault(flags);
   }

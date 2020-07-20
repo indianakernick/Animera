@@ -70,7 +70,7 @@ void appendFrameName(QString &name, const ExportNameParams &params, const Export
 }
 
 QString evaluateExportName(const ExportNameParams &params, const ExportNameState &state) {
-  QString name = params.name;
+  QString name = params.baseName;
   appendLayerName(name, params, state);
   appendGroupName(name, params, state);
   appendFrameName(name, params, state);

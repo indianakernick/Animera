@@ -91,7 +91,7 @@ struct SpriteRect {
 #endif
 )";
 
-void convertToIdentifier(QString &str) {
+bool convertToIdentifier(QString &str) {
   for (QChar &ch : str) {
     if (!ch.isLetterOrNumber()) {
       ch = '_';
@@ -99,6 +99,9 @@ void convertToIdentifier(QString &str) {
   }
   if (str.isEmpty() || str.front().isDigit()) {
     str.prepend('_');
+    return true;
+  } else {
+    return false;
   }
 }
 
@@ -126,7 +129,7 @@ void CppExportBackend::addName(
   const ExportNameParams &params,
   const ExportNameState &state
 ) {
-  QString name = params.name;
+  QString name = params.baseName;
   int baseName = name.size();
   appendLayerName(name, params, state);
   int layerName = name.size();
@@ -135,39 +138,42 @@ void CppExportBackend::addName(
   appendFrameName(name, params, state);
   int frameName = name.size();
   
-  {
-    // sometimes an underscore is prepended
-    const int sizeBefore = name.size();
-    convertToIdentifier(name);
-    if (name.size() == sizeBefore + 1) {
-      ++baseName;
-      ++layerName;
-      ++groupName;
-      ++frameName;
-    }
+  if (convertToIdentifier(name)) {
+    ++baseName;
+    ++layerName;
+    ++groupName;
+    ++frameName;
   }
   
   const bool hasLayerName = layerName > baseName;
   const bool hasGroupName = groupName > layerName;
   const bool hasFrameName = frameName > groupName;
   
-  if (hasFrameName && state.frame == state.groupBegin) {
-    if (hasGroupName && state.group == GroupIdx{0}) {
+  if (state.frame == state.groupBegin) {
+    if (state.group == GroupIdx{0}) {
       if (hasLayerName && state.layer == LayerIdx{0}) {
         addAlias(name.left(baseName), "beg_", i);
       }
-      addAlias(name.left(layerName), "beg_", i);
+      if (hasGroupName) {
+        addAlias(name.left(layerName), "beg_", i);
+      }
     }
-    addAlias(name.left(groupName), "beg_", i);
+    if (hasFrameName ) {
+      addAlias(name.left(groupName), "beg_", i);
+    }
   }
   
   appendEnumerator(name, i);
   insertName(name);
   
-  if (hasFrameName && state.frame - state.groupBegin == state.frameCount - FrameIdx{1}) {
-    addAlias(name.left(groupName), "end_", i + 1);
-    if (hasGroupName && state.group == state.groupCount - GroupIdx{1}) {
-      addAlias(name.left(layerName), "end_", i + 1);
+  if (state.frame - state.groupBegin == state.frameCount - FrameIdx{1}) {
+    if (hasFrameName) {
+      addAlias(name.left(groupName), "end_", i + 1);
+    }
+    if (state.group == state.groupCount - GroupIdx{1}) {
+      if (hasGroupName) {
+        addAlias(name.left(layerName), "end_", i + 1);
+      }
       if (hasLayerName && state.layer == state.layerCount - LayerIdx{1}) {
         addAlias(name.left(baseName), "end_", i + 1);
       }

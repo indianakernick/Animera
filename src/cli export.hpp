@@ -9,8 +9,6 @@
 #ifndef animera_cli_export_hpp
 #define animera_cli_export_hpp
 
-#include <docopt.h>
-
-int cliExport(int &, char **, const docopt::Options &);
+int cliExport(int &, char **);
 
 #endif
