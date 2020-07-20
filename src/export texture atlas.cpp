@@ -25,11 +25,22 @@ bool includeLayer(const LayerVis vis, const bool visible) {
   }
 }
 
+template <typename Idx>
+void checkNegative(Idx &idx, const Idx count) {
+  if (idx < Idx{0}) idx += count;
+}
+
 template <typename Func>
 Error eachFrame(const AnimExportParams &params, const Animation &anim, Func func) {
   const tcb::span<const Layer> layers = anim.timeline.getLayerArray();
-  const LayerRange layerRange = params.layers;
-  const FrameRange frameRange = params.frames;
+  LayerRange layerRange = params.layers;
+  FrameRange frameRange = params.frames;
+  
+  checkNegative(layerRange.min, anim.timeline.getLayers());
+  checkNegative(layerRange.max, anim.timeline.getLayers());
+  checkNegative(frameRange.min, anim.timeline.getFrames());
+  checkNegative(frameRange.max, anim.timeline.getFrames());
+  
   const LayerIdx layerCount = layerRange.max - layerRange.min + LayerIdx{1};
   
   Frame frame;
@@ -78,12 +89,17 @@ Error eachFrame(const AnimExportParams &params, const Animation &anim, Func func
 template <typename Func>
 Error eachCel(const AnimExportParams &params, const Animation &anim, Func func) {
   const tcb::span<const Layer> layers = anim.timeline.getLayerArray();
-  const LayerRange layerRange = params.layers;
-  const FrameRange frameRange = params.frames;
+  LayerRange layerRange = params.layers;
+  FrameRange frameRange = params.frames;
   
   ExportNameState state;
   state.layerCount = anim.timeline.getLayers();
   state.groupCount = anim.timeline.getGroups();
+  
+  checkNegative(layerRange.min, anim.timeline.getLayers());
+  checkNegative(layerRange.max, anim.timeline.getLayers());
+  checkNegative(frameRange.min, anim.timeline.getFrames());
+  checkNegative(frameRange.max, anim.timeline.getFrames());
   
   for (LayerIdx l = layerRange.min; l <= layerRange.max; ++l) {
     const Layer &layer = layers[+l];
