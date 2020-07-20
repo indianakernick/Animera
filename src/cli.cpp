@@ -17,32 +17,15 @@
 
 namespace {
 
-// docopt has terrible error messages for the | operator
-
-const char docopt_usage[] =
-R"(Usage:
-    Animera [--help --long-help]
-    Animera new <width> <height> [<format>]
-    Animera open <file>
-    Animera info [--layer-names --json] <file>
-    Animera export
-    Animera export [--name=<pattern> --directory=<path>]
-                   [--layer=<range> --frame=<range>]
-                   [--no-composite --format=<format> --visibility=<mode>]
-                   [--scale-x=<int> --scale-y=<int> --scale=<int>]
-                   [--angle=<int>] <file>)";
-
 const char usage[] =
 R"(Usage:
-    Animera [--help | --long-help]
+    Animera
+    Animera --help
+    Animera --long-help
     Animera new <width> <height> [<format>]
     Animera open <file>
     Animera info [--layer-names --json] <file>
-    Animera export [--name=<pattern> --directory=<path>]
-                   [--layer=<range> --frame=<range>]
-                   [--no-composite --format=<format> --visibility=<mode>]
-                   [[--scale-x=<int> --scale-y=<int>] | --scale=<int>]
-                   [--angle=<int>] <file>)";
+    Animera export)";
 
 const char short_options[] =
 R"(Options:
@@ -51,19 +34,9 @@ R"(Options:
     <width>                   Width of the animation to create.
     <height>                  Height of the animation to create.
     <format>                  Format of the animation to create.
+    <file>                    Animation file to open.
     --layer-names             Output the names of layers.
-    -j, --json                Output info as JSON.
-    -n, --name <pattern>      Name pattern for the animation.
-    -d, --directory <path>    Directory to write files to.
-    -l, --layer <range>       Range of layers to export.
-    -f, --frame <range>       Range of frames to export.
-    -c, --no-composite        Don't composite layers.
-    -F, --format <format>     Format of the output files.
-    --visibility <mode>       Mode for handling layer visibility.
-    --scale-x <int>           Horizontal scale factor applied to output images.
-    --scale-y <int>           Vertical scale factor applied to output images.
-    --scale <int>             Scale factor applied to output images.
-    -a, --angle <int>         Angle of rotation applied to output images.)";
+    -j, --json                Output info as JSON.)";
 
 const char long_options[] =
 R"(Options:
@@ -183,17 +156,6 @@ R"(Options:
         [0, 4] so --angle -3, --angle 1 and --angle 5 are all equivalent.
         The rotation is applied after the scale is applied.)";
 
-Error checkMutuallyExclusive(const docopt::Options &flags) {
-  if (flags.at("--help").asBool() && flags.at("--long-help").asBool()) {
-    return "--help must be mutually exclusive with --long-help";
-  }
-  const bool scaleXorY = flags.at("--scale-x") || flags.at("--scale-y");
-  if (scaleXorY && flags.at("--scale")) {
-    return "--scale-x and --scale-y must be mutually exclusive with --scale";
-  }
-  return {};
-}
-
 }
 
 CLI::CLI(int &argc, char **argv)
@@ -201,14 +163,20 @@ CLI::CLI(int &argc, char **argv)
 
 int CLI::exec() {
   docopt::Options flags;
+  QTextStream console{stdout};
   if (Error err = parseArgs(flags); err) {
-    QTextStream console{stdout};
     console << "Command line error\n" << err.msg() << '\n';
     console << usage << '\n';
     return 1;
   }
   
-  if (flags.at("new").asBool()) {
+  if (flags.at("--help").asBool()) {
+    console << usage << "\n\n" << short_options << '\n';
+    return 0;
+  } else if (flags.at("--long-help").asBool()) {
+    console << usage << "\n\n" << long_options << '\n';
+    return 0;
+  } else if (flags.at("new").asBool()) {
     return cliNew(argc, argv, flags);
   } else if (flags.at("open").asBool()) {
     return execOpen(flags);
@@ -217,7 +185,7 @@ int CLI::exec() {
   } else if (flags.at("export").asBool()) {
     return cliExport(argc, argv);
   } else {
-    return execDefault(flags);
+    return execDefault();
   }
 }
 
@@ -227,7 +195,7 @@ Error CLI::parseArgs(docopt::Options &flags) const {
   if (argc == 2 && std::strncmp(*first, "-psn_", 5) == 0) {
     ++first;
   }
-  std::string doc = docopt_usage;
+  std::string doc = usage;
   doc += "\n\n";
   doc += short_options;
   try {
@@ -235,19 +203,10 @@ Error CLI::parseArgs(docopt::Options &flags) const {
   } catch (docopt::DocoptArgumentError &e) {
     return e.what();
   }
-  return checkMutuallyExclusive(flags);
+  return {};
 }
 
-int CLI::execDefault(const docopt::Options &flags) const {
-  QTextStream console{stdout};
-  if (flags.at("--help").asBool()) {
-    console << usage << "\n\n" << short_options << '\n';
-    return 0;
-  }
-  if (flags.at("--long-help").asBool()) {
-    console << usage << "\n\n" << long_options << '\n';
-    return 0;
-  }
+int CLI::execDefault() const {
   Application app{argc, argv};
   app.waitForOpenEvent();
   return app.exec();

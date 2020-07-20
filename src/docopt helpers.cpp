@@ -10,15 +10,6 @@
 
 #include <docopt.h>
 
-QString nonZeroRangeStr(const IntRange range) {
-  QString str = "\nValid range is: [";
-  str += QString::number(range.min);
-  str += ", -1] U [1, ";
-  str += QString::number(range.max);
-  str += ']';
-  return str;
-}
-
 QString rangeStr(const IntRange range) {
   QString str = "\nValid range is: [";
   str += QString::number(range.min);
@@ -47,24 +38,6 @@ Error setInt(
   TRY(setInt(longNumber, value, name));
   if (longNumber < range.min || longNumber > range.max) {
     return name + " is out of range" + rangeStr(range);
-  }
-  number = static_cast<int>(longNumber);
-  return {};
-}
-
-Error setNonZeroInt(
-  int &number,
-  const docopt::value &value,
-  const QString &name,
-  const IntRange range
-) {
-  long longNumber;
-  TRY(setInt(longNumber, value, name));
-  if (longNumber == 0) {
-    return name + " cannot be 0" + nonZeroRangeStr(range);
-  }
-  if (longNumber < range.min || longNumber > range.max) {
-    return name + " is out of range" + nonZeroRangeStr(range);
   }
   number = static_cast<int>(longNumber);
   return {};

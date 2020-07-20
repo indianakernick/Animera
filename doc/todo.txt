@@ -353,19 +353,13 @@ exporter should properly validate parameters
   empty path
   empty name
 
-is "mandatory" a better word than "required"?
-
-maybe cli export should use an exception
-  would it be so bad if we throw Error directly?
-  
-macro on enum to generate names?
-
 maybe use verticies instead of rectangles
   include the destination rectangle as well as the source rectangle
   we could do transforms by just changing verticies
   could also avoid putting the transparent edges into the texture by providing
   a destination offset
   SDL render API
+  on the other hand, that sort of thing should probably be left to the user
 
 ------------------------------- minor refactoring ------------------------------
 

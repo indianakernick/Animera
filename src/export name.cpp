@@ -76,3 +76,18 @@ QString evaluateExportName(const ExportNameParams &params, const ExportNameState
   appendFrameName(name, params, state);
   return name;
 }
+
+QString nameFromPath(const QString &path) {
+  QString dir = path;
+  return nameDirFromPath(dir);
+}
+
+QString nameDirFromPath(QString &path) {
+  int begin = path.lastIndexOf('/');
+  int end = path.lastIndexOf('.');
+  begin += 1;
+  end = end == -1 ? path.size() : end;
+  QString name{path.data() + begin, end - begin};
+  path.truncate(begin);
+  return name;
+}

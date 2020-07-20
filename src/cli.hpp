@@ -23,7 +23,7 @@ private:
   char **argv;
   
   Error parseArgs(docopt::Options &) const;
-  int execDefault(const docopt::Options &) const;
+  int execDefault() const;
   int execOpen(const docopt::Options &) const;
 };
 

@@ -34,11 +34,7 @@ ExportDialog::ExportDialog(QWidget *parent, const Format format)
 
 void ExportDialog::setPath(const QString &path) {
   if (name->text().isEmpty()) {
-    int begin = path.lastIndexOf(QDir::separator());
-    int end = path.lastIndexOf('.');
-    begin += 1;
-    end = end == -1 ? path.size() : end;
-    name->setText(QString{path.data() + begin, end - begin});
+    name->setText(nameFromPath(path));
   }
 }
 

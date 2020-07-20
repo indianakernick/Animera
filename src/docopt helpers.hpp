@@ -19,12 +19,8 @@ struct value;
 
 }
 
-QString nonZeroRangeStr(IntRange);
-QString rangeStr(IntRange);
-
 Error setInt(long &, const docopt::value &, const QString &);
 Error setInt(int &, const docopt::value &, const QString &, IntRange);
-Error setNonZeroInt(int &, const docopt::value &, const QString &, IntRange);
 
 template <typename Func>
 QString validListStr(const QString &name, const std::size_t length, Func func) {

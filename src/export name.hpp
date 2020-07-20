@@ -62,4 +62,7 @@ void appendGroupName(QString &, const ExportNameParams &, const ExportNameState 
 void appendFrameName(QString &, const ExportNameParams &, const ExportNameState &);
 QString evaluateExportName(const ExportNameParams &, const ExportNameState &);
 
+QString nameFromPath(const QString &);
+QString nameDirFromPath(QString &);
+
 #endif

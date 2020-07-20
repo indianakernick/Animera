@@ -32,7 +32,7 @@ QString formatToString(const Format format) {
 }
 
 QString formatToJsonString(const Format format) {
-  // These format names are used by the other commands (new and export)
+  // These format names are used by the other commands (new)
   switch (format) {
     case Format::rgba:
       return "rgba";

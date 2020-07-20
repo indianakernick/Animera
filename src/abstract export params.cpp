@@ -75,15 +75,9 @@ void setDefaultTransform(ExportTransform &transform) {
 }
 
 void setPath(ExportParams &params, const QString &path) {
-  QString dir = path;
-  dir.chop(dir.size() - dir.lastIndexOf('.'));
-  const int lastSlash = dir.lastIndexOf(QDir::separator());
-  const int nameLen = dir.size() - lastSlash - 1;
-  QString name{dir.data() + lastSlash + 1, nameLen};
-  dir.chop(nameLen);
   params.name = "";
-  params.directory = std::move(dir);
-  params.anims[0].name.baseName = std::move(name);
+  params.directory = path;
+  params.anims[0].name.baseName = nameDirFromPath(params.directory);
   params.anims[0].name.layerName = LayerNameMode::empty;
   params.anims[0].name.groupName = GroupNameMode::empty;
   params.anims[0].name.frameName = FrameNameMode::empty;
