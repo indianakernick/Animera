@@ -100,6 +100,10 @@ Error Timeline::importImage(const QString &path) {
   TRY(reader.flush());
   
   CelImage *cel = getCel(pos);
+  if (cel->isNull()) {
+    replaceCelFrame(layers[+pos.l].cels, pos.f, true);
+    cel = getCel(pos);
+  }
   cel->pos = {};
   cel->img = std::move(image);
   ::shrinkCelImage(*cel, cel->rect());
