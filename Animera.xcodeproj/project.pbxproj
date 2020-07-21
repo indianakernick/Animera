@@ -892,7 +892,7 @@
 		4515ABA024BE7E650052C8BF /* Export */ = {
 			isa = PBXGroup;
 			children = (
-				4515ABB124C000D60052C8BF /* Backends */,
+				4515ABB124C000D60052C8BF /* Generators */,
 				45A61041230BE989000A0BD6 /* export png.cpp */,
 				45A61042230BE989000A0BD6 /* export png.hpp */,
 				4515ABA124BE81D00052C8BF /* export params.cpp */,
@@ -909,7 +909,7 @@
 			name = Export;
 			sourceTree = "<group>";
 		};
-		4515ABB124C000D60052C8BF /* Backends */ = {
+		4515ABB124C000D60052C8BF /* Generators */ = {
 			isa = PBXGroup;
 			children = (
 				4515ABB224C000F50052C8BF /* png atlas generator.cpp */,
@@ -919,7 +919,7 @@
 				45D5847D24C41641003C182C /* sprite packer.cpp */,
 				45D5847E24C41641003C182C /* sprite packer.hpp */,
 			);
-			name = Backends;
+			name = Generators;
 			sourceTree = "<group>";
 		};
 		452926E322BB607E00B17E0D /* Timeline */ = {

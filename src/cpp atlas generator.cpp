@@ -19,7 +19,7 @@
 namespace {
 
 constexpr char sprite_id_operators[] = R"(
-[[nodiscard]] constexpr ANIMERA_SPRITE_RECT getSpriteRect(const SpriteID id) noexcept {
+[[nodiscard]] constexpr SpriteRect getSpriteRect(const SpriteID id) noexcept {
   assert(0 <= static_cast<int>(id));
   assert(static_cast<int>(id) < sprite_count);
   return sprite_rects[static_cast<int>(id)];
@@ -77,6 +77,12 @@ constexpr SpriteID operator--(SpriteID &id, int) noexcept {
 }
 )";
 
+constexpr char sprite_rect_header[] = R"(
+#ifdef ANIMERA_SPRITE_RECT_HEADER
+#include ANIMERA_SPRITE_RECT_HEADER
+#endif
+)";
+
 constexpr char sprite_rect_def[] = R"(
 #ifndef ANIMERA_SPRITE_RECT
 #define ANIMERA_SPRITE_RECT ::animera::SpriteRect
@@ -84,6 +90,8 @@ struct SpriteRect {
   int x = -1, y = -1;
   int w = 0, h = 0;
 };
+#else
+using SpriteRect = ANIMERA_SPRITE_RECT;
 #endif
 
 #ifndef ANIMERA_MAKE_SPRITE_RECT
@@ -145,9 +153,9 @@ void CppAtlasGenerator::addName(
     ++frameName;
   }
   
-  const bool hasLayerName = layerName > baseName;
-  const bool hasGroupName = groupName > layerName;
-  const bool hasFrameName = frameName > groupName;
+  const bool hasLayerName = layerName > baseName && baseName > 0;
+  const bool hasGroupName = groupName > layerName && layerName > 0;
+  const bool hasFrameName = frameName > groupName && groupName > 0;
   
   if (state.frame == state.groupBegin) {
     if (state.group == GroupIdx{0}) {
@@ -302,9 +310,9 @@ Error CppAtlasGenerator::writeCpp() {
   stream << '\n';
   stream << "inline namespace " << nameSpace << " {\n";
   stream << '\n';
-  stream << "const std::size_t texture_size = " << textureBuffer.size() << ";\n";
+  stream << "extern const std::size_t texture_size = " << textureBuffer.size() << ";\n";
   stream << '\n';
-  stream << "const unsigned char texture_data[] = {";
+  stream << "extern const unsigned char texture_data[] = {";
   stream.flush();
   
   QByteArray &textureArray = textureBuffer.buffer();
@@ -341,6 +349,7 @@ Error CppAtlasGenerator::writeHpp() {
   stream << '\n';
   stream << "#include <cassert>\n";
   stream << "#include <cstddef>\n";
+  stream << sprite_rect_header;
   stream << '\n';
   stream << "namespace animera {\n";
   stream << sprite_rect_def;
@@ -357,7 +366,7 @@ Error CppAtlasGenerator::writeHpp() {
   stream << enumeration;
   stream << "};\n";
   stream << '\n';
-  stream << "constexpr ANIMERA_SPRITE_RECT sprite_rects[sprite_count] = {\n";
+  stream << "constexpr SpriteRect sprite_rects[sprite_count] = {\n";
   stream << array;
   stream << "};\n";
   stream << sprite_id_operators;
