@@ -313,14 +313,7 @@ why is it so tedious to create an animation by modifying the previous frame?
 
 export frame and export cel dialog could maybe evaluate name to get default
 
-whitepixel for indexed format
-
-should the C++ backend also have a map for looking up the sprite ID enum by string name?
-
-what we currently call a sprite is probably more appropriately named an animation
-  or maybe a sprite set?
-  currently, sprite means two different things in the export code which is kind
-  or confusing
+maybe importPalettePng should read the PLTE chunk if it exists
 
 -------------------------------- export features -------------------------------
 
@@ -328,6 +321,9 @@ automatic should choose index if name is empty
 
 allow parameters to be sent to the backend
   e.g. telling the cpp backend to generate a png or raw image data
+  might not need arbitrary parameters
+  could encode parameters in the name
+  cpp_raw and cpp_zlib
 
 select a group
 

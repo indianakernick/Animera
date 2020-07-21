@@ -310,12 +310,7 @@ void parseParams(ExportParams &params, std::vector<QString> &paths, const QJsonD
   }
   QJsonObject obj = doc.object();
   
-  if (QJsonValue val = obj.take("output name"); val.isString()) {
-    params.name = val.toString();
-  } else {
-    throw Error{"Mandatory field \"output name\" must be a string"};
-  }
-  
+  params.name = getString(obj, "output name", "atlas");
   params.directory = getString(obj, "output directory", ".");
   params.pixelFormat = getEnum(obj, "pixel format", PixelFormat::rgba);
   params.whitepixel = getBool(obj, "whitepixel", false);

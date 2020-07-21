@@ -12,6 +12,7 @@
 #include "cli new.hpp"
 #include "cli info.hpp"
 #include "cli export.hpp"
+#include "scope time.hpp"
 #include "application.hpp"
 #include <QtCore/qtextstream.h>
 
@@ -162,6 +163,8 @@ CLI::CLI(int &argc, char **argv)
   : argc{argc}, argv{argv} {}
 
 int CLI::exec() {
+  SCOPE_TIME("CLI::exec");
+
   docopt::Options flags;
   QTextStream console{stdout};
   if (Error err = parseArgs(flags); err) {
@@ -190,6 +193,8 @@ int CLI::exec() {
 }
 
 Error CLI::parseArgs(docopt::Options &flags) const {
+  SCOPE_TIME("CLI::parseArgs");
+
   // https://stackoverflow.com/a/10242200/4093378
   char **first = argv + 1;
   if (argc == 2 && std::strncmp(*first, "-psn_", 5) == 0) {
