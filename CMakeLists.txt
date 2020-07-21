@@ -316,12 +316,12 @@ set(CPACK_NSIS_URL_INFO_ABOUT "${CMAKE_PROJECT_HOMEPAGE_URL}")
 set(CPACK_PACKAGE_EXECUTABLES "Animera;Animera")
 
 set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
-    WriteRegStr HKCR '.animera' '' 'Animera.Sprite'
-    WriteRegStr HKCR 'Animera.Sprite' '' 'Animera Sprite'
-    WriteRegStr HKCR 'Animera.Sprite\\\\shell' '' 'open'
-    WriteRegStr HKCR 'Animera.Sprite\\\\shell\\\\open\\\\command' '' '\\\"\$INSTDIR\\\\bin\\\\Animera.exe\\\" open \\\"%1\\\"'
-    WriteRegStr HKCR 'Animera.Sprite\\\\shell\\\\edit\\\\command' '' '\\\"\$INSTDIR\\\\bin\\\\Animera.exe\\\" open \\\"%1\\\"'
-    WriteRegStr HKCR 'Animera.Sprite\\\\DefaultIcon' '' '\$INSTDIR\\\\bin\\\\Animera.exe,1'
+    WriteRegStr HKCR '.animera' '' 'Animera.File'
+    WriteRegStr HKCR 'Animera.File' '' 'Animera Animation'
+    WriteRegStr HKCR 'Animera.File\\\\shell' '' 'open'
+    WriteRegStr HKCR 'Animera.File\\\\shell\\\\open\\\\command' '' '\\\"\$INSTDIR\\\\bin\\\\Animera.exe\\\" open \\\"%1\\\"'
+    WriteRegStr HKCR 'Animera.File\\\\shell\\\\edit\\\\command' '' '\\\"\$INSTDIR\\\\bin\\\\Animera.exe\\\" open \\\"%1\\\"'
+    WriteRegStr HKCR 'Animera.File\\\\DefaultIcon' '' '\$INSTDIR\\\\bin\\\\Animera.exe,1'
     
     WriteRegStr HKCR '.png\\\\OpenWithProgids' 'Animera.PNG' ''
     WriteRegStr HKCR 'Animera.PNG\\\\shell' '' 'open'
@@ -334,7 +334,7 @@ set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
 
 set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "
     DeleteRegKey HKCR '.animera' ''
-    DeleteRegKey HKCR 'Animera.Sprite' ''
+    DeleteRegKey HKCR 'Animera.File' ''
     DeleteRegValue HKCR '.png\\\\OpenWithProgids' 'Animera.PNG'
     DeleteRegKey HKCR 'Animera.PNG' ''
 ")
