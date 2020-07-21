@@ -1,12 +1,12 @@
 ﻿//
-//  cpp export backend.cpp
+//  cpp atlas generator.cpp
 //  Animera
 //
 //  Created by Indiana Kernick on 18/7/20.
 //  Copyright © 2020 Indiana Kernick. All rights reserved.
 //
 
-#include "cpp export backend.hpp"
+#include "cpp atlas generator.hpp"
 
 #include "strings.hpp"
 #include "file io.hpp"
@@ -107,9 +107,9 @@ bool convertToIdentifier(QString &str) {
 
 }
 
-Error CppExportBackend::initAtlas(PixelFormat format, const QString &name, const QString &dir) {
+Error CppAtlasGenerator::initAtlas(PixelFormat format, const QString &name, const QString &dir) {
   if (format == PixelFormat::index) {
-    return "C++ Export Backend does not support indexed pixel format";
+    return "C++ Atlas Generator does not support indexed pixel format";
   }
   
   packer.init(format);
@@ -124,7 +124,7 @@ Error CppExportBackend::initAtlas(PixelFormat format, const QString &name, const
   return {};
 }
 
-void CppExportBackend::addName(
+void CppAtlasGenerator::addName(
   const std::size_t i,
   const ExportNameParams &params,
   const ExportNameState &state
@@ -181,54 +181,54 @@ void CppExportBackend::addName(
   }
 }
 
-void CppExportBackend::addSizes(const std::size_t count, const QSize size) {
+void CppAtlasGenerator::addSizes(const std::size_t count, const QSize size) {
   packer.append(count, size);
 }
 
-void CppExportBackend::addWhiteName() {
+void CppAtlasGenerator::addWhiteName() {
   appendEnumerator("whitepixel_", packer.count());
   insertName("whitepixel_");
   packer.appendWhite();
 }
 
-QString CppExportBackend::hasNameCollision() {
+QString CppAtlasGenerator::hasNameCollision() {
   return collision;
 }
 
-Error CppExportBackend::packRectangles() {
+Error CppAtlasGenerator::packRectangles() {
   return packer.pack();
 }
 
-Error CppExportBackend::initAnimation(const Format format, PaletteCSpan) {
+Error CppAtlasGenerator::initAnimation(const Format format, PaletteCSpan) {
   if (format == Format::index) {
-    return "C++ Export Backend does not support indexed animation format";
+    return "C++ Atlas Generator does not support indexed animation format";
   }
   return {};
 }
 
-Error CppExportBackend::addImage(const std::size_t i, const QImage &img) {
+Error CppAtlasGenerator::addImage(const std::size_t i, const QImage &img) {
   appendRectangle(packer.copy(i, img));
   return {};
 }
 
-Error CppExportBackend::addWhiteImage() {
+Error CppAtlasGenerator::addWhiteImage() {
   appendRectangle(packer.copyWhite(packer.count() - 1));
   return {};
 }
 
-Error CppExportBackend::finalize() {
+Error CppAtlasGenerator::finalize() {
   TRY(writeCpp());
   return writeHpp();
 }
 
-void CppExportBackend::addAlias(QString base, const char *alias, const std::size_t value) {
+void CppAtlasGenerator::addAlias(QString base, const char *alias, const std::size_t value) {
   if (!base.isEmpty()) base += '_';
   base += alias;
   appendEnumerator(base, value);
   insertName(base);
 }
 
-void CppExportBackend::appendEnumerator(const QString &name, const std::size_t value) {
+void CppAtlasGenerator::appendEnumerator(const QString &name, const std::size_t value) {
   enumeration += "  ";
   enumeration += name;
   enumeration += " = ";
@@ -240,7 +240,7 @@ void CppExportBackend::appendEnumerator(const QString &name, const std::size_t v
   enumeration += ",\n";
 }
 
-void CppExportBackend::appendRectangle(const QRect &rect) {
+void CppAtlasGenerator::appendRectangle(const QRect &rect) {
   array += "  ANIMERA_MAKE_SPRITE_RECT(";
   array += QString::number(rect.x());
   array += ", ";
@@ -252,13 +252,13 @@ void CppExportBackend::appendRectangle(const QRect &rect) {
   array += "),\n";
 }
 
-void CppExportBackend::insertName(const QString &name) {
+void CppAtlasGenerator::insertName(const QString &name) {
   if (collision.isEmpty() && !names.insert(name).second) {
     collision = name;
   }
 }
 
-Error CppExportBackend::writeBytes(QIODevice &dev, const char *data, const std::size_t size) {
+Error CppAtlasGenerator::writeBytes(QIODevice &dev, const char *data, const std::size_t size) {
   constexpr int bytes_per_line = (80 - 2) / 6;
   constexpr char hex_chars[] = "0123456789ABCDEF";
   char hex[] = "0x00, ";
@@ -282,7 +282,7 @@ Error CppExportBackend::writeBytes(QIODevice &dev, const char *data, const std::
   return {};
 }
 
-Error CppExportBackend::writeCpp() {
+Error CppAtlasGenerator::writeCpp() {
   QBuffer textureBuffer;
   textureBuffer.open(QIODevice::ReadWrite);
   TRY(packer.writePng(textureBuffer));
@@ -324,7 +324,7 @@ Error CppExportBackend::writeCpp() {
   return writer.flush();
 }
 
-Error CppExportBackend::writeHpp() {
+Error CppAtlasGenerator::writeHpp() {
   FileWriter writer;
   TRY(writer.open(atlasDir + QDir::separator() + atlasName + ".hpp"));
   writer.dev().setTextModeEnabled(true);

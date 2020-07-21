@@ -1,19 +1,19 @@
 ﻿//
-//  png export backend.cpp
+//  png atlas generator.cpp
 //  Animera
 //
 //  Created by Indiana Kernick on 16/7/20.
 //  Copyright © 2020 Indiana Kernick. All rights reserved.
 //
 
-#include "png export backend.hpp"
+#include "png atlas generator.hpp"
 
 #include "file io.hpp"
 #include <QtCore/qdir.h>
 #include <unordered_set>
 #include "export png.hpp"
 
-Error PngExportBackend::initAtlas(
+Error PngAtlasGenerator::initAtlas(
   const PixelFormat newPixelFormat,
   const QString &,
   const QString &newDirectory
@@ -23,7 +23,7 @@ Error PngExportBackend::initAtlas(
   return {};
 }
 
-void PngExportBackend::addName(
+void PngAtlasGenerator::addName(
   [[maybe_unused]] const std::size_t idx,
   const ExportNameParams &params,
   const ExportNameState &state
@@ -32,11 +32,11 @@ void PngExportBackend::addName(
   names.push_back(evaluateExportName(params, state));
 }
 
-void PngExportBackend::addSizes(std::size_t, QSize) {}
+void PngAtlasGenerator::addSizes(std::size_t, QSize) {}
 
-void PngExportBackend::addWhiteName() {}
+void PngAtlasGenerator::addWhiteName() {}
 
-QString PngExportBackend::hasNameCollision() {
+QString PngAtlasGenerator::hasNameCollision() {
   // TODO: This seems inefficient. I'm not sure how to do it better.
   std::unordered_set<QString> set;
   for (const QString &name : names) {
@@ -47,27 +47,27 @@ QString PngExportBackend::hasNameCollision() {
   return {};
 }
 
-Error PngExportBackend::packRectangles() {
+Error PngAtlasGenerator::packRectangles() {
   return {};
 }
 
-Error PngExportBackend::initAnimation(Format newFormat, PaletteCSpan newPalette) {
+Error PngAtlasGenerator::initAnimation(Format newFormat, PaletteCSpan newPalette) {
   format = newFormat;
   palette = newPalette;
   return {};
 }
 
-Error PngExportBackend::addImage(const std::size_t idx, const QImage &image) {
+Error PngAtlasGenerator::addImage(const std::size_t idx, const QImage &image) {
   FileWriter writer;
   TRY(writer.open(directory + QDir::separator() + names[idx] + ".png"));
   TRY(exportCelPng(writer.dev(), palette, image, format, pixelFormat));
   return writer.flush();
 }
 
-Error PngExportBackend::addWhiteImage() {
+Error PngAtlasGenerator::addWhiteImage() {
   return {};
 }
 
-Error PngExportBackend::finalize() {
+Error PngAtlasGenerator::finalize() {
   return {};
 }

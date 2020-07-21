@@ -14,8 +14,8 @@
 #include <QtCore/qjsonobject.h>
 #include <QtCore/qtextstream.h>
 #include <QtCore/qjsondocument.h>
-#include "png export backend.hpp"
-#include "cpp export backend.hpp"
+#include "png atlas generator.hpp"
+#include "cpp atlas generator.hpp"
 #include "export texture atlas.hpp"
 #include <QtCore/qcoreapplication.h>
 
@@ -139,13 +139,13 @@ QJsonDocument readDoc() {
   return doc;
 }
 
-std::unique_ptr<ExportBackend> parseBackend(const QString &str) {
+std::unique_ptr<AtlasGenerator> parseGenerator(const QString &str) {
   if (str == "png") {
-    return std::make_unique<PngExportBackend>();
+    return std::make_unique<PngAtlasGenerator>();
   } else if (str == "cpp") {
-    return std::make_unique<CppExportBackend>();
+    return std::make_unique<CppAtlasGenerator>();
   } else {
-    QString err = "Field \"backend\" is invalid. Valid values are:";
+    QString err = "Field \"generator\" is invalid. Valid values are:";
     err += "\n - png";
     err += "\n - cpp";
     throw Error{err};
@@ -314,7 +314,7 @@ void parseParams(ExportParams &params, std::vector<QString> &paths, const QJsonD
   params.directory = getString(obj, "output directory", ".");
   params.pixelFormat = getEnum(obj, "pixel format", PixelFormat::rgba);
   params.whitepixel = getBool(obj, "whitepixel", false);
-  params.backend = parseBackend(getString(obj, "backend", "png"));
+  params.generator = parseGenerator(getString(obj, "generator", "png"));
   
   if (QJsonValue val = obj.take("animations"); val.isArray()) {
     parseAnimationArray(params.anims, paths, val.toArray());

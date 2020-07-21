@@ -290,7 +290,7 @@ editor scaling is sometimes a pixel off
 remember there's a workaround for a bug in Xcode
   https://stackoverflow.com/q/60896739/4093378
 
-if cells widget is larger than the space it has in the timeline,
+if cels widget is larger than the space it has in the timeline,
   restrict scrolling to avoid the ugly double border
   maybe lock into place after scrolling to avoid the double border
 
@@ -309,7 +309,7 @@ try to make the most common key bindings possible with left hand
 
 why is it so tedious to create an animation by modifying the previous frame?
   perhaps a button that creates new frame that links to previous frame
-  like extend linked cell and new frame combined
+  like extend linked cel and new frame combined
 
 export frame and export cel dialog could maybe evaluate name to get default
 
@@ -326,10 +326,6 @@ allow parameters to be sent to the backend
   cpp_raw and cpp_zlib
 
 select a group
-
-would generator be a better name than backend?
-  AtlasGenerator?
-  AtlasWriter?
 
 wrapper around QIODevice for Error
   like ChunkWriter but more generic

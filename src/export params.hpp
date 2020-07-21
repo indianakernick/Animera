@@ -12,7 +12,7 @@
 #include "cel.hpp"
 #include "export name.hpp"
 #include "palette span.hpp"
-#include "export backend.hpp"
+#include "atlas generator.hpp"
 
 enum class LayerVis {
   // export cli.cpp depends on order
@@ -50,7 +50,7 @@ struct ExportParams {
   QString name;
   QString directory;
   PixelFormat pixelFormat;
-  std::unique_ptr<ExportBackend> backend;
+  std::unique_ptr<AtlasGenerator> generator;
   std::vector<AnimExportParams> anims;
   bool whitepixel;
 };

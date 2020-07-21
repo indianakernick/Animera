@@ -1,19 +1,19 @@
 ﻿//
-//  cpp export backend.hpp
+//  cpp atlas generator.hpp
 //  Animera
 //
 //  Created by Indiana Kernick on 18/7/20.
 //  Copyright © 2020 Indiana Kernick. All rights reserved.
 //
 
-#ifndef animera_cpp_export_backend_hpp
-#define animera_cpp_export_backend_hpp
+#ifndef animera_cpp_atlas_generator_hpp
+#define animera_cpp_atlas_generator_hpp
 
 #include <unordered_set>
 #include "sprite packer.hpp"
-#include "export backend.hpp"
+#include "atlas generator.hpp"
 
-class CppExportBackend final : public ExportBackend {
+class CppAtlasGenerator final : public AtlasGenerator {
 public:
   Error initAtlas(PixelFormat, const QString &, const QString &) override;
   

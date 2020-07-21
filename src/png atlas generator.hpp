@@ -1,17 +1,17 @@
 ﻿//
-//  png export backend.hpp
+//  png atlas generator.hpp
 //  Animera
 //
 //  Created by Indiana Kernick on 16/7/20.
 //  Copyright © 2020 Indiana Kernick. All rights reserved.
 //
 
-#ifndef animera_png_export_backend_hpp
-#define animera_png_export_backend_hpp
+#ifndef animera_png_atlas_generator_hpp
+#define animera_png_atlas_generator_hpp
 
-#include "export backend.hpp"
+#include "atlas generator.hpp"
 
-class PngExportBackend final : public ExportBackend {
+class PngAtlasGenerator final : public AtlasGenerator {
 public:
   Error initAtlas(PixelFormat, const QString &, const QString &) override;
   

@@ -21,9 +21,9 @@
 		4515ABA324BE81D00052C8BF /* export params.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4515ABA124BE81D00052C8BF /* export params.cpp */; };
 		4515ABA624BE95670052C8BF /* export name.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4515ABA424BE95670052C8BF /* export name.cpp */; };
 		4515ABA924BE9C740052C8BF /* abstract export params.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4515ABA724BE9C740052C8BF /* abstract export params.cpp */; };
-		4515ABAC24BE9E2E0052C8BF /* export backend.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4515ABAA24BE9E2E0052C8BF /* export backend.cpp */; };
+		4515ABAC24BE9E2E0052C8BF /* atlas generator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4515ABAA24BE9E2E0052C8BF /* atlas generator.cpp */; };
 		4515ABAF24BE9FCD0052C8BF /* export texture atlas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4515ABAD24BE9FCD0052C8BF /* export texture atlas.cpp */; };
-		4515ABB424C000F50052C8BF /* png export backend.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4515ABB224C000F50052C8BF /* png export backend.cpp */; };
+		4515ABB424C000F50052C8BF /* png atlas generator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4515ABB224C000F50052C8BF /* png atlas generator.cpp */; };
 		45161F0622F1399A0036BBED /* timeline painting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45161F0422F1399A0036BBED /* timeline painting.cpp */; };
 		451A237D24B979B700160390 /* cel painter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 451A237B24B979B600160390 /* cel painter.cpp */; };
 		4529A9FD239263110034A014 /* docopt helpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4529A9FB239263110034A014 /* docopt helpers.cpp */; };
@@ -105,7 +105,7 @@
 		45D109AC22E2D4FD00D1F1CB /* text push button widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45D109AA22E2D4FD00D1F1CB /* text push button widget.cpp */; };
 		45D109AF22E2D88500D1F1CB /* export dialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45D109AD22E2D88500D1F1CB /* export dialog.cpp */; };
 		45D109B222E304A300D1F1CB /* combo box widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45D109B022E304A300D1F1CB /* combo box widget.cpp */; };
-		45D5847724C29CE9003C182C /* cpp export backend.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45D5847524C29CE9003C182C /* cpp export backend.cpp */; };
+		45D5847724C29CE9003C182C /* cpp atlas generator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45D5847524C29CE9003C182C /* cpp atlas generator.cpp */; };
 		45D5847C24C3EE44003C182C /* stb_rect_pack.c in Sources */ = {isa = PBXBuildFile; fileRef = 45D5847B24C3EE44003C182C /* stb_rect_pack.c */; };
 		45D5847F24C41642003C182C /* sprite packer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45D5847D24C41641003C182C /* sprite packer.cpp */; };
 		45DC2566224B137C00F40116 /* status msg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45DC2564224B137C00F40116 /* status msg.cpp */; };
@@ -162,12 +162,12 @@
 		4515ABA524BE95670052C8BF /* export name.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "export name.hpp"; sourceTree = "<group>"; };
 		4515ABA724BE9C740052C8BF /* abstract export params.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "abstract export params.cpp"; sourceTree = "<group>"; };
 		4515ABA824BE9C740052C8BF /* abstract export params.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "abstract export params.hpp"; sourceTree = "<group>"; };
-		4515ABAA24BE9E2E0052C8BF /* export backend.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "export backend.cpp"; sourceTree = "<group>"; };
-		4515ABAB24BE9E2E0052C8BF /* export backend.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "export backend.hpp"; sourceTree = "<group>"; };
+		4515ABAA24BE9E2E0052C8BF /* atlas generator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "atlas generator.cpp"; sourceTree = "<group>"; };
+		4515ABAB24BE9E2E0052C8BF /* atlas generator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "atlas generator.hpp"; sourceTree = "<group>"; };
 		4515ABAD24BE9FCD0052C8BF /* export texture atlas.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "export texture atlas.cpp"; sourceTree = "<group>"; };
 		4515ABAE24BE9FCD0052C8BF /* export texture atlas.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "export texture atlas.hpp"; sourceTree = "<group>"; };
-		4515ABB224C000F50052C8BF /* png export backend.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "png export backend.cpp"; sourceTree = "<group>"; };
-		4515ABB324C000F50052C8BF /* png export backend.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "png export backend.hpp"; sourceTree = "<group>"; };
+		4515ABB224C000F50052C8BF /* png atlas generator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "png atlas generator.cpp"; sourceTree = "<group>"; };
+		4515ABB324C000F50052C8BF /* png atlas generator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "png atlas generator.hpp"; sourceTree = "<group>"; };
 		45161F0022F11EB60036BBED /* todo.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = todo.txt; sourceTree = "<group>"; };
 		45161F0422F1399A0036BBED /* timeline painting.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "timeline painting.cpp"; sourceTree = "<group>"; };
 		45161F0522F1399A0036BBED /* timeline painting.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "timeline painting.hpp"; sourceTree = "<group>"; };
@@ -824,8 +824,8 @@
 		45D109AE22E2D88500D1F1CB /* export dialog.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "export dialog.hpp"; sourceTree = "<group>"; };
 		45D109B022E304A300D1F1CB /* combo box widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "combo box widget.cpp"; sourceTree = "<group>"; };
 		45D109B122E304A300D1F1CB /* combo box widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "combo box widget.hpp"; sourceTree = "<group>"; };
-		45D5847524C29CE9003C182C /* cpp export backend.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "cpp export backend.cpp"; sourceTree = "<group>"; };
-		45D5847624C29CE9003C182C /* cpp export backend.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "cpp export backend.hpp"; sourceTree = "<group>"; };
+		45D5847524C29CE9003C182C /* cpp atlas generator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "cpp atlas generator.cpp"; sourceTree = "<group>"; };
+		45D5847624C29CE9003C182C /* cpp atlas generator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "cpp atlas generator.hpp"; sourceTree = "<group>"; };
 		45D5847824C2A480003C182C /* stb_rect_pack.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stb_rect_pack.h; sourceTree = "<group>"; };
 		45D5847924C3DF02003C182C /* social.animera */ = {isa = PBXFileReference; lastKnownFileType = file; path = social.animera; sourceTree = "<group>"; };
 		45D5847B24C3EE44003C182C /* stb_rect_pack.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = stb_rect_pack.c; sourceTree = "<group>"; };
@@ -901,8 +901,8 @@
 				4515ABA524BE95670052C8BF /* export name.hpp */,
 				4515ABA724BE9C740052C8BF /* abstract export params.cpp */,
 				4515ABA824BE9C740052C8BF /* abstract export params.hpp */,
-				4515ABAA24BE9E2E0052C8BF /* export backend.cpp */,
-				4515ABAB24BE9E2E0052C8BF /* export backend.hpp */,
+				4515ABAA24BE9E2E0052C8BF /* atlas generator.cpp */,
+				4515ABAB24BE9E2E0052C8BF /* atlas generator.hpp */,
 				4515ABAD24BE9FCD0052C8BF /* export texture atlas.cpp */,
 				4515ABAE24BE9FCD0052C8BF /* export texture atlas.hpp */,
 			);
@@ -912,10 +912,10 @@
 		4515ABB124C000D60052C8BF /* Backends */ = {
 			isa = PBXGroup;
 			children = (
-				4515ABB224C000F50052C8BF /* png export backend.cpp */,
-				4515ABB324C000F50052C8BF /* png export backend.hpp */,
-				45D5847524C29CE9003C182C /* cpp export backend.cpp */,
-				45D5847624C29CE9003C182C /* cpp export backend.hpp */,
+				4515ABB224C000F50052C8BF /* png atlas generator.cpp */,
+				4515ABB324C000F50052C8BF /* png atlas generator.hpp */,
+				45D5847524C29CE9003C182C /* cpp atlas generator.cpp */,
+				45D5847624C29CE9003C182C /* cpp atlas generator.hpp */,
 				45D5847D24C41641003C182C /* sprite packer.cpp */,
 				45D5847E24C41641003C182C /* sprite packer.hpp */,
 			);
@@ -3133,7 +3133,7 @@
 				4515ABA624BE95670052C8BF /* export name.cpp in Sources */,
 				45C5C8BA237A65820056CEE7 /* status object.cpp in Sources */,
 				45D109A922DC01A200D1F1CB /* icon push button widget.cpp in Sources */,
-				4515ABB424C000F50052C8BF /* png export backend.cpp in Sources */,
+				4515ABB424C000F50052C8BF /* png atlas generator.cpp in Sources */,
 				4513144722D0503700D66262 /* timeline.cpp in Sources */,
 				453D28C622769EC000D0E5F9 /* color slider widget.cpp in Sources */,
 				45D109A622DBFAF200D1F1CB /* icon radio button widget.cpp in Sources */,
@@ -3175,7 +3175,7 @@
 				4595D48C22C05E5400607D64 /* timeline cels widget.cpp in Sources */,
 				457D74F3239E2488009B4E4B /* settings.cpp in Sources */,
 				453C78432234E13E00818B19 /* window.cpp in Sources */,
-				45D5847724C29CE9003C182C /* cpp export backend.cpp in Sources */,
+				45D5847724C29CE9003C182C /* cpp atlas generator.cpp in Sources */,
 				45A6103C2307E1EF000A0BD6 /* error dialog.cpp in Sources */,
 				4512636622781D7B00C66A19 /* tool colors widget.cpp in Sources */,
 				4571C132227C383A00479006 /* radio button widget.cpp in Sources */,
@@ -3197,7 +3197,7 @@
 				4513145522D59EA300D66262 /* color picker impl.cpp in Sources */,
 				45E3FFB224417D40007A1FE8 /* cli new.cpp in Sources */,
 				45C5C8D22389219C0056CEE7 /* cli.cpp in Sources */,
-				4515ABAC24BE9E2E0052C8BF /* export backend.cpp in Sources */,
+				4515ABAC24BE9E2E0052C8BF /* atlas generator.cpp in Sources */,
 				4595D49222C0644B00607D64 /* timeline frames widget.cpp in Sources */,
 				4513145022D1BF8700D66262 /* palette.cpp in Sources */,
 				45BADA77224714A3000D095C /* tool widgets.cpp in Sources */,

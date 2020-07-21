@@ -10,7 +10,7 @@
 
 #include "animation.hpp"
 #include <QtCore/qdir.h>
-#include "png export backend.hpp"
+#include "png atlas generator.hpp"
 
 ExportAnimationInfo getAnimationInfo(const Animation &anim) {
   return {
@@ -94,7 +94,7 @@ ExportParams exportFrameParams(const ExportAnimationInfo &info, const QString &p
   params.anims[0].frames = {info.pos.f, info.pos.f};
   params.anims[0].composite = true;
   setFormat(params, info);
-  params.backend = std::make_unique<PngExportBackend>();
+  params.generator = std::make_unique<PngAtlasGenerator>();
   params.whitepixel = false;
   return params;
 }
@@ -108,7 +108,7 @@ ExportParams exportCelParams(const ExportAnimationInfo &info, const QString &pat
   params.anims[0].frames = {info.pos.f, info.pos.f};
   params.anims[0].composite = false;
   setFormat(params, info);
-  params.backend = std::make_unique<PngExportBackend>();
+  params.generator = std::make_unique<PngAtlasGenerator>();
   params.whitepixel = false;
   return params;
 }

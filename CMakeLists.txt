@@ -19,6 +19,8 @@ add_executable(Animera
     src/application.cpp
     src/application.hpp
     src/application.moc
+    "src/atlas generator.cpp"
+    "src/atlas generator.hpp"
     "src/brush tool.cpp"
     "src/brush tool.hpp"
     "src/cel array.cpp"
@@ -62,8 +64,8 @@ add_executable(Animera
     "src/config geometry.hpp"
     "src/config keys.hpp"
     src/connect.hpp
-    "src/cpp export backend.cpp"
-    "src/cpp export backend.hpp"
+    "src/cpp atlas generator.cpp"
+    "src/cpp atlas generator.hpp"
     "src/current tool.cpp"
     "src/current tool.hpp"
     src/dialog.cpp
@@ -79,8 +81,6 @@ add_executable(Animera
     "src/error dialog.cpp"
     "src/error dialog.hpp"
     src/error.hpp
-    "src/export backend.cpp"
-    "src/export backend.hpp"
     "src/export dialog.cpp"
     "src/export dialog.hpp"
     "src/export dialog.moc"
@@ -147,8 +147,8 @@ add_executable(Animera
     "src/picker impl gray.hpp"
     "src/picker impl rgba.cpp"
     "src/picker impl rgba.hpp"
-    "src/png export backend.cpp"
-    "src/png export backend.hpp"
+    "src/png atlas generator.cpp"
+    "src/png atlas generator.hpp"
     src/png.cpp
     src/png.hpp
     "src/quit dialog.cpp"

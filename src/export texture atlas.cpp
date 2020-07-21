@@ -10,7 +10,7 @@
 
 #include "animation.hpp"
 #include "composite.hpp"
-#include "export backend.hpp"
+#include "atlas generator.hpp"
 #include "surface factory.hpp"
 #include "graphics convert.hpp"
 #include <Graphics/transform.hpp>
@@ -182,10 +182,10 @@ Error addImage(
   Images &images
 ) {
   if (images.xformed.isNull()) {
-    return params.backend->addImage(index, images.canvas);
+    return params.generator->addImage(index, images.canvas);
   } else {
     applyTransform(images, animParams.transform);
-    return params.backend->addImage(index, images.xformed);
+    return params.generator->addImage(index, images.xformed);
   }
 }
 
@@ -196,7 +196,7 @@ void addFrameNames(
   const Animation &anim
 ) {
   auto iterate = [&](const Frame &, const ExportNameState &state) {
-    params.backend->addName(index++, animParams.name, state);
+    params.generator->addName(index++, animParams.name, state);
     return Error{};
   };
   static_cast<void>(eachFrame(animParams, anim, iterate));
@@ -209,7 +209,7 @@ void addCelNames(
   const Animation &anim
 ) {
   auto iterate = [&](const CelImage *, const ExportNameState &state) {
-    params.backend->addName(index++, animParams.name, state);
+    params.generator->addName(index++, animParams.name, state);
     return Error{};
   };
   static_cast<void>(eachCel(animParams, anim, iterate));
@@ -283,7 +283,7 @@ using AnimPtr = std::unique_ptr<const Animation, void(*)(const Animation *)>;
 using AnimArray = std::vector<AnimPtr>;
 
 Error exportTextureAtlas(const ExportParams &params, const AnimArray &anims) {
-  assert(params.backend);
+  assert(params.generator);
   assert(params.anims.size() == anims.size());
   assert(!anims.empty());
   
@@ -293,7 +293,7 @@ Error exportTextureAtlas(const ExportParams &params, const AnimArray &anims) {
     }
   }
   
-  TRY(params.backend->initAtlas(params.pixelFormat, params.name, params.directory));
+  TRY(params.generator->initAtlas(params.pixelFormat, params.name, params.directory));
   
   std::size_t spriteIndex = 0;
   for (std::size_t s = 0; s != anims.size(); ++s) {
@@ -303,25 +303,25 @@ Error exportTextureAtlas(const ExportParams &params, const AnimArray &anims) {
     } else {
       addCelNames(spriteIndex, params, params.anims[s], *anims[s]);
     }
-    params.backend->addSizes(
+    params.generator->addSizes(
       spriteIndex - indexBefore,
       getTransformedSize(anims[s]->getSize(), params.anims[s].transform)
     );
   }
   
   if (params.whitepixel) {
-    params.backend->addWhiteName();
+    params.generator->addWhiteName();
   }
   
-  if (QString name = params.backend->hasNameCollision(); !name.isNull()) {
+  if (QString name = params.generator->hasNameCollision(); !name.isNull()) {
     return "Sprite name collision \"" + name + "\"";
   }
   
-  TRY(params.backend->packRectangles());
+  TRY(params.generator->packRectangles());
   
   spriteIndex = 0;
   for (std::size_t s = 0; s != anims.size(); ++s) {
-    TRY(params.backend->initAnimation(
+    TRY(params.generator->initAnimation(
       anims[s]->getFormat(),
       anims[s]->palette.getPalette()
     ));
@@ -333,10 +333,10 @@ Error exportTextureAtlas(const ExportParams &params, const AnimArray &anims) {
   }
   
   if (params.whitepixel) {
-    TRY(params.backend->addWhiteImage());
+    TRY(params.generator->addWhiteImage());
   }
   
-  return params.backend->finalize();
+  return params.generator->finalize();
 }
 
 }

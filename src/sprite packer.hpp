@@ -15,7 +15,7 @@
 #include "stb_rect_pack.h"
 
 // TODO: Move PixelFormat to a more appropriate header
-#include "export backend.hpp"
+#include "atlas generator.hpp"
 
 class SpritePacker {
 public:

@@ -1,4 +1,4 @@
-//
+﻿//
 //  export dialog.cpp
 //  Animera
 //
@@ -18,7 +18,7 @@
 #include "combo box widget.hpp"
 #include "file input widget.hpp"
 #include <QtWidgets/qboxlayout.h>
-#include "png export backend.hpp"
+#include "png atlas generator.hpp"
 #include <QtWidgets/qgridlayout.h>
 #include "number input widget.hpp"
 #include "text push button widget.hpp"
@@ -72,7 +72,8 @@ void ExportDialog::submit() {
   params.name = "";
   params.directory = dir->path();
   params.pixelFormat = formatFromString(formatSelect->currentText());
-  params.backend = std::make_unique<PngExportBackend>();
+  params.generator = std::make_unique<PngAtlasGenerator>();
+  params.whitepixel = true;
   
   AnimExportParams &animParams = params.anims.emplace_back();
   
