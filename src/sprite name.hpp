@@ -1,13 +1,13 @@
 ﻿//
-//  export name.hpp
+//  sprite name.hpp
 //  Animera
 //
 //  Created by Indiana Kernick on 15/7/20.
 //  Copyright © 2020 Indiana Kernick. All rights reserved.
 //
 
-#ifndef animera_export_name_hpp
-#define animera_export_name_hpp
+#ifndef animera_sprite_name_hpp
+#define animera_sprite_name_hpp
 
 #include "cel.hpp"
 
@@ -35,14 +35,14 @@ enum class FrameNameMode {
   empty
 };
 
-struct ExportNameParams {
+struct SpriteNameParams {
   QString baseName;
   LayerNameMode layerName;
   GroupNameMode groupName;
   FrameNameMode frameName;
 };
 
-struct ExportNameState {
+struct SpriteNameState {
   LayerIdx layer;
   GroupIdx group;
   FrameIdx frame;
@@ -57,10 +57,10 @@ struct ExportNameState {
   std::string_view groupName;
 };
 
-void appendLayerName(QString &, const ExportNameParams &, const ExportNameState &);
-void appendGroupName(QString &, const ExportNameParams &, const ExportNameState &);
-void appendFrameName(QString &, const ExportNameParams &, const ExportNameState &);
-QString evaluateExportName(const ExportNameParams &, const ExportNameState &);
+void appendLayerName(QString &, const SpriteNameParams &, const SpriteNameState &);
+void appendGroupName(QString &, const SpriteNameParams &, const SpriteNameState &);
+void appendFrameName(QString &, const SpriteNameParams &, const SpriteNameState &);
+QString evaluateSpriteName(const SpriteNameParams &, const SpriteNameState &);
 
 QString nameFromPath(const QString &);
 QString nameDirFromPath(QString &);

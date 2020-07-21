@@ -25,11 +25,11 @@ Error PngAtlasGenerator::initAtlas(
 
 void PngAtlasGenerator::addName(
   [[maybe_unused]] const std::size_t idx,
-  const ExportNameParams &params,
-  const ExportNameState &state
+  const SpriteNameParams &params,
+  const SpriteNameState &state
 ) {
   assert(idx == names.size());
-  names.push_back(evaluateExportName(params, state));
+  names.push_back(evaluateSpriteName(params, state));
 }
 
 void PngAtlasGenerator::addSizes(std::size_t, QSize) {}

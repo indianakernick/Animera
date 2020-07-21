@@ -1,12 +1,12 @@
 ﻿//
-//  export name.cpp
+//  sprite name.cpp
 //  Animera
 //
 //  Created by Indiana Kernick on 15/7/20.
 //  Copyright © 2020 Indiana Kernick. All rights reserved.
 //
 
-#include "export name.hpp"
+#include "sprite name.hpp"
 
 #include "strings.hpp"
 
@@ -28,7 +28,7 @@ void appendIndex(QString &name, const int idx) {
 
 }
 
-void appendLayerName(QString &name, const ExportNameParams &params, const ExportNameState &state) {
+void appendLayerName(QString &name, const SpriteNameParams &params, const SpriteNameState &state) {
   switch (params.layerName) {
     case LayerNameMode::automatic:
       if (state.layerCount <= LayerIdx{1}) return;
@@ -46,7 +46,7 @@ void appendLayerName(QString &name, const ExportNameParams &params, const Export
   }
 }
 
-void appendGroupName(QString &name, const ExportNameParams &params, const ExportNameState &state) {
+void appendGroupName(QString &name, const SpriteNameParams &params, const SpriteNameState &state) {
   switch (params.groupName) {
     case GroupNameMode::automatic:
       if (state.groupCount <= GroupIdx{1}) return;
@@ -64,7 +64,7 @@ void appendGroupName(QString &name, const ExportNameParams &params, const Export
   }
 }
 
-void appendFrameName(QString &name, const ExportNameParams &params, const ExportNameState &state) {
+void appendFrameName(QString &name, const SpriteNameParams &params, const SpriteNameState &state) {
   switch (params.frameName) {
     case FrameNameMode::automatic:
       if (state.frameCount <= FrameIdx{1}) return;
@@ -77,7 +77,7 @@ void appendFrameName(QString &name, const ExportNameParams &params, const Export
   }
 }
 
-QString evaluateExportName(const ExportNameParams &params, const ExportNameState &state) {
+QString evaluateSpriteName(const SpriteNameParams &params, const SpriteNameState &state) {
   QString name = params.baseName;
   appendLayerName(name, params, state);
   appendGroupName(name, params, state);

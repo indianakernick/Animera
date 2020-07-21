@@ -317,8 +317,6 @@ maybe importPalettePng should read the PLTE chunk if it exists
 
 -------------------------------- export features -------------------------------
 
-maybe export name should be called sprite name
-
 allow parameters to be sent to the generator
   e.g. telling the cpp generator to generate a png or raw image data
   might not need arbitrary parameters

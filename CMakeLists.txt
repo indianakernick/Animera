@@ -84,8 +84,6 @@ add_executable(Animera
     "src/export dialog.cpp"
     "src/export dialog.hpp"
     "src/export dialog.moc"
-    "src/export name.cpp"
-    "src/export name.hpp"
     "src/export params.cpp"
     "src/export params.hpp"
     "src/export png.cpp"
@@ -170,6 +168,8 @@ add_executable(Animera
     "src/separator widget.hpp"
     src/settings.cpp
     src/settings.hpp
+    "src/sprite name.cpp"
+    "src/sprite name.hpp"
     "src/sprite packer.cpp"
     "src/sprite packer.hpp"
     "src/status bar widget.cpp"

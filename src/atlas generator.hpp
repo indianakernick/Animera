@@ -10,7 +10,7 @@
 #define animera_atlas_generator_hpp
 
 #include "error.hpp"
-#include "export name.hpp"
+#include "sprite name.hpp"
 #include "palette span.hpp"
 
 enum class PixelFormat {
@@ -31,7 +31,7 @@ public:
   // First pass
   // Add the names and rectangles
   virtual void addWhiteName() = 0;
-  virtual void addName(std::size_t, const ExportNameParams &, const ExportNameState &) = 0;
+  virtual void addName(std::size_t, const SpriteNameParams &, const SpriteNameState &) = 0;
   virtual void addSizes(std::size_t, QSize) = 0;
   virtual QString hasNameCollision() = 0;
   virtual Error packRectangles() = 0;

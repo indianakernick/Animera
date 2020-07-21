@@ -69,7 +69,7 @@ void setFormat(ExportParams &params, const ExportAnimationInfo &info) {
   }
 }
 
-void setDefaultTransform(ExportTransform &transform) {
+void setDefaultTransform(SpriteTransform &transform) {
   transform.scaleX = transform.scaleY = 1;
   transform.angle = 0;
 }

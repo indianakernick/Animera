@@ -54,7 +54,7 @@ Error eachFrame(const AnimExportParams &params, const Animation &anim, Func func
   GroupIterator groupIter{anim.timeline.getGroupArray(), frameRange.min};
   bool changedGroup = true;
   
-  ExportNameState state;
+  SpriteNameState state;
   state.layer = layerRange.min;
   state.layerCount = LayerIdx{1};
   state.groupCount = anim.timeline.getGroups();
@@ -92,7 +92,7 @@ Error eachCel(const AnimExportParams &params, const Animation &anim, Func func) 
   LayerRange layerRange = params.layers;
   FrameRange frameRange = params.frames;
   
-  ExportNameState state;
+  SpriteNameState state;
   state.layerCount = anim.timeline.getLayers();
   state.groupCount = anim.timeline.getGroups();
   
@@ -138,11 +138,11 @@ struct Images {
   QImage xformed;
 };
 
-bool isIdentity(const ExportTransform &transform) {
+bool isIdentity(const SpriteTransform &transform) {
   return transform.scaleX == 1 && transform.scaleY == 1 && transform.angle == 0;
 }
 
-QSize getTransformedSize(const QSize canvasSize, const ExportTransform &transform) {
+QSize getTransformedSize(const QSize canvasSize, const SpriteTransform &transform) {
   QSize size;
   size.setWidth(canvasSize.width() * std::abs(transform.scaleX));
   size.setHeight(canvasSize.height() * std::abs(transform.scaleY));
@@ -163,7 +163,7 @@ void initImages(Images &images, const AnimExportParams &params, const Animation 
   }
 }
 
-void applyTransform(Images &images, const ExportTransform &transform) {
+void applyTransform(Images &images, const SpriteTransform &transform) {
   visitSurface(images.xformed, [&](const auto dst) {
     const auto src = makeCSurface<typename decltype(dst)::Pixel>(images.canvas);
     gfx::spatialTransform(dst, src, [&](const gfx::Point dstPos) {
@@ -195,7 +195,7 @@ void addFrameNames(
   const AnimExportParams &animParams,
   const Animation &anim
 ) {
-  auto iterate = [&](const Frame &, const ExportNameState &state) {
+  auto iterate = [&](const Frame &, const SpriteNameState &state) {
     params.generator->addName(index++, animParams.name, state);
     return Error{};
   };
@@ -208,7 +208,7 @@ void addCelNames(
   const AnimExportParams &animParams,
   const Animation &anim
 ) {
-  auto iterate = [&](const CelImage *, const ExportNameState &state) {
+  auto iterate = [&](const CelImage *, const SpriteNameState &state) {
     params.generator->addName(index++, animParams.name, state);
     return Error{};
   };
@@ -226,7 +226,7 @@ Error addFrameImages(
   const Format format = anim.getFormat();
   const PaletteCSpan palette = anim.palette.getPalette();
   
-  auto iterate = [&](const Frame &frame, const ExportNameState &) {
+  auto iterate = [&](const Frame &frame, const SpriteNameState &) {
     if (format == Format::gray) {
       compositeFrame<FmtGray>(images.canvas, palette, frame, format, images.canvas.rect());
     } else {
@@ -247,7 +247,7 @@ Error addCelImages(
   Images images;
   initImages(images, animParams, anim);
   
-  auto iterate = [&](const CelImage *cel, const ExportNameState &) {
+  auto iterate = [&](const CelImage *cel, const SpriteNameState &) {
     clearImage(images.canvas);
     blitImage(images.canvas, cel->img, cel->pos);
     return addImage(index++, params, animParams, images);

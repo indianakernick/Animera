@@ -10,7 +10,7 @@
 #define animera_export_params_hpp
 
 #include "cel.hpp"
-#include "export name.hpp"
+#include "sprite name.hpp"
 #include "palette span.hpp"
 #include "atlas generator.hpp"
 
@@ -32,15 +32,15 @@ struct FrameRange {
   FrameIdx max;
 };
 
-struct ExportTransform {
+struct SpriteTransform {
   int scaleX;
   int scaleY;
   int angle;
 };
 
 struct AnimExportParams {
-  ExportNameParams name;
-  ExportTransform transform;
+  SpriteNameParams name;
+  SpriteTransform transform;
   LayerRange layers;
   FrameRange frames;
   bool composite;

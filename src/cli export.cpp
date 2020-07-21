@@ -183,7 +183,7 @@ void checkNonZeroRange(QString err, int value, const IntRange range) {
   }
 }
 
-void parseScale(ExportTransform &transform, QJsonObject &obj) {
+void parseScale(SpriteTransform &transform, QJsonObject &obj) {
   const QJsonValue val = obj.take("scale");
   if (val.isUndefined()) {
     transform.scaleX = 1;
@@ -205,7 +205,7 @@ void parseScale(ExportTransform &transform, QJsonObject &obj) {
   }
 }
 
-void parseAngle(ExportTransform &transform, QJsonObject &obj) {
+void parseAngle(SpriteTransform &transform, QJsonObject &obj) {
   const QJsonValue val = obj.take("angle");
   if (val.isUndefined()) {
     transform.angle = 0;

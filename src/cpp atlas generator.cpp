@@ -134,8 +134,8 @@ Error CppAtlasGenerator::initAtlas(PixelFormat format, const QString &name, cons
 
 void CppAtlasGenerator::addName(
   const std::size_t i,
-  const ExportNameParams &params,
-  const ExportNameState &state
+  const SpriteNameParams &params,
+  const SpriteNameState &state
 ) {
   QString name = params.baseName;
   int baseName = name.size();
