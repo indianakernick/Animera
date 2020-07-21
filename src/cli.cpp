@@ -25,7 +25,7 @@ R"(Usage:
     Animera --long-help
     Animera new <width> <height> [<format>]
     Animera open <file>
-    Animera info [--layer-names --json] <file>
+    Animera info [--groups --layers --json] <file>
     Animera export)";
 
 const char short_options[] =
@@ -36,7 +36,8 @@ R"(Options:
     <height>                  Height of the animation to create.
     <format>                  Format of the animation to create.
     <file>                    Animation file to open.
-    --layer-names             Output the names of layers.
+    --groups                  Output info about groups.
+    --layers                  Output info about layers.
     -j, --json                Output info as JSON.)";
 
 const char long_options[] =
@@ -60,7 +61,11 @@ R"(Options:
             gray   (8-bit Grayscale with alpha)
         This is "rgba" by default.
     
-    --layer-names
+    --groups
+        Outputs information about the groups. This includes the name, the
+        starting position, and the length.
+    
+    --layers
         Outputs information about the layers. This includes the name, the number
         of cels and the visibility.
     

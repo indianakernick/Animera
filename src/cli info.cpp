@@ -57,6 +57,41 @@ void writeEscaped(QTextStream &console, const std::string_view text) {
   }
 }
 
+Error printGroups(QTextStream &console, QIODevice &dev, const AnimationInfo &info, const bool json) try {
+  ChunkReader reader{dev};
+  reader.skip(reader.peek());
+  std::vector<Group> groups(static_cast<int>(info.groups));
+  TRY(readGRPS(dev, groups, info.frames));
+  FrameIdx start{};
+  
+  for (std::size_t g = 0; g != groups.size(); ++g) {
+    if (json) {
+      if (g == 0) {
+        console << "    ";
+      } else {
+        console << ", ";
+      }
+      console << "{\n";
+      console << "      \"name\": \"";
+      writeEscaped(console, groups[g].name);
+      console << "\",\n";
+      console << "      \"start\": " << static_cast<int>(start) << ",\n";
+      console << "      \"length\": " << static_cast<int>(groups[g].end - start) << '\n';
+      console << "    }";
+    } else {
+      console << "  Group " << g << ":\n";
+      console << "    Name:   " << toLatinString(groups[g].name) << '\n';
+      console << "    Start:  " << static_cast<int>(start) << '\n';
+      console << "    Length: " << static_cast<int>(groups[g].end - start) << '\n';
+    }
+    start = groups[g].end;
+  }
+  
+  return {};
+} catch (FileIOError &e) {
+  return e.msg();
+}
+
 Error printLayers(QTextStream &console, QIODevice &dev, const bool json) try {
   ChunkReader reader{dev};
   int index = 0;
@@ -77,15 +112,16 @@ Error printLayers(QTextStream &console, QIODevice &dev, const bool json) try {
         console << ", ";
       }
       console << "{\n";
-      console << "      \"cels\": " << layer.cels.size() << ",\n";
-      console << "      \"visible\": " << (layer.visible ? "true" : "false") << ",\n";
       console << "      \"name\": \"";
       writeEscaped(console, layer.name);
-      console << "\"\n    }";
+      console << "\",\n";
+      console << "      \"cels\": " << layer.cels.size() << ",\n";
+      console << "      \"visible\": " << (layer.visible ? "true" : "false") << '\n';
+      console << "    }";
     } else {
       console << "  Layer " << index << ":\n";
       console << "    Name:    " << toLatinString(layer.name) << '\n';
-      console << "    Cels:   " << layer.cels.size() << '\n';
+      console << "    Cels:    " << layer.cels.size() << '\n';
       console << "    Visible: " << (layer.visible ? "Yes" : "No") << '\n';
     }
     
@@ -97,7 +133,7 @@ Error printLayers(QTextStream &console, QIODevice &dev, const bool json) try {
   return e.msg();
 }
 
-Error printInfo(const QString &path, const bool layers, const bool json) {
+Error printInfo(const QString &path, const bool groups, const bool layers, const bool json) {
   QTextStream console{stdout};
   FileReader reader;
   TRY(reader.open(path));
@@ -112,29 +148,42 @@ Error printInfo(const QString &path, const bool layers, const bool json) {
     console << "  \"height\": " << anim.height << ",\n";
     console << "  \"format\": \"" << formatToJsonString(anim.format) << "\",\n";
     console << "  \"layers\": " << static_cast<int>(anim.layers) << ",\n";
+    console << "  \"groups\": " << static_cast<int>(anim.groups) << ",\n";
     console << "  \"frames\": " << static_cast<int>(anim.frames) << ",\n";
     console << "  \"delay\": " << anim.delay;
   } else {
     console << "Size:   {" << anim.width << ", " << anim.height << "}\n";
     console << "Format: " << formatToString(anim.format) << '\n';
     console << "Layers: " << static_cast<int>(anim.layers) << '\n';
+    console << "Groups: " << static_cast<int>(anim.groups) << '\n';
     console << "Frames: " << static_cast<int>(anim.frames) << '\n';
     console << "Delay:  " << anim.delay << " ms\n";
+  }
+  
+  if (groups) {
+    if (json) {
+      console << ",\n  \"groups\": [\n";
+      TRY(printGroups(console, reader.dev(), anim, true));
+      console << "\n  ]";
+    } else {
+      console << "Groups:\n";
+      TRY(printGroups(console, reader.dev(), anim, false));
+    }
   }
   
   if (layers) {
     if (json) {
       console << ",\n  \"layers\": [\n";
       TRY(printLayers(console, reader.dev(), true));
-      console << "\n  ]\n}\n";
+      console << "\n  ]";
     } else {
       console << "Layers:\n";
       TRY(printLayers(console, reader.dev(), false));
     }
-  } else {
-    if (json) {
-      console << "\n}\n";
-    }
+  }
+  
+  if (json) {
+    console << "\n}\n";
   }
   
   TRY(reader.flush());
@@ -148,10 +197,11 @@ int cliInfo(int &argc, char **argv, const docopt::Options &flags) {
   QTextStream console{stdout};
   
   const QString path = toLatinString(flags.at("<file>").asString());
-  const bool layers = flags.at("--layer-names").asBool();
+  const bool groups = flags.at("--groups").asBool();
+  const bool layers = flags.at("--layers").asBool();
   const bool json = flags.at("--json").asBool();
   
-  if (Error err = printInfo(path, layers, json); err) {
+  if (Error err = printInfo(path, groups, layers, json); err) {
     console << "File open error\n";
     console << err.msg() << '\n';
     return 1;
