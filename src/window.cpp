@@ -444,7 +444,7 @@ void Window::connectSignals() {
   CONNECT(anim.palette,    paletteChanged,               tools,         setPalette);
   CONNECT(anim.palette,    paletteChanged,               colors,        setPalette);
   
-  CONNECT(tools,           celImageModified,                  editor,        composite);
+  CONNECT(tools,           celImageModified,             editor,        composite);
   CONNECT(tools,           overlayModified,              editor,        compositeOverlay);
   CONNECT(tools,           shouldShowNorm,               statusBar,     showNorm);
   CONNECT(tools,           shouldGrowCelImage,           anim.timeline, growCelImage);

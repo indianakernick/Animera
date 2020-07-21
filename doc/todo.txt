@@ -319,8 +319,8 @@ maybe importPalettePng should read the PLTE chunk if it exists
 
 automatic should choose index if name is empty
 
-allow parameters to be sent to the backend
-  e.g. telling the cpp backend to generate a png or raw image data
+allow parameters to be sent to the generator
+  e.g. telling the cpp generator to generate a png or raw image data
   might not need arbitrary parameters
   could encode parameters in the name
   cpp_raw and cpp_zlib
@@ -336,7 +336,7 @@ string lookup
   std::unordered_map<std::string_view, SpriteID> ids;
   SpriteID lookupSpriteID(std::string_view);
 
-maybe backend should announce which pixel formats it supports
+maybe generator should announce which pixel formats it supports
   also should announce pixel/animation format compatability
 
 might want to share the begin/end aliases with the json exporter

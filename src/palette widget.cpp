@@ -49,7 +49,10 @@ public Q_SLOTS:
   }
   
   void updatePalette() {
-    Q_EMIT shouldAttachColor(this);
+    if (selected) {
+      Q_EMIT shouldAttachColor(this);
+      selected = true;
+    }
     Q_EMIT paletteColorChanged();
     update();
   }
