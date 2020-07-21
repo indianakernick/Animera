@@ -317,7 +317,7 @@ maybe importPalettePng should read the PLTE chunk if it exists
 
 -------------------------------- export features -------------------------------
 
-automatic should choose index if name is empty
+maybe export name should be called sprite name
 
 allow parameters to be sent to the generator
   e.g. telling the cpp generator to generate a png or raw image data
@@ -326,6 +326,9 @@ allow parameters to be sent to the generator
   cpp_raw and cpp_zlib
 
 select a group
+  could be as simple as using a range of groups
+  by default this is [0, -1]
+  frame range would then be relative to the group range
 
 wrapper around QIODevice for Error
   like ChunkWriter but more generic

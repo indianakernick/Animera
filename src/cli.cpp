@@ -148,7 +148,9 @@ Export Command
     in the sprite name. Valid values are below.
     
     "layer name" field:
-     - "automatic"  (layer name if there is more than one layer)
+     - "automatic"  (empty if there is only one layer
+                     otherwise layer name if it's not empty
+                     otherwise layer index)
      - "name"       (layer name is appended)
      - "index"      (layer index is appended)
      - "empty"      (nothing is appended)

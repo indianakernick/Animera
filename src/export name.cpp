@@ -16,56 +16,64 @@ void appendSep(QString &str) {
   if (!str.isEmpty()) str.append(' ');
 }
 
+void appendName(QString &name, const std::string_view str) {
+  appendSep(name);
+  name += toLatinString(str);
+}
+
+void appendIndex(QString &name, const int idx) {
+  appendSep(name);
+  name += QString::number(idx);
+}
+
 }
 
 void appendLayerName(QString &name, const ExportNameParams &params, const ExportNameState &state) {
   switch (params.layerName) {
     case LayerNameMode::automatic:
-      if (state.layerCount <= LayerIdx{1}) break;
+      if (state.layerCount <= LayerIdx{1}) return;
+      if (state.layerName.empty()) {
+        return appendIndex(name, +state.layer);
+      } else {
+        return appendName(name, state.layerName);
+      }
     case LayerNameMode::name:
-      appendSep(name);
-      name += toLatinString(state.layerName);
-      break;
+      return appendName(name, state.layerName);
     case LayerNameMode::index:
-      appendSep(name);
-      name += QString::number(+state.layer);
-      break;
+      return appendIndex(name, +state.layer);
     case LayerNameMode::empty:
-      break;
+      return;
   }
 }
 
 void appendGroupName(QString &name, const ExportNameParams &params, const ExportNameState &state) {
   switch (params.groupName) {
     case GroupNameMode::automatic:
-      if (state.groupCount <= GroupIdx{1}) break;
+      if (state.groupCount <= GroupIdx{1}) return;
+      if (state.groupName.empty()) {
+        return appendIndex(name, +state.group);
+      } else {
+        return appendName(name, state.groupName);
+      }
     case GroupNameMode::name:
-      appendSep(name);
-      name += toLatinString(state.groupName);
-      break;
+      return appendName(name, state.groupName);
     case GroupNameMode::index:
-      appendSep(name);
-      name += QString::number(+state.group);
-      break;
+      return appendIndex(name, +state.group);
     case GroupNameMode::empty:
-      break;
+      return;
   }
 }
 
 void appendFrameName(QString &name, const ExportNameParams &params, const ExportNameState &state) {
   switch (params.frameName) {
     case FrameNameMode::automatic:
-      if (state.frameCount <= FrameIdx{1}) break;
+      if (state.frameCount <= FrameIdx{1}) return;
     case FrameNameMode::relative:
-      appendSep(name);
-      name += QString::number(+(state.frame - state.groupBegin));
-      break;
+      return appendIndex(name, +(state.frame - state.groupBegin));
     case FrameNameMode::absolute:
-      appendSep(name);
-      name += QString::number(+state.frame);
-      break;
+      return appendIndex(name, +state.frame);
     case FrameNameMode::empty:
-      break;
+      return;
   }
 }
 
