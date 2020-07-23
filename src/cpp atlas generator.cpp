@@ -119,6 +119,7 @@ Error CppAtlasGenerator::initAtlas(PixelFormat format, const QString &name, cons
   enumeration.clear();
   appendEnumerator("null_", ~std::size_t{});
   array.clear();
+  array += "  SpriteRect{},\n";
   names.clear();
   names.insert("null_");
   collision.clear();
@@ -235,11 +236,7 @@ void CppAtlasGenerator::appendEnumerator(const QString &name, const std::size_t 
   enumeration += "  ";
   enumeration += name;
   enumeration += " = ";
-  if (value == ~std::size_t{}) {
-    enumeration += "-1";
-  } else {
-    enumeration += QString::number(value);
-  }
+  enumeration += QString::number(value + 1);
   enumeration += ",\n";
 }
 
