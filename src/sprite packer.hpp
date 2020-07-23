@@ -22,7 +22,7 @@ public:
   static constexpr int padding = 1;
 
   void init(PixelFormat);
-  void append(std::size_t, QSize);
+  void append(QSize);
   void appendWhite();
   
   Error pack();

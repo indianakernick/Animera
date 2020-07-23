@@ -32,7 +32,7 @@ void PngAtlasGenerator::addName(
   names.push_back(evaluateSpriteName(params, state));
 }
 
-void PngAtlasGenerator::addSizes(std::size_t, QSize) {}
+void PngAtlasGenerator::addSize(QSize) {}
 
 void PngAtlasGenerator::addWhiteName() {}
 

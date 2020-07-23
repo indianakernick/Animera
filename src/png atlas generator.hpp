@@ -16,7 +16,7 @@ public:
   Error initAtlas(PixelFormat, const QString &, const QString &) override;
   
   void addName(std::size_t, const SpriteNameParams &, const SpriteNameState &) override;
-  void addSizes(std::size_t, QSize) override;
+  void addSize(QSize) override;
   void addWhiteName() override;
   QString hasNameCollision() override;
   Error packRectangles() override;

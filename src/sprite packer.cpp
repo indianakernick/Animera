@@ -27,18 +27,21 @@ void SpritePacker::init(const PixelFormat newFormat) {
   format = newFormat;
 }
 
-void SpritePacker::append(std::size_t count, const QSize size) {
+void SpritePacker::append(const QSize size) {
   stbrp_rect rect;
-  rect.w = size.width() + 2 * padding;
-  rect.h = size.height() + 2 * padding;
-  area += count * rect.w * rect.h;
-  while (count--) {
-    rects.push_back(rect);
+  if (size.isEmpty()) {
+    rect.w = 0;
+    rect.h = 0;
+  } else {
+    rect.w = size.width() + 2 * padding;
+    rect.h = size.height() + 2 * padding;
+    area += rect.w * rect.h;
   }
+  rects.push_back(rect);
 }
 
 void SpritePacker::appendWhite() {
-  append(1, {1, 1});
+  append({1, 1});
 }
 
 Error SpritePacker::pack() {

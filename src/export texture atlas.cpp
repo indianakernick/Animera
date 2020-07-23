@@ -120,10 +120,8 @@ Error eachCel(const AnimExportParams &params, const Animation &anim, Func func) 
         state.groupName = groupIter.name();
       }
       
-      if (const CelImage *cel = celIter.img(); *cel) {
-        state.frame = f;
-        TRY(func(cel, state));
-      }
+      state.frame = f;
+      TRY(func(celIter.img(), state));
       
       celIter.incr();
       changedGroup = groupIter.incr();
@@ -195,8 +193,14 @@ void addFrameNames(
   const AnimExportParams &animParams,
   const Animation &anim
 ) {
-  auto iterate = [&](const Frame &, const SpriteNameState &state) {
+  const QSize size = getTransformedSize(anim.getSize(), animParams.transform);
+  auto iterate = [&](const Frame &frame, const SpriteNameState &state) {
     params.generator->addName(index++, animParams.name, state);
+    if (!frame.empty()) {
+      params.generator->addSize(size);
+    } else {
+      params.generator->addSize({});
+    }
     return Error{};
   };
   static_cast<void>(eachFrame(animParams, anim, iterate));
@@ -208,8 +212,14 @@ void addCelNames(
   const AnimExportParams &animParams,
   const Animation &anim
 ) {
-  auto iterate = [&](const CelImage *, const SpriteNameState &state) {
+  const QSize size = getTransformedSize(anim.getSize(), animParams.transform);
+  auto iterate = [&](const CelImage *img, const SpriteNameState &state) {
     params.generator->addName(index++, animParams.name, state);
+    if (*img) {
+      params.generator->addSize(size);
+    } else {
+      params.generator->addSize({});
+    }
     return Error{};
   };
   static_cast<void>(eachCel(animParams, anim, iterate));
@@ -227,12 +237,16 @@ Error addFrameImages(
   const PaletteCSpan palette = anim.palette.getPalette();
   
   auto iterate = [&](const Frame &frame, const SpriteNameState &) {
-    if (format == Format::gray) {
-      compositeFrame<FmtGray>(images.canvas, palette, frame, format, images.canvas.rect());
+    if (!frame.empty()) {
+      if (format == Format::gray) {
+        compositeFrame<FmtGray>(images.canvas, palette, frame, format, images.canvas.rect());
+      } else {
+        compositeFrame<FmtRgba>(images.canvas, palette, frame, format, images.canvas.rect());
+      }
+      return addImage(index++, params, animParams, images);
     } else {
-      compositeFrame<FmtRgba>(images.canvas, palette, frame, format, images.canvas.rect());
+      return params.generator->addImage(index++, {});
     }
-    return addImage(index++, params, animParams, images);
   };
   
   return eachFrame(animParams, anim, iterate);
@@ -248,9 +262,13 @@ Error addCelImages(
   initImages(images, animParams, anim);
   
   auto iterate = [&](const CelImage *cel, const SpriteNameState &) {
-    clearImage(images.canvas);
-    blitImage(images.canvas, cel->img, cel->pos);
-    return addImage(index++, params, animParams, images);
+    if (*cel) {
+      clearImage(images.canvas);
+      blitImage(images.canvas, cel->img, cel->pos);
+      return addImage(index++, params, animParams, images);
+    } else {
+      return params.generator->addImage(index++, {});
+    }
   };
   
   return eachCel(animParams, anim, iterate);
@@ -297,16 +315,11 @@ Error exportTextureAtlas(const ExportParams &params, const AnimArray &anims) {
   
   std::size_t spriteIndex = 0;
   for (std::size_t s = 0; s != anims.size(); ++s) {
-    std::size_t indexBefore = spriteIndex;
     if (params.anims[s].composite) {
       addFrameNames(spriteIndex, params, params.anims[s], *anims[s]);
     } else {
       addCelNames(spriteIndex, params, params.anims[s], *anims[s]);
     }
-    params.generator->addSizes(
-      spriteIndex - indexBefore,
-      getTransformedSize(anims[s]->getSize(), params.anims[s].transform)
-    );
   }
   
   if (params.whitepixel) {

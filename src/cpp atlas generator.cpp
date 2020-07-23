@@ -78,7 +78,7 @@ constexpr SpriteID operator--(SpriteID &id, int) noexcept {
 )";
 
 constexpr char sprite_rect_def[] = R"(
-struct alignas(std::uint32_t) SpriteRect {
+struct alignas(std::uint64_t) SpriteRect {
   std::uint16_t x = 0, y = 0;
   std::uint16_t w = 0, h = 0;
 };
@@ -116,15 +116,13 @@ Error CppAtlasGenerator::initAtlas(PixelFormat format, const QString &name, cons
   }
   
   packer.init(format);
-  enumeration.clear();
-  appendEnumerator("null_", ~std::size_t{});
-  array.clear();
-  array += "  SpriteRect{},\n";
+  enumeration = "  null_ = 0,\n";
+  array = "  SpriteRect{},\n";
   names.clear();
   names.insert("null_");
   collision.clear();
   atlasDir = dir;
-  atlasName = name.isEmpty() ? "atlas" : name;
+  atlasName = name;
   return {};
 }
 
@@ -162,7 +160,7 @@ void CppAtlasGenerator::addName(
         addAlias(name.left(layerName), "beg_", i);
       }
     }
-    if (hasFrameName ) {
+    if (hasFrameName) {
       addAlias(name.left(groupName), "beg_", i);
     }
   }
@@ -185,8 +183,8 @@ void CppAtlasGenerator::addName(
   }
 }
 
-void CppAtlasGenerator::addSizes(const std::size_t count, const QSize size) {
-  packer.append(count, size);
+void CppAtlasGenerator::addSize(const QSize size) {
+  packer.append(size);
 }
 
 void CppAtlasGenerator::addWhiteName() {
@@ -211,7 +209,11 @@ Error CppAtlasGenerator::initAnimation(const Format format, PaletteCSpan) {
 }
 
 Error CppAtlasGenerator::addImage(const std::size_t i, const QImage &img) {
-  appendRectangle(packer.copy(i, img));
+  if (img.isNull()) {
+    appendRectangle({});
+  } else {
+    appendRectangle(packer.copy(i, img));
+  }
   return {};
 }
 
@@ -241,15 +243,19 @@ void CppAtlasGenerator::appendEnumerator(const QString &name, const std::size_t 
 }
 
 void CppAtlasGenerator::appendRectangle(const QRect &rect) {
-  array += "  SpriteRect{";
-  array += QString::number(rect.x());
-  array += ", ";
-  array += QString::number(rect.y());
-  array += ", ";
-  array += QString::number(rect.width());
-  array += ", ";
-  array += QString::number(rect.height());
-  array += "},\n";
+  if (rect.isEmpty()) {
+    array += "  SpriteRect{},\n";
+  } else {
+    array += "  SpriteRect{";
+    array += QString::number(rect.x());
+    array += ", ";
+    array += QString::number(rect.y());
+    array += ", ";
+    array += QString::number(rect.width());
+    array += ", ";
+    array += QString::number(rect.height());
+    array += "},\n";
+  }
 }
 
 void CppAtlasGenerator::insertName(const QString &name) {
