@@ -21,16 +21,16 @@ namespace {
 constexpr char sprite_id_operators[] = R"(
 [[nodiscard]] constexpr SpriteRect getSpriteRect(const SpriteID id) noexcept {
   assert(0 <= static_cast<int>(id));
-  assert(static_cast<int>(id) < sprite_count);
+  assert(static_cast<int>(id) < static_cast<int>(SpriteID::count_));
   return sprite_rects[static_cast<int>(id)];
 }
 
 [[nodiscard]] constexpr SpriteID operator+(SpriteID id, const int off) noexcept {
   assert(0 <= static_cast<int>(id));
-  assert(static_cast<int>(id) < sprite_count);
+  assert(static_cast<int>(id) < static_cast<int>(SpriteID::count_));
   id = SpriteID{static_cast<int>(id) + off};
   assert(0 <= static_cast<int>(id));
-  assert(static_cast<int>(id) < sprite_count);
+  assert(static_cast<int>(id) < static_cast<int>(SpriteID::count_));
   return id;
 }
 
@@ -40,9 +40,9 @@ constexpr char sprite_id_operators[] = R"(
 
 [[nodiscard]] constexpr int operator-(const SpriteID a, const SpriteID b) noexcept {
   assert(0 <= static_cast<int>(a));
-  assert(static_cast<int>(a) <= sprite_count);
+  assert(static_cast<int>(a) <= static_cast<int>(SpriteID::count_));
   assert(0 <= static_cast<int>(b));
-  assert(static_cast<int>(b) < sprite_count);
+  assert(static_cast<int>(b) < static_cast<int>(SpriteID::count_));
   return static_cast<int>(a) - static_cast<int>(b);
 }
 
@@ -223,6 +223,7 @@ Error CppAtlasGenerator::addWhiteImage() {
 }
 
 Error CppAtlasGenerator::finalize() {
+  appendEnumerator("count_", packer.count());
   TRY(writeCpp());
   return writeHpp();
 }
@@ -310,6 +311,8 @@ Error CppAtlasGenerator::writeCpp() {
   stream << '\n';
   stream << "inline namespace " << nameSpace << " {\n";
   stream << '\n';
+  stream << "extern const int texture_width = " << packer.width() << ";\n";
+  stream << "extern const int texture_height = " << packer.height() << ";\n";
   stream << "extern const std::size_t texture_size = " << textureBuffer.size() << ";\n";
   stream << '\n';
   stream << "extern const unsigned char texture_data[] = {";
@@ -361,9 +364,8 @@ Error CppAtlasGenerator::writeHpp() {
   stream << '\n';
   stream << "inline namespace " << nameSpace << " {\n";
   stream << '\n';
-  stream << "constexpr int sprite_count = " << packer.count() << ";\n";
-  stream << "constexpr int texture_width = " << packer.width() << ";\n";
-  stream << "constexpr int texture_height = " << packer.height() << ";\n";
+  stream << "extern const int texture_width;\n";
+  stream << "extern const int texture_height;\n";
   stream << "extern const std::size_t texture_size;\n";
   stream << "extern const unsigned char texture_data[];\n";
   stream << "extern const SpriteRect sprite_rects[];\n";
