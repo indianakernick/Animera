@@ -282,23 +282,39 @@ void CppAtlasGenerator::insertName(const QString &name) {
 }
 
 Error CppAtlasGenerator::writeBytes(QIODevice &dev, const char *data, const std::size_t size) {
-  constexpr int bytes_per_line = (80 - 2) / 6;
+  constexpr std::size_t bytes_per_line = 80 / 5;
   constexpr char hex_chars[] = "0123456789ABCDEF";
-  char hex[] = "0x00, ";
+  const char zero[] = "0,";
+  char hexOne[] = "0x0,";
+  char hexTwo[] = "0x00,";
 
   for (std::size_t i = 0; i != size; ++i) {
     if (i % bytes_per_line == 0) {
-      if (dev.write("\n  ", 3) != 3) {
+      if (!dev.putChar('\n')) {
         return dev.errorString();
       }
     }
     
     static_assert(CHAR_BIT == 8);
     const unsigned char byte = data[i];
-    hex[2] = hex_chars[byte >> 4];
-    hex[3] = hex_chars[byte & 15];
-    if (dev.write(hex, 6) != 6) {
-      return dev.errorString();
+    const unsigned char hi = byte >> 4;
+    const unsigned char lo = byte & 15;
+    
+    if (byte == 0) {
+      if (dev.write(zero, 2) != 2) {
+        return dev.errorString();
+      }
+    } else if (hi == 0) {
+      hexOne[2] = hex_chars[byte];
+      if (dev.write(hexOne, 4) != 4) {
+        return dev.errorString();
+      }
+    } else {
+      hexTwo[2] = hex_chars[hi];
+      hexTwo[3] = hex_chars[lo];
+      if (dev.write(hexTwo, 5) != 5) {
+        return dev.errorString();
+      }
     }
   }
   
