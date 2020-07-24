@@ -279,10 +279,7 @@ Error exportPng(
     PNG_FILTER_TYPE_DEFAULT
   );
   
-  if (pixelFormat == PixelFormat::rgba) {
-    // TODO: Make ARGB endian aware so that we don't need to do this
-    png_set_bgr(ctx.png);
-  } else if (pixelFormat == PixelFormat::index) {
+  if (pixelFormat == PixelFormat::index) {
     writePalette(ctx, palette);
   }
   
@@ -304,7 +301,12 @@ Error exportCelPng(
 ) {
   SCOPE_TIME("exportCelPng");
 
-  if (pixelFormat == PixelFormat::gray) {
+  if (pixelFormat == PixelFormat::rgba) {
+    // TODO: I think this only works on little endian systems
+    if (canvasFormat == Format::rgba) {
+      gfx::convertInplace(makeSurface<PixelRgba>(image), gfx::ABGR{}, FmtRgba{});
+    }
+  } else if (pixelFormat == PixelFormat::gray) {
     if (canvasFormat == Format::gray) {
       gfx::convertInplace(makeSurface<PixelGray>(image), gfx::Y{}, FmtGray{});
     }

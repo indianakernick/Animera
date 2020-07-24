@@ -25,6 +25,10 @@ constexpr char sprite_id_operators[] = R"(
   return sprite_rects[static_cast<int>(id)];
 }
 
+[[nodiscard]] inline TextureInfo getTextureInfo(SpriteID = SpriteID::null_) noexcept {
+  return {texture_data, texture_size, texture_width, texture_height};
+}
+
 [[nodiscard]] constexpr SpriteID operator+(SpriteID id, const int off) noexcept {
   assert(0 <= static_cast<int>(id));
   assert(static_cast<int>(id) < static_cast<int>(SpriteID::count_));
@@ -94,6 +98,15 @@ constexpr char sprite_rect_operators[] = R"(
 }
 )";
 
+constexpr char texture_data_def[] = R"(
+struct TextureInfo {
+  const unsigned char *data;
+  std::size_t size;
+  int width;
+  int height;
+};
+)";
+
 bool convertToIdentifier(QString &str) {
   for (QChar &ch : str) {
     if (!ch.isLetterOrNumber()) {
@@ -109,6 +122,9 @@ bool convertToIdentifier(QString &str) {
 }
 
 }
+
+CppAtlasGenerator::CppAtlasGenerator(const DataFormat format)
+  : packer{format} {}
 
 Error CppAtlasGenerator::initAtlas(PixelFormat format, const QString &name, const QString &dir) {
   if (format == PixelFormat::index) {
@@ -292,7 +308,7 @@ Error CppAtlasGenerator::writeBytes(QIODevice &dev, const char *data, const std:
 Error CppAtlasGenerator::writeCpp() {
   QBuffer textureBuffer;
   textureBuffer.open(QIODevice::ReadWrite);
-  TRY(packer.writePng(textureBuffer));
+  TRY(packer.write(textureBuffer));
   
   QString nameSpace = atlasName;
   convertToIdentifier(nameSpace);
@@ -361,6 +377,7 @@ Error CppAtlasGenerator::writeHpp() {
   stream << "namespace animera {\n";
   stream << sprite_rect_def;
   stream << sprite_rect_operators;
+  stream << texture_data_def;
   stream << '\n';
   stream << "inline namespace " << nameSpace << " {\n";
   stream << '\n';

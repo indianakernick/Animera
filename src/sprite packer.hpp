@@ -17,9 +17,16 @@
 // TODO: Move PixelFormat to a more appropriate header
 #include "atlas generator.hpp"
 
+enum class DataFormat {
+  png,
+  raw
+};
+
 class SpritePacker {
 public:
   static constexpr int padding = 1;
+
+  explicit SpritePacker(DataFormat);
 
   void init(PixelFormat);
   void append(QSize);
@@ -29,7 +36,7 @@ public:
   Error setFormat(Format, PaletteCSpan);
   QRect copy(std::size_t, const QImage &);
   QRect copyWhite(std::size_t);
-  Error writePng(QIODevice &);
+  Error write(QIODevice &);
   
   QRect rect(std::size_t) const;
   std::size_t count() const;
@@ -42,6 +49,7 @@ private:
   int area = 0;
   PixelFormat pixelFormat;
   PaletteCSpan palette;
+  DataFormat dataFormat;
   
   using CopyFunc = void (SpritePacker::*)(const QImage &, QPoint);
   

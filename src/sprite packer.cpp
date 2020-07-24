@@ -17,6 +17,9 @@
 #include "surface factory.hpp"
 #include "graphics convert.hpp"
 
+SpritePacker::SpritePacker(const DataFormat dataFormat)
+  : dataFormat{dataFormat} {}
+
 void SpritePacker::init(const PixelFormat newFormat) {
   texture = {};
   rects.clear();
@@ -74,6 +77,7 @@ Error SpritePacker::pack() {
     return "Failed to pack rectangles";
   }
   texture = QImage{length, length, toImageFormat(pixelFormat)};
+  clearImage(texture);
   return {};
 }
 
@@ -104,8 +108,21 @@ QRect SpritePacker::copyWhite(const std::size_t i) {
   return r;
 }
 
-Error SpritePacker::writePng(QIODevice &dev) {
-  return exportPng(dev, palette, texture, pixelFormat);
+Error SpritePacker::write(QIODevice &dev) {
+  switch (dataFormat) {
+    case DataFormat::png:
+      return exportPng(dev, palette, texture, pixelFormat);
+    case DataFormat::raw:
+      return visitSurface(texture, [&](auto src) {
+        const qint64 width = src.byteWidth();
+        for (auto row : src) {
+          if (dev.write(reinterpret_cast<const char *>(row.begin()), width) != width) {
+            return Error{"Error writing image data"};
+          }
+        }
+        return Error{};
+      });
+  }
 }
 
 std::size_t SpritePacker::count() const {
@@ -181,15 +198,15 @@ void copyConvert(QImage &dstImage, const QImage &srcImage, const QPoint pos, Src
 }
 
 void SpritePacker::copyRgbaToRgba(const QImage &image, const QPoint pos) {
-  copyConvert<FmtRgba>(texture, image, pos, FmtRgba{});
+  copyConvert<gfx::ABGR>(texture, image, pos, FmtRgba{});
 }
 
 void SpritePacker::copyIndexToRgba(const QImage &image, const QPoint pos) {
-  copyConvert<FmtRgba>(texture, image, pos, FmtIndex{&palette[0].underlying()});
+  copyConvert<gfx::ABGR>(texture, image, pos, FmtIndex{&palette[0].underlying()});
 }
 
 void SpritePacker::copyGrayToRgba(const QImage &image, const QPoint pos) {
-  copyConvert<FmtRgba>(texture, image, pos, FmtGray{});
+  copyConvert<gfx::ABGR>(texture, image, pos, FmtGray{});
 }
 
 void SpritePacker::copyGrayToGray(const QImage &image, const QPoint pos) {

@@ -142,12 +142,15 @@ QJsonDocument readDoc() {
 std::unique_ptr<AtlasGenerator> parseGenerator(const QString &str) {
   if (str == "png") {
     return std::make_unique<PngAtlasGenerator>();
-  } else if (str == "cpp") {
-    return std::make_unique<CppAtlasGenerator>();
+  } else if (str == "cpp png") {
+    return std::make_unique<CppAtlasGenerator>(DataFormat::png);
+  } else if (str == "cpp raw") {
+    return std::make_unique<CppAtlasGenerator>(DataFormat::raw);
   } else {
     QString err = "Field \"generator\" is invalid. Valid values are:";
     err += "\n - png";
-    err += "\n - cpp";
+    err += "\n - cpp png";
+    err += "\n - cpp raw";
     throw Error{err};
   }
 }

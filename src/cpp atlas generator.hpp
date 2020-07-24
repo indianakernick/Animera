@@ -15,6 +15,8 @@
 
 class CppAtlasGenerator final : public AtlasGenerator {
 public:
+  explicit CppAtlasGenerator(DataFormat);
+
   Error initAtlas(PixelFormat, const QString &, const QString &) override;
   
   void addName(std::size_t, const SpriteNameParams &, const SpriteNameState &) override;
