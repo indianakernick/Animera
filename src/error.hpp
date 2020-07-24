@@ -46,4 +46,12 @@ private:
 
 #define TRY(...) if (Error error_ = (__VA_ARGS__)) return error_
 
+#define TRY_VOID(...)                                                           \
+  if constexpr (std::is_void_v<decltype(__VA_ARGS__)>) {                        \
+    __VA_ARGS__;                                                                \
+  } else {                                                                      \
+    TRY(__VA_ARGS__);                                                           \
+  }                                                                             \
+  do {} while(0)
+
 #endif

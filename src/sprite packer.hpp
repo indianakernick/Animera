@@ -19,7 +19,8 @@
 
 enum class DataFormat {
   png,
-  raw
+  raw,
+  zlib
 };
 
 class SpritePacker {

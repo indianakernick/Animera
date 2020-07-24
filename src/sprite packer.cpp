@@ -8,6 +8,7 @@
 
 #include "sprite packer.hpp"
 
+#include "zlib.hpp"
 #include "composite.hpp"
 #include "export png.hpp"
 #include <QtCore/qmath.h>
@@ -108,20 +109,71 @@ QRect SpritePacker::copyWhite(const std::size_t i) {
   return r;
 }
 
+namespace {
+
+Error exportRaw(QIODevice &dev, const QImage &texture) {
+  const uchar *bits = texture.bits();
+  const int width = texture.width() * texture.depth() / 8;
+  const int pitch = texture.bytesPerLine();
+  int height = texture.height();
+  
+  while (height--) {
+    if (dev.write(reinterpret_cast<const char *>(bits), width) != width) {
+      return Error{"Error writing image data"};
+    }
+    bits += pitch;
+  }
+  return {};
+}
+
+struct CompressContext {
+  QIODevice &dev;
+  const uchar *bits;
+  int width;
+  int height;
+  int pitch;
+  
+  CompressContext(QIODevice &dev, const QImage &img)
+    : dev{dev},
+      bits{img.bits()},
+      width{img.width() * img.depth() / 8},
+      height{img.height()},
+      pitch{img.bytesPerLine()} {}
+  
+  bool hasInput() const {
+    return height;
+  }
+  
+  std::pair<const Bytef *, uInt> getInputBuffer() {
+    const std::pair<const Bytef *, uInt> input{bits, width};
+    height--;
+    bits += pitch;
+    return input;
+  }
+  
+  Error processOutputBuffer(const Bytef *dat, const uInt len) const {
+    if (dev.write(reinterpret_cast<const char *>(dat), len) != len) {
+      return "Error writing image data";
+    }
+    return {};
+  }
+};
+
+Error exportZlib(QIODevice &dev, const QImage &texture) {
+  CompressContext context{dev, texture};
+  return zlibCompress(context);
+}
+
+}
+
 Error SpritePacker::write(QIODevice &dev) {
   switch (dataFormat) {
     case DataFormat::png:
       return exportPng(dev, palette, texture, pixelFormat);
     case DataFormat::raw:
-      return visitSurface(texture, [&](auto src) {
-        const qint64 width = src.byteWidth();
-        for (auto row : src) {
-          if (dev.write(reinterpret_cast<const char *>(row.begin()), width) != width) {
-            return Error{"Error writing image data"};
-          }
-        }
-        return Error{};
-      });
+      return exportRaw(dev, texture);
+    case DataFormat::zlib:
+      return exportZlib(dev, texture);
   }
 }
 

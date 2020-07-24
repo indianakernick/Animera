@@ -17,24 +17,6 @@
 
 namespace {
 
-struct DeflateDeleter {
-  void operator()(z_streamp stream) const noexcept {
-    assertEval(deflateEnd(stream) == Z_OK);
-  }
-};
-
-struct InflateDeleter {
-  void operator()(z_streamp stream) const noexcept {
-    assertEval(inflateEnd(stream) == Z_OK);
-  }
-};
-
-Bytef *getZlibBuffer() {
-  // TODO: std::make_unique_for_overwrite
-  static std::unique_ptr<Bytef[]> buffer = std::unique_ptr<Bytef[]>{new Bytef[file_buff_size]};
-  return buffer.get();
-}
-
 Bytef *getImageRowBuffer(const std::size_t newSize) {
   static std::unique_ptr<Bytef[]> buffer;
   static std::size_t size = 0;
@@ -274,60 +256,54 @@ Error writeCHDR(QIODevice &dev, const Cel &cel) try {
   return e.msg();
 }
 
+namespace {
+
+struct CompressContext {
+  ChunkWriter &writer;
+  const QImage &image;
+  Bytef *inBuff;
+  uInt inBuffSize;
+  Format format;
+  std::uint32_t remainingChunk = ~std::uint32_t{};
+  int rowIdx = 0;
+  
+  CompressContext(ChunkWriter &writer, const QImage &image, const Format format)
+    : writer{writer}, image{image}, format{format} {
+    inBuffSize = image.width() * byteDepth(format);
+    inBuff = getImageRowBuffer(inBuffSize);
+  }
+  
+  bool hasInput() const {
+    return rowIdx < image.height();
+  }
+  
+  std::pair<const Bytef *, uInt> getInputBuffer() {
+    copyToByteOrder(inBuff, image.scanLine(rowIdx++), inBuffSize, format);
+    return {inBuff, inBuffSize};
+  }
+  
+  Error processOutputBuffer(const Bytef *dat, const uInt len) {
+    // This situation is near impossible. This might as well be an assert
+    if (remainingChunk < len) return "Chunk overflow";
+    writer.writeString(dat, len);
+    remainingChunk -= len;
+    return {};
+  }
+};
+
+}
+
 Error writeCDAT(QIODevice &dev, const QImage &image, const Format format) try {
   SCOPE_TIME("writeCDAT");
   
   static_assert(sizeof(uInt) >= sizeof(std::uint32_t));
   
   assert(!image.isNull());
-  const std::uint32_t outBuffSize = file_buff_size;
-  Bytef *outBuff = getZlibBuffer();
-  const std::uint32_t inBuffSize = image.width() * byteDepth(format);
-  Bytef *inBuff = getImageRowBuffer(inBuffSize);
-  
-  z_stream stream;
-  stream.zalloc = nullptr;
-  stream.zfree = nullptr;
-  int ret = deflateInit(&stream, Z_DEFAULT_COMPRESSION);
-  if (ret == Z_MEM_ERROR) return "zlib: memory error";
-  assert(ret == Z_OK);
-  const std::unique_ptr<z_stream, DeflateDeleter> deleter{&stream};
-  stream.avail_in = 0;
-  stream.next_out = outBuff;
-  stream.avail_out = outBuffSize;
   
   ChunkWriter writer{dev};
   writer.begin(chunk_cel_data);
-  
-  int rowIdx = 0;
-  std::uint32_t remainingChunk = ~std::uint32_t{};
-  
-  do {
-    if (stream.avail_in == 0 && rowIdx < image.height()) {
-      copyToByteOrder(inBuff, image.scanLine(rowIdx), inBuffSize, format);
-      stream.next_in = inBuff;
-      stream.avail_in = inBuffSize;
-      ++rowIdx;
-    }
-    if (stream.avail_out == 0) {
-      // This situation is near impossible. This might as well be an assert
-      if (remainingChunk < outBuffSize) return "Chunk overflow";
-      writer.writeString(outBuff, outBuffSize);
-      remainingChunk -= outBuffSize;
-      stream.next_out = outBuff;
-      stream.avail_out = outBuffSize;
-    }
-    
-    SCOPE_TIME("deflate");
-    
-    ret = deflate(&stream, stream.avail_in ? Z_NO_FLUSH : Z_FINISH);
-  } while (ret == Z_OK);
-  assert(ret == Z_STREAM_END);
-  
-  if (stream.avail_out < outBuffSize) {
-    writer.writeString(outBuff, outBuffSize - stream.avail_out);
-  }
-  
+  CompressContext context{writer, image, format};
+  TRY(zlibCompress(context));
   writer.end();
   
   return {};
@@ -645,74 +621,71 @@ Error readCHDR(QIODevice &dev, Cel &cel, const Format format) try {
   return e.msg();
 }
 
+namespace {
+
+struct DecompressContext {
+  ChunkReader &reader;
+  QImage &image;
+  std::uint32_t remainingChunk;
+  Bytef *outBuff;
+  uInt outBuffSize;
+  int rowIdx = 0;
+  Format format;
+  
+  DecompressContext(
+    ChunkReader &reader,
+    QImage &image,
+    const Format format,
+    const std::uint32_t remainingChunk
+  ) : reader{reader},
+      image{image},
+      remainingChunk{remainingChunk},
+      format{format} {
+    outBuffSize = image.width() * byteDepth(format);
+    outBuff = getImageRowBuffer(outBuffSize);
+  }
+  
+  bool hasInput() const {
+    return remainingChunk != 0;
+  }
+  
+  bool hasOutput() {
+    return rowIdx < image.height();
+  }
+  
+  bool hasLastOutput() {
+    return rowIdx == image.height() - 1;
+  }
+  
+  uInt fillInputBuffer(Bytef *dat, uInt len) {
+    len = std::min(len, remainingChunk);
+    remainingChunk -= len;
+    reader.readString(dat, len);
+    return len;
+  }
+
+  std::pair<Bytef *, uInt> getOutputBuffer() {
+    return {outBuff, outBuffSize};
+  }
+  
+  void processOutputBuffer() {
+    copyFromByteOrder(image.scanLine(rowIdx++), outBuff, outBuffSize, format);
+  }
+};
+
+}
+
 Error readCDAT(QIODevice &dev, QImage &image, const Format format) try {
   SCOPE_TIME("readCDAT");
 
   assert(!image.isNull());
-  const std::uint32_t outBuffSize = image.width() * byteDepth(format);
-  Bytef *outBuff = getImageRowBuffer(outBuffSize);
-  const std::uint32_t inBuffSize = file_buff_size;
-  Bytef *inBuff = getZlibBuffer();
-  
-  z_stream stream;
-  stream.zalloc = nullptr;
-  stream.zfree = nullptr;
-  int ret = inflateInit(&stream);
-  if (ret == Z_MEM_ERROR) return "zlib: memory error";
-  assert(ret == Z_OK);
-  const std::unique_ptr<z_stream, InflateDeleter> deleter{&stream};
-  stream.avail_in = 0;
-  stream.next_out = outBuff;
-  stream.avail_out = outBuffSize;
   
   ChunkReader reader{dev};
   const ChunkStart start = reader.begin();
   TRY(expectedName(start, chunk_cel_data));
-  
-  int rowIdx = 0;
-  std::uint32_t remainingChunk = start.length;
-  
-  do {
-    if (stream.avail_in == 0 && remainingChunk != 0) {
-      stream.next_in = inBuff;
-      stream.avail_in = std::min(inBuffSize, remainingChunk);
-      remainingChunk -= stream.avail_in;
-      reader.readString(inBuff, stream.avail_in);
-    }
-    if (stream.avail_out == 0 && rowIdx < image.height()) {
-      copyFromByteOrder(image.scanLine(rowIdx), outBuff, outBuffSize, format);
-      stream.next_out = outBuff;
-      stream.avail_out = outBuffSize;
-      ++rowIdx;
-    }
-    
-    SCOPE_TIME("inflate");
-    
-    ret = inflate(&stream, Z_NO_FLUSH);
-  } while (ret == Z_OK);
-  if (ret == Z_DATA_ERROR) {
-    return QString{"zlib: "} + stream.msg;
-  } else if (ret == Z_MEM_ERROR) {
-    return "zlib: memory error";
-  }
-  assert(ret == Z_STREAM_END);
-  
-  if (rowIdx == image.height() - 1) {
-    if (stream.avail_out != 0) {
-      return "Extra image data";
-    }
-    copyFromByteOrder(image.scanLine(rowIdx), outBuff, outBuffSize, format);
-  } else if (rowIdx == image.height()) {
-    if (stream.avail_out != outBuffSize) {
-      return "Extra image data";
-    }
-  } else {
-    return "Truncated image data";
-  }
-  
-  TRY(reader.end());
-  
-  return {};
+  DecompressContext context{reader, image, format, start.length};
+  TRY(zlibDecompress(context));
+  return reader.end();
 } catch (FileIOError &e) {
   return e.msg();
 }
@@ -726,8 +699,7 @@ Error readAEND(QIODevice &dev) try {
   if (start.length != 0) {
     return chunkLengthInvalid(start);
   }
-  TRY(reader.end());
-  return {};
+  return reader.end();
 } catch (FileIOError &e) {
   return e.msg();
 }
