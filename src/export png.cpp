@@ -251,15 +251,14 @@ void fillRows(
 
 }
 
-Error exportCelPng(
+Error exportPng(
   QIODevice &dev,
   const PaletteCSpan palette,
   QImage image,
-  const Format canvasFormat,
   const PixelFormat pixelFormat
 ) {
-  SCOPE_TIME("exportCelPng");
-
+  SCOPE_TIME("exportPng");
+  
   WriteContext ctx;
   ctx.dev = &dev;
   TRY(initWrite(ctx));
@@ -280,28 +279,11 @@ Error exportCelPng(
     PNG_FILTER_TYPE_DEFAULT
   );
   
-  switch (pixelFormat) {
-    case PixelFormat::rgba:
-      // TODO: Make ARGB endian aware so that we don't need to do this
-      png_set_bgr(ctx.png);
-      break;
-    case PixelFormat::index:
-      writePalette(ctx, palette);
-      break;
-    case PixelFormat::gray:
-      if (canvasFormat == Format::gray) {
-        gfx::convertInplace(makeSurface<PixelGray>(image), gfx::Y{}, FmtGray{});
-      }
-      break;
-    case PixelFormat::gray_alpha:
-      break;
-    case PixelFormat::monochrome:
-      if (canvasFormat == Format::gray) {
-        gfx::convertToMono<FmtGray, 128>(makeSurface<PixelGray>(image));
-      } else if (canvasFormat == Format::index) {
-        gfx::convertToMono<gfx::Y, 1>(makeSurface<gfx::Y::Pixel>(image));
-      } else Q_UNREACHABLE();
-      break;
+  if (pixelFormat == PixelFormat::rgba) {
+    // TODO: Make ARGB endian aware so that we don't need to do this
+    png_set_bgr(ctx.png);
+  } else if (pixelFormat == PixelFormat::index) {
+    writePalette(ctx, palette);
   }
   
   png_write_info(ctx.png, ctx.info);
@@ -310,21 +292,31 @@ Error exportCelPng(
   });
   png_write_end(ctx.png, ctx.info);
   
-  /*
-  rgba
-    rgba
-  index
-    rgba
-    index (not composited)
-    gray (not composited)
-    monochrome (not composited)
-  gray
-    gray
-    gray_alpha
-    monochrome
-  */
-  
   return destroyWrite(ctx);
+}
+
+Error exportCelPng(
+  QIODevice &dev,
+  const PaletteCSpan palette,
+  QImage image,
+  const Format canvasFormat,
+  const PixelFormat pixelFormat
+) {
+  SCOPE_TIME("exportCelPng");
+
+  if (pixelFormat == PixelFormat::gray) {
+    if (canvasFormat == Format::gray) {
+      gfx::convertInplace(makeSurface<PixelGray>(image), gfx::Y{}, FmtGray{});
+    }
+  } else if (pixelFormat == PixelFormat::monochrome) {
+    if (canvasFormat == Format::gray) {
+      gfx::convertToMono<FmtGray, 128>(makeSurface<PixelGray>(image));
+    } else if (canvasFormat == Format::index) {
+      gfx::convertToMono<gfx::Y, 1>(makeSurface<gfx::Y::Pixel>(image));
+    } else Q_UNREACHABLE();
+  }
+  
+  return exportPng(dev, palette, image, pixelFormat);
 }
 
 Error importCelPng(

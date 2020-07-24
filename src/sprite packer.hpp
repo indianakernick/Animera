@@ -26,33 +26,33 @@ public:
   void appendWhite();
   
   Error pack();
+  Error setFormat(Format, PaletteCSpan);
   QRect copy(std::size_t, const QImage &);
   QRect copyWhite(std::size_t);
   Error writePng(QIODevice &);
   
-  QRect rect(const std::size_t i) const {
-    assert(i < rects.size());
-    return {
-      rects[i].x + padding, rects[i].y + padding,
-      rects[i].w - 2 * padding, rects[i].h - 2 * padding
-    };
-  }
-  
-  std::size_t count() const {
-    return rects.size();
-  }
-  int width() const {
-    return texture.width();
-  }
-  int height() const {
-    return texture.height();
-  }
+  QRect rect(std::size_t) const;
+  std::size_t count() const;
+  int width() const;
+  int height() const;
   
 private:
   QImage texture;
   std::vector<stbrp_rect> rects;
   int area = 0;
-  PixelFormat format;
+  PixelFormat pixelFormat;
+  PaletteCSpan palette;
+  
+  using CopyFunc = void (SpritePacker::*)(const QImage &, QPoint);
+  
+  CopyFunc copyFunc = nullptr;
+  
+  CopyFunc getCopyFunc(Format) const;
+  void copyRgbaToRgba(const QImage &, QPoint);
+  void copyIndexToRgba(const QImage &, QPoint);
+  void copyGrayToRgba(const QImage &, QPoint);
+  void copyGrayToGray(const QImage &, QPoint);
+  void copyGrayToGrayAlpha(const QImage &, QPoint);
 };
 
 #endif

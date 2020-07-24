@@ -11,20 +11,17 @@
 #include "composite.hpp"
 #include "export png.hpp"
 #include <QtCore/qmath.h>
-
-namespace {
-
-Format toCanvasFormat(const PixelFormat format) {
-  return format == PixelFormat::rgba ? Format::rgba : Format::gray;
-}
-
-}
+#include <Graphics/copy.hpp>
+#include <Graphics/each.hpp>
+#include <Graphics/traits.hpp>
+#include "surface factory.hpp"
+#include "graphics convert.hpp"
 
 void SpritePacker::init(const PixelFormat newFormat) {
   texture = {};
   rects.clear();
   area = 0;
-  format = newFormat;
+  pixelFormat = newFormat;
 }
 
 void SpritePacker::append(const QSize size) {
@@ -42,6 +39,20 @@ void SpritePacker::append(const QSize size) {
 
 void SpritePacker::appendWhite() {
   append({1, 1});
+}
+
+namespace {
+
+QImage::Format toImageFormat(const PixelFormat format) {
+  switch (format) {
+    case PixelFormat::rgba:       return QImage::Format_ARGB32;
+    case PixelFormat::index:      return QImage::Format_Grayscale8;
+    case PixelFormat::gray:       return QImage::Format_Grayscale8;
+    case PixelFormat::gray_alpha: return QImage::Format_Grayscale16;
+    case PixelFormat::monochrome: return QImage::Format_Mono;
+  }
+}
+
 }
 
 Error SpritePacker::pack() {
@@ -62,17 +73,26 @@ Error SpritePacker::pack() {
   if (!packed) {
     return "Failed to pack rectangles";
   }
-  texture = QImage{length, length, qimageFormat(toCanvasFormat(format))};
+  texture = QImage{length, length, toImageFormat(pixelFormat)};
+  return {};
+}
+
+Error SpritePacker::setFormat(const Format newFormat, const PaletteCSpan newPalette) {
+  palette = newPalette;
+  copyFunc = getCopyFunc(newFormat);
+  if (!copyFunc) {
+    return "Chosen pixel format conversion is not supported";
+  }
   return {};
 }
 
 QRect SpritePacker::copy(const std::size_t i, const QImage &image) {
   assert(!image.isNull());
   assert(!texture.isNull());
-  assert(image.format() == texture.format());
   const QRect r = rect(i);
   assert(r.size() == image.size());
-  blitImage(texture, image, r.topLeft());
+  assert(copyFunc);
+  (this->*copyFunc)(image, r.topLeft());
   return r;
 }
 
@@ -85,5 +105,97 @@ QRect SpritePacker::copyWhite(const std::size_t i) {
 }
 
 Error SpritePacker::writePng(QIODevice &dev) {
-  return exportCelPng(dev, {}, texture, toCanvasFormat(format), format);
+  return exportPng(dev, palette, texture, pixelFormat);
+}
+
+std::size_t SpritePacker::count() const {
+  return rects.size();
+}
+
+int SpritePacker::width() const {
+  return texture.width();
+}
+
+int SpritePacker::height() const {
+  return texture.height();
+}
+
+QRect SpritePacker::rect(const std::size_t i) const {
+  assert(i < rects.size());
+  return {
+    rects[i].x + padding, rects[i].y + padding,
+    rects[i].w - 2 * padding, rects[i].h - 2 * padding
+  };
+}
+
+SpritePacker::CopyFunc SpritePacker::getCopyFunc(const Format canvasFormat) const {
+  switch (pixelFormat) {
+    case PixelFormat::rgba:
+      switch (canvasFormat) {
+        case Format::rgba:
+          return &SpritePacker::copyRgbaToRgba;
+        case Format::index:
+          return &SpritePacker::copyIndexToRgba;
+        case Format::gray:
+          return &SpritePacker::copyGrayToRgba;
+      }
+    case PixelFormat::index:
+      return nullptr;
+    case PixelFormat::gray:
+      switch (canvasFormat) {
+        case Format::rgba:
+        case Format::index:
+          return nullptr;
+        case Format::gray:
+          return &SpritePacker::copyGrayToGray;
+      }
+    case PixelFormat::gray_alpha:
+      switch (canvasFormat) {
+        case Format::rgba:
+        case Format::index:
+          return nullptr;
+        case Format::gray:
+          return &SpritePacker::copyGrayToGrayAlpha;
+      }
+      break;
+    case PixelFormat::monochrome:
+      return nullptr;
+  }
+}
+
+namespace {
+
+template <typename DstFmt, typename SrcFmt>
+void copyConvert(QImage &dstImage, const QImage &srcImage, const QPoint pos, SrcFmt srcFmt) {
+  gfx::Surface dst = makeSurface<gfx::Pixel<DstFmt>>(dstImage);
+  gfx::Surface src = makeCSurface<gfx::Pixel<SrcFmt>>(srcImage);
+  if constexpr (std::is_same_v<DstFmt, SrcFmt>) {
+    gfx::copyRegion(dst, src, convert(pos));
+  } else {
+    gfx::eachRegion(dst, src, convert(pos), [srcFmt](auto &dst, const auto src) {
+      dst = DstFmt::pixel(srcFmt.color(src));
+    });
+  }
+}
+
+}
+
+void SpritePacker::copyRgbaToRgba(const QImage &image, const QPoint pos) {
+  copyConvert<FmtRgba>(texture, image, pos, FmtRgba{});
+}
+
+void SpritePacker::copyIndexToRgba(const QImage &image, const QPoint pos) {
+  copyConvert<FmtRgba>(texture, image, pos, FmtIndex{&palette[0].underlying()});
+}
+
+void SpritePacker::copyGrayToRgba(const QImage &image, const QPoint pos) {
+  copyConvert<FmtRgba>(texture, image, pos, FmtGray{});
+}
+
+void SpritePacker::copyGrayToGray(const QImage &image, const QPoint pos) {
+  copyConvert<gfx::Y>(texture, image, pos, FmtGray{});
+}
+
+void SpritePacker::copyGrayToGrayAlpha(const QImage &image, const QPoint pos) {
+  copyConvert<FmtGray>(texture, image, pos, FmtGray{});
 }

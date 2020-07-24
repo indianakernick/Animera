@@ -1,4 +1,4 @@
-//
+﻿//
 //  cpp atlas generator.cpp
 //  Animera
 //
@@ -19,7 +19,7 @@
 namespace {
 
 constexpr char sprite_id_operators[] = R"(
-[[nodiscard]] constexpr SpriteRect getSpriteRect(const SpriteID id) noexcept {
+[[nodiscard]] inline SpriteRect getSpriteRect(const SpriteID id) noexcept {
   assert(0 <= static_cast<int>(id));
   assert(static_cast<int>(id) < static_cast<int>(SpriteID::count_));
   return sprite_rects[static_cast<int>(id)];
@@ -114,6 +114,9 @@ Error CppAtlasGenerator::initAtlas(PixelFormat format, const QString &name, cons
   if (format == PixelFormat::index) {
     return "C++ Atlas Generator does not support indexed pixel format";
   }
+  if (format == PixelFormat::monochrome) {
+    return "C++ Atlas Generator does not support monochrome pixel format";
+  }
   
   packer.init(format);
   enumeration = "  null_ = 0,\n";
@@ -201,11 +204,8 @@ Error CppAtlasGenerator::packRectangles() {
   return packer.pack();
 }
 
-Error CppAtlasGenerator::initAnimation(const Format format, PaletteCSpan) {
-  if (format == Format::index) {
-    return "C++ Atlas Generator does not support indexed animation format";
-  }
-  return {};
+Error CppAtlasGenerator::initAnimation(const Format format, const PaletteCSpan palette) {
+  return packer.setFormat(format, palette);
 }
 
 Error CppAtlasGenerator::addImage(const std::size_t i, const QImage &img) {
