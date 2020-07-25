@@ -15,7 +15,7 @@
 
 class CppAtlasGenerator final : public AtlasGenerator {
 public:
-  explicit CppAtlasGenerator(DataFormat);
+  explicit CppAtlasGenerator(DataFormat, bool = false);
 
   Error initAtlas(PixelFormat, const QString &, const QString &) override;
   
@@ -39,6 +39,7 @@ private:
   QString collision;
   QString atlasDir;
   QString atlasName;
+  bool withInflate;
   
   void addAlias(QString, const char *, std::size_t);
   void appendEnumerator(const QString &, std::size_t);

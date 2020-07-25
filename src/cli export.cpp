@@ -146,14 +146,17 @@ std::unique_ptr<AtlasGenerator> parseGenerator(const QString &str) {
     return std::make_unique<CppAtlasGenerator>(DataFormat::png);
   } else if (str == "cpp raw") {
     return std::make_unique<CppAtlasGenerator>(DataFormat::raw);
-  } else if (str == "cpp zlib") {
-    return std::make_unique<CppAtlasGenerator>(DataFormat::zlib);
+  } else if (str == "cpp deflated") {
+    return std::make_unique<CppAtlasGenerator>(DataFormat::deflated, false);
+  } else if (str == "cpp deflated with inflate") {
+    return std::make_unique<CppAtlasGenerator>(DataFormat::deflated, true);
   } else {
     QString err = "Field \"generator\" is invalid. Valid values are:";
     err += "\n - png";
     err += "\n - cpp png";
     err += "\n - cpp raw";
-    err += "\n - cpp zlib";
+    err += "\n - cpp deflated";
+    err += "\n - cpp deflated with inflate";
     throw Error{err};
   }
 }

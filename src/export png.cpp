@@ -444,16 +444,19 @@ Error exportPalettePng(
   png_write_info(ctx.png, ctx.info);
   
   if (format == Format::gray) {
-    PixelGray rowDat[pal_colors];
+    YA::Pixel rowDat[pal_colors];
     for (std::size_t p = 0; p != palette.size(); ++p) {
-      rowDat[p] = static_cast<PixelGray>(palette[p]);
+      const auto entry = static_cast<PixelGray>(palette[p]);
+      rowDat[p] = YA::pixel(FmtGray::color(entry));
     }
     png_write_row(ctx.png, reinterpret_cast<png_bytep>(rowDat));
   } else if (format == Format::rgba || format == Format::index) {
-    png_set_bgr(ctx.png);
-    png_write_row(ctx.png, reinterpret_cast<png_bytep>(
-      const_cast<PixelVar *>(palette.data())
-    ));
+    RGBA::Pixel rowDat[pal_colors];
+    for (std::size_t p = 0; p != palette.size(); ++p) {
+      const auto entry = static_cast<PixelRgba>(palette[p]);
+      rowDat[p] = RGBA::pixel(FmtRgba::color(entry));
+    }
+    png_write_row(ctx.png, reinterpret_cast<png_bytep>(rowDat));
   }
   
   png_write_end(ctx.png, ctx.info);

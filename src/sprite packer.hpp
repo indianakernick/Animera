@@ -20,7 +20,7 @@
 enum class DataFormat {
   png,
   raw,
-  zlib
+  deflated
 };
 
 class SpritePacker {
@@ -43,6 +43,7 @@ public:
   std::size_t count() const;
   int width() const;
   int height() const;
+  int pitch() const;
   
 private:
   QImage texture;

@@ -159,9 +159,9 @@ struct CompressContext {
   }
 };
 
-Error exportZlib(QIODevice &dev, const QImage &texture) {
+Error exportDeflated(QIODevice &dev, const QImage &texture) {
   CompressContext context{dev, texture};
-  return zlibCompress(context);
+  return zlibCompress(context, true);
 }
 
 }
@@ -172,8 +172,8 @@ Error SpritePacker::write(QIODevice &dev) {
       return exportPng(dev, palette, texture, pixelFormat);
     case DataFormat::raw:
       return exportRaw(dev, texture);
-    case DataFormat::zlib:
-      return exportZlib(dev, texture);
+    case DataFormat::deflated:
+      return exportDeflated(dev, texture);
   }
 }
 
@@ -187,6 +187,10 @@ int SpritePacker::width() const {
 
 int SpritePacker::height() const {
   return texture.height();
+}
+
+int SpritePacker::pitch() const {
+  return texture.bytesPerLine();
 }
 
 QRect SpritePacker::rect(const std::size_t i) const {

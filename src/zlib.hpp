@@ -44,14 +44,21 @@ struct Context {
 */
 
 template <typename Context>
-Error zlibCompress(Context ctx) {
+Error zlibCompress(Context ctx, const bool raw = false) {
   const uInt outBuffSize = file_buff_size;
   Bytef *outBuff = getZlibBuffer();
   
   z_stream stream;
   stream.zalloc = nullptr;
   stream.zfree = nullptr;
-  int ret = deflateInit(&stream, Z_DEFAULT_COMPRESSION);
+  int ret = deflateInit2(
+    &stream,
+    Z_DEFAULT_COMPRESSION,
+    Z_DEFLATED,
+    raw ? -15 : 15,
+    8,
+    Z_DEFAULT_STRATEGY
+  );
   if (ret == Z_MEM_ERROR) return "zlib: memory error";
   assert(ret == Z_OK);
   const std::unique_ptr<z_stream, DeflateDeleter> deleter{&stream};
