@@ -43,6 +43,34 @@ constexpr std::uint8_t formatByte(const Format format) {
   return byteDepth(format);
 }
 
+template <typename DstFmt, typename SrcFmt>
+void alignedCopy(unsigned char *dstBytes, const unsigned char *srcBytes, const std::size_t size) {
+  using DstPixel = typename DstFmt::Pixel;
+  using SrcPixel = typename SrcFmt::Pixel;
+  
+  static_assert(sizeof(DstPixel) == sizeof(SrcPixel));
+  assert(size % sizeof(DstPixel) == 0);
+  assert(reinterpret_cast<std::uintptr_t>(dstBytes) % sizeof(DstPixel) == 0);
+  assert(reinterpret_cast<std::uintptr_t>(srcBytes) % sizeof(SrcPixel) == 0);
+  
+  if constexpr (std::is_same_v<DstFmt, SrcFmt>) {
+    std::memcpy(dstBytes, srcBytes, size);
+  } else {
+    auto *dst = reinterpret_cast<DstPixel *>(dstBytes);
+    const auto *src = reinterpret_cast<const SrcPixel *>(srcBytes);
+    auto *dstEnd = reinterpret_cast<DstPixel *>(dstBytes + size);
+    
+    while (dst != dstEnd) {
+      SrcPixel srcPixel{};
+      std::memcpy(&srcPixel, src, sizeof(SrcPixel));
+      const DstPixel dstPixel = DstFmt::pixel(SrcFmt::color(srcPixel));
+      std::memcpy(dst, &dstPixel, sizeof(DstPixel));
+      ++src;
+      ++dst;
+    }
+  }
+}
+
 void copyToByteOrder(
   unsigned char *dst,
   const unsigned char *src,
@@ -53,30 +81,14 @@ void copyToByteOrder(
 
   assert(size % byteDepth(format) == 0);
   switch (format) {
-    case Format::rgba: {
-      const auto *srcPx = reinterpret_cast<const PixelRgba *>(src);
-      unsigned char *dstEnd = dst + size;
-      while (dst != dstEnd) {
-        const gfx::Color color = FmtRgba::color(*srcPx++);
-        *dst++ = color.r;
-        *dst++ = color.g;
-        *dst++ = color.b;
-        *dst++ = color.a;
-      }
+    case Format::rgba:
+      alignedCopy<RGBA, FmtRgba>(dst, src, size);
       break;
-    }
     case Format::index:
-      static_assert(sizeof(PixelIndex) == 1);
       std::memcpy(dst, src, size);
       break;
     case Format::gray: {
-      auto *srcPx = reinterpret_cast<const PixelGray *>(src);
-      unsigned char *dstEnd = dst + size;
-      while (dst != dstEnd) {
-        const gfx::Color color = FmtGray::color(*srcPx++);
-        *dst++ = color.r;
-        *dst++ = color.a;
-      }
+      alignedCopy<YA, FmtGray>(dst, src, size);
       break;
     }
   }
@@ -92,34 +104,15 @@ void copyFromByteOrder(
 
   assert(size % byteDepth(format) == 0);
   switch (format) {
-    case Format::rgba: {
-      auto *dstPx = reinterpret_cast<PixelRgba *>(dst);
-      const unsigned char *srcEnd = src + size;
-      while (src != srcEnd) {
-        gfx::Color color;
-        color.r = *src++;
-        color.g = *src++;
-        color.b = *src++;
-        color.a = *src++;
-        *dstPx++ = FmtRgba::pixel(color);
-      }
+    case Format::rgba:
+      alignedCopy<FmtRgba, RGBA>(dst, src, size);
       break;
-    }
     case Format::index:
-      static_assert(sizeof(PixelIndex) == 1);
       std::memcpy(dst, src, size);
       break;
-    case Format::gray: {
-      auto *dstPx = reinterpret_cast<PixelGray *>(dst);
-      const unsigned char *srcEnd = src + size;
-      while (src != srcEnd) {
-        gfx::Color color;
-        color.r = *src++;
-        color.a = *src++;
-        *dstPx++ = FmtGray::pixel(color);
-      }
+    case Format::gray:
+      alignedCopy<FmtGray, YA>(dst, src, size);
       break;
-    }
   }
 }
 

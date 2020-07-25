@@ -250,15 +250,15 @@ void copyConvert(QImage &dstImage, const QImage &srcImage, const QPoint pos, Src
 }
 
 void SpritePacker::copyRgbaToRgba(const QImage &image, const QPoint pos) {
-  copyConvert<gfx::ABGR>(texture, image, pos, FmtRgba{});
+  copyConvert<RGBA>(texture, image, pos, FmtRgba{});
 }
 
 void SpritePacker::copyIndexToRgba(const QImage &image, const QPoint pos) {
-  copyConvert<gfx::ABGR>(texture, image, pos, FmtIndex{&palette[0].underlying()});
+  copyConvert<RGBA>(texture, image, pos, FmtIndex{&palette[0].underlying()});
 }
 
 void SpritePacker::copyGrayToRgba(const QImage &image, const QPoint pos) {
-  copyConvert<gfx::ABGR>(texture, image, pos, FmtGray{});
+  copyConvert<RGBA>(texture, image, pos, FmtGray{});
 }
 
 void SpritePacker::copyGrayToGray(const QImage &image, const QPoint pos) {
@@ -266,5 +266,5 @@ void SpritePacker::copyGrayToGray(const QImage &image, const QPoint pos) {
 }
 
 void SpritePacker::copyGrayToGrayAlpha(const QImage &image, const QPoint pos) {
-  copyConvert<FmtGray>(texture, image, pos, FmtGray{});
+  copyConvert<YA>(texture, image, pos, FmtGray{});
 }

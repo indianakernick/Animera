@@ -302,9 +302,8 @@ Error exportCelPng(
   SCOPE_TIME("exportCelPng");
 
   if (pixelFormat == PixelFormat::rgba) {
-    // TODO: I think this only works on little endian systems
     if (canvasFormat == Format::rgba) {
-      gfx::convertInplace(makeSurface<PixelRgba>(image), gfx::ABGR{}, FmtRgba{});
+      gfx::convertInplace(makeSurface<PixelRgba>(image), RGBA{}, FmtRgba{});
     }
   } else if (pixelFormat == PixelFormat::gray) {
     if (canvasFormat == Format::gray) {
