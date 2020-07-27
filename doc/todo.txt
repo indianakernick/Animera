@@ -212,9 +212,6 @@ frame groups
   deleting a group could be done by right clicking
   could add a delete button to balance frame group text box
     right clicking to delete is a little but unintuitive
-  
-resize the canvas
-  maybe a sprite info dialog that shows size, format and cels
 
 --------------------------------- refactoring ----------------------------------
 

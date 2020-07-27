@@ -109,6 +109,7 @@
 		45D5847C24C3EE44003C182C /* stb_rect_pack.c in Sources */ = {isa = PBXBuildFile; fileRef = 45D5847B24C3EE44003C182C /* stb_rect_pack.c */; };
 		45D5847F24C41642003C182C /* sprite packer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45D5847D24C41641003C182C /* sprite packer.cpp */; };
 		45DBBF9324CE65BF00FC97A6 /* json atlas generator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45DBBF9124CE65BF00FC97A6 /* json atlas generator.cpp */; };
+		45DBBF9724CEA31C00FC97A6 /* resize canvas dialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45DBBF9524CEA31C00FC97A6 /* resize canvas dialog.cpp */; };
 		45DC2566224B137C00F40116 /* status msg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45DC2564224B137C00F40116 /* status msg.cpp */; };
 		45DFE499224DE89E00EA40C5 /* global font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45DFE497224DE89E00EA40C5 /* global font.cpp */; };
 		45E3340623A1F4F4009F5EC1 /* libz.1.2.11.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 45E3340523A1F4F4009F5EC1 /* libz.1.2.11.dylib */; };
@@ -835,6 +836,8 @@
 		45D9DC7C242F04B4001ACE37 /* title@8x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "title@8x.png"; sourceTree = "<group>"; };
 		45DBBF9124CE65BF00FC97A6 /* json atlas generator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "json atlas generator.cpp"; sourceTree = "<group>"; };
 		45DBBF9224CE65BF00FC97A6 /* json atlas generator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "json atlas generator.hpp"; sourceTree = "<group>"; };
+		45DBBF9524CEA31C00FC97A6 /* resize canvas dialog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "resize canvas dialog.cpp"; sourceTree = "<group>"; };
+		45DBBF9624CEA31C00FC97A6 /* resize canvas dialog.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "resize canvas dialog.hpp"; sourceTree = "<group>"; };
 		45DC255F224A034200F40116 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		45DC2562224A0AEA00F40116 /* title.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = title.png; sourceTree = "<group>"; };
 		45DC2564224B137C00F40116 /* status msg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "status msg.cpp"; sourceTree = "<group>"; };
@@ -2223,6 +2226,8 @@
 			children = (
 				45F3EB6C22CC430F00F9F93E /* init canvas dialog.cpp */,
 				45F3EB6D22CC430F00F9F93E /* init canvas dialog.hpp */,
+				45DBBF9524CEA31C00FC97A6 /* resize canvas dialog.cpp */,
+				45DBBF9624CEA31C00FC97A6 /* resize canvas dialog.hpp */,
 				45D109AD22E2D88500D1F1CB /* export dialog.cpp */,
 				45D109AE22E2D88500D1F1CB /* export dialog.hpp */,
 				45A6103A2307E1EF000A0BD6 /* error dialog.cpp */,
@@ -2256,6 +2261,7 @@
 				45AA32C822F5256500005DD8 /* Moc - timeline frames widget */,
 				45AA32C922F525C700005DD8 /* Moc - timeline layers widget */,
 				45AA32CA22F5263200005DD8 /* Moc - timeline cels widget */,
+				45DBBF9824CEA57E00FC97A6 /* Moc - resize canvas dialog */,
 				452D32FF249AF818009FA8F0 /* Moc - number input widget */,
 				45AA32CB22F526CB00005DD8 /* Moc - color picker widget */,
 				45AA32CC22F526FC00005DD8 /* Moc - color slider widget */,
@@ -3117,6 +3123,27 @@
 			shellPath = /bin/sh;
 			shellScript = "/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
 		};
+		45DBBF9824CEA57E00FC97A6 /* Moc - resize canvas dialog */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(PROJECT_DIR)/src/resize canvas dialog.hpp",
+				"$(PROJECT_DIR)/src/resize canvas dialog.cpp",
+			);
+			name = "Moc - resize canvas dialog";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(PROJECT_DIR)/src/resize canvas dialog.moc",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -3163,6 +3190,7 @@
 				4529AA03239CA0D40034A014 /* tool param bar widget.cpp in Sources */,
 				45D109AF22E2D88500D1F1CB /* export dialog.cpp in Sources */,
 				45D1099822DAFD7000D1F1CB /* select tools.cpp in Sources */,
+				45DBBF9724CEA31C00FC97A6 /* resize canvas dialog.cpp in Sources */,
 				453C781F22349F0100818B19 /* tool select widget.cpp in Sources */,
 				4515AB9E24BAA17A0052C8BF /* group array.cpp in Sources */,
 				45C447F422F56E6100B65AD3 /* dialog.cpp in Sources */,

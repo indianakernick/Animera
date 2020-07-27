@@ -220,6 +220,10 @@ void Timeline::initCanvas(const Format format, const QSize size) {
   canvasSize = size;
 }
 
+void Timeline::resizeCanvas(const QSize size) {
+  canvasSize = size;
+}
+
 void Timeline::nextFrame() {
   if (locked) return;
   pos.f = (pos.f + FrameIdx{1}) % frameCount;

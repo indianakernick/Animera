@@ -49,6 +49,7 @@ public Q_SLOTS:
   void setColors(ToolColors);
   void setPalette(PaletteCSpan);
   void initCanvas(Format, QSize);
+  void resizeCanvas(QSize);
   
 private Q_SLOTS:
   void setTool(ToolWidget *, Tool *);

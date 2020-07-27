@@ -39,6 +39,7 @@ public Q_SLOTS:
   void setFrame(const Frame &);
   void setPalette(PaletteCSpan);
   void initCanvas(Format, QSize);
+  void resizeCanvas(QSize);
 
 private:
   EditorImage *view = nullptr;

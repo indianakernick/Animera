@@ -65,6 +65,7 @@ public:
 
 public Q_SLOTS:
   void initCanvas(Format, QSize);
+  void resizeCanvas(QSize);
 
   void nextFrame();
   void prevFrame();

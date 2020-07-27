@@ -420,6 +420,13 @@ void EditorWidget::initCanvas(const Format newFormat, const QSize newSize) {
   Q_EMIT overlayChanged(view->getOverlay());
 }
 
+void EditorWidget::resizeCanvas(const QSize newSize) {
+  size = newSize;
+  view->setSize(size);
+  composite(toRect(size));
+  compositeOverlay(toRect(size));
+}
+
 bool EditorWidget::event(QEvent *event) {
   if (event->type() == QEvent::Gesture) {
     auto *gestureEvent = static_cast<QGestureEvent *>(event);

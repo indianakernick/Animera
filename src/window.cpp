@@ -36,6 +36,7 @@
 #include "tool select widget.hpp"
 #include "color picker widget.hpp"
 #include <QtWidgets/qfiledialog.h>
+#include "resize canvas dialog.hpp"
 #include "export texture atlas.hpp"
 #include "tool param bar widget.hpp"
 #include <QtWidgets/qdesktopwidget.h>
@@ -297,6 +298,7 @@ void Window::populateMenubar() {
   ADD_ACTION(file, "Open", key_open_file, *app, openFileDialog);
   ADD_ACTION(file, "Save", key_save_file, *this, saveFile);
   ADD_ACTION(file, "Save As", key_save_file_as, *this, saveFileDialog);
+  ADD_ACTION(file, "Resize", {}, *this, resizeDialog);
   file->addSeparator();
   ADD_ACTION(file, "Export", key_export_file, *this, exportDialog);
   ADD_ACTION(file, "Export Frame", key_export_frame, *this, exportFrameDialog);
@@ -438,6 +440,10 @@ void Window::connectSignals() {
   CONNECT(anim,            canvasInitialized,            palette,       initCanvas);
   CONNECT(anim,            canvasInitialized,            tools,         initCanvas);
   CONNECT(anim,            canvasInitialized,            sample,        initCanvas);
+  
+  CONNECT(anim,            canvasResized,                editor,        resizeCanvas);
+  CONNECT(anim,            canvasResized,                tools,         resizeCanvas);
+  CONNECT(anim,            canvasResized,                this,          modify);
   
   CONNECT(anim.palette,    paletteChanged,               palette,       setPalette);
   CONNECT(anim.palette,    paletteChanged,               editor,        setPalette);
@@ -651,6 +657,13 @@ void Window::resetPalette() {
 void Window::keysDialog() {
   auto *app = static_cast<QApplication *>(QApplication::instance());
   auto *dialog = new KeysDialog{app->desktop()};
+  dialog->open();
+}
+
+void Window::resizeDialog() {
+  auto *dialog = new ResizeCanvasDialog{this};
+  CONNECT(dialog, canvasResized, anim, resizeCanvas);
+  dialog->setSize(anim.getSize());
   dialog->open();
 }
 

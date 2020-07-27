@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_Timeline_t {
-    QByteArrayData data[66];
-    char stringdata0[830];
+    QByteArrayData data[67];
+    char stringdata0[843];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -60,43 +60,44 @@ QT_MOC_LITERAL(25, 336, 8), // "modified"
 QT_MOC_LITERAL(26, 345, 16), // "celImageModified"
 QT_MOC_LITERAL(27, 362, 10), // "initCanvas"
 QT_MOC_LITERAL(28, 373, 6), // "Format"
-QT_MOC_LITERAL(29, 380, 9), // "nextFrame"
-QT_MOC_LITERAL(30, 390, 9), // "prevFrame"
-QT_MOC_LITERAL(31, 400, 10), // "layerBelow"
-QT_MOC_LITERAL(32, 411, 10), // "layerAbove"
-QT_MOC_LITERAL(33, 422, 14), // "beginSelection"
-QT_MOC_LITERAL(34, 437, 17), // "continueSelection"
-QT_MOC_LITERAL(35, 455, 12), // "endSelection"
-QT_MOC_LITERAL(36, 468, 14), // "clearSelection"
-QT_MOC_LITERAL(37, 483, 11), // "insertLayer"
-QT_MOC_LITERAL(38, 495, 11), // "removeLayer"
-QT_MOC_LITERAL(39, 507, 11), // "moveLayerUp"
-QT_MOC_LITERAL(40, 519, 13), // "moveLayerDown"
-QT_MOC_LITERAL(41, 533, 11), // "insertFrame"
-QT_MOC_LITERAL(42, 545, 11), // "removeFrame"
-QT_MOC_LITERAL(43, 557, 8), // "clearCel"
-QT_MOC_LITERAL(44, 566, 9), // "extendCel"
-QT_MOC_LITERAL(45, 576, 8), // "splitCel"
-QT_MOC_LITERAL(46, 585, 12), // "growCelImage"
-QT_MOC_LITERAL(47, 598, 14), // "shrinkCelImage"
-QT_MOC_LITERAL(48, 613, 8), // "setGroup"
-QT_MOC_LITERAL(49, 622, 12), // "setGroupName"
-QT_MOC_LITERAL(50, 635, 9), // "moveGroup"
-QT_MOC_LITERAL(51, 645, 8), // "GroupIdx"
-QT_MOC_LITERAL(52, 654, 14), // "splitGroupLeft"
-QT_MOC_LITERAL(53, 669, 15), // "splitGroupRight"
-QT_MOC_LITERAL(54, 685, 14), // "mergeGroupLeft"
-QT_MOC_LITERAL(55, 700, 15), // "mergeGroupRight"
-QT_MOC_LITERAL(56, 716, 6), // "setPos"
-QT_MOC_LITERAL(57, 723, 13), // "setVisibility"
-QT_MOC_LITERAL(58, 737, 17), // "isolateVisibility"
-QT_MOC_LITERAL(59, 755, 12), // "setLayerName"
-QT_MOC_LITERAL(60, 768, 8), // "setDelay"
-QT_MOC_LITERAL(61, 777, 13), // "clearSelected"
-QT_MOC_LITERAL(62, 791, 12), // "copySelected"
-QT_MOC_LITERAL(63, 804, 13), // "pasteSelected"
-QT_MOC_LITERAL(64, 818, 4), // "lock"
-QT_MOC_LITERAL(65, 823, 6) // "unlock"
+QT_MOC_LITERAL(29, 380, 12), // "resizeCanvas"
+QT_MOC_LITERAL(30, 393, 9), // "nextFrame"
+QT_MOC_LITERAL(31, 403, 9), // "prevFrame"
+QT_MOC_LITERAL(32, 413, 10), // "layerBelow"
+QT_MOC_LITERAL(33, 424, 10), // "layerAbove"
+QT_MOC_LITERAL(34, 435, 14), // "beginSelection"
+QT_MOC_LITERAL(35, 450, 17), // "continueSelection"
+QT_MOC_LITERAL(36, 468, 12), // "endSelection"
+QT_MOC_LITERAL(37, 481, 14), // "clearSelection"
+QT_MOC_LITERAL(38, 496, 11), // "insertLayer"
+QT_MOC_LITERAL(39, 508, 11), // "removeLayer"
+QT_MOC_LITERAL(40, 520, 11), // "moveLayerUp"
+QT_MOC_LITERAL(41, 532, 13), // "moveLayerDown"
+QT_MOC_LITERAL(42, 546, 11), // "insertFrame"
+QT_MOC_LITERAL(43, 558, 11), // "removeFrame"
+QT_MOC_LITERAL(44, 570, 8), // "clearCel"
+QT_MOC_LITERAL(45, 579, 9), // "extendCel"
+QT_MOC_LITERAL(46, 589, 8), // "splitCel"
+QT_MOC_LITERAL(47, 598, 12), // "growCelImage"
+QT_MOC_LITERAL(48, 611, 14), // "shrinkCelImage"
+QT_MOC_LITERAL(49, 626, 8), // "setGroup"
+QT_MOC_LITERAL(50, 635, 12), // "setGroupName"
+QT_MOC_LITERAL(51, 648, 9), // "moveGroup"
+QT_MOC_LITERAL(52, 658, 8), // "GroupIdx"
+QT_MOC_LITERAL(53, 667, 14), // "splitGroupLeft"
+QT_MOC_LITERAL(54, 682, 15), // "splitGroupRight"
+QT_MOC_LITERAL(55, 698, 14), // "mergeGroupLeft"
+QT_MOC_LITERAL(56, 713, 15), // "mergeGroupRight"
+QT_MOC_LITERAL(57, 729, 6), // "setPos"
+QT_MOC_LITERAL(58, 736, 13), // "setVisibility"
+QT_MOC_LITERAL(59, 750, 17), // "isolateVisibility"
+QT_MOC_LITERAL(60, 768, 12), // "setLayerName"
+QT_MOC_LITERAL(61, 781, 8), // "setDelay"
+QT_MOC_LITERAL(62, 790, 13), // "clearSelected"
+QT_MOC_LITERAL(63, 804, 12), // "copySelected"
+QT_MOC_LITERAL(64, 817, 13), // "pasteSelected"
+QT_MOC_LITERAL(65, 831, 4), // "lock"
+QT_MOC_LITERAL(66, 836, 6) // "unlock"
 
     },
     "Timeline\0posChanged\0\0CelPos\0celImageChanged\0"
@@ -108,19 +109,20 @@ QT_MOC_LITERAL(65, 823, 6) // "unlock"
     "Frame\0layerCelsChanged\0tcb::span<const Cel>\0"
     "frameCountChanged\0FrameIdx\0layerCountChanged\0"
     "delayChanged\0modified\0celImageModified\0"
-    "initCanvas\0Format\0nextFrame\0prevFrame\0"
-    "layerBelow\0layerAbove\0beginSelection\0"
-    "continueSelection\0endSelection\0"
-    "clearSelection\0insertLayer\0removeLayer\0"
-    "moveLayerUp\0moveLayerDown\0insertFrame\0"
-    "removeFrame\0clearCel\0extendCel\0splitCel\0"
-    "growCelImage\0shrinkCelImage\0setGroup\0"
-    "setGroupName\0moveGroup\0GroupIdx\0"
-    "splitGroupLeft\0splitGroupRight\0"
-    "mergeGroupLeft\0mergeGroupRight\0setPos\0"
-    "setVisibility\0isolateVisibility\0"
-    "setLayerName\0setDelay\0clearSelected\0"
-    "copySelected\0pasteSelected\0lock\0unlock"
+    "initCanvas\0Format\0resizeCanvas\0nextFrame\0"
+    "prevFrame\0layerBelow\0layerAbove\0"
+    "beginSelection\0continueSelection\0"
+    "endSelection\0clearSelection\0insertLayer\0"
+    "removeLayer\0moveLayerUp\0moveLayerDown\0"
+    "insertFrame\0removeFrame\0clearCel\0"
+    "extendCel\0splitCel\0growCelImage\0"
+    "shrinkCelImage\0setGroup\0setGroupName\0"
+    "moveGroup\0GroupIdx\0splitGroupLeft\0"
+    "splitGroupRight\0mergeGroupLeft\0"
+    "mergeGroupRight\0setPos\0setVisibility\0"
+    "isolateVisibility\0setLayerName\0setDelay\0"
+    "clearSelected\0copySelected\0pasteSelected\0"
+    "lock\0unlock"
 };
 #undef QT_MOC_LITERAL
 
@@ -130,7 +132,7 @@ static const uint qt_meta_data_Timeline[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-      52,   14, // methods
+      53,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -138,60 +140,61 @@ static const uint qt_meta_data_Timeline[] = {
       15,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    1,  274,    2, 0x06 /* Public */,
-       4,    1,  277,    2, 0x06 /* Public */,
-       6,    1,  280,    2, 0x06 /* Public */,
-       8,    1,  283,    2, 0x06 /* Public */,
-      10,    1,  286,    2, 0x06 /* Public */,
-      12,    2,  289,    2, 0x06 /* Public */,
-      14,    2,  294,    2, 0x06 /* Public */,
-      15,    1,  299,    2, 0x06 /* Public */,
-      17,    1,  302,    2, 0x06 /* Public */,
-      19,    2,  305,    2, 0x06 /* Public */,
-      21,    1,  310,    2, 0x06 /* Public */,
-      23,    1,  313,    2, 0x06 /* Public */,
-      24,    1,  316,    2, 0x06 /* Public */,
-      25,    0,  319,    2, 0x06 /* Public */,
-      26,    1,  320,    2, 0x06 /* Public */,
+       1,    1,  279,    2, 0x06 /* Public */,
+       4,    1,  282,    2, 0x06 /* Public */,
+       6,    1,  285,    2, 0x06 /* Public */,
+       8,    1,  288,    2, 0x06 /* Public */,
+      10,    1,  291,    2, 0x06 /* Public */,
+      12,    2,  294,    2, 0x06 /* Public */,
+      14,    2,  299,    2, 0x06 /* Public */,
+      15,    1,  304,    2, 0x06 /* Public */,
+      17,    1,  307,    2, 0x06 /* Public */,
+      19,    2,  310,    2, 0x06 /* Public */,
+      21,    1,  315,    2, 0x06 /* Public */,
+      23,    1,  318,    2, 0x06 /* Public */,
+      24,    1,  321,    2, 0x06 /* Public */,
+      25,    0,  324,    2, 0x06 /* Public */,
+      26,    1,  325,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      27,    2,  323,    2, 0x0a /* Public */,
-      29,    0,  328,    2, 0x0a /* Public */,
-      30,    0,  329,    2, 0x0a /* Public */,
-      31,    0,  330,    2, 0x0a /* Public */,
-      32,    0,  331,    2, 0x0a /* Public */,
-      33,    0,  332,    2, 0x0a /* Public */,
-      34,    0,  333,    2, 0x0a /* Public */,
-      35,    0,  334,    2, 0x0a /* Public */,
-      36,    0,  335,    2, 0x0a /* Public */,
-      37,    0,  336,    2, 0x0a /* Public */,
-      38,    0,  337,    2, 0x0a /* Public */,
-      39,    0,  338,    2, 0x0a /* Public */,
-      40,    0,  339,    2, 0x0a /* Public */,
-      41,    0,  340,    2, 0x0a /* Public */,
-      42,    0,  341,    2, 0x0a /* Public */,
-      43,    0,  342,    2, 0x0a /* Public */,
-      44,    0,  343,    2, 0x0a /* Public */,
-      45,    0,  344,    2, 0x0a /* Public */,
-      46,    1,  345,    2, 0x0a /* Public */,
-      47,    1,  348,    2, 0x0a /* Public */,
-      48,    1,  351,    2, 0x0a /* Public */,
-      49,    1,  354,    2, 0x0a /* Public */,
-      50,    2,  357,    2, 0x0a /* Public */,
-      52,    0,  362,    2, 0x0a /* Public */,
-      53,    0,  363,    2, 0x0a /* Public */,
-      54,    0,  364,    2, 0x0a /* Public */,
-      55,    0,  365,    2, 0x0a /* Public */,
-      56,    1,  366,    2, 0x0a /* Public */,
-      57,    2,  369,    2, 0x0a /* Public */,
-      58,    1,  374,    2, 0x0a /* Public */,
-      59,    2,  377,    2, 0x0a /* Public */,
-      60,    1,  382,    2, 0x0a /* Public */,
-      61,    0,  385,    2, 0x0a /* Public */,
-      62,    0,  386,    2, 0x0a /* Public */,
-      63,    0,  387,    2, 0x0a /* Public */,
-      64,    0,  388,    2, 0x0a /* Public */,
-      65,    0,  389,    2, 0x0a /* Public */,
+      27,    2,  328,    2, 0x0a /* Public */,
+      29,    1,  333,    2, 0x0a /* Public */,
+      30,    0,  336,    2, 0x0a /* Public */,
+      31,    0,  337,    2, 0x0a /* Public */,
+      32,    0,  338,    2, 0x0a /* Public */,
+      33,    0,  339,    2, 0x0a /* Public */,
+      34,    0,  340,    2, 0x0a /* Public */,
+      35,    0,  341,    2, 0x0a /* Public */,
+      36,    0,  342,    2, 0x0a /* Public */,
+      37,    0,  343,    2, 0x0a /* Public */,
+      38,    0,  344,    2, 0x0a /* Public */,
+      39,    0,  345,    2, 0x0a /* Public */,
+      40,    0,  346,    2, 0x0a /* Public */,
+      41,    0,  347,    2, 0x0a /* Public */,
+      42,    0,  348,    2, 0x0a /* Public */,
+      43,    0,  349,    2, 0x0a /* Public */,
+      44,    0,  350,    2, 0x0a /* Public */,
+      45,    0,  351,    2, 0x0a /* Public */,
+      46,    0,  352,    2, 0x0a /* Public */,
+      47,    1,  353,    2, 0x0a /* Public */,
+      48,    1,  356,    2, 0x0a /* Public */,
+      49,    1,  359,    2, 0x0a /* Public */,
+      50,    1,  362,    2, 0x0a /* Public */,
+      51,    2,  365,    2, 0x0a /* Public */,
+      53,    0,  370,    2, 0x0a /* Public */,
+      54,    0,  371,    2, 0x0a /* Public */,
+      55,    0,  372,    2, 0x0a /* Public */,
+      56,    0,  373,    2, 0x0a /* Public */,
+      57,    1,  374,    2, 0x0a /* Public */,
+      58,    2,  377,    2, 0x0a /* Public */,
+      59,    1,  382,    2, 0x0a /* Public */,
+      60,    2,  385,    2, 0x0a /* Public */,
+      61,    1,  390,    2, 0x0a /* Public */,
+      62,    0,  393,    2, 0x0a /* Public */,
+      63,    0,  394,    2, 0x0a /* Public */,
+      64,    0,  395,    2, 0x0a /* Public */,
+      65,    0,  396,    2, 0x0a /* Public */,
+      66,    0,  397,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, 0x80000000 | 3,    2,
@@ -212,6 +215,7 @@ static const uint qt_meta_data_Timeline[] = {
 
  // slots: parameters
     QMetaType::Void, 0x80000000 | 28, QMetaType::QSize,    2,    2,
+    QMetaType::Void, QMetaType::QSize,    2,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -233,7 +237,7 @@ static const uint qt_meta_data_Timeline[] = {
     QMetaType::Void, QMetaType::QRect,    2,
     QMetaType::Void, 0x80000000 | 22,    2,
     QMetaType::Void, 0x80000000 | 11,    2,
-    QMetaType::Void, 0x80000000 | 51, 0x80000000 | 22,    2,    2,
+    QMetaType::Void, 0x80000000 | 52, 0x80000000 | 22,    2,    2,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -274,42 +278,43 @@ void Timeline::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, vo
         case 13: _t->modified(); break;
         case 14: _t->celImageModified((*reinterpret_cast< QRect(*)>(_a[1]))); break;
         case 15: _t->initCanvas((*reinterpret_cast< Format(*)>(_a[1])),(*reinterpret_cast< QSize(*)>(_a[2]))); break;
-        case 16: _t->nextFrame(); break;
-        case 17: _t->prevFrame(); break;
-        case 18: _t->layerBelow(); break;
-        case 19: _t->layerAbove(); break;
-        case 20: _t->beginSelection(); break;
-        case 21: _t->continueSelection(); break;
-        case 22: _t->endSelection(); break;
-        case 23: _t->clearSelection(); break;
-        case 24: _t->insertLayer(); break;
-        case 25: _t->removeLayer(); break;
-        case 26: _t->moveLayerUp(); break;
-        case 27: _t->moveLayerDown(); break;
-        case 28: _t->insertFrame(); break;
-        case 29: _t->removeFrame(); break;
-        case 30: _t->clearCel(); break;
-        case 31: _t->extendCel(); break;
-        case 32: _t->splitCel(); break;
-        case 33: _t->growCelImage((*reinterpret_cast< QRect(*)>(_a[1]))); break;
-        case 34: _t->shrinkCelImage((*reinterpret_cast< QRect(*)>(_a[1]))); break;
-        case 35: _t->setGroup((*reinterpret_cast< FrameIdx(*)>(_a[1]))); break;
-        case 36: _t->setGroupName((*reinterpret_cast< std::string_view(*)>(_a[1]))); break;
-        case 37: _t->moveGroup((*reinterpret_cast< GroupIdx(*)>(_a[1])),(*reinterpret_cast< FrameIdx(*)>(_a[2]))); break;
-        case 38: _t->splitGroupLeft(); break;
-        case 39: _t->splitGroupRight(); break;
-        case 40: _t->mergeGroupLeft(); break;
-        case 41: _t->mergeGroupRight(); break;
-        case 42: _t->setPos((*reinterpret_cast< CelPos(*)>(_a[1]))); break;
-        case 43: _t->setVisibility((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
-        case 44: _t->isolateVisibility((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;
-        case 45: _t->setLayerName((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< std::string_view(*)>(_a[2]))); break;
-        case 46: _t->setDelay((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 47: _t->clearSelected(); break;
-        case 48: _t->copySelected(); break;
-        case 49: _t->pasteSelected(); break;
-        case 50: _t->lock(); break;
-        case 51: _t->unlock(); break;
+        case 16: _t->resizeCanvas((*reinterpret_cast< QSize(*)>(_a[1]))); break;
+        case 17: _t->nextFrame(); break;
+        case 18: _t->prevFrame(); break;
+        case 19: _t->layerBelow(); break;
+        case 20: _t->layerAbove(); break;
+        case 21: _t->beginSelection(); break;
+        case 22: _t->continueSelection(); break;
+        case 23: _t->endSelection(); break;
+        case 24: _t->clearSelection(); break;
+        case 25: _t->insertLayer(); break;
+        case 26: _t->removeLayer(); break;
+        case 27: _t->moveLayerUp(); break;
+        case 28: _t->moveLayerDown(); break;
+        case 29: _t->insertFrame(); break;
+        case 30: _t->removeFrame(); break;
+        case 31: _t->clearCel(); break;
+        case 32: _t->extendCel(); break;
+        case 33: _t->splitCel(); break;
+        case 34: _t->growCelImage((*reinterpret_cast< QRect(*)>(_a[1]))); break;
+        case 35: _t->shrinkCelImage((*reinterpret_cast< QRect(*)>(_a[1]))); break;
+        case 36: _t->setGroup((*reinterpret_cast< FrameIdx(*)>(_a[1]))); break;
+        case 37: _t->setGroupName((*reinterpret_cast< std::string_view(*)>(_a[1]))); break;
+        case 38: _t->moveGroup((*reinterpret_cast< GroupIdx(*)>(_a[1])),(*reinterpret_cast< FrameIdx(*)>(_a[2]))); break;
+        case 39: _t->splitGroupLeft(); break;
+        case 40: _t->splitGroupRight(); break;
+        case 41: _t->mergeGroupLeft(); break;
+        case 42: _t->mergeGroupRight(); break;
+        case 43: _t->setPos((*reinterpret_cast< CelPos(*)>(_a[1]))); break;
+        case 44: _t->setVisibility((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
+        case 45: _t->isolateVisibility((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;
+        case 46: _t->setLayerName((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< std::string_view(*)>(_a[2]))); break;
+        case 47: _t->setDelay((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 48: _t->clearSelected(); break;
+        case 49: _t->copySelected(); break;
+        case 50: _t->pasteSelected(); break;
+        case 51: _t->lock(); break;
+        case 52: _t->unlock(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -451,13 +456,13 @@ int Timeline::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 52)
+        if (_id < 53)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 52;
+        _id -= 53;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 52)
+        if (_id < 53)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 52;
+        _id -= 53;
     }
     return _id;
 }

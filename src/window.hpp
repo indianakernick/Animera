@@ -88,6 +88,7 @@ private:
   void savePaletteDialog();
   void resetPalette();
   void keysDialog();
+  void resizeDialog();
   
   void closeEvent(QCloseEvent *) override;
 };

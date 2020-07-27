@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_ToolSelectWidget_t {
-    QByteArrayData data[34];
-    char stringdata0[390];
+    QByteArrayData data[35];
+    char stringdata0[403];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -60,11 +60,12 @@ QT_MOC_LITERAL(25, 302, 10), // "setPalette"
 QT_MOC_LITERAL(26, 313, 12), // "PaletteCSpan"
 QT_MOC_LITERAL(27, 326, 10), // "initCanvas"
 QT_MOC_LITERAL(28, 337, 6), // "Format"
-QT_MOC_LITERAL(29, 344, 7), // "setTool"
-QT_MOC_LITERAL(30, 352, 11), // "ToolWidget*"
-QT_MOC_LITERAL(31, 364, 5), // "Tool*"
-QT_MOC_LITERAL(32, 370, 8), // "lockTool"
-QT_MOC_LITERAL(33, 379, 10) // "unlockTool"
+QT_MOC_LITERAL(29, 344, 12), // "resizeCanvas"
+QT_MOC_LITERAL(30, 357, 7), // "setTool"
+QT_MOC_LITERAL(31, 365, 11), // "ToolWidget*"
+QT_MOC_LITERAL(32, 377, 5), // "Tool*"
+QT_MOC_LITERAL(33, 383, 8), // "lockTool"
+QT_MOC_LITERAL(34, 392, 10) // "unlockTool"
 
     },
     "ToolSelectWidget\0celImageModified\0\0"
@@ -76,8 +77,9 @@ QT_MOC_LITERAL(33, 379, 10) // "unlockTool"
     "mouseMove\0mouseUp\0keyPress\0Qt::Key\0"
     "setOverlay\0QImage*\0setCelImage\0CelImage*\0"
     "setColors\0ToolColors\0setPalette\0"
-    "PaletteCSpan\0initCanvas\0Format\0setTool\0"
-    "ToolWidget*\0Tool*\0lockTool\0unlockTool"
+    "PaletteCSpan\0initCanvas\0Format\0"
+    "resizeCanvas\0setTool\0ToolWidget*\0Tool*\0"
+    "lockTool\0unlockTool"
 };
 #undef QT_MOC_LITERAL
 
@@ -87,7 +89,7 @@ static const uint qt_meta_data_ToolSelectWidget[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-      22,   14, // methods
+      23,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -95,30 +97,31 @@ static const uint qt_meta_data_ToolSelectWidget[] = {
        8,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    1,  124,    2, 0x06 /* Public */,
-       3,    1,  127,    2, 0x06 /* Public */,
-       4,    1,  130,    2, 0x06 /* Public */,
-       6,    0,  133,    2, 0x06 /* Public */,
-       7,    1,  134,    2, 0x06 /* Public */,
-       8,    1,  137,    2, 0x06 /* Public */,
-       9,    0,  140,    2, 0x06 /* Public */,
-      10,    0,  141,    2, 0x06 /* Public */,
+       1,    1,  129,    2, 0x06 /* Public */,
+       3,    1,  132,    2, 0x06 /* Public */,
+       4,    1,  135,    2, 0x06 /* Public */,
+       6,    0,  138,    2, 0x06 /* Public */,
+       7,    1,  139,    2, 0x06 /* Public */,
+       8,    1,  142,    2, 0x06 /* Public */,
+       9,    0,  145,    2, 0x06 /* Public */,
+      10,    0,  146,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      11,    1,  142,    2, 0x0a /* Public */,
-      12,    0,  145,    2, 0x0a /* Public */,
-      13,    2,  146,    2, 0x0a /* Public */,
-      15,    1,  151,    2, 0x0a /* Public */,
-      16,    2,  154,    2, 0x0a /* Public */,
-      17,    1,  159,    2, 0x0a /* Public */,
-      19,    1,  162,    2, 0x0a /* Public */,
-      21,    1,  165,    2, 0x0a /* Public */,
-      23,    1,  168,    2, 0x0a /* Public */,
-      25,    1,  171,    2, 0x0a /* Public */,
-      27,    2,  174,    2, 0x0a /* Public */,
-      29,    2,  179,    2, 0x08 /* Private */,
-      32,    0,  184,    2, 0x08 /* Private */,
-      33,    0,  185,    2, 0x08 /* Private */,
+      11,    1,  147,    2, 0x0a /* Public */,
+      12,    0,  150,    2, 0x0a /* Public */,
+      13,    2,  151,    2, 0x0a /* Public */,
+      15,    1,  156,    2, 0x0a /* Public */,
+      16,    2,  159,    2, 0x0a /* Public */,
+      17,    1,  164,    2, 0x0a /* Public */,
+      19,    1,  167,    2, 0x0a /* Public */,
+      21,    1,  170,    2, 0x0a /* Public */,
+      23,    1,  173,    2, 0x0a /* Public */,
+      25,    1,  176,    2, 0x0a /* Public */,
+      27,    2,  179,    2, 0x0a /* Public */,
+      29,    1,  184,    2, 0x0a /* Public */,
+      30,    2,  187,    2, 0x08 /* Private */,
+      33,    0,  192,    2, 0x08 /* Private */,
+      34,    0,  193,    2, 0x08 /* Private */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::QRect,    2,
@@ -142,7 +145,8 @@ static const uint qt_meta_data_ToolSelectWidget[] = {
     QMetaType::Void, 0x80000000 | 24,    2,
     QMetaType::Void, 0x80000000 | 26,    2,
     QMetaType::Void, 0x80000000 | 28, QMetaType::QSize,    2,    2,
-    QMetaType::Void, 0x80000000 | 30, 0x80000000 | 31,    2,    2,
+    QMetaType::Void, QMetaType::QSize,    2,
+    QMetaType::Void, 0x80000000 | 31, 0x80000000 | 32,    2,    2,
     QMetaType::Void,
     QMetaType::Void,
 
@@ -174,9 +178,10 @@ void ToolSelectWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
         case 16: _t->setColors((*reinterpret_cast< ToolColors(*)>(_a[1]))); break;
         case 17: _t->setPalette((*reinterpret_cast< PaletteCSpan(*)>(_a[1]))); break;
         case 18: _t->initCanvas((*reinterpret_cast< Format(*)>(_a[1])),(*reinterpret_cast< QSize(*)>(_a[2]))); break;
-        case 19: _t->setTool((*reinterpret_cast< ToolWidget*(*)>(_a[1])),(*reinterpret_cast< Tool*(*)>(_a[2]))); break;
-        case 20: _t->lockTool(); break;
-        case 21: _t->unlockTool(); break;
+        case 19: _t->resizeCanvas((*reinterpret_cast< QSize(*)>(_a[1]))); break;
+        case 20: _t->setTool((*reinterpret_cast< ToolWidget*(*)>(_a[1])),(*reinterpret_cast< Tool*(*)>(_a[2]))); break;
+        case 21: _t->lockTool(); break;
+        case 22: _t->unlockTool(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -269,13 +274,13 @@ int ToolSelectWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 22)
+        if (_id < 23)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 22;
+        _id -= 23;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 22)
+        if (_id < 23)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 22;
+        _id -= 23;
     }
     return _id;
 }

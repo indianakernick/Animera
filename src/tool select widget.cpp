@@ -152,6 +152,10 @@ void ToolSelectWidget::initCanvas(const Format format, const QSize size) {
   ctx.size = size;
 }
 
+void ToolSelectWidget::resizeCanvas(const QSize size) {
+  ctx.size = size;
+}
+
 void ToolSelectWidget::setTool(ToolWidget *widget, Tool *tool) {
   ensureVisible(widget);
   currWidget = widget;

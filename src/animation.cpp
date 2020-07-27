@@ -12,6 +12,17 @@
 #include "scope time.hpp"
 #include "animation file.hpp"
 
+void Animation::optimize() {
+  timeline.optimize();
+}
+
+void Animation::resizeCanvas(const QSize newSize) {
+  if (size == newSize) return;
+  size = newSize;
+  timeline.resizeCanvas(size);
+  Q_EMIT canvasResized(size);
+}
+
 void Animation::newFile(const Format newFormat, const QSize newSize) {
   SCOPE_TIME("Animation::newFile");
   
@@ -22,10 +33,6 @@ void Animation::newFile(const Format newFormat, const QSize newSize) {
   timeline.initCanvas(format, size);
   palette.initDefault();
   timeline.initDefault();
-}
-
-void Animation::optimize() {
-  timeline.optimize();
 }
 
 Error Animation::saveFile(const QString &path) const {

@@ -156,6 +156,8 @@ add_executable(Animera
     "src/quit dialog.moc"
     "src/radio button widget.cpp"
     "src/radio button widget.hpp"
+    "src/resize canvas dialog.cpp"
+    "src/resize canvas dialog.hpp"
     src/resources.cpp
     "src/sample object.cpp"
     "src/sample object.hpp"

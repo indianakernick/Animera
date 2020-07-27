@@ -21,6 +21,7 @@ class Animation final : public QObject {
 
 public Q_SLOTS:
   void optimize();
+  void resizeCanvas(QSize);
   void newFile(Format, QSize);
   Error saveFile(const QString &) const;
   Error openFile(const QString &);
@@ -28,6 +29,7 @@ public Q_SLOTS:
   
 Q_SIGNALS:
   void canvasInitialized(Format, QSize);
+  void canvasResized(QSize);
 
 public:
   Timeline timeline;
