@@ -730,6 +730,7 @@ void CppAtlasGenerator::addWhiteName() {
 }
 
 QString CppAtlasGenerator::hasNameCollision() {
+  insertName("count_");
   return collision;
 }
 

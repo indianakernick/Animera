@@ -119,6 +119,8 @@ add_executable(Animera
     "src/init canvas dialog.hpp"
     "src/init canvas dialog.moc"
     "src/int range.hpp"
+    "src/json atlas generator.cpp"
+    "src/json atlas generator.hpp"
     "src/keys dialog.cpp"
     "src/keys dialog.hpp"
     "src/label widget.cpp"

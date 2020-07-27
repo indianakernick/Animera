@@ -61,12 +61,7 @@ void alignedCopy(unsigned char *dstBytes, const unsigned char *srcBytes, const s
     auto *dstEnd = reinterpret_cast<DstPixel *>(dstBytes + size);
     
     while (dst != dstEnd) {
-      SrcPixel srcPixel{};
-      std::memcpy(&srcPixel, src, sizeof(SrcPixel));
-      const DstPixel dstPixel = DstFmt::pixel(SrcFmt::color(srcPixel));
-      std::memcpy(dst, &dstPixel, sizeof(DstPixel));
-      ++src;
-      ++dst;
+      *dst++ = DstFmt::pixel(SrcFmt::color(*src++));
     }
   }
 }

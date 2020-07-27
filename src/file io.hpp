@@ -19,7 +19,7 @@ public:
 
   Error open(const QString &);
   QIODevice &dev();
-  Error flush() const;
+  Error flush();
   
 private:
   QBuffer buff;
@@ -33,7 +33,7 @@ class FileReader {
 public:
   Error open(const QString &);
   QIODevice &dev();
-  Error flush() const;
+  Error flush();
 
 private:
   QFile file;

@@ -44,10 +44,11 @@ QIODevice &FileWriter::dev() {
   return buff;
 }
 
-Error FileWriter::flush() const {
+Error FileWriter::flush() {
   SCOPE_TIME("FileWriter::flush");
   
   // TODO: should we try to avoid opening the file twice?
+  buff.close();
   const qint64 equal = filesEqual();
   return equal == buff.size() ? Error{} : flushFrom(equal);
 }
@@ -115,6 +116,7 @@ QIODevice &FileReader::dev() {
   return file;
 }
 
-Error FileReader::flush() const {
+Error FileReader::flush() {
+  file.close();
   return {};
 }

@@ -16,6 +16,7 @@
 #include <QtCore/qjsondocument.h>
 #include "png atlas generator.hpp"
 #include "cpp atlas generator.hpp"
+#include "json atlas generator.hpp"
 #include "export texture atlas.hpp"
 #include <QtCore/qcoreapplication.h>
 
@@ -142,6 +143,8 @@ QJsonDocument readDoc() {
 std::unique_ptr<AtlasGenerator> parseGenerator(const QString &str) {
   if (str == "png") {
     return std::make_unique<PngAtlasGenerator>();
+  } else if (str == "json") {
+    return std::make_unique<JsonAtlasGenerator>();
   } else if (str == "cpp png") {
     return std::make_unique<CppAtlasGenerator>(DataFormat::png);
   } else if (str == "cpp raw") {

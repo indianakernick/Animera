@@ -108,6 +108,7 @@
 		45D5847724C29CE9003C182C /* cpp atlas generator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45D5847524C29CE9003C182C /* cpp atlas generator.cpp */; };
 		45D5847C24C3EE44003C182C /* stb_rect_pack.c in Sources */ = {isa = PBXBuildFile; fileRef = 45D5847B24C3EE44003C182C /* stb_rect_pack.c */; };
 		45D5847F24C41642003C182C /* sprite packer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45D5847D24C41641003C182C /* sprite packer.cpp */; };
+		45DBBF9324CE65BF00FC97A6 /* json atlas generator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45DBBF9124CE65BF00FC97A6 /* json atlas generator.cpp */; };
 		45DC2566224B137C00F40116 /* status msg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45DC2564224B137C00F40116 /* status msg.cpp */; };
 		45DFE499224DE89E00EA40C5 /* global font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45DFE497224DE89E00EA40C5 /* global font.cpp */; };
 		45E3340623A1F4F4009F5EC1 /* libz.1.2.11.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 45E3340523A1F4F4009F5EC1 /* libz.1.2.11.dylib */; };
@@ -832,6 +833,8 @@
 		45D5847D24C41641003C182C /* sprite packer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "sprite packer.cpp"; sourceTree = "<group>"; };
 		45D5847E24C41641003C182C /* sprite packer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "sprite packer.hpp"; sourceTree = "<group>"; };
 		45D9DC7C242F04B4001ACE37 /* title@8x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "title@8x.png"; sourceTree = "<group>"; };
+		45DBBF9124CE65BF00FC97A6 /* json atlas generator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "json atlas generator.cpp"; sourceTree = "<group>"; };
+		45DBBF9224CE65BF00FC97A6 /* json atlas generator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "json atlas generator.hpp"; sourceTree = "<group>"; };
 		45DC255F224A034200F40116 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		45DC2562224A0AEA00F40116 /* title.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = title.png; sourceTree = "<group>"; };
 		45DC2564224B137C00F40116 /* status msg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "status msg.cpp"; sourceTree = "<group>"; };
@@ -918,6 +921,8 @@
 				45D5847624C29CE9003C182C /* cpp atlas generator.hpp */,
 				45D5847D24C41641003C182C /* sprite packer.cpp */,
 				45D5847E24C41641003C182C /* sprite packer.hpp */,
+				45DBBF9124CE65BF00FC97A6 /* json atlas generator.cpp */,
+				45DBBF9224CE65BF00FC97A6 /* json atlas generator.hpp */,
 			);
 			name = Generators;
 			sourceTree = "<group>";
@@ -3184,6 +3189,7 @@
 				451A237D24B979B700160390 /* cel painter.cpp in Sources */,
 				45054F732259C9AB0078350B /* color picker widget.cpp in Sources */,
 				45D1099222DAF70000D1F1CB /* brush tool.cpp in Sources */,
+				45DBBF9324CE65BF00FC97A6 /* json atlas generator.cpp in Sources */,
 				454E990F2349A9B40059274C /* gradient tool.cpp in Sources */,
 				4595D48F22C061DF00607D64 /* timeline layers widget.cpp in Sources */,
 				45D1099522DAFA1D00D1F1CB /* flood fill tool.cpp in Sources */,
