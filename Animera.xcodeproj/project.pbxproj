@@ -58,6 +58,7 @@
 		4549BB49243BFFF700B1A62A /* docopt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4549BB3D243BFF3200B1A62A /* docopt.cpp */; };
 		454E990F2349A9B40059274C /* gradient tool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 454E990D2349A9B40059274C /* gradient tool.cpp */; };
 		455486BF23449254001D5611 /* native mac.mm in Sources */ = {isa = PBXBuildFile; fileRef = 455486BE23449254001D5611 /* native mac.mm */; };
+		4556699F24CFB02600F761E3 /* basic atlas generator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4556699D24CFB02600F761E3 /* basic atlas generator.cpp */; };
 		455CE08224B59B750050EEDB /* COPYING in Resources */ = {isa = PBXBuildFile; fileRef = 455CE08124B59B750050EEDB /* COPYING */; };
 		455F2868220690A600C73F39 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 455F2867220690A600C73F39 /* main.cpp */; };
 		455F2879220691DE00C73F39 /* QtCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455F286E220691DD00C73F39 /* QtCore.framework */; };
@@ -708,6 +709,8 @@
 		455486BD234466F6001D5611 /* slider bar.animera */ = {isa = PBXFileReference; lastKnownFileType = file; path = "slider bar.animera"; sourceTree = "<group>"; };
 		455486BE23449254001D5611 /* native mac.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "native mac.mm"; sourceTree = "<group>"; };
 		455486C123449E70001D5611 /* native mac.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "native mac.hpp"; sourceTree = "<group>"; };
+		4556699D24CFB02600F761E3 /* basic atlas generator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "basic atlas generator.cpp"; sourceTree = "<group>"; };
+		4556699E24CFB02600F761E3 /* basic atlas generator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "basic atlas generator.hpp"; sourceTree = "<group>"; };
 		45571E20246FC473001FC61A /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		45571E22246FC473001FC61A /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		45571E23246FC473001FC61A /* catch_main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = catch_main.cpp; sourceTree = "<group>"; };
@@ -922,10 +925,12 @@
 				4515ABB324C000F50052C8BF /* png atlas generator.hpp */,
 				45D5847524C29CE9003C182C /* cpp atlas generator.cpp */,
 				45D5847624C29CE9003C182C /* cpp atlas generator.hpp */,
-				45D5847D24C41641003C182C /* sprite packer.cpp */,
-				45D5847E24C41641003C182C /* sprite packer.hpp */,
 				45DBBF9124CE65BF00FC97A6 /* json atlas generator.cpp */,
 				45DBBF9224CE65BF00FC97A6 /* json atlas generator.hpp */,
+				45D5847D24C41641003C182C /* sprite packer.cpp */,
+				45D5847E24C41641003C182C /* sprite packer.hpp */,
+				4556699D24CFB02600F761E3 /* basic atlas generator.cpp */,
+				4556699E24CFB02600F761E3 /* basic atlas generator.hpp */,
 			);
 			name = Generators;
 			sourceTree = "<group>";
@@ -3205,6 +3210,7 @@
 				4515ABA924BE9C740052C8BF /* abstract export params.cpp in Sources */,
 				45D109AC22E2D4FD00D1F1CB /* text push button widget.cpp in Sources */,
 				453E8E4B236572250070B841 /* file io.cpp in Sources */,
+				4556699F24CFB02600F761E3 /* basic atlas generator.cpp in Sources */,
 				4595D48C22C05E5400607D64 /* timeline cels widget.cpp in Sources */,
 				457D74F3239E2488009B4E4B /* settings.cpp in Sources */,
 				453C78432234E13E00818B19 /* window.cpp in Sources */,

@@ -164,6 +164,8 @@ Error exportDeflated(QIODevice &dev, const QImage &texture) {
   return zlibCompress(context, true);
 }
 
+// the C++ generator is actually really impractical
+
 }
 
 Error SpritePacker::write(QIODevice &dev) {

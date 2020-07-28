@@ -624,160 +624,40 @@ std::unique_ptr<const unsigned char []> decompressTexture(const TextureInfo &inf
 }
 )";
 
-bool convertToIdentifier(QString &str) {
-  for (QChar &ch : str) {
-    if (!ch.isLetterOrNumber()) {
-      ch = '_';
-    }
-  }
-  if (str.isEmpty() || str.front().isDigit()) {
-    str.prepend('_');
-    return true;
-  } else {
-    return false;
-  }
-}
-
 }
 
 CppAtlasGenerator::CppAtlasGenerator(const DataFormat format, const bool withInflate)
-  : packer{format}, withInflate{withInflate} {}
+  : BasicAtlasGenerator{format}, withInflate{withInflate} {}
 
-Error CppAtlasGenerator::initAtlas(PixelFormat format, const QString &name, const QString &dir) {
-  if (format == PixelFormat::index) {
-    return "C++ Atlas Generator does not support indexed pixel format";
-  }
-  if (format == PixelFormat::monochrome) {
-    return "C++ Atlas Generator does not support monochrome pixel format";
-  }
-  
-  packer.init(format);
+Error CppAtlasGenerator::initAtlas(const PixelFormat format, const QString &name, const QString &dir) {
+  TRY(BasicAtlasGenerator::initAtlas(format, name, dir));
   enumeration = "  null_ = 0,\n";
   array = "  SpriteRect{},\n";
-  names.clear();
-  names.insert("null_");
-  collision.clear();
-  atlasDir = dir;
   atlasName = name;
+  atlasDir = dir;
   return {};
-}
-
-void CppAtlasGenerator::addName(
-  const std::size_t i,
-  const SpriteNameParams &params,
-  const SpriteNameState &state
-) {
-  QString name = params.baseName;
-  int baseName = name.size();
-  appendLayerName(name, params, state);
-  int layerName = name.size();
-  appendGroupName(name, params, state);
-  int groupName = name.size();
-  appendFrameName(name, params, state);
-  int frameName = name.size();
-  
-  if (convertToIdentifier(name)) {
-    ++baseName;
-    ++layerName;
-    ++groupName;
-    ++frameName;
-  }
-  
-  const bool hasLayerName = layerName > baseName && baseName > 0;
-  const bool hasGroupName = groupName > layerName && layerName > 0;
-  const bool hasFrameName = frameName > groupName && groupName > 0;
-  
-  if (state.frame == state.groupBegin) {
-    if (state.group == GroupIdx{0}) {
-      if (hasLayerName && state.layer == LayerIdx{0}) {
-        addAlias(name.left(baseName), "beg_", i);
-      }
-      if (hasGroupName) {
-        addAlias(name.left(layerName), "beg_", i);
-      }
-    }
-    if (hasFrameName) {
-      addAlias(name.left(groupName), "beg_", i);
-    }
-  }
-  
-  appendEnumerator(name, i);
-  insertName(name);
-  
-  if (state.frame - state.groupBegin == state.frameCount - FrameIdx{1}) {
-    if (hasFrameName) {
-      addAlias(name.left(groupName), "end_", i + 1);
-    }
-    if (state.group == state.groupCount - GroupIdx{1}) {
-      if (hasGroupName) {
-        addAlias(name.left(layerName), "end_", i + 1);
-      }
-      if (hasLayerName && state.layer == state.layerCount - LayerIdx{1}) {
-        addAlias(name.left(baseName), "end_", i + 1);
-      }
-    }
-  }
-}
-
-void CppAtlasGenerator::addSize(const QSize size) {
-  packer.append(size);
-}
-
-void CppAtlasGenerator::addWhiteName() {
-  appendEnumerator("whitepixel_", packer.count());
-  insertName("whitepixel_");
-  packer.appendWhite();
 }
 
 QString CppAtlasGenerator::hasNameCollision() {
   insertName("count_");
-  return collision;
-}
-
-Error CppAtlasGenerator::packRectangles() {
-  return packer.pack();
-}
-
-Error CppAtlasGenerator::initAnimation(const Format format, const PaletteCSpan palette) {
-  return packer.setFormat(format, palette);
-}
-
-Error CppAtlasGenerator::addImage(const std::size_t i, const QImage &img) {
-  if (img.isNull()) {
-    appendRectangle({});
-  } else {
-    appendRectangle(packer.copy(i, img));
-  }
-  return {};
-}
-
-Error CppAtlasGenerator::addWhiteImage() {
-  appendRectangle(packer.copyWhite(packer.count() - 1));
-  return {};
+  return BasicAtlasGenerator::hasNameCollision();
 }
 
 Error CppAtlasGenerator::finalize() {
-  appendEnumerator("count_", packer.count());
+  appendName("count_", packer.count());
   TRY(writeCpp());
   return writeHpp();
 }
 
-void CppAtlasGenerator::addAlias(QString base, const char *alias, const std::size_t value) {
-  if (!base.isEmpty()) base += '_';
-  base += alias;
-  appendEnumerator(base, value);
-  insertName(base);
-}
-
-void CppAtlasGenerator::appendEnumerator(const QString &name, const std::size_t value) {
+void CppAtlasGenerator::appendName(const QString &name, const std::size_t i) {
   enumeration += "  ";
   enumeration += name;
   enumeration += " = ";
-  enumeration += QString::number(value + 1);
+  enumeration += QString::number(i + 1);
   enumeration += ",\n";
 }
 
-void CppAtlasGenerator::appendRectangle(const QRect &rect) {
+void CppAtlasGenerator::appendRect(const QRect rect) {
   if (rect.isEmpty()) {
     array += "  SpriteRect{},\n";
   } else {
@@ -793,10 +673,25 @@ void CppAtlasGenerator::appendRectangle(const QRect &rect) {
   }
 }
 
-void CppAtlasGenerator::insertName(const QString &name) {
-  if (collision.isEmpty() && !names.insert(name).second) {
-    collision = name;
+void CppAtlasGenerator::fixName(QString &name, std::array<int, 4> &positions) {
+  for (QChar &ch : name) {
+    if (!ch.isLetterOrNumber()) {
+      ch = '_';
+    }
   }
+  if (name.isEmpty() || name.front().isDigit()) {
+    name.prepend('_');
+    for (int &pos : positions) {
+      ++pos;
+    }
+  }
+}
+
+void CppAtlasGenerator::appendAlias(QString base, const char *alias, const std::size_t i) {
+  if (!base.isEmpty()) base += '_';
+  base += alias;
+  appendName(base, i);
+  insertName(base);
 }
 
 Error CppAtlasGenerator::writeBytes(QIODevice &dev, const char *data, const std::size_t size) {
@@ -845,7 +740,10 @@ Error CppAtlasGenerator::writeCpp() {
   TRY(packer.write(textureBuffer));
   
   QString nameSpace = atlasName;
-  convertToIdentifier(nameSpace);
+  {
+    std::array<int, 4> positions;
+    fixName(nameSpace, positions);
+  }
   
   FileWriter writer;
   TRY(writer.open(atlasDir + QDir::separator() + atlasName + ".cpp"));
@@ -906,7 +804,10 @@ Error CppAtlasGenerator::writeHpp() {
   QTextStream stream{&writer.dev()};
 
   QString nameSpace = atlasName;
-  convertToIdentifier(nameSpace);
+  {
+    std::array<int, 4> positions;
+    fixName(nameSpace, positions);
+  }
   QString headerGuard = nameSpace.toUpper();
 
   stream << "// This file was generated by Animera\n";

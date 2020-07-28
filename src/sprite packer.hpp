@@ -11,11 +11,10 @@
 
 #include <vector>
 #include "error.hpp"
+#include "image.hpp"
 #include <QtCore/qrect.h>
 #include "stb_rect_pack.h"
-
-// TODO: Move PixelFormat to a more appropriate header
-#include "atlas generator.hpp"
+#include "palette span.hpp"
 
 enum class DataFormat {
   png,

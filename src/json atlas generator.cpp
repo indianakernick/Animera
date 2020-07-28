@@ -12,95 +12,24 @@
 #include <QtCore/qdir.h>
 
 JsonAtlasGenerator::JsonAtlasGenerator()
-  : packer{DataFormat::png} {}
+  : BasicAtlasGenerator{DataFormat::png} {}
 
 Error JsonAtlasGenerator::initAtlas(const PixelFormat format, const QString &name, const QString &dir) {
-  if (format == PixelFormat::index) {
-    return "JSON Atlas Generator does not support indexed pixel format";
-  }
-  if (format == PixelFormat::monochrome) {
-    return "JSON Atlas Generator does not support monochrome pixel format";
-  }
-  
-  packer.init(format);
+  TRY(BasicAtlasGenerator::initAtlas(format, name, dir));
   atlas = "{\"names\":{\"null_\":0";
   atlasName = name;
   atlasDir = dir;
-  names.clear();
-  collision.clear();
   return {};
 }
 
-namespace {
-
-void escapeJsonString(QString &str) {
-  for (int i = 0; i != str.size(); ++i) {
-    if (str[i] == '\\') {
-      str.insert(i, '\\');
-      ++i;
-    } else if (str[i] == '\"') {
-      str.insert(i, '\\');
-      ++i;
-    }
-  }
-}
-
-}
-
-void JsonAtlasGenerator::addName(
-  const std::size_t i,
-  const SpriteNameParams &params,
-  const SpriteNameState &state
-) {
-  // TODO: How do we reuse CppAtlasGenerator::addName?
-  QString name = evaluateSpriteName(params, state);
-  insertName(name);
-  escapeJsonString(name);
-  appendName(name, i);
-}
-
-void JsonAtlasGenerator::addSize(const QSize size) {
-  packer.append(size);
-}
-
-void JsonAtlasGenerator::addWhiteName() {
-  appendName("whitepixel_", packer.count());
-  insertName("whitepixel_");
-  packer.appendWhite();
-}
-
-QString JsonAtlasGenerator::hasNameCollision() {
-  return collision;
-}
-
 Error JsonAtlasGenerator::packRectangles() {
-  TRY(packer.pack());
+  TRY(BasicAtlasGenerator::packRectangles());
   atlas += "},\"rects\":[[0,0,0,0]";
   return {};
 }
 
-Error JsonAtlasGenerator::initAnimation(const Format format, const PaletteCSpan palette) {
-  return packer.setFormat(format, palette);
-}
-
-Error JsonAtlasGenerator::addImage(const std::size_t i, const QImage &img) {
-  if (img.isNull()) {
-    appendRect({});
-  } else {
-    appendRect(packer.copy(i, img));
-  }
-  return {};
-}
-
-Error JsonAtlasGenerator::addWhiteImage() {
-  appendRect(packer.copyWhite(packer.count() - 1));
-  return {};
-}
-
 Error JsonAtlasGenerator::finalize() {
-  atlas += "],\"count\":";
-  atlas += QString::number(packer.count() + 1);
-  atlas += ",\"width\":";
+  atlas += "],\"width\":";
   atlas += QString::number(packer.width());
   atlas += ",\"height\":";
   atlas += QString::number(packer.height());
@@ -120,12 +49,6 @@ Error JsonAtlasGenerator::finalize() {
   TRY(writer.flush());
   
   return {};
-}
-
-void JsonAtlasGenerator::insertName(const QString &name) {
-  if (collision.isEmpty() && !names.insert(name).second) {
-    collision = name;
-  }
 }
 
 void JsonAtlasGenerator::appendName(const QString &name, const std::size_t i) {
@@ -149,4 +72,25 @@ void JsonAtlasGenerator::appendRect(const QRect r) {
     atlas += QString::number(r.height());
     atlas += ']';
   }
+}
+
+void JsonAtlasGenerator::fixName(QString &name, std::array<int, 4> &positions) {
+  for (int i = 0; i != name.size(); ++i) {
+    if (name[i] == '\\') {
+      name.insert(i, '\\');
+    } else if (name[i] == '\"') {
+      name.insert(i, '\\');
+    } else continue;
+    for (int &pos : positions) {
+      if (i < pos) ++pos;
+    }
+    ++i;
+  }
+}
+
+void JsonAtlasGenerator::appendAlias(QString base, const char *alias, const std::size_t i) {
+  if (!base.isEmpty()) base += ' ';
+  base += alias;
+  appendName(base, i);
+  insertName(base);
 }

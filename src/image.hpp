@@ -20,6 +20,15 @@ enum class Format : std::uint8_t {
   gray
 };
 
+enum class PixelFormat {
+  // cli export.cpp depends on order
+  rgba,
+  index,
+  gray,
+  gray_alpha,
+  monochrome
+};
+
 constexpr QRgb mask_color_on = 0xFFFFFFFF;
 constexpr QRgb mask_color_off = 0;
 

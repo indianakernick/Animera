@@ -9,40 +9,26 @@
 #ifndef animera_json_atlas_generator_hpp
 #define animera_json_atlas_generator_hpp
 
-#include <unordered_set>
-#include "sprite packer.hpp"
-#include "atlas generator.hpp"
 #include <QtCore/qjsondocument.h>
+#include "basic atlas generator.hpp"
 
-class JsonAtlasGenerator final : public AtlasGenerator {
+class JsonAtlasGenerator final : public BasicAtlasGenerator {
 public:
   JsonAtlasGenerator();
 
   Error initAtlas(PixelFormat, const QString &, const QString &) override;
-  
-  void addName(std::size_t, const SpriteNameParams &, const SpriteNameState &) override;
-  void addSize(QSize) override;
-  void addWhiteName() override;
-  QString hasNameCollision() override;
   Error packRectangles() override;
-  
-  Error initAnimation(Format, PaletteCSpan) override;
-  Error addImage(std::size_t, const QImage &) override;
-  Error addWhiteImage() override;
-  
   Error finalize() override;
+  
+  void appendName(const QString &, std::size_t) override;
+  void appendRect(QRect) override;
+  void fixName(QString &, std::array<int, 4> &) override;
+  void appendAlias(QString, const char *, std::size_t) override;
 
 private:
-  SpritePacker packer;
   QString atlas;
-  QString atlasDir;
   QString atlasName;
-  std::unordered_set<QString> names;
-  QString collision;
-  
-  void insertName(const QString &);
-  void appendName(const QString &, std::size_t);
-  void appendRect(QRect);
+  QString atlasDir;
 };
 
 #endif

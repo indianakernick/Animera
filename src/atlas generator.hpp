@@ -13,15 +13,6 @@
 #include "sprite name.hpp"
 #include "palette span.hpp"
 
-enum class PixelFormat {
-  // cli export.cpp depends on order
-  rgba,
-  index,
-  gray,
-  gray_alpha,
-  monochrome
-};
-
 class AtlasGenerator {
 public:
   virtual ~AtlasGenerator() = default;

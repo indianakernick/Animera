@@ -21,6 +21,8 @@ add_executable(Animera
     src/application.moc
     "src/atlas generator.cpp"
     "src/atlas generator.hpp"
+    "src/basic atlas generator.cpp"
+    "src/basic atlas generator.hpp"
     "src/brush tool.cpp"
     "src/brush tool.hpp"
     "src/cel array.cpp"
@@ -158,6 +160,7 @@ add_executable(Animera
     "src/radio button widget.hpp"
     "src/resize canvas dialog.cpp"
     "src/resize canvas dialog.hpp"
+    "src/resize canvas dialog.moc"
     src/resources.cpp
     "src/sample object.cpp"
     "src/sample object.hpp"

@@ -24,11 +24,10 @@ Error PngAtlasGenerator::initAtlas(
 }
 
 void PngAtlasGenerator::addName(
-  [[maybe_unused]] const std::size_t idx,
+  std::size_t,
   const SpriteNameParams &params,
   const SpriteNameState &state
 ) {
-  assert(idx == names.size());
   names.push_back(evaluateSpriteName(params, state));
 }
 
@@ -37,7 +36,6 @@ void PngAtlasGenerator::addSize(QSize) {}
 void PngAtlasGenerator::addWhiteName() {}
 
 QString PngAtlasGenerator::hasNameCollision() {
-  // TODO: This seems inefficient. I'm not sure how to do it better.
   std::unordered_set<QString> set;
   for (const QString &name : names) {
     if (!set.insert(name).second) {
@@ -57,9 +55,9 @@ Error PngAtlasGenerator::initAnimation(Format newFormat, PaletteCSpan newPalette
   return {};
 }
 
-Error PngAtlasGenerator::addImage(const std::size_t idx, const QImage &image) {
+Error PngAtlasGenerator::addImage(const std::size_t i, const QImage &image) {
   FileWriter writer;
-  TRY(writer.open(directory + QDir::separator() + names[idx] + ".png"));
+  TRY(writer.open(directory + QDir::separator() + names[i] + ".png"));
   TRY(exportCelPng(writer.dev(), palette, image, format, pixelFormat));
   return writer.flush();
 }
