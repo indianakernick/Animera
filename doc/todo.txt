@@ -154,6 +154,7 @@ transform a layer or transform a frame
 ----------------------------------- palette ------------------------------------
 
 differentiate between indexed with full alpha and indexed with transparent entry
+  kind of like a color key
   if there is a single fully transparent entry then it will be possible to
   composite indexed images into indexed images
 
@@ -290,6 +291,11 @@ remember there's a workaround for a bug in Xcode
 if cels widget is larger than the space it has in the timeline,
   restrict scrolling to avoid the ugly double border
   maybe lock into place after scrolling to avoid the double border
+  
+opening application modal dialogs in fullscreen
+  key bindings and init canvas dialogs appear in a new fullscreen window
+  they should be a popup on top of the current window
+  open file dialog has the desired behaviour
 
 -------------------------------- minor features --------------------------------
 
@@ -312,13 +318,11 @@ export frame and export cel dialog could maybe evaluate name to get default
 
 maybe importPalettePng should read the PLTE chunk if it exists
 
--------------------------------- export features -------------------------------
+import multiple cels at once
 
-allow parameters to be sent to the generator
-  e.g. telling the cpp generator to generate a png or raw image data
-  might not need arbitrary parameters
-  could encode parameters in the name
-  cpp_raw and cpp_zlib
+drag and drop to import
+
+-------------------------------- export features -------------------------------
 
 select a group
   could be as simple as using a range of groups
@@ -329,15 +333,8 @@ wrapper around QIODevice for Error
   like ChunkWriter but more generic
   could just be a handful of simple functions
 
-string lookup
-  std::string names;
-  std::unordered_map<std::string_view, SpriteID> ids;
-  SpriteID lookupSpriteID(std::string_view);
-
 maybe generator should announce which pixel formats it supports
   also should announce pixel/animation format compatability
-
-might want to share the begin/end aliases with the json exporter
 
 exporter should properly validate parameters
   empty path
