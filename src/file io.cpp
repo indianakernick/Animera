@@ -35,6 +35,7 @@ alternative c
 */
 
 Error FileWriter::open(const QString &newPath) {
+  buff.setData("", 0);
   buff.open(QIODevice::WriteOnly);
   path = newPath;
   return {};
