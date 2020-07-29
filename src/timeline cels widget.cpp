@@ -287,9 +287,9 @@ FrameIdx GroupsWidget::framePos(const int pos) const {
 std::optional<FrameIdx> GroupsWidget::boundaryPos(const int pos) const {
   const int relPos = pos % cel_width;
   const int frame = pos / cel_width;
-  if (relPos < 1_px) {
+  if (relPos < group_boundary_radius) {
     return FrameIdx{frame};
-  } else if (relPos >= cel_width - glob_border_width - 1_px) {
+  } else if (relPos >= cel_width - glob_border_width - group_boundary_radius) {
     return FrameIdx{frame + 1};
   } else {
     return std::nullopt;
