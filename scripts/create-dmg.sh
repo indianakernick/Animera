@@ -7,7 +7,7 @@
 # Requires appdmg
 # Requires envsubst from gettext
 
-cmake configure_file
+# Could be using cmake configure_file here
 
 alias animera="$BUILT_PRODUCTS_DIR/$EXECUTABLE_PATH"
 BACKGROUND="$PROJECT_DIR/Resources/Animations/dmg background.animera"

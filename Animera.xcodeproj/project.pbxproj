@@ -2446,22 +2446,23 @@
 		453C787B2235D63B00818B19 /* RCC */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
+			dependencyFile = "$(DERIVED_FILE_DIR)/resources.d";
 			files = (
 			);
 			inputFileListPaths = (
 				"",
 			);
 			inputPaths = (
+				"$(PROJECT_DIR)/Resources/resources.qrc",
 			);
 			name = RCC;
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(PROJECT_DIR)/src/resources.cpp",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/opt/qt/bin/rcc --no-compress --namespace --output \"$PROJECT_DIR/src/resources.cpp\" \"$PROJECT_DIR/Resources/resources.qrc\"\n";
+			shellScript = "/usr/local/opt/qt/bin/rcc --no-compress --namespace --output \"$PROJECT_DIR/src/resources.cpp\" --depfile \"$DERIVED_FILE_DIR/resources.d\" \"$PROJECT_DIR/Resources/resources.qrc\"\n";
 		};
 		455F288A2206A17600C73F39 /* Mac Deploy */ = {
 			isa = PBXShellScriptBuildPhase;
