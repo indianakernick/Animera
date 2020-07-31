@@ -50,14 +50,7 @@ should I make a post to r/gamedev?
   could be a good place to get feedback
   laterforreddit.com
 
-README
-  probably does what you need
-  it's free so why not give it a try
-
 --------------------------------- build system ---------------------------------
-
-Could be useful
-  https://stackoverflow.com/questions/53771040/how-do-you-use-file-lists-xcfilelist-within-xcode-10-script-build-phases
 
 Build system
   https://stackoverflow.com/questions/2144406/how-to-make-shallow-git-submodules
@@ -66,14 +59,6 @@ Build system
   https://cmake.org/cmake/help/latest/prop_tgt/MACOSX_BUNDLE_INFO_PLIST.html#prop_tgt:MACOSX_BUNDLE_INFO_PLIST
   https://cmake.org/cmake/help/latest/module/CPack.html
   https://cmake.org/cmake/help/latest/module/BundleUtilities.html
-
-build from commandline
-  xcodebuild
-  msbuild
-
-windows packaged app
-  Windows RunTime (WinRT)
-  Universal Windows Platform (UWP)
 
 directory structure
   tests
@@ -184,11 +169,6 @@ generate a palette from a gradient
 
 ---------------------------------- features ------------------------------------
 
-make exporting less tedious
-  store paths in QSettings
-  would it be useful to copy export settings to and from the clipboard?
-  key_export_frame might make more sense with ALT instead of SHIFT
-
 proper undo/redo system
   an application-wide undo system would be cool
 
@@ -198,21 +178,6 @@ behave like a proper Single Document Interface (SDI) application
 quicklook plugin
   https://fespinoza.github.io/creating-a-quicklook-plugin-for-a-document-based-macos-application
   https://developer.apple.com/library/archive/documentation/UserExperience/Conceptual/Quicklook_Programming_Guide/Introduction/Introduction.html
-
-frame groups
-  take the same amount of space as a layer
-  text box on the left
-  spans in the timeline
-  spans act like a radio button
-    one can be selected at a time
-  the selected group's name appears in the text box on the left
-  groups are selected by clicking on them
-  double clicking on a frame will make it the start of a new group
-  the border between groups can be dragged
-    a group cannot be dragged to zero length
-  deleting a group could be done by right clicking
-  could add a delete button to balance frame group text box
-    right clicking to delete is a little but unintuitive
 
 --------------------------------- refactoring ----------------------------------
 
@@ -229,9 +194,6 @@ remove signals from tools (maybe?)
   another system reads data structure and sends signals
   not sure if this is a real improvement
   probably ties in with making a more abstract tool interface
-
-define what the application does and use that to guide refactoring
-  similar amount of detail as the previous plans
 
 ------------------------------------- tools ------------------------------------
 
@@ -255,6 +217,9 @@ generating noise
   should be uniform random
     maintain a constant color when all pixels are mixed together
   select some colors from palette (and maybe proportions) then use brush
+
+blending and shading
+  enable blending globally (for all paint tools)
 
 ---------------------------------- minor bugs ----------------------------------
 
@@ -302,7 +267,7 @@ opening application modal dialogs in fullscreen
 remove layer button appears when hovering layer name
   would this be more intuitive than a button that removes the current layer?
 
-if another application edits the sprite file, ask to reload
+if another application edits the animation file, ask to reload
   https://doc.qt.io/qt-5/qfilesystemwatcher.html#fileChanged
   also see "file io.cpp" FileWriter uses a buffer
 
@@ -315,8 +280,6 @@ why is it so tedious to create an animation by modifying the previous frame?
   like extend linked cel and new frame combined
 
 export frame and export cel dialog could maybe evaluate name to get default
-
-maybe importPalettePng should read the PLTE chunk if it exists
 
 import multiple cels at once
 
