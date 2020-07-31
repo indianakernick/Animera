@@ -180,10 +180,10 @@ Error addImage(
   Images &images
 ) {
   if (images.xformed.isNull()) {
-    return params.generator->addImage(index, images.canvas);
+    return params.generator->copyImage(index, images.canvas);
   } else {
     applyTransform(images, animParams.transform);
-    return params.generator->addImage(index, images.xformed);
+    return params.generator->copyImage(index, images.xformed);
   }
 }
 
@@ -195,12 +195,8 @@ void addFrameNames(
 ) {
   const QSize size = getTransformedSize(anim.getSize(), animParams.transform);
   auto iterate = [&](const Frame &frame, const SpriteNameState &state) {
-    params.generator->addName(index++, animParams.name, state);
-    if (!frame.empty()) {
-      params.generator->addSize(size);
-    } else {
-      params.generator->addSize({});
-    }
+    NameInfo info = {animParams.name, state, frame.empty() ? QSize{} : size};
+    params.generator->appendName(index++, info);
     return Error{};
   };
   static_cast<void>(eachFrame(animParams, anim, iterate));
@@ -214,12 +210,8 @@ void addCelNames(
 ) {
   const QSize size = getTransformedSize(anim.getSize(), animParams.transform);
   auto iterate = [&](const CelImage *img, const SpriteNameState &state) {
-    params.generator->addName(index++, animParams.name, state);
-    if (*img) {
-      params.generator->addSize(size);
-    } else {
-      params.generator->addSize({});
-    }
+    NameInfo info = {animParams.name, state, *img ? size : QSize{}};
+    params.generator->appendName(index++, info);
     return Error{};
   };
   static_cast<void>(eachCel(animParams, anim, iterate));
@@ -245,7 +237,7 @@ Error addFrameImages(
       }
       return addImage(index++, params, animParams, images);
     } else {
-      return params.generator->addImage(index++, {});
+      return params.generator->copyImage(index++, {});
     }
   };
   
@@ -267,33 +259,18 @@ Error addCelImages(
       blitImage(images.canvas, cel->img, cel->pos);
       return addImage(index++, params, animParams, images);
     } else {
-      return params.generator->addImage(index++, {});
+      return params.generator->copyImage(index++, {});
     }
   };
   
   return eachCel(animParams, anim, iterate);
 }
 
-bool compatibleFormat(
-  const Format format,
-  const bool composite,
-  const PixelFormat pixelFormat
-) {
-  switch (format) {
-    case Format::rgba:
-      return pixelFormat == PixelFormat::rgba;
-    case Format::index:
-      if (composite) {
-        return pixelFormat == PixelFormat::rgba;
-      } else {
-        return pixelFormat == PixelFormat::index ||
-               pixelFormat == PixelFormat::gray ||
-               pixelFormat == PixelFormat::monochrome;
-      }
-    case Format::gray:
-      return pixelFormat == PixelFormat::gray_alpha ||
-             pixelFormat == PixelFormat::gray ||
-             pixelFormat == PixelFormat::monochrome;
+Format compositedFormat(const Format format, const bool composite) {
+  if (format == Format::index && composite) {
+    return Format::rgba;
+  } else {
+    return format;
   }
 }
 
@@ -306,12 +283,14 @@ Error exportTextureAtlas(const ExportParams &params, const AnimArray &anims) {
   assert(!anims.empty());
   
   for (std::size_t s = 0; s != anims.size(); ++s) {
-    if (!compatibleFormat(anims[s]->getFormat(), params.anims[s].composite, params.pixelFormat)) {
-      return "Pixel format is not compatible with animation format";
+    const Format format = compositedFormat(anims[s]->getFormat(), params.anims[s].composite);
+    if (!params.generator->supported(params.pixelFormat, format)) {
+      return "Combination of pixel format and animation format is not supported by atlas generator";
     }
   }
   
-  TRY(params.generator->initAtlas(params.pixelFormat, params.name, params.directory));
+  const AtlasInfo info = {params.name, params.directory, params.pixelFormat};
+  TRY(params.generator->beginAtlas(info));
   
   std::size_t spriteIndex = 0;
   for (std::size_t s = 0; s != anims.size(); ++s) {
@@ -323,21 +302,19 @@ Error exportTextureAtlas(const ExportParams &params, const AnimArray &anims) {
   }
   
   if (params.whitepixel) {
-    params.generator->addWhiteName();
+    params.generator->appendWhiteName(spriteIndex);
   }
   
-  if (QString name = params.generator->hasNameCollision(); !name.isNull()) {
+  if (QString name = params.generator->endNames(); !name.isNull()) {
     return "Sprite name collision \"" + name + "\"";
   }
   
-  TRY(params.generator->packRectangles());
+  TRY(params.generator->beginImages());
   
   spriteIndex = 0;
   for (std::size_t s = 0; s != anims.size(); ++s) {
-    TRY(params.generator->initAnimation(
-      anims[s]->getFormat(),
-      anims[s]->palette.getPalette()
-    ));
+    const Format format = compositedFormat(anims[s]->getFormat(), params.anims[s].composite);
+    TRY(params.generator->setImageFormat(format, anims[s]->palette.getPalette()));
     if (params.anims[s].composite) {
       TRY(addFrameImages(spriteIndex, params, params.anims[s], *anims[s]));
     } else {
@@ -346,10 +323,10 @@ Error exportTextureAtlas(const ExportParams &params, const AnimArray &anims) {
   }
   
   if (params.whitepixel) {
-    TRY(params.generator->addWhiteImage());
+    TRY(params.generator->copyWhiteImage(spriteIndex));
   }
   
-  return params.generator->finalize();
+  return params.generator->endAtlas();
 }
 
 }

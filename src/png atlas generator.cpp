@@ -13,29 +13,34 @@
 #include <unordered_set>
 #include "export png.hpp"
 
-Error PngAtlasGenerator::initAtlas(
-  const PixelFormat newPixelFormat,
-  const QString &,
-  const QString &newDirectory
-) {
-  pixelFormat = newPixelFormat;
-  directory = newDirectory;
+bool PngAtlasGenerator::supported(const PixelFormat newPixelFormat, const Format newFormat) const {
+  switch (newPixelFormat) {
+    case PixelFormat::rgba:
+      return newFormat == Format::rgba || newFormat == Format::index;
+    case PixelFormat::index:
+      return newFormat == Format::index;
+    case PixelFormat::gray:
+      return newFormat == Format::index || newFormat == Format::gray;
+    case PixelFormat::gray_alpha:
+      return newFormat == Format::gray;
+    case PixelFormat::monochrome:
+      return newFormat == Format::index || newFormat == Format::gray;
+  }
+}
+
+Error PngAtlasGenerator::beginAtlas(const AtlasInfo &info) {
+  pixelFormat = info.pixelFormat;
+  directory = info.directory;
   return {};
 }
 
-void PngAtlasGenerator::addName(
-  std::size_t,
-  const SpriteNameParams &params,
-  const SpriteNameState &state
-) {
-  names.push_back(evaluateSpriteName(params, state));
+void PngAtlasGenerator::appendName(std::size_t, const NameInfo info) {
+  names.push_back(evaluateSpriteName(info.params, info.state));
 }
 
-void PngAtlasGenerator::addSize(QSize) {}
+void PngAtlasGenerator::appendWhiteName(std::size_t) {}
 
-void PngAtlasGenerator::addWhiteName() {}
-
-QString PngAtlasGenerator::hasNameCollision() {
+QString PngAtlasGenerator::endNames() {
   std::unordered_set<QString> set;
   for (const QString &name : names) {
     if (!set.insert(name).second) {
@@ -45,27 +50,27 @@ QString PngAtlasGenerator::hasNameCollision() {
   return {};
 }
 
-Error PngAtlasGenerator::packRectangles() {
+Error PngAtlasGenerator::beginImages() {
   return {};
 }
 
-Error PngAtlasGenerator::initAnimation(Format newFormat, PaletteCSpan newPalette) {
+Error PngAtlasGenerator::setImageFormat(const Format newFormat, const PaletteCSpan newPalette) {
   format = newFormat;
   palette = newPalette;
   return {};
 }
 
-Error PngAtlasGenerator::addImage(const std::size_t i, const QImage &image) {
+Error PngAtlasGenerator::copyImage(const std::size_t i, const QImage &image) {
   FileWriter writer;
   TRY(writer.open(directory + QDir::separator() + names[i] + ".png"));
   TRY(exportCelPng(writer.dev(), palette, image, format, pixelFormat));
   return writer.flush();
 }
 
-Error PngAtlasGenerator::addWhiteImage() {
+Error PngAtlasGenerator::copyWhiteImage(std::size_t) {
   return {};
 }
 
-Error PngAtlasGenerator::finalize() {
+Error PngAtlasGenerator::endAtlas() {
   return {};
 }

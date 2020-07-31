@@ -13,19 +13,21 @@
 
 class PngAtlasGenerator final : public AtlasGenerator {
 public:
-  Error initAtlas(PixelFormat, const QString &, const QString &) override;
+  bool supported(PixelFormat, Format) const override;
+
+  Error beginAtlas(const AtlasInfo &) override;
   
-  void addName(std::size_t, const SpriteNameParams &, const SpriteNameState &) override;
-  void addSize(QSize) override;
-  void addWhiteName() override;
-  QString hasNameCollision() override;
-  Error packRectangles() override;
+  void appendName(std::size_t, NameInfo) override;
+  void appendWhiteName(std::size_t) override;
   
-  Error initAnimation(Format, PaletteCSpan) override;
-  Error addImage(std::size_t, const QImage &) override;
-  Error addWhiteImage() override;
+  QString endNames() override;
+  Error beginImages() override;
   
-  Error finalize() override;
+  Error setImageFormat(Format, PaletteCSpan) override;
+  Error copyImage(std::size_t, const QImage &) override;
+  Error copyWhiteImage(std::size_t) override;
+  
+  Error endAtlas() override;
 
 private:
   PixelFormat pixelFormat;

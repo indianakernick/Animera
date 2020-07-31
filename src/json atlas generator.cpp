@@ -14,21 +14,21 @@
 JsonAtlasGenerator::JsonAtlasGenerator()
   : BasicAtlasGenerator{DataFormat::png} {}
 
-Error JsonAtlasGenerator::initAtlas(const PixelFormat format, const QString &name, const QString &dir) {
-  TRY(BasicAtlasGenerator::initAtlas(format, name, dir));
+Error JsonAtlasGenerator::beginAtlas(const AtlasInfo &info) {
+  TRY(BasicAtlasGenerator::beginAtlas(info));
   atlas = "{\"names\":{\"null_\":0";
-  atlasName = name;
-  atlasDir = dir;
+  atlasName = info.name;
+  atlasDir = info.directory;
   return {};
 }
 
-Error JsonAtlasGenerator::packRectangles() {
-  TRY(BasicAtlasGenerator::packRectangles());
+Error JsonAtlasGenerator::beginImages() {
+  TRY(BasicAtlasGenerator::beginImages());
   atlas += "},\"rects\":[[0,0,0,0]";
   return {};
 }
 
-Error JsonAtlasGenerator::finalize() {
+Error JsonAtlasGenerator::endAtlas() {
   atlas += "],\"width\":";
   atlas += QString::number(packer.width());
   atlas += ",\"height\":";

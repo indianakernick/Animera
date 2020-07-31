@@ -333,9 +333,6 @@ wrapper around QIODevice for Error
   like ChunkWriter but more generic
   could just be a handful of simple functions
 
-maybe generator should announce which pixel formats it supports
-  also should announce pixel/animation format compatability
-
 exporter should properly validate parameters
   empty path
   empty name

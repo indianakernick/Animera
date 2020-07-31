@@ -629,21 +629,21 @@ std::unique_ptr<const unsigned char []> decompressTexture(const TextureInfo &inf
 CppAtlasGenerator::CppAtlasGenerator(const DataFormat format, const bool withInflate)
   : BasicAtlasGenerator{format}, withInflate{withInflate} {}
 
-Error CppAtlasGenerator::initAtlas(const PixelFormat format, const QString &name, const QString &dir) {
-  TRY(BasicAtlasGenerator::initAtlas(format, name, dir));
+Error CppAtlasGenerator::beginAtlas(const AtlasInfo &info) {
+  TRY(BasicAtlasGenerator::beginAtlas(info));
   enumeration = "  null_ = 0,\n";
   array = "  SpriteRect{},\n";
-  atlasName = name;
-  atlasDir = dir;
+  atlasName = info.name;
+  atlasDir = info.directory;
   return {};
 }
 
-QString CppAtlasGenerator::hasNameCollision() {
+QString CppAtlasGenerator::endNames() {
   insertName("count_");
-  return BasicAtlasGenerator::hasNameCollision();
+  return BasicAtlasGenerator::endNames();
 }
 
-Error CppAtlasGenerator::finalize() {
+Error CppAtlasGenerator::endAtlas() {
   appendName("count_", packer.count());
   TRY(writeCpp());
   return writeHpp();

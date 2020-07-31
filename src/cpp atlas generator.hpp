@@ -17,9 +17,9 @@ class CppAtlasGenerator final : public BasicAtlasGenerator {
 public:
   explicit CppAtlasGenerator(DataFormat, bool = false);
 
-  Error initAtlas(PixelFormat, const QString &, const QString &) override;
-  QString hasNameCollision() override;
-  Error finalize() override;
+  Error beginAtlas(const AtlasInfo &) override;
+  QString endNames() override;
+  Error endAtlas() override;
   
   void appendName(const QString &, std::size_t) override;
   void appendRect(QRect) override;

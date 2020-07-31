@@ -16,9 +16,9 @@ class JsonAtlasGenerator final : public BasicAtlasGenerator {
 public:
   JsonAtlasGenerator();
 
-  Error initAtlas(PixelFormat, const QString &, const QString &) override;
-  Error packRectangles() override;
-  Error finalize() override;
+  Error beginAtlas(const AtlasInfo &) override;
+  Error beginImages() override;
+  Error endAtlas() override;
   
   void appendName(const QString &, std::size_t) override;
   void appendRect(QRect) override;
