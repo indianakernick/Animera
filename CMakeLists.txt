@@ -243,8 +243,8 @@ add_executable(Animera
     src/window.hpp
     src/window.moc
     src/zlib.hpp
-    third_paty/stb/stb_rect_pack.c
-    third_paty/stb/stb_rect_pack.h
+    third_party/stb/stb_rect_pack.c
+    third_party/stb/stb_rect_pack.h
 )
 
 target_compile_features(Animera
@@ -262,6 +262,7 @@ target_include_directories(Animera
     src
     third_party/Graphics/include
     third_party/span/include
+    third_party/stb
 )
 
 set(USE_BOOST_REGEX ON CACHE BOOL "Use boost-regex")
