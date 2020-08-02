@@ -36,7 +36,7 @@ Error JsonAtlasGenerator::endAtlas() {
   atlas += "}\n";
   
   FileWriter writer;
-  TRY(writer.open(atlasDir + QDir::separator() + atlasName + ".json"));
+  TRY(writer.open(atlasDir + '/' + atlasName + ".json"));
   writer.dev().setTextModeEnabled(true);
   const QByteArray utf8 = atlas.toUtf8();
   if (writer.dev().write(utf8) != utf8.size()) {
@@ -44,7 +44,7 @@ Error JsonAtlasGenerator::endAtlas() {
   }
   TRY(writer.flush());
   
-  TRY(writer.open(atlasDir + QDir::separator() + atlasName + ".png"));
+  TRY(writer.open(atlasDir + '/' + atlasName + ".png"));
   TRY(packer.write(writer.dev()));
   TRY(writer.flush());
   

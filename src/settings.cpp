@@ -12,6 +12,10 @@
 #include "connect.hpp"
 #include <QtWidgets/qfiledialog.h>
 
+void SetDirFunctor::operator()(const QString &dir) const {
+  getSettings().setValue(key, dir);
+}
+
 QSettings &getSettings() {
   static QSettings settings;
   static bool init = false;
@@ -28,5 +32,17 @@ void updateDirSettings(QFileDialog *dialog, const QString &key) {
 }
 
 QString getDirSettings(const QString &key) {
-  return getSettings().value(key, QDir::homePath()).toString();
+  QString dir = getSettings().value(key, QString{}).toString();
+  while (!dir.isEmpty() && !QDir{dir}.exists()) {
+    dir.truncate(dir.lastIndexOf('/'));
+  }
+  if (dir.isEmpty()) {
+    dir = QDir::homePath();
+  }
+  getSettings().setValue(key, dir);
+  return dir;
+}
+
+SetDirFunctor setDirSettings(const QString &key) {
+  return {key};
 }

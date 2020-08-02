@@ -13,15 +13,15 @@
 
 class QFileDialog;
 
+struct SetDirFunctor {
+  QString key;
+  void operator()(const QString &) const;
+};
+
 QSettings &getSettings();
 void updateDirSettings(QFileDialog *, const QString &);
 QString getDirSettings(const QString &);
-
-inline auto setDirSettings(const QString &key) {
-  return [key](const QString &dir) {
-    getSettings().setValue(key, dir);
-  };
-}
+SetDirFunctor setDirSettings(const QString &);
 
 inline const QString pref_animation_dir = "Animation Directory";
 inline const QString pref_export_dir = "Export Directory";

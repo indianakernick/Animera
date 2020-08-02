@@ -61,8 +61,9 @@ Error PngAtlasGenerator::setImageFormat(const Format newFormat, const PaletteCSp
 }
 
 Error PngAtlasGenerator::copyImage(const std::size_t i, const QImage &image) {
+  if (image.isNull()) return {};
   FileWriter writer;
-  TRY(writer.open(directory + QDir::separator() + names[i] + ".png"));
+  TRY(writer.open(directory + '/' + names[i] + ".png"));
   TRY(exportCelPng(writer.dev(), palette, image, format, pixelFormat));
   return writer.flush();
 }
