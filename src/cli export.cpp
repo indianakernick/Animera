@@ -28,27 +28,27 @@ template <typename Enum>
 const int enumStrings = 0;
 
 template <>
-const QString enumStrings<PixelFormat>[] = {
+const QString enumStrings<PixelFormat>[5] = {
   "rgba", "index", "gray", "gray-alpha", "monochrome"
 };
 
 template <>
-const QString enumStrings<LayerNameMode>[] = {
+const QString enumStrings<LayerNameMode>[4] = {
   "automatic", "name", "index", "empty"
 };
 
 template <>
-const QString enumStrings<GroupNameMode>[] = {
+const QString enumStrings<GroupNameMode>[4] = {
   "automatic", "name", "index", "empty"
 };
 
 template <>
-const QString enumStrings<FrameNameMode>[] = {
+const QString enumStrings<FrameNameMode>[4] = {
   "automatic", "relative", "absolute", "empty"
 };
 
 template <>
-const QString enumStrings<LayerVis>[] = {
+const QString enumStrings<LayerVis>[3] = {
   "visible", "hidden", "all"
 };
 
