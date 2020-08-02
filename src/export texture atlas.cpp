@@ -30,16 +30,44 @@ void checkNegative(Idx &idx, const Idx count) {
   if (idx < Idx{0}) idx += count;
 }
 
+Error validateRange(LayerRange &range, const LayerIdx count) {
+  checkNegative(range.min, count);
+  checkNegative(range.max, count);
+  if (range.min < LayerIdx{0} || range.min >= count) {
+    return "Layer min is out of range";
+  }
+  if (range.max < LayerIdx{0} || range.max >= count) {
+    return "Layer max is out of range";
+  }
+  if (range.min > range.max) {
+    return "Layer range is invalid";
+  }
+  return {};
+}
+
+Error validateRange(FrameRange &range, const FrameIdx count) {
+  checkNegative(range.min, count);
+  checkNegative(range.max, count);
+  if (range.min < FrameIdx{0} || range.min >= count) {
+    return "Frame min is out of range";
+  }
+  if (range.max < FrameIdx{0} || range.max >= count) {
+    return "Frame max is out of range";
+  }
+  if (range.min > range.max) {
+    return "Frame range is invalid";
+  }
+  return {};
+}
+
 template <typename Func>
 Error eachFrame(const AnimExportParams &params, const Animation &anim, Func func) {
   const tcb::span<const Layer> layers = anim.timeline.getLayerArray();
   LayerRange layerRange = params.layers;
   FrameRange frameRange = params.frames;
   
-  checkNegative(layerRange.min, anim.timeline.getLayers());
-  checkNegative(layerRange.max, anim.timeline.getLayers());
-  checkNegative(frameRange.min, anim.timeline.getFrames());
-  checkNegative(frameRange.max, anim.timeline.getFrames());
+  TRY(validateRange(layerRange, anim.timeline.getLayers()));
+  TRY(validateRange(frameRange, anim.timeline.getFrames()));
   
   const LayerIdx layerCount = layerRange.max - layerRange.min + LayerIdx{1};
   
@@ -92,14 +120,12 @@ Error eachCel(const AnimExportParams &params, const Animation &anim, Func func) 
   LayerRange layerRange = params.layers;
   FrameRange frameRange = params.frames;
   
+  TRY(validateRange(layerRange, anim.timeline.getLayers()));
+  TRY(validateRange(frameRange, anim.timeline.getFrames()));
+  
   SpriteNameState state;
   state.layerCount = anim.timeline.getLayers();
   state.groupCount = anim.timeline.getGroups();
-  
-  checkNegative(layerRange.min, anim.timeline.getLayers());
-  checkNegative(layerRange.max, anim.timeline.getLayers());
-  checkNegative(frameRange.min, anim.timeline.getFrames());
-  checkNegative(frameRange.max, anim.timeline.getFrames());
   
   for (LayerIdx l = layerRange.min; l <= layerRange.max; ++l) {
     const Layer &layer = layers[+l];
@@ -162,6 +188,8 @@ void initImages(Images &images, const AnimExportParams &params, const Animation 
 }
 
 void applyTransform(Images &images, const SpriteTransform &transform) {
+  assert(transform.scaleX != 0);
+  assert(transform.scaleY != 0);
   visitSurface(images.xformed, [&](const auto dst) {
     const auto src = makeCSurface<typename decltype(dst)::Pixel>(images.canvas);
     gfx::spatialTransform(dst, src, [&](const gfx::Point dstPos) {
@@ -285,11 +313,14 @@ Error exportTextureAtlas(const ExportParams &params, const AnimArray &anims) {
   for (std::size_t s = 0; s != anims.size(); ++s) {
     const Format format = compositedFormat(anims[s]->getFormat(), params.anims[s].composite);
     if (!params.generator->supported(params.pixelFormat, format)) {
-      return "Combination of pixel format and animation format is not supported by atlas generator";
+      return "Format is not supported by atlas generator";
     }
   }
   
-  const AtlasInfo info = {params.name, params.directory, params.pixelFormat};
+  AtlasInfo info = {params.name, params.directory, params.pixelFormat};
+  if (info.directory.isEmpty()) {
+    info.directory = ".";
+  }
   TRY(params.generator->beginAtlas(info));
   
   std::size_t spriteIndex = 0;

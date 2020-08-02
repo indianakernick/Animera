@@ -296,10 +296,6 @@ wrapper around QIODevice for Error
   like ChunkWriter but more generic
   could just be a handful of simple functions
 
-exporter should properly validate parameters
-  empty path
-  empty name
-
 maybe use verticies instead of rectangles
   include the destination rectangle as well as the source rectangle
   we could do transforms by just changing verticies
