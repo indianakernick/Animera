@@ -252,9 +252,10 @@ target_compile_features(Animera
     cxx_std_20
 )
 
+# stop the command prompt window from showing
 target_link_options(Animera
     PRIVATE
-    /SUBSYSTEM:WINDOWS # stop the command prompt window from showing
+    /SUBSYSTEM:WINDOWS
 )
 
 target_include_directories(Animera
@@ -265,8 +266,10 @@ target_include_directories(Animera
     third_party/stb
 )
 
-set(USE_BOOST_REGEX ON CACHE BOOL "Use boost-regex")
-set(WITH_STATIC ON)
+# There's a problem with std::regex on Windows.
+# Uncomment this if the CLI becomes sufficiently complex.
+# set(USE_BOOST_REGEX ON CACHE BOOL "Use boost-regex")
+# set(WITH_STATIC ON)
 add_subdirectory(third_party/docopt EXCLUDE_FROM_ALL)
 
 find_package(libpng CONFIG REQUIRED)
