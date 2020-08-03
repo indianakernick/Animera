@@ -323,7 +323,7 @@ void parseParams(ExportParams &params, std::vector<QString> &paths, const QJsonD
   QJsonObject obj = doc.object();
   
   params.name = getString(obj, "output name", "atlas");
-  params.directory = getString(obj, "output directory", ".");
+  params.directory = QDir::fromNativeSeparators(getString(obj, "output directory", "."));
   params.pixelFormat = getEnum(obj, "pixel format", PixelFormat::rgba);
   params.whitepixel = getBool(obj, "whitepixel", false);
   params.generator = parseGenerator(getString(obj, "generator", "png"));
