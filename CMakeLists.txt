@@ -1,7 +1,7 @@
 # cxx_std_20 added in 3.12
 cmake_minimum_required(VERSION 3.12)
 project(Animera
-    VERSION 0.1.0
+    VERSION 0.2.0
     DESCRIPTION "A cross-platform Qt tool for making pixel-art animations for games"
     HOMEPAGE_URL "https://github.com/Kerndog73/Animera"
     LANGUAGES CXX
@@ -313,6 +313,7 @@ include(InstallRequiredSystemLibraries)
 
 set(CPACK_PACKAGE_NAME "Animera")
 set(CPACK_PACKAGE_VENDOR "Indiana Kernick")
+set(CPACK_PACKAGE_INSTALL_DIRECTORY "Animera")
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/COPYING")
 set(CPACK_STRIP_FILES ON)
 set(CPACK_GENERATOR "NSIS64")

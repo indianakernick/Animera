@@ -12,13 +12,18 @@
 alias animera="$BUILT_PRODUCTS_DIR/$EXECUTABLE_PATH"
 BACKGROUND="$PROJECT_DIR/Resources/Animations/dmg background.animera"
 
-animera export --name=background --scale=4 "$BACKGROUND"
-animera export --name=background@2x --scale=8 "$BACKGROUND"
+animera export << EOF
+{
+  "animations": [
+    { "file": "$BACKGROUND", "name": "background",    "scale": 4 },
+    { "file": "$BACKGROUND", "name": "background@2x", "scale": 8 }
+  ]
+}
+EOF
 
 envsubst < "$PROJECT_DIR/scripts/dmg.json" > expanded.json
-appdmg expanded.json "$PROJECT_DIR/Animera-$MARKETING_VERSION.dmg"
+appdmg expanded.json "$PROJECT_DIR/Animera-$MARKETING_VERSION-macos.dmg"
 
 rm expanded.json
 rm background.png
 rm background@2x.png
-rm VolumeIcon.icns

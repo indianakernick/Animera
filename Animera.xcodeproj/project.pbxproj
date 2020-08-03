@@ -2301,6 +2301,7 @@
 				455F284F220688FD00C73F39 /* Resources */,
 				455F288A2206A17600C73F39 /* Mac Deploy */,
 				457D74FC239F8B06009B4E4B /* Trim */,
+				45FBDCFA24D7ADA700B6D82F /* Create DMG */,
 			);
 			buildRules = (
 			);
@@ -3150,6 +3151,24 @@
 			shellPath = /bin/sh;
 			shellScript = "/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
 		};
+		45FBDCFA24D7ADA700B6D82F /* Create DMG */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Create DMG";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# \"$PROJECT_DIR/scripts/create-dmg-icon.sh\"\n# \"$PROJECT_DIR/scripts/create-dmg.sh\"\n# rm \"$PROJECT_DIR/VolumeIcon.icns\"\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -3396,17 +3415,14 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = QY44MADGVC;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/usr/local/opt/qt/lib,
 				);
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					GLM_FORCE_SILENT_WARNINGS,
-					"$(inherited)",
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = (
 					$PROJECT_DIR/third_party/Graphics/include,
 					$PROJECT_DIR/third_party/span/include,
@@ -3430,7 +3446,7 @@
 				);
 				LLVM_LTO = NO;
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				MARKETING_VERSION = 0.1.0;
+				MARKETING_VERSION = 0.2.0;
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-Wall",
@@ -3463,7 +3479,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = QY44MADGVC;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -3472,11 +3488,7 @@
 					/usr/local/opt/qt/lib,
 				);
 				GCC_OPTIMIZATION_LEVEL = z;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					GLM_FORCE_SILENT_WARNINGS,
-					NDEBUG,
-					ENABLE_SCOPE_TIME,
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = NDEBUG;
 				HEADER_SEARCH_PATHS = (
 					$PROJECT_DIR/third_party/Graphics/include,
 					$PROJECT_DIR/third_party/span/include,
@@ -3500,7 +3512,7 @@
 				);
 				LLVM_LTO = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				MARKETING_VERSION = 0.1.0;
+				MARKETING_VERSION = 0.2.0;
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-Wall",
