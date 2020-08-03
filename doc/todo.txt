@@ -179,6 +179,14 @@ quicklook plugin
   https://fespinoza.github.io/creating-a-quicklook-plugin-for-a-document-based-macos-application
   https://developer.apple.com/library/archive/documentation/UserExperience/Conceptual/Quicklook_Programming_Guide/Introduction/Introduction.html
 
+more flexible symmetry
+  place symmetry lines anywhere
+  use symmetry with any tool
+  copy something, set symmetry line, paste flipped
+
+pull or stretch when copying
+  moving a region, fill the gap with the edge pixels
+
 --------------------------------- refactoring ----------------------------------
 
 more abstract tool interface
@@ -304,6 +312,21 @@ maybe use verticies instead of rectangles
   SDL render API
   on the other hand, that sort of thing should probably be left to the user
 
+the composite option on export would probably make more sense as an attribute of
+  the animation. If composite is disabled, layer visibility would change every
+  time you changed layers.
+
+There's a wierd edge case.
+  exportCelPng can convert index to gray
+  It does this by reinterpreting the index as a grayscale value
+  exportCelPng doesn't converted rgba to gray
+  If indexed is composited, it is converted to rgba
+  if exportCelPng did convert rgba to gray,
+  you'd end up with vastly different outcomes between compositing and not
+  compositing.
+  it might make sense to let to user specify whether they want to reinterpret
+  or not
+
 ------------------------------- minor refactoring ------------------------------
 
 there might be a few random constants that should be in config.hpp but aren't
@@ -311,6 +334,21 @@ there might be a few random constants that should be in config.hpp but aren't
 Should probably be using mouse release instead of mouse press in some places
 
 Might want to consider adding the license notice to every source file
+
+merge Cel and CelImage into one class
+
+--------------------------------- release notes --------------------------------
+
+Update version in CMakeLists.txt and Xcode project
+Increment the build number in Xcode project
+  Incrementing a number for every build seems like a bit of a hassle and also
+  it would probably be in the thousands by now if I was keeping track from the
+  start.
+  Instead, we'll increment it for every release.
+Disable address santizer and others
+Disable ENABLE_SCOPE_TIME
+Do a release build
+Release the dSYM file
 
 ------------------------------- submodules notes -------------------------------
 
