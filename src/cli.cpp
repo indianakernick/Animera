@@ -90,7 +90,7 @@ Export Command
     
     {
       "output name": "my-atlas",
-      "generator": "cpp"
+      "generator": "cpp png"
       "animations": ["path/to/file.animera"]
     }
     
@@ -120,7 +120,11 @@ Export Command
     
     "generator" field:
      - "png"  (multiple individual png files)
-     - "cpp"  (a cpp and hpp file)
+     - "cpp png"  (a cpp and hpp file with embedded png)
+     - "cpp raw"  (a cpp and hpp file with embedded uncompressed image data)
+     - "cpp deflated"  (a cpp and hpp file with embedded deflated image data)
+     - "cpp deflated with inflate"  (a cpp and hpp file with embedded deflated
+       image data and inflate function)
     
     Those are the parameters for the atlas. The "simplest configuration" from
     earlier is equivalent to this:
