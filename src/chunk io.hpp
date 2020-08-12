@@ -9,6 +9,7 @@
 #ifndef animera_chunk_io_hpp
 #define animera_chunk_io_hpp
 
+#include <optional>
 #include "error.hpp"
 #include "file io error.hpp"
 #include "config geometry.hpp"
@@ -33,6 +34,7 @@ private:
   QIODevice &dev;
   unsigned long crc;
   qint64 startPos;
+  std::optional<std::uint32_t> length;
   
   void writeStart(std::uint32_t, const char *);
   
@@ -64,6 +66,8 @@ public:
 private:
   QIODevice &dev;
   unsigned long crc;
+  qint64 startPos;
+  std::uint32_t length;
   char name[chunk_name_len];
   
   template <typename T>

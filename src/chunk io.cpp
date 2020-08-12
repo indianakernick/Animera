@@ -16,7 +16,9 @@ ChunkWriter::ChunkWriter(QIODevice &dev)
   : dev{dev} {}
 
 void ChunkWriter::begin(const std::uint32_t len, const char *name) {
-  startPos = -1;
+  startPos = dev.pos();
+  assert(startPos != 0);
+  length = len;
   writeStart(len, name);
 }
 
@@ -24,16 +26,19 @@ void ChunkWriter::begin(const char *name) {
   assert(!dev.isSequential());
   startPos = dev.pos();
   assert(startPos != 0);
+  length = std::nullopt;
   writeStart(0, name);
 }
 
 void ChunkWriter::end() {
   const std::uint32_t finalCrc = static_cast<std::uint32_t>(crc);
-  if (startPos != -1) {
-    const qint64 currPos = dev.pos();
-    assert(currPos != 0);
-    const qint64 dataLen = currPos - startPos - chunk_name_len - file_int_size;
-    assert(dataLen == qint64{static_cast<std::uint32_t>(dataLen)});
+  const qint64 currPos = dev.pos();
+  assert(currPos != 0);
+  const qint64 dataLen = currPos - startPos - chunk_name_len - file_int_size;
+  assert(dataLen == qint64{static_cast<std::uint32_t>(dataLen)});
+  if (length) {
+    assert(*length == dataLen);
+  } else {
     if (!dev.seek(startPos)) throw FileIOError{dev};
     writeInt(static_cast<std::uint32_t>(dataLen));
     if (!dev.seek(currPos)) throw FileIOError{dev};
@@ -83,13 +88,17 @@ ChunkReader::ChunkReader(QIODevice &dev)
 ChunkStart ChunkReader::begin() {
   ChunkStart start;
   start.length = readInt();
+  length = start.length;
   crc = crc32(0, nullptr, 0);
   readString(start.name, chunk_name_len);
   std::memcpy(name, start.name, chunk_name_len);
+  startPos = dev.pos();
+  assert(startPos != 0);
   return start;
 }
 
 Error ChunkReader::end() {
+  assert(dev.pos() - startPos == length);
   const std::uint32_t finalCrc = static_cast<std::uint32_t>(crc);
   if (finalCrc != readInt()) {
     QString msg = "CRC mismatch in '";

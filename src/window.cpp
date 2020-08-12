@@ -150,7 +150,7 @@ void Window::setupLayouts() {
   rightLayout->addWidget(new HoriSeparator{right});
   rightLayout->addWidget(palette);
   rightLayout->addSpacing(glob_margin);
-  right->setStyleSheet("background-color: " + glob_main.name());
+  right->setStyleSheet("background-color:" + glob_main.name());
   right->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
   
   /*

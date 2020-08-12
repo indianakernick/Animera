@@ -89,7 +89,7 @@ void Application::openFile(const QString &path) {
 void Application::initStyles() {
   setStyleSheet(
     "QToolTip {"
-      "background-color: " + glob_main.name() + ";"
+      "background-color:" + glob_main.name() + ";"
       "color: " + glob_light_2.name() + ";"
       "border-width: " + QString::number(glob_border_width) + "px;"
       "border-color: " + glob_border_color.name() + ";"

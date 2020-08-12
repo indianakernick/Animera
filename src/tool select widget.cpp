@@ -74,7 +74,7 @@ ToolSelectWidget::ToolSelectWidget(QWidget *parent, ToolParamBarWidget *bar)
   setFixedWidth(tool_select_width);
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  setStyleSheet("background-color: " + tool_select_background.name());
+  setStyleSheet("background-color:" + tool_select_background.name());
   setFrameShape(NoFrame);
   createTools();
   setupLayout();
