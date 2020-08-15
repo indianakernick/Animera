@@ -120,6 +120,7 @@ Export Command
     
     "generator" field:
      - "png"  (multiple individual png files)
+     - "json"  (a json atlas and a png texture)
      - "cpp png"  (a cpp and hpp file with embedded png)
      - "cpp raw"  (a cpp and hpp file with embedded uncompressed image data)
      - "cpp deflated"  (a cpp and hpp file with embedded deflated image data)
