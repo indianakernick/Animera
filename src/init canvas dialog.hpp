@@ -12,7 +12,7 @@
 #include "image.hpp"
 #include "dialog.hpp"
 
-class FormatWidget;
+class ComboBoxWidget;
 class NumberInputWidget;
 class TextPushButtonWidget;
 
@@ -31,7 +31,7 @@ private Q_SLOTS:
 private:
   NumberInputWidget *width = nullptr;
   NumberInputWidget *height = nullptr;
-  std::vector<FormatWidget *> formats;
+  ComboBoxWidget *formats;
   TextPushButtonWidget *ok = nullptr;
   TextPushButtonWidget *cancel = nullptr;
   

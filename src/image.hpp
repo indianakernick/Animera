@@ -14,7 +14,7 @@
 #include <Graphics/pixel variant.hpp>
 
 enum class Format : std::uint8_t {
-  // cli new.cpp depends on the order
+  // cli new.cpp and init canvas dialog.cpp depend on the order
   rgba,
   index,
   gray
