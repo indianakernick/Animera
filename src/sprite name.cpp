@@ -73,6 +73,7 @@ void appendFrameName(QString &name, const SpriteNameParams &params, const Sprite
     case FrameNameMode::absolute:
       return appendIndex(name, +state.frame);
     case FrameNameMode::empty:
+    case FrameNameMode::sheet:
       return;
   }
 }

@@ -43,8 +43,8 @@ const QString enumStrings<GroupNameMode>[4] = {
 };
 
 template <>
-const QString enumStrings<FrameNameMode>[4] = {
-  "automatic", "relative", "absolute", "empty"
+const QString enumStrings<FrameNameMode>[5] = {
+  "automatic", "relative", "absolute", "empty", "sheet"
 };
 
 template <>

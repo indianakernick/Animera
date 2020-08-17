@@ -32,7 +32,8 @@ enum class FrameNameMode {
   automatic,
   relative,
   absolute,
-  empty
+  empty,
+  sheet
 };
 
 struct SpriteNameParams {

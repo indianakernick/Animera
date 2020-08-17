@@ -108,7 +108,7 @@ Error eachFrame(const AnimExportParams &params, const Animation &anim, Func func
     state.frame = f;
     changedGroup = groupIter.incr();
     
-    TRY(func(frame, state));
+    TRY_VOID(func(frame, state));
   }
   
   return {};
@@ -147,7 +147,7 @@ Error eachCel(const AnimExportParams &params, const Animation &anim, Func func) 
       }
       
       state.frame = f;
-      TRY(func(celIter.img(), state));
+      TRY_VOID(func(celIter.img(), state));
       
       celIter.incr();
       changedGroup = groupIter.incr();
@@ -201,19 +201,88 @@ void applyTransform(Images &images, const SpriteTransform &transform) {
   });
 }
 
-Error addImage(
-  const std::size_t index,
-  const ExportParams &params,
-  const AnimExportParams &animParams,
-  Images &images
-) {
+QImage &selectImage(Images &images, const AnimExportParams &animParams) {
   if (images.xformed.isNull()) {
-    return params.generator->copyImage(index, images.canvas);
+    return images.canvas;
   } else {
     applyTransform(images, animParams.transform);
-    return params.generator->copyImage(index, images.xformed);
+    return images.xformed;
   }
 }
+
+class NameAppender {
+public:
+  NameAppender(
+    const ExportParams &params,
+    const AnimExportParams &animParams,
+    const QSize size
+  ) : params{params}, animParams{animParams}, size{size} {}
+
+  void append(std::size_t &index, const SpriteNameState &state, const bool null) const {
+    if (animParams.name.frameName == FrameNameMode::sheet) {
+      if (state.frame == state.groupBegin) {
+        const QSize sheetSize = {size.width() * +state.frameCount, size.height()};
+        const NameInfo info = {animParams.name, state, sheetSize};
+        params.generator->appendName(index++, info);
+      }
+    } else {
+      const NameInfo info = {animParams.name, state, null ? QSize{} : size};
+      params.generator->appendName(index++, info);
+    }
+  }
+
+private:
+  const ExportParams &params;
+  const AnimExportParams &animParams;
+  QSize size;
+};
+
+class ImageCopier {
+public:
+  ImageCopier(
+    const ExportParams &params,
+    const AnimExportParams &animParams,
+    const QSize size,
+    const Format format
+  ) : params{params}, animParams{animParams}, size{size}, format{format} {}
+
+  void setImage(const QImage &newImage) {
+    image = &newImage;
+  }
+  void setNullImage() {
+    image = &nullImage;
+  }
+
+  Error copy(std::size_t &index, const SpriteNameState &state) {
+    if (animParams.name.frameName == FrameNameMode::sheet) {
+      if (state.frame == state.groupBegin) {
+        QSize sheetSize = {size.width() * +state.frameCount, size.height()};
+        sheetImage = {sheetSize, qimageFormat(format)};
+      }
+      const int x = size.width() * +(state.frame - state.groupBegin);
+      if (image != &nullImage) {
+        blitImage(sheetImage, *image, {x, 0});
+      } else {
+        clearImage(sheetImage, {x, 0, size.width(), size.height()});
+      }
+      if (state.frame == state.groupBegin + state.frameCount - FrameIdx{1}) {
+        return params.generator->copyImage(index++, sheetImage);
+      }
+      return Error{};
+    } else {
+      return params.generator->copyImage(index++, *image);
+    }
+  }
+
+private:
+  const ExportParams &params;
+  const AnimExportParams &animParams;
+  QImage sheetImage;
+  QImage nullImage;
+  const QImage *image = nullptr;
+  QSize size;
+  Format format;
+};
 
 void addFrameNames(
   std::size_t &index,
@@ -222,10 +291,9 @@ void addFrameNames(
   const Animation &anim
 ) {
   const QSize size = getTransformedSize(anim.getSize(), animParams.transform);
+  NameAppender appender{params, animParams, size};
   auto iterate = [&](const Frame &frame, const SpriteNameState &state) {
-    NameInfo info = {animParams.name, state, frame.empty() ? QSize{} : size};
-    params.generator->appendName(index++, info);
-    return Error{};
+    appender.append(index, state, frame.empty());
   };
   static_cast<void>(eachFrame(animParams, anim, iterate));
 }
@@ -237,10 +305,9 @@ void addCelNames(
   const Animation &anim
 ) {
   const QSize size = getTransformedSize(anim.getSize(), animParams.transform);
+  NameAppender appender{params, animParams, size};
   auto iterate = [&](const CelImage *img, const SpriteNameState &state) {
-    NameInfo info = {animParams.name, state, *img ? size : QSize{}};
-    params.generator->appendName(index++, info);
-    return Error{};
+    appender.append(index, state, img->isNull());
   };
   static_cast<void>(eachCel(animParams, anim, iterate));
 }
@@ -255,18 +322,21 @@ Error addFrameImages(
   initImages(images, animParams, anim);
   const Format format = anim.getFormat();
   const PaletteCSpan palette = anim.palette.getPalette();
+  const QSize size = getTransformedSize(anim.getSize(), animParams.transform);
+  ImageCopier copier{params, animParams, size, format};
   
-  auto iterate = [&](const Frame &frame, const SpriteNameState &) {
+  auto iterate = [&](const Frame &frame, const SpriteNameState &state) {
     if (!frame.empty()) {
       if (format == Format::gray) {
         compositeFrame<FmtGray>(images.canvas, palette, frame, format, images.canvas.rect());
       } else {
         compositeFrame<FmtRgba>(images.canvas, palette, frame, format, images.canvas.rect());
       }
-      return addImage(index++, params, animParams, images);
+      copier.setImage(selectImage(images, animParams));
     } else {
-      return params.generator->copyImage(index++, {});
+      copier.setNullImage();
     }
+    return copier.copy(index, state);
   };
   
   return eachFrame(animParams, anim, iterate);
@@ -280,15 +350,18 @@ Error addCelImages(
 ) {
   Images images;
   initImages(images, animParams, anim);
+  const QSize size = getTransformedSize(anim.getSize(), animParams.transform);
+  ImageCopier copier{params, animParams, size, anim.getFormat()};
   
-  auto iterate = [&](const CelImage *cel, const SpriteNameState &) {
+  auto iterate = [&](const CelImage *cel, const SpriteNameState &state) {
     if (*cel) {
       clearImage(images.canvas);
       blitImage(images.canvas, cel->img, cel->pos);
-      return addImage(index++, params, animParams, images);
+      copier.setImage(selectImage(images, animParams));
     } else {
-      return params.generator->copyImage(index++, {});
+      copier.setNullImage();
     }
+    return copier.copy(index, state);
   };
   
   return eachCel(animParams, anim, iterate);
