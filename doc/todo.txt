@@ -307,8 +307,6 @@ drag and drop to import
 
 -------------------------------- export features -------------------------------
 
-sprite sheets break when selecting only part of what would become a sheet
-
 select a group
   could be as simple as using a range of groups
   by default this is [0, -1]

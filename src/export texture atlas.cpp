@@ -60,6 +60,32 @@ Error validateRange(FrameRange &range, const FrameIdx count) {
   return {};
 }
 
+Error validateSheetRange(
+  const FrameRange range,
+  const SpriteNameParams &params,
+  const Timeline &timeline
+) {
+  if (params.frameName != FrameNameMode::sheet) return {};
+  const FrameIdx lastFrame = timeline.getFrames() - FrameIdx{1};
+  if (params.groupName == GroupNameMode::empty) {
+    if (range.min != FrameIdx{0}) {
+      return "Frame range min is not aligned with sprite sheet";
+    }
+    if (range.max != lastFrame) {
+      return "Frame range max is not aligned with sprite sheet";
+    }
+  } else {
+    const tcb::span<const Group> groups = timeline.getGroupArray();
+    if (range.min != FrameIdx{0} && !findGroupBoundary(groups, range.min - FrameIdx{1})) {
+      return "Frame range min is not aligned with sprite sheet";
+    }
+    if (range.max != lastFrame && !findGroupBoundary(groups, range.max)) {
+      return "Frame range max is not aligned with sprite sheet";
+    }
+  }
+  return {};
+}
+
 template <typename Func>
 Error eachFrame(const AnimExportParams &params, const Animation &anim, Func func) {
   const tcb::span<const Layer> layers = anim.timeline.getLayerArray();
@@ -68,6 +94,7 @@ Error eachFrame(const AnimExportParams &params, const Animation &anim, Func func
   
   TRY(validateRange(layerRange, anim.timeline.getLayers()));
   TRY(validateRange(frameRange, anim.timeline.getFrames()));
+  TRY(validateSheetRange(frameRange, params.name, anim.timeline));
   
   const LayerIdx layerCount = layerRange.max - layerRange.min + LayerIdx{1};
   
@@ -123,6 +150,7 @@ Error eachCel(const AnimExportParams &params, const Animation &anim, Func func) 
   
   TRY(validateRange(layerRange, anim.timeline.getLayers()));
   TRY(validateRange(frameRange, anim.timeline.getFrames()));
+  TRY(validateSheetRange(frameRange, params.name, anim.timeline));
   
   SpriteNameState state;
   state.layerCount = anim.timeline.getLayers();
