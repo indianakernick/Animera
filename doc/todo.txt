@@ -121,6 +121,18 @@ thick line
 why is the overlay a few frames behind the cursor?
   is there anything that can be done?
 
+more efficient image growing and shrinking
+  MEASURE MEASURE MEASURE
+  keep the used rectangle of the image
+  shinking
+    we could simply not reallocate at all
+    should probably free memory when the rectangle becomes empty
+  growing
+    over allocate in the positive and negative directions
+    if we need space on the left but there's only space on the right
+    just shift the image over
+    reallocating would require copying the image anyway
+
 ----------------------------------- scripting ----------------------------------
 
 scripting interface
@@ -295,6 +307,8 @@ drag and drop to import
 
 -------------------------------- export features -------------------------------
 
+sprite sheets break when selecting only part of what would become a sheet
+
 select a group
   could be as simple as using a range of groups
   by default this is [0, -1]
@@ -315,6 +329,8 @@ maybe use verticies instead of rectangles
 the composite option on export would probably make more sense as an attribute of
   the animation. If composite is disabled, layer visibility would change every
   time you changed layers.
+  isn't this basically the same as nested groups but worse?
+  nested groups is better than disabling the compositing of layers
 
 There's a wierd edge case.
   exportCelPng can convert index to gray
@@ -335,7 +351,9 @@ Should probably be using mouse release instead of mouse press in some places
 
 Might want to consider adding the license notice to every source file
 
-merge Cel and CelImage into one class
+could probably use QImage instead of CelImage
+  QImage has an offset
+  might make it easier to use overlay and cel with paint functions
 
 --------------------------------- release notes --------------------------------
 

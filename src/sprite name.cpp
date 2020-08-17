@@ -67,7 +67,7 @@ void appendGroupName(QString &name, const SpriteNameParams &params, const Sprite
 void appendFrameName(QString &name, const SpriteNameParams &params, const SpriteNameState &state) {
   switch (params.frameName) {
     case FrameNameMode::automatic:
-      if (state.frameCount <= FrameIdx{1}) return;
+      if (state.groupFrameCount <= FrameIdx{1}) return;
     case FrameNameMode::relative:
       return appendIndex(name, +(state.frame - state.groupBegin));
     case FrameNameMode::absolute:

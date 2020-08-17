@@ -52,6 +52,7 @@ struct SpriteNameState {
   GroupIdx groupCount;
   FrameIdx frameCount;
   
+  FrameIdx groupFrameCount;
   FrameIdx groupBegin;
   
   std::string_view layerName;

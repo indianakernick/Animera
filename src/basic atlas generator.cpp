@@ -68,7 +68,7 @@ void BasicAtlasGenerator::appendName(const std::size_t i, const NameInfo info) {
   appendName(name, i);
   insertName(name);
   
-  if (info.state.frame - info.state.groupBegin == info.state.frameCount - FrameIdx{1}) {
+  if (info.state.frame - info.state.groupBegin == info.state.groupFrameCount - FrameIdx{1}) {
     if (hasFrameName) {
       appendAlias(name.left(namePos[2]), "end_", i + 1);
     }
