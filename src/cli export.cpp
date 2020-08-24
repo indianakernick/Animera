@@ -33,8 +33,8 @@ const QString enumStrings<PixelFormat>[5] = {
 };
 
 template <>
-const QString enumStrings<LayerNameMode>[4] = {
-  "automatic", "name", "index", "empty"
+const QString enumStrings<LayerNameMode>[6] = {
+  "automatic", "name", "index", "empty", "sheet-column", "sheet-row"
 };
 
 template <>

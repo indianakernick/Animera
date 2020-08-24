@@ -153,12 +153,14 @@ Export Command
     in the sprite name. Valid values are below.
     
     "layer name" field:
-     - "automatic"  (empty if there is only one layer
-                     otherwise layer name if it's not empty
-                     otherwise layer index)
-     - "name"       (layer name is appended)
-     - "index"      (layer index is appended)
-     - "empty"      (nothing is appended)
+     - "automatic"     (empty if there is only one layer
+                        otherwise layer name if it's not empty
+                        otherwise layer index)
+     - "name"          (layer name is appended)
+     - "index"         (layer index is appended)
+     - "empty"         (nothing is appended)
+     - "sheet-column"  (layer becomes sprite sheet column)
+     - "sheet-row"     (layer becomes sprite sheet row)
     
     The "group name" field is very similar to the "layer name" field except that
     it applies to groups. It also has sprite sheet support.

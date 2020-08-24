@@ -1,4 +1,4 @@
-//
+﻿//
 //  export texture atlas.cpp
 //  Animera
 //
@@ -61,26 +61,49 @@ Error validateRange(FrameRange &range, const FrameIdx count) {
 }
 
 Error validateSheetRange(
-  const FrameRange range,
+  const LayerRange layerRange,
+  const FrameRange frameRange,
   const SpriteNameParams &params,
   const Timeline &timeline
 ) {
-  if (params.frameName != FrameNameMode::sheet_column || params.frameName != FrameNameMode::sheet_row) return {};
   const FrameIdx lastFrame = timeline.getFrames() - FrameIdx{1};
-  if (params.groupName == GroupNameMode::empty) {
-    if (range.min != FrameIdx{0}) {
-      return "Frame range min is not aligned with sprite sheet";
+  const LayerIdx lastLayer = timeline.getLayers() - LayerIdx{1};
+  
+  if (isSheetMode(params.layerName)) {
+    if (frameRange.min != FrameIdx{0} || frameRange.max != lastFrame) {
+      return "Frame range is not aligned with sprite sheet";
     }
-    if (range.max != lastFrame) {
-      return "Frame range max is not aligned with sprite sheet";
+    if (layerRange.min != LayerIdx{0} || layerRange.max != lastLayer) {
+      return "Layer range is not aligned with sprite sheet";
     }
-  } else {
+    
+    const tcb::span<const Layer> layers = timeline.getLayerArray();
+    switch (layerRange.vis) {
+      case LayerVis::visible:
+        if (!layers.front().visible || !layers.back().visible) {
+          return "Layer visibility is not aligned with sprite sheet";
+        }
+        break;
+      case LayerVis::hidden:
+        if (layers.front().visible || layers.back().visible) {
+          return "Layer visibility is not aligned with sprite sheet";
+        }
+        break;
+      case LayerVis::all:
+        break;
+    }
+    return {};
+  } else if (isSheetMode(params.groupName)) {
+    if (frameRange.min != FrameIdx{0} || frameRange.max != lastFrame) {
+      return "Frame range is not aligned with sprite sheet";
+    }
+  } else if (isSheetMode(params.frameName)) {
     const tcb::span<const Group> groups = timeline.getGroupArray();
-    if (range.min != FrameIdx{0} && !findGroupBoundary(groups, range.min - FrameIdx{1})) {
-      return "Frame range min is not aligned with sprite sheet";
+    if (frameRange.min != FrameIdx{0} && !findGroupBoundary(groups, frameRange.min - FrameIdx{1})) {
+      return "Frame range is not aligned with sprite sheet";
     }
-    if (range.max != lastFrame && !findGroupBoundary(groups, range.max)) {
-      return "Frame range max is not aligned with sprite sheet";
+    if (frameRange.max != lastFrame && !findGroupBoundary(groups, frameRange.max)) {
+      return "Frame range is not aligned with sprite sheet";
     }
   }
   return {};
@@ -109,7 +132,7 @@ Error eachFrame(const AnimExportParams &params, const Animation &anim, Func func
   
   TRY(validateRange(layerRange, anim.timeline.getLayers()));
   TRY(validateRange(frameRange, anim.timeline.getFrames()));
-  TRY(validateSheetRange(frameRange, params.name, anim.timeline));
+  TRY(validateSheetRange(layerRange, frameRange, params.name, anim.timeline));
   
   const LayerIdx layerCount = layerRange.max - layerRange.min + LayerIdx{1};
   
@@ -166,7 +189,7 @@ Error eachCel(const AnimExportParams &params, const Animation &anim, Func func) 
   
   TRY(validateRange(layerRange, anim.timeline.getLayers()));
   TRY(validateRange(frameRange, anim.timeline.getFrames()));
-  TRY(validateSheetRange(frameRange, params.name, anim.timeline));
+  TRY(validateSheetRange(layerRange, frameRange, params.name, anim.timeline));
   
   SpriteNameState state;
   state.layerCount = anim.timeline.getLayers();
@@ -265,6 +288,16 @@ struct SheetRange {
   int majorCount;
 };
 
+SheetRange layerRange(const SpriteNameState &state) {
+  return {
+    +state.frame + +state.layer * +state.frameCount,
+    +state.layerCount * +state.frameCount,
+    +state.layerCount * +state.frameCount,
+    0,
+    1
+  };
+}
+
 SheetRange groupRange(const SpriteNameState &state) {
   return {
     +state.frame,
@@ -285,7 +318,17 @@ SheetRange frameRange(const SpriteNameState &state) {
   };
 }
 
-SheetRange frameGroupRange(const SpriteNameState &state) {
+SheetRange frameToGroupLayerRange(const SpriteNameState &state) {
+  return {
+    +(state.frame - state.groupBegin),
+    +state.groupFrameCount,
+    +state.maxGroupFrameCount,
+    +state.group * +state.layer,
+    +state.groupCount * +state.layerCount
+  };
+}
+
+SheetRange frameToGroupRange(const SpriteNameState &state) {
   return {
     +(state.frame - state.groupBegin),
     +state.groupFrameCount,
@@ -294,6 +337,26 @@ SheetRange frameGroupRange(const SpriteNameState &state) {
     +state.groupCount
   };
 };
+
+SheetRange frameLayerToGroupRange(const SpriteNameState &state) {
+  return {
+    +state.frame - +state.groupBegin + +state.layer * +state.maxGroupFrameCount,
+    +state.maxGroupFrameCount * +state.layerCount,
+    +state.maxGroupFrameCount * +state.layerCount,
+    +state.group,
+    +state.groupCount
+  };
+}
+
+SheetRange frameGroupToLayerRange(const SpriteNameState &state) {
+  return {
+    +state.frame,
+    +state.frameCount,
+    +state.frameCount,
+    +state.layer,
+    +state.layerCount
+  };
+}
 
 QPoint columnDim(const int value, const int other) {
   return {value, other};
@@ -305,25 +368,55 @@ QPoint rowDim(const int value, const int other) {
 
 template <typename Class>
 auto selectFunc(const SpriteNameParams &params) {
-  if (params.groupName == GroupNameMode::sheet_column) {
-    if (params.frameName == FrameNameMode::sheet_row) {
-      return &Class::template funcImpl<&frameGroupRange, &rowDim>;
+  if (params.layerName == LayerNameMode::sheet_column) {
+    if (params.groupName == GroupNameMode::sheet_row) {
+      if (params.frameName == FrameNameMode::sheet_column) {
+        return &Class::template funcImpl<&frameLayerToGroupRange, &columnDim>;
+      } else {
+        return &Class::template funcImpl<&frameGroupToLayerRange, &rowDim>;
+      }
     } else {
-      return &Class::template funcImpl<&groupRange, &columnDim>;
+      if (params.frameName == FrameNameMode::sheet_row) {
+        return &Class::template funcImpl<&frameToGroupLayerRange, &rowDim>;
+      } else {
+        return &Class::template funcImpl<&layerRange, &columnDim>;
+      }
     }
-  } else if (params.groupName == GroupNameMode::sheet_row) {
-    if (params.frameName == FrameNameMode::sheet_column) {
-      return &Class::template funcImpl<&frameGroupRange, &columnDim>;
+  } else if (params.layerName == LayerNameMode::sheet_row) {
+    if (params.groupName == GroupNameMode::sheet_column) {
+      if (params.frameName == FrameNameMode::sheet_row) {
+        return &Class::template funcImpl<&frameLayerToGroupRange, &rowDim>;
+      } else {
+        return &Class::template funcImpl<&frameGroupToLayerRange, &columnDim>;
+      }
     } else {
-      return &Class::template funcImpl<&groupRange, &rowDim>;
+      if (params.frameName == FrameNameMode::sheet_column) {
+        return &Class::template funcImpl<&frameToGroupLayerRange, &columnDim>;
+      } else {
+        return &Class::template funcImpl<&layerRange, &rowDim>;
+      }
     }
   } else {
-    if (params.frameName == FrameNameMode::sheet_column) {
-      return &Class::template funcImpl<&frameRange, &columnDim>;
-    } else if (params.frameName == FrameNameMode::sheet_row) {
-      return &Class::template funcImpl<&frameRange, &rowDim>;
+    if (params.groupName == GroupNameMode::sheet_column) {
+      if (params.frameName == FrameNameMode::sheet_row) {
+        return &Class::template funcImpl<&frameToGroupRange, &rowDim>;
+      } else {
+        return &Class::template funcImpl<&groupRange, &columnDim>;
+      }
+    } else if (params.groupName == GroupNameMode::sheet_row) {
+      if (params.frameName == FrameNameMode::sheet_column) {
+        return &Class::template funcImpl<&frameToGroupRange, &columnDim>;
+      } else {
+        return &Class::template funcImpl<&groupRange, &rowDim>;
+      }
     } else {
-      return &Class::noSheet;
+      if (params.frameName == FrameNameMode::sheet_column) {
+        return &Class::template funcImpl<&frameRange, &columnDim>;
+      } else if (params.frameName == FrameNameMode::sheet_row) {
+        return &Class::template funcImpl<&frameRange, &rowDim>;
+      } else {
+        return &Class::noSheet;
+      }
     }
   }
 }

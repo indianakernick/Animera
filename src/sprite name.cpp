@@ -42,6 +42,8 @@ void appendLayerName(QString &name, const SpriteNameParams &params, const Sprite
     case LayerNameMode::index:
       return appendIndex(name, +state.layer);
     case LayerNameMode::empty:
+    case LayerNameMode::sheet_column:
+    case LayerNameMode::sheet_row:
       return;
   }
 }
@@ -49,6 +51,7 @@ void appendLayerName(QString &name, const SpriteNameParams &params, const Sprite
 void appendGroupName(QString &name, const SpriteNameParams &params, const SpriteNameState &state) {
   switch (params.groupName) {
     case GroupNameMode::automatic:
+      if (isSheetMode(params.layerName)) return;
       if (state.groupCount <= GroupIdx{1}) return;
       if (state.groupName.empty()) {
         return appendIndex(name, +state.group);
@@ -69,6 +72,8 @@ void appendGroupName(QString &name, const SpriteNameParams &params, const Sprite
 void appendFrameName(QString &name, const SpriteNameParams &params, const SpriteNameState &state) {
   switch (params.frameName) {
     case FrameNameMode::automatic:
+      if (isSheetMode(params.groupName)) return;
+      if (isSheetMode(params.layerName)) return;
       if (state.groupFrameCount <= FrameIdx{1}) return;
     case FrameNameMode::relative:
       return appendIndex(name, +(state.frame - state.groupBegin));

@@ -16,7 +16,9 @@ enum class LayerNameMode {
   automatic,
   name,
   index,
-  empty
+  empty,
+  sheet_column,
+  sheet_row
 };
 
 enum class GroupNameMode {
@@ -62,6 +64,11 @@ struct SpriteNameState {
   std::string_view layerName;
   std::string_view groupName;
 };
+
+template <typename Mode>
+constexpr bool isSheetMode(const Mode mode) {
+  return mode == Mode::sheet_column || mode == Mode::sheet_row;
+}
 
 void appendLayerName(QString &, const SpriteNameParams &, const SpriteNameState &);
 void appendGroupName(QString &, const SpriteNameParams &, const SpriteNameState &);

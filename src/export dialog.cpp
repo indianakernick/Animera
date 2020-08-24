@@ -124,16 +124,18 @@ void ExportDialog::addFormatOptions() {
 }
 
 void ExportDialog::createWidgets() {
-  name = new TextInputWidget{this, textBoxRect(15)};
+  name = new TextInputWidget{this, textBoxRect(14)};
   
   dir = new FileInputWidget{this, 55};
   dir->setPath(getDirSettings(pref_export_dir));
   
-  layerName = new ComboBoxWidget{this, 11};
+  layerName = new ComboBoxWidget{this, 12};
   layerName->addItem("Auto layer");
   layerName->addItem("Layer name");
   layerName->addItem("Layer index");
   layerName->addItem("Empty");
+  layerName->addItem("Sheet column");
+  layerName->addItem("Sheet row");
   
   groupName = new ComboBoxWidget{this, 12};
   groupName->addItem("Auto group");
