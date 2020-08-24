@@ -161,16 +161,28 @@ Export Command
      - "empty"      (nothing is appended)
     
     The "group name" field is very similar to the "layer name" field except that
-    it applies to groups. Its valid values are the same as for "layer name".
+    it applies to groups. It also has sprite sheet support.
+    
+    "group name" field:
+     - "automatic"     (empty if there is only one group
+                        otherwise group name if it's not empty
+                        otherwise group index)
+     - "name"          (group name is appended)
+     - "index"         (group index is appended)
+     - "empty"         (nothing is appended)
+     - "sheet-column"  (group becomes sprite sheet column)
+     - "sheet-row"     (group becomes sprite sheet row)
     
     The "frame name" field is similar but different to the previous name fields.
-    It has a different set of valid values.
+    Like "group name", it also has sprite sheet support.
     
     "frame name" field:
-     - "automatic" (relative frame index if there is more than one frame)
-     - "relative"  (frame index relative to group is appended)
-     - "absolute"  (absolute frame index is appended)
-     - "empty"     (nothing is appended)
+     - "automatic"     (relative frame index if there is more than one frame)
+     - "relative"      (frame index relative to group is appended)
+     - "absolute"      (absolute frame index is appended)
+     - "empty"         (nothing is appended)
+     - "sheet-column"  (frame becomes sprite sheet column)
+     - "sheet-row"     (frame becomes sprite sheet row)
     
     The "scale" field specifies the scale factor to apply to each sprite in the
     animation. It can either be a single integer to uniformly scale the sprite,

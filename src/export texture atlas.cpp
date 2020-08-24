@@ -306,20 +306,16 @@ QPoint rowDim(const int value, const int other) {
 template <typename Class>
 auto selectFunc(const SpriteNameParams &params) {
   if (params.groupName == GroupNameMode::sheet_column) {
-    if (params.frameName == FrameNameMode::sheet_column) {
-      return &Class::template funcImpl<&groupRange, &columnDim>;
-    } else if (params.frameName == FrameNameMode::sheet_row) {
+    if (params.frameName == FrameNameMode::sheet_row) {
       return &Class::template funcImpl<&frameGroupRange, &rowDim>;
     } else {
-      Q_UNREACHABLE(); // maybe we could assume FrameNameMode::sheet_column
+      return &Class::template funcImpl<&groupRange, &columnDim>;
     }
   } else if (params.groupName == GroupNameMode::sheet_row) {
     if (params.frameName == FrameNameMode::sheet_column) {
       return &Class::template funcImpl<&frameGroupRange, &columnDim>;
-    } else if (params.frameName == FrameNameMode::sheet_row) {
-      return &Class::template funcImpl<&groupRange, &rowDim>;
     } else {
-      Q_UNREACHABLE(); // maybe we could assume FrameNameMode::sheet_row
+      return &Class::template funcImpl<&groupRange, &rowDim>;
     }
   } else {
     if (params.frameName == FrameNameMode::sheet_column) {
