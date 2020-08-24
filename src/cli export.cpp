@@ -38,8 +38,8 @@ const QString enumStrings<LayerNameMode>[4] = {
 };
 
 template <>
-const QString enumStrings<GroupNameMode>[4] = {
-  "automatic", "name", "index", "empty"
+const QString enumStrings<GroupNameMode>[6] = {
+  "automatic", "name", "index", "empty", "sheet-column", "sheet-row"
 };
 
 template <>

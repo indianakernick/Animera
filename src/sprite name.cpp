@@ -1,4 +1,4 @@
-﻿//
+//
 //  sprite name.cpp
 //  Animera
 //
@@ -60,6 +60,8 @@ void appendGroupName(QString &name, const SpriteNameParams &params, const Sprite
     case GroupNameMode::index:
       return appendIndex(name, +state.group);
     case GroupNameMode::empty:
+    case GroupNameMode::sheet_column:
+    case GroupNameMode::sheet_row:
       return;
   }
 }
@@ -73,7 +75,8 @@ void appendFrameName(QString &name, const SpriteNameParams &params, const Sprite
     case FrameNameMode::absolute:
       return appendIndex(name, +state.frame);
     case FrameNameMode::empty:
-    case FrameNameMode::sheet:
+    case FrameNameMode::sheet_column:
+    case FrameNameMode::sheet_row:
       return;
   }
 }

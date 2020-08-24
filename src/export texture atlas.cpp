@@ -86,6 +86,21 @@ Error validateSheetRange(
   return {};
 }
 
+FrameIdx getMaxFrameCount(const tcb::span<const Group> groups, const FrameRange range) {
+  GroupInfo info = findGroup(groups, range.min);
+  FrameIdx maxCount = info.end - info.begin;
+  FrameIdx prevEnd = info.end;
+  std::size_t index = static_cast<std::size_t>(info.group) + 1;
+  while (index < groups.size()) {
+    const FrameIdx end = groups[index].end;
+    if (end - FrameIdx{1} > range.max) break;
+    maxCount = std::max(maxCount, end - prevEnd);
+    prevEnd = end;
+    ++index;
+  }
+  return std::min(maxCount, range.max - range.min + FrameIdx{1});
+}
+
 template <typename Func>
 Error eachFrame(const AnimExportParams &params, const Animation &anim, Func func) {
   const tcb::span<const Layer> layers = anim.timeline.getLayerArray();
@@ -114,6 +129,7 @@ Error eachFrame(const AnimExportParams &params, const Animation &anim, Func func
   state.layerCount = LayerIdx{1};
   state.groupCount = anim.timeline.getGroups();
   state.frameCount = anim.timeline.getFrames();
+  state.maxGroupFrameCount = getMaxFrameCount(anim.timeline.getGroupArray(), frameRange);
   state.layerName = layers[+layerRange.min].name;
   
   for (FrameIdx f = frameRange.min; f <= frameRange.max; ++f) {
@@ -156,6 +172,7 @@ Error eachCel(const AnimExportParams &params, const Animation &anim, Func func) 
   state.layerCount = anim.timeline.getLayers();
   state.groupCount = anim.timeline.getGroups();
   state.frameCount = anim.timeline.getFrames();
+  state.maxGroupFrameCount = getMaxFrameCount(anim.timeline.getGroupArray(), frameRange);
   
   for (LayerIdx l = layerRange.min; l <= layerRange.max; ++l) {
     const Layer &layer = layers[+l];
@@ -240,18 +257,43 @@ QImage &selectImage(Images &images, const AnimExportParams &animParams) {
   }
 }
 
-struct Range {
-  FrameIdx start;
-  FrameIdx count;
+struct SheetRange {
+  int minor;
+  int minorCount;
+  int maxMinorCount;
+  int major;
+  int majorCount;
 };
 
-Range layerRange(const SpriteNameState &state) {
-  return {FrameIdx{0}, state.frameCount};
+SheetRange groupRange(const SpriteNameState &state) {
+  return {
+    +state.frame,
+    +state.frameCount,
+    +state.frameCount,
+    0,
+    1
+  };
 }
 
-Range groupRange(const SpriteNameState &state) {
-  return {state.groupBegin, state.groupFrameCount};
+SheetRange frameRange(const SpriteNameState &state) {
+  return {
+    +(state.frame - state.groupBegin),
+    +state.groupFrameCount,
+    +state.groupFrameCount,
+    0,
+    1
+  };
 }
+
+SheetRange frameGroupRange(const SpriteNameState &state) {
+  return {
+    +(state.frame - state.groupBegin),
+    +state.groupFrameCount,
+    +state.maxGroupFrameCount,
+    +state.group,
+    +state.groupCount
+  };
+};
 
 QPoint columnDim(const int value, const int other) {
   return {value, other};
@@ -263,20 +305,30 @@ QPoint rowDim(const int value, const int other) {
 
 template <typename Class>
 auto selectFunc(const SpriteNameParams &params) {
-  if (params.frameName == FrameNameMode::sheet_column) {
-    if (params.groupName == GroupNameMode::empty) {
-      return &Class::template funcImpl<&layerRange, &columnDim>;
-    } else {
+  if (params.groupName == GroupNameMode::sheet_column) {
+    if (params.frameName == FrameNameMode::sheet_column) {
       return &Class::template funcImpl<&groupRange, &columnDim>;
-    }
-  } else if (params.frameName == FrameNameMode::sheet_row) {
-    if (params.groupName == GroupNameMode::empty) {
-      return &Class::template funcImpl<&layerRange, &rowDim>;
+    } else if (params.frameName == FrameNameMode::sheet_row) {
+      return &Class::template funcImpl<&frameGroupRange, &rowDim>;
     } else {
+      Q_UNREACHABLE(); // maybe we could assume FrameNameMode::sheet_column
+    }
+  } else if (params.groupName == GroupNameMode::sheet_row) {
+    if (params.frameName == FrameNameMode::sheet_column) {
+      return &Class::template funcImpl<&frameGroupRange, &columnDim>;
+    } else if (params.frameName == FrameNameMode::sheet_row) {
       return &Class::template funcImpl<&groupRange, &rowDim>;
+    } else {
+      Q_UNREACHABLE(); // maybe we could assume FrameNameMode::sheet_row
     }
   } else {
-    return &Class::noSheet;
+    if (params.frameName == FrameNameMode::sheet_column) {
+      return &Class::template funcImpl<&frameRange, &columnDim>;
+    } else if (params.frameName == FrameNameMode::sheet_row) {
+      return &Class::template funcImpl<&frameRange, &rowDim>;
+    } else {
+      return &Class::noSheet;
+    }
   }
 }
 
@@ -296,9 +348,9 @@ public:
   
   template <auto RangeFn, auto DimFn>
   void funcImpl(std::size_t &index, const SpriteNameState &state, bool) const {
-    const Range range = RangeFn(state);
-    if (state.frame == range.start) {
-      const QPoint count = DimFn(+range.count, 1);
+    const SheetRange range = RangeFn(state);
+    if (range.minor == 0 && range.major == 0) {
+      const QPoint count = DimFn(range.maxMinorCount, range.majorCount);
       const QSize sheetSize = {count.x() * size.width(), count.y() * size.height()};
       const NameInfo info = {animParams.name, state, sheetSize};
       params.generator->appendName(index++, info);
@@ -341,15 +393,15 @@ public:
   
   template <auto RangeFn, auto DimFn>
   Error funcImpl(std::size_t &index, const SpriteNameState &state) {
-    const Range range = RangeFn(state);
-    if (state.frame == range.start) {
-      const QPoint count = DimFn(+range.count, 1);
+    const SheetRange range = RangeFn(state);
+    if (range.minor == 0 && range.major == 0) {
+      const QPoint count = DimFn(range.maxMinorCount, range.majorCount);
       const QSize sheetSize = {count.x() * size.width(), count.y() * size.height()};
       sheetImage = {sheetSize, qimageFormat(format)};
     }
-    const QPoint pos = DimFn(+(state.frame - range.start), 0);
+    const QPoint pos = DimFn(range.minor, range.major);
     copyToSheet({pos.x() * size.width(), pos.y() * size.height()});
-    if (state.frame == range.start + range.count - FrameIdx{1}) {
+    if (range.minor == range.minorCount - 1 && range.major == range.majorCount - 1) {
       return params.generator->copyImage(index++, sheetImage);
     }
     return {};

@@ -24,7 +24,9 @@ enum class GroupNameMode {
   automatic,
   name,
   index,
-  empty
+  empty,
+  sheet_column,
+  sheet_row
 };
 
 enum class FrameNameMode {
@@ -53,6 +55,7 @@ struct SpriteNameState {
   GroupIdx groupCount;
   FrameIdx frameCount;
   
+  FrameIdx maxGroupFrameCount;
   FrameIdx groupFrameCount;
   FrameIdx groupBegin;
   
