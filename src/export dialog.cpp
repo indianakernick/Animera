@@ -146,7 +146,8 @@ void ExportDialog::createWidgets() {
   frameName->addItem("Relative frame");
   frameName->addItem("Absolute frame");
   frameName->addItem("Empty");
-  frameName->addItem("Sprite sheet");
+  frameName->addItem("Sheet column");
+  frameName->addItem("Sheet row");
   
   layerSelect = new ComboBoxWidget{this, 8};
   layerSelect->addItem("Visible");

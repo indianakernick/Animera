@@ -65,7 +65,7 @@ Error validateSheetRange(
   const SpriteNameParams &params,
   const Timeline &timeline
 ) {
-  if (params.frameName != FrameNameMode::sheet) return {};
+  if (params.frameName != FrameNameMode::sheet_column || params.frameName != FrameNameMode::sheet_row) return {};
   const FrameIdx lastFrame = timeline.getFrames() - FrameIdx{1};
   if (params.groupName == GroupNameMode::empty) {
     if (range.min != FrameIdx{0}) {
@@ -240,6 +240,46 @@ QImage &selectImage(Images &images, const AnimExportParams &animParams) {
   }
 }
 
+struct Range {
+  FrameIdx start;
+  FrameIdx count;
+};
+
+Range layerRange(const SpriteNameState &state) {
+  return {FrameIdx{0}, state.frameCount};
+}
+
+Range groupRange(const SpriteNameState &state) {
+  return {state.groupBegin, state.groupFrameCount};
+}
+
+QPoint columnDim(const int value, const int other) {
+  return {value, other};
+}
+
+QPoint rowDim(const int value, const int other) {
+  return {other, value};
+}
+
+template <typename Class>
+auto selectFunc(const SpriteNameParams &params) {
+  if (params.frameName == FrameNameMode::sheet_column) {
+    if (params.groupName == GroupNameMode::empty) {
+      return &Class::template funcImpl<&layerRange, &columnDim>;
+    } else {
+      return &Class::template funcImpl<&groupRange, &columnDim>;
+    }
+  } else if (params.frameName == FrameNameMode::sheet_row) {
+    if (params.groupName == GroupNameMode::empty) {
+      return &Class::template funcImpl<&layerRange, &rowDim>;
+    } else {
+      return &Class::template funcImpl<&groupRange, &rowDim>;
+    }
+  } else {
+    return &Class::noSheet;
+  }
+}
+
 class NameAppender {
 public:
   NameAppender(
@@ -247,28 +287,19 @@ public:
     const AnimExportParams &animParams,
     const QSize size
   ) : params{params}, animParams{animParams}, size{size} {
-    if (animParams.name.frameName == FrameNameMode::sheet) {
-      if (animParams.name.groupName == GroupNameMode::empty) {
-        appendFunc = &NameAppender::layerSheet;
-      } else {
-        appendFunc = &NameAppender::groupSheet;
-      }
-    } else {
-      appendFunc = &NameAppender::noSheet;
-    }
+    appendFunc = selectFunc<NameAppender>(animParams.name);
+  }
+
+  void append(std::size_t &index, const SpriteNameState &state, const bool null) const {
+    (this->*appendFunc)(index, state, null);
   }
   
-  void layerSheet(std::size_t &index, const SpriteNameState &state, bool) const {
-    if (state.frame == FrameIdx{0}) {
-      const QSize sheetSize = {size.width() * +state.frameCount, size.height()};
-      const NameInfo info = {animParams.name, state, sheetSize};
-      params.generator->appendName(index++, info);
-    }
-  }
-  
-  void groupSheet(std::size_t &index, const SpriteNameState &state, bool) const {
-    if (state.frame == state.groupBegin) {
-      const QSize sheetSize = {size.width() * +state.groupFrameCount, size.height()};
+  template <auto RangeFn, auto DimFn>
+  void funcImpl(std::size_t &index, const SpriteNameState &state, bool) const {
+    const Range range = RangeFn(state);
+    if (state.frame == range.start) {
+      const QPoint count = DimFn(+range.count, 1);
+      const QSize sheetSize = {count.x() * size.width(), count.y() * size.height()};
       const NameInfo info = {animParams.name, state, sheetSize};
       params.generator->appendName(index++, info);
     }
@@ -277,10 +308,6 @@ public:
   void noSheet(std::size_t &index, const SpriteNameState &state, const bool null) const {
     const NameInfo info = {animParams.name, state, null ? QSize{} : size};
     params.generator->appendName(index++, info);
-  }
-
-  void append(std::size_t &index, const SpriteNameState &state, const bool null) const {
-    (this->*appendFunc)(index, state, null);
   }
 
 private:
@@ -298,15 +325,7 @@ public:
     const QSize size,
     const Format format
   ) : params{params}, size{size}, format{format} {
-    if (animParams.name.frameName == FrameNameMode::sheet) {
-      if (animParams.name.groupName == GroupNameMode::empty) {
-        copyFunc = &ImageCopier::layerSheet;
-      } else {
-        copyFunc = &ImageCopier::groupSheet;
-      }
-    } else {
-      copyFunc = &ImageCopier::noSheet;
-    }
+    copyFunc = selectFunc<ImageCopier>(animParams.name);
   }
 
   void setImage(const QImage &newImage) {
@@ -315,26 +334,22 @@ public:
   void setNullImage() {
     image = &nullImage;
   }
-  
-  Error layerSheet(std::size_t &index, const SpriteNameState &state) {
-    if (state.frame == FrameIdx{0}) {
-      const QSize sheetSize = {size.width() * +state.frameCount, size.height()};
-      sheetImage = {sheetSize, qimageFormat(format)};
-    }
-    copyToSheet(size.width() * +state.frame);
-    if (state.frame == state.frameCount - FrameIdx{1}) {
-      return params.generator->copyImage(index++, sheetImage);
-    }
-    return {};
+
+  Error copy(std::size_t &index, const SpriteNameState &state) {
+    return (this->*copyFunc)(index, state);
   }
   
-  Error groupSheet(std::size_t &index, const SpriteNameState &state) {
-    if (state.frame == state.groupBegin) {
-      const QSize sheetSize = {size.width() * +state.groupFrameCount, size.height()};
+  template <auto RangeFn, auto DimFn>
+  Error funcImpl(std::size_t &index, const SpriteNameState &state) {
+    const Range range = RangeFn(state);
+    if (state.frame == range.start) {
+      const QPoint count = DimFn(+range.count, 1);
+      const QSize sheetSize = {count.x() * size.width(), count.y() * size.height()};
       sheetImage = {sheetSize, qimageFormat(format)};
     }
-    copyToSheet(size.width() * +(state.frame - state.groupBegin));
-    if (state.frame == state.groupBegin + state.groupFrameCount - FrameIdx{1}) {
+    const QPoint pos = DimFn(+(state.frame - range.start), 0);
+    copyToSheet({pos.x() * size.width(), pos.y() * size.height()});
+    if (state.frame == range.start + range.count - FrameIdx{1}) {
       return params.generator->copyImage(index++, sheetImage);
     }
     return {};
@@ -342,10 +357,6 @@ public:
   
   Error noSheet(std::size_t &index, const SpriteNameState &) {
     return params.generator->copyImage(index++, *image);
-  }
-
-  Error copy(std::size_t &index, const SpriteNameState &state) {
-    return (this->*copyFunc)(index, state);
   }
 
 private:
@@ -357,11 +368,11 @@ private:
   Format format;
   Error (ImageCopier::*copyFunc)(std::size_t &, const SpriteNameState &);
   
-  void copyToSheet(const int x) {
+  void copyToSheet(const QPoint pos) {
     if (image != &nullImage) {
-      blitImage(sheetImage, *image, {x, 0});
+      blitImage(sheetImage, *image, pos);
     } else {
-      clearImage(sheetImage, {x, 0, size.width(), size.height()});
+      clearImage(sheetImage, {pos, size});
     }
   }
 };

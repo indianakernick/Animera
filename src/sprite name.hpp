@@ -1,4 +1,4 @@
-﻿//
+//
 //  sprite name.hpp
 //  Animera
 //
@@ -33,7 +33,8 @@ enum class FrameNameMode {
   relative,
   absolute,
   empty,
-  sheet
+  sheet_column,
+  sheet_row
 };
 
 struct SpriteNameParams {
