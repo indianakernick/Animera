@@ -246,33 +246,48 @@ public:
     const ExportParams &params,
     const AnimExportParams &animParams,
     const QSize size
-  ) : params{params}, animParams{animParams}, size{size} {}
-
-  void append(std::size_t &index, const SpriteNameState &state, const bool null) const {
+  ) : params{params}, animParams{animParams}, size{size} {
     if (animParams.name.frameName == FrameNameMode::sheet) {
       if (animParams.name.groupName == GroupNameMode::empty) {
-        if (state.frame == FrameIdx{0}) {
-          const QSize sheetSize = {size.width() * +state.frameCount, size.height()};
-          const NameInfo info = {animParams.name, state, sheetSize};
-          params.generator->appendName(index++, info);
-        }
+        appendFunc = &NameAppender::layerSheet;
       } else {
-        if (state.frame == state.groupBegin) {
-          const QSize sheetSize = {size.width() * +state.groupFrameCount, size.height()};
-          const NameInfo info = {animParams.name, state, sheetSize};
-          params.generator->appendName(index++, info);
-        }
+        appendFunc = &NameAppender::groupSheet;
       }
     } else {
-      const NameInfo info = {animParams.name, state, null ? QSize{} : size};
+      appendFunc = &NameAppender::noSheet;
+    }
+  }
+  
+  void layerSheet(std::size_t &index, const SpriteNameState &state, bool) const {
+    if (state.frame == FrameIdx{0}) {
+      const QSize sheetSize = {size.width() * +state.frameCount, size.height()};
+      const NameInfo info = {animParams.name, state, sheetSize};
       params.generator->appendName(index++, info);
     }
+  }
+  
+  void groupSheet(std::size_t &index, const SpriteNameState &state, bool) const {
+    if (state.frame == state.groupBegin) {
+      const QSize sheetSize = {size.width() * +state.groupFrameCount, size.height()};
+      const NameInfo info = {animParams.name, state, sheetSize};
+      params.generator->appendName(index++, info);
+    }
+  }
+  
+  void noSheet(std::size_t &index, const SpriteNameState &state, const bool null) const {
+    const NameInfo info = {animParams.name, state, null ? QSize{} : size};
+    params.generator->appendName(index++, info);
+  }
+
+  void append(std::size_t &index, const SpriteNameState &state, const bool null) const {
+    (this->*appendFunc)(index, state, null);
   }
 
 private:
   const ExportParams &params;
   const AnimExportParams &animParams;
   QSize size;
+  void (NameAppender::*appendFunc)(std::size_t &, const SpriteNameState &, bool) const;
 };
 
 class ImageCopier {
@@ -282,7 +297,17 @@ public:
     const AnimExportParams &animParams,
     const QSize size,
     const Format format
-  ) : params{params}, animParams{animParams}, size{size}, format{format} {}
+  ) : params{params}, size{size}, format{format} {
+    if (animParams.name.frameName == FrameNameMode::sheet) {
+      if (animParams.name.groupName == GroupNameMode::empty) {
+        copyFunc = &ImageCopier::layerSheet;
+      } else {
+        copyFunc = &ImageCopier::groupSheet;
+      }
+    } else {
+      copyFunc = &ImageCopier::noSheet;
+    }
+  }
 
   void setImage(const QImage &newImage) {
     image = &newImage;
@@ -290,42 +315,47 @@ public:
   void setNullImage() {
     image = &nullImage;
   }
+  
+  Error layerSheet(std::size_t &index, const SpriteNameState &state) {
+    if (state.frame == FrameIdx{0}) {
+      const QSize sheetSize = {size.width() * +state.frameCount, size.height()};
+      sheetImage = {sheetSize, qimageFormat(format)};
+    }
+    copyToSheet(size.width() * +state.frame);
+    if (state.frame == state.frameCount - FrameIdx{1}) {
+      return params.generator->copyImage(index++, sheetImage);
+    }
+    return {};
+  }
+  
+  Error groupSheet(std::size_t &index, const SpriteNameState &state) {
+    if (state.frame == state.groupBegin) {
+      const QSize sheetSize = {size.width() * +state.groupFrameCount, size.height()};
+      sheetImage = {sheetSize, qimageFormat(format)};
+    }
+    copyToSheet(size.width() * +(state.frame - state.groupBegin));
+    if (state.frame == state.groupBegin + state.groupFrameCount - FrameIdx{1}) {
+      return params.generator->copyImage(index++, sheetImage);
+    }
+    return {};
+  }
+  
+  Error noSheet(std::size_t &index, const SpriteNameState &) {
+    return params.generator->copyImage(index++, *image);
+  }
 
   Error copy(std::size_t &index, const SpriteNameState &state) {
-    if (animParams.name.frameName == FrameNameMode::sheet) {
-      if (animParams.name.groupName == GroupNameMode::empty) {
-        if (state.frame == FrameIdx{0}) {
-          const QSize sheetSize = {size.width() * +state.frameCount, size.height()};
-          sheetImage = {sheetSize, qimageFormat(format)};
-        }
-        copyToSheet(size.width() * +state.frame);
-        if (state.frame == state.frameCount - FrameIdx{1}) {
-          return params.generator->copyImage(index++, sheetImage);
-        }
-      } else {
-        if (state.frame == state.groupBegin) {
-          const QSize sheetSize = {size.width() * +state.groupFrameCount, size.height()};
-          sheetImage = {sheetSize, qimageFormat(format)};
-        }
-        copyToSheet(size.width() * +(state.frame - state.groupBegin));
-        if (state.frame == state.groupBegin + state.groupFrameCount - FrameIdx{1}) {
-          return params.generator->copyImage(index++, sheetImage);
-        }
-      }
-      return Error{};
-    } else {
-      return params.generator->copyImage(index++, *image);
-    }
+    return (this->*copyFunc)(index, state);
   }
 
 private:
   const ExportParams &params;
-  const AnimExportParams &animParams;
   QImage sheetImage;
   QImage nullImage;
   const QImage *image = nullptr;
   QSize size;
   Format format;
+  Error (ImageCopier::*copyFunc)(std::size_t &, const SpriteNameState &);
   
   void copyToSheet(const int x) {
     if (image != &nullImage) {

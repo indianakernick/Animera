@@ -191,13 +191,9 @@ quicklook plugin
   https://fespinoza.github.io/creating-a-quicklook-plugin-for-a-document-based-macos-application
   https://developer.apple.com/library/archive/documentation/UserExperience/Conceptual/Quicklook_Programming_Guide/Introduction/Introduction.html
 
-more flexible symmetry
-  place symmetry lines anywhere
-  use symmetry with any tool
-  copy something, set symmetry line, paste flipped
-
-pull or stretch when copying
-  moving a region, fill the gap with the edge pixels
+timeline selection
+  select an animation and reverse it
+  reorder groups (move whole groups around)
 
 --------------------------------- refactoring ----------------------------------
 
@@ -240,6 +236,19 @@ generating noise
 
 blending and shading
   enable blending globally (for all paint tools)
+
+more flexible symmetry
+  move symmetry lines rather than have them stuck in the center
+  use symmetry with any tool
+  copy something, set symmetry line, paste flipped
+
+pull or stretch when copying
+  moving a region, fill the gap with the edge pixels
+  
+select multiple cels and then draw on all of them at the same time
+  is that useful?
+  transform might be useful
+  select tools would be wierd
 
 ---------------------------------- minor bugs ----------------------------------
 
