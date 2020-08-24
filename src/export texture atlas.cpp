@@ -323,7 +323,7 @@ SheetRange frameToGroupLayerRange(const SpriteNameState &state) {
     +(state.frame - state.groupBegin),
     +state.groupFrameCount,
     +state.maxGroupFrameCount,
-    +state.group * +state.layer,
+    +state.group + +state.layer * +state.groupCount,
     +state.groupCount * +state.layerCount
   };
 }
