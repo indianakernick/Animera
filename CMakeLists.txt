@@ -90,6 +90,8 @@ add_executable(Animera
     "src/export params.hpp"
     "src/export png.cpp"
     "src/export png.hpp"
+    "src/export sprite sheet.cpp"
+    "src/export sprite sheet.hpp"
     "src/export texture atlas.cpp"
     "src/export texture atlas.hpp"
     "src/file input widget.cpp"
