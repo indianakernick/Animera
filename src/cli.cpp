@@ -36,8 +36,8 @@ R"(Options:
     <height>                  Height of the animation to create.
     <format>                  Format of the animation to create.
     <file>                    Animation file to open.
-    --groups                  Output info about groups.
-    --layers                  Output info about layers.
+    -g, --groups              Output info about groups.
+    -l, --layers              Output info about layers.
     -j, --json                Output info as JSON.)";
 
 const char long_options[] =
@@ -64,11 +64,11 @@ R"(Options:
             gray   (8-bit Grayscale with alpha)
         This is "rgba" by default.
     
-    --groups
+    -g, --groups
         Outputs information about the groups. This includes the name, the
         starting position, and the length.
     
-    --layers
+    -l, --layers
         Outputs information about the layers. This includes the name, the number
         of cels and the visibility.
     
