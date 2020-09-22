@@ -244,11 +244,16 @@ QSize getTransformedSize(const QSize canvasSize, const SpriteTransform &transfor
   return convert(gfx::rotateSize(convert(size), transform.angle));
 }
 
-void initImages(Images &images, const AnimExportParams &params, const Animation &anim) {
-  Format imageFormat = anim.getFormat();
-  if (params.composite && anim.getFormat() != Format::gray) {
-    imageFormat = Format::rgba;
+Format compositedFormat(const Format format, const bool composite) {
+  if (format == Format::index && composite) {
+    return Format::rgba;
+  } else {
+    return format;
   }
+}
+
+void initImages(Images &images, const AnimExportParams &params, const Animation &anim) {
+  const Format imageFormat = compositedFormat(anim.getFormat(), params.composite);
   images.canvas = {anim.getSize(), qimageFormat(imageFormat)};
   if (isIdentity(params.transform)) {
     images.xformed = {};
@@ -360,14 +365,6 @@ Error addCelImages(
   };
   
   return eachCel(animParams, anim, iterate);
-}
-
-Format compositedFormat(const Format format, const bool composite) {
-  if (format == Format::index && composite) {
-    return Format::rgba;
-  } else {
-    return format;
-  }
 }
 
 using AnimPtr = std::unique_ptr<const Animation, void(*)(const Animation *)>;
