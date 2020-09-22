@@ -522,6 +522,14 @@ void Timeline::mergeGroupRight() {
   }
 }
 
+void Timeline::moveGroupLeft() {
+  
+}
+
+void Timeline::moveGroupRight() {
+  
+}
+
 void Timeline::setPos(const CelPos newPos) {
   assert(LayerIdx{0} <= newPos.l);
   assert(newPos.l < layerCount());
@@ -618,7 +626,7 @@ void Timeline::pasteSelected() {
   const LayerIdx endLayer = std::min(
     layerCount(), selection.minL + static_cast<LayerIdx>(clipboard.size())
   );
-  const FrameIdx frames = frameCount - selection.minF;
+  const FrameIdx frames = selection.maxF - selection.minF + FrameIdx{1};
   for (LayerIdx l = selection.minL; l < endLayer; ++l) {
     std::vector<Cel> cels = truncateCopyCelArray(clipboard[+(l - selection.minL)], frames);
     replaceCelArray(layers[+l].cels, selection.minF, cels);

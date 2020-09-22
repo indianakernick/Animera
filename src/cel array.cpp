@@ -58,7 +58,6 @@ bool CelIterator::incr() {
   }
 }
 
-
 void optimizeCelArray(std::vector<Cel> &cels) {
   FrameIdx prevNull{0};
   for (auto s = cels.begin(); s != cels.end(); ++s) {
@@ -151,47 +150,51 @@ std::vector<Cel>::iterator insertCels(std::vector<Cel> &dst, std::vector<Cel>::i
   );
 }
 
-void removeCels(std::vector<Cel> &cels, std::vector<Cel>::iterator iter, FrameIdx len) {
-  assert(iter != cels.end());
+std::vector<Cel>::iterator removeCels(std::vector<Cel> &cels, FrameIdx frame, FrameIdx len) {
+  auto iter = findCelIter(cels, frame);
+  if (frame > FrameIdx{0}) {
+    if (len >= iter->len - frame) {
+      len -= iter->len - frame;
+      iter->len = frame;
+      ++iter;
+    } else {
+      const FrameIdx leftSize = frame;
+      const FrameIdx rightSize = iter->len - frame - len;
+      iter->len = leftSize;
+      CelImagePtr copy = std::make_unique<CelImage>(*iter->cel);
+      return cels.insert(++iter, {std::move(copy), rightSize});
+    }
+  }
   while (len > FrameIdx{0} && iter->len <= len) {
     len -= iter->len;
     iter = cels.erase(iter);
   }
-  if (iter->len > len) {
-    iter->len = iter->len - len;
+  if (len > FrameIdx{0}) {
+    assert(iter != cels.end());
+    iter->len -= len;
   }
+  return iter;
 }
 
 }
 
 void replaceCelArray(std::vector<Cel> &cels, FrameIdx idx, std::vector<Cel> &newCels) {
   const FrameIdx len = arrayLength(newCels);
-  if (len <= FrameIdx{0}) return;
-  auto iter = findCelIter(cels, idx);
-  if (idx == FrameIdx{0}) {
-    if (iter->len < len) {
-      iter = insertCels(cels, iter, newCels) + newCels.size();
-      removeCels(cels, iter, len - iter->len);
-    } else if (iter->len > len) {
-      iter->len -= len;
-      insertCels(cels, iter, newCels);
-    } else {
-      iter = cels.erase(iter);
-      insertCels(cels, iter, newCels);
+  auto begin = removeCels(cels, idx, len);
+  begin = insertCels(cels, begin, newCels);
+  if (begin != cels.begin()) {
+    auto prevBegin = std::prev(begin);
+    if (begin->cel == prevBegin->cel) {
+      begin->len += prevBegin->len;
+      begin = cels.erase(prevBegin);
     }
-  } else {
-    const FrameIdx leftSize = idx;
-    const FrameIdx rightSize = iter->len - idx - len;
-    iter->len = leftSize;
-    if (rightSize < FrameIdx{0}) {
-      iter = insertCels(cels, ++iter, newCels) + newCels.size();
-      removeCels(cels, iter, -rightSize);
-    } else if (rightSize > FrameIdx{0}) {
-      CelImagePtr copy = std::make_unique<CelImage>(*iter->cel);
-      iter = insertCels(cels, ++iter, newCels) + newCels.size();
-      iter = cels.insert(iter, {std::move(copy), rightSize});
-    } else {
-      insertCels(cels, ++iter, newCels);
+  }
+  auto end = begin + newCels.size();
+  if (end != cels.end()) {
+    auto prevEnd = std::prev(end);
+    if (end->cel == prevEnd->cel) {
+      end->len += prevEnd->len;
+      cels.erase(prevEnd);
     }
   }
 }
@@ -228,8 +231,12 @@ std::vector<Cel> truncateCopyCelArray(tcb::span<const Cel> cels, FrameIdx len) {
     len -= iter->len;
     ++iter;
   }
-  if (iter != cels.end() && len > FrameIdx{0}) {
-    newCels.push_back({std::make_unique<CelImage>(*iter->cel), len});
+  if (len > FrameIdx{0}) {
+    if (iter != cels.end()) {
+      newCels.push_back({std::make_unique<CelImage>(*iter->cel), len});
+    } else {
+      newCels.push_back({std::make_unique<CelImage>(), len});
+    }
   }
   return newCels;
 }

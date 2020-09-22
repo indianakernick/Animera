@@ -98,6 +98,8 @@ public Q_SLOTS:
   void splitGroupRight();
   void mergeGroupLeft();
   void mergeGroupRight();
+  void moveGroupLeft();
+  void moveGroupRight();
   
   void setPos(CelPos);
   void setVisibility(LayerIdx, bool);
