@@ -1,4 +1,4 @@
-﻿//
+//
 //  sprite packer.cpp
 //  Animera
 //
@@ -60,7 +60,7 @@ QImage::Format toImageFormat(const PixelFormat format) {
 }
 
 Error SpritePacker::pack() {
-  int length = qNextPowerOfTwo(qRound(std::sqrt(area)));
+  int length = qNextPowerOfTwo(static_cast<int>(std::sqrt(area)));
   std::vector<stbrp_node> nodes;
   stbrp_context ctx;
   int packed = 0;
