@@ -1,6 +1,6 @@
 [submodule "third_party/Graphics"]
 	path = third_party/Graphics
-	url = https://github.com/Kerndog73/Graphics
+	url = https://github.com/indianakernick/Graphics
 	shallow = true
 [submodule "third_party/docopt"]
 	path = third_party/docopt

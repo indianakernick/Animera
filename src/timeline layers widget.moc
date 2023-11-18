@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'timeline layers widget.hpp'
 **
-** Created by: The Qt Meta Object Compiler version 67 (Qt 5.15.2)
+** Created by: The Qt Meta Object Compiler version 67 (Qt 5.15.10)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -12,7 +12,7 @@
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'timeline layers widget.hpp' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 67
-#error "This file was generated using the moc from 5.15.2. It"
+#error "This file was generated using the moc from 5.15.10. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -87,7 +87,7 @@ void LayerNameWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int 
 {
     if (_c == QMetaObject::InvokeMetaMethod) {
         auto *_t = static_cast<LayerNameWidget *>(_o);
-        Q_UNUSED(_t)
+        (void)_t;
         switch (_id) {
         case 0: _t->shouldSetVisibility((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
         case 1: _t->shouldIsolateVisibility((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;
@@ -237,7 +237,7 @@ void GroupNameWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int 
 {
     if (_c == QMetaObject::InvokeMetaMethod) {
         auto *_t = static_cast<GroupNameWidget *>(_o);
-        Q_UNUSED(_t)
+        (void)_t;
         switch (_id) {
         case 0: _t->shouldSetName((*reinterpret_cast< std::string_view(*)>(_a[1]))); break;
         case 1: _t->setName((*reinterpret_cast< std::string_view(*)>(_a[1]))); break;
@@ -374,7 +374,7 @@ void LayersWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
 {
     if (_c == QMetaObject::InvokeMetaMethod) {
         auto *_t = static_cast<LayersWidget *>(_o);
-        Q_UNUSED(_t)
+        (void)_t;
         switch (_id) {
         case 0: _t->shouldSetVisibility((*reinterpret_cast< LayerIdx(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
         case 1: _t->shouldIsolateVisibility((*reinterpret_cast< LayerIdx(*)>(_a[1]))); break;
@@ -518,7 +518,7 @@ void LayerScrollWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, in
 {
     if (_c == QMetaObject::InvokeMetaMethod) {
         auto *_t = static_cast<LayerScrollWidget *>(_o);
-        Q_UNUSED(_t)
+        (void)_t;
         switch (_id) {
         case 0: _t->shouldSetBottomMargin((*reinterpret_cast< int(*)>(_a[1]))); break;
         default: ;
@@ -587,7 +587,7 @@ QT_END_MOC_NAMESPACE
 /****************************************************************************
 ** Meta object code from reading C++ file 'timeline layers widget.cpp'
 **
-** Created by: The Qt Meta Object Compiler version 67 (Qt 5.15.2)
+** Created by: The Qt Meta Object Compiler version 67 (Qt 5.15.10)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -598,7 +598,7 @@ QT_END_MOC_NAMESPACE
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'timeline layers widget.cpp' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 67
-#error "This file was generated using the moc from 5.15.2. It"
+#error "This file was generated using the moc from 5.15.10. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -652,7 +652,7 @@ void VisibleWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _i
 {
     if (_c == QMetaObject::InvokeMetaMethod) {
         auto *_t = static_cast<VisibleWidget *>(_o);
-        Q_UNUSED(_t)
+        (void)_t;
         switch (_id) {
         case 0: _t->isolated(); break;
         default: ;
@@ -667,7 +667,7 @@ void VisibleWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _i
             }
         }
     }
-    Q_UNUSED(_a);
+    (void)_a;
 }
 
 QT_INIT_METAOBJECT const QMetaObject VisibleWidget::staticMetaObject = { {

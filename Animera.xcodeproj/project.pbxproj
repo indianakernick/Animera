@@ -61,9 +61,6 @@
 		4556699F24CFB02600F761E3 /* basic atlas generator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4556699D24CFB02600F761E3 /* basic atlas generator.cpp */; };
 		455CE08224B59B750050EEDB /* COPYING in Resources */ = {isa = PBXBuildFile; fileRef = 455CE08124B59B750050EEDB /* COPYING */; };
 		455F2868220690A600C73F39 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 455F2867220690A600C73F39 /* main.cpp */; };
-		455F2879220691DE00C73F39 /* QtCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455F286E220691DD00C73F39 /* QtCore.framework */; };
-		455F287D220691DE00C73F39 /* QtWidgets.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455F2872220691DD00C73F39 /* QtWidgets.framework */; };
-		455F287F220691DE00C73F39 /* QtGui.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455F2874220691DD00C73F39 /* QtGui.framework */; };
 		455F2881220692EE00C73F39 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455F2880220692EE00C73F39 /* Cocoa.framework */; };
 		455F28832206930200C73F39 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455F28822206930200C73F39 /* IOKit.framework */; };
 		455F28852206930800C73F39 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 455F28842206930800C73F39 /* CoreVideo.framework */; };
@@ -114,13 +111,16 @@
 		45DBBF9724CEA31C00FC97A6 /* resize canvas dialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45DBBF9524CEA31C00FC97A6 /* resize canvas dialog.cpp */; };
 		45DC2566224B137C00F40116 /* status msg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45DC2564224B137C00F40116 /* status msg.cpp */; };
 		45DFE499224DE89E00EA40C5 /* global font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45DFE497224DE89E00EA40C5 /* global font.cpp */; };
-		45E3340623A1F4F4009F5EC1 /* libz.1.2.11.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 45E3340523A1F4F4009F5EC1 /* libz.1.2.11.dylib */; };
-		45E3340823A1F514009F5EC1 /* libpng16.16.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 45E3340723A1F513009F5EC1 /* libpng16.16.dylib */; };
 		45E3FFAC244179C2007A1FE8 /* cli export.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45E3FFAA244179C2007A1FE8 /* cli export.cpp */; };
 		45E3FFAF24417A47007A1FE8 /* cli info.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45E3FFAD24417A47007A1FE8 /* cli info.cpp */; };
 		45E3FFB224417D40007A1FE8 /* cli new.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45E3FFB024417D40007A1FE8 /* cli new.cpp */; };
 		45F065F22222998300BCE863 /* current tool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45F065F02222998300BCE863 /* current tool.cpp */; };
 		45F3EB6E22CC430F00F9F93E /* init canvas dialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45F3EB6C22CC430F00F9F93E /* init canvas dialog.cpp */; };
+		C9C14D522B083AC500B73038 /* QtGui.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9C14D4F2B083AC500B73038 /* QtGui.framework */; };
+		C9C14D532B083AC500B73038 /* QtCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9C14D502B083AC500B73038 /* QtCore.framework */; };
+		C9C14D542B083AC500B73038 /* QtWidgets.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9C14D512B083AC500B73038 /* QtWidgets.framework */; };
+		C9C14D5C2B083E1B00B73038 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C9C14D5A2B083E1B00B73038 /* libz.dylib */; };
+		C9C14D602B083EE100B73038 /* libpng.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C9C14D5E2B083EE100B73038 /* libpng.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -737,14 +737,10 @@
 		455F28602206890300C73F39 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		455F28612206890300C73F39 /* Animera.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Animera.entitlements; sourceTree = "<group>"; };
 		455F2867220690A600C73F39 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		455F286E220691DD00C73F39 /* QtCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtCore.framework; path = ../../../../../../usr/local/opt/qt/lib/QtCore.framework; sourceTree = "<group>"; };
-		455F2872220691DD00C73F39 /* QtWidgets.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtWidgets.framework; path = ../../../../../../usr/local/opt/qt/lib/QtWidgets.framework; sourceTree = "<group>"; };
-		455F2874220691DD00C73F39 /* QtGui.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtGui.framework; path = ../../../../../../usr/local/opt/qt/lib/QtGui.framework; sourceTree = "<group>"; };
 		455F2880220692EE00C73F39 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		455F28822206930200C73F39 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		455F28842206930800C73F39 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		455F28862206930D00C73F39 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
-		455F28882206942200C73F39 /* libqcocoa.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libqcocoa.dylib; path = ../../../../../../usr/local/opt/qt/plugins/platforms/libqcocoa.dylib; sourceTree = "<group>"; };
 		45689A2224B2D23300C9BB06 /* docicon.animera */ = {isa = PBXFileReference; lastKnownFileType = file; path = docicon.animera; sourceTree = "<group>"; };
 		4571C130227C383A00479006 /* radio button widget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "radio button widget.cpp"; sourceTree = "<group>"; };
 		4571C131227C383A00479006 /* radio button widget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "radio button widget.hpp"; sourceTree = "<group>"; };
@@ -863,8 +859,6 @@
 		45DFE498224DE89E00EA40C5 /* global font.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "global font.hpp"; sourceTree = "<group>"; };
 		45DFE4A12252038700EA40C5 /* 5x7+2_var_ascii.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "5x7+2_var_ascii.ttf"; sourceTree = "<group>"; };
 		45DFE4A22252039600EA40C5 /* 5x7+2ascii.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "5x7+2ascii.ttf"; sourceTree = "<group>"; };
-		45E3340523A1F4F4009F5EC1 /* libz.1.2.11.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.11.dylib; path = ../../../../../../usr/local/Cellar/zlib/1.2.11/lib/libz.1.2.11.dylib; sourceTree = "<group>"; };
-		45E3340723A1F513009F5EC1 /* libpng16.16.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpng16.16.dylib; path = ../../../../../../usr/local/Cellar/libpng/1.6.37/lib/libpng16.16.dylib; sourceTree = "<group>"; };
 		45E3FFAA244179C2007A1FE8 /* cli export.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "cli export.cpp"; sourceTree = "<group>"; };
 		45E3FFAB244179C2007A1FE8 /* cli export.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "cli export.hpp"; sourceTree = "<group>"; };
 		45E3FFAD24417A47007A1FE8 /* cli info.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "cli info.cpp"; sourceTree = "<group>"; };
@@ -879,6 +873,11 @@
 		45F3EB7022CC5D4F00F9F93E /* gray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gray.png; sourceTree = "<group>"; };
 		45F3EB7122CC5D4F00F9F93E /* index.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = index.png; sourceTree = "<group>"; };
 		45F3EB7222CC5D4F00F9F93E /* rgba.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rgba.png; sourceTree = "<group>"; };
+		C9C14D4F2B083AC500B73038 /* QtGui.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtGui.framework; path = /opt/homebrew/opt/qt5/lib/QtGui.framework; sourceTree = "<group>"; };
+		C9C14D502B083AC500B73038 /* QtCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtCore.framework; path = /opt/homebrew/opt/qt5/lib/QtCore.framework; sourceTree = "<group>"; };
+		C9C14D512B083AC500B73038 /* QtWidgets.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtWidgets.framework; path = /opt/homebrew/opt/qt5/lib/QtWidgets.framework; sourceTree = "<group>"; };
+		C9C14D5A2B083E1B00B73038 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = /opt/homebrew/opt/zlib/lib/libz.dylib; sourceTree = "<group>"; };
+		C9C14D5E2B083EE100B73038 /* libpng.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpng.dylib; path = /opt/homebrew/opt/libpng/lib/libpng.dylib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -886,15 +885,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C9C14D602B083EE100B73038 /* libpng.dylib in Frameworks */,
+				C9C14D5C2B083E1B00B73038 /* libz.dylib in Frameworks */,
+				C9C14D522B083AC500B73038 /* QtGui.framework in Frameworks */,
+				C9C14D532B083AC500B73038 /* QtCore.framework in Frameworks */,
+				C9C14D542B083AC500B73038 /* QtWidgets.framework in Frameworks */,
 				455F28872206930E00C73F39 /* OpenGL.framework in Frameworks */,
 				455F28852206930800C73F39 /* CoreVideo.framework in Frameworks */,
 				455F28832206930200C73F39 /* IOKit.framework in Frameworks */,
-				45E3340623A1F4F4009F5EC1 /* libz.1.2.11.dylib in Frameworks */,
 				455F2881220692EE00C73F39 /* Cocoa.framework in Frameworks */,
-				455F2879220691DE00C73F39 /* QtCore.framework in Frameworks */,
-				45E3340823A1F514009F5EC1 /* libpng16.16.dylib in Frameworks */,
-				455F287D220691DE00C73F39 /* QtWidgets.framework in Frameworks */,
-				455F287F220691DE00C73F39 /* QtGui.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2100,16 +2099,15 @@
 		455F2869220691DC00C73F39 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				45E3340523A1F4F4009F5EC1 /* libz.1.2.11.dylib */,
-				45E3340723A1F513009F5EC1 /* libpng16.16.dylib */,
-				455F28882206942200C73F39 /* libqcocoa.dylib */,
+				C9C14D5E2B083EE100B73038 /* libpng.dylib */,
+				C9C14D5A2B083E1B00B73038 /* libz.dylib */,
+				C9C14D502B083AC500B73038 /* QtCore.framework */,
+				C9C14D4F2B083AC500B73038 /* QtGui.framework */,
+				C9C14D512B083AC500B73038 /* QtWidgets.framework */,
 				455F28862206930D00C73F39 /* OpenGL.framework */,
 				455F28842206930800C73F39 /* CoreVideo.framework */,
 				455F28822206930200C73F39 /* IOKit.framework */,
 				455F2880220692EE00C73F39 /* Cocoa.framework */,
-				455F286E220691DD00C73F39 /* QtCore.framework */,
-				455F2874220691DD00C73F39 /* QtGui.framework */,
-				455F2872220691DD00C73F39 /* QtWidgets.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -2426,7 +2424,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+			shellScript = "/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
 		};
 		452D32FF249AF818009FA8F0 /* Moc - number input widget */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2447,7 +2445,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+			shellScript = "/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
 		};
 		453C787B2235D63B00818B19 /* RCC */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2468,7 +2466,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/opt/qt/bin/rcc --no-compress --namespace --output \"$PROJECT_DIR/src/resources.cpp\" --depfile \"$DERIVED_FILE_DIR/resources.d\" \"$PROJECT_DIR/Resources/resources.qrc\"\n";
+			shellScript = "/opt/homebrew/opt/qt5/bin/rcc --no-compress --namespace --output \"$PROJECT_DIR/src/resources.cpp\" --depfile \"$DERIVED_FILE_DIR/resources.d\" \"$PROJECT_DIR/Resources/resources.qrc\"\n";
 		};
 		455F288A2206A17600C73F39 /* Mac Deploy */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2486,7 +2484,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [[ \"$CONFIGURATION\" = \"Release\" ]]; then\n  /usr/local/opt/qt/bin/macdeployqt \"$CODESIGNING_FOLDER_PATH\" -codesign=$EXPANDED_CODE_SIGN_IDENTITY -verbose=2\nelse\n  /usr/local/opt/qt/bin/macdeployqt \"$CODESIGNING_FOLDER_PATH\" -codesign=$EXPANDED_CODE_SIGN_IDENTITY -verbose=2 -no-strip\nfi\n\n";
+			shellScript = "if [[ \"$CONFIGURATION\" = \"Release\" ]]; then\n  /opt/homebrew/opt/qt5/bin/macdeployqt \"$CODESIGNING_FOLDER_PATH\" -codesign=$EXPANDED_CODE_SIGN_IDENTITY -verbose=2\nelse\n  /opt/homebrew/opt/qt5/bin/macdeployqt \"$CODESIGNING_FOLDER_PATH\" -codesign=$EXPANDED_CODE_SIGN_IDENTITY -verbose=2 -no-strip\nfi\n\n";
 		};
 		457D74FC239F8B06009B4E4B /* Trim */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2525,7 +2523,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+			shellScript = "/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
 		};
 		45AA32C722F524E100005DD8 /* Moc - timeline controls widget */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2546,7 +2544,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+			shellScript = "/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
 		};
 		45AA32C822F5256500005DD8 /* Moc - timeline frames widget */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2567,7 +2565,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+			shellScript = "/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
 		};
 		45AA32C922F525C700005DD8 /* Moc - timeline layers widget */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2588,7 +2586,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+			shellScript = "/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
 		};
 		45AA32CA22F5263200005DD8 /* Moc - timeline cels widget */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2609,7 +2607,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+			shellScript = "/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
 		};
 		45AA32CB22F526CB00005DD8 /* Moc - color picker widget */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2630,7 +2628,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+			shellScript = "/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
 		};
 		45AA32CC22F526FC00005DD8 /* Moc - color slider widget */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2651,7 +2649,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+			shellScript = "/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
 		};
 		45AA32CD22F5272A00005DD8 /* Moc - color graph widget */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2672,7 +2670,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+			shellScript = "/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
 		};
 		45AA32CE22F5275F00005DD8 /* Moc - tool select widget */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2693,7 +2691,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+			shellScript = "/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
 		};
 		45AA32CF22F5279000005DD8 /* Moc - hex input widget */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2714,7 +2712,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+			shellScript = "/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
 		};
 		45AA32D022F527C600005DD8 /* Moc - tool colors widget */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2735,7 +2733,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+			shellScript = "/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
 		};
 		45AA32D122F5281400005DD8 /* Moc - init canvas dialog */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2756,7 +2754,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+			shellScript = "/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
 		};
 		45AA32D222F5284B00005DD8 /* Moc - file input widget */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2777,7 +2775,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+			shellScript = "/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
 		};
 		45AA32D322F5288C00005DD8 /* Moc - color picker impl */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2798,7 +2796,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+			shellScript = "/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
 		};
 		45AA32D422F528C300005DD8 /* Moc - text input widget */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2819,7 +2817,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+			shellScript = "/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
 		};
 		45AA32D522F528F300005DD8 /* Moc - status bar widget */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2840,7 +2838,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+			shellScript = "/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
 		};
 		45AA32D622F5292400005DD8 /* Moc - combo box widget */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2861,7 +2859,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+			shellScript = "/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
 		};
 		45AA32D722F5295B00005DD8 /* Moc - timeline widget */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2882,7 +2880,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+			shellScript = "/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
 		};
 		45AA32D822F529A800005DD8 /* Moc - palette widget */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2903,7 +2901,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+			shellScript = "/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
 		};
 		45AA32D922F529D600005DD8 /* Moc - sample object */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2924,7 +2922,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+			shellScript = "/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
 		};
 		45AA32DA22F52A0400005DD8 /* Moc - export dialog */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2945,7 +2943,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+			shellScript = "/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
 		};
 		45AA32DB22F52A3300005DD8 /* Moc - editor widget */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2966,7 +2964,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+			shellScript = "/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
 		};
 		45AA32DE22F52AC800005DD8 /* Moc - undo object */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2987,7 +2985,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+			shellScript = "/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
 		};
 		45AA32DF22F52B0000005DD8 /* Moc - application */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3008,7 +3006,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+			shellScript = "/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
 		};
 		45AA32E022F52B2900005DD8 /* Moc - timeline */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3029,7 +3027,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+			shellScript = "/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
 		};
 		45AA32E122F52B8B00005DD8 /* Moc - palette */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3050,7 +3048,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+			shellScript = "/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
 		};
 		45AA32E222F52BB500005DD8 /* Moc - animation */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3071,7 +3069,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+			shellScript = "/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
 		};
 		45AA32E322F52BE800005DD8 /* Moc - tool */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3092,7 +3090,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+			shellScript = "/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
 		};
 		45AA32E422F52C2E00005DD8 /* Moc - main */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3112,7 +3110,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\n";
+			shellScript = "/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\n";
 		};
 		45C5C8BB237A660A0056CEE7 /* Moc - status object */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3133,7 +3131,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+			shellScript = "/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
 		};
 		45DBBF9824CEA57E00FC97A6 /* Moc - resize canvas dialog */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3154,7 +3152,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/usr/local/opt/qt/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
+			shellScript = "/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\necho \"\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n/opt/homebrew/opt/qt5/bin/moc -i \"$SCRIPT_INPUT_FILE_1\" >> \"$SCRIPT_OUTPUT_FILE_0\"\n";
 		};
 		45FBDCFA24D7ADA700B6D82F /* Create DMG */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3429,7 +3427,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/usr/local/opt/qt/lib,
+					/opt/homebrew/opt/qt5/lib,
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = (
@@ -3437,8 +3435,8 @@
 					$PROJECT_DIR/third_party/span/include,
 					$PROJECT_DIR/third_party/docopt,
 					$PROJECT_DIR/third_party/stb,
-					/usr/local/include,
-					/usr/local/opt/zlib/include,
+					/opt/homebrew/opt/zlib/include,
+					/opt/homebrew/opt/libpng/include,
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -3447,14 +3445,11 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					/usr/local/opt/qt/plugins/platforms,
-					/usr/local/lib,
-					/usr/local/opt/zlib/lib,
-					/usr/local/Cellar/zlib/1.2.11/lib,
-					/usr/local/Cellar/libpng/1.6.37/lib,
+					/opt/homebrew/opt/zlib/lib,
+					/opt/homebrew/opt/libpng/lib,
 				);
 				LLVM_LTO = NO;
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 0.2.0;
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
@@ -3494,7 +3489,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/usr/local/opt/qt/lib,
+					/opt/homebrew/opt/qt5/lib,
 				);
 				GCC_OPTIMIZATION_LEVEL = z;
 				GCC_PREPROCESSOR_DEFINITIONS = NDEBUG;
@@ -3503,8 +3498,8 @@
 					$PROJECT_DIR/third_party/span/include,
 					$PROJECT_DIR/third_party/docopt,
 					$PROJECT_DIR/third_party/stb,
-					/usr/local/include,
-					/usr/local/opt/zlib/include,
+					/opt/homebrew/opt/zlib/include,
+					/opt/homebrew/opt/libpng/include,
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -3513,14 +3508,11 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					/usr/local/opt/qt/plugins/platforms,
-					/usr/local/lib,
-					/usr/local/opt/zlib/lib,
-					/usr/local/Cellar/zlib/1.2.11/lib,
-					/usr/local/Cellar/libpng/1.6.37/lib,
+					/opt/homebrew/opt/zlib/lib,
+					/opt/homebrew/opt/libpng/lib,
 				);
 				LLVM_LTO = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 0.2.0;
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",

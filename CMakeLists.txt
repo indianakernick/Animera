@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.12)
 project(Animera
     VERSION 0.2.0
     DESCRIPTION "A cross-platform Qt tool for making pixel-art animations for games"
-    HOMEPAGE_URL "https://github.com/Kerndog73/Animera"
+    HOMEPAGE_URL "https://github.com/indianakernick/Animera"
     LANGUAGES CXX
 )
 

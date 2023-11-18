@@ -2,9 +2,9 @@
 
 ### A cross-platform Qt tool for making pixel-art animations for games
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/b1edeadecabb45c49787c50084aa913a)](https://www.codacy.com/manual/kerndog73/Animera?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Kerndog73/Animera&amp;utm_campaign=Badge_Grade)
-[![GitHub Release Version](https://img.shields.io/github/v/release/Kerndog73/Animera?include_prereleases&sort=semver)](https://github.com/Kerndog73/Animera/releases/latest)
-[![License](https://img.shields.io/github/license/Kerndog73/Animera)](https://github.com/Kerndog73/Animera/blob/master/COPYING)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/b1edeadecabb45c49787c50084aa913a)](https://www.codacy.com/manual/indianakernick/Animera?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=indianakernick/Animera&amp;utm_campaign=Badge_Grade)
+[![GitHub Release Version](https://img.shields.io/github/v/release/indianakernick/Animera?include_prereleases&sort=semver)](https://github.com/indianakernick/Animera/releases/latest)
+[![License](https://img.shields.io/github/license/indianakernick/Animera)](https://github.com/indianakernick/Animera/blob/master/COPYING)
 
 ![Screenshot](https://i.imgur.com/e3ToSs5.png)
 
