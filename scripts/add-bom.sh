@@ -18,7 +18,7 @@ for file in "$PROJECT_DIR"/src/*; do
   if echo "$TYPE" | grep -q '(with BOM)'; then
     : # echo "# $file already has BOM, skipping." 1>&2
   else
-    ( mv "${file}" "${file}"~ && /usr/local/opt/icu4c/bin/uconv -f utf-8 -t utf-8 --add-signature < "${file}~" > "${file}" ) || ( echo Error processing "$file" 1>&2 ; exit 1)
+    ( mv "${file}" "${file}"~ && /opt/homebrew/opt/icu4c/bin/uconv -f utf-8 -t utf-8 --add-signature < "${file}~" > "${file}" ) || ( echo Error processing "$file" 1>&2 ; exit 1)
     rm "${file}~"
   fi
 done

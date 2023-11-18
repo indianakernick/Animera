@@ -3174,7 +3174,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# \"$PROJECT_DIR/scripts/create-dmg-icon.sh\"\n# \"$PROJECT_DIR/scripts/create-dmg.sh\"\n# rm \"$PROJECT_DIR/VolumeIcon.icns\"\n";
+			shellScript = "# eval \"$(/opt/homebrew/bin/brew shellenv)\"\n# \"$PROJECT_DIR/scripts/create-dmg-icon.sh\"\n# \"$PROJECT_DIR/scripts/create-dmg.sh\"\n# rm \"$PROJECT_DIR/VolumeIcon.icns\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
