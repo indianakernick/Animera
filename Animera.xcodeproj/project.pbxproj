@@ -835,13 +835,11 @@
 		45D5847B24C3EE44003C182C /* stb_rect_pack.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = stb_rect_pack.c; sourceTree = "<group>"; };
 		45D5847D24C41641003C182C /* sprite packer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "sprite packer.cpp"; sourceTree = "<group>"; };
 		45D5847E24C41641003C182C /* sprite packer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "sprite packer.hpp"; sourceTree = "<group>"; };
-		45D9DC7C242F04B4001ACE37 /* title@8x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "title@8x.png"; sourceTree = "<group>"; };
 		45DBBF9124CE65BF00FC97A6 /* json atlas generator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "json atlas generator.cpp"; sourceTree = "<group>"; };
 		45DBBF9224CE65BF00FC97A6 /* json atlas generator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "json atlas generator.hpp"; sourceTree = "<group>"; };
 		45DBBF9524CEA31C00FC97A6 /* resize canvas dialog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "resize canvas dialog.cpp"; sourceTree = "<group>"; };
 		45DBBF9624CEA31C00FC97A6 /* resize canvas dialog.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "resize canvas dialog.hpp"; sourceTree = "<group>"; };
 		45DC255F224A034200F40116 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		45DC2562224A0AEA00F40116 /* title.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = title.png; sourceTree = "<group>"; };
 		45DC2564224B137C00F40116 /* status msg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "status msg.cpp"; sourceTree = "<group>"; };
 		45DC2565224B137C00F40116 /* status msg.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "status msg.hpp"; sourceTree = "<group>"; };
 		45DC980F24791A1200429465 /* create-app-icon.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "create-app-icon.sh"; sourceTree = "<group>"; };
@@ -878,6 +876,10 @@
 		C9C14D512B083AC500B73038 /* QtWidgets.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtWidgets.framework; path = /opt/homebrew/opt/qt5/lib/QtWidgets.framework; sourceTree = "<group>"; };
 		C9C14D5A2B083E1B00B73038 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = /opt/homebrew/opt/zlib/lib/libz.dylib; sourceTree = "<group>"; };
 		C9C14D5E2B083EE100B73038 /* libpng.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpng.dylib; path = /opt/homebrew/opt/libpng/lib/libpng.dylib; sourceTree = "<group>"; };
+		C9C14D652B08988700B73038 /* title dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "title dark.png"; sourceTree = "<group>"; };
+		C9C14D662B08988700B73038 /* title light.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "title light.png"; sourceTree = "<group>"; };
+		C9C14D672B08988700B73038 /* title dark@16x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "title dark@16x.png"; sourceTree = "<group>"; };
+		C9C14D682B08988700B73038 /* title light@16x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "title light@16x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1967,8 +1969,10 @@
 				45B284972219003B00D6D055 /* icon.png */,
 				452926E222BB607E00B17E0D /* screenshot.png */,
 				45DC981C24795A1200429465 /* social.png */,
-				45DC2562224A0AEA00F40116 /* title.png */,
-				45D9DC7C242F04B4001ACE37 /* title@8x.png */,
+				C9C14D652B08988700B73038 /* title dark.png */,
+				C9C14D672B08988700B73038 /* title dark@16x.png */,
+				C9C14D662B08988700B73038 /* title light.png */,
+				C9C14D682B08988700B73038 /* title light@16x.png */,
 			);
 			path = Logo;
 			sourceTree = "<group>";

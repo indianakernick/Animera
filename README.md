@@ -1,4 +1,5 @@
-![Title](https://i.imgur.com/ekpLSId.png)
+![Title](Resources/Logo/title%20light@16x.png#gh-light-mode-only)
+![Title](Resources/Logo/title%20dark@16x.png#gh-dark-mode-only)
 
 ### A cross-platform Qt tool for making pixel-art animations for games
 
@@ -6,7 +7,7 @@
 [![GitHub Release Version](https://img.shields.io/github/v/release/indianakernick/Animera?include_prereleases&sort=semver)](https://github.com/indianakernick/Animera/releases/latest)
 [![License](https://img.shields.io/github/license/indianakernick/Animera)](https://github.com/indianakernick/Animera/blob/master/COPYING)
 
-![Screenshot](https://i.imgur.com/e3ToSs5.png)
+![Screenshot](Resources/Logo/screenshot.png)
 
 ---
 
